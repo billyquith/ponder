@@ -24,6 +24,13 @@ public:
     CAMP_API InvalidClass(const char* className) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidClass(const InvalidClass& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidClass() throw();

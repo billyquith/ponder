@@ -27,6 +27,13 @@ public:
     CAMP_API InvalidIndex(std::size_t index, std::size_t size) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidIndex(const InvalidIndex& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidIndex() throw();

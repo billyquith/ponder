@@ -15,6 +15,14 @@ InvalidArgument::InvalidArgument(Type sourceType, Type requestedType, const char
 }
 
 //-------------------------------------------------------------------------------------------------
+InvalidArgument::InvalidArgument(const InvalidArgument& copy) throw()
+    : InvalidValue(copy)
+    , m_index(copy.m_index)
+{
+    strncpy(m_function, copy.m_function, sizeof(m_function));
+}
+
+//-------------------------------------------------------------------------------------------------
 InvalidArgument::~InvalidArgument() throw()
 {
 }

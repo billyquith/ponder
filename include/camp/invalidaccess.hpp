@@ -41,6 +41,13 @@ public:
     CAMP_API InvalidAccess(const char* attribute, Action action) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidAccess(const InvalidAccess& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidAccess() throw();

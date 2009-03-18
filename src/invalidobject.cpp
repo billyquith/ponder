@@ -12,6 +12,12 @@ InvalidObject::InvalidObject(const UserObject& object) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
+InvalidObject::InvalidObject(const InvalidObject& copy) throw()
+    : m_object(copy.m_object)
+{
+}
+
+//-------------------------------------------------------------------------------------------------
 InvalidObject::~InvalidObject() throw()
 {
 }

@@ -27,6 +27,13 @@ public:
     CAMP_API InvalidFunction(const char* function, const Class& ownerClass) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidFunction(const InvalidFunction& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidFunction() throw();

@@ -24,6 +24,13 @@ public:
     CAMP_API InvalidEnum(const char* enumName) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidEnum(const InvalidEnum& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidEnum() throw();

@@ -28,6 +28,13 @@ public:
     CAMP_API InvalidValue(Type sourceType, Type requestedType) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidValue(const InvalidValue& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidValue() throw();

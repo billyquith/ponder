@@ -13,6 +13,13 @@ InvalidIndex::InvalidIndex(std::size_t index, std::size_t size) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
+InvalidIndex::InvalidIndex(const InvalidIndex& copy) throw()
+    : m_index(copy.m_index)
+    , m_size(copy.m_size)
+{
+}
+
+//-------------------------------------------------------------------------------------------------
 InvalidIndex::~InvalidIndex() throw()
 {
 }

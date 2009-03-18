@@ -27,6 +27,13 @@ public:
     CAMP_API InvalidEnumValue(long value, const Enum& ownerEnum) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidEnumValue(const InvalidEnumValue& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidEnumValue() throw();

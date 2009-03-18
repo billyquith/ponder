@@ -27,6 +27,13 @@ public:
     CAMP_API InvalidProperty(const char* property, const Class& ownerClass) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidProperty(const InvalidProperty& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidProperty() throw();

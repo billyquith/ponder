@@ -14,6 +14,13 @@ InvalidFunction::InvalidFunction(const char* function, const Class& ownerClass) 
 }
 
 //-------------------------------------------------------------------------------------------------
+InvalidFunction::InvalidFunction(const InvalidFunction& copy) throw()
+    : m_ownerClass(copy.m_ownerClass)
+{
+    strncpy(m_function, copy.m_function, sizeof(m_function));
+}
+
+//-------------------------------------------------------------------------------------------------
 InvalidFunction::~InvalidFunction() throw()
 {
 }

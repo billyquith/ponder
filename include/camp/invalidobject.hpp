@@ -28,6 +28,13 @@ public:
     CAMP_API InvalidObject(const UserObject& object) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidObject(const InvalidObject& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidObject() throw();

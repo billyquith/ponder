@@ -9,12 +9,12 @@ CONFIG += exceptions stl console
 CONFIG(debug, debug|release) {
     OBJECTS_DIR = debug
     TARGET = camptestd
-    win:LIBS += -lcampd0 -lutfd
+    win32:LIBS += -lcampd0 -lutfd
     unix:LIBS += -lcampd -lutfd
 } else {
     OBJECTS_DIR = release
     TARGET = camptest
-    win:LIBS += -lcamp0 -lutf
+    win32:LIBS += -lcamp0 -lutf
     unix:LIBS += -lcamp -lutf
 }
 

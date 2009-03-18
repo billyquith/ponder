@@ -27,6 +27,13 @@ public:
     CAMP_API InvalidArgument(Type sourceType, Type requestedType, const char* function, std::size_t index) throw();
 
     /**
+     * \brief Copy constructor
+     *
+     * \param copy Instance to copy
+     */
+    CAMP_API InvalidArgument(const InvalidArgument& copy) throw();
+
+    /**
      * \brief Destructor
      */
     CAMP_API virtual ~InvalidArgument() throw();
