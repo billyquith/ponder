@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-include(../../build/config.pro)
+include(../../common/build/config.pro)
 
 CONFIG -= qt
 
@@ -23,4 +23,4 @@ SOURCES += main.cpp
 HEADERS += test.hpp
 
 INCLUDEPATH += ../include $${BOOST_PATH}
-LIBS += -L../lib/ -L../../utf/lib
+LIBS += -L../lib/ -L../../common/utf/lib

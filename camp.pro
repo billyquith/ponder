@@ -1,5 +1,5 @@
 TEMPLATE = lib
-include(../build/config.pro)
+include(../common/build/config.pro)
 CONFIG -= qt
 VERSION = 0.1
 CONFIG += exceptions \
