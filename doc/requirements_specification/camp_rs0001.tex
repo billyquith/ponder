@@ -1,0 +1,1024 @@
+
+\documentclass[a4paper, twoside]{report}
+
+%-------------------------------------
+
+% Document type
+\usepackage{tgsreqspec}
+
+% Document informations
+\documentreference{RS-0001}
+\projectcode{DMAC}
+\documentmajorversion{1}
+\documentminorversion{A}
+\clientcode{TGS}
+\notcontractualdocument
+\documentauthor{\persons{GOM}{}}
+\documentcontroller{\persons{DEL}{}}
+\documentquality{\persons{DOC}{}}
+\title{CAMP}
+\date{February 19, 2009}
+
+% Document status
+%\draftdocument
+%\underapprovaldocument
+\publisheddocument
+%\obsoletedocument
+
+% Document classification
+%\publicdocument
+%\restricteddocument
+\confidentialdocument
+
+% Generate PDF information
+\makepdfinfo
+
+%-------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\chapter*{About this document}
+
+\section*{Document history}
+
+\begin{historytable}
+    \addhistory{1.A}{2009-02-19}{GOM}{Initial version}
+\end{historytable}
+
+%\section*{Related documents}
+
+%\begin{documenttable}
+%    \adddocument{RS-0001}{1.A}{}{Required}
+%\end{documenttable}
+
+\tableofcontents
+
+\section{historytable environment}
+\begin{historytable}
+	\addhistory{0.1}{2009-02-19}{GOM}{first version}
+\end{historytable}
+
+\chapter{Abstract}
+
+	CAMP is a C++ library whose aim is to provide reflection-like features for
+	objects, i.e. to enable them to expose their attributes dynamically at runtime.
+	This way, such objects can be manipulated in higher-level layers than direct 
+	C++ code, and offer much more flexibility of usage and interaction.
+	
+	CAMP also provides a framework to help building components on top of class information
+	like script engines, network transmitters, or XML I/O.
+	
+	This document specifies the requirements for the CAMP library.
+
+\chapter{Description of needs}
+
+	Here is an unordered list of needs for the CAMP library:
+
+	\begin{itemize}
+		\item CAMP is an independant, self-contained library, with no dependency on private projects
+		\item CAMP must be as less intrusive as possible for classes exposing properties
+		\item CAMP will provide an helper framework for writing higher-level components based on its features
+		\item CAMP has no strong performance constraint, and should focus on flexibility and memory usage rather than speed
+		\item An object using CAMP exposes two kinds of attributes:
+		\begin{itemize}
+			\item properties, that can be read and written
+			\item functions, that can be executed
+		\end{itemize}
+		\item CAMP properties and functions must be bindable to any internal implementation in the host class
+		\begin{itemize}
+			\item a set of accessors
+			\item a pointer to a member variable
+			\item a member of a member
+			\item other complicated binds with no limitation
+		\end{itemize}
+		\item CAMP properties consist of the following abstract types:
+		\begin{itemize}
+			\item primitive types: booleans, integers, reals
+			\item strings
+			\item enumerations
+			\item arrays
+			\item objects
+		\end{itemize}
+		\item The basic types of properties must be able to handle all the corresponding C++ primitive types
+		\item A class bound to CAMP is automatically a valid type of property (type "object")
+		\item A class not bound to CAMP cannot be a valid type of property, or function argument / return value
+		\item CAMP properties are typed, but allow conversions from other types when they are compatible
+		\item A CAMP property can be marked as readable and/or writable, and these states are specific to each object instance
+		\item A CAMP function can be marked as callable, and this state is specific to each object instance
+		\item Properties and functions must be able to hold custom tags, which can depend or not on objects instances
+		\item The CAMP runtime information about an object must be directly accessible, given the object
+		\item CAMP must be able to bind C++ enumerations, and provide specific features for them
+		\item CAMP classes, enumerations, properties and functions must be accessed both by name and by index
+		\item CAMP must provide a detailed error reporting system
+		\item CAMP must support single and multiple inheritance
+		\begin{itemize}
+			\item an inherited object must inherit its parent's properties and functions
+		\end{itemize}
+	\end{itemize}
+
+\chapter{Proposal}
+
+\section{Overview}
+
+	Figure \ref{fig:overview} is a high level overview of the CAMP system, showing its main classes and
+	how they are related to each other.
+
+	\image{fig:overview}{Overview of the CAMP library}{images/overview}
+
+	\begin{description}
+		\item[Metaclass (chapter \ref{sec:metaclass})]
+			This is the entry point of the system; it basically	represents a C++ class in the CAMP system.
+			A metaclass owns a set of metaproperties and a set of metafunctions.
+		\item[Metaenum (chapter \ref{sec:metaenum})]
+			Metaenums are the representation of C++ enumerated types in CAMP. They hold a set of
+			$<$name, value$>$ pairs describing the corresponding C++ enum.
+		\item[Metaproperty (chapter \ref{sec:metaproperty})]
+			A metaproperty is the abstract representation of a member data in the C++ class,
+			which can be read and written.
+		\item[Metafunction (chapter \ref{sec:metafunction})]
+			A metafunction is the abstract representation of a member function in the C++ class,
+			which can be executed.
+		\item[Visitor (chapter \ref{sec:visitor})]
+			Even though properties and functions can be accessed easily through the base API, CAMP provides a slightly
+			higher-level framework to facilitate manipulation of metaclasses.
+	\end{description}
+
+	\ibinfo
+	{
+			Metaproperties and metafunctions may be referred simply as ``properties'' and ``functions'' in the following sections
+			of this document.
+	}
+
+\section{Metaclass}
+\label{sec:metaclass}
+
+	Metaclass is the main concept of the CAMP library. Declaring a metaclass for a
+	C++ class allows it to expose its members to the CAMP system.
+	
+	Each metaclass instance describes a C++ class that has been exposed, and gives
+	access to its properties and functions. It can then be used	to manipulate the
+	class' information at runtime, and modify any instance of the class through
+	the properties and functions.
+
+\subsection{Declaration}
+
+	A metaclass declaration contains the following elements in order to describe a class:
+	\begin{itemize}
+		\item Its target C++ class
+		\item Its name
+		\item The metaclasses that it inherits from
+		\item Its constructors
+		\item Its properties (see section \ref{sec:metaproperty})
+		\item Its functions (see section \ref{sec:metafunction})
+	\end{itemize}
+
+	The target C++ class and the metaclass name are mandatory, all other elements are optional.
+	
+	A metaclass declaration must be completed in a single step, and cannot be modified later anymore.
+	
+	Example:
+
+\begin{cppcode}
+declare<TargetClass>("Name")
+  .base<BaseClass>()
+  .constructor<int>()
+  .property("p", &TargetClass::p)
+  .function("f", &TargetClass::f)
+  ;
+\end{cppcode}
+
+	\ibwarning
+	{
+			Metaclasses are unique, and any attempt to declare a metaclass with the same name
+			as an already existing metaclass must be rejected. \\
+			However, declaring multiple metaclasses bound to the same C++ class is allowed.
+	}
+	
+	\ibwarning
+	{
+		Property and function names have to be unique within the same metaclass. Declaring a property
+		or function whose name already exists in the metaclass must be rejected.
+	}
+
+	Users must have the ability to bind public, protected and private members of the target class.
+	Binding public members should be completely non-intrusive, while binding protected and private members
+	may have to be a little bit intrusive regarding the target class.
+
+\subsubsection{Mapping external systems}
+
+	Some classes bound to CAMP, from other libraries, may already have a similar system
+	providing meta-information about the class properties and functions. A perfect example
+	would be Qt and its properties system.
+
+	In such case, CAMP must be able to automatically bind this information to its own structure,
+	without having to manually duplicate their definition for each class. This must be done at
+	declaration-time.
+	
+	Example:
+
+\begin{cppcode}
+declare<TargetClass>("Name")
+  .external<Mapper>()
+  ;
+\end{cppcode}
+	
+	Here, \verb@Mapper@ is a user-defined class which is responsible for
+	translating custom meta-information to CAMP properties and functions.
+
+\subsection{Retrieval}
+
+	CAMP must provide different ways to retrieve a metaclass:
+
+	\begin{tabular}{r|l}
+		From a class type 		& \verb@classByType<MyClass>()@  \\
+		From a metaclass name & \verb@classByName("MyClass")@  \\
+		From a class instance &	\verb@classByObject(instance)@ \\
+		From an index				  &	\verb@classByIndex(1)@ 				 \\
+	\end{tabular}
+	
+	Each metaclass is represented by a unique instance; thus every call to one of the above functions
+	to request the same metaclass will return a reference to the same instance.
+	
+	The returned object must be a \emph{read-only} reference to the metaclass; after declaration-time
+	metaclasses cannot be modified, they can only be read.
+
+	In the special case a C++ class is bound to multiple metaclasses, it must be possible to
+	retrieve all of them using their total count and an indexed access:
+
+	\begin{tabular}{r|l}
+		From a type 				  & \verb@classByType<MyClass>(index)@    \\
+		From a class instance & \verb@classByObject(instance, index)@
+	\end{tabular}
+	
+	Retrieving a metaclass triggers an error if the metaclass does not exist. Such error should be reported
+	at compile-time whenever possible.
+
+\subsubsection{Object types}
+
+	When getting a metaclass from an object, CAMP must accept any kind of storage/modifier on the actual type:
+
+	\begin{itemize}
+		\item A raw instance (\verb@T@)
+		\item A const instance (\verb@const T@)
+		\item A pointer (\verb@T*@)
+		\item A const pointer (\verb@const T*@)
+		\item A smart pointer (\verb@shared_ptr<T>@)
+	\end{itemize}
+	
+	In all the above cases, CAMP must return the metaclass of \verb@T@.
+
+\subsubsection{Polymorphic objects}
+
+	When using a polymorphic object, CAMP must be able to use some kind of
+	RTTI (\emph{RunTime Type Information}) to access the metaclass of the actual
+	dynamic type of the object, not its static one.
+	
+\begin{cppcode}
+Base* obj = new Derived;
+metaclass = classByObject(obj);
+\end{cppcode}
+	
+	In the above example, \verb@metaclass@ must be the metaclass of Derived.
+
+\subsection{Usage}
+
+	The interface of metaclasses must provide full access to the class members:
+	
+	\begin{itemize}
+		\item Iterate on base metaclasses
+		\item Iterate on properties
+		\item Iterate on functions
+		\item Get a property by its name
+		\item Get a function by its name
+		\item Check if the metaenum contains a property or a function by its name
+		\item Construct and destroy instances of the target class
+	\end{itemize}
+
+\section{Metaenum}
+\label{sec:metaenum}
+
+	As C++ enumerated types are supported by CAMP, they must have an abstract representation in the system.
+	This is the purpose of metaenums.
+	
+	A metaenum is basically a set of $<$name, value$>$ pairs that can be manipulated dynamically.
+	The main feature of metaenums is that their items can be browsed at runtime and accessed by index,
+	by name or by value.
+
+\subsection{Declaration}
+
+	A metaenum declaration is similar to a metaclass declaration, except that the only thing to bind are
+	$<$name, value$>$ pairs.
+	
+\begin{cppcode}
+declare<TargetEnum>("Name")
+  .value("a", a)
+  .value("b", b)
+  .value("c", c)
+  ;
+\end{cppcode}
+	
+	\ibwarning
+	{
+			Metaenums are unique, and any attempt to declare a metaenum with the same name
+			as an already existing metaenum must be rejected. \\
+			However, declaring multiple metaenums bound to the same C++ enum is allowed.
+	}
+	
+	\ibwarning
+	{
+		Names and values have to be unique within the same metaenum. Declaring a pair whose
+		value or name already exists in the metaenum must be rejected.
+	}
+
+\subsubsection{Mapping external systems}
+
+	Like for metaclasses, some enumerations bound to CAMP may already have a similar system
+	providing meta-information about the enumeration content.
+
+	In such case, CAMP must be able to interpret this meta-information and fill the metaenum
+	from it.
+	
+\begin{cppcode}
+declare<TargetEnum>("Name")
+  .external<Mapper>();
+\end{cppcode}
+	
+	Here, \verb@Mapper@ is a user-defined class which is responsible for
+	translating custom meta-information to CAMP metaenum pairs.
+
+\subsection{Retrieval}
+
+	CAMP must provide different ways to retrieve a metaenum:
+
+	\begin{tabular}{r|l}
+		From an enum type			& \verb@enumByType<MyEnum>()@   \\
+		From a metaenum name  & \verb@enumByName("MyEnum")@   \\
+		From an enum instance &	\verb@enumByObject(instance)@ \\
+		From an index				  &	\verb@enumByIndex(1)@ 			  \\
+	\end{tabular}
+	
+	Each metaenum is represented by a unique instance; thus every call to one of the above functions
+	to request the same metaenum will return a reference to the same instance.
+	
+	The returned object must be a \emph{read-only} reference to the metaenum; after declaration-time
+	metaenums cannot be modified, they can only be read.
+
+	In the special case a C++ enum is bound to multiple metaenums, it must be possible to
+	retrieve all of them using their total count and an indexed access:
+
+	\begin{tabular}{r|l}
+		From a type 				  & \verb@enumByType<MyClass>(index)@    \\
+		From an enum instance & \verb@enumByObject(instance, index)@
+	\end{tabular}
+	
+	Retrieving a metaenum triggers an error if the metaenum does not exist. Such error will be reported
+	at compile-time whenever possible.
+
+\subsection{Usage}
+
+	The interface of metaenums must provide full access to the enumeration members:
+	
+	\begin{itemize}
+		\item The total number of pairs contained in the metaenum
+		\item Iterate on pairs
+		\item Get a value from its name
+		\item Get a name from its value
+		\item Check if the metaenum contains a name or a value
+	\end{itemize}
+
+\section{Metavalue}
+\label{sec:metavalue}
+
+	Metavalue is a high-level concept of variables. It is a kind of variant, that can hold values of
+	any valid type (see section \ref{sec:metavalue-types}). It is used in CAMP to wrap C++ values
+	into an abstract representation that will be manipulated by other CAMP entities (properties, functions, ...).
+	
+	Metavalues should behave as much as possible like C++ variables, but with extra flexibility.
+	Here are the requirements for them:
+
+	\begin{tabular}{r|l}
+		\textbf{Requirement}									& \textbf{Example}												\\
+		\hline
+		Construct empty values 								& \verb@Value v;@    											\\
+		Construct and assign from valid types	& \verb@Value v(5); v = true;@ 						\\
+		Copy and assign from other values 		& \verb@Value v1; Value v2(v1); v1 = v2;@ \\
+		Retrieve its abstract type 						& \verb@type = v.type();@ 							\\
+		Check conversion to valid types 			& \verb@bool b = v.isConvertible<int>();@ \\
+		Convert implicitly to valid types 		& \verb@int x = v;@ 											\\
+		Convert explicitly to valid types 		& \verb@int x = v.to<int>();@ 						\\
+		Support comparisons with other values	& \verb@ ==, !=, <, >, <=, >=@ 						\\
+		Support type-safe visitation 					& \verb@see "visitation" section below@ 	\\
+	\end{tabular}
+
+\subsection{Supported types}
+\label{sec:metavalue-types}
+
+	Metavalues must support construction and conversion from/to the following set of types:
+
+	\begin{description}
+		\item[Booleans] bool
+		\item[Integers] char, short, int, long and their signed/unsigned versions
+		\item[Reals] float, double
+		\item[Strings] const char*, std::string, and user-defined string types
+		\item[Enumerations] user-defined enum types
+		\item[User types] user-defined class types
+	\end {description}
+	
+	By default CAMP provides mapping and conversion for primitive and standard types, but
+	it must be extensible in order to support user-defined types. The extension system must
+	allow users to provide the following information	about a custom type:
+	
+	\begin{itemize}
+		\item The abstract CAMP type it maps to (integer, string, enumeration, ...)
+		\item How to convert from it to the CAMP type
+		\item How to convert from \emph{all} supported CAMP types to it
+	\end{itemize}
+
+\subsection{Type-safe visitation}
+\label{sec:metavalue-visitor}
+
+	Metavalues hide their actual C++ type in order to provide a uniform abstraction, but
+	it may sometimes be desirable to have a direct access to the underlying type for operations
+	that require strong type-safety.
+	
+	To enable this, metavalues have to support static visitation. A visitor
+	must define a callback function for every possible type used by metavalues,
+	and CAMP will call the proper one according to the actual type of the value.
+	
+	This can be seen as a compile-time switch, which dispatches the execution to
+	the proper function according to the real type of the value.
+
+	Example:
+	
+\begin{cppcode}
+class Visitor : public ValueVisitor
+{
+public:
+
+  void visit(Value::BoolType value);
+  void visit(Value::IntegerType value);
+  void visit(Value::StringType value);
+  ...
+};
+
+Value v = 5;
+visitor.visit(Visitor());
+\end{cppcode}
+	
+	In this example, the metavalue \verb@v@ is assigned an integer so the visitor will be notified
+	in its \verb@visit(Value::IntegerType)@ function, which directly receives the value as an integer type.
+	
+	\ibinfo
+	{
+		If visiting an empty value, the visitor must receive an argument of a special type (\texttt{Value::EmptyType})
+		indicating that the source value contains nothing.
+	}
+
+	CAMP must support unary visitation as well as binary visitation.
+	
+	Here is an example of a binary visitor:
+
+\begin{cppcode}
+class BinaryVisitor : public ValueVisitor
+{
+public:
+
+  void visit(Value::BoolType v1, Value::BoolType v2);
+  void visit(Value::IntegerType v1, Value::StringType v2);
+  ...
+};
+
+Value v = 5;
+Value other = "hello";
+v.visit(BinaryVisitor(), other);
+\end{cppcode}
+	
+	In this example, the visitor will be notified	in its
+	\texttt{visit(Value::IntegerType, Value::StringType)} function,
+	which will directly receive 5 and "hello".
+
+\section{Metaobject}
+\label{sec:metaobject}
+
+	Metaobject is a high-level concept of class instance. It is an abstract wrapper that can
+	store any type of object, and which can be used by metaproperties and metafunctions
+	with no knowledge about the actual C++ type of the stored object.
+	
+	Metaobjects should behave as much as possible like class instances, but with extra flexibility.
+	Here are the requirements for them:
+
+	\begin{tabular}{r|l}
+		\textbf{Requirement}										& \textbf{Example}													\\
+		\hline
+		Construct and assign from any type	 		& \verb@Object o(obj); o = obj;@ 						\\
+		Copy and assign from other objects 			& \verb@Object o1; Object o2(o1); o1 = o2;@ \\
+		Retrieve its metaclass 									& \verb@metaclass = o.metaclass();@ 				\\
+		Convert explicitly to a class type			& \verb@o.to<MyClass>();@ 									\\
+		Support comparisons with other objects	& \verb@ ==, !=, <, >, <=, >=@ 							\\
+	\end{tabular}
+
+\subsection{Conversions from/to user types}
+\label{sec:metaobject-conversion}
+
+	Just like the metaclass retrieval function, the metaobject constructor accepts source objects
+	with any kind of modifier/storage. Here is the list of what is accepted:
+
+	\begin{itemize}
+		\item A direct object (\verb@T@)
+		\item A const object (\verb@const T@)
+		\item A pointer to the object (\verb@T*@)
+		\item A const pointer to the object (\verb@const T*@)
+		\item A smart pointer to the object (\verb@shared_ptr<T>@)
+	\end{itemize}
+	
+	In all the above cases, the metaobject will be aware that it is storing an object of type T, and its metaclass
+	must be the one associated to T.
+
+  Similarly, conversions from objects to user types using any of the above modifiers must be properly interpreted
+  and return the expected result.
+	
+\subsection{Copy}
+\label{sec:metaobject-copy}
+
+	A metaobject must ensure that the stored object is never copied. In other words, metaobjects must always
+	deal with direct pointers to the source objects, and never create new instances that the user may not be aware of.
+	
+	This has the consequence that users must ensure that the lifetime of a stored object is almost as long as
+	the lifetime of the metaobject storing it.
+
+\section{Metaproperty}
+\label{sec:metaproperty}
+
+	A metaproperty is a member of a metaclass, just like a variable can be a member of a C++ class. It abstracts
+	the way its value is read and written, thus providing a unified way of accessing any property of an object.
+
+	A metaproperty describes a property inside a metaclass, and is not bound to a particular object. A metaproperty
+	must be used with an object instance of the owner metaclass to actually get or set its value.
+
+	Metaproperties must provide the following interface:
+
+	\begin{itemize}
+		\item Retrieve its name
+		\item Retrieve its type (see section \ref{sec:metaproperty-types})
+		\item Check if the property is readable
+		\item Check if the property is writable
+		\item Get its value for a given object
+		\item Set its value for a given object
+		\item Implement tags (see section \ref{sec:tag})
+	\end{itemize}
+
+\subsection{Metaproperty types}
+\label{sec:metaproperty-types}
+
+	Every metaproperty has an abstract type, which refers to the actual type of the underlying
+	C++ property.
+
+	Here is the list of all the types that must be supported by metaproperties:
+
+	\begin{itemize}
+		\item Boolean
+		\item Integer
+		\item Real
+		\item String
+		\item Array
+		\item Enumeration
+		\item Object
+	\end{itemize}
+
+\subsection{Declaration}
+
+	Metaproperties are defined within the declaration of their owner metaclass.
+	
+	A metaproperty declaration must provide the following information:
+	
+	\begin{itemize}
+		\item Its name (must be unique within the metaproperties of a metaclass)
+		\item The C++ variable / function it is bound to
+		\item Its readable state (i.e. can we get the property?)
+		\item Its writable state (i.e. can we set the property?)
+		\item Its tags
+	\end{itemize}
+	
+	The metaproperty name and its C++ binding are mandatory, all other attributes are optional. By default,
+	a metaproperty should be readable if it is bound to a valid getter, writable if it is bound to a
+	valid setter, and contain no tag.
+	
+	To access its underlying value, the metaproperty must be bindable to several C++ entities related to the target class
+	(member functions, member variables, etc.). See section \ref{sec:metaproperty-bind} for a complete reference
+	of all the possible bindings.
+
+	The readable and writable states of a metaproperty can be bound either to a boolean constant,
+	or to a function of the target C++ class returning a boolean. In such case, the state will depend
+	on an object's state rather than being a constant value.
+	
+	\begin{minipage}{\linewidth}
+		Example:
+
+\begin{cppcode}
+declare<TargetClass>("Name")
+  .property("x", &TargetClass::x)
+    .readable(true)
+    .writable(false)
+    .tag(scriptable)
+  ...
+\end{cppcode}
+	
+	\end{minipage}
+
+	\ibinfo
+	{
+		Please refer to section \ref{sec:tag} for a complete description of tags.
+	}
+
+\subsection{Bindings}
+\label{sec:metaproperty-bind}
+
+	To get or set its value for a particular object, a metaproperty must be bindable to
+	either a single getter, a single setter, or a pair of getter and setter.
+
+\subsubsection{Getters}
+
+	The getter must accept the following C++ entities:
+
+	\begin{tabular}{r|l}
+		\textbf{Binding}	& \textbf{Examples}											\\
+		\hline
+		A member variable	& \verb@int Class::x@ 			    				\\
+		\hline
+		A member function	& \verb@bool Class::get()@ 							\\
+		~ 								& \verb@bool Class::get() const@ 				\\
+		\hline
+		A free function		& \verb@float get(Class&)@ 								\\
+		~ 								& \verb@float get(Class*)@ 								\\
+		~ 								& \verb@float get(const Class&)@ 					\\
+		~ 								& \verb@float get(const Class*)@ 					\\
+		\hline
+		A function object	& \verb@boost::function<int (Class&)>@ 	\\
+		~ 								& \verb@boost::bind(&Class::get, _1)@ 	\\
+		\hline
+	\end{tabular}
+
+	Function objects are special objects behaving as functions by overloading an \verb@operator()@.
+	The main purpose of supporting such objects is to make CAMP compatible with third-party
+	libraries which provide powerful function semantics through function objects (such as
+	std::binder, boost::function, boost::bind, etc.).
+
+	If a metaproperty is bound to a getter which gives a write access to the
+	variable (i.e. returning a non-const reference/pointer to the value), it must be
+	considered as	a setter as well.
+
+\subsubsection{Setters}
+
+	The setter must accept the following C++ entities:
+
+	\begin{tabular}{r|l}
+		\textbf{Binding}	& \textbf{Examples}														\\
+		\hline
+		A member variable	& \verb@int Class::x@ 			    							\\
+		\hline
+		A member function	& \verb@void Class::set(bool)@ 								\\
+		\hline
+		A free function		& \verb@void set(Class&, float)@ 								\\
+		~ 								& \verb@void set(Class*, float)@ 								\\
+		\hline
+		A function object	& \verb@boost::function<void (Class&, int)>@	\\
+		~ 								& \verb@boost::bind(&Class::set, _1, _2)@ 		\\
+		\hline
+	\end{tabular}
+
+\subsubsection{Returned value}
+
+	The value returned by the binding can have the following modifiers:
+
+	\begin{itemize}
+		\item A direct value (\verb@T@)
+		\item A const value (\verb@const T@)
+		\item A pointer to the value (\verb@T*@)
+		\item A const pointer to the value (\verb@const T*@)
+		\item A smart pointer to the value (\verb@shared_ptr<T>@)
+	\end{itemize}
+
+	All of the above types must produce a metaproperty of type T, and must not
+	alter the way the metaproperty is manipulated from the user's point of view.
+
+\subsection{Special types of metaproperties}
+\label{sec:metaproperty-derived}
+	
+	All types of properties share the same basic semantics (accessing a single value), but some of them have
+	additional semantics due to their type. These types are Array, Enumeration and Object.
+	
+	In order to provide the extra features tied to their type, they must extend the basic metaproperty interface.
+
+	Figure \ref{fig:properties} shows these special types of properties and the extra members they provide.
+
+	\image{fig:properties}{The properties classes}{images/properties}
+
+\subsubsection{Array property}
+\label{sec:metaproperty-array}
+
+	Array properties (i.e. properties bound to C++ arrays) extend the basic metaproperty interface
+	to add array-related features. CAMP must handle both static arrays (their size is fixed)
+	and dynamic ones (they can grow at runtime).
+	
+	An array metaproperty provides the following extra functions:
+
+	\begin{itemize}
+		\item Check whether the array is static or dynamic
+		\item Retrieve its current size
+		\item Get an element by its index
+		\item Set an element by its index
+		\item Insert a new element
+		\item Remove an existing element by its index
+	\end{itemize}
+	
+	Insertion and removal are available only if the array is dynamic, and must trigger an error if used on static arrays.
+
+\par{\textbf{Extending array properties}}
+
+	By default, CAMP must be able to handle the standard types of array-like containers:
+	
+	\begin{itemize}
+		\item T[N]
+		\item std::vector$<$T$>$
+		\item std::list$<$T$>$
+		\item boost::array$<$T, N$>$
+	\end{itemize}
+	
+	But it may sometimes be desirable to be able to use a custom type of array, like a \verb@QVector<T>@ for instance.
+	CAMP must provide	a simple way to extend the array metaproperties to any of these user-defined array types.
+
+\subsubsection{Enum property}
+\label{sec:metaproperty-enum}
+
+	Enumerated properties (i.e. properties bound to C++ enum types) have the same semantics as simple properties,
+	except they also provide information related to their corresponding metaenum (see section \ref{sec:metaenum}).
+
+\subsubsection{Object property}
+\label{sec:metaproperty-object}
+
+	Object properties (i.e. properties bound to user-defined class types) have the same semantics as simple properties,
+	except they also provide information related to their corresponding metaclass (see section \ref{sec:metaclass}).
+
+\section{Metafunction}
+\label{sec:metafunction}
+
+	A metafunction is a member of a metaclass, just like a function can be a member of a C++ class. It abstracts
+	the way it is executed, thus providing a unified way of calling any function of an object.
+
+	A metafunction describes a function inside a metaclass, and is not bound to a particular object. A metafunction
+	must be used with an object instance of the owner metaclass to actually execute a function.
+
+	Metafunctions must provide the following interface:
+
+	\begin{itemize}
+		\item Retrieve its name
+		\item Retrieve its return type (see section \ref{sec:metaproperty-types})
+		\item Retrieve its arguments types (see section \ref{sec:metaproperty-types})
+		\item Retrieve its arguments count
+		\item Check if the function is callable
+		\item Call the function for a given object
+		\item Implement tags (see section \ref{sec:tag})
+	\end{itemize}
+
+\subsection{Declaration}
+
+	Metafunctions are defined within the declaration of their owner metaclass.
+	
+	A metafunction declaration must provide the following information:
+	
+	\begin{itemize}
+		\item Its name (must be unique within the metafunctions of a metaclass)
+		\item The C++ function it is bound to
+		\item Its callable state (i.e. can we execute the function?)
+		\item Its tags
+	\end{itemize}
+	
+	The metafunction name and its C++ binding are mandatory, all other attributes are optional. By default,
+	a metafunction should be callable and contain no tag.
+	
+	To access its underlying function, the metafunction must be bindable to several C++ entities related to the target class
+	(member functions, etc.). See section \ref{sec:metafunction-bind} for a complete reference
+	of all the possible bindings.
+
+	The callable state of a metafunction can be bound either to a boolean constant,
+	or to a function of the target C++ class returning a boolean. In such case, the state will depend
+	on an object's state rather than being a constant value.
+
+	Example:
+
+\begin{cppcode}
+declare<TargetClass>("Name")
+  .function("f", &TargetClass::f)
+    .callable(true)
+    .tag(scriptable)
+  ...
+\end{cppcode}
+	
+	\ibinfo
+	{
+		Please refer to section \ref{sec:tag} for a complete description of tags.
+	}
+
+\subsection{Bindings}
+\label{sec:metafunction-bind}
+
+	To execute its function for a particular object, a metafunction must be bindable to
+	the following C++ types:
+
+	\begin{tabular}{r|l}
+		\textbf{Binding}	& \textbf{Examples}												\\
+		\hline
+		A member function	& \verb@int Class::f()@ 			    				\\
+		~ 								& \verb@int Class::f() const@ 						\\
+		\hline
+		A free function		& \verb@bool f(Class&)@ 									\\
+		~ 								& \verb@bool f(Class*)@ 									\\
+		~ 								& \verb@bool f(const Class&)@ 						\\
+		~ 								& \verb@bool f(const Class*)@ 						\\
+		\hline
+		A function object	& \verb@boost::function<float (Class&)>@ 	\\
+		\hline
+	\end{tabular}
+
+	Function objects are special objects behaving as functions by overloading an \verb@operator()@.
+
+\subsubsection{Result and arguments types}
+
+	A metafunction can be bound to a function returning a value or nothing (\verb@void@).
+	It must at least support functions with up to 5 arguments.
+
+	The result and arguments types of the binding can have the following modifiers:
+
+	\begin{itemize}
+		\item A direct value (\verb@T@)
+		\item A const value (\verb@const T@)
+		\item A pointer to the value (\verb@T*@)
+		\item A const pointer to the value (\verb@const T*@)
+		\item A smart pointer to the value (\verb@shared_ptr<T>@)
+	\end{itemize}
+
+	All of the above types must be interpreted the same way as T, and must not
+	alter the way the metafunction is manipulated from the user's point of view.
+
+\section{Properties and functions tags}
+\label{sec:tag}
+
+	In addition to their fixed attributes (readable, writable, callable),
+	metaproperties and metafunctions can be extended to hold custom tags. This allows to communicate with
+	external high-level components without impacting the CAMP API. An example would be a "persistant"
+	tag, to mark which properties have to be serialized by an XML writer or a network engine.
+	
+	A tag can be:
+
+	\begin{tabular}{r|l}
+		\hline
+		A single static value								& \verb@"persistent"@ 													\\
+		~																		& \verb@scriptable@ 			  										\\
+		\hline
+		A static $<$key, value$>$ pair			& \verb@<"category", 5>@ 												\\
+		~																		& \verb@<designable, true>@ 										\\
+		\hline
+		A key associated to a dynamic value	& \verb@<"category", &TargetClass::category>@ 	\\
+		~																		& \verb@<designable, &TargetClass::designable>@ \\
+		\hline
+	\end{tabular}
+
+	Both keys and values are metavalues, and can thus be assigned any supported type (booleans,
+	integers, reals, strings, enums, objects).
+	
+	If the tag is bound to a member of the target class, its value will be dynamic and
+	thus depend on every instance. The valid bindings for dynamic tags are detailed in section
+	\ref{sec:metaproperty-bind}.
+
+	Metaproperties and metafunctions can hold any number of tags. They must provide the following interface to
+	give access to them:
+	
+	\begin{itemize}
+		\item Getting the total number of tags
+		\item Retrieving a tag by its index
+		\item Checking existence of a tag by its identifier
+		\item Getting a tag's value by its identifier
+	\end{itemize}
+
+\section{Error handling}
+\label{sec:error}
+
+	Any inconsistent operation must be reported by CAMP as an error. A CAMP error must provide
+	all the information about the error, so that the client code can interpret and format it
+	in its own way.
+
+	Here is the list of errors triggered by CAMP:
+
+	\begin{description}
+		\item[Invalid class] The requested metaclass does not exist.
+		\item[Invalid enum] The requested metaenum does not exist.
+		\item[Invalid value] The metavalue cannot be converted to the requested type.
+		\item[Invalid argument] The metavalue cannot be converted to the requested metafunction parameter.
+		\item[Invalid property] The requested metaproperty does not exist in the metaclass.
+		\item[Invalid function] The requested metafunction does not exist in the metaclass.
+		\item[Invalid enum value] The requested value does not exist in the metaenum.
+		\item[Invalid enum name] The requested name does not exist in the metaenum.
+		\item[Invalid object] The metaobject cannot be converted to the requested type.
+		\item[Invalid index] The given index is out of the valid range.
+		\item[Invalid access] The requested action cannot be executed due to access restrictions (metaproperty get/set, metafunction call).
+	\end{description}
+
+\section{Observers}
+\label{sec:observer}
+
+	CAMP must provide a way for the client code to be notified of some internal events.
+	
+	In particular, the system must notify the following events:
+	
+	\begin{itemize}
+		\item Metaclass creation
+		\item Metaenum creation
+		\item Metaclass removal
+		\item Metaenum removal
+	\end{itemize}
+
+\section{Visitors}
+\label{sec:visitor}
+
+	Although the basic API of CAMP provides everything necessary to build components on top of it, it
+	also provides a framework to make this process more straight-forward.
+	
+	This framework is based on the visitor pattern, and makes exploring a metaclass' properties and
+	functions easier and cleaner. In particular, it must give access to the actual type of properties
+	(see \ref{sec:metaproperty-derived}), which is not possible with the standard metaclass and metaproperty
+	interface.
+
+	Here is an example of what a metaclass visitor must look like:
+	
+\begin{cppcode}
+class ClassVisitor
+{
+public:
+  void visit(Class);
+    
+protected:
+  void visit(SimpleProperty);
+  void visit(ArrayProperty);
+  void visit(EnumProperty);
+  void visit(ObjectProperty);
+  void visit(Function);
+};
+\end{cppcode}
+
+\appendix
+
+\chapter{Why not just using Qt's properties system?}
+
+	Qt provides a similar system that could be used directly, but it fails to meet the following requirements:
+	
+	\begin{itemize}
+		\item The system is very intrusive, and tied to Qt framework and tools (MOC)
+		\item Properties cannot be bound to direct members nor member of member, only to a set of accessors
+		\item Objects embedding properties cannot be valid types of properties for other objects
+		\item Valid types of properties cannot hold properties themselves, and thus cannot be introspected
+		\item Visibility of properties cannot change according to the state of the object
+		\item Properties cannot hold custom tags
+		\item Multiple inheritance is not supported
+	\end{itemize}
+
+\chapter{Future improvements}
+
+\section{Adding scopes for metaclasses and metaenums}
+
+	This would mainly be used in script engines, in order to add a high-level layer
+	of organization. Metaclasses and Metaenums could be declared in a given scope,
+	which is either a metaclass or a ``namespace''.
+
+\section{Support for dictionary properties}
+
+	If necessary, CAMP could support a new type of properties bound to
+	dictionaries (std::map, ...). It would define a specific interface to
+	manipulate keys and values, as well as an extension system similar to
+	arrays for binding custom types of dictionaries.
+
+\section{Extending the Visitor base class}
+
+	The Visitor class provides a minimal interface for exploring properties and functions
+	of a metaclass. If required, it could be extended to include more advanced features such
+	as filtering or custom traversal.
+
+\section{Automatic support for \texttt{toString()} function}
+
+	At declaration time, a metaclass could try to detect an available conversion from its target class
+	to a string type, and automatically provide it in its interface through a \verb@toString(object)@ function.
+	
+	CAMP could detect the following typical implementations of the conversion:
+	\begin{itemize}
+		\item A operator$<<$(std::ostream\&, const T\&) function
+		\item A T::toString() function
+		\item A T::operator const char*() function
+		\item A T::operator std::string() function
+	\end{itemize}
+	
+	If a conversion exists but uses something else, it could also be given explicitely when declaring the metaclass.
+
+\listoffigures
+
+\end{document}

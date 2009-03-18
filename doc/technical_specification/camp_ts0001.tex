@@ -1,0 +1,574 @@
+
+\documentclass[a4paper, twoside]{report}
+
+%-------------------------------------
+
+% Document type
+\usepackage{tgstechspec}
+
+% Document informations
+\documentreference{TS-0001}
+\projectcode{DMAC}
+\documentmajorversion{1}
+\documentminorversion{A}
+\clientcode{TGS}
+\notcontractualdocument
+\documentauthor{\persons{GOM}{}}
+\documentcontroller{\persons{DEL}{}}
+\documentquality{\persons{DOC}{}}
+\title{CAMP}
+\date{February 19, 2009}
+
+% Document status
+%\draftdocument
+%\underapprovaldocument
+\publisheddocument
+%\obsoletedocument
+
+% Document classification
+%\publicdocument
+%\restricteddocument
+\confidentialdocument
+
+% Generate PDF information
+\makepdfinfo
+
+%-------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\chapter*{About this document}
+
+\section*{Document history}
+
+\begin{historytable}
+    \addhistory{1.A}{2009-02-19}{GOM}{Initial version}
+\end{historytable}
+
+\section*{Related documents}
+
+\begin{documenttable}
+    \adddocument{RS-0001}{1.A}{}{Required}
+\end{documenttable}
+
+\tableofcontents
+
+\chapter{Overview of design and implementation}
+
+\section{Metaprogramming}
+
+	Due to its high-level of genericity, CAMP makes an intensive use of C++ meta-programming technics.
+	We choose to use a lot of compile-time code generation, automatic type detection, etc. to
+	make the public API as intuitive and straight-forward as possible for the end user, who
+	may not have particular meta-programming skills.
+	
+	By using meta-programming technics, we also ensure that metaclasses declarations are
+	type-safe, and that CAMP will never be able to create valid objects that would be dangerous to use.
+	
+	To help writing meta-programs, the boost\footnote{\url{http://www.boost.org/}} library is used,
+	especially its \verb@function@, \verb@bind@, \verb@function_types@, \verb@type_traits@
+	and \verb@variant@ modules.
+	
+\section{Abstraction}
+
+	Another aspect of CAMP is its flexibility at runtime, which means that all the templates
+	must remain hidden from the public interface and be used only internally. As a consequence,
+	CAMP is made of two layers: the abstract/typeless public interface, and the specialized/strongly-typed
+	implementation.
+	
+	This is generally implemented using the same pattern: an
+	abstract base class handling abstract variables (metavalue, metaobject),
+	and template derived classes which convert those variables to the corresponding typed values
+	and forward them to the actual member of the target C++ class.
+	
+	This organization is illlustrated in
+	chapter \ref{sec:property} with the typical examples of metaproperties.
+	
+\section{Namespaces}
+
+	CAMP defines its classes and functions in three namespaces:
+	
+	\begin{tabular}{r|l}
+		\verb@camp@         & public API \\
+		\verb@camp_ext@     & public API which can be extended by users \\
+		\verb@camp::detail@ & private API \\
+	\end{tabular}
+
+\section{Macros}
+
+	All the macros defined by CAMP have the \verb@CAMP_@ prefix.
+
+\chapter{Metaclass}
+
+	Three classes are involved in management of metaclasses:
+	
+	\begin{itemize}
+		\item \verb@Class@ represents the metaclass; it contains the interface to access its properties, functions, etc.
+		\item \verb@ClassManager@ is a singleton class which creates, stores and destroys the metaclasses instances
+		\item \verb@ClassBuilder@ is a proxy which fills a metaclass with bases, properties, functions and constructors
+	\end{itemize}
+	
+	These three classes are detailed on figure \ref{fig:class}.
+	
+	Creating a metaclass can be decomposed into the following steps:
+	
+\begin{cppcode}
+template <typename T>
+ClassBuilder<T> Class::declare(string name)
+{
+  // 1- get the CAMP identifier of T
+  string id = staticTypeId<T>();
+  
+  // 2- register it and get back the new metaclass created by the manager
+  Class& newClass = ClassManager::instance().registerNew(name, id);
+  
+  // 3- return a builder constructed from the new metaclass
+  return ClassBuilder<T>(newClass);
+}
+\end{cppcode}
+
+	\rotatedimage{fig:class}{The \texttt{camp::Class} class}{images/class}
+
+\chapter{Metaenum}
+
+	The implementation of metaenums follows the same pattern as metaclasses:
+	
+	\begin{itemize}
+		\item \verb@Enum@ represents the metaenum; it contains the interface to access its items
+		\item \verb@EnumManager@ is a singleton class which creates, stores and destroys the metaenums instances
+		\item \verb@EnumBuilder@ is a proxy which fills a metaenum with $<$name, value$>$ pairs
+	\end{itemize}
+	
+	These three classes are detailed on figure \ref{fig:enum}.
+	
+	Similarly to creating a metaclass, creating a metaenum can be decomposed into the following steps:
+	
+\begin{cppcode}
+template <typename T>
+EnumBuilder Enum::declare(string name)
+{
+  // 1- get the CAMP identifier of T
+  string id = staticTypeId<T>();
+  
+  // 2- register it and get back the new metaenum created by the manager
+  Enum& newEnum = EnumManager::instance().registerNew(name, id);
+  
+  // 3- return a builder constructed from the new metaenum
+  return EnumBuilder(newEnum);
+}
+\end{cppcode}
+
+	\rotatedimage{fig:enum}{The \texttt{camp::Enum} class}{images/enum}
+
+\chapter{Metaproperty}
+\label{sec:property}
+
+	Metaproperties are implemented using a hierarchy of classes with three layers, as shown in
+	figure \ref{fig:property}.
+	
+	The first layer is the main part of the public API: \verb@camp::Property@. It defines pure virtuals to get and set
+	the value of the property, plus all the accessors not related to the implementation of the property. It also
+	defines the \verb@isReadable@ and \verb@isWritable@ virtual functions, to let the derived classes tell whether or not
+	it has valid getter and setter, independently of the readable and writable state of the property. This allows to handle properly
+	properties marked as writable but not bound to a valid setter (same for readable/getter).
+	
+	The second layer is a less visible part of the API: \verb@camp::Property@ is derived in 4 classes that
+	fit the different types of properties, and add the extra features related to them:
+	
+	\begin{itemize}
+		\item \verb@SimpleProperty@ adds nothing, it is just separated from the other properties by design
+		\item \verb@ArrayProperty@ adds array semantics through virtual functions to access the elements of the array
+		\item \verb@EnumProperty@ adds an access to the metaenum of the property
+		\item \verb@UserProperty@ adds an access to the metaclass of the property
+	\end{itemize}
+	
+	This layer is still abstract, but completes the set of functions needed for metaproperties.
+	
+	The third layer is purely an implementation layer, it consists of the typed implementations of the 4 property classes.
+	These derived classes are strongly typed, and can thus store and manipulate the actual C++ property.
+
+	\rotatedimage{fig:property}{Implementation of metaproperties}{images/property}
+
+\section{Array metaproperties}
+
+	Array metaproperties (\verb@camp::ArrayProperty@) are a special case since they have a whole new semantic. They add functions
+	for manipulating the underlying array, whatever its actual type is (\verb@T[]@, \verb@std::vector@, ...).
+	
+	To do so, \verb@ArrayProperyImpl@ uses the template class \verb@camp_ext::ArrayMapper@. \verb@ArrayMapper<T>@ is a utility class
+	which adapts the particular interface of an array type to a common interface usable by \verb@ArrayProperyImpl@. Moreover,
+	this structure can be specialized by the user in order to make its own array class compatible with CAMP.
+	
+	Here is a sample specialization for \verb@std::vector@:
+	
+\begin{cppcode}
+namespace camp_ext
+{
+  template <typename T>
+  struct ArrayMapper<std::vector<T> >
+  {
+    typedef T ElementType;
+    
+    static bool dynamic()
+    {
+      return true;
+    }
+    
+    static std::size_t size(const std::vector<T>& arr)
+    {
+      return arr.size();
+    }
+    
+    static const T& get(const std::vector<T>& arr, std::size_t index)
+    {
+      return arr[index];
+    }
+    
+    static void set(std::vector<T>& arr, std::size_t index, const T& value)
+    {
+      arr[index] = value;
+    }
+    
+    static void insert(std::vector<T>& arr, std::size_t index, const T& value)
+    {
+      arr.insert(arr.begin() + index, value);
+    }
+    
+    static void remove(std::vector<T>& arr, std::size_t index)
+    {
+      arr.erase(arr.begin() + index);
+    }
+}
+\end{cppcode}
+
+\chapter{Metafunction}
+\label{sec:function}
+
+	Metafunctions are implemented using several typed classes inheriting from \verb@camp::Function@, as shown in
+	figure \ref{fig:function}.
+	
+	When calling \verb@Function::call@, some common checks are done on the object and the parameters, then the call is forwarded
+	to the \verb@execute@ virtual function. This function is implemented in every \verb@FunctionImpl@ derived class, which
+	is specialized for a different number of arguments so that it can extract them from the provided list and call the underlying function properly.
+
+	Derived classes store the underlying C++ function to call in an instance of \verb@boost::function@, so that it can hold all the supported
+	callable entities (member function, free function, ...) without the need for more specializations to handle this.
+	
+	To return a proper value even when the underlying function returns nothing (\verb@void@), \verb@FunctionImpl::execute@ uses a
+	structure which dispatches the call at compile-time according to the return type: if it is void then it returns \verb@Value::nothing@,
+	otherwise it returns a value constructed from the returned value.
+	
+	Example for the specialization handling two arguments:
+
+\begin{cppcode}
+template <typename R, typename C, typename A1, typename A2>
+class FunctionImpl<R (C, A1, A2)>
+{
+public:
+
+  Value execute(const UserObject& object, const Args& args) const
+  {
+    return CallHelper<R>::call(m_function, object.get<C>(),
+                               args[0].to<A1>(), args[1].to<A2>());
+  }
+
+private:
+
+  boost::function<R (C, A1, A2)> m_function;
+};
+\end{cppcode}
+
+	\rotatedimage{fig:function}{Implementation of metafunctions}{images/function}
+
+\chapter{Metaconstructor}
+
+	Metaconstructors, just like metaproperties and metafunctions, are implemented using an abstract base class and
+	typed specializations, as shown on figure \ref{fig:constructor}.
+
+	The base class contains two virtual functions:
+	\begin{itemize}
+		\item \verb@matches(args)@ is called when the owner metaclass needs to match a constructor with a set of arguments; this is the only
+		      way to find which constructor to call according to the provided arguments
+		\item \verb@create(args)@ creates an instance of the class with the provided arguments
+	\end{itemize}
+	
+	The derived classes, which are specialized on the type and number of arguments, can then implement these two virtual functions.
+
+	\rotatedimage{fig:constructor}{Metaconstructors}{images/constructor}
+
+\chapter{Metavalue}
+
+	Metavalues in CAMP are implemented in the \verb@camp::Value@ class.
+	In fact, this class is just a wrapper which hides the usage of more complex
+	sub-modules to implement its features.
+	
+	Figure \ref{fig:value} describes the \verb@camp::Value@ interface and its components.
+	
+	\rotatedimage{fig:value}{The \texttt{camp::Value} class and its components}{images/value}
+
+\section{Storage and conversions}
+
+	In order to be able to store any type of variable, \verb@camp::Value@ internally uses a variant
+	(\verb@boost::variant@). This variant can store any type among a finite set of predefined types,
+	which means that CAMP must be able to map any type of variable to one of these types.
+	
+	Figure \ref{tab:value-types} shows this set of predefined types, and how other types map to them.
+
+	\begin{figure}
+		\label{tab:value-types}
+		\begin{center}
+		\begin{tabular}{|l|l|l|}
+			\hline
+			\textbf{C++ type} & \textbf{CAMP type} & \textbf{storage type} \\
+			\hline
+			N/A 										& noType      & \verb@NoType@ 		\\
+			\hline
+			\verb@bool@ 						& boolType    & \verb@bool@ 				\\
+			\hline
+			\verb@[unsigned] char@ 	& intType			& \verb@long@ 				\\
+			\verb@[unsigned] short@ & ~						& ~ 			 						\\
+			\verb@[unsigned] int@ 	& ~						& ~ 			 						\\
+			\verb@[unsigned] long@ 	& ~						& ~ 			 						\\
+			\hline
+			\verb@float@ 						& realType    & \verb@double@ 			\\
+			\verb@double@ 					& ~						& ~ 			 						\\
+			\hline
+			\verb@const char*@ 			& stringType  & \verb@std::string@	\\
+			\verb@std::string@ 			& ~						& ~ 			 						\\
+			\hline
+			all \verb@enum@ types 	& enumType 		& \verb@EnumObject@ 	\\
+			\hline
+			all other types 				& userType    & \verb@UserObject@ 	\\
+			\hline
+		\end{tabular}
+		\caption{C++ types mapped to CAMP types}
+		\end{center}
+	\end{figure}
+
+	This type mapping is implemented using the \verb@camp_ext::ValueMapper@ template class.
+	\verb@ValueMapper<T>@ provides:
+	\begin{itemize}
+		\item a compile-time constant which identifies the CAMP type that T maps to (i.e. how it should be stored in the variant)
+		\item a function to convert from T to the mapped type
+		\item functions to convert from supported storage types to T (see figure \ref{tab:value-types})
+	\end{itemize}
+
+	CAMP implements specializations of \verb@ValueMapper@ in order to support all the primitive
+	and standard types.
+	
+	Users can extend the mapping system, by creating specializations of the
+	\verb@ValueMapper@ template for their own types, and defining the proper type mapping
+	and conversion functions.
+
+\section{Visitors}
+
+	Metavalues support static visitation, which allows to get a direct access to the value stored
+	in the metavalue.
+	
+  Static visitors are often better than the usual approach using a runtime dispatch with a single
+  switch/case statement. First, the functions handling each type are clearly separated, and dispatch
+  is done at compile-time. Another benefit is that no conversion is needed, the argument is directly
+  the variable which is stored in the metavalue.
+  
+  This is even more important when using binary visitors, which involve double dispatch and are almost impossible to
+  handle properly with switch/case statements.
+	
+	To implement value visitors, CAMP uses the visitation feature of
+	\verb@boost::variant@, which already does all the dispatching job.
+	
+	Users can write their own visitors by inheriting from \verb@camp::ValueVisitor@, which
+	itself inherits from \verb@boost::static_visitor@ in order to be compatible with \verb@boost::variant@.
+	
+	The visitation system is also used internally by CAMP, to implement most of the features of
+	\verb@camp::Value@ : conversions, comparisons, ...
+
+	Here is an exemple of a visitor which creates an editor according to the type of the value:
+
+\begin{minipage}{\linewidth}
+\begin{cppcode}
+struct EditorFactory : public ValueVisitor<PropertyEditor*>
+{
+    PropertyEditor* operator()(bool value)
+    {
+        return new BooleanEditor(value);
+    }
+
+    PropertyEditor* operator()(long value)
+    {
+        return new IntegerEditor(value);
+    }
+
+    PropertyEditor* operator()(double value)
+    {
+        return new RealEditor(value);
+    }
+
+    PropertyEditor* operator()(const std::string& value)
+    {
+        return new StringEditor(value);
+    }
+
+    PropertyEditor* operator()(const camp::EnumObject& value)
+    {
+        return new EnumEditor(value);
+    }
+
+    PropertyEditor* operator()(const camp::UserObject& value)
+    {
+        return new UserEditor(value);
+    }
+};
+
+camp::Value value;
+PropertyEditor* editor = value.visit(EditorFactory());
+\end{cppcode}
+\end{minipage}
+
+\chapter{Enum and user objects}
+
+	Enum and user objects are wrappers for instances which have a metaenum or metaclass.
+	
+	Figure \ref{fig:enumuserobject} describes these two classes.
+
+\section{Enum object}
+
+  An enum object is composed of an enumerated value, stored as a long integer, and its owner metaenum. This allows to get extra information,
+  such as the name associated to the value in the metaenum.
+  
+  Enum objects are used as the storage type for enumerated values in \verb@camp::Value@.
+
+\section{User object}
+
+	A user object is composed of a raw pointer to the source instance, stored as a typeless \verb@void*@ pointer,
+	and its owner metaclass. This allows to get extra information, such as the name of the class of the object.
+	
+	With the owner metaclass, \verb@UserObject@ is also able to safely handle the conversion of the object back to its original type,
+	or to one of its base types if any.
+	
+	User objects are an important feature of CAMP: they are used as argument type for every function that needs to manipulate
+	an abstract object (\verb@Property::get@, \verb@Property::set@, \verb@Function::call@, ...).
+
+	\image{fig:enumuserobject}{\texttt{EnumObject} and \texttt{UserObject} classes}{images/enumuserobject}
+
+\chapter{Type identification}
+\label{sec:identification}
+
+	In order to map a C++ type to its corresponding metaclass or a metaenum, CAMP implements a strong
+	type identification system. It supports both static type identification, and	dynamic type identification
+	(for polymorphic objects).
+
+	Figure \ref{fig:typeid} shows the structures involved in the type identification system.
+
+	\image{fig:typeid}{Type identification}{images/typeid}
+
+\section{Static identification}
+	
+	Every user-defined type (class or enum) declared with the \verb@CAMP_TYPE@
+	macro is given a string identifier. This identifier is guaranteed to
+	be unique and to always refer to the same type. In other words, there is a 1:1
+	mapping between a C++ type and its CAMP identifier.
+	
+	What the \verb@CAMP_TYPE@ does, is to implement a specialization if the \verb@StaticTypeId@ template
+	to provide a \verb@get@ function which returns the corresponding string identifier.
+	This way, the type$\Leftrightarrow$id mapping is resolved during compilation, and any request for the metaclass
+	or metaenum of a type that has not been declared with \verb@CAMP_TYPE@ can be detected and reported
+	at compile-time (the generic version of \verb@StaticTypeId@ triggers an error in its \verb@get@ function).
+	
+	All this stuff is wrapped and accessed through the \verb@staticTypeId<T>()@ free function.
+
+\section{Dynamic identification}
+
+	In order to be able to retrieve the real dynamic type of a polymorphic object, two solutions exist:
+	
+	\begin{itemize}
+		\item Use standard C++ RTTI through the \verb@typeid@ keyword
+		\item Implement our own RTTI system through virtual functions
+	\end{itemize}
+	
+	As standard RTTI is not realiable enough in this context, CAMP has to use its own RTTI system and thus
+	inserts its own virtual function inside classes that want to support dynamic type identification.
+	
+	This is accomplished with the \verb@CAMP_RTTI@ macro, which expands to this code inside the target class:
+	
+\begin{cppcode}
+virtual const char* campClassId() const
+{
+    return camp::detail::staticTypeId(this);
+}
+\end{cppcode}
+
+	When requesting the type identifier of an object, CAMP detects through the
+	\verb@HasDynamicTypeId@ structure if the C++ type of the object implements the \verb@CAMP_RTTI@ macro.
+	If so, it can safely route the call to the \verb@campClassId@ function of the object; if not,
+	it just retrieves its static type identifier.
+	
+	All this stuff is wrapped and accessed through the \verb@typeId(T)@ free function.
+
+\chapter{Error handling}
+
+	Errors in CAMP are implemented using exceptions. All types of errors inherit from a common base:
+	\verb@Error@.
+	
+	\verb@Error@ inherit itself from the standard \verb@std::exception@ class. It also provides the
+	execution context (source file and line number) where the error happened.
+	
+	Derived types of errors provide a generic error description, as well as information about the context
+	of the error through accessors; see	figure \ref{fig:exceptions} for a detailed description of the error
+	classes and their members.
+	
+	\image{fig:exceptions}{Error classes}{images/exceptions}
+
+	Here is the list of CAMP error classes, and the functions that throw them:
+	
+	\begin{description}
+		\item[InvalidClass] Class::declare, classByName, classByType, classByObject
+		\item[InvalidEnum] Enum::declare, enumByName, enumByType, enumByObject
+		\item[InvalidProperty] Class::property
+		\item[InvalidFunction] Class::function
+		\item[InvalidObject] UserObject::getClass, UserObject::get and every function taking a UserObject in argument
+		\item[InvalidValue] Value::to, Value::operator T and every function taking a Value in argument
+		\item[InvalidArgument] Function::call
+		\item[InvalidEnumValue] Enum::name
+		\item[InvalidEnumName] Enum::value
+		\item[InvalidAccess] Function::call, Property::get, Property::set, ArrayProperty::get,
+                         ArrayProperty::set, ArrayProperty::size, ArrayProperty::insert, ArrayProperty::remove
+		\item[InvalidIndex] Every function taking an index in argument
+	\end{description}
+
+\chapter{Observer}
+
+	\verb@Observer@ is a base class for classes which want to be notified of global CAMP events:
+	
+	\begin{itemize}
+		\item Class creation
+		\item Class removal
+		\item Enum creation
+		\item Enum removal
+	\end{itemize}
+	
+	User-defined observers are registered and unregistered through the \verb@addObserver@ and \verb@removeObserver@ free functions,
+	which forward to the notifier classes (\verb@ClassManager@ and \verb@EnumManager@). Observer notifiers inherit from the base
+	class \verb@ObserverNotifier@, which implements all the common operations (registration, unregistration and iterating over the observers).
+	
+	Figure \ref{fig:observer} shows the implementation of the observer pattern in CAMP.
+
+	\image{fig:observer}{Class and enum observer}{images/observer}
+
+\chapter{Class visitor}
+
+	The class visitor is made of a standard visitor design pattern, as shown on Figure \ref{fig:visitor}.
+	
+	A class which wants to explore the contents of a metaclass can inherit from the \verb@camp::ClassVisitor@ interface, and
+	override the \verb@visit@ functions corresponding to the properties and functions types it wants to explore.
+	
+	Then, a call to \verb@visit(Class)@ starts the visitation and calls back the proper \verb@visit@ functions according to
+	the contents of the visited metaclass.
+
+	\image{fig:visitor}{Inner view of the class visitor framework}{images/visitor}
+
+\newpage
+
+\listoffigures
+
+\end{document}
