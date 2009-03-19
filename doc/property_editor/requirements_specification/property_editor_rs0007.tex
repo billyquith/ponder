@@ -1,0 +1,219 @@
+\documentclass[a4paper, twoside]{report}
+
+%-------------------------------------
+
+% Document type
+\usepackage{tgsreqspec}
+%\usepacakge(tgstechspec}
+%\usepackage{tgstechnote}
+%\usepackage{tgsproc}
+%\usepackage{tgsguidelines}
+%\usepackage{tgstestplan}
+
+% Document information
+\documentreference{RS-0007}
+\projectcode{DMAC}
+\documentmajorversion{1}
+\documentminorversion{A}
+\clientcode{TGS}
+\documentauthor{\persons{DEL}{}}
+\documentcontroller{\persons{RAC}{}}
+\documentquality{\persons{DOC}{}}
+\title{CAMP Property Editor}
+\date{\today}
+
+% Contractual document ?
+%\contractualdocument
+\notcontractualdocument
+
+% Document status
+\draftdocument
+%\underapprovaldocument
+%\publisheddocument
+%\obsoletedocument
+
+% Document classification
+%\publicdocument
+%\restricteddocument
+\confidentialdocument
+
+% Generate PDF information
+\makepdfinfo
+
+%-------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\chapter*{About this document}
+
+\section*{Document history}
+
+% To add a history entry use:
+% \addhistory{version}{data}{author}{changes}
+% Newer history entries first
+\begin{historytable}
+\end{historytable}
+
+\section*{Related documents}
+
+% To add a related document entry use:
+% \adddocument{document}{version}{parts}{knowledge}
+% document: the document reference, title, url...
+% version: version of the document if any
+% parts: parts of the document which is relevant (pages, sections...)
+% knowledge: should be either "Required", or "Recommanded", or "Advised"
+\begin{documenttable}
+    \adddocument{CAMP RS-0001}{1.A}{}{Required}
+\end{documenttable}
+
+\tableofcontents
+
+%-------------------------------------
+
+\chapter{Introduction\label{sec:introduction}}
+
+The CAMP Property Editor is a graphical component which allows to view and edit CAMP properties. The
+component is designed to be embedded into an application which allow easy interaction with CAMP
+objects.
+
+The property editor is extendable to allow custom display and editing according to CAMP property
+types.
+
+This document specifies the requirements for the CAMP Property Editor.
+
+\chapter{Description of needs\label{sec:needs}}
+
+Here is an unordered list of needs for the CAMP Property Editor component.
+
+\begin{itemize}
+    \item Based on Qt Model/View framework
+    \item Allow synchronous viewing and editing of properties
+    \item Ease a future implementation of an asynchronous viewing and editing mode
+    \item Allow cancellation of an editing operations
+    \item Handle clean and dirty states:
+    \begin{itemize}
+        \item Clean state correspond typically to the state of the object the last time it was saved
+        \item Dirty state correspond to an object which has been modified since the last time it was
+saved; the modified properties must be emphasized
+    \end{itemize}
+    \item Handle all CAMP property types
+    \item Allow customization/extension of the property name viewer
+    \item Allow customization/extension of the property value viewer and editor
+    \item Allow to group properties according to the class hierarchy
+    \item Allow property filtering by property name and by tag name using regular expressions
+    \item Allow to edit the common properties of several objects inheriting a same base class
+\end{itemize}
+
+\chapter{Overview\label{sec:overview}}
+
+The CAMP Property Editor shows the CAMP properties of one or several objects in a manner similar to the Qt
+designer property editor which does it for Qt properties (fig. \ref{fig:qt-property-editor}).
+
+\image[0.5]{fig:qt-property-editor}{Qt Designer Property Editor}{images/qt_property_editor}
+
+The editor widget must be composed of two main parts:
+\begin{itemize}
+    \item A tree like structure in a first column which usually displays the property names. It is
+also possible to delegate the property name display to have specific rendering (e.g. for arrays, it
+allows to iterate over elements one by one).
+    \item A second column allows to view and edit the value associated with the properties:
+    \begin{itemize}
+        \item If the property is readable, its value is displayed according to its type. Else, a
+notification of this \emph{not readable} state is displayed.
+        \item If the property is writable, a value editor is displayed when the user click on the
+cell. The editor depends of the property types. If the property is not writable, the property value
+is grayed and no editor is displayed.
+    \end{itemize}
+\end{itemize}
+
+The section \ref{sec:property_types} details the different viewers and editors for all supported
+CAMP property types.
+
+\section{Filtering and grouping}
+
+The property editor must display all visible properties of a CAMP object. Moreover, it must be possible
+to filter the properties according to their names or their tag names using regular expressions.
+
+The property editor must allow to group the properties of a CAMP object according to the class
+hierarchy of the object. The figures \ref{fig:without-classes} and \ref{fig:with-classes} show an
+example of a CAMP object being displayed by the CAMP property editor with and without grouping. In
+the first case, all no classes informations occurs. Each sub-tree directly lists all the properties of the
+corresponding CAMP object. In the second case, all the properties are placed under the meta-class
+name in which they have been declared. This allows to group properties from the most general sub-set to the
+most specific one.
+
+\image[0.5]{fig:without-classes}{Simple property tree}{images/without_classes}
+\image[0.5]{fig:with-classes}{Property tree with classes hierarchy}{images/with_classes}
+
+\section{Editing properties}
+
+When a property is beeing edited, it must be possible to cancel the operation at any time. The
+previous value is then restored.
+
+The CAMP property editor must allow to identify what properties have been changed from the previous
+\emph{clean state}. The clean state corresponds usually to the last time the object has been saved.
+All the properties which differ from that state must be emphasized. This way, the user can easily
+see what has been modified.
+
+The editor must be able to edit several CAMP objects at the same time. In this case, the CAMP
+property editor must list all the of their first common meta-class ancestor. Thus, it the objects
+do not inherit a same base class, no property will be listed.
+
+\chapter{Handling Property Types\label{sec:property_types}}
+
+This section will define how the different CAMP property types will be handled by default. This
+includes how is represented the property name, the property value and how the property value is
+edited. First, we will begin by the default handling if the property type is not handled yet,
+or if it does not provide it own display. Then, for each property type, any special handling is
+listed.
+
+\section{Default}
+
+This section define how properties will be displayed by default (i.e. when no overriding occurs).
+
+The property name is displayed as a simple text. If the property value is convertible into a string,
+this string representation is used as value. Otherwise, the value \emph{not available} is displayed
+in bold and italic. There is no editor available.
+
+\section{Boolean}
+
+This section define how boolean properties will be displayed.
+
+The property value is displayed and edited with a check box.
+
+\section{Integer}
+
+The value editor is a spin box for integer number.
+
+\section{Real}
+
+The value editor is a spin box for real number.
+
+\section{String}
+
+The editor is a line edit.
+
+\section{Array}
+
+An array can be displayed in two ways:
+\begin{itemize}
+    \item In the first column of the property editor, the property name is replaced by the property
+name plus an additional spin box. The spin box is used to iterate over the different values of the
+array. The value of the property is displayed in the second column according to its type. If the
+value as property too, they are listed into a sub-tree as usual.
+    \item The wall content of the array is listed in a sub-tree. The first column shows the index of
+the value displayed in the second column.
+\end{itemize}
+
+The default behavior is the first one because it is more compact and it avoid to query all the array
+values.
+
+TODO dynamic array (+,-) and custom dialog
+
+\section{Enumeration}
+\section{Object}
+
+\end{document}
+

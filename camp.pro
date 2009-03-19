@@ -1,21 +1,18 @@
 TEMPLATE = lib
-include(../common/build/config.pro)
-CONFIG -= qt
+include(../config.pro)
+
 VERSION = 0.1
 CONFIG += exceptions \
     stl
 CONFIG(debug, debug|release) { 
-    OBJECTS_DIR = debug
     TARGET = campd
 }
 else { 
-    OBJECTS_DIR = release
     TARGET = camp
 }
 DEFINES += CAMP_EXPORTS
 INCLUDEPATH += ./include \
     $${BOOST_PATH}
-DESTDIR = ./lib
 SOURCES += ./src/userproperty.cpp \
     ./src/userobject.cpp \
     ./src/tagholder.cpp \
