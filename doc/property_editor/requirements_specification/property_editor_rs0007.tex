@@ -75,10 +75,10 @@
 \chapter{Introduction\label{sec:introduction}}
 
 The CAMP Property Editor is a graphical component which allows to view and edit CAMP properties. The
-component is designed to be embedded into an application which allow easy interaction with CAMP
+component is designed to be embedded into an application which allows easy interaction with CAMP
 objects.
 
-The property editor is extendable to allow custom display and editing according to CAMP property
+The property editor is extendable to allow custom display and edit features according to CAMP property
 types.
 
 This document specifies the requirements for the CAMP Property Editor.
@@ -88,9 +88,8 @@ This document specifies the requirements for the CAMP Property Editor.
 Here is an unordered list of needs for the CAMP Property Editor component.
 
 \begin{itemize}
-    \item Based on Qt Model/View framework
+    \item Based on Qt
     \item Allow synchronous viewing and editing of properties
-    \item Ease a future implementation of an asynchronous viewing and editing mode
     \item Allow cancellation of an editing operations
     \item Handle clean and dirty states:
     \begin{itemize}
@@ -99,36 +98,28 @@ Here is an unordered list of needs for the CAMP Property Editor component.
 saved; the modified properties must be emphasized
     \end{itemize}
     \item Handle all CAMP property types
-    \item Allow customization/extension of the property name viewer
-    \item Allow customization/extension of the property value viewer and editor
+    \item Allow customization/extension of the property viewer and editor
     \item Allow to group properties according to the class hierarchy
     \item Allow property filtering by property name and by tag name using regular expressions
-    \item Allow to edit the common properties of several objects inheriting a same base class
+    \item Ease a future implementation of editing the common properties of several objects inheriting a same base class
+    \item Ease a future implementation of an asynchronous viewing and editing mode
 \end{itemize}
 
 \chapter{Overview\label{sec:overview}}
 
-The CAMP Property Editor shows the CAMP properties of one or several objects in a manner similar to the Qt
+The CAMP Property Editor shows the CAMP properties of a CAMP object in a manner similar to the Qt
 designer property editor which does it for Qt properties (fig. \ref{fig:qt-property-editor}).
 
 \image[0.5]{fig:qt-property-editor}{Qt Designer Property Editor}{images/qt_property_editor}
 
 The editor widget must be composed of two main parts:
 \begin{itemize}
-    \item A tree like structure in a first column which usually displays the property names. It is
-also possible to delegate the property name display to have specific rendering (e.g. for arrays, it
-allows to iterate over elements one by one).
-    \item A second column allows to view and edit the value associated with the properties:
-    \begin{itemize}
-        \item If the property is readable, its value is displayed according to its type. Else, a
-notification of this \emph{not readable} state is displayed.
-        \item If the property is writable, a value editor is displayed when the user click on the
-cell. The editor depends of the property types. If the property is not writable, the property value
-is grayed and no editor is displayed.
-    \end{itemize}
+    \item A tree like structure displays the property names in a first column
+    \item A second column displays the associated values and allows to edit them
 \end{itemize}
 
-The section \ref{sec:property_types} details the different viewers and editors for all supported
+The property names and values displaying and editing features can be fully customized as explained
+later. The section \ref{sec:property_types} details the different viewers and editors for all supported
 CAMP property types.
 
 \section{Filtering and grouping}
@@ -139,7 +130,7 @@ to filter the properties according to their names or their tag names using regul
 The property editor must allow to group the properties of a CAMP object according to the class
 hierarchy of the object. The figures \ref{fig:without-classes} and \ref{fig:with-classes} show an
 example of a CAMP object being displayed by the CAMP property editor with and without grouping. In
-the first case, all no classes informations occurs. Each sub-tree directly lists all the properties of the
+the first case, there is no classes information. Each sub-tree directly lists all the properties of the
 corresponding CAMP object. In the second case, all the properties are placed under the meta-class
 name in which they have been declared. This allows to group properties from the most general sub-set to the
 most specific one.
@@ -147,7 +138,10 @@ most specific one.
 \image[0.5]{fig:without-classes}{Simple property tree}{images/without_classes}
 \image[0.5]{fig:with-classes}{Property tree with classes hierarchy}{images/with_classes}
 
-\section{Editing properties}
+\section{Displaying and editing properties}
+
+According to the property type, the property name area and the property value must be fully
+customizable (i.e. property name and value displaying and editing).
 
 When a property is beeing edited, it must be possible to cancel the operation at any time. The
 previous value is then restored.
@@ -157,11 +151,12 @@ The CAMP property editor must allow to identify what properties have been change
 All the properties which differ from that state must be emphasized. This way, the user can easily
 see what has been modified.
 
-The editor must be able to edit several CAMP objects at the same time. In this case, the CAMP
-property editor must list all the of their first common meta-class ancestor. Thus, it the objects
-do not inherit a same base class, no property will be listed.
+The displaying and editing of several CAMP objects at the same time will be present in a future
+version. In this case, the CAMP property editor must list all the properties of their first common
+meta-class ancestor. Thus, it the objects do not inherit a same base class, no property will be
+listed. This feature is not required for now, but it must be taken into account.
 
-\chapter{Handling Property Types\label{sec:property_types}}
+\chapter{Handling property types\label{sec:property_types}}
 
 This section will define how the different CAMP property types will be handled by default. This
 includes how is represented the property name, the property value and how the property value is
@@ -173,13 +168,18 @@ listed.
 
 This section define how properties will be displayed by default (i.e. when no overriding occurs).
 
-The property name is displayed as a simple text. If the property value is convertible into a string,
-this string representation is used as value. Otherwise, the value \emph{not available} is displayed
-in bold and italic. There is no editor available.
+The property name area display the property name as a simple text. If the property is dirty, the
+text is bolded.
+
+The property value area display the property value as a string if it is convertible into this
+format. Otherwise, the text \emph{not available} is displayed in bold and italic. If the property is
+not readable, the area is left empty.
+
+If the property is not writable, the content of the area must be grayed.
+
+There is no default editor neither for the property name area, nor for the property value one.
 
 \section{Boolean}
-
-This section define how boolean properties will be displayed.
 
 The property value is displayed and edited with a check box.
 
@@ -198,22 +198,35 @@ The editor is a line edit.
 \section{Array}
 
 An array can be displayed in two ways:
-\begin{itemize}
-    \item In the first column of the property editor, the property name is replaced by the property
-name plus an additional spin box. The spin box is used to iterate over the different values of the
-array. The value of the property is displayed in the second column according to its type. If the
-value as property too, they are listed into a sub-tree as usual.
-    \item The wall content of the array is listed in a sub-tree. The first column shows the index of
-the value displayed in the second column.
-\end{itemize}
+\begin{description}
+    \item[Step by step] In this mode, the property name area contains a spinbox which allows to
+iterate over each value contained into the array. The corresponding value is displayed in the
+property value area according to the element type, as usual. However, if the element are arrays too,
+the value area will be left blank, and another spinbox will be displayed as a child node of the
+property name one. If the element are objects, their properties are listed as child nodes too.
+    \item[Expanded] In this mode, the whole content of the array is listed in a sub-tree. The
+property value area shows the index of the value displayed in the value area.
+\end{description}
 
 The default behavior is the first one because it is more compact and it avoid to query all the array
 values.
 
-TODO dynamic array (+,-) and custom dialog
+If the array is dynamic, a \emph{plus} and \emph{minus} buttons are displayed next to the spinbox to
+allow adding and removing of element. The plus button will open a popup menu to select if the
+insertion must occur before or after the current item (this will insert a default constructed
+value). The minus button will remove the current item.
+
+Right clicking the property name are will allow to switch from the step by step mode to the
+expanded one for this property.
 
 \section{Enumeration}
+
+The editor for enumeration is a combo-box which displays all the possible value.
+
 \section{Object}
+
+The property value area displays the text representation of the object if it exists.
+There is no editor. Instead, the properties of the object are listed in a sub-tree as usual.
 
 \end{document}
 
