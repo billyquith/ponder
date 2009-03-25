@@ -90,19 +90,21 @@ Here is an unordered list of needs for the CAMP Property Editor component.
 \begin{itemize}
     \item Based on Qt
     \item Allow synchronous viewing and editing of properties
-    \item Allow cancellation of an editing operations
+    \item Request property values only when needed
+    \item Allow user cancellation of an editing operations
     \item Handle clean and dirty states:
     \begin{itemize}
         \item Clean state correspond typically to the state of the object the last time it was saved
-        \item Dirty state correspond to an object which has been modified since the last time it was
+        \item Dirty state may correspond to an object which has been modified since the last time it was
 saved; the modified properties must be emphasized
     \end{itemize}
     \item Handle all CAMP property types
-    \item Allow customization/extension of the property viewer and editor
+    \item Allow customization/extension of property viewers and editors
     \item Allow to group properties according to the class hierarchy
     \item Allow property filtering by property name and by tag name using regular expressions
     \item Ease a future implementation of editing the common properties of several objects inheriting a same base class
     \item Ease a future implementation of an asynchronous viewing and editing mode
+    \item Ease a future implementation to receive external notification of property changes
 \end{itemize}
 
 \chapter{Overview\label{sec:overview}}
@@ -114,8 +116,10 @@ designer property editor which does it for Qt properties (fig. \ref{fig:qt-prope
 
 The editor widget must be composed of two main parts:
 \begin{itemize}
-    \item A tree like structure displays the property names in a first column
-    \item A second column displays the associated values and allows to edit them
+    \item A tree like structure displays the property names in a first column. This is the property
+name area.
+    \item A second column displays the associated values and allows to edit them. This is the
+property value area.
 \end{itemize}
 
 The property names and values displaying and editing features can be fully customized as explained
@@ -140,16 +144,38 @@ most specific one.
 
 \section{Displaying and editing properties}
 
-According to the property type, the property name area and the property value must be fully
-customizable (i.e. property name and value displaying and editing).
+\ibinfo{
+A cell can be in two states: either in view mode, or in edit mode. View mode refers to a state which
+only display something, but do not allow the user to interact with it. Edit mode refers to a state
+which allow some interaction with the user. Typically, a cell is in the view mode by default and
+enters in edit mode if the user double click it. Then, an editor is shown which allows the user to
+change the cell value. When the user validate the changes, the cell returns to the view state.
 
-When a property is beeing edited, it must be possible to cancel the operation at any time. The
-previous value is then restored.
+However, a cell can be in edit mode all the time. Thus, the viewer is never shown and only the
+editor is. This is useful for example to display a boolean value as a checkbox. This way, the user
+can directly click on it to change the value. An other example would be a combox in the name area
+which allow to iterate over the element of an array, the current value being displayed in the value
+area.
+}
 
-The CAMP property editor must allow to identify what properties have been changed from the previous
-\emph{clean state}. The clean state corresponds usually to the last time the object has been saved.
-All the properties which differ from that state must be emphasized. This way, the user can easily
-see what has been modified.
+According to the property type, the property name area and the property value area must be fully
+customizable (i.e. property name and value viewers and editors).
+
+Moreover, a future version of the property editor will allow to edit the values asynchronously. This
+mean that the property editor will send a request for a value and will receive it later. The property
+editor can show a busy indicator while the value is missing. However, the user must be able to
+interact with other properties even if the value is not yet received. The current implementation
+must takes this future improvement into account.
+
+Property values must be requested only when necessary. This mean that a property which is not visible
+must not ask its value to the underlying CAMP object. The value must be retrieved when the property
+becomes visible.
+
+When a property is beeing edited, the user must be able to cancel the operation at any time by
+pressing the escape key. The previous value is then restored.
+
+The CAMP property editor must provide a way to mark a property as clean or dirty. Dirty properties must be
+emphasized. This way, the user can easily see what is dirty and what is not.
 
 The displaying and editing of several CAMP objects at the same time will be present in a future
 version. In this case, the CAMP property editor must list all the properties of their first common
@@ -159,73 +185,172 @@ listed. This feature is not required for now, but it must be taken into account.
 \chapter{Handling property types\label{sec:property_types}}
 
 This section will define how the different CAMP property types will be handled by default. This
-includes how is represented the property name, the property value and how the property value is
-edited. First, we will begin by the default handling if the property type is not handled yet,
-or if it does not provide it own display. Then, for each property type, any special handling is
-listed.
+includes the definition of the viewers and editors for the property name and value areas for each
+property type.
 
 \section{Default}
 
-This section define how properties will be displayed by default (i.e. when no overriding occurs).
+This section define how properties are handled by default. This is used for example when the
+property type is not supported yet.
 
-The property name area display the property name as a simple text. If the property is dirty, the
-text is bolded.
+The property name area must display the property name as a simple text. If the property is dirty, the
+text must be bolded.
 
-The property value area display the property value as a string if it is convertible into this
-format. Otherwise, the text \emph{not available} is displayed in bold and italic. If the property is
-not readable, the area is left empty.
+If the property value is convertible into a string, this representation must be used into the
+property value area. Otherwise, the text \emph{not available} must be displayed in italic. If the
+property is not readable, the cell must be left empty.
 
 If the property is not writable, the content of the area must be grayed.
 
-There is no default editor neither for the property name area, nor for the property value one.
+The property name and value must not be editable.
 
 \section{Boolean}
 
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
 The property value is displayed and edited with a check box.
+
+If the property has a tag named \emph{trueLabel}, the string representation of the associated value
+must be displayed along the checkbox when the property is true.
+If the property has a tag named \emph{falseLabel}, the string representation of the associated value
+must be displayed along the checkbox when the property is false.
 
 \section{Integer}
 
-The value editor is a spin box for integer number.
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
+The string representation of the integer must be used as the property value area viewer.
+The property area editor is a spin box for integer number.
+
+If the property has a tag named \emph{min}, the integer representation of the associated value must
+be used as lower bound for the spin box.
+If the property has a tag named \emph{max}, the integer representation of the associated value must
+be used as upper bound for the spin box.
 
 \section{Real}
 
-The value editor is a spin box for real number.
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
+The string representation of the real number must be used as the property value area viewer.
+The property area editor is a spin box for real number.
+
+If the property has a tag named \emph{min}, the real number representation of the associated value must be used as lower bound for the spin box.
+If the property has a tag named \emph{max}, the real number representation of the associated value must be used as upper bound for the spin box.
 
 \section{String}
 
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
 The editor is a line edit.
+
+If the property has a tag named \emph{validator}, the string representation of the associated value
+must be used to validate the value entered into the line edit while the user types in. The validator
+is used as regular expression in the QRegExp::RegExp2 Qt syntax (see the Qt's QRegExp
+documentation). If the current string validate the regexp, the background of the line edit must be
+green, otherwise it must be red.
 
 \section{Array}
 
-An array can be displayed in two ways:
+Array properties handling must offers two different ways to see the array content:
 \begin{description}
-    \item[Step by step] In this mode, the property name area contains a spinbox which allows to
-iterate over each value contained into the array. The corresponding value is displayed in the
-property value area according to the element type, as usual. However, if the element are arrays too,
-the value area will be left blank, and another spinbox will be displayed as a child node of the
-property name one. If the element are objects, their properties are listed as child nodes too.
-    \item[Expanded] In this mode, the whole content of the array is listed in a sub-tree. The
-property value area shows the index of the value displayed in the value area.
+    \item[Collapsed mode (default)] In this mode, the array must be displayed in a space-saving way,
+showing only one element at a time, but allowing to iterate over each one easily
+    \item[Expanded mode] In this mode, the whole array content must be displayed which offers a
+global view of the array content.
 \end{description}
 
-The default behavior is the first one because it is more compact and it avoid to query all the array
-values.
+The default mode must be the collapsed one as it is space preserving and it avoid to query all the
+array values which could be expensive.
 
-If the array is dynamic, a \emph{plus} and \emph{minus} buttons are displayed next to the spinbox to
-allow adding and removing of element. The plus button will open a popup menu to select if the
-insertion must occur before or after the current item (this will insert a default constructed
-value). The minus button will remove the current item.
+The figures \ref{fig:simple-array}, \ref{fig:object-array} and \ref{fig:sub-array} gives an idea of
+what is expected in terms of layout and feature. Each figure contains an overview of an array shown
+in the collapsed mode (on the left) and in the expanded mode (on the right) according to array
+element type.
 
-Right clicking the property name are will allow to switch from the step by step mode to the
-expanded one for this property.
+\subsection{Simple array\label{sec:array-simple}}
+
+The figure \ref{fig:simple-array} illustrates how must be represented arrays containing simple
+elements (i.e. neither object nor sub-array).
+
+The collapsed mode must display the property name (bolded if the array is dirty) with a spinbox and
+a push-button in the property name area. The spinbox must allow to iterate
+over each element of the array, the corresponding value being displayed in the property value area
+as usual. If the array is empty, the spinbox must be grayed. The push-button must pop up a
+drop-down list with different items as explained in section \ref{sec:array-dropdownlist}.
+
+The expanded mode must display the property name (bolded if the array is dirty) with a push-button
+in the property name area. The push-button must pop up a drop-down list with different items as
+explained in section \ref{sec:array-dropdownlist}. The elements of the array must be listed in a
+sub-tree, each node representing an element. The property name area must display the element
+index, and the corresponding value must be displayed in the property value area as usual. Dynamic
+arrays have additional buttons/items as explained in the section \ref{sec:array-dynamic}.
+
+\image[0.5]{fig:simple-array}{Array with simple elements}{images/simple_array}
+
+\subsection{Array of objects\label{sec:array-object}}
+
+The figure \ref{fig:object-array} illustrates how must be represented arrays containing object
+elements.
+
+The representation must be similar to the one used for simple array (section
+\ref{sec:array-simple}). The difference is that an additional sub-tree must list the properties of the
+current object in collapsed mode, and the properties of the object corresponding to the matching
+item for the expanded mode.
+
+\image[0.5]{fig:object-array}{Array with object elements}{images/object_array}
+
+\subsection{Array of arrays\label{sec:array-subarray}}
+
+The figure \ref{fig:sub-array} illustrates how must be represented arrays containing array elements
+(i.e. sub-array).
+
+The representation must be similar to the one used for simple array (section
+\ref{sec:array-simple}). The difference is that the property value area of the array must be left
+blank. Sub-arrays must be listed in a sub-tree with the usual representation. This means that
+sub-arrays can be in collapsed or expanded mode too.
+
+\image[0.5]{fig:sub-array}{Array with arrays elements}{images/sub_array}
+
+\subsection{Drop-down list\label{sec:array-dropdownlist}}
+
+The property name area of an array node must contain a push-button which display a drop-down list
+when clicked. This drop-down list must have an item which allows to switch between the collapsed and
+the expanded modes. In the future, an item will allow to display a specialized dialog to view and
+edit the array.
+
+\subsection{Dynamic array\label{sec:array-dynamic}}
+
+Dynamic arrays allow to insert and remove elements. The property editor must provide an access to
+these features. Thus, for arrays in collapsed mode, the drop-down list must display:
+\begin{itemize}
+    \item An item to insert an element before the current index
+    \item An item to insert an element after the current index
+    \item An item to remove the current element
+\end{itemize}
+
+For dynamic arrays in expanded mode, these features must be accessible directly on the property name
+area of each element. A push button msut allow to insert an element before the clicked one, another
+one must allow to remove the clicked element. An additional node at the end of the subtree must contain a push button to insert an element at the end of the array.
 
 \section{Enumeration}
 
-The editor for enumeration is a combo-box which displays all the possible value.
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
+The property value viewer must display the string representation of the current value.
+The property value editor is a combo-box which displays the string representation of all the
+possible values (i.e. enumeration labels).
 
 \section{Object}
 
-The property value area displays the text representation of the object if it exists.
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
+The property value area displays the string representation of the object if it exists.
 There is no editor. Instead, the properties of the object are listed in a sub-tree as usual.
 
 \end{document}
