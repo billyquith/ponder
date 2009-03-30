@@ -154,8 +154,8 @@ most specific one.
 A cell can be in two states: either in view mode, or in edit mode. View mode refers to a state that
 only displays something, but does not allow the user to interact with it. Edit mode refers to a state
 that allows some interaction with the user. Typically, a cell is in the view mode by default and
-enters in edit mode if the user double clicks it. Then, an editor is shown allowing the user to
-change the cell value. When the user validates the changes, the cell returns to the view state.
+enters in edit mode according to a user action. Then, an editor is shown allowing the user to change
+the cell value. When the user validates the changes, the cell returns to the view state.
 
 However, a cell can be in edit mode all the time. Thus, the viewer is never shown and only the
 editor is. This is useful for example to display a boolean value as a checkbox. This way, the user
@@ -169,13 +169,20 @@ customizable (i.e. property name and value viewers and editors).
 
 Moreover, a future version of the property editor will allow to edit the values asynchronously. This
 means that the property editor will send a request for a value and will receive it later. The property
-editor can show a busy indicator while the value is missing. However, the user must be able to
-interact with other properties even if the value is not yet received. The current implementation
-must take this future improvement into account.
+editor must show a busy indicator while the value is missing. The user must not be able to interact
+with editor while the property editor is busy. The current implementation must take this future
+improvement into account.
 
 Property values must be requested only when necessary. This means that a property which is not visible
 must not ask its value to the underlying CAMP object. The value must be retrieved when the property
 becomes visible.
+
+Passing from the view mode to the edit mode must be done according to a global policy selected
+programatically. A \emph{simple click} and a \emph{double click} policies must be available. These
+policies must activate the edit mode of a cell when the user makes a simple click (respectively a
+double click) on this cell. An \emph{F2 key} policy must be available too. This must edit the
+current selected cell if the user press the \emph{F2 key}. Combining mouse and keyboard policies
+must be possible.
 
 When a property is edited, the user must be able to cancel the operation at any time by
 pressing the escape key. Thus, the property value is left unchanged.
@@ -230,7 +237,7 @@ The property area editor is a spin box for integer number.
 If the property has a tag named \emph{min}, the integer representation of the associated value must
 be used as lower bound for the spin box.
 If the property has a tag named \emph{max}, the integer representation of the associated value must
-be used as upper bound for the spin box.
+be used as upper bound for the spin box. The value must be changed each time an arrow is pressed.
 
 \section{Real}
 
@@ -238,7 +245,8 @@ The property name area must display the property name as a simple text. If the p
 the text must be bolded.
 
 The string representation of the real number must be used as the property value area viewer.
-The property area editor is a spin box for real number.
+The property area editor is a spin box for real number. The value must be changed each time an arrow
+is pressed.
 
 If the property has a tag named \emph{min}, the real number representation of the associated value must be used as lower bound for the spin box.
 If the property has a tag named \emph{max}, the real number representation of the associated value must be used as upper bound for the spin box.
