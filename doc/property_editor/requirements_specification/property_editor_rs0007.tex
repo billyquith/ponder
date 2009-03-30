@@ -74,8 +74,8 @@
 
 \chapter{Introduction\label{sec:introduction}}
 
-The CAMP Property Editor is a graphical component which allows to view and edit CAMP properties. The
-component is designed to be embedded into an application which allows easy interaction with CAMP
+The CAMP Property Editor is a graphical component that allows viewing and editing CAMP properties. The
+component is designed to be embedded into an application that allows easy interaction with CAMP
 objects.
 
 The property editor is extendable to allow custom display and edit features according to CAMP property
@@ -91,12 +91,12 @@ Here is an unordered list of needs for the CAMP Property Editor component.
     \item Based on Qt
     \item Allow synchronous viewing and editing of properties
     \item Request property values only when needed
-    \item Allow user cancellation of an editing operations
+    \item Allow user cancellation of editing operations
     \item Handle clean and dirty states:
     \begin{itemize}
-        \item Clean state correspond typically to the state of the object the last time it was saved
-        \item Dirty state may correspond to an object which has been modified since the last time it was
-saved; the modified properties must be emphasized
+        \item Clean state corresponds typically to the state of the object the last time it was saved
+        \item Dirty state may correspond to an object that has been modified since the last time it
+was saved; the modified properties must be emphasized
     \end{itemize}
     \item Handle all CAMP property types
     \item Allow customization/extension of property viewers and editors
@@ -116,15 +116,21 @@ designer property editor which does it for Qt properties (fig. \ref{fig:qt-prope
 
 The editor widget must be composed of two main parts:
 \begin{itemize}
-    \item A tree like structure displays the property names in a first column. This is the property
-name area.
-    \item A second column displays the associated values and allows to edit them. This is the
-property value area.
+    \item A tree like structure displaying the property names in a first column. This column
+contains usually the property names.
+    \item A second column displaying the associated values and allows to edit them. This column
+contains usually the property values.
 \end{itemize}
 
+Thus, each row of the tree correspond, usually, to one property. The first cell of that row is the
+\emph{property name area} of the property while the cell in the second column is the \emph{property
+value area}.
+
 The property names and values displaying and editing features can be fully customized as explained
-later. The section \ref{sec:property_types} details the different viewers and editors for all supported
-CAMP property types.
+later. This means that the property name area can display an other thing than the property name, and
+the property value area can display an other thing than the corresponding property value. The
+section \ref{sec:property_types} details the different viewers and editors for all
+supported CAMP property types.
 
 \section{Filtering and grouping}
 
@@ -145,16 +151,16 @@ most specific one.
 \section{Displaying and editing properties}
 
 \ibinfo{
-A cell can be in two states: either in view mode, or in edit mode. View mode refers to a state which
-only display something, but do not allow the user to interact with it. Edit mode refers to a state
-which allow some interaction with the user. Typically, a cell is in the view mode by default and
-enters in edit mode if the user double click it. Then, an editor is shown which allows the user to
-change the cell value. When the user validate the changes, the cell returns to the view state.
+A cell can be in two states: either in view mode, or in edit mode. View mode refers to a state that
+only displays something, but does not allow the user to interact with it. Edit mode refers to a state
+that allows some interaction with the user. Typically, a cell is in the view mode by default and
+enters in edit mode if the user double clicks it. Then, an editor is shown allowing the user to
+change the cell value. When the user validates the changes, the cell returns to the view state.
 
 However, a cell can be in edit mode all the time. Thus, the viewer is never shown and only the
 editor is. This is useful for example to display a boolean value as a checkbox. This way, the user
 can directly click on it to change the value. An other example would be a combox in the name area
-which allow to iterate over the element of an array, the current value being displayed in the value
+that allows the iteration over the element of an array, the current value being displayed in the value
 area.
 }
 
@@ -162,24 +168,24 @@ According to the property type, the property name area and the property value ar
 customizable (i.e. property name and value viewers and editors).
 
 Moreover, a future version of the property editor will allow to edit the values asynchronously. This
-mean that the property editor will send a request for a value and will receive it later. The property
+means that the property editor will send a request for a value and will receive it later. The property
 editor can show a busy indicator while the value is missing. However, the user must be able to
 interact with other properties even if the value is not yet received. The current implementation
-must takes this future improvement into account.
+must take this future improvement into account.
 
-Property values must be requested only when necessary. This mean that a property which is not visible
+Property values must be requested only when necessary. This means that a property which is not visible
 must not ask its value to the underlying CAMP object. The value must be retrieved when the property
 becomes visible.
 
-When a property is beeing edited, the user must be able to cancel the operation at any time by
-pressing the escape key. The previous value is then restored.
+When a property is edited, the user must be able to cancel the operation at any time by
+pressing the escape key. Thus, the property value is left unchanged.
 
 The CAMP property editor must provide a way to mark a property as clean or dirty. Dirty properties must be
 emphasized. This way, the user can easily see what is dirty and what is not.
 
 The displaying and editing of several CAMP objects at the same time will be present in a future
 version. In this case, the CAMP property editor must list all the properties of their first common
-meta-class ancestor. Thus, it the objects do not inherit a same base class, no property will be
+meta-class ancestor. Thus, if the objects do not inherit a same base class, no property will be
 listed. This feature is not required for now, but it must be taken into account.
 
 \chapter{Handling property types\label{sec:property_types}}
@@ -190,24 +196,21 @@ property type.
 
 \section{Default}
 
-This section define how properties are handled by default. This is used for example when the
-property type is not supported yet.
+This section define how property with unsupported or unknown types are handled.
 
 The property name area must display the property name as a simple text. If the property is dirty, the
-text must be bolded.
+text must be displayed in bold.
 
 If the property value is convertible into a string, this representation must be used into the
 property value area. Otherwise, the text \emph{not available} must be displayed in italic. If the
 property is not readable, the cell must be left empty.
 
-If the property is not writable, the content of the area must be grayed.
-
-The property name and value must not be editable.
+The property name and value must not be editable (thus, the content of the area must be grayed).
 
 \section{Boolean}
 
 The property name area must display the property name as a simple text. If the property is dirty,
-the text must be bolded.
+the text must be displayed in bold.
 
 The property value is displayed and edited with a check box.
 
@@ -250,8 +253,25 @@ The editor is a line edit.
 If the property has a tag named \emph{validator}, the string representation of the associated value
 must be used to validate the value entered into the line edit while the user types in. The validator
 is used as regular expression in the QRegExp::RegExp2 Qt syntax (see the Qt's QRegExp
-documentation). If the current string validate the regexp, the background of the line edit must be
+documentation). If the current string validates the regexp, the background of the line edit must be
 green, otherwise it must be red.
+
+\section{Enumeration}
+
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
+The property value viewer must display the string representation of the current value.
+The property value editor is a combo-box which displays the string representation of all the
+possible values (i.e. enumeration labels).
+
+\section{Object}
+
+The property name area must display the property name as a simple text. If the property is dirty,
+the text must be bolded.
+
+The property value area displays the string representation of the object if it exists.
+There is no editor. Instead, the properties of the object are listed in a sub-tree as usual.
 
 \section{Array}
 
@@ -263,7 +283,7 @@ showing only one element at a time, but allowing to iterate over each one easily
 global view of the array content.
 \end{description}
 
-The default mode must be the collapsed one as it is space preserving and it avoid to query all the
+The default mode must be the collapsed one as it is space preserving and it avoids querying all the
 array values which could be expensive.
 
 The figures \ref{fig:simple-array}, \ref{fig:object-array} and \ref{fig:sub-array} gives an idea of
@@ -276,13 +296,13 @@ element type.
 The figure \ref{fig:simple-array} illustrates how must be represented arrays containing simple
 elements (i.e. neither object nor sub-array).
 
-The collapsed mode must display the property name (bolded if the array is dirty) with a spinbox and
+The collapsed mode must display the property name (in bold if the array is dirty) with a spinbox and
 a push-button in the property name area. The spinbox must allow to iterate
 over each element of the array, the corresponding value being displayed in the property value area
 as usual. If the array is empty, the spinbox must be grayed. The push-button must pop up a
 drop-down list with different items as explained in section \ref{sec:array-dropdownlist}.
 
-The expanded mode must display the property name (bolded if the array is dirty) with a push-button
+The expanded mode must display the property name (in bold if the array is dirty) with a push-button
 in the property name area. The push-button must pop up a drop-down list with different items as
 explained in section \ref{sec:array-dropdownlist}. The elements of the array must be listed in a
 sub-tree, each node representing an element. The property name area must display the element
@@ -317,8 +337,8 @@ sub-arrays can be in collapsed or expanded mode too.
 
 \subsection{Drop-down list\label{sec:array-dropdownlist}}
 
-The property name area of an array node must contain a push-button which display a drop-down list
-when clicked. This drop-down list must have an item which allows to switch between the collapsed and
+The property name area of an array node must contain a push-button that displays a drop-down list
+when clicked on. This drop-down list must have an item allowing the user to switch between the collapsed and
 the expanded modes. In the future, an item will allow to display a specialized dialog to view and
 edit the array.
 
@@ -333,25 +353,8 @@ these features. Thus, for arrays in collapsed mode, the drop-down list must disp
 \end{itemize}
 
 For dynamic arrays in expanded mode, these features must be accessible directly on the property name
-area of each element. A push button msut allow to insert an element before the clicked one, another
+area of each element. A push button must allow to insert an element before the clicked one, another
 one must allow to remove the clicked element. An additional node at the end of the subtree must contain a push button to insert an element at the end of the array.
-
-\section{Enumeration}
-
-The property name area must display the property name as a simple text. If the property is dirty,
-the text must be bolded.
-
-The property value viewer must display the string representation of the current value.
-The property value editor is a combo-box which displays the string representation of all the
-possible values (i.e. enumeration labels).
-
-\section{Object}
-
-The property name area must display the property name as a simple text. If the property is dirty,
-the text must be bolded.
-
-The property value area displays the string representation of the object if it exists.
-There is no editor. Instead, the properties of the object are listed in a sub-tree as usual.
 
 \end{document}
 
