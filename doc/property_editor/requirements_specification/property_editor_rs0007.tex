@@ -184,6 +184,15 @@ double click) on this cell. An \emph{F2 key} policy must be available too. This 
 current selected cell if the user press the \emph{F2 key}. Combining mouse and keyboard policies
 must be possible.
 
+Validating a cell under an edit process must be doable according to a global policy selected
+programatically. This policy determine how editors must handle the validation of the entered value.
+A \emph{default} policy must be available. This must validate the value on a traditional basis
+according to editors. A \emph{strong} policy must be available too. With this policy, an editor
+must validate the value only if the user really requires it (e.g. by pressing the return
+key). It is up to each editor to take into account these policies. For example, some editors simply
+can not handle this (e.g. a checkbox) while some others can (e.g. a line edit can require a return
+key press for the strong policy while it can also accept the focus loss with the default one).
+
 When a property is edited, the user must be able to cancel the operation at any time by
 pressing the escape key. Thus, the property value is left unchanged.
 
