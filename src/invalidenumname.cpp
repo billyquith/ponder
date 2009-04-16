@@ -14,13 +14,6 @@ InvalidEnumName::InvalidEnumName(const char* name, const Enum& ownerEnum) throw(
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidEnumName::InvalidEnumName(const InvalidEnumName& copy) throw()
-    : m_ownerEnum(copy.m_ownerEnum)
-{
-    strncpy(m_name, copy.m_name, sizeof(m_name));
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidEnumName::~InvalidEnumName() throw()
 {
 }

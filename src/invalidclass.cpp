@@ -13,12 +13,6 @@ InvalidClass::InvalidClass(const char* className) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidClass::InvalidClass(const InvalidClass& copy) throw()
-{
-    strncpy(m_className, copy.m_className, sizeof(m_className));
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidClass::~InvalidClass() throw()
 {
 }

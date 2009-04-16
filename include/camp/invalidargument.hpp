@@ -27,13 +27,6 @@ public:
     InvalidArgument(Type sourceType, Type requestedType, const char* function, std::size_t index) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidArgument(const InvalidArgument& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidArgument() throw();

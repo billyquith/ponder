@@ -27,13 +27,6 @@ public:
     InvalidFunction(const char* function, const Class& ownerClass) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidFunction(const InvalidFunction& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidFunction() throw();

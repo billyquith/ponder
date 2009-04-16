@@ -28,13 +28,6 @@ public:
     InvalidObject(const UserObject& object) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidObject(const InvalidObject& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidObject() throw();

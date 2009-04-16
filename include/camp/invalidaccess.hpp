@@ -41,13 +41,6 @@ public:
     InvalidAccess(const char* attribute, Action action) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidAccess(const InvalidAccess& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidAccess() throw();

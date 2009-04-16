@@ -14,13 +14,6 @@ InvalidAccess::InvalidAccess(const char* attribute, Action action) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidAccess::InvalidAccess(const InvalidAccess& copy) throw()
-    : m_action(copy.m_action)
-{
-    strncpy(m_attribute, copy.m_attribute, sizeof(m_attribute));
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidAccess::~InvalidAccess() throw()
 {
 }

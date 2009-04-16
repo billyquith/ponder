@@ -14,13 +14,6 @@ InvalidProperty::InvalidProperty(const char* property, const Class& ownerClass) 
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidProperty::InvalidProperty(const InvalidProperty& copy) throw()
-    : m_ownerClass(copy.m_ownerClass)
-{
-    strncpy(m_property, copy.m_property, sizeof(m_property));
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidProperty::~InvalidProperty() throw()
 {
 }

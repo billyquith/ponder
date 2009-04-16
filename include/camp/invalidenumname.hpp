@@ -27,13 +27,6 @@ public:
     InvalidEnumName(const char* name, const Enum& ownerEnum) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidEnumName(const InvalidEnumName& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidEnumName() throw();

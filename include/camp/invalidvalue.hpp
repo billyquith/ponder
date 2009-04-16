@@ -28,13 +28,6 @@ public:
     InvalidValue(Type sourceType, Type requestedType) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidValue(const InvalidValue& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidValue() throw();

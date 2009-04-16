@@ -13,13 +13,6 @@ InvalidValue::InvalidValue(Type sourceType, Type requestedType) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidValue::InvalidValue(const InvalidValue& copy) throw()
-    : m_sourceType(copy.m_sourceType)
-    , m_requestedType(copy.m_requestedType)
-{
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidValue::~InvalidValue() throw()
 {
 }

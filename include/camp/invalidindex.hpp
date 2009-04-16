@@ -27,13 +27,6 @@ public:
     InvalidIndex(std::size_t index, std::size_t size) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidIndex(const InvalidIndex& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidIndex() throw();

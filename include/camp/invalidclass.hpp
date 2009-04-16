@@ -24,13 +24,6 @@ public:
     InvalidClass(const char* className) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidClass(const InvalidClass& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidClass() throw();

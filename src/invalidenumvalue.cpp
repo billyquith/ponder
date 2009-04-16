@@ -13,13 +13,6 @@ InvalidEnumValue::InvalidEnumValue(long value, const Enum& ownerEnum) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidEnumValue::InvalidEnumValue(const InvalidEnumValue& copy) throw()
-    : m_value(copy.m_value)
-    , m_ownerEnum(copy.m_ownerEnum)
-{
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidEnumValue::~InvalidEnumValue() throw()
 {
 }

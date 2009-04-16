@@ -13,12 +13,6 @@ InvalidEnum::InvalidEnum(const char* enumName) throw()
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidEnum::InvalidEnum(const InvalidEnum& copy) throw()
-{
-    strncpy(m_enumName, copy.m_enumName, sizeof(m_enumName));
-}
-
-//-------------------------------------------------------------------------------------------------
 InvalidEnum::~InvalidEnum() throw()
 {
 }

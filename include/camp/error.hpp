@@ -19,13 +19,6 @@ class CAMP_API Error : public std::exception
 public:
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    Error(const Error& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~Error() throw();

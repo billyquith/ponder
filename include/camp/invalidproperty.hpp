@@ -27,13 +27,6 @@ public:
     InvalidProperty(const char* property, const Class& ownerClass) throw();
 
     /**
-     * \brief Copy constructor
-     *
-     * \param copy Instance to copy
-     */
-    InvalidProperty(const InvalidProperty& copy) throw();
-
-    /**
      * \brief Destructor
      */
     virtual ~InvalidProperty() throw();
