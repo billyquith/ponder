@@ -13,7 +13,7 @@ namespace camp
  * \brief Specialized type of property for arrays
  *
  */
-class ArrayProperty : public Property
+class CAMP_API ArrayProperty : public Property
 {
 public:
 
@@ -24,19 +24,19 @@ public:
      * \param elementType Type of the property
      * \param dynamic Tells if the array is dynamic or not
      */
-    CAMP_API ArrayProperty(const std::string& name, Type elementType, bool dynamic);
+    ArrayProperty(const std::string& name, Type elementType, bool dynamic);
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~ArrayProperty();
+    virtual ~ArrayProperty();
 
     /**
      * \brief Get the type of the array elements
      *
      * \return Type of elements
      */
-    CAMP_API Type elementType() const;
+    Type elementType() const;
 
     /**
      * \brief Check if the array is dynamic
@@ -46,7 +46,7 @@ public:
      *
      * \return True if the array is dynamic, false otherwise
      */
-    CAMP_API bool dynamic() const;
+    bool dynamic() const;
 
     /**
      * \brief Get the current size of the array
@@ -58,7 +58,7 @@ public:
      * \throw InvalidObject object has an invalid value
      * \throw InvalidAccess property is not readable
      */
-    CAMP_API std::size_t size(const UserObject& object) const;
+    std::size_t size(const UserObject& object) const;
 
     /**
      * \brief Get an element of the array for a given object
@@ -72,7 +72,7 @@ public:
      * \throw InvalidAccess property is not readable
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API Value get(const UserObject& object, std::size_t index) const;
+    Value get(const UserObject& object, std::size_t index) const;
 
     /**
      * \brief Set an element of the array for a given object
@@ -86,7 +86,7 @@ public:
      * \throw InvalidValue value can't be converted to the property's type
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API void set(const UserObject& object, std::size_t index, const Value& value) const;
+    void set(const UserObject& object, std::size_t index, const Value& value) const;
 
     /**
      * \brief Insert a new element into the array
@@ -102,7 +102,7 @@ public:
      * \throw InvalidValue value can't be converted to the property's type
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API void insert(const UserObject& object, std::size_t before, const Value& value) const;
+    void insert(const UserObject& object, std::size_t before, const Value& value) const;
 
     /**
      * \brief Remove an element from the array
@@ -116,26 +116,26 @@ public:
      * \throw InvalidAccess array is not writable or not dynamic
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API void remove(const UserObject& object, std::size_t index) const;
+    void remove(const UserObject& object, std::size_t index) const;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
      */
-    CAMP_API virtual void accept(ClassVisitor& visitor) const;
+    virtual void accept(ClassVisitor& visitor) const;
 
 protected:
 
     /**
      * \see Property::getValue
      */
-    CAMP_API virtual Value getValue(const UserObject& object) const;
+    virtual Value getValue(const UserObject& object) const;
 
     /**
      * \see Property::setValue
      */
-    CAMP_API virtual void setValue(const UserObject& object, const Value& value) const;
+    virtual void setValue(const UserObject& object, const Value& value) const;
 
     /**
      * \brief Do the actual retrieval of the size
@@ -144,7 +144,7 @@ protected:
      *
      * \return Size of the array
      */
-    CAMP_API virtual std::size_t getSize(const UserObject& object) const = 0;
+    virtual std::size_t getSize(const UserObject& object) const = 0;
 
     /**
      * \brief Do the actual reading of an element
@@ -156,7 +156,7 @@ protected:
      *
      * \return Value of the index-th element
      */
-    CAMP_API virtual Value getElement(const UserObject& object, std::size_t index) const = 0;
+    virtual Value getElement(const UserObject& object, std::size_t index) const = 0;
 
     /**
      * \brief Do the actual writing of an element
@@ -167,7 +167,7 @@ protected:
      * \param index Index of the element to get
      * \param value New value to assign to the element
      */
-    CAMP_API virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const = 0;
+    virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const = 0;
 
     /**
      * \brief Do the actual insertion of an element
@@ -178,7 +178,7 @@ protected:
      * \param before Index before which the new element will be inserted
      * \param value Value of the element to insert
      */
-    CAMP_API virtual void insertElement(const UserObject& object, std::size_t before, const Value& value) const = 0;
+    virtual void insertElement(const UserObject& object, std::size_t before, const Value& value) const = 0;
 
     /**
      * \brief Do the actual removal of an element
@@ -188,7 +188,7 @@ protected:
      * \param object Object
      * \param index Index of the element to remove
      */
-    CAMP_API virtual void removeElement(const UserObject& object, std::size_t index) const = 0;
+    virtual void removeElement(const UserObject& object, std::size_t index) const = 0;
 
 private:
 

@@ -12,7 +12,7 @@ namespace camp
 /**
  * \brief Error thrown when passing an invalid argument to a function call
  */
-class InvalidArgument : public InvalidValue
+class CAMP_API InvalidArgument : public InvalidValue
 {
 public:
 
@@ -24,40 +24,40 @@ public:
      * \param function Name of the owner function
      * \param index Index of the argument
      */
-    CAMP_API InvalidArgument(Type sourceType, Type requestedType, const char* function, std::size_t index) throw();
+    InvalidArgument(Type sourceType, Type requestedType, const char* function, std::size_t index) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidArgument(const InvalidArgument& copy) throw();
+    InvalidArgument(const InvalidArgument& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidArgument() throw();
+    virtual ~InvalidArgument() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the name of the owner function
      *
      * \return Name of the function
      */
-    CAMP_API const char* function() const throw();
+    const char* function() const throw();
 
     /**
      * \brief Return the index of the argument
      *
      * \return Index of the argument within the function call
      */
-    CAMP_API std::size_t index() const throw();
+    std::size_t index() const throw();
 
 private:
 

@@ -69,14 +69,14 @@ class Function;
  * metaclass.visit(visitor);
  * \endcode
  */
-class ClassVisitor
+class CAMP_API ClassVisitor
 {
 public:
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~ClassVisitor();
+    virtual ~ClassVisitor();
 
     /**
      * \brief Visit any kind of property
@@ -87,49 +87,49 @@ public:
      *
      * \param property Property which is being visited
      */
-    CAMP_API virtual void visit(const Property& property);
+    virtual void visit(const Property& property);
 
     /**
      * \brief Visit a simple property
      *
      * \param property Property which is being visited
      */
-    CAMP_API virtual void visit(const SimpleProperty& property);
+    virtual void visit(const SimpleProperty& property);
 
     /**
      * \brief Visit an array property
      *
      * \param property Property which is being visited
      */
-    CAMP_API virtual void visit(const ArrayProperty& property);
+    virtual void visit(const ArrayProperty& property);
 
     /**
      * \brief Visit an enum property
      *
      * \param property Property which is being visited
      */
-    CAMP_API virtual void visit(const EnumProperty& property);
+    virtual void visit(const EnumProperty& property);
 
     /**
      * \brief Visit a user property
      *
      * \param property Property which is being visited
      */
-    CAMP_API virtual void visit(const UserProperty& property);
+    virtual void visit(const UserProperty& property);
 
     /**
      * \brief Visit a function
      *
      * \param function Function which is being visited
      */
-    CAMP_API virtual void visit(const Function& function);
+    virtual void visit(const Function& function);
 
 protected:
 
     /**
      * \brief Default constructor
      */
-    CAMP_API ClassVisitor();
+    ClassVisitor();
 };
 
 } // namespace camp

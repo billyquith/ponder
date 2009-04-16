@@ -15,7 +15,7 @@ namespace camp
  *
  * This error may be thrown when a value can't be converted to the requested type
  */
-class InvalidValue : public Error
+class CAMP_API InvalidValue : public Error
 {
 public:
 
@@ -25,40 +25,40 @@ public:
      * \param sourceType Type of the source value
      * \param requestedType Type the value is being converted to
      */
-    CAMP_API InvalidValue(Type sourceType, Type requestedType) throw();
+    InvalidValue(Type sourceType, Type requestedType) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidValue(const InvalidValue& copy) throw();
+    InvalidValue(const InvalidValue& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidValue() throw();
+    virtual ~InvalidValue() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the type of the source value
      *
      * \return Source type
      */
-    CAMP_API Type sourceType() const throw();
+    Type sourceType() const throw();
 
     /**
      * \brief Return the type the value is being converted to
      *
      * \return Requested type
      */
-    CAMP_API Type requestedType() const throw();
+    Type requestedType() const throw();
 
 private:
 

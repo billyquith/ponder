@@ -14,7 +14,7 @@ class Class;
 /**
  * \brief Error thrown when requesting a property which doesn't exist in a metaclass
  */
-class InvalidProperty : public Error
+class CAMP_API InvalidProperty : public Error
 {
 public:
 
@@ -24,40 +24,40 @@ public:
      * \param property Name of the requested property
      * \param ownerClass Owner metaclass
      */
-    CAMP_API InvalidProperty(const char* property, const Class& ownerClass) throw();
+    InvalidProperty(const char* property, const Class& ownerClass) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidProperty(const InvalidProperty& copy) throw();
+    InvalidProperty(const InvalidProperty& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidProperty() throw();
+    virtual ~InvalidProperty() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the requested property name
      *
      * \return Name of the requested property
      */
-    CAMP_API const char* property() const throw();
+    const char* property() const throw();
 
     /**
      * \brief Return the owner metaclass
      *
      * \return Reference to the owner metaclass
      */
-    CAMP_API const Class& ownerClass() const throw();
+    const Class& ownerClass() const throw();
 
 private:
 

@@ -27,7 +27,7 @@ namespace detail
  *
  * \sa Class
  */
-class ClassManager : public ObserverNotifier, boost::noncopyable
+class CAMP_API ClassManager : public ObserverNotifier, boost::noncopyable
 {
 public:
 
@@ -36,7 +36,7 @@ public:
      *
      * \return Reference to the unique instance of ClassManager
      */
-    CAMP_API static ClassManager& instance();
+    static ClassManager& instance();
 
     /**
      * \brief Create and register a new metaclass
@@ -49,7 +49,7 @@ public:
      *
      * \return Reference to the new metaclass
      */
-    CAMP_API Class& registerNew(const std::string& name, const std::string& id);
+    Class& registerNew(const std::string& name, const std::string& id);
 
     /**
      * \brief Get a metaclass from its name
@@ -60,7 +60,7 @@ public:
      *
      * \throw InvalidClass name is not the name of an existing metaclass
      */
-    CAMP_API const Class& getByName(const std::string& name) const;
+    const Class& getByName(const std::string& name) const;
 
     /**
      * \brief Get the number of metaclasses bound to a C++ type
@@ -69,7 +69,7 @@ public:
      *
      * \return Number of metaclasses bound to the given type
      */
-    CAMP_API std::size_t count(const std::string& id) const;
+    std::size_t count(const std::string& id) const;
 
     /**
      * \brief Get a metaclass from a C++ type
@@ -85,14 +85,14 @@ public:
      * \throw InvalidClass id is not the name of an existing metaclass
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API const Class& getById(const std::string& id, std::size_t index) const;
+    const Class& getById(const std::string& id, std::size_t index) const;
 
     /**
      * \brief Get the total number of metaclasses
      *
      * \return Number of metaclasses that have been registered
      */
-    CAMP_API std::size_t count() const;
+    std::size_t count() const;
 
     /**
      * \brief Get a metaclass from its global index
@@ -106,7 +106,7 @@ public:
      *
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API const Class& getByIndex(std::size_t index) const;
+    const Class& getByIndex(std::size_t index) const;
 
     /**
      * \brief Check if a given type has a metaclass

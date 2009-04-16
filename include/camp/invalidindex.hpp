@@ -14,7 +14,7 @@ namespace camp
  *
  * This error may be thrown by every function which takes an index in its parameters
  */
-class InvalidIndex : public Error
+class CAMP_API InvalidIndex : public Error
 {
 public:
 
@@ -24,40 +24,40 @@ public:
      * \param index Invalid index
      * \param size Allowed size
      */
-    CAMP_API InvalidIndex(std::size_t index, std::size_t size) throw();
+    InvalidIndex(std::size_t index, std::size_t size) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidIndex(const InvalidIndex& copy) throw();
+    InvalidIndex(const InvalidIndex& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidIndex() throw();
+    virtual ~InvalidIndex() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the invalid index which was passed
      *
      * \return Index
      */
-    CAMP_API std::size_t index() const throw();
+    std::size_t index() const throw();
 
     /**
      * \brief Return the allowed size
      *
      * \return Valid range
      */
-    CAMP_API std::size_t size() const throw();
+    std::size_t size() const throw();
 
 private:
 

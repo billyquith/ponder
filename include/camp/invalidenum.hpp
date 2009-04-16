@@ -12,7 +12,7 @@ namespace camp
 /**
  * \brief Error thrown when requesting a metaenum which doesn't exist
  */
-class InvalidEnum : public Error
+class CAMP_API InvalidEnum : public Error
 {
 public:
 
@@ -21,33 +21,33 @@ public:
      *
      * \param enumName Name of the requested metaenum
      */
-    CAMP_API InvalidEnum(const char* enumName) throw();
+    InvalidEnum(const char* enumName) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidEnum(const InvalidEnum& copy) throw();
+    InvalidEnum(const InvalidEnum& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidEnum() throw();
+    virtual ~InvalidEnum() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the requested metaenum name
      *
      * \return Name of the metaenum
      */
-    CAMP_API const char* enumName() const throw();
+    const char* enumName() const throw();
 
 private:
 

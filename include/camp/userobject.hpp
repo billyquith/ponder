@@ -22,7 +22,7 @@ namespace camp
  *
  * \sa EnumObject
  */
-class UserObject : boost::totally_ordered<UserObject>
+class CAMP_API UserObject : boost::totally_ordered<UserObject>
 {
 public:
 
@@ -46,7 +46,7 @@ public:
      *
      * \param copy Instance to copy
      */
-    CAMP_API UserObject(const UserObject& copy);
+    UserObject(const UserObject& copy);
 
     /**
      * \brief Retrieve the instance stored in the user object
@@ -69,14 +69,14 @@ public:
      *
      * \return Pointer to the stored object
      */
-    CAMP_API void* pointer() const;
+    void* pointer() const;
 
     /**
      * \brief Retrieve the metaclass of the stored instance
      *
      * \return Reference to the instance's metaclass
      */
-    CAMP_API const Class& getClass() const;
+    const Class& getClass() const;
 
     /**
      * \brief Operator == to compare equality between two user objects
@@ -87,7 +87,7 @@ public:
      *
      * \return True if both user objects are the same, false otherwise
      */
-    CAMP_API bool operator==(const UserObject& other) const;
+    bool operator==(const UserObject& other) const;
 
     /**
      * \brief Operator < to compare two user objects
@@ -96,14 +96,14 @@ public:
      *
      * \return True if this < other
      */
-    CAMP_API bool operator<(const UserObject& other) const;
+    bool operator<(const UserObject& other) const;
 
 public:
 
     /**
      * \brief Special UserObject instance representing an empty object
      */
-    CAMP_API static const UserObject nothing;
+    static const UserObject nothing;
 
 private:
 
@@ -115,7 +115,7 @@ private:
      *
      * \return Converted pointer, or 0 on failure
      */
-    CAMP_API void* convertPtr(void* pointer, const Class& targetClass) const;
+    void* convertPtr(void* pointer, const Class& targetClass) const;
 
     void* m_object; ///< Address of the stored instance
     const Class* m_class; ///< Metaclass of the instance

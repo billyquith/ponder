@@ -14,7 +14,7 @@ class Class;
 /**
  * \brief Error thrown when requesting a function which doesn't exist in a metaclass
  */
-class InvalidFunction : public Error
+class CAMP_API InvalidFunction : public Error
 {
 public:
 
@@ -24,40 +24,40 @@ public:
      * \param function Name of the requested function
      * \param ownerClass Owner metaclass
      */
-    CAMP_API InvalidFunction(const char* function, const Class& ownerClass) throw();
+    InvalidFunction(const char* function, const Class& ownerClass) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidFunction(const InvalidFunction& copy) throw();
+    InvalidFunction(const InvalidFunction& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidFunction() throw();
+    virtual ~InvalidFunction() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the requested function name
      *
      * \return Name of the requested function
      */
-    CAMP_API const char* function() const throw();
+    const char* function() const throw();
 
     /**
      * \brief Return the owner metaclass
      *
      * \return Reference to the owner metaclass
      */
-    CAMP_API const Class& ownerClass() const throw();
+    const Class& ownerClass() const throw();
 
 private:
 

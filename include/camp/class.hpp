@@ -79,7 +79,7 @@ class ClassVisitor;
  *
  * \sa Class, EnumBuilder, Function, Property
  */
-class Class : boost::noncopyable
+class CAMP_API Class : boost::noncopyable
 {
 public:
 
@@ -105,14 +105,14 @@ public:
      *
      * \return String containing the name of the metaclass
      */
-    CAMP_API const std::string& name() const;
+    const std::string& name() const;
 
     /**
      * \brief Return the total number of base metaclasses of this metaclass
      *
      * \return Number of base metaclasses
      */
-    CAMP_API std::size_t baseCount() const;
+    std::size_t baseCount() const;
 
     /**
      * \brief Return a base metaclass from its index
@@ -123,14 +123,14 @@ public:
      *
      * \throw camp::InvalidIndex index is out of range
      */
-    CAMP_API const Class& base(std::size_t index) const;
+    const Class& base(std::size_t index) const;
 
     /**
      * \brief Return the total number of functions of this metaclass
      *
      * \return Number of functions
      */
-    CAMP_API std::size_t functionCount() const;
+    std::size_t functionCount() const;
 
     /**
      * \brief Check if this metaclass contains the given function
@@ -139,7 +139,7 @@ public:
      *
      * \return True if the function is in the metaclass, false otherwise
      */
-    CAMP_API bool hasFunction(const std::string& name) const;
+    bool hasFunction(const std::string& name) const;
 
     /**
      * \brief Get a function from its index in this metaclass
@@ -150,7 +150,7 @@ public:
      *
      * \throw camp::InvalidIndex index is out of range
      */
-    CAMP_API const Function& function(std::size_t index) const;
+    const Function& function(std::size_t index) const;
 
     /**
      * \brief Get a function from its name
@@ -161,14 +161,14 @@ public:
      *
      * \throw camp::InvalidFunction name doesn't exist in the metaclass
      */
-    CAMP_API const Function& function(const std::string& name) const;
+    const Function& function(const std::string& name) const;
 
     /**
      * \brief Return the total number of properties of this metaclass
      *
      * \return Number of properties
      */
-    CAMP_API std::size_t propertyCount() const;
+    std::size_t propertyCount() const;
 
     /**
      * \brief Check if this metaclass contains the given property
@@ -177,7 +177,7 @@ public:
      *
      * \return True if the property is in the metaclass, false otherwise
      */
-    CAMP_API bool hasProperty(const std::string& name) const;
+    bool hasProperty(const std::string& name) const;
 
     /**
      * \brief Get a property from its index in this metaclass
@@ -188,7 +188,7 @@ public:
      *
      * \throw camp::InvalidIndex index is out of range
      */
-    CAMP_API const Property& property(std::size_t index) const;
+    const Property& property(std::size_t index) const;
 
     /**
      * \brief Get a property from its name
@@ -199,7 +199,7 @@ public:
      *
      * \throw camp::InvalidProperty name doesn't exist in the metaclass
      */
-    CAMP_API const Property& property(const std::string& name) const;
+    const Property& property(const std::string& name) const;
 
     /**
      * \brief Construct a new instance of the C++ class bound to the metaclass
@@ -234,7 +234,7 @@ public:
      *
      * \param visitor Visitor to use for visitation
      */
-    CAMP_API void visit(ClassVisitor& visitor) const;
+    void visit(ClassVisitor& visitor) const;
 
     /**
      * \brief Operator == to check equality between two metaclasses
@@ -245,7 +245,7 @@ public:
      *
      * \return True if both metaclasses are the same, false otherwise
      */
-    CAMP_API bool operator==(const Class& other) const;
+    bool operator==(const Class& other) const;
 
     /**
      * \brief Operator != to check inequality between two metaclasses
@@ -254,7 +254,7 @@ public:
      *
      * \return True if metaclasses are different, false if they are equal
      */
-    CAMP_API bool operator!=(const Class& other) const;
+     bool operator!=(const Class& other) const;
 
 private:
 
@@ -267,7 +267,7 @@ private:
      *
      * \param name Name of the metaclass
      */
-    CAMP_API Class(const std::string& name);
+    Class(const std::string& name);
 
     /**
      * \brief Convert a pointer to an object to be compatible with a base metaclass
@@ -277,7 +277,7 @@ private:
      *
      * \return True if conversion was properly done, false on error
      */
-    CAMP_API bool applyOffset(void*& pointer, const Class& base) const;
+    bool applyOffset(void*& pointer, const Class& base) const;
 
 private:
 

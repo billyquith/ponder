@@ -23,7 +23,7 @@ class Enum;
  * This class should never be explicitely instanciated, unless you
  * need to split the metaenum creation in multiple parts.
  */
-class EnumBuilder
+class CAMP_API EnumBuilder
 {
 public:
 
@@ -32,7 +32,7 @@ public:
      *
      * \param target Target metaenum to construct
      */
-    CAMP_API EnumBuilder(Enum& target);
+    EnumBuilder(Enum& target);
 
     /**
      * \brief Add a new pair to the metaenum
@@ -40,7 +40,7 @@ public:
      * \param name Name of the pair
      * \param value Value of the pair
      */
-    CAMP_API EnumBuilder& value(const std::string& name, long value);
+    EnumBuilder& value(const std::string& name, long value);
 
 private:
 

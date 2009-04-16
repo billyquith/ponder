@@ -15,7 +15,7 @@ class Enum;
  * \brief Specialized type of property for enums
  *
  */
-class EnumProperty : public Property
+class CAMP_API EnumProperty : public Property
 {
 public:
 
@@ -25,26 +25,26 @@ public:
      * \param name Name of the property
      * \param propEnum Eumeration the property is bound to
      */
-    CAMP_API EnumProperty(const std::string& name, const Enum& propEnum);
+    EnumProperty(const std::string& name, const Enum& propEnum);
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~EnumProperty();
+    virtual ~EnumProperty();
 
     /**
      * \brief Get the owner enum
      *
      * \return Enum the property is bound to
      */
-    CAMP_API const Enum& getEnum() const;
+    const Enum& getEnum() const;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
      */
-    CAMP_API virtual void accept(ClassVisitor& visitor) const;
+    virtual void accept(ClassVisitor& visitor) const;
 
 private:
 

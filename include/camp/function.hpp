@@ -26,35 +26,35 @@ class ClassVisitor;
  * Functions are members of metaclasses. Their main purpose is to be called; they also provide
  * detailed informations about their prototype.
  */
-class Function : public TagHolder
+class CAMP_API Function : public TagHolder
 {
 public:
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~Function();
+    virtual ~Function();
 
     /**
      * \brief Get the name of the function
      *
      * \return Name of the function
      */
-    CAMP_API const std::string& name() const;
+    const std::string& name() const;
 
     /**
      * \brief Get the number of arguments of the function
      *
      * \return Total number of arguments taken by the function
      */
-    CAMP_API std::size_t argCount() const;
+    std::size_t argCount() const;
 
     /**
      * \brief Get the type of variable returned by the function
      *
      * \return Type of the result of the function
      */
-    CAMP_API Type returnType() const;
+    Type returnType() const;
 
     /**
      * \brief Get the type of an argument given by its index
@@ -65,7 +65,7 @@ public:
      *
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API Type argType(std::size_t index) const;
+    Type argType(std::size_t index) const;
 
     /**
      * \brief Check if the function is currently callable for a given object
@@ -76,7 +76,7 @@ public:
      *
      * \throw InvalidObject object has an invalid value
      */
-    CAMP_API bool callable(const UserObject& object) const;
+    bool callable(const UserObject& object) const;
 
     /**
      * \brief Call the function
@@ -90,14 +90,14 @@ public:
      * \throw InvalidObject object has an invalid value
      * \throw InvalidArgument one of the arguments can't be converted to the requested type
      */
-    CAMP_API Value call(const UserObject& object, const Args& args = Args::empty) const;
+    Value call(const UserObject& object, const Args& args = Args::empty) const;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
      */
-    CAMP_API virtual void accept(ClassVisitor& visitor) const;
+    virtual void accept(ClassVisitor& visitor) const;
 
 protected:
 
@@ -112,7 +112,7 @@ protected:
      *
      * \return Value returned by the function call
      */
-    CAMP_API Function(const std::string& name, Type returnType, const std::vector<Type>& argTypes = std::vector<Type>());
+    Function(const std::string& name, Type returnType, const std::vector<Type>& argTypes = std::vector<Type>());
 
     /**
      * \brief Do the actual call
@@ -127,7 +127,7 @@ protected:
      * \throw InvalidObject object has an invalid value
      * \throw InvalidArgument one of the arguments can't be converted to the requested type
      */
-    CAMP_API virtual Value execute(const UserObject& object, const Args& args) const = 0;
+    virtual Value execute(const UserObject& object, const Args& args) const = 0;
 
 private:
 

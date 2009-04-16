@@ -17,7 +17,7 @@ namespace camp
  *
  * \sa ArrayProperty, EnumProperty, ObjectProperty
  */
-class SimpleProperty : public Property
+class CAMP_API SimpleProperty : public Property
 {
 public:
 
@@ -27,19 +27,19 @@ public:
      * \param name Name of the property
      * \param type Type of the property
      */
-    CAMP_API SimpleProperty(const std::string& name, Type type);
+    SimpleProperty(const std::string& name, Type type);
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~SimpleProperty();
+    virtual ~SimpleProperty();
 
     /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
      */
-    CAMP_API virtual void accept(ClassVisitor& visitor) const;
+    virtual void accept(ClassVisitor& visitor) const;
 };
 
 } // namespace camp

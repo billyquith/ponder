@@ -58,21 +58,21 @@ namespace camp
  *
  * \sa ValueVisitor, camp_ext::ValueMapper
  */
-class Value : boost::totally_ordered<Value>
+class CAMP_API Value : boost::totally_ordered<Value>
 {
 public:
 
     /**
      * \brief Default constructor, constructs a null value
      */
-    CAMP_API Value();
+    Value();
 
     /**
      * \brief Copy constructor
      *
      * \param other Value to copy
      */
-    CAMP_API Value(const Value& other);
+    Value(const Value& other);
 
     /**
      * \brief Construct the value from a variable of type T
@@ -87,7 +87,7 @@ public:
      *
      * \return Type of the value
      */
-    CAMP_API Type type() const;
+    Type type() const;
 
     /**
      * \brief Convert the value to the type T
@@ -155,7 +155,7 @@ public:
      *
      * \return True if both values are the same, false otherwise
      */
-    CAMP_API bool operator==(const Value& other) const;
+    bool operator==(const Value& other) const;
 
     /**
      * \brief Operator < to compare two values
@@ -164,14 +164,14 @@ public:
      *
      * \return True if this < other
      */
-    CAMP_API bool operator<(const Value& other) const;
+    bool operator<(const Value& other) const;
 
 public:
 
     /**
      * \brief Special Value instance representing an empty value
      */
-    CAMP_API static const Value nothing;
+    static const Value nothing;
 
 private:
 

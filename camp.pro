@@ -1,15 +1,10 @@
 TEMPLATE = lib
 include(../config.pro)
-
 VERSION = 0.1
 CONFIG += exceptions \
     stl
-CONFIG(debug, debug|release) { 
-    TARGET = campd
-}
-else { 
-    TARGET = camp
-}
+CONFIG(debug, debug|release):TARGET = campd
+else:TARGET = camp
 DEFINES += CAMP_EXPORTS
 INCLUDEPATH += ./include \
     $${BOOST_PATH}

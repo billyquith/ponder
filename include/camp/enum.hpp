@@ -48,7 +48,7 @@ namespace camp
  *
  * \sa Class, EnumBuilder
  */
-class Enum : boost::noncopyable
+class CAMP_API Enum : boost::noncopyable
 {
 public:
 
@@ -83,14 +83,14 @@ public:
      *
      * \return String containing the name of the metaenum
      */
-    CAMP_API const std::string& name() const;
+    const std::string& name() const;
 
     /**
      * \brief Return the size of the metaenum
      *
      * \return Total number of values contained in the metaenum
      */
-    CAMP_API std::size_t size() const;
+    std::size_t size() const;
 
     /**
      * \brief Get a pair by its index
@@ -101,7 +101,7 @@ public:
      *
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API const Pair& pair(std::size_t index) const;
+    const Pair& pair(std::size_t index) const;
 
     /**
      * \brief Check if the enum contains a name
@@ -110,7 +110,7 @@ public:
      *
      * \return True if the metaenum contains a pair whose name is \a name
      */
-    CAMP_API bool hasName(const std::string& name) const;
+    bool hasName(const std::string& name) const;
 
     /**
      * \brief Check if the enum contains a value
@@ -119,7 +119,7 @@ public:
      *
      * \return True if the metaenum contains a pair whose value is \a value
      */
-    CAMP_API bool hasValue(long value) const;
+    bool hasValue(long value) const;
 
     /**
      * \brief Return the name corresponding to given a value
@@ -130,7 +130,7 @@ public:
      *
      * \throw InvalidEnumValue value doesn't exist in the metaenum
      */
-    CAMP_API const std::string& name(long value) const;
+    const std::string& name(long value) const;
 
     /**
      * \brief Return the value corresponding to given a name
@@ -141,7 +141,7 @@ public:
      *
      * \throw InvalidEnumName name doesn't exist in the metaenum
      */
-    CAMP_API long value(const std::string& name) const;
+    long value(const std::string& name) const;
 
     /**
      * \brief Operator == to check equality between two metaenums
@@ -152,7 +152,7 @@ public:
      *
      * \return True if both metaenums are the same, false otherwise
      */
-    CAMP_API bool operator==(const Enum& other) const;
+    bool operator==(const Enum& other) const;
 
     /**
      * \brief Operator != to check inequality between two metaenums
@@ -161,7 +161,7 @@ public:
      *
      * \return True if metaenums are different, false if they are equal
      */
-    CAMP_API bool operator!=(const Enum& other) const;
+    bool operator!=(const Enum& other) const;
 
 private:
 

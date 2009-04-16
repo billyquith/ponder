@@ -14,7 +14,7 @@ namespace camp
 /**
  * \brief Base class for every exception thrown in CAMP
  */
-class Error : public std::exception
+class CAMP_API Error : public std::exception
 {
 public:
 
@@ -23,33 +23,33 @@ public:
      *
      * \param copy Instance to copy
      */
-    CAMP_API Error(const Error& copy) throw();
+    Error(const Error& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~Error() throw();
+    virtual ~Error() throw();
 
     /**
      * \brief Return a description of the error
      *
      * \return Pointer to a string containing the error message
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Get the source file where the exception was thrown
      *
      * \return Pointer to a string containing the source filename
      */
-    CAMP_API const char* file() const throw();
+    const char* file() const throw();
 
     /**
      * \brief Get the line number in the source file where the exception was thrown
      *
      * \return Line number
      */
-    CAMP_API int line() const throw();
+    int line() const throw();
 
     /**
      * \brief Set the source file and the line number where the exception was thrown
@@ -59,14 +59,14 @@ public:
      * \param file Source filename
      * \param line Line number in the source file
      */
-    CAMP_API void setContext(const char* file, int line) throw();
+    void setContext(const char* file, int line) throw();
 
 protected:
 
     /**
      * \brief Default constructor
      */
-    CAMP_API Error();
+    Error();
 
 private:
 

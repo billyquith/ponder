@@ -16,7 +16,7 @@ class UserObject;
  *
  * This error may be thrown if user object is null, of if its type doesn't match the requested one
  */
-class InvalidObject : public Error
+class CAMP_API InvalidObject : public Error
 {
 public:
 
@@ -25,33 +25,33 @@ public:
      *
      * \param object User object
      */
-    CAMP_API InvalidObject(const UserObject& object) throw();
+    InvalidObject(const UserObject& object) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidObject(const InvalidObject& copy) throw();
+    InvalidObject(const InvalidObject& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidObject() throw();
+    virtual ~InvalidObject() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the user object
      *
      * \return Reference to the user object
      */
-    CAMP_API const UserObject& object() const throw();
+    const UserObject& object() const throw();
 
 private:
 

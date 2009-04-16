@@ -20,49 +20,49 @@ class Enum;
  *
  * \sa Class, Enum
  */
-class Observer
+class CAMP_API Observer
 {
 public:
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~Observer();
+    virtual ~Observer();
 
     /**
      * \brief Functon called when a new metaclass is created
      *
      * \param added Metaclass that have been added
      */
-    CAMP_API virtual void classAdded(const Class& added);
+    virtual void classAdded(const Class& added);
 
     /**
      * \brief Functon called when an existing metaclass is destroyed
      *
      * \param removed Metaclass that have been destroyed
      */
-    CAMP_API virtual void classRemoved(const Class& removed);
+    virtual void classRemoved(const Class& removed);
 
     /**
      * \brief Functon called when a new metaenum is created
      *
      * \param added Metaenum that have been added
      */
-    CAMP_API virtual void enumAdded(const Enum& added);
+    virtual void enumAdded(const Enum& added);
 
     /**
      * \brief Functon called when an existing metaenum is destroyed
      *
      * \param removed Metaenum that have been destroyed
      */
-    CAMP_API virtual void enumRemoved(const Enum& removed);
+    virtual void enumRemoved(const Enum& removed);
 
 protected:
 
     /**
      * \brief Default constructor
      */
-    CAMP_API Observer();
+    Observer();
 };
 
 /**

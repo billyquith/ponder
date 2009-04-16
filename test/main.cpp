@@ -2,7 +2,7 @@
 
 #include "test.hpp"
 
-
+#define BOOST_TEST_NO_LIB
 #define BOOST_TEST_MODULE CAMP test
 #include <boost/test/unit_test.hpp>
 
@@ -583,7 +583,7 @@ BOOST_AUTO_TEST_CASE(campFunctionBindTest)
     .function("f4", &FunctionTest::constFunc)
     .function("f5", static_cast<std::string (FunctionTest::*)()>(&FunctionTest::inheritedFunc))
 
-    // ***** arguments count *****
+    // ***** arguments count ******
     .function("f6",  &FunctionTest::f0)
     .function("f7",  &FunctionTest::f1)
     .function("f8",  &FunctionTest::f2)

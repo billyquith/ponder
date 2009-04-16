@@ -36,21 +36,21 @@ class UserObject;
  * bool hidden = tagHolder.tag("hidden", object);
  * \endcode
  */
-class TagHolder
+class CAMP_API TagHolder
 {
 public:
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~TagHolder();
+    virtual ~TagHolder();
 
     /**
      * \brief Get the total number of tags stored in the object
      *
      * \return Number of tags
      */
-    CAMP_API std::size_t tagCount() const;
+    std::size_t tagCount() const;
 
     /**
      * \brief Get a tag by its index
@@ -61,7 +61,7 @@ public:
      *
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API const Value& tagId(std::size_t index) const;
+    const Value& tagId(std::size_t index) const;
 
     /**
      * \brief Check the existence of a tag
@@ -70,7 +70,7 @@ public:
      *
      * \return True if the tag exists, false otherwise
      */
-    CAMP_API bool hasTag(const Value& id) const;
+    bool hasTag(const Value& id) const;
 
     /**
      * \brief Get the value associated to a tag
@@ -79,7 +79,7 @@ public:
      *
      * \return Value associated to the tag, or Value::nothing if the tag doesn't exist
      */
-    CAMP_API const Value& tag(const Value& id) const;
+    const Value& tag(const Value& id) const;
 
     /**
      * \brief Get the value associated to a dynamic tag
@@ -89,7 +89,7 @@ public:
      *
      * \return Value associated to the tag for \a object, or Value::nothing if the tag doesn't exist
      */
-    CAMP_API Value tag(const Value& id, const UserObject& object) const;
+    Value tag(const Value& id, const UserObject& object) const;
 
 protected:
 

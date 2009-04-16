@@ -15,7 +15,7 @@ class Class;
  * \brief Specialized type of property for user types
  *
  */
-class UserProperty : public Property
+class CAMP_API UserProperty : public Property
 {
 public:
 
@@ -25,26 +25,26 @@ public:
      * \param name Name of the property
      * \param propClass Eumeration the property is bound to
      */
-    CAMP_API UserProperty(const std::string& name, const Class& propClass);
+    UserProperty(const std::string& name, const Class& propClass);
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~UserProperty();
+    virtual ~UserProperty();
 
     /**
      * \brief Get the owner class
      *
      * \return Class the property is bound to
      */
-    CAMP_API const Class& getClass() const;
+    const Class& getClass() const;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
      */
-    CAMP_API virtual void accept(ClassVisitor& visitor) const;
+    virtual void accept(ClassVisitor& visitor) const;
 
 private:
 

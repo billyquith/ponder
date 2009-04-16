@@ -14,7 +14,7 @@ class Enum;
 /**
  * \brief Error thrown when requesting the value of a pair which doesn't exist in a metaenum
  */
-class InvalidEnumValue : public Error
+class CAMP_API InvalidEnumValue : public Error
 {
 public:
 
@@ -24,40 +24,40 @@ public:
      * \param value Value of the requested pair
      * \param ownerEnum Owner metaenum
      */
-    CAMP_API InvalidEnumValue(long value, const Enum& ownerEnum) throw();
+    InvalidEnumValue(long value, const Enum& ownerEnum) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidEnumValue(const InvalidEnumValue& copy) throw();
+    InvalidEnumValue(const InvalidEnumValue& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidEnumValue() throw();
+    virtual ~InvalidEnumValue() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Return the requested pair value
      *
      * \return Value of the requested pair
      */
-    CAMP_API long value() const throw();
+    long value() const throw();
 
     /**
      * \brief Return the owner metaenum
      *
      * \return Reference to the owner metaenum
      */
-    CAMP_API const Enum& ownerEnum() const throw();
+    const Enum& ownerEnum() const throw();
 
 private:
 

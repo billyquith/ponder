@@ -27,7 +27,7 @@ namespace detail
  *
  * \sa Enum
  */
-class EnumManager : public ObserverNotifier, boost::noncopyable
+class CAMP_API EnumManager : public ObserverNotifier, boost::noncopyable
 {
 public:
 
@@ -36,7 +36,7 @@ public:
      *
      * \return Reference to the unique instance of EnumManager
      */
-    CAMP_API static EnumManager& instance();
+    static EnumManager& instance();
 
     /**
      * \brief Create and register a new metaenum
@@ -49,7 +49,7 @@ public:
      *
      * \return Reference to the new metaenum
      */
-    CAMP_API Enum& registerNew(const std::string& name, const std::string& id);
+    Enum& registerNew(const std::string& name, const std::string& id);
 
     /**
      * \brief Get a metaenum from its name
@@ -60,7 +60,7 @@ public:
      *
      * \throw InvalidEnum name is not the name of an existing metaenum
      */
-    CAMP_API const Enum& getByName(const std::string& name) const;
+    const Enum& getByName(const std::string& name) const;
 
     /**
      * \brief Get the number of metaenums bound to a C++ type
@@ -69,7 +69,7 @@ public:
      *
      * \return Number of metaenums bound to the given type
      */
-    CAMP_API std::size_t count(const std::string& id) const;
+    std::size_t count(const std::string& id) const;
 
     /**
      * \brief Get a metaenum from a C++ type
@@ -85,14 +85,14 @@ public:
      * \throw InvalidEnum id is not the name of an existing metaenum
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API const Enum& getById(const std::string& id, std::size_t index) const;
+    const Enum& getById(const std::string& id, std::size_t index) const;
 
     /**
      * \brief Get the total number of metaenums
      *
      * \return Number of metaenums that have been registered
      */
-    CAMP_API std::size_t count() const;
+    std::size_t count() const;
 
     /**
      * \brief Get a metaenum from its global index
@@ -106,7 +106,7 @@ public:
      *
      * \throw InvalidIndex index is out of range
      */
-    CAMP_API const Enum& getByIndex(std::size_t index) const;
+    const Enum& getByIndex(std::size_t index) const;
 
     /**
      * \brief Check if a given type has a metaenum

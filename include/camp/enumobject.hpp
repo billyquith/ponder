@@ -22,7 +22,7 @@ namespace camp
  *
  * \sa UserObject
  */
-class EnumObject : boost::totally_ordered<EnumObject>
+class CAMP_API EnumObject : boost::totally_ordered<EnumObject>
 {
 public:
 
@@ -39,21 +39,21 @@ public:
      *
      * \return Integer value of the enum object
      */
-    CAMP_API long value() const;
+    long value() const;
 
     /**
      * \brief Get the name of the enum object
      *
      * \return String containing the name of the enum object
      */
-    CAMP_API const std::string& name() const;
+    const std::string& name() const;
 
     /**
      * \brief Retrieve the metaenum of the stored enum object
      *
      * \return Reference to the object's metaenum
      */
-    CAMP_API const Enum& getEnum() const;
+    const Enum& getEnum() const;
 
     /**
      * \brief Operator == to compare equality between two enum objects
@@ -64,7 +64,7 @@ public:
      *
      * \return True if both enum objects are the same, false otherwise
      */
-    CAMP_API bool operator==(const EnumObject& other) const;
+    bool operator==(const EnumObject& other) const;
 
     /**
      * \brief Operator < to compare two enum objects
@@ -73,7 +73,7 @@ public:
      *
      * \return True if this < other
      */
-    CAMP_API bool operator<(const EnumObject& other) const;
+    bool operator<(const EnumObject& other) const;
 
 private:
 

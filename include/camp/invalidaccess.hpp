@@ -18,7 +18,7 @@ namespace camp
  * \li Calling \c set on a non-writable property
  * \li Calling \c call on a non-callable function
  */
-class InvalidAccess : public Error
+class CAMP_API InvalidAccess : public Error
 {
 public:
 
@@ -38,40 +38,40 @@ public:
      * \param attribute Name of the owner property/function
      * \param action Type of action which triggered the error
      */
-    CAMP_API InvalidAccess(const char* attribute, Action action) throw();
+    InvalidAccess(const char* attribute, Action action) throw();
 
     /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
      */
-    CAMP_API InvalidAccess(const InvalidAccess& copy) throw();
+    InvalidAccess(const InvalidAccess& copy) throw();
 
     /**
      * \brief Destructor
      */
-    CAMP_API virtual ~InvalidAccess() throw();
+    virtual ~InvalidAccess() throw();
 
     /**
      * \brief Return a message describing the error
      *
      * \return Pointer to a string describing the error
      */
-    CAMP_API virtual const char* what() const throw();
+    virtual const char* what() const throw();
 
     /**
      * \brief Get the owner property/function
      *
      * \return Name of the owner attribute
      */
-    CAMP_API const char* attribute() const throw();
+    const char* attribute() const throw();
 
     /**
      * \brief Get the type of action
      *
      * \return Type of action which triggered the error
      */
-    CAMP_API Action action() const throw();
+    Action action() const throw();
 
 private:
 
