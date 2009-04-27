@@ -40,30 +40,25 @@ const Class& UserObject::getClass() const
 //-------------------------------------------------------------------------------------------------
 bool UserObject::operator==(const UserObject& other) const
 {
-    return (m_class == other.m_class) && (m_object == other.m_object);
+    return m_object == other.m_object;
 }
 
 //-------------------------------------------------------------------------------------------------
 bool UserObject::operator<(const UserObject& other) const
 {
-    if (m_class != other.m_class)
-    {
-        return m_class < other.m_class;
-    }
-    else
-    {
-        return m_object < other.m_object;
-    }
+    return m_object < other.m_object;
 }
 
 //-------------------------------------------------------------------------------------------------
-void* UserObject::convertPtr(void* pointer, const Class& targetClass) const
+void* UserObject::convertPtr(void* pointer, const Class& sourceClass, const Class& targetClass)
 {
     // Note: this function exists only to hide the usage of camp::Class to a separate compile unit;
     //       including <camp/class.hpp> in our header would cause a cycle in inclusions.
 
-    bool ok = m_class->applyOffset(pointer, targetClass);
-    return ok ? pointer : 0;
+    if (sourceClass.applyOffset(pointer, targetClass))
+        return pointer;
+    else
+        return 0;
 }
 
 } // namespace camp

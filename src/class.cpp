@@ -150,6 +150,33 @@ void Class::visit(ClassVisitor& visitor) const
 }
 
 //-------------------------------------------------------------------------------------------------
+bool Class::applyOffset(void*& pointer, const Class& target) const
+{
+    // Special case for null pointers: don't apply offset to leave them null
+    if (!pointer)
+        return true;
+
+    // Check target as a base class of this
+    int offset = baseOffset(target);
+    if (offset != -1)
+    {
+        pointer = static_cast<void*>(static_cast<char*>(pointer) + offset);
+        return true;
+    }
+
+    // Check target as a derived class of this
+    offset = target.baseOffset(*this);
+    if (offset != -1)
+    {
+        pointer = static_cast<void*>(static_cast<char*>(pointer) - offset);
+        return true;
+    }
+
+    // No match found, target is not a base class nor a derived class of this
+    return false;
+}
+
+//-------------------------------------------------------------------------------------------------
 bool Class::operator==(const Class& other) const
 {
     return m_name == other.m_name;
@@ -168,31 +195,22 @@ Class::Class(const std::string& name)
 }
 
 //-------------------------------------------------------------------------------------------------
-bool Class::applyOffset(void*& pointer, const Class& base) const
+int Class::baseOffset(const Class& base) const
 {
     // Check self
     if (&base == this)
-        return true;
+        return 0;
 
-    // Check base classes
+    // Search base in the base classes
     std::vector<BaseInfo>::const_iterator end = m_bases.end();
-    for (std::vector<BaseInfo>::const_iterator it = m_bases.begin(); it != end;  ++it)
+    for (std::vector<BaseInfo>::const_iterator it = m_bases.begin(); it != end; ++it)
     {
-        if (it->base == &base)
-        {
-            // Special case for null pointers: don't apply offset to let them be null
-            if (pointer)
-                pointer = static_cast<void*>(static_cast<char*>(pointer) + it->offset);
-            return true;
-        }
-        else if (it->base->applyOffset(pointer, base))
-        {
-            return true;
-        }
+        int offset = it->base->baseOffset(base);
+        if (offset != -1)
+            return offset + it->offset;
     }
 
-    // No match found for base class...
-    return false;
+    return -1;
 }
 
 } // namespace camp

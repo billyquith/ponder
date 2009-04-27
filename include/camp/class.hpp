@@ -237,6 +237,18 @@ public:
     void visit(ClassVisitor& visitor) const;
 
     /**
+     * \brief Convert a pointer to an object to be compatible with a base or derived metaclass
+     *
+     * The target metaclass may be a base or a derived of this, both cases are properly handled.
+     *
+     * \param pointer Pointer to convert
+     * \param target Target metaclass to convert to
+     *
+     * \return True if the conversion was properly done, false on error
+     */
+    bool applyOffset(void*& pointer, const Class& target) const;
+
+    /**
      * \brief Operator == to check equality between two metaclasses
      *
      * Two metaclasses are equal if their name is the same.
@@ -260,7 +272,6 @@ private:
 
     template <typename T> friend class ClassBuilder;
     friend class detail::ClassManager;
-    friend class UserObject;
 
     /**
      * \brief Construct the metaclass from its name
@@ -270,14 +281,13 @@ private:
     Class(const std::string& name);
 
     /**
-     * \brief Convert a pointer to an object to be compatible with a base metaclass
+     * \brief Get the offset of a base metaclass
      *
-     * \param pointer Pointer to convert
-     * \param base Target base metaclass
+     * \param base Base metaclass to check
      *
-     * \return True if conversion was properly done, false on error
+     * \return offset between this and base, or -1 if both classes are unrelated
      */
-    bool applyOffset(void*& pointer, const Class& base) const;
+    int baseOffset(const Class& base) const;
 
 private:
 

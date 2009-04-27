@@ -111,14 +111,15 @@ private:
      * \brief Convert a pointer to a target metaclass
      *
      * \param pointer Source pointer to convert
+     * \param sourceClass Source metaclass to convert from
      * \param targetClass Target metaclass to convert to
      *
      * \return Converted pointer, or 0 on failure
      */
-    void* convertPtr(void* pointer, const Class& targetClass) const;
+    static void* convertPtr(void* pointer, const Class& sourceClass, const Class& targetClass);
 
     void* m_object; ///< Address of the stored instance
-    const Class* m_class; ///< Metaclass of the instance
+    const Class* m_class; ///< Dynamic metaclass of the instance
 };
 
 } // namespace camp

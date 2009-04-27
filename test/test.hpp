@@ -70,6 +70,7 @@ struct DerivedMultiple : public TestClass, public TestClass2
 };
 CAMP_TYPE(DerivedMultiple);
 
+
 struct DerivedDeep : public DerivedMultiple
 {
     CAMP_RTTI();
