@@ -9,7 +9,7 @@ UserObject::UserObject(const T& object)
 {
     const void* pointer = detail::ObjectTraits<const T&>::getPointer(object);
 
-    // Get the dynamic metaclass of the object, and convert
+    // Get the dynamic metaclass of the object, and convert the pointer accordingly
     m_class = &classByObject(object);
     m_object = convertPtr(const_cast<void*>(pointer), classByType<T>(), *m_class);
 
