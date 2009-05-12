@@ -443,6 +443,12 @@ PropertyEditor* editor = value.visit(EditorFactory());
 	A user object is composed of a raw pointer to the source instance, stored as a typeless \verb@void*@ pointer,
 	and its owner metaclass. This allows to get extra information, such as the name of the class of the object.
 	
+	The raw pointer to the object is accessed through the \verb@AbstractObjectHolder@ class, which allows
+	the user object to use different storage policies: either a storage by reference (the holder stores a direct pointer to the object)
+	or a storage by copy (the holder stores its own copy of the object). This management of storage allows \verb@UserObject@ instances
+	to hold direct references to objects as well as copies of temporary objects.
+	To choose which storage policy to use, one can call either \verb@UserObject::ref(object)@ or \verb@UserObject::copy(object)@ static functions.
+
 	With the owner metaclass, \verb@UserObject@ is also able to safely handle the conversion of the object back to its original type,
 	or to one of its base types if any.
 	
