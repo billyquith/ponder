@@ -60,7 +60,8 @@ struct PropertyMapper<A, camp::userType>
  * Helper structure to perform copy and assignment
  *
  * The purpose of this structure is to avoid a compiler error when the copied
- * type is not copyable. Instead, we throw a CAMP error.
+ * type is not copyable. Instead, we just return an error so that the caller
+ * can throw a CAMP exception.
  */
 template <typename T, typename E = void>
 struct CopyHelper

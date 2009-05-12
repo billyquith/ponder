@@ -111,7 +111,10 @@ BOOST_AUTO_TEST_CASE(campEnumTest)
 //////////////////////////////////////////////////////////////
 BOOST_AUTO_TEST_CASE(campTagHolderTest)
 {
-    camp::Class::declare<Comparable>("Comparable");
+    camp::Class::declare<ComparableBase>("ComparableBase");
+
+    camp::Class::declare<Comparable>("Comparable")
+        .base<ComparableBase>();
     Comparable c(0);
 
     camp::Class::declare<TagTest>("TagTest")
@@ -506,6 +509,7 @@ BOOST_AUTO_TEST_CASE(campUserPropertyTest)
         .property("c1", &UserPropTest::c1)
         .property("c2", &UserPropTest::c2)
         .property("c3", &UserPropTest::c3)
+        .property("c4", &UserPropTest::getC4, &UserPropTest::setC4)
         ;
 
     UserPropTest obj;
@@ -513,29 +517,39 @@ BOOST_AUTO_TEST_CASE(campUserPropertyTest)
     const camp::UserProperty& c1 = static_cast<const camp::UserProperty&>(c.property("c1"));
     const camp::UserProperty& c2 = static_cast<const camp::UserProperty&>(c.property("c2"));
     const camp::UserProperty& c3 = static_cast<const camp::UserProperty&>(c.property("c3"));
+    const camp::UserProperty& c4 = static_cast<const camp::UserProperty&>(c.property("c4"));
 
     // ***** type *****
     BOOST_CHECK_EQUAL(c1.type(), camp::userType);
     BOOST_CHECK_EQUAL(c2.type(), camp::userType);
     BOOST_CHECK_EQUAL(c3.type(), camp::userType);
+    BOOST_CHECK_EQUAL(c4.type(), camp::userType);
 
     // ***** getClass *****
     BOOST_CHECK_EQUAL(c1.getClass() == camp::classByType<Comparable>(), true);
     BOOST_CHECK_EQUAL(c2.getClass() == camp::classByType<Comparable>(), true);
     BOOST_CHECK_EQUAL(c3.getClass() == camp::classByType<Comparable>(), true);
+    BOOST_CHECK_EQUAL(c4.getClass() == camp::classByType<Comparable>(), true);
 
     // ***** get *****
     BOOST_CHECK_EQUAL(c1.get(obj).to<Comparable>(), Comparable(10));
     BOOST_CHECK_EQUAL(c2.get(obj).to<Comparable>(), Comparable(20));
     BOOST_CHECK_EQUAL(c3.get(obj).to<Comparable>(), Comparable(30));
+    BOOST_CHECK_EQUAL(c4.get(obj).to<Comparable>(), Comparable(40));
 
     // ***** set *****
     c1.set(obj, Comparable(100));
     c2.set(obj, Comparable(200));
     c3.set(obj, Comparable(300));
-    BOOST_CHECK_EQUAL(c1.get(obj).to<Comparable>(), Comparable(100));
-    BOOST_CHECK_EQUAL(c2.get(obj).to<Comparable>(), Comparable(200));
-    BOOST_CHECK_EQUAL(c3.get(obj).to<Comparable>(), Comparable(300));
+    c4.set(obj, Comparable(400));
+    camp::Value v4 = c4.get(obj); // reverse order on purpose (to exhibit memory corruptions)
+    camp::Value v3 = c3.get(obj);
+    camp::Value v2 = c2.get(obj);
+    camp::Value v1 = c1.get(obj);
+    BOOST_CHECK_EQUAL(v1.to<Comparable>(), Comparable(100));
+    BOOST_CHECK_EQUAL(v2.to<Comparable>(), Comparable(200));
+    BOOST_CHECK_EQUAL(v3.to<Comparable>(), Comparable(300));
+    BOOST_CHECK_EQUAL(v4.to<Comparable>(), Comparable(400));
 }
 
 
@@ -893,6 +907,15 @@ BOOST_AUTO_TEST_CASE(campInheritedClassesTest)
     BOOST_CHECK_EQUAL(c3.property("p3").get(b3).to<int>(), 30);
     BOOST_CHECK_EQUAL(c4.property("p3").get(b4).to<int>(), 30);
     BOOST_CHECK_EQUAL(c4.property("p4").get(b4).to<int>(), 40);
+
+    // ***** up/down-cast with offset *****
+    Base2* bb3 = &b3;
+    Base2* bb4 = &b4;
+    BOOST_CHECK_EQUAL(c2.property("p2").get(bb3).to<int>(), 20);
+    BOOST_CHECK_EQUAL(c2.property("p2").get(bb4).to<int>(), 20);
+    BOOST_CHECK_EQUAL(c3.property("p3").get(bb3).to<int>(), 30);
+    BOOST_CHECK_EQUAL(c3.property("p3").get(bb4).to<int>(), 30);
+    BOOST_CHECK_EQUAL(c4.property("p4").get(bb4).to<int>(), 40);
 }
 
 
@@ -980,6 +1003,10 @@ BOOST_AUTO_TEST_CASE(campUserObjectTest)
     BOOST_CHECK_EQUAL(obj.getClass().name(), "Comparable");
     BOOST_CHECK_EQUAL(ptr.getClass().name(), "Comparable");
 
+    // ***** getClass with polymorphic object *****
+    camp::UserObject polymorphic(static_cast<ComparableBase&>(test));
+    BOOST_CHECK_EQUAL(polymorphic.getClass().name(), "Comparable");
+
     // ***** operator == *****
     Comparable other(2);
     BOOST_CHECK_EQUAL(obj == camp::UserObject(test), true);
@@ -988,6 +1015,10 @@ BOOST_AUTO_TEST_CASE(campUserObjectTest)
     BOOST_CHECK_EQUAL(ptr == camp::UserObject(test), true);
     BOOST_CHECK_EQUAL(obj == camp::UserObject(other), false);
     BOOST_CHECK_EQUAL(ptr == camp::UserObject(&other), false);
+    BOOST_CHECK_EQUAL(obj == camp::UserObject::ref(test), true);
+    BOOST_CHECK_EQUAL(obj == camp::UserObject::copy(test), false);
+    BOOST_CHECK_EQUAL(obj == camp::UserObject::ref(&test), true);
+    BOOST_CHECK_EQUAL(obj == camp::UserObject::copy(&test), false);
 }
 
 

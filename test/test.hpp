@@ -78,11 +78,22 @@ struct DerivedDeep : public DerivedMultiple
 CAMP_TYPE(DerivedDeep);
 
 
-struct Comparable
+struct ComparableBase
+{
+    virtual ~ComparableBase() {}
+    char padding[4];
+
+    CAMP_RTTI()
+};
+CAMP_TYPE(ComparableBase);
+
+struct Comparable : public ComparableBase
 {
     Comparable(int x = -1) : m_x(x) {}
     bool operator ==(const Comparable& c) const {return m_x == c.m_x;}
     int m_x;
+
+    CAMP_RTTI()
 };
 CAMP_TYPE(Comparable);
 
@@ -289,7 +300,7 @@ CAMP_TYPE(EnumPropTest);
 
 struct UserPropTest
 {
-    UserPropTest() : c1(10), c2(new Comparable(20)), c3(new Comparable(30))
+    UserPropTest() : c1(10), c2(new Comparable(20)), c3(new Comparable(30)), c4(40)
     {
     }
 
@@ -298,9 +309,13 @@ struct UserPropTest
         delete c2;
     }
 
+    Comparable getC4() const {return c4;}
+    void setC4(Comparable c) {c4 = c;}
+
     Comparable c1;
     Comparable* c2;
     boost::shared_ptr<Comparable> c3;
+    Comparable c4;
 };
 CAMP_TYPE(UserPropTest);
 

@@ -23,6 +23,7 @@ namespace detail
  * It provides the following constants:
  *
  * \li isWritable: true if the type allows to modify the object (non-const references and pointers)
+ * \li isRef: true if the type is a reference type (references and pointers)
  *
  * ... the following types:
  *
@@ -44,7 +45,11 @@ namespace detail
 template <typename T, typename E = void>
 struct ObjectTraits
 {
-    enum {isWritable = false};
+    enum
+    {
+        isWritable = false,
+        isRef = false
+    };
 
     typedef T ReturnType;
     typedef T& RefReturnType;
@@ -60,7 +65,11 @@ struct ObjectTraits
 template <typename T>
 struct ObjectTraits<T*>
 {
-    enum {isWritable = !boost::is_const<T>::value};
+    enum
+    {
+        isWritable = !boost::is_const<T>::value,
+        isRef = true
+    };
 
     typedef T* ReturnType;
     typedef T* RefReturnType;
@@ -78,7 +87,11 @@ struct ObjectTraits<T*>
 template <template <typename> class T, typename U>
 struct ObjectTraits<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::type>
 {
-    enum {isWritable = !boost::is_const<U>::value};
+    enum
+    {
+        isWritable = !boost::is_const<U>::value,
+        isRef = true
+    };
 
     typedef U* ReturnType;
     typedef U* RefReturnType;
@@ -96,7 +109,11 @@ struct ObjectTraits<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::t
 template <typename T, int N>
 struct ObjectTraits<T[N]>
 {
-    enum {isWritable = false};
+    enum
+    {
+        isWritable = false,
+        isRef = true
+    };
 
     typedef T(&ReturnType)[N];
     typedef T(&RefReturnType)[N];
@@ -111,7 +128,11 @@ struct ObjectTraits<T[N]>
 template <typename T>
 struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename ObjectTraits<T>::ReturnType> >::type>
 {
-    enum {isWritable = !boost::is_const<T>::value};
+    enum
+    {
+        isWritable = !boost::is_const<T>::value,
+        isRef = true
+    };
 
     typedef T& ReturnType;
     typedef T& RefReturnType;

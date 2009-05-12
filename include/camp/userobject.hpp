@@ -7,7 +7,9 @@
 #include <camp/classget.hpp>
 #include <camp/invalidobject.hpp>
 #include <camp/detail/objecttraits.hpp>
+#include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <string>
 
@@ -35,6 +37,9 @@ public:
 
     /**
      * \brief Construct the user object from an instance
+     *
+     * This constructor is equivalent to calling UserObject::ref(object),
+     * i.e. the object is stored by reference.
      *
      * \param object Instance to store in the user object
      */
@@ -105,6 +110,30 @@ public:
      */
     static const UserObject nothing;
 
+    /**
+     * \brief Construct a user object from a reference to an object
+     *
+     * This functions is equivalent to calling UserObject(object).
+     *
+     * \param object Instance to store in the user object
+     *
+     * \return UserObject containing a reference to \object
+     */
+    template <typename T>
+    static UserObject ref(const T& object);
+
+    /**
+     * \brief Construct a user object with a copy of an object
+     *
+     * This functions is NOT equivalent to calling UserObject(object).
+     *
+     * \param object Instance to store in the user object
+     *
+     * \return UserObject containing a copy of \object
+     */
+    template <typename T>
+    static UserObject copy(const T& object);
+
 private:
 
     /**
@@ -118,8 +147,9 @@ private:
      */
     static void* convertPtr(void* pointer, const Class& sourceClass, const Class& targetClass);
 
-    void* m_object; ///< Address of the stored instance
-    const Class* m_class; ///< Dynamic metaclass of the instance
+    boost::shared_ptr<detail::AbstractObjectHolder> m_holder; ///< Abstract holder storing the object
+    void* m_pointer; ///< Direct pointer to the stored object
+    const Class* m_class; ///< Dynamic metaclass of the object
 };
 
 } // namespace camp

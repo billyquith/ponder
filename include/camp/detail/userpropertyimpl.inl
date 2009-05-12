@@ -5,6 +5,38 @@ namespace camp
 {
 namespace detail
 {
+/**
+ * \brief Helper structure to construct a UserObject according
+ *        to whether a type is a reference type or not
+ *
+ * The generic version assumes a non-reference type and stores
+ * the object by copy.
+ */
+template <bool IsRef>
+struct ToUserObject
+{
+    template <typename T>
+    static UserObject get(const T& value)
+    {
+        return UserObject::copy(value);
+    }
+};
+
+/**
+ * \brief Specialization of ToUserObject for reference types
+ *
+ * This version stores the object by reference (no copy).
+ */
+template <>
+struct ToUserObject<true>
+{
+    template <typename T>
+    static UserObject get(const T& value)
+    {
+        return UserObject::ref(value);
+    }
+};
+
 //-------------------------------------------------------------------------------------------------
 template <typename A>
 UserPropertyImpl<A>::UserPropertyImpl(const std::string& name, const A& accessor)
@@ -17,7 +49,7 @@ UserPropertyImpl<A>::UserPropertyImpl(const std::string& name, const A& accessor
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return m_accessor.get(object.get<typename A::ClassType>());
+    return ToUserObject<A::Traits::isRef>::get(m_accessor.get(object.get<typename A::ClassType>()));
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ SOURCES += ./src/userproperty.cpp \
     ./src/classmanager.cpp \
     ./src/enummanager.cpp \
     ./src/observernotifier.cpp \
-    src/camptype.cpp
+    ./src/camptype.cpp
 OTHER_FILES += ./include/camp/value.inl \
     ./include/camp/userobject.inl \
     ./include/camp/getter.inl \
@@ -53,7 +53,8 @@ OTHER_FILES += ./include/camp/value.inl \
     ./include/camp/detail/simplepropertyimpl.inl \
     ./include/camp/detail/getter.inl \
     ./include/camp/detail/enumpropertyimpl.inl \
-    ./include/camp/detail/arraypropertyimpl.inl
+    ./include/camp/detail/arraypropertyimpl.inl \
+    ./include/camp/detail/objectholder.inl
 HEADERS += ./include/camp/valuemapper.hpp \
     ./include/camp/value.hpp \
     ./include/camp/userproperty.hpp \
@@ -113,10 +114,12 @@ HEADERS += ./include/camp/valuemapper.hpp \
     ./include/camp/detail/arraypropertyimpl.hpp \
     ./include/camp/detail/yesnotype.hpp \
     ./include/camp/detail/observernotifier.hpp \
-    include/camp/qt/qtvariantconverter.hpp \
-    include/camp/qt/qtsimpleproperty.hpp \
-    include/camp/qt/qtmapper.hpp \
-    include/camp/qt/qt.hpp \
-    include/camp/qt/qstring.hpp \
-    include/camp/qt/qlist.hpp \
-    include/camp/qt/qvector.hpp
+    ./include/camp/qt/qtvariantconverter.hpp \
+    ./include/camp/qt/qtsimpleproperty.hpp \
+    ./include/camp/qt/qtmapper.hpp \
+    ./include/camp/qt/qt.hpp \
+    ./include/camp/qt/qstring.hpp \
+    ./include/camp/qt/qlist.hpp \
+    ./include/camp/qt/qvector.hpp \
+    ./include/camp/detail/objectholder.hpp
+

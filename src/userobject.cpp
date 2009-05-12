@@ -10,14 +10,16 @@ const UserObject UserObject::nothing;
 
 //-------------------------------------------------------------------------------------------------
 UserObject::UserObject()
-    : m_object(0)
+    : m_holder()
+    , m_pointer(0)
     , m_class(0)
 {
 }
 
 //-------------------------------------------------------------------------------------------------
 UserObject::UserObject(const UserObject& copy)
-    : m_object(copy.m_object)
+    : m_holder(copy.m_holder)
+    , m_pointer(copy.m_pointer) // warning: works only because both instances share the same holder instance
     , m_class(copy.m_class)
 {
 }
@@ -25,7 +27,7 @@ UserObject::UserObject(const UserObject& copy)
 //-------------------------------------------------------------------------------------------------
 void* UserObject::pointer() const
 {
-    return m_object;
+    return m_pointer;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -40,13 +42,13 @@ const Class& UserObject::getClass() const
 //-------------------------------------------------------------------------------------------------
 bool UserObject::operator==(const UserObject& other) const
 {
-    return m_object == other.m_object;
+    return pointer() == other.pointer();
 }
 
 //-------------------------------------------------------------------------------------------------
 bool UserObject::operator<(const UserObject& other) const
 {
-    return m_object < other.m_object;
+    return pointer() < other.pointer();
 }
 
 //-------------------------------------------------------------------------------------------------
