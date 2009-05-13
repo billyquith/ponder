@@ -30,6 +30,19 @@ enum DummyEnum {};
 CAMP_TYPE(DummyEnum);
 
 
+struct AbstractClass
+{
+    virtual void f() = 0;
+};
+CAMP_TYPE(AbstractClass);
+
+struct ConcreteClass : public AbstractClass
+{
+    virtual void f() {}
+};
+CAMP_TYPE(ConcreteClass);
+
+
 struct TestClass
 {
     CAMP_RTTI();

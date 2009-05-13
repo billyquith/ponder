@@ -74,7 +74,7 @@ struct CopyHelper
 };
 
 /**
- * Specialization of CopyTraits for non-copyable types
+ * Specialization of CopyHelper for non-copyable types
  *
  * This specialization triggers an error
  */
@@ -85,6 +85,40 @@ struct CopyHelper<T, typename boost::enable_if_c<!StaticTypeId<T>::copyable>::ty
     {
         return false;
     }
+};
+
+/**
+ * Helper structure to return values
+ *
+ * The purpose of this structure is to provide workarounds for types
+ * that don't exactly satisfy the compiler when returned. For example,
+ * it converts smart pointer types to the corresponding raw pointer types.
+ */
+template <typename T, typename E = void>
+struct ReturnHelper
+{
+    typedef T Type;
+    static Type get(T value) {return value;}
+};
+
+/**
+ * Specialization of ReturnHelper for smart pointer types
+ */
+template <template <typename> class T, typename U>
+struct ReturnHelper<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::type>
+{
+    typedef U* Type;
+    static Type get(T<U> value) {return boost::get_pointer(value);}
+};
+
+/**
+ * Specialization of ReturnHelper for built-in array types
+ */
+template <typename T, int N>
+struct ReturnHelper<T[N]>
+{
+    typedef T (&Type)[N];
+    static Type get(T (&value)[N]) {return value;}
 };
 
 /*
@@ -111,9 +145,9 @@ public:
     {
     }
 
-    typename Traits::ReturnType get(C& object) const
+    typename ReturnHelper<R>::Type get(C& object) const
     {
-        return Traits::get(m_getter(object));
+        return ReturnHelper<R>::get(m_getter(object));
     }
 
     bool set(C&, const Value&) const
@@ -151,9 +185,9 @@ public:
     {
     }
 
-    typename Traits::ReturnType get(C& object) const
+    typename ReturnHelper<R>::Type get(C& object) const
     {
-        return Traits::get(m_getter(object));
+        return ReturnHelper<R>::get(m_getter(object));
     }
 
     bool set(C& object, const Value& value) const
@@ -192,9 +226,9 @@ public:
     {
     }
 
-    typename Traits::ReturnType get(C& object) const
+    typename ReturnHelper<R>::Type get(C& object) const
     {
-        return Traits::get(m_getter(object));
+        return ReturnHelper<R>::get(m_getter(object));
     }
 
     bool set(C& object, const Value& value) const
@@ -234,9 +268,9 @@ public:
     {
     }
 
-    typename Traits::ReturnType get(C& object) const
+    typename ReturnHelper<R>::Type get(C& object) const
     {
-        return Traits::get(m_getter1(m_getter2(object)));
+        return ReturnHelper<R>::get(m_getter1(m_getter2(object)));
     }
 
     bool set(C&, const Value&) const
@@ -276,9 +310,9 @@ public:
     {
     }
 
-    typename Traits::ReturnType get(C& object) const
+    typename ReturnHelper<R>::Type get(C& object) const
     {
-        return Traits::get(m_getter1(m_getter2(object)));
+        return ReturnHelper<R>::get(m_getter1(m_getter2(object)));
     }
 
     bool set(C& object, const Value& value) const

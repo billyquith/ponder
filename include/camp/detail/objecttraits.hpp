@@ -27,14 +27,12 @@ namespace detail
  *
  * ... the following types:
  *
- * \li ReturnType: the type closest to T which allows to have direct access to the object (T for raw types, T& for reference, T* for pointer types)
  * \li RefReturnType: the reference type closest to T which allows to have direct access to the object (T& for raw types and references, T* for pointer types)
  * \li PointerType: the pointer type closest to T which allows to have direct access to the object (T*)
  * \li DataType: the actual raw type of the object (removes all indirections, as well const and reference modifiers)
  *
  * ... and the following functions:
  *
- * \li get(T): get a direct access to the object, regardless its original storage / modifiers (in other words, converts from T to ReturnType)
  * \li get(void*): get a direct access to an object given by a typeless pointer (in other words, converts from void* to RefReturnType)
  * \li getPointer(T): get a direct pointer to an object, regardless its original storage / modifiers (in other words, convert from T to PointerType)
  */
@@ -51,11 +49,9 @@ struct ObjectTraits
         isRef = false
     };
 
-    typedef T ReturnType;
     typedef T& RefReturnType;
     typedef typename RawType<T>::Type DataType;
 
-    static ReturnType get(T value) {return value;}
     static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
 };
 
@@ -71,12 +67,10 @@ struct ObjectTraits<T*>
         isRef = true
     };
 
-    typedef T* ReturnType;
     typedef T* RefReturnType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
 
-    static ReturnType get(T* value) {return value;}
     static RefReturnType get(void* pointer) {return static_cast<T*>(pointer);}
     static PointerType getPointer(T* value) {return value;}
 };
@@ -93,12 +87,10 @@ struct ObjectTraits<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::t
         isRef = true
     };
 
-    typedef U* ReturnType;
     typedef U* RefReturnType;
     typedef U* PointerType;
     typedef typename RawType<U>::Type DataType;
 
-    static ReturnType get(T<U> value) {return boost::get_pointer(value);}
     static RefReturnType get(void* pointer) {return static_cast<U*>(pointer);}
     static PointerType getPointer(T<U> value) {return boost::get_pointer(value);}
 };
@@ -115,18 +107,15 @@ struct ObjectTraits<T[N]>
         isRef = true
     };
 
-    typedef T(&ReturnType)[N];
     typedef T(&RefReturnType)[N];
     typedef typename RawType<T>::Type DataType;
-
-    static ReturnType get(T(&value)[N]) {return value;}
 };
 
 /*
  * Specialized version for references to non-ref types
  */
 template <typename T>
-struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename ObjectTraits<T>::ReturnType> >::type>
+struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type>
 {
     enum
     {
@@ -134,12 +123,10 @@ struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename Ob
         isRef = true
     };
 
-    typedef T& ReturnType;
     typedef T& RefReturnType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
 
-    static ReturnType get(T& value) {return value;}
     static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
     static PointerType getPointer(T& value) {return &value;}
 };
@@ -148,7 +135,7 @@ struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename Ob
  * Specialized version for references to ref types -- just remove the reference modifier
  */
 template <typename T>
-struct ObjectTraits<T&, typename boost::enable_if<boost::is_pointer<typename ObjectTraits<T>::ReturnType> >::type> : ObjectTraits<T>
+struct ObjectTraits<T&, typename boost::enable_if<boost::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type> : ObjectTraits<T>
 {
 };
 
