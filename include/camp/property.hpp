@@ -105,6 +105,7 @@ public:
 protected:
 
     template <typename T> friend class ClassBuilder;
+    friend class UserObject;
 
     /**
      * \brief Construct the property from its description

@@ -1029,6 +1029,25 @@ BOOST_AUTO_TEST_CASE(campUserObjectTest)
     obj1.get<AbstractClass>();
     camp::UserObject obj2(static_cast<AbstractClass&>(c));
     obj2.get<ConcreteClass>();
+
+    // ***** composed objects *****
+    camp::Class::declare<Owner>("Owner")
+        .property("p", &Owner::get, &Owner::set);
+    camp::Class::declare<SuperOwner>("SuperOwner")
+        .property("p", &SuperOwner::get, &SuperOwner::set);
+    const camp::UserProperty& p1 = static_cast<const camp::UserProperty&>(camp::classByType<SuperOwner>().property("p"));
+    const camp::UserProperty& p2 = static_cast<const camp::UserProperty&>(camp::classByType<Owner>().property("p"));
+    SuperOwner sowner;
+    camp::UserObject owner(sowner, p1);
+    camp::UserObject owned(owner, p2);
+    p2.set(owner, Comparable(5));
+    BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(5));
+    BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(5));
+    BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(5));
+    p2.set(owner, Comparable(20));
+    BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(20));
+    BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(20));
+    BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(20));
 }
 
 

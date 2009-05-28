@@ -1,7 +1,8 @@
 // <insert copyright>
 
 #include <camp/userobject.hpp>
-#include <camp/class.hpp>
+#include <camp/detail/objectholderbyprop.hpp>
+#include <camp/property.hpp>
 
 
 namespace camp
@@ -11,56 +12,67 @@ const UserObject UserObject::nothing;
 //-------------------------------------------------------------------------------------------------
 UserObject::UserObject()
     : m_holder()
-    , m_pointer(0)
-    , m_class(0)
 {
 }
 
 //-------------------------------------------------------------------------------------------------
+UserObject::UserObject(const UserObject& parent, const UserProperty& member)
+{
+    m_holder.reset(new detail::ObjectHolderByProp(parent, member));
+}
+
+//-------------------------------------------------------------------------------------------------
 UserObject::UserObject(const UserObject& copy)
-    : m_holder(copy.m_holder)
-    , m_pointer(copy.m_pointer) // warning: works only because both instances share the same holder instance
-    , m_class(copy.m_class)
+    : m_holder(copy.m_holder ? copy.m_holder->clone() : 0)
 {
 }
 
 //-------------------------------------------------------------------------------------------------
 void* UserObject::pointer() const
 {
-    return m_pointer;
+    return m_holder ? m_holder->object() : 0;
 }
 
 //-------------------------------------------------------------------------------------------------
 const Class& UserObject::getClass() const
 {
-    if (!m_class)
+    if (!m_holder)
         CAMP_ERROR(InvalidObject(*this));
 
-    return *m_class;
+    return m_holder->getClass();
+}
+
+//-------------------------------------------------------------------------------------------------
+UserObject& UserObject::operator=(const UserObject& other)
+{
+    m_holder.reset(other.m_holder ? other.m_holder->clone() : 0);
+
+    return *this;
 }
 
 //-------------------------------------------------------------------------------------------------
 bool UserObject::operator==(const UserObject& other) const
 {
+    // @todo compare holders (double dispatch?)
     return pointer() == other.pointer();
 }
 
 //-------------------------------------------------------------------------------------------------
 bool UserObject::operator<(const UserObject& other) const
 {
+    // @todo compare holders (double dispatch?)
     return pointer() < other.pointer();
 }
 
 //-------------------------------------------------------------------------------------------------
-void* UserObject::convertPtr(void* pointer, const Class& sourceClass, const Class& targetClass)
+void UserObject::set(const Property& property, const Value& value) const
 {
-    // Note: this function exists only to hide the usage of camp::Class to a separate compile unit;
-    //       including <camp/class.hpp> in our header would cause a cycle in inclusions.
+    // Make sure we have a valid holder
+    if (!m_holder)
+        CAMP_ERROR(InvalidObject(*this));
 
-    if (sourceClass.applyOffset(pointer, targetClass))
-        return pointer;
-    else
-        return 0;
+    property.setValue(*this, value);
+    m_holder->updateObject();
 }
 
 } // namespace camp

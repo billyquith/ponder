@@ -39,7 +39,9 @@ SOURCES += ./src/userproperty.cpp \
     ./src/classmanager.cpp \
     ./src/enummanager.cpp \
     ./src/observernotifier.cpp \
-    ./src/camptype.cpp
+    ./src/camptype.cpp \
+    ./src/objectholderbyprop.cpp \
+    ./src/classcast.cpp
 OTHER_FILES += ./include/camp/value.inl \
     ./include/camp/userobject.inl \
     ./include/camp/getter.inl \
@@ -121,5 +123,6 @@ HEADERS += ./include/camp/valuemapper.hpp \
     ./include/camp/qt/qstring.hpp \
     ./include/camp/qt/qlist.hpp \
     ./include/camp/qt/qvector.hpp \
-    ./include/camp/detail/objectholder.hpp
-
+    ./include/camp/detail/objectholder.hpp \
+    ./include/camp/detail/objectholderbyprop.hpp \
+    ./include/camp/classcast.hpp

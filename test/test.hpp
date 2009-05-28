@@ -116,6 +116,28 @@ std::ostream& operator <<(std::ostream& stream, const Comparable& c)
 }
 
 
+struct Owner
+{
+    Comparable get() const {return m_c;}
+    void set(Comparable c) {m_c = c;}
+
+    Comparable m_c;
+};
+CAMP_TYPE(Owner);
+
+struct SuperOwner
+{
+    Owner get() const {return m_o;}
+    void set(Owner o) {m_o = o;}
+
+    Comparable getValue() const {return m_o.get();}
+    void setValue(Comparable c) {m_o.set(c);}
+
+    Owner m_o;
+};
+CAMP_TYPE(SuperOwner);
+
+
 enum TestEnum
 {
     One = 1,

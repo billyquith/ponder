@@ -4,8 +4,14 @@
 #define CAMP_DETAIL_OBJECTHOLDER_HPP
 
 
+#include <camp/classget.hpp>
+#include <camp/classcast.hpp>
+
+
 namespace camp
 {
+class UserObject;
+
 namespace detail
 {
 /**
@@ -21,7 +27,14 @@ public:
     /**
      * \brief Destructor
      */
-    virtual ~AbstractObjectHolder() {}
+    virtual ~AbstractObjectHolder();
+
+    /**
+     * \brief Clone the instance
+     *
+     * \return New holder which is a copy of this
+     */
+    virtual AbstractObjectHolder* clone() const = 0;
 
     /**
      * \brief Return a typeless pointer to the stored object
@@ -30,12 +43,24 @@ public:
      */
     virtual void* object() = 0;
 
+    /**
+     * \brief Update the stored object
+     */
+    virtual void updateObject();
+
+    /**
+     * \brief Retrieve the metaclass of the stored object
+     *
+     * \return Object metaclass
+     */
+    virtual const Class& getClass() const = 0;
+
 protected:
 
     /**
      * \brief Default constructor
      */
-    AbstractObjectHolder() {}
+    AbstractObjectHolder();
 };
 
 /**
@@ -52,15 +77,31 @@ public:
     ObjectHolderByRef(const T* object);
 
     /**
+     * \brief Clone the instance
+     *
+     * \return New holder which is a copy of this
+     */
+    virtual AbstractObjectHolder* clone() const;
+
+    /**
      * \brief Return a typeless pointer to the stored object
      *
      * \return Pointer to the object
      */
     virtual void* object();
 
+    /**
+     * \brief Retrieve the metaclass of the stored object
+     *
+     * \return Object metaclass
+     */
+    virtual const Class& getClass() const;
+
 private:
 
     T* m_object; ///< Pointer to the object
+    const Class* m_class; ///< Metaclass of the object
+    void* m_alignedPtr; ///< Pointer to the actual derived part of the object (may be different than m_object in case of multiple inheritance with offset)
 };
 
 /**
@@ -77,15 +118,30 @@ public:
     ObjectHolderByCopy(const T* object);
 
     /**
+     * \brief Clone the instance
+     *
+     * \return New holder which is a copy of this
+     */
+    virtual AbstractObjectHolder* clone() const;
+
+    /**
      * \brief Return a typeless pointer to the stored object
      *
      * \return Pointer to the object
      */
     virtual void* object();
 
+    /**
+     * \brief Retrieve the metaclass of the stored object
+     *
+     * \return Object metaclass
+     */
+    virtual const Class& getClass() const;
+
 private:
 
     T m_object; ///< Copy of the object
+    const Class* m_class; ///< Metaclass of the object
 };
 
 } // namespace detail

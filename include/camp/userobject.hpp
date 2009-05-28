@@ -4,18 +4,22 @@
 #define CAMP_USEROBJECT_HPP
 
 
-#include <camp/classget.hpp>
+#include <camp/classcast.hpp>
 #include <camp/invalidobject.hpp>
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <string>
 
 
 namespace camp
 {
+class Property;
+class UserProperty;
+class Value;
+
 /**
  * \brief Wrapper to manipulate user objects in the CAMP system
  *
@@ -45,6 +49,17 @@ public:
      */
     template <typename T>
     UserObject(const T& object);
+
+    /**
+     * \brief Construct the user object from a parent object and a member property
+     *
+     * This constructor allows to create user objects that are accessed through a property
+     * of another user object, and that cannot be stored in memory.
+     *
+     * \param parent Parent user object
+     * \param member Member of \a parent used to access the actual object
+     */
+    UserObject(const UserObject& parent, const UserProperty& member);
 
     /**
      * \brief Copy constructor
@@ -84,6 +99,15 @@ public:
     const Class& getClass() const;
 
     /**
+     * \brief Assignment operator
+     *
+     * \param other User object to assign
+     *
+     * \return Reference to this
+     */
+    UserObject& operator=(const UserObject& other);
+
+    /**
      * \brief Operator == to compare equality between two user objects
      *
      * Two user objects are equal if their metaclasses and pointers are both equal
@@ -117,7 +141,7 @@ public:
      *
      * \param object Instance to store in the user object
      *
-     * \return UserObject containing a reference to \object
+     * \return UserObject containing a reference to \a  object
      */
     template <typename T>
     static UserObject ref(const T& object);
@@ -136,20 +160,23 @@ public:
 
 private:
 
-    /**
-     * \brief Convert a pointer to a target metaclass
-     *
-     * \param pointer Source pointer to convert
-     * \param sourceClass Source metaclass to convert from
-     * \param targetClass Target metaclass to convert to
-     *
-     * \return Converted pointer, or 0 on failure
-     */
-    static void* convertPtr(void* pointer, const Class& sourceClass, const Class& targetClass);
+    friend class Property;
 
-    boost::shared_ptr<detail::AbstractObjectHolder> m_holder; ///< Abstract holder storing the object
-    void* m_pointer; ///< Direct pointer to the stored object
-    const Class* m_class; ///< Dynamic metaclass of the object
+    /**
+     * \brief Assign a new value to a property of the object
+     *
+     * This functions is meant to be used only by Property, and
+     * is needed for proper propagation of the modification to the
+     * parent objects.
+     *
+     * \param property Property to modify
+     * \param value New value to assign
+     */
+    void set(const Property& property, const Value& value) const;
+
+private:
+
+    boost::scoped_ptr<detail::AbstractObjectHolder> m_holder; ///< Abstract holder storing the object
 };
 
 } // namespace camp

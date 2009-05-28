@@ -3,6 +3,7 @@
 #include <camp/property.hpp>
 #include <camp/invalidaccess.hpp>
 #include <camp/classvisitor.hpp>
+#include <camp/userobject.hpp>
 
 
 namespace camp
@@ -53,7 +54,9 @@ void Property::set(const UserObject& object, const Value& value) const
     if (!writable(object))
         CAMP_ERROR(InvalidAccess(m_name.c_str(), InvalidAccess::Write));
 
-    setValue(object, value);
+    // Here we don't call setValue directly, we rather let the user object do it
+    // and add any processing needed for proper propagation of the modification
+    object.set(*this, value);
 }
 
 //-------------------------------------------------------------------------------------------------
