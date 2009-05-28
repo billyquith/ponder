@@ -75,15 +75,14 @@ struct CopyHelper
 
 /**
  * Specialization of CopyHelper for non-copyable types
- *
- * This specialization triggers an error
  */
 template <typename T>
 struct CopyHelper<T, typename boost::enable_if_c<!StaticTypeId<T>::copyable>::type>
 {
     static bool copy(T&, const Value&)
     {
-        return false;
+        // We don't really return an error, we just skip the assignment
+        return true;
     }
 };
 
