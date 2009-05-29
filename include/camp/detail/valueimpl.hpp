@@ -150,8 +150,8 @@ struct PrintVisitor : public boost::static_visitor<>
 
     void operator()(const UserObject& value) const
     {
-        // User object: print the object address
-        // TODO: use the metaclass.toString() function if available
+        // User object: print the metaclass name
+        // @todo use the metaclass.toString() function if available
         m_stream << value.pointer();
     }
 

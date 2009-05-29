@@ -1040,14 +1040,25 @@ BOOST_AUTO_TEST_CASE(campUserObjectTest)
     SuperOwner sowner;
     camp::UserObject owner(sowner, p1);
     camp::UserObject owned(owner, p2);
-    p2.set(owner, Comparable(5));
-    BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(5));
-    BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(5));
-    BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(5));
-    p2.set(owner, Comparable(20));
+    BOOST_CHECK_EQUAL(sowner.m_x, 0);
+    sowner.setValue(Comparable(10));
+    BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(10));
+    BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(10));
+    BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(10));
+    sowner.setValue(Comparable(20));
     BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(20));
     BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(20));
     BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(20));
+    p2.set(owner, Comparable(30));
+    BOOST_CHECK_EQUAL(sowner.m_x, 1);
+    BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(30));
+    BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(30));
+    BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(30));
+    p2.set(owner, Comparable(40));
+    BOOST_CHECK_EQUAL(sowner.m_x, 2);
+    BOOST_CHECK_EQUAL(sowner.getValue(), Comparable(40));
+    BOOST_CHECK_EQUAL(owner.get<Owner>().get(), Comparable(40));
+    BOOST_CHECK_EQUAL(owned.get<Comparable>(), Comparable(40));
 }
 
 

@@ -104,6 +104,7 @@ struct Comparable : public ComparableBase
 {
     Comparable(int x = -1) : m_x(x) {}
     bool operator ==(const Comparable& c) const {return m_x == c.m_x;}
+    bool operator !=(const Comparable& c) const {return m_x != c.m_x;}
     int m_x;
 
     CAMP_RTTI()
@@ -127,13 +128,23 @@ CAMP_TYPE(Owner);
 
 struct SuperOwner
 {
-    Owner get() const {return m_o;}
-    void set(Owner o) {m_o = o;}
+    SuperOwner() : m_x(0) {}
+
+    const Owner& get() const {return m_o;}
+    void set(const Owner& o)
+    {
+        if (m_o.get() != o.get())
+        {
+            m_o = o;
+            m_x++;
+        }
+    }
 
     Comparable getValue() const {return m_o.get();}
     void setValue(Comparable c) {m_o.set(c);}
 
     Owner m_o;
+    int m_x;
 };
 CAMP_TYPE(SuperOwner);
 

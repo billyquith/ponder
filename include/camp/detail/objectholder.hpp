@@ -10,8 +10,6 @@
 
 namespace camp
 {
-class UserObject;
-
 namespace detail
 {
 /**
@@ -30,23 +28,11 @@ public:
     virtual ~AbstractObjectHolder();
 
     /**
-     * \brief Clone the instance
-     *
-     * \return New holder which is a copy of this
-     */
-    virtual AbstractObjectHolder* clone() const = 0;
-
-    /**
      * \brief Return a typeless pointer to the stored object
      *
      * \return Pointer to the object
      */
     virtual void* object() = 0;
-
-    /**
-     * \brief Update the stored object
-     */
-    virtual void updateObject();
 
     /**
      * \brief Retrieve the metaclass of the stored object
@@ -75,13 +61,6 @@ public:
      * \brief Construct the holder from an object
      */
     ObjectHolderByRef(const T* object);
-
-    /**
-     * \brief Clone the instance
-     *
-     * \return New holder which is a copy of this
-     */
-    virtual AbstractObjectHolder* clone() const;
 
     /**
      * \brief Return a typeless pointer to the stored object
@@ -116,13 +95,6 @@ public:
      * \brief Construct the holder from an object
      */
     ObjectHolderByCopy(const T* object);
-
-    /**
-     * \brief Clone the instance
-     *
-     * \return New holder which is a copy of this
-     */
-    virtual AbstractObjectHolder* clone() const;
 
     /**
      * \brief Return a typeless pointer to the stored object

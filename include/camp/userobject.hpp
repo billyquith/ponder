@@ -9,6 +9,7 @@
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <string>
@@ -19,6 +20,7 @@ namespace camp
 class Property;
 class UserProperty;
 class Value;
+class ParentObject;
 
 /**
  * \brief Wrapper to manipulate user objects in the CAMP system
@@ -174,10 +176,31 @@ private:
      */
     void set(const Property& property, const Value& value) const;
 
+    /**
+     * \brief blah ...
+     */
+    void cascadeSet(const UserObject& object, const Property& property, const Value& value) const;
+
 private:
 
-    boost::scoped_ptr<detail::AbstractObjectHolder> m_holder; ///< Abstract holder storing the object
+    const Class* m_class; ///< Metaclass of the stored object
+    boost::shared_ptr<detail::AbstractObjectHolder> m_holder; ///< Optional abstract holder storing the object
+    boost::scoped_ptr<ParentObject> m_parent; ///< Optional parent object
+    const UserObject* m_child; ///< Optional pointer to the child object (m_parent.object.m_child == this)
 };
+
+
+// @todo clean up
+class ParentObject : boost::noncopyable
+{
+public:
+
+    ParentObject(const UserObject& obj, const UserProperty& mem) : object(obj), member(mem) {}
+
+    UserObject object; ///< Parent object
+    const UserProperty& member; ///< Member of the parent giving access to the child object
+};
+
 
 } // namespace camp
 

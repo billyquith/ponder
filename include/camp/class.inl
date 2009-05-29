@@ -35,7 +35,7 @@ T* Class::construct(const Args& args) const
     if (!object)
     {
         // Error: no constructor found for the given list of arguments
-        // TODO : CAMP_ERROR(InvalidConstructor(args));
+        // @todo CAMP_ERROR(InvalidConstructor(args));
         return 0;
     }
 
@@ -50,7 +50,7 @@ T* Class::construct(const Args& args) const
     else
     {
         // Error: T is unrelated to this class
-        // TODO : CAMP_ERROR(InvalidConstructor(args));
+        // @todo CAMP_ERROR(InvalidConstructor(args));
         return 0;
     }
 }
