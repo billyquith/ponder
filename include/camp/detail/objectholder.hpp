@@ -34,13 +34,6 @@ public:
      */
     virtual void* object() = 0;
 
-    /**
-     * \brief Retrieve the metaclass of the stored object
-     *
-     * \return Object metaclass
-     */
-    virtual const Class& getClass() const = 0;
-
 protected:
 
     /**
@@ -69,17 +62,9 @@ public:
      */
     virtual void* object();
 
-    /**
-     * \brief Retrieve the metaclass of the stored object
-     *
-     * \return Object metaclass
-     */
-    virtual const Class& getClass() const;
-
 private:
 
     T* m_object; ///< Pointer to the object
-    const Class* m_class; ///< Metaclass of the object
     void* m_alignedPtr; ///< Pointer to the actual derived part of the object (may be different than m_object in case of multiple inheritance with offset)
 };
 
@@ -103,17 +88,9 @@ public:
      */
     virtual void* object();
 
-    /**
-     * \brief Retrieve the metaclass of the stored object
-     *
-     * \return Object metaclass
-     */
-    virtual const Class& getClass() const;
-
 private:
 
     T m_object; ///< Copy of the object
-    const Class* m_class; ///< Metaclass of the object
 };
 
 } // namespace detail
