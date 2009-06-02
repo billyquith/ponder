@@ -46,10 +46,10 @@ void* UserObject::pointer() const
     }
     else if (m_parent)
     {
-        static UserObject o;
-        o = m_parent->member.get(m_parent->object).to<UserObject>();
-        return o.pointer();
-        //return m_parent->member.get(m_parent->object).to<UserObject>().pointer();
+        // warning: this may not be multi-thread safe,
+        // but it is required to make the returned value persistent
+        m_parent->lastValue = m_parent->member.get(m_parent->object).to<UserObject>();
+        return m_parent->lastValue.pointer();
     }
     else
     {
@@ -73,8 +73,10 @@ const Class& UserObject::getClass() const
 //-------------------------------------------------------------------------------------------------
 UserObject& UserObject::operator=(const UserObject& other)
 {
+    m_class = other.m_class;
     m_holder = other.m_holder;
     m_parent.reset(other.m_parent ? new ParentObject(other.m_parent->object, other.m_parent->member) : 0);
+    m_child = 0;
 
     if (m_parent)
         m_parent->object.m_child = this;
@@ -161,11 +163,20 @@ void UserObject::set(const Property& property, const Value& value) const
 //-------------------------------------------------------------------------------------------------
 void UserObject::cascadeSet(const UserObject& object, const Property& property, const Value& value) const
 {
-    // Get the temporary object to modify
-    camp::Value val = m_parent->member.get(object);
-    const UserObject& sub = val.to<UserObject>();
+    // @todo Manually check the access (read / write) to the properties,
+    // as we bypass the standard path?
 
-    // Modify it
+    // Get the temporary object to modify
+    UserObject sub = m_parent->member.getValue(object).to<UserObject>();
+
+    // Make sure that the underlying object is *really* modifiable.
+    // If m_holder was holding a const reference to an object, this will
+    // replace it with a holder storing a copy of the object.
+    detail::AbstractObjectHolder* holder = sub.m_holder->getWritable();
+    bool same = (holder == sub.m_holder.get());
+    if (!same)
+        sub.m_holder.reset(holder);
+
     if (m_child)
     {
         // ...continue to recurse if it's not the actual property to modify
@@ -178,7 +189,7 @@ void UserObject::cascadeSet(const UserObject& object, const Property& property, 
     }
 
     // Assign the modified object back to its parent
-    m_parent->member.set(object, sub);
+    m_parent->member.setValue(object, sub);
 }
 
 } // namespace camp

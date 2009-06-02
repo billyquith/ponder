@@ -35,6 +35,12 @@ struct ToUserObject<true>
     {
         return UserObject::ref(value);
     }
+
+    template <typename T>
+    static UserObject get(T& value)
+    {
+        return UserObject::ref(value);
+    }
 };
 
 //-------------------------------------------------------------------------------------------------

@@ -146,6 +146,18 @@ public:
      * \return UserObject containing a reference to \a  object
      */
     template <typename T>
+    static UserObject ref(T& object);
+
+    /**
+     * \brief Construct a user object from a const reference to an object
+     *
+     * This functions is NOT equivalent to calling UserObject(object).
+     *
+     * \param object Instance to store in the user object
+     *
+     * \return UserObject containing a const reference to \a  object
+     */
+    template <typename T>
     static UserObject ref(const T& object);
 
     /**
@@ -177,7 +189,13 @@ private:
     void set(const Property& property, const Value& value) const;
 
     /**
-     * \brief blah ...
+     * \brief Recursively set a property
+     *
+     * See the description of UserObject::set(property, value).
+     *
+     * \param object Object to modify
+     * \param property Property to set when the recursion is over
+     * \param value Value to assign when the recursion is over
      */
     void cascadeSet(const UserObject& object, const Property& property, const Value& value) const;
 
@@ -190,15 +208,23 @@ private:
 };
 
 
-// @todo clean up
+/**
+ * \brief Structure holding the informations about a parent object
+ *
+ * A parent object is composed of a <object, property> pair.
+ */
 class ParentObject : boost::noncopyable
 {
 public:
 
+    /**
+     * \brief Default constructor
+     */
     ParentObject(const UserObject& obj, const UserProperty& mem) : object(obj), member(mem) {}
 
     UserObject object; ///< Parent object
     const UserProperty& member; ///< Member of the parent giving access to the child object
+    UserObject lastValue; ///< Last value of the object (stored here for persistency)
 };
 
 

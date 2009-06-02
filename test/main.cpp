@@ -1020,6 +1020,11 @@ BOOST_AUTO_TEST_CASE(campUserObjectTest)
     BOOST_CHECK_EQUAL(obj == camp::UserObject::ref(&test), true);
     BOOST_CHECK_EQUAL(obj == camp::UserObject::copy(&test), false);
 
+    // ***** operator = *****
+    camp::UserObject copy;
+    copy = derived;
+    BOOST_CHECK_EQUAL(copy == derived, true);
+
     // ***** storage of abstract classes *****
     camp::Class::declare<AbstractClass>("AbstractClass");
     camp::Class::declare<ConcreteClass>("ConcreteClass")
