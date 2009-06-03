@@ -302,17 +302,21 @@ private:
 
     typedef boost::shared_ptr<Property> PropertyPtr;
     typedef std::map<std::string, PropertyPtr> PropertyTable;
+    typedef std::vector<PropertyPtr> PropertyArray;
 
     typedef boost::shared_ptr<Function> FunctionPtr;
     typedef std::map<std::string, FunctionPtr> FunctionTable;
+    typedef std::vector<FunctionPtr> FunctionArray;
 
     typedef boost::shared_ptr<Constructor> ConstructorPtr;
     typedef std::vector<ConstructorPtr> ConstructorList;
 
     std::string m_name; ///< Name of the metaclass
     std::vector<BaseInfo> m_bases; ///< List of base metaclasses
-    FunctionTable m_functions; ///< List of metafunctions
-    PropertyTable m_properties; ///< List of metaproperties
+    FunctionTable m_functions; ///< List of metafunctions sorted by name
+    FunctionArray m_functionsByIndex; ///< List of metafunctions sorted by index
+    PropertyTable m_properties; ///< List of metaproperties sorted by name
+    PropertyArray m_propertiesByIndex; ///< List of metaproperties sorted by index
     ConstructorList m_constructors; ///< List of metaconstructors
 };
 

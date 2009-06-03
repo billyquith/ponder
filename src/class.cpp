@@ -6,40 +6,6 @@
 #include <camp/invalidproperty.hpp>
 
 
-
-
-//-------------------------------------------------------------------------------------------------
-/*#error Système générique de proxy (voir ci-dessous)
---> pas inclus dans CAMP, complètement externe (tester quand même)
-
-declareProxyClass<MyProxy>("MyDynamicClass")
-    .property("p1", camp::string)
-    .property("p2", camp::integer)
-    .function("f1", camp::integer, camp::boolean, camp::string)
-    .function("f2", camp::noType);
-
-class MyProxy
-{
-    camp::Value get(const std::string& className, const std::string& propName, camp::Type type)
-    {
-
-    }
-
-    void set(const std::string& className, const std::string& propName, camp::Type type, camp::Value value)
-    {
-
-    }
-
-    camp::Value call(const std::string& className, const std::string& funcName, vector<camp::Type> types, vector<camp::Value> args)
-    {
-
-    }
-};*/
-//-------------------------------------------------------------------------------------------------
-
-
-
-
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
@@ -66,7 +32,7 @@ const Class& Class::base(std::size_t index) const
 //-------------------------------------------------------------------------------------------------
 std::size_t Class::functionCount() const
 {
-    return m_functions.size();
+    return m_functionsByIndex.size();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -78,13 +44,10 @@ bool Class::hasFunction(const std::string& name) const
 //-------------------------------------------------------------------------------------------------
 const Function& Class::function(std::size_t index) const
 {
-    if (index >= m_functions.size())
-        CAMP_ERROR(InvalidIndex(index, m_functions.size()));
+    if (index >= m_functionsByIndex.size())
+        CAMP_ERROR(InvalidIndex(index, m_functionsByIndex.size()));
 
-    FunctionTable::const_iterator it = m_functions.begin();
-    std::advance(it, index);
-
-    return *it->second;
+    return *m_functionsByIndex[index];
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -100,7 +63,7 @@ const Function& Class::function(const std::string& name) const
 //-------------------------------------------------------------------------------------------------
 std::size_t Class::propertyCount() const
 {
-    return m_properties.size();
+    return m_propertiesByIndex.size();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -112,13 +75,10 @@ bool Class::hasProperty(const std::string& name) const
 //-------------------------------------------------------------------------------------------------
 const Property& Class::property(std::size_t index) const
 {
-    if (index >= m_properties.size())
-        CAMP_ERROR(InvalidIndex(index, m_properties.size()));
+    if (index >= m_propertiesByIndex.size())
+        CAMP_ERROR(InvalidIndex(index, m_propertiesByIndex.size()));
 
-    PropertyTable::const_iterator it = m_properties.begin();
-    std::advance(it, index);
-
-    return *it->second;
+    return *m_propertiesByIndex[index];
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -135,17 +95,17 @@ const Property& Class::property(const std::string& name) const
 void Class::visit(ClassVisitor& visitor) const
 {
     // First visit properties
-    PropertyTable::const_iterator propEnd = m_properties.end();
-    for (PropertyTable::const_iterator it = m_properties.begin(); it != propEnd; ++it)
+    PropertyArray::const_iterator propEnd = m_propertiesByIndex.end();
+    for (PropertyArray::const_iterator it = m_propertiesByIndex.begin(); it != propEnd; ++it)
     {
-        it->second->accept(visitor);
+        (*it)->accept(visitor);
     }
 
     // Then visit functions
-    FunctionTable::const_iterator funcEnd = m_functions.end();
-    for (FunctionTable::const_iterator it = m_functions.begin(); it != funcEnd; ++it)
+    FunctionArray::const_iterator funcEnd = m_functionsByIndex.end();
+    for (FunctionArray::const_iterator it = m_functionsByIndex.begin(); it != funcEnd; ++it)
     {
-        it->second->accept(visitor);
+        (*it)->accept(visitor);
     }
 }
 
@@ -214,3 +174,35 @@ int Class::baseOffset(const Class& base) const
 }
 
 } // namespace camp
+
+
+
+
+//-------------------------------------------------------------------------------------------------
+/* @todo Système générique de proxy (voir ci-dessous)
+--> pas inclus dans CAMP, complètement externe (tester quand même)
+
+declareProxyClass<MyProxy>("MyDynamicClass")
+    .property("p1", camp::string)
+    .property("p2", camp::integer)
+    .function("f1", camp::integer, camp::boolean, camp::string)
+    .function("f2", camp::noType);
+
+class MyProxy
+{
+    camp::Value get(const std::string& className, const std::string& propName, camp::Type type)
+    {
+
+    }
+
+    void set(const std::string& className, const std::string& propName, camp::Type type, camp::Value value)
+    {
+
+    }
+
+    camp::Value call(const std::string& className, const std::string& funcName, vector<camp::Type> types, vector<camp::Value> args)
+    {
+
+    }
+};*/
+//-------------------------------------------------------------------------------------------------

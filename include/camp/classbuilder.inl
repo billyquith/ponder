@@ -44,14 +44,16 @@ ClassBuilder<T>& ClassBuilder<T>::base(const std::string& className)
     Class::PropertyTable::const_iterator endProp = baseClass.m_properties.end();
     for (Class::PropertyTable::const_iterator it = baseClass.m_properties.begin(); it != endProp; ++it)
     {
-        m_target->m_properties.insert(*it);
+        if (m_target->m_properties.insert(*it).second)
+            m_target->m_propertiesByIndex.push_back(it->second);
     }
 
     // Copy all functions of the base class into the current class
     Class::FunctionTable::const_iterator endFunc = baseClass.m_functions.end();
     for (Class::FunctionTable::const_iterator it = baseClass.m_functions.begin(); it != endFunc; ++it)
     {
-        m_target->m_functions.insert(*it);
+        if (m_target->m_functions.insert(*it).second)
+            m_target->m_functionsByIndex.push_back(it->second);
     }
 
     return *this;
@@ -316,7 +318,19 @@ ClassBuilder<T>& ClassBuilder<T>::external()
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 {
-    m_target->m_properties[property->name()].reset(property);
+    Class::PropertyPtr newProperty(property);
+    Class::PropertyPtr& oldProperty = m_target->m_properties[property->name()];
+    if (oldProperty)
+    {
+        Class::PropertyArray::iterator it = std::find(m_target->m_propertiesByIndex.begin(), m_target->m_propertiesByIndex.end(), oldProperty);
+        *it = newProperty;
+    }
+    else
+    {
+        m_target->m_propertiesByIndex.push_back(newProperty);
+    }
+
+    oldProperty = newProperty;
     m_currentTagHolder = m_currentProperty = property;
     m_currentFunction = 0;
 
@@ -327,7 +341,20 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
 {
-    m_target->m_functions[function->name()].reset(function);
+    Class::FunctionPtr newFunction(function);
+    Class::FunctionPtr& oldFunction = m_target->m_functions[function->name()];
+    if (oldFunction)
+    {
+        Class::FunctionArray::iterator it = std::find(m_target->m_functionsByIndex.begin(), m_target->m_functionsByIndex.end(), oldFunction);
+        if (it != m_target->m_functionsByIndex.end())
+            *it = newFunction;
+    }
+    else
+    {
+        m_target->m_functionsByIndex.push_back(newFunction);
+    }
+
+    oldFunction = newFunction;
     m_currentTagHolder = m_currentFunction = function;
     m_currentProperty = 0;
 
