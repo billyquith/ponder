@@ -140,11 +140,11 @@ include_directories(
     ${BOOST_INCLUDE_DIR}
 )
 
-# define the export macro
-add_definitions(-DCAMP_EXPORTS)
-
 # instruct CMake to build a shared library from all of the source files
 add_library(camp SHARED ${CAMP_SRCS})
+
+# define the export macro
+set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 
 # add the test subdirectory, but do not build it by default
 add_subdirectory(test EXCLUDE_FROM_ALL)
