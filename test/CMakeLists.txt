@@ -32,5 +32,5 @@ link_directories(
 add_executable(camptest ${CAMP_TEST_SRCS})
 
 # last thing we have to do is to tell CMake what libraries our executable needs,
-target_link_libraries(camptest -lcamp -lutf)
+target_link_libraries(camptest camp utf)
 
