@@ -3,9 +3,6 @@ cmake_minimum_required(VERSION 2.6)
 # set project's name
 project(CAMP)
 
-# configure some variables
-include(${CMAKE_BINARY_DIR}/config.cmake)
-
 # all .cpp files
 set(CAMP_SRCS
     src/userproperty.cpp
@@ -134,10 +131,13 @@ set(GICS_OTHERS
     include/camp/detail/objectholder.inl
 )
 
+# find Boost
+find_package(Boost 1.38.0 REQUIRED)
+
 # include files search paths
 include_directories(
     ${CAMP_SOURCE_DIR}/include
-    ${BOOST_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 # instruct CMake to build a shared library from all of the source files
