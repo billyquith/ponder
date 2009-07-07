@@ -204,6 +204,7 @@ if(DOXYGEN_FOUND)
     # installation directives
     install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
         DESTINATION doc
+        COMPONENT apidoc
     )
 endif()
 
@@ -213,12 +214,18 @@ endif()
 
 install(DIRECTORY include
     DESTINATION .
+    COMPONENT devel
 )
 
 install(TARGETS camp
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
+    COMPONENT bin
+)
+
+install(TARGETS camp
     ARCHIVE DESTINATION lib
+    COMPONENT devel
 )
 
 install(FILES README.txt
@@ -229,6 +236,29 @@ install(FILES README.txt
 # packaging
 ###############################
 
+# Components setup
+set(CPACK_COMPONENTS_ALL bin devel apidoc)
+set(CPACK_ALL_INSTALL_TYPES Runtime Development)
+
+set(CPACK_COMPONENT_BIN_DISPLAY_NAME "CAMP library")
+set(CPACK_COMPONENT_BIN_DESCRIPTION "The CAMP reflection library binaries")
+set(CPACK_COMPONENT_BIN_INSTALL_TYPES Runtime Development)
+
+set(CPACK_COMPONENT_DEVEL_DISPLAY_NAME "CAMP development files")
+set(CPACK_COMPONENT_DEVEL_DESCRIPTION "C++ header files, import library...")
+set(CPACK_COMPONENT_DEVEL_DEPENDS bin)
+set(CPACK_COMPONENT_DEVEL_GROUP "Development")
+set(CPACK_COMPONENT_DEVEL_INSTALL_TYPES Development)
+
+set(CPACK_COMPONENT_APIDOC_DISPLAY_NAME "CAMP API documentation")
+set(CPACK_COMPONENT_APIDOC_DESCRIPTION "Documentation for developers")
+set(CPACK_COMPONENT_APIDOC_GROUP "Development")
+set(CPACK_COMPONENT_APIDOC_INSTALL_TYPES Development)
+
+set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION "Components related to software development based on CAMP")
+set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED TRUE)
+
+# Package setup
 set(CPACK_PACKAGE_NAME CAMP)
 set(CPACK_PACKAGE_VENDOR Tegesoft)
 set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
@@ -252,6 +282,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     doc/property_editor
 )
 
+# NSIS setup
 #set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY)
 #set(CPACK_NSIS_MUI_ICON)
 #set(CPACK_NSIS_MUI_UNIICON)
