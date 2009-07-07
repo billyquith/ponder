@@ -6,10 +6,6 @@ project(CAMP_TEST)
 # all source files
 set(CAMP_TEST_SRCS
     main.cpp
-)
-
-# all header files
-set(CAMP_TEST_HDRS
     test.hpp
 )
 

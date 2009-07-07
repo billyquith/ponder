@@ -5,102 +5,113 @@ project(CAMP)
 
 # all .cpp files
 set(CAMP_SRCS
-    src/userproperty.cpp
-    src/userobject.cpp
-    src/tagholder.cpp
-    src/simpleproperty.cpp
-    src/property.cpp
-    src/observer.cpp
-    src/invalidvalue.cpp
-    src/invalidproperty.cpp
-    src/invalidobject.cpp
-    src/invalidindex.cpp
-    src/invalidfunction.cpp
-    src/invalidenumvalue.cpp
-    src/invalidenumname.cpp
-    src/invalidenum.cpp
-    src/invalidclass.cpp
-    src/invalidargument.cpp
-    src/invalidaccess.cpp
-    src/function.cpp
-    src/error.cpp
-    src/enumproperty.cpp
-    src/enumobject.cpp
-    src/enumbuilder.cpp
-    src/enum.cpp
-    src/classvisitor.cpp
-    src/class.cpp
-    src/arrayproperty.cpp
-    src/args.cpp
-    src/value.cpp
-    src/classmanager.cpp
-    src/enummanager.cpp
-    src/observernotifier.cpp
-    src/camptype.cpp
-    src/classcast.cpp
-)
-
-# all header files
-set(CAMP_HDRS
-    include/camp/valuemapper.hpp
-    include/camp/value.hpp
     include/camp/userproperty.hpp
+    src/userproperty.cpp
     include/camp/userobject.hpp
-    include/camp/type.hpp
+    include/camp/userobject.inl
+    src/userobject.cpp
     include/camp/tagholder.hpp
+    src/tagholder.cpp
     include/camp/simpleproperty.hpp
+    src/simpleproperty.cpp
     include/camp/property.hpp
+    src/property.cpp
     include/camp/observer.hpp
+    src/observer.cpp
     include/camp/invalidvalue.hpp
+    src/invalidvalue.cpp
     include/camp/invalidproperty.hpp
+    src/invalidproperty.cpp
     include/camp/invalidobject.hpp
+    src/invalidobject.cpp
     include/camp/invalidindex.hpp
+    src/invalidindex.cpp
     include/camp/invalidfunction.hpp
+    src/invalidfunction.cpp
     include/camp/invalidenumvalue.hpp
+    src/invalidenumvalue.cpp
     include/camp/invalidenumname.hpp
+    src/invalidenumname.cpp
     include/camp/invalidenum.hpp
+    src/invalidenum.cpp
     include/camp/invalidclass.hpp
+    src/invalidclass.cpp
     include/camp/invalidargument.hpp
+    src/invalidargument.cpp
     include/camp/invalidaccess.hpp
-    include/camp/getter.hpp
+    src/invalidaccess.cpp
     include/camp/function.hpp
+    src/function.cpp
     include/camp/error.hpp
+    src/error.cpp
     include/camp/enumproperty.hpp
+    src/enumproperty.cpp
     include/camp/enumobject.hpp
-    include/camp/enumget.hpp
+    include/camp/enumobject.inl
+    src/enumobject.cpp
     include/camp/enumbuilder.hpp
+    src/enumbuilder.cpp
     include/camp/enum.hpp
+    include/camp/enum.inl
+    src/enum.cpp
+    include/camp/classvisitor.hpp
+    src/classvisitor.cpp
+    include/camp/class.hpp
+    include/camp/class.inl
+    src/class.cpp
+    include/camp/arrayproperty.hpp
+    src/arrayproperty.cpp
+    include/camp/args.hpp
+    src/args.cpp
+    include/camp/value.hpp
+    include/camp/value.inl
+    src/value.cpp
+    include/camp/detail/classmanager.hpp
+    src/classmanager.cpp
+    include/camp/detail/enummanager.hpp
+    src/enummanager.cpp
+    include/camp/detail/observernotifier.hpp
+    src/observernotifier.cpp
+    include/camp/camptype.hpp
+    src/camptype.cpp
+    include/camp/classcast.hpp
+    src/classcast.cpp
+    include/camp/type.hpp
+    include/camp/enumget.hpp
+    include/camp/enumget.inl
     include/camp/constructor.hpp
     include/camp/config.hpp
-    include/camp/classvisitor.hpp
     include/camp/classget.hpp
+    include/camp/classget.inl
     include/camp/classbuilder.hpp
-    include/camp/class.hpp
-    include/camp/camptype.hpp
-    include/camp/arrayproperty.hpp
+    include/camp/classbuilder.inl
     include/camp/arraymapper.hpp
-    include/camp/args.hpp
+    include/camp/valuemapper.hpp
     include/camp/valuevisitor.hpp
     include/camp/detail/valueimpl.hpp
     include/camp/detail/userpropertyimpl.hpp
+    include/camp/detail/userpropertyimpl.inl
     include/camp/detail/typeid.hpp
     include/camp/detail/simplepropertyimpl.hpp
+    include/camp/detail/simplepropertyimpl.inl
     include/camp/detail/returntype.hpp
     include/camp/detail/rawtype.hpp
     include/camp/detail/propertyfactory.hpp
     include/camp/detail/objecttraits.hpp
     include/camp/detail/issmartpointer.hpp
     include/camp/detail/getter.hpp
+    include/camp/detail/getter.inl
     include/camp/detail/functiontraits.hpp
     include/camp/detail/functionimpl.hpp
     include/camp/detail/enumpropertyimpl.hpp
-    include/camp/detail/enummanager.hpp
+    include/camp/detail/enumpropertyimpl.inl
     include/camp/detail/constructorimpl.hpp
-    include/camp/detail/classmanager.hpp
     include/camp/detail/callhelper.hpp
     include/camp/detail/arraypropertyimpl.hpp
+    include/camp/detail/arraypropertyimpl.inl
     include/camp/detail/yesnotype.hpp
-    include/camp/detail/observernotifier.hpp
+    include/camp/detail/objectholder.hpp
+    include/camp/detail/objectholder.inl
     include/camp/qt/qtvariantconverter.hpp
     include/camp/qt/qtsimpleproperty.hpp
     include/camp/qt/qtmapper.hpp
@@ -108,27 +119,6 @@ set(CAMP_HDRS
     include/camp/qt/qstring.hpp
     include/camp/qt/qlist.hpp
     include/camp/qt/qvector.hpp
-    include/camp/detail/objectholder.hpp
-    include/camp/classcast.hpp
-)
-
-# other files
-set(GICS_OTHERS
-    include/camp/value.inl
-    include/camp/userobject.inl
-    include/camp/getter.inl
-    include/camp/enumobject.inl
-    include/camp/enumget.inl
-    include/camp/enum.inl
-    include/camp/classget.inl
-    include/camp/classbuilder.inl
-    include/camp/class.inl
-    include/camp/detail/userpropertyimpl.inl
-    include/camp/detail/simplepropertyimpl.inl
-    include/camp/detail/getter.inl
-    include/camp/detail/enumpropertyimpl.inl
-    include/camp/detail/arraypropertyimpl.inl
-    include/camp/detail/objectholder.inl
 )
 
 # find Boost
@@ -148,4 +138,131 @@ set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 
 # add the test subdirectory, but do not build it by default
 add_subdirectory(test EXCLUDE_FROM_ALL)
+
+###############################
+# doc
+###############################
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/campapi.doxy)
+    set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc/api CACHE PATH "Documentation directory")
+    set(DOXYGEN_OUTPUT ${DOXYGEN_OUTPUT_DIR}/html/index.html)
+
+    if(WIN32)
+        set(DOXYGEN_GENERATE_MAN NO)
+        find_program(HHC_PROGRAM 
+            NAMES hhc.exe 
+            PATHS "c:/Program Files/HTML Help Workshop"
+            DOC "HTML Help Compiler program")
+        if(HHC_PROGRAM)
+            set(DOXYGEN_GENERATE_HTMLHELP YES)
+        else()
+            set(DOXYGEN_GENERATE_HTMLHELP NO)
+        endif()
+    else()
+        set(DOXYGEN_GENERATE_MAN YES)
+        set(DOXYGEN_GENERATE_HTMLHELP NO)
+        set(HHC_PROGRAM)
+    endif()
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/api/Doxyfile ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
+
+    file(GLOB image_files ${CMAKE_CURRENT_SOURCE_DIR}/doc/api/images/*)
+
+    # Copy necessary doc files
+    foreach(file ${image_files})
+        get_filename_component(filename ${file} NAME)
+        configure_file(${file} ${DOXYGEN_OUTPUT_DIR}/html/${filename} COPYONLY)
+    endforeach()
+
+    add_custom_command(
+        OUTPUT ${DOXYGEN_OUTPUT}
+        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
+        COMMAND ${CMAKE_COMMAND} -E echo "Done."
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS ${DOXYGEN_CONFIGURED_INPUT}
+    )
+
+    add_custom_target(apidoc ALL DEPENDS ${DOXYGEN_OUTPUT})
+
+    add_custom_target(apidoc_forced
+        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
+        COMMAND ${CMAKE_COMMAND} -E echo "Done."
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+    install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+        DESTINATION doc
+    )
+endif()
+
+###############################
+# installing
+###############################
+
+#if(WIN32)
+#    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/camp)
+#endif()
+
+install(DIRECTORY include
+    DESTINATION .
+)
+
+install(TARGETS camp
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
+
+install(FILES README.txt
+    DESTINATION .
+)
+
+###############################
+# packaging
+###############################
+
+set(CPACK_PACKAGE_NAME CAMP)
+set(CPACK_PACKAGE_VENDOR Tegesoft)
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 1)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_DESCRIPTION_FILE ${CAMP_SOURCE_DIR}/README.txt)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CAMP is a multi-purpose reflection library")
+#set(CPACK_PACKAGE_FILE_NAME camp-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
+set(CPACK_PACKAGE_INSTALL_DIRECTORY camp)
+#set(CPACK_RESOURCE_FILE_LICENSE ${CAMP_SOURCE_DIR}/LICENSE.txt)
+set(CPACK_RESOURCE_FILE_README ${CAMP_SOURCE_DIR}/README.txt)
+#set(CPACK_RESOURCE_FILE_WELCOME )
+set(CPACK_GENERATOR TGZ;TBZ2;ZIP;NSIS)
+#set(CPACK_PACKAGE_EXECUTABLES "camptest;Unit Tests")
+
+#set(CPACK_SOURCE_PACKAGE_FILE_NAME camp-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
+set(CPACK_SOURCE_GENERATOR TGZ;TBZ2;ZIP)
+set(CPACK_SOURCE_IGNORE_FILES
+    doc/requirements_specification
+    doc/technical_specification
+    doc/property_editor
+)
+
+#set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY)
+#set(CPACK_NSIS_MUI_ICON)
+#set(CPACK_NSIS_MUI_UNIICON)
+#set(CPACK_PACKAGE_ICON)
+#set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS)
+#set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
+#set(CPACK_NSIS_COMPRESSOR)
+#set(CPACK_NSIS_MODIFY_PATH)
+#set(CPACK_NSIS_DISPLAY_NAME)
+#set(CPACK_NSIS_INSTALLED_ICON_NAME)
+#set(CPACK_NSIS_HELP_LINK)
+#set(CPACK_NSIS_URL_INFO_ABOUT)
+#set(CPACK_NSIS_CONTACT)
+#set(CPACK_NSIS_CREATE_ICONS_EXTRA)
+#set(CPACK_NSIS_DELETE_ICONS_EXTRA)
+    
+include(CPack)
 
