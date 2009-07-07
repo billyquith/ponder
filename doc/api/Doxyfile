@@ -31,7 +31,7 @@ PROJECT_NAME           = CAMP
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 0.1
+PROJECT_NUMBER         = @VERSION_MAJOR@.@VERSION_MINOR@
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
@@ -917,7 +917,7 @@ TOC_EXPAND             = NO
 # Qt's qhelpgenerator to generate a Qt Compressed Help (.qch) of the generated 
 # HTML documentation.
 
-GENERATE_QHP           = YES
+GENERATE_QHP           = NO
 
 # If the QHG_LOCATION tag is specified, the QCH_FILE tag can 
 # be used to specify the file name of the resulting .qch file. 
@@ -929,7 +929,7 @@ QCH_FILE               =
 # Qt Help Project output. For more information please see 
 # http://doc.trolltech.com/qthelpproject.html#namespace
 
-QHP_NAMESPACE          = camp.0_1
+QHP_NAMESPACE          = camp
 
 # The QHP_VIRTUAL_FOLDER tag specifies the namespace to use when generating 
 # Qt Help Project output. For more information please see 

@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 2.6)
 # set project's name
 project(CAMP)
 
+# setup version numbers
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 0)
+
 # all .cpp files
 set(CAMP_SRCS
     include/camp/userproperty.hpp
@@ -145,6 +150,7 @@ add_subdirectory(test EXCLUDE_FROM_ALL)
 
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
+    # setup variables to be replaced in the source Doxyfile
     set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/campapi.doxy)
     set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc/api CACHE PATH "Documentation directory")
     set(DOXYGEN_OUTPUT ${DOXYGEN_OUTPUT_DIR}/html/index.html)
@@ -166,16 +172,17 @@ if(DOXYGEN_FOUND)
         set(HHC_PROGRAM)
     endif()
 
+    # configure the source Doxyfile by copying it and replacing all @variables@
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/api/Doxyfile ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
 
-    file(GLOB image_files ${CMAKE_CURRENT_SOURCE_DIR}/doc/api/images/*)
-
     # Copy necessary doc files
+    file(GLOB image_files ${CMAKE_CURRENT_SOURCE_DIR}/doc/api/images/*)
     foreach(file ${image_files})
         get_filename_component(filename ${file} NAME)
         configure_file(${file} ${DOXYGEN_OUTPUT_DIR}/html/${filename} COPYONLY)
     endforeach()
 
+    # add new targets to build the documentation
     add_custom_command(
         OUTPUT ${DOXYGEN_OUTPUT}
         COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
@@ -194,6 +201,7 @@ if(DOXYGEN_FOUND)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
+    # installation directives
     install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
         DESTINATION doc
     )
@@ -202,10 +210,6 @@ endif()
 ###############################
 # installing
 ###############################
-
-#if(WIN32)
-#    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/camp)
-#endif()
 
 install(DIRECTORY include
     DESTINATION .
@@ -227,9 +231,9 @@ install(FILES README.txt
 
 set(CPACK_PACKAGE_NAME CAMP)
 set(CPACK_PACKAGE_VENDOR Tegesoft)
-set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 1)
-set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CAMP_SOURCE_DIR}/README.txt)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CAMP is a multi-purpose reflection library")
 #set(CPACK_PACKAGE_FILE_NAME camp-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
