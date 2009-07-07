@@ -2,6 +2,8 @@
 
 /*! \mainpage CAMP C++ library documentation
  *
+ * \image html logo_camp.png
+ *
  * \section overview Overview
  *
  * CAMP is a C++ library which provides runtime reflection for types.
@@ -25,18 +27,15 @@
  * binary formats. Or you can even combine all these examples to provide a powerful
  * and consistent interface for manipulating your objects outside C++ code.
  *
- * \section start Getting started
- *
- * To start using CAMP, please refer to the \ref tutorial.
- *
  * \section example Quick example
  * 
  * Here is a simple example of how to use CAMP:
  *
  * \code
+ * #include <camp/camptype.hpp>
+ * #include <camp/class.hpp>
  * #include <string>
  * #include <iostream>
- * #include <camp/class.hpp>
  * 
  * // Let's define a class for handling persons
  * class Person

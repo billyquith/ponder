@@ -155,7 +155,7 @@ public:
      *
      * \param object Instance to store in the user object
      *
-     * \return UserObject containing a const reference to \a  object
+     * \return UserObject containing a const reference to \a object
      */
     template <typename T>
     static UserObject ref(const T& object);
@@ -167,7 +167,7 @@ public:
      *
      * \param object Instance to store in the user object
      *
-     * \return UserObject containing a copy of \object
+     * \return UserObject containing a copy of \a object
      */
     template <typename T>
     static UserObject copy(const T& object);
