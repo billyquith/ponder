@@ -221,9 +221,6 @@ install(TARGETS camp
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     COMPONENT bin
-)
-
-install(TARGETS camp
     ARCHIVE DESTINATION lib
     COMPONENT devel
 )
