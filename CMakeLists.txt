@@ -139,3 +139,67 @@ set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 # add the test subdirectory, but do not build it by default
 add_subdirectory(test EXCLUDE_FROM_ALL)
 
+###############################
+# doc
+###############################
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/campapi.doxy)
+    set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc/api CACHE PATH "Documentation directory")
+    set(DOXYGEN_OUTPUT ${DOXYGEN_OUTPUT_DIR}/html/index.html)
+
+    if(WIN32)
+        set(DOXYGEN_GENERATE_MAN NO)
+        find_program(HHC_PROGRAM 
+            NAMES hhc.exe 
+            PATHS "c:/Program Files/HTML Help Workshop"
+            DOC "HTML Help Compiler program")
+        if(HHC_PROGRAM)
+            set(DOXYGEN_GENERATE_HTMLHELP YES)
+        else()
+            set(DOXYGEN_GENERATE_HTMLHELP NO)
+        endif()
+    else()
+        set(DOXYGEN_GENERATE_MAN YES)
+        set(DOXYGEN_GENERATE_HTMLHELP NO)
+        set(HHC_PROGRAM)
+    endif()
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/api/Doxyfile ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
+
+    #    FILE(MAKE_DIRECTORY ${APIDOC_DIR}/html)
+
+    #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/tsp.css ${APIDOC_DIR}/html/tsp.css COPYONLY)
+    #FILE(GLOB header_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/header/*.htm*)
+    #FILE(GLOB footer_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/footer/*.htm*)
+    #FILE(GLOB images_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/images/*.png)
+
+    # Copy necessary doc files
+    #FOREACH (file ${header_files} ${footer_files} ${images_files})
+    #    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${file} ${APIDOC_DIR}/html/${file} COPYONLY)
+    #ENDFOREACH (file)
+
+    add_custom_command(
+        OUTPUT ${DOXYGEN_OUTPUT}
+        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
+        COMMAND ${CMAKE_COMMAND} -E echo "Done."
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS ${DOXYGEN_CONFIGURED_INPUT}
+    )
+
+    add_custom_target(apidoc ALL DEPENDS ${DOXYGEN_OUTPUT})
+
+    add_custom_target(apidoc_forced
+        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
+        COMMAND ${CMAKE_COMMAND} -E echo "Done."
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+    install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+        DESTINATION doc
+    )
+endif()
+
