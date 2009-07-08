@@ -201,16 +201,17 @@ if(DOXYGEN_FOUND)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-    # installation directives
-    install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
-        DESTINATION doc
-        COMPONENT apidoc
-    )
 endif()
 
 ###############################
 # installing
 ###############################
+
+if(WIN32 AND NOT UNIX)
+    set(INSTALL_MISC_DIR .)
+elseif(UNIX)
+    set(INSTALL_MISC_DIR share/camp)
+endif()
 
 install(DIRECTORY include
     DESTINATION .
@@ -224,11 +225,18 @@ install(TARGETS camp
 )
 
 install(FILES README.txt LICENSE.GPL3
-    DESTINATION .
+    DESTINATION ${INSTALL_MISC_DIR}
 )
 
+if(DOXYGEN_FOUND)
+    install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+        DESTINATION ${INSTALL_MISC_DIR}/doc
+        COMPONENT apidoc
+    )
+endif()
+
 install(DIRECTORY utils
-    DESTINATION .
+    DESTINATION ${INSTALL_MISC_DIR}
     COMPONENT utils
 )
 
