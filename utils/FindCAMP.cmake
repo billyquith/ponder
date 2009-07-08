@@ -9,6 +9,7 @@ FIND_PATH(CAMP_INCLUDE_DIR camp/camptype.hpp
   $ENV{CAMP_DIR}
   PATH_SUFFIXES include
   PATHS
+  [HKEY_LOCAL_MACHINE\\SOFTWARE\\Tegesoft\\CAMP]
   ~/Library/Frameworks
   /Library/Frameworks
   /usr/local
@@ -25,6 +26,7 @@ FIND_LIBRARY(CAMP_LIBRARY
   $ENV{CAMP_DIR}
   PATH_SUFFIXES lib64 lib
   PATHS
+  [HKEY_LOCAL_MACHINE\\SOFTWARE\\Tegesoft\\CAMP]
   ~/Library/Frameworks
   /Library/Frameworks
   /usr/local

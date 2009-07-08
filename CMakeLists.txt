@@ -227,6 +227,11 @@ install(FILES README.txt
     DESTINATION .
 )
 
+install(FILES utils/FindCAMP.cmake
+    DESTINATION ${CMAKE_ROOT}/Modules
+    COMPONENT utils
+)
+
 ###############################
 # packaging
 ###############################
@@ -250,6 +255,13 @@ set(CPACK_COMPONENT_APIDOC_DESCRIPTION "Documentation for developers")
 set(CPACK_COMPONENT_APIDOC_GROUP "Development")
 set(CPACK_COMPONENT_APIDOC_INSTALL_TYPES Development)
 
+set(CPACK_COMPONENT_UTILS_DISPLAY_NAME "CAMP utilities")
+set(CPACK_COMPONENT_UTILS_DESCRIPTION
+    "Install a FindCAMP.cmake file into the standard CMake modules directory"
+)
+set(CPACK_COMPONENT_UTILS_GROUP "Development")
+set(CPACK_COMPONENT_UTILS_DISABLED TRUE)
+
 set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION "Components related to software development based on CAMP")
 set(CPACK_COMPONENT_GROUP_DEVELOPMENT_EXPANDED TRUE)
 
@@ -264,6 +276,7 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CAMP is a multi-purpose C++ reflection li
 set(CPACK_PACKAGE_INSTALL_DIRECTORY camp)
 set(CPACK_RESOURCE_FILE_LICENSE ${CAMP_SOURCE_DIR}/LICENSE.GPL3)
 set(CPACK_RESOURCE_FILE_README ${CAMP_SOURCE_DIR}/README.txt)
+set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY CAMP)
 
 if(WIN32 AND NOT UNIX)
     set(CPACK_GENERATOR ZIP;NSIS)
