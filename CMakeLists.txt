@@ -297,9 +297,9 @@ endif()
 
 set(CPACK_SOURCE_GENERATOR TGZ;ZIP)
 
-file(GLOB IGNORE_DOT_FILE ".*")
+file(GLOB IGNORED_DOT_FILES ".*")
 set(CPACK_SOURCE_IGNORE_FILES
-    ${IGNORE_DOT_FILE}
+    ${IGNORED_DOT_FILES}
     doc/requirements_specification
     doc/technical_specification
     doc/property_editor
