@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/error.hpp>
 #include <string.h>

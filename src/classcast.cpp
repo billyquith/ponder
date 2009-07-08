@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/classcast.hpp>
 #include <camp/class.hpp>

@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_ERROR_HPP
 #define CAMP_ERROR_HPP

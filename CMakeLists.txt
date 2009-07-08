@@ -142,7 +142,7 @@ add_library(camp SHARED ${CAMP_SRCS})
 set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 
 # add the test subdirectory, but do not build it by default
-add_subdirectory(test EXCLUDE_FROM_ALL)
+#add_subdirectory(test EXCLUDE_FROM_ALL)
 
 ###############################
 # doc
@@ -312,7 +312,7 @@ set(CPACK_PACKAGE_ICON ${CAMP_SOURCE_DIR}/doc/images\\\\logo_package.bmp)
 #set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
 #set(CPACK_NSIS_COMPRESSOR)
 #set(CPACK_NSIS_MODIFY_PATH)
-set(CPACK_NSIS_DISPLAY_NAME CAMP)
+#set(CPACK_NSIS_DISPLAY_NAME pouet)
 #set(CPACK_NSIS_INSTALLED_ICON_NAME)
 set(CPACK_NSIS_HELP_LINK "http://www.tegesoft.com")
 set(CPACK_NSIS_URL_INFO_ABOUT "http://www.tegesoft.com")

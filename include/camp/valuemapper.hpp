@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_VALUEMAPPER_HPP
 #define CAMP_VALUEMAPPER_HPP

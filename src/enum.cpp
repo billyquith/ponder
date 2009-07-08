@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/enum.hpp>
 #include <camp/invalidindex.hpp>

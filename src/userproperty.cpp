@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/userproperty.hpp>
 #include <camp/classvisitor.hpp>

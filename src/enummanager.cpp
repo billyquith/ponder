@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/detail/enummanager.hpp>
 #include <camp/enum.hpp>

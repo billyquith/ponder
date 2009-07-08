@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_ARRAYMAPPER_HPP
 #define CAMP_ARRAYMAPPER_HPP

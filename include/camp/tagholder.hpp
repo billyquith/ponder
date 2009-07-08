@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_TAGHOLDER_HPP
 #define CAMP_TAGHOLDER_HPP

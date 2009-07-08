@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef TESTCLASS_HPP
 #define TESTCLASS_HPP

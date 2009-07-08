@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_FUNCTION_HPP
 #define CAMP_FUNCTION_HPP

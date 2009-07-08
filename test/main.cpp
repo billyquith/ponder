@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include "test.hpp"
 

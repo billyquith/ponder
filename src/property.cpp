@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/property.hpp>
 #include <camp/invalidaccess.hpp>

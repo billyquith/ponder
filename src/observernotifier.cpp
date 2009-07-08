@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/detail/observernotifier.hpp>
 #include <camp/observer.hpp>
