@@ -223,12 +223,12 @@ install(TARGETS camp
     ARCHIVE DESTINATION lib COMPONENT devel
 )
 
-install(FILES README.txt
+install(FILES README.txt LICENSE.GPL3
     DESTINATION .
 )
 
-install(FILES utils/FindCAMP.cmake
-    DESTINATION ${CMAKE_ROOT}/Modules
+install(DIRECTORY utils
+    DESTINATION .
     COMPONENT utils
 )
 
@@ -257,7 +257,7 @@ set(CPACK_COMPONENT_APIDOC_INSTALL_TYPES Development)
 
 set(CPACK_COMPONENT_UTILS_DISPLAY_NAME "CAMP utilities")
 set(CPACK_COMPONENT_UTILS_DESCRIPTION
-    "Install a FindCAMP.cmake file into the standard CMake modules directory"
+    "Provides a FindCAMP.cmake file to be used with project based on CMake"
 )
 set(CPACK_COMPONENT_UTILS_GROUP "Development")
 set(CPACK_COMPONENT_UTILS_DISABLED TRUE)
@@ -305,10 +305,10 @@ set(CPACK_PACKAGE_ICON ${CAMP_SOURCE_DIR}/doc/images\\\\logo_package.bmp)
 #set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
 #set(CPACK_NSIS_COMPRESSOR)
 #set(CPACK_NSIS_MODIFY_PATH)
-#set(CPACK_NSIS_DISPLAY_NAME)
+set(CPACK_NSIS_DISPLAY_NAME CAMP)
 #set(CPACK_NSIS_INSTALLED_ICON_NAME)
-set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.tegesoft.com")
-set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.tegesoft.com")
+set(CPACK_NSIS_HELP_LINK "http://www.tegesoft.com")
+set(CPACK_NSIS_URL_INFO_ABOUT "http://www.tegesoft.com")
 set(CPACK_NSIS_CONTACT "contact@tegesoft.com")
 #set(CPACK_NSIS_CREATE_ICONS_EXTRA)
 #set(CPACK_NSIS_DELETE_ICONS_EXTRA)
