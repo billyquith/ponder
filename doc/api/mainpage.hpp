@@ -1,4 +1,4 @@
-﻿// <insert copyright>
+// <insert copyright>
 
 /*! \mainpage CAMP C++ library documentation
  *
@@ -134,9 +134,5 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * \endverbatim
- *
- * \section contact Contact
- *
- * Blah blah Tegesoft...
  *
  */
