@@ -2,7 +2,7 @@
 
  The CAMP library is Copyright (C) 2009 TECHNOGERMA Systems France and/or
  its subsidiary(-ies).
- Contact: Technogerma Systems France Information (contact@techngerma.fr)
+ Contact: Technogerma Systems France Information (contact@technogerma.fr)
 
  You may use, distribute and copy the CAMP library under the terms of the
  GNU General Public License version 3, which is displayed below.
