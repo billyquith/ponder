@@ -1,3 +1,50 @@
 
-TODO (explain install and compile procedures)
+Building CAMP
+-------------
 
+The build system used for CAMP is CMake (http://cmake.org/).
+
+Moreover, the CAMP library depends on Boost (http://www.boost.org/).
+
+CMake will find Boost automatically if it is properly installed. If not, the BOOST_ROOT CMake variable can
+be defined to locate it.
+
+Once you have generated the project files / makefiles for your favorite compiler (please refer to http://cmake.org/
+if you do not know how to do it), you can use them to compile the CAMP binaries.
+ 
+The following targets are defined:
+ 
+(empty)
+    builds everything
+
+camp
+    builds the CAMP library
+
+camptest
+    builds the CAMP unit tests
+
+apidoc
+    generates the API documentation in HTML format; on Windows, if the HTML Help Workshop program
+    is available, the CHM documentation is generated as well
+         
+apidoc_forced
+    regenerates the API documentation
+
+install
+    installs all the generated components to the standard path
+
+
+Installing CAMP
+---------------
+
+There are three ways to install CAMP:
+- Running the installer (on Windows and Mac OS X) and following the instructions
+- Uncompressing the binary archive to a standard path (C:\Program Files, /usr/local/, ...)
+- Using CMake and calling the "install" target (see above)
+
+This will create the following directories:
+- <INSTALL_PATH>/bin contains the CAMP binary files
+- <INSTALL_PATH>/doc contains the API documentation
+- <INSTALL_PATH>/include contains the CAMP header files
+- <INSTALL_PATH>/lib contains the CAMP library files
+- <INSTALL_PATH>/utils contains various utilities related to CAMP
