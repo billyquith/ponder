@@ -32,7 +32,7 @@ project(CAMP)
 
 # setup version numbers
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 6)
 set(VERSION_PATCH 0)
 
 # all source files
