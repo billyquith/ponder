@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_INVALIDINDEX_HPP
 #define CAMP_INVALIDINDEX_HPP

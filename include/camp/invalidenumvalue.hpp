@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_INVALIDENUMVALUE_HPP
 #define CAMP_INVALIDENUMVALUE_HPP

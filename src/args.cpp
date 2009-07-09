@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/args.hpp>
 #include <camp/value.hpp>

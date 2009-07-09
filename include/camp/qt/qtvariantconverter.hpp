@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_QT_QTVARIANTCONVERTER_HPP
 #define CAMP_QT_QTVARIANTCONVERTER_HPP

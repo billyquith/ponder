@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_ARRAYPROPERTY_HPP
 #define CAMP_ARRAYPROPERTY_HPP

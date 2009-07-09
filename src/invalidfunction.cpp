@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/invalidfunction.hpp>
 #include <string.h>

@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/tagholder.hpp>
 #include <camp/value.hpp>

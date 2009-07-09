@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_ENUMBUILDER_HPP
 #define CAMP_ENUMBUILDER_HPP

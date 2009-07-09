@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_CLASS_HPP
 #define CAMP_CLASS_HPP

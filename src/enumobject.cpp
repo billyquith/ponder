@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/enumobject.hpp>
 #include <camp/enum.hpp>

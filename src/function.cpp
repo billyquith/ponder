@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/function.hpp>
 #include <camp/classvisitor.hpp>

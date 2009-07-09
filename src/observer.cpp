@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/observer.hpp>
 #include <camp/detail/classmanager.hpp>

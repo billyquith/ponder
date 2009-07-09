@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_OBSERVER_HPP
 #define CAMP_OBSERVER_HPP

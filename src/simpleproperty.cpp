@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/simpleproperty.hpp>
 #include <camp/classvisitor.hpp>

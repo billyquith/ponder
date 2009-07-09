@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/invalidobject.hpp>
 

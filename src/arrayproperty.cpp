@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/arrayproperty.hpp>
 #include <camp/classvisitor.hpp>

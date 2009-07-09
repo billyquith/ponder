@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #include <camp/detail/classmanager.hpp>
 #include <camp/class.hpp>

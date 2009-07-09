@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_QT_QVECTOR_HPP
 #define CAMP_QT_QVECTOR_HPP

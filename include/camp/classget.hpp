@@ -1,4 +1,4 @@
-// <insert copyright>
+
 
 #ifndef CAMP_CLASSGET_HPP
 #define CAMP_CLASSGET_HPP
