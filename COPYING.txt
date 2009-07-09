@@ -1,30 +1,22 @@
+Copyright (C) 2009 TECHNOGERMA Systems France and/or its subsidiary(-ies).
+Contact: Technogerma Systems France Information (contact@technogerma.fr)
 
-The GICS library is distributed under two different licenses: a free one,
-and a commercial one. You may choose the one that best suits your need.
+This file is part of the CAMP library.
 
+Commercial Usage
+Licensees holding valid CAMP Commercial licenses may use this file in
+accordance with the CAMP Commercial License Agreement provided with the
+Software or, alternatively, in accordance with the terms contained in
+a written agreement between you and TECHNOGERMA Systems France.
 
-Free license
-------------
+GNU General Public License Usage
+Alternatively, this file may be used under the terms of the GNU
+General Public License version 3.0 as published by the Free Software
+Foundation and appearing in the file LICENSE.GPL3.txt included in the
+packaging of this file.  Please review the following information to
+ensure the GNU General Public License version 3.0 requirements will be
+met: http://www.gnu.org/copyleft/gpl.html.
 
-GICS is distributed under the terms of the GNU GPL version 3 license.
+If you are unsure which license is appropriate for your use, please
+contact the sales department at contact@technogerma.fr.
 
-This license allows you to use and distribute the GICS library freely.
-However, this implies that any application using GICS with this license
-must distribute its source code in accordance with the GNU GPL version 3.
-
-You can find the full description of the GNU GPL version 3
-in the file LICENSE.GPL3.txt.
-
-
-Commercial license
-------------------
-
-GICS is distributed under the terms of a commercial license.
-
-This license is not free, which means that you have to purchase a valid copy
-to Technogerma Systems France.
-This license is the one to use for proprietary/commercial applications,
-where you do not want to share any source code.
-
-You can find the full description of the commercial license
-in the file LICENSE.TGS.txt.
