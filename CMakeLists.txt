@@ -8,7 +8,7 @@ set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 0)
 
-# all .cpp files
+# all source files
 set(CAMP_SRCS
     include/camp/userproperty.hpp
     src/userproperty.cpp
