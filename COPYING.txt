@@ -1,3 +1,30 @@
 
-TODO (explain licensing and where to find the whole license)
+The GICS library is distributed under two different licenses: a free one,
+and a commercial one. You may choose the one that best suits your need.
 
+
+Free license
+------------
+
+GICS is distributed under the terms of the GNU GPL version 3 license.
+
+This license allows you to use and distribute the GICS library freely.
+However, this implies that any application using GICS with this license
+must distribute its source code in accordance with the GNU GPL version 3.
+
+You can find the full description of the GNU GPL version 3
+in the file LICENSE.GPL3.txt.
+
+
+Commercial license
+------------------
+
+GICS is distributed under the terms of a commercial license.
+
+This license is not free, which means that you have to purchase a valid copy
+to Technogerma Systems France.
+This license is the one to use for proprietary/commercial applications,
+where you do not want to share any source code.
+
+You can find the full description of the commercial license
+in the file LICENSE.TGS.txt.
