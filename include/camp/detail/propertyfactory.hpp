@@ -20,7 +20,7 @@
 ** met: http://www.gnu.org/copyleft/gpl.html.
 **
 ** If you are unsure which license is appropriate for your use, please
-** contact the sales department at contact@technogerma.fr.
+** contact the sales department at sales@technogerma.fr.
 **
 ****************************************************************************/
 
