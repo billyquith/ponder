@@ -115,24 +115,28 @@
  *
  * \section licence Licence
  *
- * CAMP is distributed under the terms of the GPL v3 licence:
+ * CAMP is distributed under both the GNU GPL version 3 licence and a commercial license.
+ *
+ * If you are unsure which license is appropriate for your use, please
+ * contact the sales department at sales@technogerma.fr.
  *
  * \verbatim
- *   CAMP - dynamic reflexion C++ library
- *   Copyright (C) 2009 TechnoGerma Systems France
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Copyright (C) 2009 TECHNOGERMA Systems France and/or its subsidiary(-ies).
+ * Contact: Technogerma Systems France Information (contact@technogerma.fr)
+ * 
+ * Commercial Usage
+ * Licensees holding valid CAMP Commercial licenses may use this file in
+ * accordance with the CAMP Commercial License Agreement provided with the
+ * Software or, alternatively, in accordance with the terms contained in
+ * a written agreement between you and TECHNOGERMA Systems France.
+ * 
+ * GNU General Public License Usage
+ * Alternatively, this file may be used under the terms of the GNU
+ * General Public License version 3.0 as published by the Free Software
+ * Foundation and appearing in the file LICENSE.GPL3.txt included in the
+ * packaging of this file.  Please review the following information to
+ * ensure the GNU General Public License version 3.0 requirements will be
+ * met: http://www.gnu.org/copyleft/gpl.html.
  * \endverbatim
  *
  */
