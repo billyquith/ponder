@@ -221,7 +221,7 @@ if(DOXYGEN_FOUND)
         DEPENDS ${DOXYGEN_CONFIGURED_INPUT}
     )
 
-    add_custom_target(apidoc DEPENDS ${DOXYGEN_OUTPUT})
+    add_custom_target(apidoc ALL DEPENDS ${DOXYGEN_OUTPUT})
 
     add_custom_target(apidoc_forced
         COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
