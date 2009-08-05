@@ -30,10 +30,8 @@ cmake_minimum_required(VERSION 2.6)
 # set project's name
 project(CAMP)
 
-# setup version numbers
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 6)
-set(VERSION_PATCH 0)
+# include global configuration
+include(${CMAKE_SOURCE_DIR}/Config.cmake)
 
 # all source files
 set(CAMP_SRCS
@@ -177,72 +175,11 @@ endif()
 # doc
 ###############################
 
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-    # setup variables to be replaced in the source Doxyfile
-    set(DOXYGEN_OUTPUT_TYPE html)
-    set(DOXYGEN_INPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-    set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/campapi.doxy)
-    set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc/api CACHE PATH "Documentation directory")
-    set(DOXYGEN_OUTPUT ${DOXYGEN_OUTPUT_DIR}/html/index.html)
-
-    if(WIN32)
-        set(DOXYGEN_GENERATE_MAN NO)
-        find_program(HHC_PROGRAM 
-            NAMES hhc.exe 
-            PATHS "c:/Program Files/HTML Help Workshop"
-            DOC "HTML Help Compiler program")
-        if(HHC_PROGRAM)
-            set(DOXYGEN_GENERATE_HTMLHELP YES)
-        else()
-            set(DOXYGEN_GENERATE_HTMLHELP NO)
-        endif()
-    else()
-        set(DOXYGEN_GENERATE_MAN NO)
-        set(DOXYGEN_GENERATE_HTMLHELP NO)
-        set(HHC_PROGRAM)
-    endif()
-
-    # configure the source Doxyfile by copying it and replacing all @variables@
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/api/Doxyfile ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
-
-    # Copy necessary doc files
-    file(GLOB image_files ${CMAKE_CURRENT_SOURCE_DIR}/doc/api/images/*)
-    foreach(file ${image_files})
-        get_filename_component(filename ${file} NAME)
-        configure_file(${file} ${DOXYGEN_OUTPUT_DIR}/html/${filename} COPYONLY)
-    endforeach()
-
-    # add new targets to build the documentation
-    add_custom_command(
-        OUTPUT ${DOXYGEN_OUTPUT}
-        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
-        COMMAND ${CMAKE_COMMAND} -E echo "Done."
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        DEPENDS ${DOXYGEN_CONFIGURED_INPUT}
-    )
-
-    add_custom_target(apidoc ALL DEPENDS ${DOXYGEN_OUTPUT})
-
-    add_custom_target(apidoc_forced
-        COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
-        COMMAND ${CMAKE_COMMAND} -E echo "Done."
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-endif()
+add_subdirectory(doc)
 
 ###############################
 # installing
 ###############################
-
-if(WIN32 AND NOT UNIX)
-    set(INSTALL_MISC_DIR .)
-elseif(UNIX)
-    set(INSTALL_MISC_DIR share/camp)
-endif()
 
 install(DIRECTORY include
     DESTINATION .
@@ -258,13 +195,6 @@ install(TARGETS camp
 install(FILES README.txt COPYING.txt LICENSE.GPL3.txt
     DESTINATION ${INSTALL_MISC_DIR}
 )
-
-if(DOXYGEN_FOUND)
-    install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
-        DESTINATION ${INSTALL_MISC_DIR}/doc
-        COMPONENT apidoc
-    )
-endif()
 
 install(DIRECTORY cmake
     DESTINATION ${INSTALL_MISC_DIR}
@@ -333,9 +263,6 @@ set(CPACK_SOURCE_IGNORE_FILES
     doc/requirements_specification
     doc/technical_specification
     doc/property_editor
-    doc/CMakeLists.txt
-    doc/api/header.php
-    doc/api/footer.php
 )
 
 # NSIS setup
