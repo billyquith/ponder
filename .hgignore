@@ -6,6 +6,7 @@ Thumbs.db
 *~
 .~*
 ~*
+*.swp
 
 # IDE temporary files
 *.ncb

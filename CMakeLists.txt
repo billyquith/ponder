@@ -264,7 +264,7 @@ if(DOXYGEN_FOUND)
     )
 endif()
 
-install(DIRECTORY utils
+install(DIRECTORY cmake
     DESTINATION ${INSTALL_MISC_DIR}
     COMPONENT utils
 )
