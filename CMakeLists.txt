@@ -169,7 +169,9 @@ add_library(camp SHARED ${CAMP_SRCS})
 set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 
 # add the test subdirectory, but do not build it by default
-#add_subdirectory(test EXCLUDE_FROM_ALL)
+if(BUILD_TEST)
+    add_subdirectory(test)
+endif()
 
 ###############################
 # doc
@@ -221,7 +223,7 @@ if(DOXYGEN_FOUND)
         DEPENDS ${DOXYGEN_CONFIGURED_INPUT}
     )
 
-    add_custom_target(apidoc ALL DEPENDS ${DOXYGEN_OUTPUT})
+    add_custom_target(apidoc DEPENDS ${DOXYGEN_OUTPUT})
 
     add_custom_target(apidoc_forced
         COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
@@ -322,7 +324,6 @@ elseif(UNIX AND NOT APPLE)
 elseif(APPLE)
     set(CPACK_GENERATOR TGZ;TBZ2;PackageMaker)
 endif()
-#set(CPACK_PACKAGE_EXECUTABLES "camptest;Unit Tests")
 
 set(CPACK_SOURCE_GENERATOR TGZ;ZIP)
 
