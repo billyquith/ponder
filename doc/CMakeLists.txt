@@ -68,7 +68,7 @@ if(DOXYGEN_FOUND)
     endif()
 
     # configure the source Doxyfile by copying it and replacing all @variables@
-    configure_file(${DOXYGEN_INPUT_DIR}/doc/api/Doxyfile ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
+    configure_file(${DOXYGEN_INPUT_DIR}/doc/api/Doxyfile.in ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
 
     # copy necessary doc files
     file(GLOB image_files ${DOXYGEN_INPUT_DIR}/doc/api/images/*)
@@ -104,7 +104,7 @@ if(DOXYGEN_FOUND)
     set(HHC_PROGRAM)
 
     # configure the source Doxyfile by copying it and replacing all @variables@
-    configure_file(${DOXYGEN_INPUT_DIR}/doc/api/Doxyfile ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
+    configure_file(${DOXYGEN_INPUT_DIR}/doc/api/Doxyfile.in ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
 
     # copy necessary doc files
     file(GLOB image_files ${DOXYGEN_INPUT_DIR}/doc/api/images/*)
