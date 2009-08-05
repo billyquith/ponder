@@ -178,6 +178,8 @@ set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
     # setup variables to be replaced in the source Doxyfile
+    set(DOXYGEN_OUTPUT_TYPE html)
+    set(DOXYGEN_INPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/campapi.doxy)
     set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc/api CACHE PATH "Documentation directory")
     set(DOXYGEN_OUTPUT ${DOXYGEN_OUTPUT_DIR}/html/index.html)
@@ -330,6 +332,9 @@ set(CPACK_SOURCE_IGNORE_FILES
     doc/requirements_specification
     doc/technical_specification
     doc/property_editor
+    doc/CMakeLists.txt
+    doc/api/header.php
+    doc/api/footer.php
 )
 
 # NSIS setup
