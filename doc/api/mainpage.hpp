@@ -113,9 +113,9 @@
  * }
  * \endcode
  *
- * \section licence Licence
+ * \section license License
  *
- * CAMP is distributed under both the GNU GPL version 3 licence and a commercial license.
+ * CAMP is distributed under both the GNU GPL version 3 license and a commercial license.
  *
  * If you are unsure which license is appropriate for your use, please
  * contact the sales department at sales@technogerma.fr.
