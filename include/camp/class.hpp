@@ -32,6 +32,7 @@
 #include <camp/config.hpp>
 #include <camp/args.hpp>
 #include <camp/error.hpp>
+#include <camp/invalidconstruction.hpp>
 #include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
@@ -236,6 +237,8 @@ public:
      * \param args Arguments to pass to the constructor (empty by default)
      *
      * \return Pointer to the new instance, or 0 if it failed
+     *
+     * \throw camp::InvalidConstructor no matching constructor was found
      */
     template <typename T>
     T* construct(const Args& args = Args::empty) const;

@@ -199,35 +199,3 @@ int Class::baseOffset(const Class& base) const
 }
 
 } // namespace camp
-
-
-
-
-//-------------------------------------------------------------------------------------------------
-/* @todo Système générique de proxy (voir ci-dessous)
---> pas inclus dans CAMP, complètement externe (tester quand même)
-
-declareProxyClass<MyProxy>("MyDynamicClass")
-    .property("p1", camp::string)
-    .property("p2", camp::integer)
-    .function("f1", camp::integer, camp::boolean, camp::string)
-    .function("f2", camp::noType);
-
-class MyProxy
-{
-    camp::Value get(const std::string& className, const std::string& propName, camp::Type type)
-    {
-
-    }
-
-    void set(const std::string& className, const std::string& propName, camp::Type type, camp::Value value)
-    {
-
-    }
-
-    camp::Value call(const std::string& className, const std::string& funcName, vector<camp::Type> types, vector<camp::Value> args)
-    {
-
-    }
-};*/
-//-------------------------------------------------------------------------------------------------

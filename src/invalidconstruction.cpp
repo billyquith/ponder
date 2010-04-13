@@ -25,63 +25,40 @@
 ****************************************************************************/
 
 
+#include <camp/invalidconstruction.hpp>
+#include <camp/class.hpp>
+
 
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-ClassBuilder<T> Class::declare(const std::string& name)
+InvalidConstruction::InvalidConstruction(const Args& args, const Class& ownerClass) throw()
+    : m_args(args)
+    , m_ownerClass(&ownerClass)
 {
-    Class& newClass = detail::ClassManager::instance().registerNew(name, detail::StaticTypeId<T>::get(false));
-    return ClassBuilder<T>(newClass);
 }
 
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-T* Class::construct(const Args& args) const
+InvalidConstruction::~InvalidConstruction() throw()
 {
-    void* object = 0;
-
-    // Search an arguments match among the list of available constructors
-    ConstructorList::const_iterator end = m_constructors.end();
-    for (ConstructorList::const_iterator it = m_constructors.begin();
-         (it != end) && !object;
-         ++it)
-    {
-        Constructor& constructor = **it;
-
-        if (constructor.matches(args))
-        {
-            // Match found: use the constructor to create the new instance
-            object = constructor.create(args);
-        }
-    }
-
-    if (!object)
-    {
-        // Error: no constructor found for the given list of arguments
-        CAMP_ERROR(InvalidConstruction(args, *this));
-    }
-
-    // Get the metaclass of T, if any
-    const Class* targetClass = classByTypeSafe<T>();
-
-    // Apply the proper offset in case T is a base of this class
-    bool ok = !targetClass || applyOffset(object, *targetClass);
-    if (!ok)
-    {
-        // Error: T is unrelated to this class
-        CAMP_ERROR(InvalidConstruction(args, *this));
-    }
-
-    return static_cast<T*>(object);
 }
 
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-void Class::destroy(const T* object) const
+const char* InvalidConstruction::what() const throw()
 {
-    delete object;
+    return "Invalid construction of an instance from the metaclass";
+}
+
+//-------------------------------------------------------------------------------------------------
+const Args& InvalidConstruction::args() const throw()
+{
+    return m_args;
+}
+
+//-------------------------------------------------------------------------------------------------
+const Class& InvalidConstruction::ownerClass() const throw()
+{
+    return *m_ownerClass;
 }
 
 } // namespace camp
