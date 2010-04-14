@@ -11,6 +11,13 @@ if(NOT CMAKE_BUILD_TYPE)
     )
 endif()
 
+# Set the default test build option to false
+if(NOT BUILD_TEST)
+    set(BUILD_TEST FALSE
+        CACHE STRING "TRUE to build the unit tests (requires the Boost Test Library), FALSE otherwise."
+    )
+endif()
+
 # define install directory for miscelleneous files
 if(WIN32 AND NOT UNIX)
     set(INSTALL_MISC_DIR .)
