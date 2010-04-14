@@ -29,6 +29,7 @@
 #include <camp/args.hpp>
 #include <camp/error.hpp>
 #include <camp/invalidconstruction.hpp>
+#include <camp/tagholder.hpp>
 #include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
@@ -69,6 +70,7 @@ class ClassVisitor;
  * };
  *
  * camp::Class::declare<MyClass>("MyClass")
+ *     .tag("help", "this is my class")
  *     .constructor()
  *     .property("prop", &MyClass::getProp, &MyClass::setProp)
  *     .function("func", &MyClass::func);
@@ -79,8 +81,8 @@ class ClassVisitor;
  * \code
  * const camp::Class& metaclass = camp::classByType<MyClass>();
  *
- * const Property& prop = metaclass.property("prop");
- * const Function& func = metaclass.function("func");
+ * const camp::Property& prop = metaclass.property("prop");
+ * const camp::Function& func = metaclass.function("func");
  * \endcode
  *
  * Another way to inspect a class, which is more type-safe, is to use a ClassVisitor.
@@ -99,9 +101,9 @@ class ClassVisitor;
  *
  * \remark All function and property names are unique within the metaclass.
  *
- * \sa Class, EnumBuilder, Function, Property
+ * \sa Enum, TagHolder, ClassBuilder, Function, Property
  */
-class CAMP_API Class : boost::noncopyable
+class CAMP_API Class : public TagHolder, boost::noncopyable
 {
 public:
 

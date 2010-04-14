@@ -28,7 +28,7 @@ namespace camp
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)
-    , m_currentTagHolder(0)
+    , m_currentTagHolder(m_target)
     , m_currentProperty(0)
     , m_currentFunction(0)
 {

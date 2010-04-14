@@ -450,6 +450,7 @@ public:
     TagTest() : m_v("m_v") {}
 
     void f() {}
+    int p;
 
     camp::Value m_v;
     camp::Value v1() {return "v1";}

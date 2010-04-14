@@ -138,80 +138,101 @@ BOOST_AUTO_TEST_CASE(campTagHolderTest)
         .base<ComparableBase>();
     Comparable c(0);
 
-    camp::Class::declare<TagTest>("TagTest")
-    .function("f", &TagTest::f)
+    camp::ClassBuilder<TagTest> builder = camp::Class::declare<TagTest>("TagTest");
 
-    // ***** static tags *****
-    .tag(camp::Value::nothing)
-    .tag(true)
-    .tag(5L)
-    .tag(24.6)
-    .tag("tag")
-    .tag(MinusTwo)
-    .tag(c)
+    // Create tags on the metaclass, a function and a property
+    for (int i = 0; i < 3; ++i)
+    {
+        switch (i)
+        {
+            case 0 : /* add tags to the metaclass */     break;
+            case 1 : builder.function("f", &TagTest::f); break;
+            case 2 : builder.property("p", &TagTest::p); break;
+        }
 
-    // ***** static tags with value *****
-    .tag("v1", camp::Value::nothing)
-    .tag("v2", false)
-    .tag("v3", 0L)
-    .tag("v4", 0.)
-    .tag("v5", "0")
-    .tag("v6", Zero)
-    .tag("v7", c)
+        // ***** static tags *****
+        builder.tag(camp::Value::nothing)
+        .tag(true)
+        .tag(5L)
+        .tag(24.6)
+        .tag("tag")
+        .tag(MinusTwo)
+        .tag(c)
 
-    // ***** dynamic tags *****
-    .tag("v8",  &TagTest_FreeFunc)
-    .tag("v9",  &TagTest::m_v)
-    .tag("v10", &TagTest::v1)
-    .tag("v11", &TagTest::v2)
-    .tag("v12", boost::bind(boost::mem_fn(&TagTest::v2), _1))
-    .tag("v13", boost::function<camp::Value (const TagTest&)>(&TagTest::m_v))
-    ;
+        // ***** static tags with value *****
+        .tag("v1", camp::Value::nothing)
+        .tag("v2", false)
+        .tag("v3", 0L)
+        .tag("v4", 0.)
+        .tag("v5", "0")
+        .tag("v6", Zero)
+        .tag("v7", c)
 
-    const camp::Function& f = camp::classByType<TagTest>().function("f");
+        // ***** dynamic tags *****
+        .tag("v8",  &TagTest_FreeFunc)
+        .tag("v9",  &TagTest::m_v)
+        .tag("v10", &TagTest::v1)
+        .tag("v11", &TagTest::v2)
+        .tag("v12", boost::bind(boost::mem_fn(&TagTest::v2), _1))
+        .tag("v13", boost::function<camp::Value (const TagTest&)>(&TagTest::m_v))
+        ;
+    }
 
-    // ***** tagCount *****
-    BOOST_CHECK_EQUAL(f.tagCount(), 20U);
+    // Test the 3 kind of tag holders
+    const camp::TagHolder* holders[] =
+    {
+        &camp::classByType<TagTest>(),
+        &camp::classByType<TagTest>().function("f"),
+        &camp::classByType<TagTest>().property("p")
+    };
 
-    // ***** tagId *****
-    BOOST_CHECK_EQUAL(f.tagId(0) != f.tagId(1), true);
+    for (int i = 0; i < 3; ++i)
+    {
+        const camp::TagHolder& holder = *holders[i];
 
-    // ***** hasTag *****
-    BOOST_CHECK_EQUAL(f.hasTag(camp::Value::nothing), true);
-    BOOST_CHECK_EQUAL(f.hasTag(true), true);
-    BOOST_CHECK_EQUAL(f.hasTag(5L), true);
-    BOOST_CHECK_EQUAL(f.hasTag("tag"), true);
-    BOOST_CHECK_EQUAL(f.hasTag(MinusTwo), true);
-    BOOST_CHECK_EQUAL(f.hasTag(c), true);
-    BOOST_CHECK_EQUAL(f.hasTag("v1"), true);
-    BOOST_CHECK_EQUAL(f.hasTag("v8"), true);
-    BOOST_CHECK_EQUAL(f.hasTag("v13"), true);
+        // ***** tagCount *****
+        BOOST_CHECK_EQUAL(holder.tagCount(), 20U);
 
-    // ***** tag (static) *****
-    BOOST_CHECK_EQUAL(f.tag(camp::Value::nothing), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag(true), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag(5L), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag("tag"), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag(MinusTwo), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag(Comparable(8)), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag("v1"), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(f.tag("v2").to<bool>(), false);
-    BOOST_CHECK_EQUAL(f.tag("v3").to<long>(), 0L);
-    BOOST_CHECK_CLOSE(f.tag("v4").to<double>(), 0., 1E-5);
-    BOOST_CHECK_EQUAL(f.tag("v5").to<std::string>(), "0");
-    BOOST_CHECK_EQUAL(f.tag("v6").to<TestEnum>(), Zero);
-    BOOST_CHECK_EQUAL(f.tag("v7").to<Comparable>(), c);
-    BOOST_CHECK_EQUAL(f.tag("v8"), camp::Value::nothing);
+        // ***** tagId *****
+        BOOST_CHECK_EQUAL(holder.tagId(0) != holder.tagId(1), true);
 
-    TagTest obj;
+        // ***** hasTag *****
+        BOOST_CHECK_EQUAL(holder.hasTag(camp::Value::nothing), true);
+        BOOST_CHECK_EQUAL(holder.hasTag(true), true);
+        BOOST_CHECK_EQUAL(holder.hasTag(5L), true);
+        BOOST_CHECK_EQUAL(holder.hasTag("tag"), true);
+        BOOST_CHECK_EQUAL(holder.hasTag(MinusTwo), true);
+        BOOST_CHECK_EQUAL(holder.hasTag(c), true);
+        BOOST_CHECK_EQUAL(holder.hasTag("v1"), true);
+        BOOST_CHECK_EQUAL(holder.hasTag("v8"), true);
+        BOOST_CHECK_EQUAL(holder.hasTag("v13"), true);
 
-    // ***** tag (dynamic) *****
-    BOOST_CHECK_EQUAL(f.tag("v8", obj).to<std::string>(),  "m_v");
-    BOOST_CHECK_EQUAL(f.tag("v9", obj).to<std::string>(),  "m_v");
-    BOOST_CHECK_EQUAL(f.tag("v10", obj).to<std::string>(), "v1");
-    BOOST_CHECK_EQUAL(f.tag("v11", obj).to<std::string>(), "v2");
-    BOOST_CHECK_EQUAL(f.tag("v12", obj).to<std::string>(), "v2");
-    BOOST_CHECK_EQUAL(f.tag("v13", obj).to<std::string>(), "m_v");
+        // ***** tag (static) *****
+        BOOST_CHECK_EQUAL(holder.tag(camp::Value::nothing), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag(true), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag(5L), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag("tag"), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag(MinusTwo), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag(Comparable(8)), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag("v1"), camp::Value::nothing);
+        BOOST_CHECK_EQUAL(holder.tag("v2").to<bool>(), false);
+        BOOST_CHECK_EQUAL(holder.tag("v3").to<long>(), 0L);
+        BOOST_CHECK_CLOSE(holder.tag("v4").to<double>(), 0., 1E-5);
+        BOOST_CHECK_EQUAL(holder.tag("v5").to<std::string>(), "0");
+        BOOST_CHECK_EQUAL(holder.tag("v6").to<TestEnum>(), Zero);
+        BOOST_CHECK_EQUAL(holder.tag("v7").to<Comparable>(), c);
+        BOOST_CHECK_EQUAL(holder.tag("v8"), camp::Value::nothing);
+
+        TagTest obj;
+
+        // ***** tag (dynamic) *****
+        BOOST_CHECK_EQUAL(holder.tag("v8", obj).to<std::string>(),  "m_v");
+        BOOST_CHECK_EQUAL(holder.tag("v9", obj).to<std::string>(),  "m_v");
+        BOOST_CHECK_EQUAL(holder.tag("v10", obj).to<std::string>(), "v1");
+        BOOST_CHECK_EQUAL(holder.tag("v11", obj).to<std::string>(), "v2");
+        BOOST_CHECK_EQUAL(holder.tag("v12", obj).to<std::string>(), "v2");
+        BOOST_CHECK_EQUAL(holder.tag("v13", obj).to<std::string>(), "m_v");
+    }
 }
 
 
