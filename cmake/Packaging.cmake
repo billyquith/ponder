@@ -80,9 +80,6 @@ set(CPACK_SOURCE_GENERATOR TGZ;ZIP)
 file(GLOB IGNORED_DOT_FILES ".*")
 set(CPACK_SOURCE_IGNORE_FILES
     ${IGNORED_DOT_FILES}
-    doc/requirements_specification
-    doc/technical_specification
-    doc/property_editor
 )
 
 # NSIS setup
@@ -93,7 +90,7 @@ set(CPACK_PACKAGE_ICON ${CAMP_SOURCE_DIR}/doc/images\\\\logo_package.bmp)
 #set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
 #set(CPACK_NSIS_COMPRESSOR)
 #set(CPACK_NSIS_MODIFY_PATH)
-#set(CPACK_NSIS_DISPLAY_NAME pouet)
+set(CPACK_NSIS_DISPLAY_NAME CAMP)
 #set(CPACK_NSIS_INSTALLED_ICON_NAME)
 set(CPACK_NSIS_HELP_LINK "http://dev.tegesoft.com/camp/")
 set(CPACK_NSIS_URL_INFO_ABOUT "http://dev.tegesoft.com/camp/")
