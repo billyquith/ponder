@@ -24,10 +24,10 @@
 cmake_minimum_required(VERSION 2.6)
 
 # set project's name
-project(CAMP_TEST)
+project(CAMP_TEST_QT)
 
 # all source files
-set(CAMP_TEST_SRCS
+set(CAMP_TEST_QT_SRCS
     main.cpp
     test.hpp
 )
@@ -35,6 +35,16 @@ set(CAMP_TEST_SRCS
 # find Boost
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.38.0 COMPONENTS unit_test_framework REQUIRED)
+
+# find Qt4
+find_package(Qt4 4.5.0 COMPONENTS QtCore REQUIRED)
+
+# add some useful macros and variables
+# (QT_USE_FILE is a variable defined by find_package( Qt4 ) that contains a path to CMake script)
+include(${QT_USE_FILE})
+
+# this will run moc
+QT4_WRAP_CPP(CAMP_TEST_QT_MOC_SRCS test.hpp)
 
 # include files search paths
 include_directories(
@@ -48,13 +58,8 @@ link_directories(
 )
 
 # instruct CMake to build an executable from all of the source files
-add_executable(camptest ${CAMP_TEST_SRCS})
+add_executable(camptest-qt ${CAMP_TEST_QT_SRCS} ${CAMP_TEST_QT_MOC_SRCS})
 
-# last thing we have to do is to tell CMake what libraries our executable needs,
-target_link_libraries(camptest camp ${Boost_LIBRARIES})
-
-# add the qt subdirectory, but do not build it by default
-if(BUILD_TEST_QT)
-    add_subdirectory(qt)
-endif()
+# last thing we have to do is to tell CMake what libraries our executable needs
+target_link_libraries(camptest-qt camp ${Boost_LIBRARIES} ${QT_LIBRARIES})
 

@@ -18,6 +18,13 @@ if(NOT BUILD_TEST)
     )
 endif()
 
+# Set the default test build option to false
+if(NOT BUILD_TEST_QT)
+    set(BUILD_TEST_QT FALSE
+        CACHE BOOL "TRUE to build the Qt-specific unit tests (requires the Boost Test Library and Qt 4.5), FALSE otherwise."
+    )
+endif()
+
 # define install directory for miscelleneous files
 if(WIN32 AND NOT UNIX)
     set(INSTALL_MISC_DIR .)
