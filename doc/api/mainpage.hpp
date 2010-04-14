@@ -1,5 +1,3 @@
-// <insert copyright>
-
 /*! \mainpage CAMP C++ library documentation
  *
  * \image html logo_camp.png
