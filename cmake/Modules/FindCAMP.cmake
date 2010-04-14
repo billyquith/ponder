@@ -1,10 +1,10 @@
 # Locate CAMP library
 # This module defines
-#  CAMP_FOUND, if false, do not try to link to Lua
+#  CAMP_FOUND, if false, do not try to link to CAMP
 #  CAMP_LIBRARIES
-#  CAMP_INCLUDE_DIR, where to find camptype.hpp
+#  CAMP_INCLUDE_DIR, where to find camp/version.hpp
 
-FIND_PATH(CAMP_INCLUDE_DIR camp/camptype.hpp
+FIND_PATH(CAMP_INCLUDE_DIR camp/version.hpp
   HINTS
   $ENV{CAMP_DIR}
   PATH_SUFFIXES include

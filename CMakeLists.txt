@@ -48,6 +48,8 @@ set(CAMP_SRCS
     src/property.cpp
     include/camp/observer.hpp
     src/observer.cpp
+    include/camp/invalidconstruction.hpp
+    src/invalidconstruction.cpp
     include/camp/invalidvalue.hpp
     src/invalidvalue.cpp
     include/camp/invalidproperty.hpp
@@ -118,6 +120,7 @@ set(CAMP_SRCS
     include/camp/arraymapper.hpp
     include/camp/valuemapper.hpp
     include/camp/valuevisitor.hpp
+    include/camp/version.hpp
     include/camp/detail/valueimpl.hpp
     include/camp/detail/userpropertyimpl.hpp
     include/camp/detail/userpropertyimpl.inl
