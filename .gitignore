@@ -1,5 +1,3 @@
-syntax: glob
-
 Thumbs.db
 
 # Text editors temporary files
@@ -15,7 +13,7 @@ Thumbs.db
 *.obj
 *.lnk
 *.user
-qtc-gdbmacros/*
+qtc-gdbmacros/
 
 # LaTeX temporary files
 *.aux
@@ -28,10 +26,9 @@ qtc-gdbmacros/*
 
 # Temporary build files
 *.o
+*.a
 moc_*
-
-# user dependant files
-build/config.pro
 
 # Auto-generated documentation files
 doc/api/*/*
+
