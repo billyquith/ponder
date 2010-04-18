@@ -109,6 +109,21 @@ public:
     const Class& getById(const std::string& id, std::size_t index) const;
 
     /**
+     * \brief Get a metaclass from a C++ type
+     *
+     * This version returns a null pointer if no metaclass is found, instead
+     * of throwing an exception.
+     * If multiple metaclasses are bound to the given type, the index parameter
+     * is used to choose which one to return. Otherwise this parameter is ignored.
+     *
+     * \param id Identifier of the C++ type
+     * \param index Index of the metaclass to get, within the metaclasses bound to the type
+     *
+     * \return Pointer to the requested metaclass, or 0 if not found
+     */
+    const Class* getByIdSafe(const std::string& id, std::size_t index) const;
+
+    /**
      * \brief Get the total number of metaclasses
      *
      * \return Number of metaclasses that have been registered

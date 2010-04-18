@@ -109,6 +109,21 @@ public:
     const Enum& getById(const std::string& id, std::size_t index) const;
 
     /**
+     * \brief Get a metaenum from a C++ type
+     *
+     * This version returns a null pointer if no metaenum is found, instead
+     * of throwing an exception.
+     * If multiple metaenums are bound to the given type, the index parameter
+     * is used to choose which one to return. Otherwise this parameter is ignored.
+     *
+     * \param id Identifier of the C++ type
+     * \param index Index of the metaenum to get, within the metaenums bound to the type
+     *
+     * \return Pointer to the requested metaenum, or 0 if not found
+     */
+    const Enum* getByIdSafe(const std::string& id, std::size_t index) const;
+
+    /**
      * \brief Get the total number of metaenums
      *
      * \return Number of metaenums that have been registered

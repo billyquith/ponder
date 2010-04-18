@@ -74,14 +74,7 @@ inline const Class& classByName(const std::string& name)
 template <typename T>
 const Class* classByTypeSafe(std::size_t index)
 {
-    try
-    {
-        return &detail::ClassManager::instance().getById(detail::safeTypeId<T>(), index);
-    }
-    catch (Error&)
-    {
-        return 0;
-    }
+    return detail::ClassManager::instance().getByIdSafe(detail::safeTypeId<T>(), index);
 }
 
 } // namespace camp

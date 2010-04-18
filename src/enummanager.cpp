@@ -100,6 +100,21 @@ const Enum& EnumManager::getById(const std::string& id, std::size_t index) const
 }
 
 //-------------------------------------------------------------------------------------------------
+const Enum* EnumManager::getByIdSafe(const std::string& id, std::size_t index) const
+{
+    // First retrieve the array of enums associated to the given identifier
+    EnumByIdTable::const_iterator it = m_byId.find(id);
+    if (it == m_byId.end())
+        return 0;
+
+    // Make sure the index is valid
+    if (index >= it->second.size())
+        return 0;
+
+    return &*it->second[index];
+}
+
+//-------------------------------------------------------------------------------------------------
 std::size_t EnumManager::count() const
 {
     return m_byName.size();

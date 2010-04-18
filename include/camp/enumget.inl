@@ -74,14 +74,7 @@ inline const Enum& enumByName(const std::string& name)
 template <typename T>
 const Enum* enumByTypeSafe(std::size_t index)
 {
-    try
-    {
-        return &detail::EnumManager::instance().getById(detail::safeTypeId<T>(), index);
-    }
-    catch (Error&)
-    {
-        return 0;
-    }
+    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeId<T>(), index);
 }
 
 } // namespace camp

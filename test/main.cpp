@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(campTagHolderTest)
     {
         switch (i)
         {
-            case 0 : /* add tags to the metaclass */     break;
+            case 0 : break; // add tags to the metaclass itself
             case 1 : builder.function("f", &TagTest::f); break;
             case 2 : builder.property("p", &TagTest::p); break;
         }
