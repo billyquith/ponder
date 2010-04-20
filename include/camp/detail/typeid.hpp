@@ -76,10 +76,10 @@ template <typename T> const char* staticTypeId()         {return StaticTypeId<ty
 template <typename T> const char* staticTypeId(const T&) {return StaticTypeId<typename RawType<T>::Type>::get();}
 
 /**
- * \brief Utility class used to check at compile-time if a type T supports CAMP RTTI
+ * \brief Utility class used to check at compile-time if a type T implements the CAMP RTTI
  */
 template <typename T>
-struct HasDynamicTypeId
+struct HasCampRtti
 {
     template <typename U, const char* (U::*)() const> struct TestForMember {};
     template <typename U> static TypeYes check(TestForMember<U, &U::campClassId>*);
@@ -112,7 +112,7 @@ struct DynamicTypeId
  * Specialization of DynamicTypeId for types that don't implement CAMP RTTI
  */
 template <typename T>
-struct DynamicTypeId<T, typename boost::disable_if<HasDynamicTypeId<T> >::type>
+struct DynamicTypeId<T, typename boost::disable_if<HasCampRtti<T> >::type>
 {
     static const char* get(const T&)
     {
