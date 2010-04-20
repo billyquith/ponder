@@ -40,15 +40,8 @@ BOOST_AUTO_TEST_CASE(campClassTest)
 
     // ***** count *****
     BOOST_CHECK_EQUAL(camp::classCount(), 0U);
-    BOOST_CHECK_EQUAL(camp::classCount<TestClass>(), 0U);
-    BOOST_CHECK_EQUAL(camp::classCount(test), 0U);
-    BOOST_CHECK_EQUAL(camp::classCount(*test), 0U);
-
     camp::Class::declare<TestClass>("Test");
     BOOST_CHECK_EQUAL(camp::classCount(), 1U);
-    BOOST_CHECK_EQUAL(camp::classCount<TestClass>(), 1U);
-    BOOST_CHECK_EQUAL(camp::classCount(test), 1U);
-    BOOST_CHECK_EQUAL(camp::classCount(*test), 1U);
 
     // ***** get *****
     BOOST_CHECK_EQUAL(camp::classByIndex(0).name(), "Test");
@@ -93,8 +86,6 @@ BOOST_AUTO_TEST_CASE(campEnumTest)
 
     // ***** count *****
     BOOST_CHECK_EQUAL(camp::enumCount(), 0U);
-    BOOST_CHECK_EQUAL(camp::enumCount<TestEnum>(), 0U);
-    BOOST_CHECK_EQUAL(camp::enumCount(test), 0U);
 
     camp::Enum::declare<TestEnum>("Test")
         .value("One",      One)
@@ -103,8 +94,6 @@ BOOST_AUTO_TEST_CASE(campEnumTest)
         .value("Five",     Five);
 
     BOOST_CHECK_EQUAL(camp::enumCount(), 1U);
-    BOOST_CHECK_EQUAL(camp::enumCount<TestEnum>(), 1U);
-    BOOST_CHECK_EQUAL(camp::enumCount(test), 1U);
 
     // ***** get *****
     BOOST_CHECK_EQUAL(camp::enumByIndex(0).name(), "Test");
@@ -1289,33 +1278,33 @@ BOOST_AUTO_TEST_CASE(campObserverTest)
     // ***** classAdded *****
     BOOST_CHECK_EQUAL(obs.classes, 0);
     BOOST_CHECK_EQUAL(obs.enums, 0);
-    camp::Class::declare<DummyClass>("Dummy1");
+    camp::Class::declare<DummyClass1>("Dummy1");
     BOOST_CHECK_EQUAL(obs.classes, 1);
     BOOST_CHECK_EQUAL(obs.enums, 0);
-    camp::Class::declare<DummyClass>("Dummy2");
+    camp::Class::declare<DummyClass2>("Dummy2");
     BOOST_CHECK_EQUAL(obs.classes, 2);
     BOOST_CHECK_EQUAL(obs.enums, 0);
-    camp::Class::declare<DummyClass>("Dummy3");
+    camp::Class::declare<DummyClass3>("Dummy3");
     BOOST_CHECK_EQUAL(obs.classes, 3);
     BOOST_CHECK_EQUAL(obs.enums, 0);
 
     // ***** enumAdded *****
     BOOST_CHECK_EQUAL(obs.classes, 3);
     BOOST_CHECK_EQUAL(obs.enums, 0);
-    camp::Enum::declare<DummyEnum>("Dummy1");
+    camp::Enum::declare<DummyEnum1>("Dummy1");
     BOOST_CHECK_EQUAL(obs.classes, 3);
     BOOST_CHECK_EQUAL(obs.enums, 1);
-    camp::Enum::declare<DummyEnum>("Dummy2");
+    camp::Enum::declare<DummyEnum2>("Dummy2");
     BOOST_CHECK_EQUAL(obs.classes, 3);
     BOOST_CHECK_EQUAL(obs.enums, 2);
-    camp::Enum::declare<DummyEnum>("Dummy3");
+    camp::Enum::declare<DummyEnum3>("Dummy3");
     BOOST_CHECK_EQUAL(obs.classes, 3);
     BOOST_CHECK_EQUAL(obs.enums, 3);
 
     // ***** removeObserver *****
     camp::removeObserver(&obs);
-    camp::Class::declare<DummyClass>("Dummy4");
-    camp::Enum::declare<DummyEnum>("Dummy4");
+    camp::Class::declare<DummyClass4>("Dummy4");
+    camp::Enum::declare<DummyEnum4>("Dummy4");
     BOOST_CHECK_EQUAL(obs.classes, 3);
     BOOST_CHECK_EQUAL(obs.enums, 3);
 }

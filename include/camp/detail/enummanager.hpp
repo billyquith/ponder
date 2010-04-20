@@ -31,7 +31,6 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <string>
-#include <vector>
 
 
 namespace camp
@@ -73,57 +72,6 @@ public:
     Enum& registerNew(const std::string& name, const std::string& id);
 
     /**
-     * \brief Get a metaenum from its name
-     *
-     * \param name Name of the metaenum to retrieve
-     *
-     * \return Reference to the requested metaenum
-     *
-     * \throw InvalidEnum name is not the name of an existing metaenum
-     */
-    const Enum& getByName(const std::string& name) const;
-
-    /**
-     * \brief Get the number of metaenums bound to a C++ type
-     *
-     * \param id Identifier of the C++ type
-     *
-     * \return Number of metaenums bound to the given type
-     */
-    std::size_t count(const std::string& id) const;
-
-    /**
-     * \brief Get a metaenum from a C++ type
-     *
-     * If multiple metaenums are bound to the given type, the index parameter
-     * is used to choose which one to return. Otherwise this parameter is ignored.
-     *
-     * \param id Identifier of the C++ type
-     * \param index Index of the metaenum to get, within the metaenums bound to the type
-     *
-     * \return Reference to the requested metaenum
-     *
-     * \throw InvalidEnum id is not the name of an existing metaenum
-     * \throw InvalidIndex index is out of range
-     */
-    const Enum& getById(const std::string& id, std::size_t index) const;
-
-    /**
-     * \brief Get a metaenum from a C++ type
-     *
-     * This version returns a null pointer if no metaenum is found, instead
-     * of throwing an exception.
-     * If multiple metaenums are bound to the given type, the index parameter
-     * is used to choose which one to return. Otherwise this parameter is ignored.
-     *
-     * \param id Identifier of the C++ type
-     * \param index Index of the metaenum to get, within the metaenums bound to the type
-     *
-     * \return Pointer to the requested metaenum, or 0 if not found
-     */
-    const Enum* getByIdSafe(const std::string& id, std::size_t index) const;
-
-    /**
      * \brief Get the total number of metaenums
      *
      * \return Number of metaenums that have been registered
@@ -143,6 +91,40 @@ public:
      * \throw InvalidIndex index is out of range
      */
     const Enum& getByIndex(std::size_t index) const;
+
+    /**
+     * \brief Get a metaenum from its name
+     *
+     * \param name Name of the metaenum to retrieve
+     *
+     * \return Reference to the requested metaenum
+     *
+     * \throw InvalidEnum name is not the name of an existing metaenum
+     */
+    const Enum& getByName(const std::string& name) const;
+
+    /**
+     * \brief Get a metaenum from a C++ type
+     *
+     * \param id Identifier of the C++ type
+     *
+     * \return Reference to the requested metaenum
+     *
+     * \throw InvalidEnum id is not the name of an existing metaenum
+     */
+    const Enum& getById(const std::string& id) const;
+
+    /**
+     * \brief Get a metaenum from a C++ type
+     *
+     * This version returns a null pointer if no metaenum is found, instead
+     * of throwing an exception.
+     *
+     * \param id Identifier of the C++ type
+     *
+     * \return Pointer to the requested metaenum, or 0 if not found
+     */
+    const Enum* getByIdSafe(const std::string& id) const;
 
     /**
      * \brief Check if a given type has a metaenum
@@ -169,7 +151,7 @@ private:
 
     typedef boost::shared_ptr<Enum> EnumPtr;
     typedef std::map<std::string, EnumPtr> EnumByNameTable;
-    typedef std::map<std::string, std::vector<EnumPtr> > EnumByIdTable;
+    typedef std::map<std::string, EnumPtr> EnumByIdTable;
 
     EnumByNameTable m_byName; ///< List of metaenums sorted by name
     EnumByIdTable m_byId; ///< List of metaenums sorted by class id

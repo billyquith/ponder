@@ -43,16 +43,14 @@ ClassManager& ClassManager::instance()
 //-------------------------------------------------------------------------------------------------
 Class& ClassManager::registerNew(const std::string& name, const std::string& id)
 {
-    // Create the new class and insert it into the main table
-    ClassPtr newClass = ClassPtr(new Class(name));
-    std::pair<ClassByNameTable::iterator, bool> result = m_byName.insert(std::make_pair(name, newClass));
-
-    // If this name already exists in the table, report an error (duplicate classes are not allowed)
-    if (!result.second)
+    // First make sure that the class doesn't already exist
+    if ((m_byName.find(name) != m_byName.end()) || (m_byId.find(id) != m_byId.end()))
         CAMP_ERROR(InvalidClass(name.c_str()));
 
-    // Insert a pointer to the new class in the id table
-    m_byId[id].push_back(newClass);
+    // Create the new class and insert it into the lookup tables
+    ClassPtr newClass = ClassPtr(new Class(name));
+    m_byName[name] = newClass;
+    m_byId[id] = newClass;
 
     // Notify observers
     ObserverIterator end = observersEnd();
@@ -62,6 +60,25 @@ Class& ClassManager::registerNew(const std::string& name, const std::string& id)
     }
 
     return *newClass;
+}
+
+//-------------------------------------------------------------------------------------------------
+std::size_t ClassManager::count() const
+{
+    return m_byName.size();
+}
+
+//-------------------------------------------------------------------------------------------------
+const Class& ClassManager::getByIndex(std::size_t index) const
+{
+    // Make sure that the index is valid
+    if (index >= m_byName.size())
+        CAMP_ERROR(InvalidIndex(index, m_byName.size()));
+
+    ClassByNameTable::const_iterator it = m_byName.begin();
+    std::advance(it, index);
+
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -75,62 +92,23 @@ const Class& ClassManager::getByName(const std::string& name) const
 }
 
 //-------------------------------------------------------------------------------------------------
-std::size_t ClassManager::count(const std::string& id) const
+const Class& ClassManager::getById(const std::string& id) const
 {
-    ClassByIdTable::const_iterator it = m_byId.find(id);
-    if (it == m_byId.end())
-        return 0;
-
-    return it->second.size();
-}
-
-//-------------------------------------------------------------------------------------------------
-const Class& ClassManager::getById(const std::string& id, std::size_t index) const
-{
-    // First retrieve the array of classes associated to the given identifier
     ClassByIdTable::const_iterator it = m_byId.find(id);
     if (it == m_byId.end())
         CAMP_ERROR(InvalidClass(id.c_str()));
 
-    // Make sure the index is valid
-    if (index >= it->second.size())
-        CAMP_ERROR(InvalidIndex(index, it->second.size()));
-
-    return *it->second[index];
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
-const Class* ClassManager::getByIdSafe(const std::string& id, std::size_t index) const
+const Class* ClassManager::getByIdSafe(const std::string& id) const
 {
-    // First retrieve the array of classes associated to the given identifier
     ClassByIdTable::const_iterator it = m_byId.find(id);
     if (it == m_byId.end())
         return 0;
 
-    // Make sure the index is valid
-    if (index >= it->second.size())
-        return 0;
-
-    return &*it->second[index];
-}
-
-//-------------------------------------------------------------------------------------------------
-std::size_t ClassManager::count() const
-{
-    return m_byName.size();
-}
-
-//-------------------------------------------------------------------------------------------------
-const Class& ClassManager::getByIndex(std::size_t index) const
-{
-    // Make sure the index is valid
-    if (index >= m_byName.size())
-        CAMP_ERROR(InvalidIndex(index, m_byName.size()));
-
-    ClassByNameTable::const_iterator it = m_byName.begin();
-    std::advance(it, index);
-
-    return *it->second;
+    return &*it->second;
 }
 
 //-------------------------------------------------------------------------------------------------

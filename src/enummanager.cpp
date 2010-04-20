@@ -43,16 +43,14 @@ EnumManager& EnumManager::instance()
 //-------------------------------------------------------------------------------------------------
 Enum& EnumManager::registerNew(const std::string& name, const std::string& id)
 {
-    // Create the new enum and insert it into the main table
-    EnumPtr newEnum = EnumPtr(new Enum(name));
-    std::pair<EnumByNameTable::iterator, bool> result = m_byName.insert(std::make_pair(name, newEnum));
-
-    // If this name already exists in the table, report an error (duplicate enums are not allowed)
-    if (!result.second)
+    // First make sure that the enum doesn't already exist
+    if ((m_byName.find(name) != m_byName.end()) || (m_byId.find(id) != m_byId.end()))
         CAMP_ERROR(InvalidEnum(name.c_str()));
 
-    // Insert a pointer to the new enum in the id table
-    m_byId[id].push_back(newEnum);
+    // Create the new enum and insert it into the lookup tables
+    EnumPtr newEnum = EnumPtr(new Enum(name));
+    m_byName[name] = newEnum;
+    m_byId[id] = newEnum;
 
     // Notify observers
     ObserverIterator end = observersEnd();
@@ -62,56 +60,6 @@ Enum& EnumManager::registerNew(const std::string& name, const std::string& id)
     }
 
     return *newEnum;
-}
-
-//-------------------------------------------------------------------------------------------------
-const Enum& EnumManager::getByName(const std::string& name) const
-{
-    EnumByNameTable::const_iterator it = m_byName.find(name);
-    if (it == m_byName.end())
-        CAMP_ERROR(InvalidEnum(name.c_str()));
-
-    return *it->second;
-}
-
-//-------------------------------------------------------------------------------------------------
-std::size_t EnumManager::count(const std::string& id) const
-{
-    EnumByIdTable::const_iterator it = m_byId.find(id);
-    if (it == m_byId.end())
-        return 0;
-
-    return it->second.size();
-}
-
-//-------------------------------------------------------------------------------------------------
-const Enum& EnumManager::getById(const std::string& id, std::size_t index) const
-{
-    // First retrieve the array of enums associated to the given identifier
-    EnumByIdTable::const_iterator it = m_byId.find(id);
-    if (it == m_byId.end())
-        CAMP_ERROR(InvalidEnum(id.c_str()));
-
-    // Make sure the index is valid
-    if (index >= it->second.size())
-        CAMP_ERROR(InvalidIndex(index, it->second.size()));
-
-    return *it->second[index];
-}
-
-//-------------------------------------------------------------------------------------------------
-const Enum* EnumManager::getByIdSafe(const std::string& id, std::size_t index) const
-{
-    // First retrieve the array of enums associated to the given identifier
-    EnumByIdTable::const_iterator it = m_byId.find(id);
-    if (it == m_byId.end())
-        return 0;
-
-    // Make sure the index is valid
-    if (index >= it->second.size())
-        return 0;
-
-    return &*it->second[index];
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -131,6 +79,36 @@ const Enum& EnumManager::getByIndex(std::size_t index) const
     std::advance(it, index);
 
     return *it->second;
+}
+
+//-------------------------------------------------------------------------------------------------
+const Enum& EnumManager::getByName(const std::string& name) const
+{
+    EnumByNameTable::const_iterator it = m_byName.find(name);
+    if (it == m_byName.end())
+        CAMP_ERROR(InvalidEnum(name.c_str()));
+
+    return *it->second;
+}
+
+//-------------------------------------------------------------------------------------------------
+const Enum& EnumManager::getById(const std::string& id) const
+{
+    EnumByIdTable::const_iterator it = m_byId.find(id);
+    if (it == m_byId.end())
+        CAMP_ERROR(InvalidEnum(id.c_str()));
+
+    return *it->second;
+}
+
+//-------------------------------------------------------------------------------------------------
+const Enum* EnumManager::getByIdSafe(const std::string& id) const
+{
+    EnumByIdTable::const_iterator it = m_byId.find(id);
+    if (it == m_byId.end())
+        return 0;
+
+    return &*it->second;
 }
 
 //-------------------------------------------------------------------------------------------------

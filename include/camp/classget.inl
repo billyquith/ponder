@@ -31,37 +31,9 @@ inline std::size_t classCount()
 }
 
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-std::size_t classCount()
-{
-    return detail::ClassManager::instance().count(detail::typeId<T>());
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-std::size_t classCount(const T& object)
-{
-    return detail::ClassManager::instance().count(detail::typeId(object));
-}
-
-//-------------------------------------------------------------------------------------------------
 inline const Class& classByIndex(std::size_t index)
 {
     return detail::ClassManager::instance().getByIndex(index);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-const Class& classByObject(const T& object, std::size_t index)
-{
-    return detail::ClassManager::instance().getById(detail::typeId(object), index);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-const Class& classByType(std::size_t index)
-{
-    return detail::ClassManager::instance().getById(detail::typeId<T>(), index);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -72,9 +44,23 @@ inline const Class& classByName(const std::string& name)
 
 //-------------------------------------------------------------------------------------------------
 template <typename T>
-const Class* classByTypeSafe(std::size_t index)
+const Class& classByObject(const T& object)
 {
-    return detail::ClassManager::instance().getByIdSafe(detail::safeTypeId<T>(), index);
+    return detail::ClassManager::instance().getById(detail::typeId(object));
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename T>
+const Class& classByType()
+{
+    return detail::ClassManager::instance().getById(detail::typeId<T>());
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename T>
+const Class* classByTypeSafe()
+{
+    return detail::ClassManager::instance().getByIdSafe(detail::safeTypeId<T>());
 }
 
 } // namespace camp

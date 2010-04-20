@@ -31,37 +31,9 @@ inline std::size_t enumCount()
 }
 
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-std::size_t enumCount()
-{
-    return detail::EnumManager::instance().count(detail::typeId<T>());
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-std::size_t enumCount(T value)
-{
-    return detail::EnumManager::instance().count(detail::typeId(value));
-}
-
-//-------------------------------------------------------------------------------------------------
 inline const Enum& enumByIndex(std::size_t index)
 {
     return detail::EnumManager::instance().getByIndex(index);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-const Enum& enumByType(std::size_t index)
-{
-    return detail::EnumManager::instance().getById(detail::typeId<T>(), index);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-const Enum& enumByObject(T value, std::size_t index)
-{
-    return detail::EnumManager::instance().getById(detail::typeId(value), index);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -72,9 +44,23 @@ inline const Enum& enumByName(const std::string& name)
 
 //-------------------------------------------------------------------------------------------------
 template <typename T>
-const Enum* enumByTypeSafe(std::size_t index)
+const Enum& enumByObject(T)
 {
-    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeId<T>(), index);
+    return detail::EnumManager::instance().getById(detail::typeId<T>());
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename T>
+const Enum& enumByType()
+{
+    return detail::EnumManager::instance().getById(detail::typeId<T>());
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename T>
+const Enum* enumByTypeSafe()
+{
+    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeId<T>());
 }
 
 } // namespace camp

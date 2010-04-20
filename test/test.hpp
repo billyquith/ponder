@@ -44,11 +44,23 @@
 #include <string>
 
 
-class DummyClass {};
-CAMP_TYPE(DummyClass);
+class DummyClass1 {};
+CAMP_TYPE(DummyClass1);
+class DummyClass2 {};
+CAMP_TYPE(DummyClass2);
+class DummyClass3 {};
+CAMP_TYPE(DummyClass3);
+class DummyClass4 {};
+CAMP_TYPE(DummyClass4);
 
-enum DummyEnum {};
-CAMP_TYPE(DummyEnum);
+enum DummyEnum1 {};
+CAMP_TYPE(DummyEnum1);
+enum DummyEnum2 {};
+CAMP_TYPE(DummyEnum2);
+enum DummyEnum3 {};
+CAMP_TYPE(DummyEnum3);
+enum DummyEnum4 {};
+CAMP_TYPE(DummyEnum4);
 
 
 struct AbstractClass

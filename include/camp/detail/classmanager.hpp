@@ -31,7 +31,6 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <string>
-#include <vector>
 
 
 namespace camp
@@ -73,57 +72,6 @@ public:
     Class& registerNew(const std::string& name, const std::string& id);
 
     /**
-     * \brief Get a metaclass from its name
-     *
-     * \param name Name of the metaclass to retrieve
-     *
-     * \return Reference to the requested metaclass
-     *
-     * \throw InvalidClass name is not the name of an existing metaclass
-     */
-    const Class& getByName(const std::string& name) const;
-
-    /**
-     * \brief Get the number of metaclasses bound to a C++ type
-     *
-     * \param id Identifier of the C++ type
-     *
-     * \return Number of metaclasses bound to the given type
-     */
-    std::size_t count(const std::string& id) const;
-
-    /**
-     * \brief Get a metaclass from a C++ type
-     *
-     * If multiple metaclasses are bound to the given type, the index parameter
-     * is used to choose which one to return. Otherwise this parameter is ignored.
-     *
-     * \param id Identifier of the C++ type
-     * \param index Index of the metaclass to get, within the metaclasses bound to the type
-     *
-     * \return Reference to the requested metaclass
-     *
-     * \throw InvalidClass id is not the name of an existing metaclass
-     * \throw InvalidIndex index is out of range
-     */
-    const Class& getById(const std::string& id, std::size_t index) const;
-
-    /**
-     * \brief Get a metaclass from a C++ type
-     *
-     * This version returns a null pointer if no metaclass is found, instead
-     * of throwing an exception.
-     * If multiple metaclasses are bound to the given type, the index parameter
-     * is used to choose which one to return. Otherwise this parameter is ignored.
-     *
-     * \param id Identifier of the C++ type
-     * \param index Index of the metaclass to get, within the metaclasses bound to the type
-     *
-     * \return Pointer to the requested metaclass, or 0 if not found
-     */
-    const Class* getByIdSafe(const std::string& id, std::size_t index) const;
-
-    /**
      * \brief Get the total number of metaclasses
      *
      * \return Number of metaclasses that have been registered
@@ -143,6 +91,40 @@ public:
      * \throw InvalidIndex index is out of range
      */
     const Class& getByIndex(std::size_t index) const;
+
+    /**
+     * \brief Get a metaclass from its name
+     *
+     * \param name Name of the metaclass to retrieve
+     *
+     * \return Reference to the requested metaclass
+     *
+     * \throw InvalidClass name is not the name of an existing metaclass
+     */
+    const Class& getByName(const std::string& name) const;
+
+    /**
+     * \brief Get a metaclass from a C++ type
+     *
+     * \param id Identifier of the C++ type
+     *
+     * \return Reference to the requested metaclass
+     *
+     * \throw InvalidClass id is not the name of an existing metaclass
+     */
+    const Class& getById(const std::string& id) const;
+
+    /**
+     * \brief Get a metaclass from a C++ type
+     *
+     * This version returns a null pointer if no metaclass is found, instead
+     * of throwing an exception.
+     *
+     * \param id Identifier of the C++ type
+     *
+     * \return Pointer to the requested metaclass, or 0 if not found
+     */
+    const Class* getByIdSafe(const std::string& id) const;
 
     /**
      * \brief Check if a given type has a metaclass
@@ -169,7 +151,7 @@ private:
 
     typedef boost::shared_ptr<Class> ClassPtr;
     typedef std::map<std::string, ClassPtr> ClassByNameTable;
-    typedef std::map<std::string, std::vector<ClassPtr> > ClassByIdTable;
+    typedef std::map<std::string, ClassPtr> ClassByIdTable;
 
     ClassByNameTable m_byName; ///< List of metaclasses sorted by name
     ClassByIdTable m_byId; ///< List of metaclasses sorted by class id
