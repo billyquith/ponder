@@ -25,6 +25,7 @@
 #define CAMP_USEROBJECT_HPP
 
 
+#include <camp/args.hpp>
 #include <camp/classcast.hpp>
 #include <camp/invalidobject.hpp>
 #include <camp/detail/objecttraits.hpp>
@@ -120,6 +121,42 @@ public:
      * \return Reference to the instance's metaclass
      */
     const Class& getClass() const;
+
+    /**
+     * \brief Get the value of an object's property
+     *
+     * This function is defined for convenience, it is a shortcut
+     * for <tt>object.getClass().property(name).get(object);</tt>
+     *
+     * \param property Name of the property to get
+     *
+     * \return Current value of the property
+     */
+    Value get(const std::string& property) const;
+
+    /**
+     * \brief Set the value of an object's property
+     *
+     * This function is defined for convenience, it is a shortcut
+     * for <tt>object.getClass().property(name).set(object, value);</tt>
+     *
+     * \param property Name of the property to set
+     * \param value Value to set
+     */
+    void set(const std::string& property, const Value& value) const;
+
+    /**
+     * \brief Call an object's function
+     *
+     * This function is defined for convenience, it is a shortcut
+     * for <tt>object.getClass().function(name).call(object, args);</tt>
+     *
+     * \param function Name of the function to call
+     * \param args Arguments to pass to the function
+     *
+     * \return Value returned by the function
+     */
+    Value call(const std::string& function, const Args& args = Args::empty) const;
 
     /**
      * \brief Assignment operator

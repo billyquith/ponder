@@ -123,6 +123,13 @@ struct DerivedDeep : public DerivedMultiple
 };
 CAMP_TYPE(DerivedDeep);
 
+struct ObjectTest
+{
+    ObjectTest() : prop(5) {}
+    std::string func(int x) {return boost::lexical_cast<std::string>(x);}
+    int prop;
+};
+CAMP_TYPE(ObjectTest);
 
 struct ComparableBase
 {

@@ -23,6 +23,9 @@
 
 #include <camp/userobject.hpp>
 #include <camp/userproperty.hpp>
+#include <camp/class.hpp>
+#include <camp/function.hpp>
+#include <camp/property.hpp>
 
 
 namespace camp
@@ -89,6 +92,24 @@ const Class& UserObject::getClass() const
     {
         CAMP_ERROR(InvalidObject(*this));
     }
+}
+
+//-------------------------------------------------------------------------------------------------
+Value UserObject::get(const std::string& property) const
+{
+    return getClass().property(property).get(*this);
+}
+
+//-------------------------------------------------------------------------------------------------
+void UserObject::set(const std::string& property, const Value& value) const
+{
+    getClass().property(property).set(*this, value);
+}
+
+//-------------------------------------------------------------------------------------------------
+Value UserObject::call(const std::string& function, const Args& args) const
+{
+    return getClass().function(function).call(*this, args);
 }
 
 //-------------------------------------------------------------------------------------------------

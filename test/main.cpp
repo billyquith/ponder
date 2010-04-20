@@ -1034,6 +1034,18 @@ BOOST_AUTO_TEST_CASE(campUserObjectTest)
     BOOST_CHECK_EQUAL(obj.getClass().name(), "Comparable");
     BOOST_CHECK_EQUAL(ptr.getClass().name(), "Comparable");
 
+    camp::Class::declare<ObjectTest>("ObjectTest")
+        .property("prop", &ObjectTest::prop)
+        .function("func", &ObjectTest::func);
+
+    // ***** convenience interface (get / set / call) *****
+    ObjectTest objTest;
+    camp::UserObject object = objTest;
+    object.set("prop", 20);
+    BOOST_CHECK_EQUAL(object.get("prop").to<int>(), objTest.prop);
+    BOOST_CHECK_EQUAL(objTest.prop, 20);
+    BOOST_CHECK_EQUAL(object.call("func", camp::Args(60)).to<std::string>(), "60");
+
     // ***** getClass with polymorphic object *****
     camp::UserObject polymorphic(static_cast<ComparableBase&>(test));
     BOOST_CHECK_EQUAL(polymorphic.getClass().name(), "Comparable");
