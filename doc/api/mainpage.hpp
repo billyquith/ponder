@@ -88,21 +88,23 @@
  *         .property("age", &Person::age, &Person::setAge)
  *         .function("speak", &Person::speak);
  * 
- *     // Retrieve it by its name
+ *     // Retrieve the metaclass by its name
  *     const camp::Class& metaclass = camp::classByName("Person");
  * 
- *     // Construct a new person named John
+ *     // Use the metaclass to construct a new person named John
  *     Person* john = metaclass.construct<Person>(camp::Args("John"));
- * 
+ *
+ *     // Wrap it in a metaobject
+ *     camp::UserObject metaobject = john;
+ *
  *     // Print its name
- *     std::string name = metaclass.property("name").get(john);
- *     std::cout << "John's name is: " << name << std::endl;
- * 
+ *     std::cout << "John's name is: " << metaobject.get("name") << std::endl;
+ *
  *     // Set its age to 24
- *     metaclass.property("age").set(john, 24);
- * 
+ *     metaobject.set("age", 24);
+ *
  *     // Make John say something
- *     metaclass.function("speak").call(john);
+ *     metaobject.call("speak");
  * 
  *     // Kill John
  *     metaclass.destroy(john);
