@@ -1,6 +1,12 @@
 /*! \mainpage CAMP C++ library documentation
  *
+ * \htmlonly
+ * <div class="logo">
+ * \endhtmlonly
  * \image html logo_camp.png
+ * \htmlonly
+ * </div>
+ * \endhtmlonly
  *
  * \section overview Overview
  *

@@ -86,35 +86,5 @@ if(DOXYGEN_FOUND)
         DESTINATION ${INSTALL_MISC_DIR}/doc
         COMPONENT apidoc
     )
-
-    ###################################
-    # online documentation
-    ###################################
-
-    set(DOXYGEN_OUTPUT_TYPE php)
-    set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc-online/campapi.doxy)
-    set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc-online/api)
-
-    set(DOXYGEN_GENERATE_MAN NO)
-    set(DOXYGEN_GENERATE_HTMLHELP NO)
-    set(HHC_PROGRAM)
-
-    # configure the source Doxyfile by copying it and replacing all @variables@
-    configure_file(${DOXYGEN_INPUT_DIR}/doc/api/Doxyfile.in ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
-
-    # copy necessary doc files
-    file(GLOB image_files ${DOXYGEN_INPUT_DIR}/doc/api/images/*)
-    foreach(file ${image_files})
-        get_filename_component(filename ${file} NAME)
-        configure_file(${file} ${DOXYGEN_OUTPUT_DIR}/${DOXYGEN_OUTPUT_TYPE}/${filename} COPYONLY)
-    endforeach()
-
-    # target setup
-    add_custom_target(onlinedoc
-        COMMAND ${CMAKE_COMMAND} -E echo_append "Building Online API Documentation..."
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
-        COMMAND ${CMAKE_COMMAND} -E echo "Done."
-        WORKING_DIRECTORY ${DOXYGEN_INPUT_DIR}
-    )
 endif()
 
