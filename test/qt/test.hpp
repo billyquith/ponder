@@ -24,55 +24,56 @@
 #ifndef TESTCLASS_HPP
 #define TESTCLASS_HPP
 
-
-/*#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
-#include <camp/value.hpp>
-#include <camp/function.hpp>
-#include <camp/property.hpp>
-#include <camp/arrayproperty.hpp>
-#include <camp/enumobject.hpp>
-#include <camp/userobject.hpp>
-#include <camp/classvisitor.hpp>
-#include <camp/simpleproperty.hpp>
-#include <camp/arrayproperty.hpp>
-#include <camp/enumproperty.hpp>
-#include <camp/userproperty.hpp>
-#include <camp/observer.hpp>
-#include <boost/shared_ptr.hpp>
-#include <QObject>
-#include <string>*/
-
-
 #include <ostream>
 #include <QObject>
 #include <QStringList>
 #include <camp/camptype.hpp>
 #include <camp/class.hpp>
 #include <camp/qt/qt.hpp>
+#include <iostream>
+
+struct Test
+{
+    Test(int i = -1) : x(i) {}
+    int x;
+};
+
+CAMP_TYPE(Test);
+Q_DECLARE_METATYPE(Test)
 
 
-class MapperTest : public QObject
+class PropertiesTest : public QObject
 {
     Q_OBJECT
+
+public:
+
+    enum Enum
+    {
+        one   = 1,
+        two   = 2,
+        three = 3
+    };
+    Q_ENUMS(Enum)
 
 public :
 
     // read only
     Q_PROPERTY(bool m_bool_read READ getBool)
     Q_PROPERTY(int m_int_read READ getInt)
-    Q_PROPERTY(unsigned int m_uint_read READ getUInt)
+    Q_PROPERTY(unsigned long m_ulong_read READ getULong)
     Q_PROPERTY(double m_double_read READ getDouble)
     Q_PROPERTY(QString m_string_read READ getString)
+    Q_PROPERTY(Enum m_enum_read READ getEnum)
     //Q_PROPERTY(QStringList m_stringlist_read READ getStringList) NOT IMPLEMENTED YET
 
     // read-write
     Q_PROPERTY(bool m_bool READ getBool WRITE setBool)
     Q_PROPERTY(int m_int READ getInt WRITE setInt)
-    Q_PROPERTY(unsigned int m_uint READ getUInt WRITE setUInt)
+    Q_PROPERTY(unsigned long m_ulong READ getULong WRITE setULong)
     Q_PROPERTY(double m_double READ getDouble WRITE setDouble)
     Q_PROPERTY(QString m_string READ getString WRITE setString)
+    Q_PROPERTY(Enum m_enum READ getEnum WRITE setEnum)
     //Q_PROPERTY(QStringList m_stringlist READ getStringList WRITE setStringList) NOT IMPLEMENTED YET
 
 public :
@@ -83,14 +84,17 @@ public :
     int getInt() const {return m_int;}
     void setInt(int x) {m_int = x;}
 
-    unsigned int getUInt() const {return m_uint;}
-    void setUInt(unsigned int x) {m_uint = x;}
+    unsigned long getULong() const {return m_ulong;}
+    void setULong(unsigned long x) {m_ulong = x;}
 
     double getDouble() const {return m_double;}
     void setDouble(double x) {m_double = x;}
 
     QString getString() const {return m_string;}
     void setString(QString x) {m_string = x;}
+
+    Enum getEnum() const {return m_enum;}
+    void setEnum(Enum x) {m_enum = x;}
 
     QStringList getStringList() const {return m_stringlist;}
     void setStringList(QStringList x) {m_stringlist = x;}
@@ -99,13 +103,35 @@ private :
 
     bool m_bool;
     int m_int;
-    unsigned int m_uint;
+    unsigned long m_ulong;
     double m_double;
     QString m_string;
+    Enum m_enum;
     QStringList m_stringlist;
 };
 
-CAMP_TYPE_NONCOPYABLE(MapperTest);
+CAMP_TYPE_NONCOPYABLE(PropertiesTest);
+
+CAMP_TYPE(PropertiesTest::Enum);
+Q_DECLARE_METATYPE(PropertiesTest::Enum)
+
+
+class FunctionsTest : public QObject
+{
+    Q_OBJECT
+
+public Q_SLOTS:
+
+    void          f1()                                                           {}
+    bool          f2(bool b)                                                     {return b;}
+    int           f3(int i1, int i2)                                             {return i1 + i2;}
+    unsigned long f4(unsigned long l1, unsigned long l2, unsigned long l3)       {return l1 + l2 + l3;}
+    double        f5(double d1, double d2, double d3, double d4)                 {return d1 + d2 + d3 + d4;}
+    QString       f6(QString s1, QString s2, QString s3, QString s4, QString s5) {return s1 + s2 + s3 + s4 + s5;}
+};
+
+CAMP_TYPE_NONCOPYABLE(FunctionsTest);
+
 
 // So that the print_log_value function of boost.test is happy
 inline std::ostream& operator <<(std::ostream& stream, const QString& str)

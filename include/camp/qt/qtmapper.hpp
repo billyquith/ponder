@@ -26,8 +26,10 @@
 
 
 #include <camp/qt/qtsimpleproperty.hpp>
+#include <camp/qt/qtfunction.hpp>
 #include <camp/function.hpp>
 #include <QMetaObject>
+#include <QMetaMethod>
 
 
 namespace camp_ext
@@ -35,7 +37,11 @@ namespace camp_ext
 /**
  * \brief Mapper for Qt properties
  *
- * This class tells CAMP how to build metaproperties and metafunctions from Qt's metatypes
+ * This class tells CAMP how to build metaproperties and metafunctions from Qt's metatypes.
+ *
+ * This mapper is not complete due to some limitations of either CAMP or Qt:
+ * \li user defined classes are not supported for meta-properties
+ * \li user defined enums and classes are not supported for meta-functions
  */
 template <typename T>
 class QtMapper
@@ -88,7 +94,15 @@ public:
      */
     static std::size_t functionCount()
     {
-        return 0;
+        int count = 0;
+        for (int i = 0; i < T::staticMetaObject.methodCount(); ++i)
+        {
+            // Discard incompatible types
+            if (filter(T::staticMetaObject.method(i)))
+                count++;
+        }
+
+        return count;
     }
 
     /**
@@ -100,7 +114,16 @@ public:
      */
     static camp::Function* function(std::size_t index)
     {
-        return 0;
+        int func = 0;
+        int count = 0;
+        for (func = 0; count <= static_cast<int>(index); ++func)
+        {
+            // Discard incompatible types
+            if (filter(T::staticMetaObject.method(func)))
+                count++;
+        }
+
+        return new QtFunction<T>(T::staticMetaObject.method(func - 1));
     }
 
 private:
@@ -114,7 +137,35 @@ private:
      */
     static bool filter(const QMetaProperty& property)
     {
-        return QtVariantConverter::type(property.type()) != camp::noType;
+        return QtHelper::type(property.type()) != camp::noType
+               || property.isEnumType();
+    }
+
+    /**
+     * \brief Check if a function is mappable to CAMP
+     *
+     * \param function Function to check
+     *
+     * \return True if the function can be bound to CAMP
+     */
+    static bool filter(const QMetaMethod& function)
+    {
+        // Check return type
+        if ((QtHelper::type(function.typeName()) == camp::noType)
+            && QMetaType::type(function.typeName()) != QMetaType::Void) // void maps to camp::noType but is a valid return type
+        {
+            return false;
+        }
+
+        // Check parameters types
+        QList<QByteArray> args = function.parameterTypes();
+        Q_FOREACH(QByteArray arg, args)
+        {
+            if (QtHelper::type(arg) == camp::noType)
+                return false;
+        }
+
+        return true;
     }
 };
 
