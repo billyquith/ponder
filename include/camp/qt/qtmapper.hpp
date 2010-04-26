@@ -40,8 +40,9 @@ namespace camp_ext
  * This class tells CAMP how to build metaproperties and metafunctions from Qt's metatypes.
  *
  * This mapper is not complete due to some limitations of either CAMP or Qt:
- * \li user defined classes are not supported for meta-properties
- * \li user defined enums and classes are not supported for meta-functions
+ * \li enum properties are not mapped using camp::EnumProperty, but camp::SimpleProperty
+ * \li arrays and user defined classes are not supported for meta-properties
+ * \li arrays, user defined enums and classes are not supported for meta-functions
  */
 template <typename T>
 class QtMapper

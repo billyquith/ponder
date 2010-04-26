@@ -53,10 +53,8 @@ BOOST_AUTO_TEST_CASE(QtMapperProperties)
     test.setDouble(0.55);
     test.setString("qt");
     test.setEnum(PropertiesTest::two);
-    test.setStringList(QStringList() << "aaa" << "bbb" << "ccc");
 
     const camp::Class& metaclass = camp::classByType<PropertiesTest>();
-    //const camp::ArrayProperty& arrayProperty = static_cast<const camp::ArrayProperty&>(metaclass.property("m_stringlist"));
     camp::UserObject object = test;
 
     // ***** names *****
@@ -66,14 +64,12 @@ BOOST_AUTO_TEST_CASE(QtMapperProperties)
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_double_read"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_string_read"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_enum_read"), true);
-    //BOOST_CHECK_EQUAL(metaclass.hasProperty("m_stringlist_read"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_bool"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_int"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_ulong"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_double"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_string"), true);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("m_enum"), true);
-    //BOOST_CHECK_EQUAL(metaclass.hasProperty("m_stringlist"), true);
 
     // ***** types *****
     BOOST_CHECK_EQUAL(metaclass.property("m_bool_read").type(), camp::boolType);
@@ -82,7 +78,6 @@ BOOST_AUTO_TEST_CASE(QtMapperProperties)
     BOOST_CHECK_EQUAL(metaclass.property("m_double_read").type(), camp::realType);
     BOOST_CHECK_EQUAL(metaclass.property("m_string_read").type(), camp::stringType);
     BOOST_CHECK_EQUAL(metaclass.property("m_enum_read").type(), camp::enumType);
-    //BOOST_CHECK_EQUAL(metaclass.property("m_stringlist_read").type(), camp::arrayType);
 
     // ***** get *****
     BOOST_CHECK_EQUAL(metaclass.property("m_bool_read").get(object).to<bool>(), true);
@@ -91,7 +86,6 @@ BOOST_AUTO_TEST_CASE(QtMapperProperties)
     BOOST_CHECK_CLOSE(metaclass.property("m_double_read").get(object).to<double>(), 0.55, 1E-5);
     BOOST_CHECK_EQUAL(metaclass.property("m_string_read").get(object).to<std::string>(), "qt");
     BOOST_CHECK_EQUAL(metaclass.property("m_enum_read").get(object).to<PropertiesTest::Enum>(), PropertiesTest::two);
-    //BOOST_CHECK_EQUAL(arrayProperty.get(object, 1).to<std::string>(), "bbb");
 
     // ***** set *****
     metaclass.property("m_bool").set(object, false);
@@ -100,7 +94,6 @@ BOOST_AUTO_TEST_CASE(QtMapperProperties)
     metaclass.property("m_double").set(object, -8.88);
     metaclass.property("m_string").set(object, "camp");
     metaclass.property("m_enum").set(object, PropertiesTest::three);
-    //BOOST_CHECK_EQUAL(arrayProperty.set(object, 2, "zzz");
 
     // ***** get *****
     BOOST_CHECK_EQUAL(metaclass.property("m_bool").get(object).to<bool>(), false);
@@ -109,7 +102,6 @@ BOOST_AUTO_TEST_CASE(QtMapperProperties)
     BOOST_CHECK_CLOSE(metaclass.property("m_double").get(object).to<double>(), -8.88, 1E-5);
     BOOST_CHECK_EQUAL(metaclass.property("m_string").get(object).to<std::string>(), "camp");
     BOOST_CHECK_EQUAL(metaclass.property("m_enum").get(object).to<PropertiesTest::Enum>(), PropertiesTest::three);
-    //BOOST_CHECK_EQUAL(arrayProperty.get(object, 2).to<std::string>(), "zzz");
 }
 
 

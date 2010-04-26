@@ -65,7 +65,6 @@ public :
     Q_PROPERTY(double m_double_read READ getDouble)
     Q_PROPERTY(QString m_string_read READ getString)
     Q_PROPERTY(Enum m_enum_read READ getEnum)
-    //Q_PROPERTY(QStringList m_stringlist_read READ getStringList) NOT IMPLEMENTED YET
 
     // read-write
     Q_PROPERTY(bool m_bool READ getBool WRITE setBool)
@@ -74,7 +73,6 @@ public :
     Q_PROPERTY(double m_double READ getDouble WRITE setDouble)
     Q_PROPERTY(QString m_string READ getString WRITE setString)
     Q_PROPERTY(Enum m_enum READ getEnum WRITE setEnum)
-    //Q_PROPERTY(QStringList m_stringlist READ getStringList WRITE setStringList) NOT IMPLEMENTED YET
 
 public :
 
@@ -96,9 +94,6 @@ public :
     Enum getEnum() const {return m_enum;}
     void setEnum(Enum x) {m_enum = x;}
 
-    QStringList getStringList() const {return m_stringlist;}
-    void setStringList(QStringList x) {m_stringlist = x;}
-
 private :
 
     bool m_bool;
@@ -107,7 +102,6 @@ private :
     double m_double;
     QString m_string;
     Enum m_enum;
-    QStringList m_stringlist;
 };
 
 CAMP_TYPE_NONCOPYABLE(PropertiesTest);
