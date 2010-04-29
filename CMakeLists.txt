@@ -26,7 +26,7 @@ cmake_minimum_required(VERSION 2.6)
 # set project's name
 project(CAMP)
 
-# include global configuration
+# include project configuration
 include(${CMAKE_SOURCE_DIR}/Config.cmake)
 
 # setup MacOSX build environment if necessary
@@ -119,7 +119,6 @@ set(CAMP_SRCS
     include/camp/arraymapper.hpp
     include/camp/valuemapper.hpp
     include/camp/valuevisitor.hpp
-    include/camp/version.hpp
     include/camp/detail/valueimpl.hpp
     include/camp/detail/userpropertyimpl.hpp
     include/camp/detail/userpropertyimpl.inl
@@ -162,6 +161,10 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
 )
 
+# generate version.hpp
+message("Generate version.hpp")
+configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_BINARY_DIR}/version.hpp @ONLY)
+
 # instruct CMake to build a shared library from all of the source files
 add_library(camp SHARED ${CAMP_SRCS})
 
@@ -185,6 +188,11 @@ add_subdirectory(doc)
 
 install(DIRECTORY include
     DESTINATION .
+    COMPONENT devel
+)
+
+install(FILES ${CMAKE_BINARY_DIR}/version.hpp
+    DESTINATION include/camp
     COMPONENT devel
 )
 
