@@ -3,6 +3,7 @@
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 6)
 set(VERSION_PATCH 0)
+set(VERSION_STR "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # Set the default build type to release with debug info
 if(NOT CMAKE_BUILD_TYPE)
@@ -31,4 +32,7 @@ if(WIN32 AND NOT UNIX)
 elseif(UNIX)
     set(INSTALL_MISC_DIR share/camp)
 endif()
+
+# setup MacOSX build environment if necessary
+include(${CMAKE_SOURCE_DIR}/cmake/MacOSX.cmake)
 

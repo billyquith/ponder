@@ -27,7 +27,7 @@ cmake_minimum_required(VERSION 2.6)
 project(CAMPDOC)
 
 # include global configuration
-include(${CMAKE_SOURCE_DIR}/Config.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
 
 ###############################
 # doc
