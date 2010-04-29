@@ -29,9 +29,6 @@ project(CAMP)
 # include project configuration
 include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
 
-# setup MacOSX build environment if necessary
-include(${CMAKE_SOURCE_DIR}/cmake/MacOSX.cmake)
-
 # all source files
 set(CAMP_SRCS
     include/camp/userproperty.hpp
