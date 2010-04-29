@@ -25,7 +25,7 @@
 #define CAMP_QT_QTSIMPLEPROPERTY_HPP
 
 
-#include <camp/qt/qtvariantconverter.hpp>
+#include <camp/qt/qthelper.hpp>
 #include <camp/simpleproperty.hpp>
 #include <camp/userobject.hpp>
 #include <camp/value.hpp>
@@ -38,9 +38,9 @@ namespace camp_ext
 /**
  * \brief Specialization of camp::SimpleProperty implemented using a Qt property
  *
- * This class is instanciated and returned by QMapper<T>.
+ * This class is instanciated and returned by QtMapper<T>.
  *
- * \sa QMapper
+ * \sa QtMapper
  */
 template <typename T>
 class QtSimpleProperty : public camp::SimpleProperty
@@ -53,7 +53,7 @@ public:
      * \param metaProperty Qt meta property
      */
     QtSimpleProperty(const QMetaProperty& metaProperty)
-        : camp::SimpleProperty(metaProperty.name(), metaProperty.isEnumType() ? camp::enumType : QtVariantConverter::type(metaProperty.type()))
+        : camp::SimpleProperty(metaProperty.name(), metaProperty.isEnumType() ? camp::enumType : QtHelper::type(metaProperty.type()))
         , m_metaProperty(metaProperty)
     {
     }
@@ -67,7 +67,7 @@ public:
      */
     virtual camp::Value getValue(const camp::UserObject& object) const
     {
-        return QtVariantConverter::toValue(m_metaProperty.read(object.get<T*>()));
+        return QtHelper::variantToValue(m_metaProperty.read(object.get<T*>()));
     }
 
     /**
@@ -78,7 +78,7 @@ public:
      */
     virtual void setValue(const camp::UserObject& object, const camp::Value& value) const
     {
-        m_metaProperty.write(object.get<T*>(), QtVariantConverter::fromValue(value));
+        m_metaProperty.write(object.get<T*>(), QtHelper::valueToVariant(value));
     }
 
     /**

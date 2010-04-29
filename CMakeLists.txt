@@ -140,13 +140,14 @@ set(CAMP_SRCS
     include/camp/detail/yesnotype.hpp
     include/camp/detail/objectholder.hpp
     include/camp/detail/objectholder.inl
-    include/camp/qt/qtvariantconverter.hpp
+    include/camp/qt/qthelper.hpp
     include/camp/qt/qtsimpleproperty.hpp
     include/camp/qt/qtmapper.hpp
     include/camp/qt/qt.hpp
     include/camp/qt/qstring.hpp
     include/camp/qt/qlist.hpp
     include/camp/qt/qvector.hpp
+    include/camp/qt/qtfunction.hpp
 )
 
 # find Boost
