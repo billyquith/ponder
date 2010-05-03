@@ -21,14 +21,6 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 2.6)
-
-# set project's name
-project(CAMPDOC)
-
-# include global configuration
-include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
-
 ###############################
 # doc
 ###############################
