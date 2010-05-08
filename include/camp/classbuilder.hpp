@@ -69,20 +69,17 @@ public:
     /**
      * \brief Declare a base metaclass
      *
-     * The template parameter U is the C++ base class of T. If multiple metaclasses
-     * are bound to U, use the className argument to identify the one you want.
+     * The template parameter U is the C++ base class of T.
      *
      * This function makes the target metaclass inherit of all the metaproperties and
      * metafunctions of the given base metaclass.
      *
-     * \param className Name of the base metaclass (empty by default)
-     *
      * \return Reference to this, in order to chain other calls
      *
-     * \throw InvalidClass className is not empty and doesn't name an existing metaclass, or className is empty and no metaclass is bound to U
+     * \throw InvalidClass no metaclass is bound to U
      */
     template <typename U>
-    ClassBuilder<T>& base(const std::string& className = "");
+    ClassBuilder<T>& base();
 
     /**
      * \brief Declare a new property from a single accessor
