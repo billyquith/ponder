@@ -28,7 +28,7 @@
 #include <camp/enumobject.hpp>
 #include <camp/userobject.hpp>
 #include <camp/valuemapper.hpp>
-#include <camp/invalidvalue.hpp>
+#include <camp/badtype.hpp>
 #include <boost/variant/static_visitor.hpp>
 #include <ostream>
 #include <string>
@@ -66,7 +66,7 @@ struct ConvertVisitor : public boost::static_visitor<T>
     T operator()(NoType) const
     {
         // Error: trying to convert an empty value
-        CAMP_ERROR(InvalidValue(noType, mapType<T>()));
+        CAMP_ERROR(BadType(noType, mapType<T>()));
     }
 };
 
@@ -90,7 +90,7 @@ struct ConvertVisitor<UserObject> : public boost::static_visitor<UserObject>
     UserObject operator()(const U&) const
     {
         // Error: trying to convert a non-user type to a UserObject
-        CAMP_ERROR(InvalidValue(mapType<U>(), userType));
+        CAMP_ERROR(BadType(mapType<U>(), userType));
     }
 };
 

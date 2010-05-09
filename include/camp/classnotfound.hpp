@@ -21,8 +21,8 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDPROPERTY_HPP
-#define CAMP_INVALIDPROPERTY_HPP
+#ifndef CAMP_CLASSNOTFOUND_HPP
+#define CAMP_CLASSNOTFOUND_HPP
 
 
 #include <camp/error.hpp>
@@ -30,56 +30,27 @@
 
 namespace camp
 {
-class Class;
-
 /**
- * \brief Error thrown when requesting a property which doesn't exist in a metaclass
+ * \brief Error thrown when a metaclass couldn't be found (either by its name or its id)
  */
-class CAMP_API InvalidProperty : public Error
+class CAMP_API ClassNotFound : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param property Name of the requested property
-     * \param ownerClass Owner metaclass
+     * \param name Name of the requested class
      */
-    InvalidProperty(const char* property, const Class& ownerClass) throw();
+    ClassNotFound(const std::string& name);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidProperty() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the requested property name
-     *
-     * \return Name of the requested property
-     */
-    const char* property() const throw();
-
-    /**
-     * \brief Return the owner metaclass
-     *
-     * \return Reference to the owner metaclass
-     */
-    const Class& ownerClass() const throw();
-
-private:
-
-    char m_property[256]; ///< Name of the requested property
-    const Class* m_ownerClass; ///< Owner metaclass
+    virtual ~ClassNotFound() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDPROPERTY_HPP
+#endif // CAMP_CLASSNOTFOUND_HPP

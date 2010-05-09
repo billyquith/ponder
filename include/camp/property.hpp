@@ -77,7 +77,7 @@ public:
      *
      * \return True if the property can be read, false otherwise
      *
-     * \throw InvalidObject object has an invalid value
+     * \throw NullObject object is invalid
      */
     bool readable(const UserObject& object) const;
 
@@ -88,7 +88,7 @@ public:
      *
      * \return True if the property can be written, false otherwise
      *
-     * \throw InvalidObject object has an invalid value
+     * \throw NullObject object is invalid
      */
     bool writable(const UserObject& object) const;
 
@@ -99,8 +99,8 @@ public:
      *
      * \return Value of the property
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess property is not readable
+     * \throw NullObject object is invalid
+     * \throw ForbiddenRead property is not readable
      */
     Value get(const UserObject& object) const;
 
@@ -110,9 +110,9 @@ public:
      * \param object Object
      * \param value New value to assign to the property
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess property is not writable
-     * \throw InvalidValue value can't be converted to the property's type
+     * \throw NullObject \a object is invalid
+     * \throw ForbiddenWrite property is not writable
+     * \throw BadType \a value can't be converted to the property's type
      */
     void set(const UserObject& object, const Value& value) const;
 

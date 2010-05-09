@@ -21,66 +21,37 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDVALUE_HPP
-#define CAMP_INVALIDVALUE_HPP
+#ifndef CAMP_PROPERTYNOTFOUND_HPP
+#define CAMP_PROPERTYNOTFOUND_HPP
 
 
 #include <camp/error.hpp>
-#include <camp/type.hpp>
 
 
 namespace camp
 {
 /**
- * \brief Error thrown when using an invalid value
- *
- * This error may be thrown when a value can't be converted to the requested type
+ * \brief Error thrown when a property can't be found in a metaclass (by its name)
  */
-class CAMP_API InvalidValue : public Error
+class CAMP_API PropertyNotFound : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param sourceType Type of the source value
-     * \param requestedType Type the value is being converted to
+     * \param name Name of the requested property
+     * \param className Name of the owner metaclass
      */
-    InvalidValue(Type sourceType, Type requestedType) throw();
+    PropertyNotFound(const std::string& name, const std::string& className);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidValue() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the type of the source value
-     *
-     * \return Source type
-     */
-    Type sourceType() const throw();
-
-    /**
-     * \brief Return the type the value is being converted to
-     *
-     * \return Requested type
-     */
-    Type requestedType() const throw();
-
-private:
-
-    Type m_sourceType; ///< Type of the source value
-    Type m_requestedType; ///< Type the value is being converted to
+    virtual ~PropertyNotFound() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDVALUE_HPP
+#endif // CAMP_PROPERTYNOTFOUND_HPP

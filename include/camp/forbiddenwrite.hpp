@@ -21,8 +21,8 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDENUMNAME_HPP
-#define CAMP_INVALIDENUMNAME_HPP
+#ifndef CAMP_FORBIDDENWRITE_HPP
+#define CAMP_FORBIDDENWRITE_HPP
 
 
 #include <camp/error.hpp>
@@ -30,56 +30,27 @@
 
 namespace camp
 {
-class Enum;
-
 /**
- * \brief Error thrown when requesting the name of a pair which doesn't exist in a metaenum
+ * \brief Error thrown when trying to write a function that is not writable
  */
-class CAMP_API InvalidEnumName : public Error
+class CAMP_API ForbiddenWrite : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param name Name of the requested pair
-     * \param ownerEnum Owner metaenum
+     * \param propertyName Name of the property
      */
-    InvalidEnumName(const char* name, const Enum& ownerEnum) throw();
+    ForbiddenWrite(const std::string& propertyName);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidEnumName() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the requested pair name
-     *
-     * \return Name of the requested pair
-     */
-    const char* name() const throw();
-
-    /**
-     * \brief Return the owner metaenum
-     *
-     * \return Reference to the owner metaenum
-     */
-    const Enum& ownerEnum() const throw();
-
-private:
-
-    char m_name[256]; ///< Name of the requested pair
-    const Enum* m_ownerEnum; ///< Owner metaenum
+    virtual ~ForbiddenWrite() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDENUMNAME_HPP
+#endif // CAMP_FORBIDDENWRITE_HPP

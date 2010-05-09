@@ -76,7 +76,7 @@ public:
      *
      * \return Reference to this, in order to chain other calls
      *
-     * \throw InvalidClass no metaclass is bound to U
+     * \throw ClassNotFound no metaclass is bound to U
      */
     template <typename U>
     ClassBuilder<T>& base();

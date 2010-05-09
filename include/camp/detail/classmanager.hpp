@@ -88,7 +88,7 @@ public:
      *
      * \return Reference to the index-th metaclass
      *
-     * \throw InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Class& getByIndex(std::size_t index) const;
 
@@ -99,7 +99,7 @@ public:
      *
      * \return Reference to the requested metaclass
      *
-     * \throw InvalidClass name is not the name of an existing metaclass
+     * \throw ClassNotFound name is not the name of an existing metaclass
      */
     const Class& getByName(const std::string& name) const;
 
@@ -110,7 +110,7 @@ public:
      *
      * \return Reference to the requested metaclass
      *
-     * \throw InvalidClass id is not the name of an existing metaclass
+     * \throw ClassNotFound id is not the name of an existing metaclass
      */
     const Class& getById(const std::string& id) const;
 

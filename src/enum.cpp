@@ -22,9 +22,9 @@
 
 
 #include <camp/enum.hpp>
-#include <camp/invalidindex.hpp>
-#include <camp/invalidenumname.hpp>
-#include <camp/invalidenumvalue.hpp>
+#include <camp/outofrange.hpp>
+#include <camp/enumnamenotfound.hpp>
+#include <camp/enumvaluenotfound.hpp>
 #include <algorithm>
 
 
@@ -78,8 +78,9 @@ std::size_t Enum::size() const
 //-------------------------------------------------------------------------------------------------
 const Enum::Pair& Enum::pair(std::size_t index) const
 {
+    // Make sure that the index is not out of range
     if (index >= m_pairs.size())
-        CAMP_ERROR(InvalidIndex(index, m_pairs.size()));
+        CAMP_ERROR(OutOfRange(index, m_pairs.size()));
 
     return m_pairs[index];
 }
@@ -102,7 +103,7 @@ const std::string& Enum::name(long value) const
     PairArray::const_iterator it = std::find_if(m_pairs.begin(), m_pairs.end(), FindByValue(value));
 
     if (it == m_pairs.end())
-        CAMP_ERROR(InvalidEnumValue(value, *this));
+        CAMP_ERROR(EnumValueNotFound(value, name()));
 
     return it->name;
 }
@@ -113,7 +114,7 @@ long Enum::value(const std::string& name) const
     PairArray::const_iterator it = std::find_if(m_pairs.begin(), m_pairs.end(), FindByName(name));
 
     if (it == m_pairs.end())
-        CAMP_ERROR(InvalidEnumName(name.c_str(), *this));
+        CAMP_ERROR(EnumNameNotFound(name, m_name));
 
     return it->value;
 }

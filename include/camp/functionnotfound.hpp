@@ -21,8 +21,8 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDFUNCTION_HPP
-#define CAMP_INVALIDFUNCTION_HPP
+#ifndef CAMP_FUNCTIONNOTFOUND_HPP
+#define CAMP_FUNCTIONNOTFOUND_HPP
 
 
 #include <camp/error.hpp>
@@ -30,56 +30,28 @@
 
 namespace camp
 {
-class Class;
-
 /**
- * \brief Error thrown when requesting a function which doesn't exist in a metaclass
+ * \brief Error thrown when a function can't be found in a metaclass (by its name)
  */
-class CAMP_API InvalidFunction : public Error
+class CAMP_API FunctionNotFound : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param function Name of the requested function
-     * \param ownerClass Owner metaclass
+     * \param name Name of the requested function
+     * \param className Name of the owner metaclass
      */
-    InvalidFunction(const char* function, const Class& ownerClass) throw();
+    FunctionNotFound(const std::string& name, const std::string& className);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidFunction() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the requested function name
-     *
-     * \return Name of the requested function
-     */
-    const char* function() const throw();
-
-    /**
-     * \brief Return the owner metaclass
-     *
-     * \return Reference to the owner metaclass
-     */
-    const Class& ownerClass() const throw();
-
-private:
-
-    char m_function[256]; ///< Name of the requested function
-    const Class* m_ownerClass; ///< Owner metaclass
+    virtual ~FunctionNotFound() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDFUNCTION_HPP
+#endif // CAMP_FUNCTIONNOTFOUND_HPP

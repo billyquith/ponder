@@ -21,65 +21,56 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDARGUMENT_HPP
-#define CAMP_INVALIDARGUMENT_HPP
+#ifndef CAMP_BADTYPE_HPP
+#define CAMP_BADTYPE_HPP
 
 
-#include <camp/invalidvalue.hpp>
+#include <camp/error.hpp>
+#include <camp/type.hpp>
 
 
 namespace camp
 {
 /**
- * \brief Error thrown when passing an invalid argument to a function call
+ * \brief Error thrown when providing a metavalue whose type is incompatible with what's expected
  */
-class CAMP_API InvalidArgument : public InvalidValue
+class CAMP_API BadType : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param sourceType Type of the source value
-     * \param requestedType Type the value is being converted to
-     * \param function Name of the owner function
-     * \param index Index of the argument
+     * \param provided Provided type
+     * \param expected Expected type
      */
-    InvalidArgument(Type sourceType, Type requestedType, const char* function, std::size_t index) throw();
+    BadType(Type provided, Type expected);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidArgument() throw();
+    virtual ~BadType() throw();
+
+protected:
 
     /**
-     * \brief Return a message describing the error
+     * \brief Constructor for derived classes
      *
-     * \return Pointer to a string describing the error
+     * \param message Description of the error
      */
-    virtual const char* what() const throw();
+    BadType(const std::string& message);
 
     /**
-     * \brief Return the name of the owner function
+     * \brief Get the string name of a CAMP type
      *
-     * \return Name of the function
-     */
-    const char* function() const throw();
-
-    /**
-     * \brief Return the index of the argument
+     * \param type Type to convert
      *
-     * \return Index of the argument within the function call
+     * \return Name of the provided type
      */
-    std::size_t index() const throw();
-
-private:
-
-    char m_function[256]; ///< Name of the owner function
-    std::size_t m_index; ///< Index of the argument in the function call
+    static std::string typeName(Type type);
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDARGUMENT_HPP
+#endif // CAMP_BADTYPE_HPP

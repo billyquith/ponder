@@ -45,7 +45,7 @@ template <typename A>
 void EnumPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
     if (!m_accessor.set(object.get<typename A::ClassType>(), value))
-        CAMP_ERROR(InvalidAccess(name().c_str(), InvalidAccess::Write));
+        CAMP_ERROR(ForbiddenWrite(name()));
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -88,7 +88,7 @@ public:
      *
      * \return Reference to the index-th metaenum
      *
-     * \throw InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Enum& getByIndex(std::size_t index) const;
 
@@ -99,7 +99,7 @@ public:
      *
      * \return Reference to the requested metaenum
      *
-     * \throw InvalidEnum name is not the name of an existing metaenum
+     * \throw EnumNotFound name is not the name of an existing metaenum
      */
     const Enum& getByName(const std::string& name) const;
 
@@ -110,7 +110,7 @@ public:
      *
      * \return Reference to the requested metaenum
      *
-     * \throw InvalidEnum id is not the name of an existing metaenum
+     * \throw EnumNotFound id is not the name of an existing metaenum
      */
     const Enum& getById(const std::string& id) const;
 

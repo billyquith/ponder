@@ -23,7 +23,7 @@
 
 #include <camp/args.hpp>
 #include <camp/value.hpp>
-#include <camp/invalidindex.hpp>
+#include <camp/outofrange.hpp>
 
 
 namespace camp
@@ -84,8 +84,9 @@ std::size_t Args::count() const
 //-------------------------------------------------------------------------------------------------
 const Value& Args::operator[](std::size_t index) const
 {
+    // Make sure that the index is not out of range
     if (index >= m_values.size())
-        CAMP_ERROR(InvalidIndex(index, m_values.size()));
+        CAMP_ERROR(OutOfRange(index, m_values.size()));
 
     return m_values[index];
 }

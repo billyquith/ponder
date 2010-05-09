@@ -21,39 +21,36 @@
 ****************************************************************************/
 
 
-#include <camp/invalidenumvalue.hpp>
+#ifndef CAMP_FORBIDDENREAD_HPP
+#define CAMP_FORBIDDENREAD_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-InvalidEnumValue::InvalidEnumValue(long value, const Enum& ownerEnum) throw()
-    : m_value(value)
-    , m_ownerEnum(&ownerEnum)
+/**
+ * \brief Error thrown when trying to read a property that is not readable
+ */
+class CAMP_API ForbiddenRead : public Error
 {
-}
+public:
 
-//-------------------------------------------------------------------------------------------------
-InvalidEnumValue::~InvalidEnumValue() throw()
-{
-}
+    /**
+     * \brief Constructor
+     *
+     * \param propertyName Name of the property
+     */
+    ForbiddenRead(const std::string& propertyName);
 
-//-------------------------------------------------------------------------------------------------
-const char* InvalidEnumValue::what() const throw()
-{
-    return "The requested value doesn't exist in the metaenum";
-}
-
-//-------------------------------------------------------------------------------------------------
-long InvalidEnumValue::value() const throw()
-{
-    return m_value;
-}
-
-//-------------------------------------------------------------------------------------------------
-const Enum& InvalidEnumValue::ownerEnum() const throw()
-{
-    return *m_ownerEnum;
-}
+    /**
+     * \brief Destructor
+     */
+    virtual ~ForbiddenRead() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_FORBIDDENREAD_HPP

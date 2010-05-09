@@ -23,8 +23,9 @@
 
 #include <camp/detail/enummanager.hpp>
 #include <camp/enum.hpp>
-#include <camp/invalidenum.hpp>
-#include <camp/invalidindex.hpp>
+#include <camp/enumalreadycreated.hpp>
+#include <camp/enumnotfound.hpp>
+#include <camp/outofrange.hpp>
 #include <camp/observer.hpp>
 #include <cassert>
 
@@ -45,7 +46,7 @@ Enum& EnumManager::registerNew(const std::string& name, const std::string& id)
 {
     // First make sure that the enum doesn't already exist
     if ((m_byName.find(name) != m_byName.end()) || (m_byId.find(id) != m_byId.end()))
-        CAMP_ERROR(InvalidEnum(name.c_str()));
+        CAMP_ERROR(EnumAlreadyCreated(name, id));
 
     // Create the new enum and insert it into the lookup tables
     EnumPtr newEnum = EnumPtr(new Enum(name));
@@ -71,9 +72,9 @@ std::size_t EnumManager::count() const
 //-------------------------------------------------------------------------------------------------
 const Enum& EnumManager::getByIndex(std::size_t index) const
 {
-    // Make sure the index is valid
+    // Make sure that the index is not out of range
     if (index >= m_byName.size())
-        CAMP_ERROR(InvalidIndex(index, m_byName.size()));
+        CAMP_ERROR(OutOfRange(index, m_byName.size()));
 
     EnumByNameTable::const_iterator it = m_byName.begin();
     std::advance(it, index);
@@ -86,7 +87,7 @@ const Enum& EnumManager::getByName(const std::string& name) const
 {
     EnumByNameTable::const_iterator it = m_byName.find(name);
     if (it == m_byName.end())
-        CAMP_ERROR(InvalidEnum(name.c_str()));
+        CAMP_ERROR(EnumNotFound(name));
 
     return *it->second;
 }
@@ -96,7 +97,7 @@ const Enum& EnumManager::getById(const std::string& id) const
 {
     EnumByIdTable::const_iterator it = m_byId.find(id);
     if (it == m_byId.end())
-        CAMP_ERROR(InvalidEnum(id.c_str()));
+        CAMP_ERROR(EnumNotFound(id));
 
     return *it->second;
 }

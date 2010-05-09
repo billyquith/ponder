@@ -21,16 +21,37 @@
 ****************************************************************************/
 
 
-#include <camp/classcast.hpp>
-#include <camp/class.hpp>
+#ifndef CAMP_ENUMNAMENOTFOUND_HPP
+#define CAMP_ENUMNAMENOTFOUND_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
+/**
+ * \brief Error thrown when the value of a metaenum couldn't be found by its name
+ */
+class CAMP_API EnumNameNotFound : public Error
 {
-    return sourceClass.applyOffset(pointer, targetClass);
-}
+public:
+
+    /**
+     * \brief Constructor
+     *
+     * \param name Name of the requested metaenum member
+     * \param enumName Name of the owner metaenum
+     */
+    EnumNameNotFound(const std::string& name, const std::string& enumName);
+
+    /**
+     * \brief Destructor
+     */
+    virtual ~EnumNameNotFound() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_ENUMNAMENOTFOUND_HPP

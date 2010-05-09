@@ -28,7 +28,7 @@
 #include <camp/config.hpp>
 #include <camp/args.hpp>
 #include <camp/error.hpp>
-#include <camp/invalidconstruction.hpp>
+#include <camp/constructornotfound.hpp>
 #include <camp/tagholder.hpp>
 #include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
@@ -145,7 +145,7 @@ public:
      *
      * \return Reference to the index-th base metaclass of this metaclass
      *
-     * \throw camp::InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Class& base(std::size_t index) const;
 
@@ -172,7 +172,7 @@ public:
      *
      * \return Reference to the function
      *
-     * \throw camp::InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Function& function(std::size_t index) const;
 
@@ -183,7 +183,7 @@ public:
      *
      * \return Reference to the function
      *
-     * \throw camp::InvalidFunction name doesn't exist in the metaclass
+     * \throw FunctionNotFound \a name is not a function of the metaclass
      */
     const Function& function(const std::string& name) const;
 
@@ -210,7 +210,7 @@ public:
      *
      * \return Reference to the property
      *
-     * \throw camp::InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Property& property(std::size_t index) const;
 
@@ -221,7 +221,7 @@ public:
      *
      * \return Reference to the property
      *
-     * \throw camp::InvalidProperty name doesn't exist in the metaclass
+     * \throw PropertyNotFound \a name is not a property of the metaclass
      */
     const Property& property(const std::string& name) const;
 
@@ -236,7 +236,9 @@ public:
      *
      * \return Pointer to the new instance, or 0 if it failed
      *
-     * \throw camp::InvalidConstructor no matching constructor was found
+     * \throw ConstructorNotFound no matching constructor was found
+     * \throw ClassUnrelated T is not a base or derived class of this
+     * \throw BadArgument one of the arguments can't be converted to the requested type
      */
     template <typename T>
     T* construct(const Args& args = Args::empty) const;
@@ -270,9 +272,11 @@ public:
      * \param pointer Pointer to convert
      * \param target Target metaclass to convert to
      *
-     * \return True if the conversion was properly done, false on error
+     * \return Converted pointer
+     *
+     * \throw ClassUnrelated \a target is not a base nor a derived class of this
      */
-    bool applyOffset(void*& pointer, const Class& target) const;
+    void* applyOffset(void* pointer, const Class& target) const;
 
     /**
      * \brief Operator == to check equality between two metaclasses

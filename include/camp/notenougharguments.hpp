@@ -21,16 +21,38 @@
 ****************************************************************************/
 
 
-#include <camp/classcast.hpp>
-#include <camp/class.hpp>
+#ifndef CAMP_NOTENOUGHARGUMENTS_HPP
+#define CAMP_NOTENOUGHARGUMENTS_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
+/**
+ * \brief Error thrown when a declaring a metaclass that already exists
+ */
+class CAMP_API NotEnoughArguments : public Error
 {
-    return sourceClass.applyOffset(pointer, targetClass);
-}
+public:
+
+    /**
+     * \brief Constructor
+     *
+     * \param functionName Name of the function
+     * \param provided Number of arguments provided
+     * \param expected Number of arguments expected
+     */
+    NotEnoughArguments(const std::string& functionName, std::size_t provided, std::size_t expected);
+
+    /**
+     * \brief Destructor
+     */
+    virtual ~NotEnoughArguments() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_NOTENOUGHARGUMENTS_HPP

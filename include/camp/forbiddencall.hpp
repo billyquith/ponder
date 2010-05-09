@@ -21,8 +21,8 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDINDEX_HPP
-#define CAMP_INVALIDINDEX_HPP
+#ifndef CAMP_FORBIDDENCALL_HPP
+#define CAMP_FORBIDDENCALL_HPP
 
 
 #include <camp/error.hpp>
@@ -31,55 +31,26 @@
 namespace camp
 {
 /**
- * \brief Error thrown when using an index which is out of bounds
- *
- * This error may be thrown by every function which takes an index in its parameters
+ * \brief Error thrown when calling a function that is not callable
  */
-class CAMP_API InvalidIndex : public Error
+class CAMP_API ForbiddenCall : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param index Invalid index
-     * \param size Allowed size
+     * \param functionName Name of the function
      */
-    InvalidIndex(std::size_t index, std::size_t size) throw();
+    ForbiddenCall(const std::string& functionName);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidIndex() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the invalid index which was passed
-     *
-     * \return Index
-     */
-    std::size_t index() const throw();
-
-    /**
-     * \brief Return the allowed size
-     *
-     * \return Valid range
-     */
-    std::size_t size() const throw();
-
-private:
-
-    std::size_t m_index; ///< Invalid index
-    std::size_t m_size; ///< Valid size
+    virtual ~ForbiddenCall() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDINDEX_HPP
+#endif // CAMP_FORBIDDENCALL_HPP

@@ -84,7 +84,7 @@ public:
      *
      * \return Type of the index-th argument
      *
-     * \throw InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     Type argType(std::size_t index) const;
 
@@ -95,7 +95,7 @@ public:
      *
      * \return True if the function can be called, false otherwise
      *
-     * \throw InvalidObject object has an invalid value
+     * \throw NullObject object is invalid
      */
     bool callable(const UserObject& object) const;
 
@@ -107,9 +107,10 @@ public:
      *
      * \return Value returned by the function call
      *
-     * \throw InvalidAccess function is not callable
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidArgument one of the arguments can't be converted to the requested type
+     * \throw ForbiddenCall the function is not callable
+     * \throw NullObject object is invalid
+     * \throw NotEnoughArguments too few arguments are provided
+     * \throw BadArgument one of the arguments can't be converted to the requested type
      */
     Value call(const UserObject& object, const Args& args = Args::empty) const;
 
@@ -145,8 +146,8 @@ protected:
      *
      * \return Value returned by the function call
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidArgument one of the arguments can't be converted to the requested type
+     * \throw NullObject object is invalid
+     * \throw BadArgument one of the arguments can't be converted to the requested type
      */
     virtual Value execute(const UserObject& object, const Args& args) const = 0;
 

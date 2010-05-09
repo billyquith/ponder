@@ -21,33 +21,36 @@
 ****************************************************************************/
 
 
-#include <camp/invalidenum.hpp>
-#include <string.h>
+#ifndef CAMP_CONSTRUCTORNOTFOUND_HPP
+#define CAMP_CONSTRUCTORNOTFOUND_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-InvalidEnum::InvalidEnum(const char* enumName) throw()
+/**
+ * \brief Error thrown when no constructor was found to match the provided list of arguments
+ */
+class CAMP_API ConstructorNotFound : public Error
 {
-    strncpy(m_enumName, enumName ? enumName : "", sizeof(m_enumName));
-}
+public:
 
-//-------------------------------------------------------------------------------------------------
-InvalidEnum::~InvalidEnum() throw()
-{
-}
+    /**
+     * \brief Constructor
+     *
+     * \param className Name of the owner class
+     */
+    ConstructorNotFound(const std::string& className);
 
-//-------------------------------------------------------------------------------------------------
-const char* InvalidEnum::what() const throw()
-{
-    return "Invalid metaenum request";
-}
-
-//-------------------------------------------------------------------------------------------------
-const char* InvalidEnum::enumName() const throw()
-{
-    return m_enumName;
-}
+    /**
+     * \brief Destructor
+     */
+    virtual ~ConstructorNotFound() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_CONSTRUCTORNOTFOUND_HPP

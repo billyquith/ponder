@@ -120,7 +120,7 @@ public:
      *
      * \return index-th pair
      *
-     * \throw InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Pair& pair(std::size_t index) const;
 

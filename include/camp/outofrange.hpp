@@ -21,33 +21,37 @@
 ****************************************************************************/
 
 
-#include <camp/invalidclass.hpp>
-#include <string.h>
+#ifndef CAMP_OUTOFRANGE_HPP
+#define CAMP_OUTOFRANGE_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-InvalidClass::InvalidClass(const char* className) throw()
+/**
+ * \brief Error thrown when using an index which is out of bounds
+ */
+class CAMP_API OutOfRange : public Error
 {
-    strncpy(m_className, className ? className : "", sizeof(m_className));
-}
+public:
 
-//-------------------------------------------------------------------------------------------------
-InvalidClass::~InvalidClass() throw()
-{
-}
+    /**
+     * \brief Constructor
+     *
+     * \param index Invalid index
+     * \param size Allowed size
+     */
+    OutOfRange(std::size_t index, std::size_t size);
 
-//-------------------------------------------------------------------------------------------------
-const char* InvalidClass::what() const throw()
-{
-    return "Invalid metaclass request";
-}
-
-//-------------------------------------------------------------------------------------------------
-const char* InvalidClass::className() const throw()
-{
-    return m_className;
-}
+    /**
+     * \brief Destructor
+     */
+    virtual ~OutOfRange() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_OUTOFRANGE_HPP

@@ -21,40 +21,39 @@
 ****************************************************************************/
 
 
-#include <camp/invalidenumname.hpp>
-#include <string.h>
+#ifndef CAMP_BADARGUMENT_HPP
+#define CAMP_BADARGUMENT_HPP
+
+
+#include <camp/badtype.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-InvalidEnumName::InvalidEnumName(const char* name, const Enum& ownerEnum) throw()
-    : m_ownerEnum(&ownerEnum)
+/**
+ * \brief Error thrown when providing a function argument which is incompatible with what the function expects
+ */
+class CAMP_API BadArgument : public BadType
 {
-    strncpy(m_name, name ? name : "", sizeof(m_name));
-}
+public:
 
-//-------------------------------------------------------------------------------------------------
-InvalidEnumName::~InvalidEnumName() throw()
-{
-}
+    /**
+     * \brief Constructor
+     *
+     * \param provided Provided type
+     * \param expected Expected type
+     * \param index Index of the argument in the function prototype
+     * \param functionName Name of the function
+     */
+    BadArgument(Type provided, Type expected, std::size_t index, const std::string& functionName);
 
-//-------------------------------------------------------------------------------------------------
-const char* InvalidEnumName::what() const throw()
-{
-    return "The requested name doesn't exist in the metaenum";
-}
-
-//-------------------------------------------------------------------------------------------------
-const char* InvalidEnumName::name() const throw()
-{
-    return m_name;
-}
-
-//-------------------------------------------------------------------------------------------------
-const Enum& InvalidEnumName::ownerEnum() const throw()
-{
-    return *m_ownerEnum;
-}
+    /**
+     * \brief Destructor
+     */
+    virtual ~BadArgument() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_BADARGUMENT_HPP

@@ -26,8 +26,10 @@
 
 
 #include <camp/config.hpp>
-#include <cstdlib>
+#include <boost/current_function.hpp>
+#include <boost/lexical_cast.hpp>
 #include <exception>
+#include <string>
 
 
 namespace camp
@@ -52,68 +54,65 @@ public:
     virtual const char* what() const throw();
 
     /**
-     * \brief Get the source file where the exception was thrown
+     * \brief Return the error location (file + line + function)
      *
-     * \return Pointer to a string containing the source filename
+     * \return String containing the error location
      */
-    const char* file() const throw();
+    virtual const char* where() const throw();
 
     /**
-     * \brief Get the line number in the source file where the exception was thrown
+     * \brief Prepare an error to be thrown
      *
-     * \return Line number
-     */
-    int line() const throw();
-
-    /**
-     * \brief Set the source file and the line number where the exception was thrown
+     * This function is meant for internal use only. It adds
+     * the current context of execution (file, line and function)
+     * to the given error and returns it.
      *
-     * This function is meant for internal use only
-     *
+     * \param error Error to prepare
      * \param file Source filename
      * \param line Line number in the source file
+     * \param function Name of the function where the error was thrown
+     *
+     * \return Modified error, ready to be thrown
      */
-    void setContext(const char* file, int line) throw();
+    template <typename T>
+    static T prepare(T error, const std::string& file, int line, const std::string& function);
 
 protected:
 
     /**
      * \brief Default constructor
+     *
+     * \param message Error message to return in what()
      */
-    Error();
+    Error(const std::string& message);
+
+    /**
+     * \brief Helper function to convert anything to a string
+     *
+     * This is a convenience function provided to help derived
+     * classes to easily build their full message
+     *
+     * \param x Value to convert
+     *
+     * \return \a x converted to a string
+     */
+    template <typename T>
+    static std::string str(T x);
 
 private:
 
-    char m_file[256]; ///< Source filename where the error was thrown
-    int m_line; ///< Line number in the source file where the error was thrown
+    std::string m_message; ///< Error message
+    std::string m_location; ///< Location of the error (file, line and function)
 };
 
-namespace detail
-{
-/**
- * \brief Setup a CAMP error with the current context
- *
- * \param error Error to setup (note: the returned error is a copy of the source error)
- * \param file Source filename
- * \param line Line number in the source file
- *
- * \return Copy of \a error setup with the current context
- */
-template <typename T>
-T setupError(T error, const char* file, int line)
-{
-    error.setContext(file, line);
-    return error;
-}
-
-} // namespace detail
-
 } // namespace camp
+
+#include <camp/error.inl>
 
 /**
  * \brief Trigger a CAMP error
  */
-#define CAMP_ERROR(error) throw camp::detail::setupError(error, __FILE__, __LINE__)
+#define CAMP_ERROR(error) throw camp::Error::prepare(error, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION)
 
 
 #endif // CAMP_ERROR_HPP

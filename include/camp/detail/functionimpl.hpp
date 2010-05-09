@@ -27,7 +27,8 @@
 
 #include <camp/function.hpp>
 #include <camp/value.hpp>
-#include <camp/invalidargument.hpp>
+#include <camp/badtype.hpp>
+#include <camp/badargument.hpp>
 #include <camp/detail/callhelper.hpp>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
@@ -44,8 +45,8 @@ using boost::assign::list_of;
 /**
  * \brief Helper function which converts an argument to a C++ type
  *
- * The main purpose of this function is to convert any InvalidValue error to
- * an InvalidArgument one.
+ * The main purpose of this function is to convert any BadType error to
+ * a BadArgument one.
  *
  * \param args List of arguments
  * \param index Index of the argument to convert
@@ -53,7 +54,7 @@ using boost::assign::list_of;
  *
  * \return Value of args[index] converted to T
  *
- * \thrown InvalidArgument conversion triggered an InvalidValue error
+ * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
 inline typename boost::remove_reference<T>::type convertArg(const Args& args, std::size_t index, const std::string& function)
@@ -62,9 +63,9 @@ inline typename boost::remove_reference<T>::type convertArg(const Args& args, st
     {
         return args[index].to<typename boost::remove_reference<T>::type>();
     }
-    catch (InvalidValue& error)
+    catch (BadType&)
     {
-        CAMP_ERROR(InvalidArgument(error.sourceType(), error.requestedType(), function.c_str(), index));
+        CAMP_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
     }
 }
 

@@ -55,7 +55,7 @@ std::size_t enumCount();
  *
  * \return Reference to the index-th metaenum
  *
- * \throw InvalidIndex index is out of range
+ * \throw OutOfRange index is out of range
  */
 const Enum& enumByIndex(std::size_t index);
 
@@ -68,7 +68,7 @@ const Enum& enumByIndex(std::size_t index);
  *
  * \return Reference to the requested metaenum
  *
- * \throw InvalidEnum name is not a valid metaenum name
+ * \throw EnumNotFound name is not a valid metaenum name
  */
 const Enum& enumByName(const std::string& name);
 
@@ -83,7 +83,7 @@ const Enum& enumByName(const std::string& name);
  *
  * \return Reference to the metaenum bound to type T
  *
- * \throw InvalidEnum no metaenum has been declared for T
+ * \throw EnumNotFound no metaenum has been declared for T
  */
 template <typename T>
 const Enum& enumByObject(T value);
@@ -95,7 +95,7 @@ const Enum& enumByObject(T value);
  *
  * \return Reference to the metaenum bound to type T
  *
- * \throw InvalidEnum no metaenum has been declared for T
+ * \throw EnumNotFound no metaenum has been declared for T
  */
 template <typename T>
 const Enum& enumByType();

@@ -90,7 +90,7 @@ const Class& UserObject::getClass() const
     }
     else
     {
-        CAMP_ERROR(InvalidObject(*this));
+        CAMP_ERROR(NullObject(m_class));
     }
 }
 
@@ -200,7 +200,7 @@ void UserObject::set(const Property& property, const Value& value) const
     else
     {
         // Error, null object
-        CAMP_ERROR(InvalidObject(*this));
+        CAMP_ERROR(NullObject(m_class));
     }
 }
 

@@ -21,40 +21,36 @@
 ****************************************************************************/
 
 
-#include <camp/invalidaccess.hpp>
-#include <string.h>
+#ifndef CAMP_ENUMNOTFOUND_HPP
+#define CAMP_ENUMNOTFOUND_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-InvalidAccess::InvalidAccess(const char* attribute, Action action) throw()
-    : m_action(action)
+/**
+ * \brief Error thrown when a metaenum couldn't be found (either by its name or its id)
+ */
+class CAMP_API EnumNotFound : public Error
 {
-    strncpy(m_attribute, attribute ? attribute : "", sizeof(m_attribute));
-}
+public:
 
-//-------------------------------------------------------------------------------------------------
-InvalidAccess::~InvalidAccess() throw()
-{
-}
+    /**
+     * \brief Constructor
+     *
+     * \param name Name of the requested enum
+     */
+    EnumNotFound(const std::string& name);
 
-//-------------------------------------------------------------------------------------------------
-const char* InvalidAccess::what() const throw()
-{
-    return "Invalid access to a property or function";
-}
-
-//-------------------------------------------------------------------------------------------------
-const char* InvalidAccess::attribute() const throw()
-{
-    return m_attribute;
-}
-
-//-------------------------------------------------------------------------------------------------
-InvalidAccess::Action InvalidAccess::action() const throw()
-{
-    return m_action;
-}
+    /**
+     * \brief Destructor
+     */
+    virtual ~EnumNotFound() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_ENUMNOTFOUND_HPP

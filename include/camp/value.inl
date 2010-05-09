@@ -57,9 +57,9 @@ T Value::to() const
     {
         return detail::ValueTo<T>::convert(*this);
     }
-    catch (std::exception&)
+    catch (boost::bad_lexical_cast&)
     {
-        CAMP_ERROR(InvalidValue(m_type, mapType<T>()));
+        CAMP_ERROR(BadType(type(), mapType<T>()));
     }
 }
 

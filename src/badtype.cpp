@@ -21,56 +21,43 @@
 ****************************************************************************/
 
 
+#include <camp/badtype.hpp>
+
+
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-ClassBuilder<T> Class::declare(const std::string& name)
+BadType::BadType(Type provided, Type expected)
+    : Error("value of type " + typeName(provided) + " couldn't be converted to type " + typeName(expected))
 {
-    Class& newClass = detail::ClassManager::instance().registerNew(name, detail::StaticTypeId<T>::get(false));
-    return ClassBuilder<T>(newClass);
 }
 
 //-------------------------------------------------------------------------------------------------
-template <typename T>
-T* Class::construct(const Args& args) const
+BadType::~BadType() throw()
 {
-    void* object = 0;
+}
 
-    // Search an arguments match among the list of available constructors
-    ConstructorList::const_iterator end = m_constructors.end();
-    for (ConstructorList::const_iterator it = m_constructors.begin();
-         (it != end) && !object;
-         ++it)
+//-------------------------------------------------------------------------------------------------
+BadType::BadType(const std::string& message)
+    : Error(message)
+{
+}
+
+//-------------------------------------------------------------------------------------------------
+std::string BadType::typeName(Type type)
+{
+    switch (type)
     {
-        Constructor& constructor = **it;
-
-        if (constructor.matches(args))
-        {
-            // Match found: use the constructor to create the new instance
-            object = constructor.create(args);
-        }
+        case noType:     return "none";
+        case boolType:   return "boolean";
+        case intType:    return "integer";
+        case realType:   return "real";
+        case stringType: return "string";
+        case enumType:   return "enum";
+        case arrayType:  return "array";
+        case userType:   return "user";
+        default:         return "unknown";
     }
-
-    // Check if we found a constructor matching the provided list of arguments
-    if (!object)
-        CAMP_ERROR(ConstructorNotFound(name()));
-
-    // Get the metaclass of T (we use classByTypeSafe because it may not exist)
-    const Class* targetClass = classByTypeSafe<T>();
-
-    // Apply the proper offset in case T is a base of this class
-    if (targetClass)
-        object = applyOffset(object, *targetClass);
-
-    return static_cast<T*>(object);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-void Class::destroy(const T* object) const
-{
-    delete object;
 }
 
 } // namespace camp

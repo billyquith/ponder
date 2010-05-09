@@ -21,16 +21,38 @@
 ****************************************************************************/
 
 
-#include <camp/classcast.hpp>
-#include <camp/class.hpp>
+#ifndef CAMP_NULLOBJECT_HPP
+#define CAMP_NULLOBJECT_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
+class Class;
+
+/**
+ * \brief Error thrown when trying to use an empty metaobject
+ */
+class CAMP_API NullObject : public Error
 {
-    return sourceClass.applyOffset(pointer, targetClass);
-}
+public:
+
+    /**
+     * \brief Constructor
+     *
+     * \param objectClass Metaclass of the object (may be null if object has no class)
+     */
+    NullObject(const Class* objectClass);
+
+    /**
+     * \brief Destructor
+     */
+    virtual ~NullObject() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_NULLOBJECT_HPP

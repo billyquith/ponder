@@ -23,7 +23,7 @@
 
 #include <camp/tagholder.hpp>
 #include <camp/value.hpp>
-#include <camp/invalidindex.hpp>
+#include <camp/outofrange.hpp>
 #include <algorithm>
 
 
@@ -43,8 +43,9 @@ std::size_t TagHolder::tagCount() const
 //-------------------------------------------------------------------------------------------------
 const Value& TagHolder::tagId(std::size_t index) const
 {
+    // Make sure that the index is not out of range
     if (index >= m_tags.size())
-        CAMP_ERROR(InvalidIndex(index, m_tags.size()));
+        CAMP_ERROR(OutOfRange(index, m_tags.size()));
 
     TagsTable::const_iterator it = m_tags.begin();
     std::advance(it, index);

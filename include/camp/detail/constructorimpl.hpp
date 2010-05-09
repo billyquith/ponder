@@ -29,12 +29,40 @@
 #include <camp/valuemapper.hpp>
 #include <camp/value.hpp>
 #include <camp/valuevisitor.hpp>
+#include <camp/badtype.hpp>
+#include <camp/badargument.hpp>
 
 
 namespace camp
 {
 namespace detail
 {
+/**
+ * \brief Helper function which converts an argument to a C++ type
+ *
+ * The main purpose of this function is to convert any BadType error to
+ * a BadArgument one.
+ *
+ * \param args List of arguments
+ * \param index Index of the argument to convert
+ *
+ * \return Value of args[index] converted to T
+ *
+ * \thrown BadArgument conversion triggered a BadType error
+ */
+template <typename T>
+inline typename boost::remove_reference<T>::type convertArg(const Args& args, std::size_t index)
+{
+    try
+    {
+        return args[index].to<typename boost::remove_reference<T>::type>();
+    }
+    catch (BadType&)
+    {
+        CAMP_ERROR(BadArgument(args[index].type(), mapType<T>(), index, "constructor"));
+    }
+}
+
 /**
  * \brief Check if a value is compatible with a C++ type
  *
@@ -95,7 +123,7 @@ public:
      */
     virtual void* create(const Args& args) const
     {
-        return new T(args[0].to<A0>());
+        return new T(convertArg<A0>(args, 0));
     }
 };
 
@@ -122,8 +150,8 @@ public:
      */
     virtual void* create(const Args& args) const
     {
-        return new T(args[0].to<A0>(),
-                     args[1].to<A1>());
+        return new T(convertArg<A0>(args, 0),
+                     convertArg<A1>(args, 1));
     }
 };
 
@@ -151,9 +179,9 @@ public:
      */
     virtual void* create(const Args& args) const
     {
-        return new T(args[0].to<A0>(),
-                     args[1].to<A1>(),
-                     args[2].to<A2>());
+        return new T(convertArg<A0>(args, 0),
+                     convertArg<A1>(args, 1),
+                     convertArg<A2>(args, 2));
     }
 };
 
@@ -182,10 +210,10 @@ public:
      */
     virtual void* create(const Args& args) const
     {
-        return new T(args[0].to<A0>(),
-                     args[1].to<A1>(),
-                     args[2].to<A2>(),
-                     args[3].to<A3>());
+        return new T(convertArg<A0>(args, 0),
+                     convertArg<A1>(args, 1),
+                     convertArg<A2>(args, 2),
+                     convertArg<A3>(args, 3));
     }
 };
 
@@ -215,11 +243,11 @@ public:
      */
     virtual void* create(const Args& args) const
     {
-        return new T(args[0].to<A0>(),
-                     args[1].to<A1>(),
-                     args[2].to<A2>(),
-                     args[3].to<A3>(),
-                     args[4].to<A4>());
+        return new T(convertArg<A0>(args, 0),
+                     convertArg<A1>(args, 1),
+                     convertArg<A2>(args, 2),
+                     convertArg<A3>(args, 3),
+                     convertArg<A4>(args, 4));
     }
 };
 

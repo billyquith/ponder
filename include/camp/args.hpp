@@ -126,7 +126,7 @@ public:
      *
      * \return Value of the index-th argument
      *
-     * \throw InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Value& operator[](std::size_t index) const;
 

@@ -40,6 +40,8 @@ class Class;
  * \param targetClass Target metaclass to convert to
  *
  * \return Converted pointer, or 0 on failure
+ *
+ * \throw ClassUnrelated sourceClass is not a base nor a derived of targetClass
  */
 CAMP_API void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass);
 

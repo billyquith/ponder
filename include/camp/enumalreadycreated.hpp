@@ -21,39 +21,37 @@
 ****************************************************************************/
 
 
-#include <camp/invalidvalue.hpp>
+#ifndef CAMP_ENUMALREADYCREATED_HPP
+#define CAMP_ENUMALREADYCREATED_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-InvalidValue::InvalidValue(Type sourceType, Type requestedType) throw()
-    : m_sourceType(sourceType)
-    , m_requestedType(requestedType)
+/**
+ * \brief Error thrown when a declaring a metaenum that already exists
+ */
+class CAMP_API EnumAlreadyCreated : public Error
 {
-}
+public:
 
-//-------------------------------------------------------------------------------------------------
-InvalidValue::~InvalidValue() throw()
-{
-}
+    /**
+     * \brief Constructor
+     *
+     * \param name Name of the enum
+     * \param type Identifier of the C++ type
+     */
+    EnumAlreadyCreated(const std::string& name, const std::string& type);
 
-//-------------------------------------------------------------------------------------------------
-const char* InvalidValue::what() const throw()
-{
-    return "Invalid value; failed to convert to the requested type";
-}
-
-//-------------------------------------------------------------------------------------------------
-Type InvalidValue::sourceType() const throw()
-{
-    return m_sourceType;
-}
-
-//-------------------------------------------------------------------------------------------------
-Type InvalidValue::requestedType() const throw()
-{
-    return m_requestedType;
-}
+    /**
+     * \brief Destructor
+     */
+    virtual ~EnumAlreadyCreated() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_ENUMALREADYCREATED_HPP

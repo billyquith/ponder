@@ -27,7 +27,8 @@
 
 #include <camp/args.hpp>
 #include <camp/classcast.hpp>
-#include <camp/invalidobject.hpp>
+#include <camp/nullobject.hpp>
+#include <camp/classnotfound.hpp>
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
@@ -59,7 +60,7 @@ public:
     /**
      * \brief Default constructor
      *
-     * Constructs an empty / invalid object
+     * Constructs an empty/invalid object
      */
     UserObject();
 
@@ -100,7 +101,9 @@ public:
      *
      * \return Reference to the instance of the stored object
      *
-     * \throw InvalidObject the stored instance is not compatible with T
+     * \throw NullObject the stored object is invalid
+     * \throw ClassNotFound T has not metaclass
+     * \throw ClassUnrelated the type of the object is not compatible with T
      */
     template <typename T>
     typename detail::ObjectTraits<T>::RefReturnType get() const;
@@ -119,6 +122,8 @@ public:
      * \brief Retrieve the metaclass of the stored instance
      *
      * \return Reference to the instance's metaclass
+     *
+     * \throw NullObject the stored object has no metaclass
      */
     const Class& getClass() const;
 
@@ -131,6 +136,9 @@ public:
      * \param property Name of the property to get
      *
      * \return Current value of the property
+     *
+     * \throw PropertyNotFound \a property is not a property of the object
+     * \throw ForbiddenRead \a property is not readable
      */
     Value get(const std::string& property) const;
 
@@ -142,6 +150,10 @@ public:
      *
      * \param property Name of the property to set
      * \param value Value to set
+     *
+     * \throw PropertyNotFound \a property is not a property of the object
+     * \throw ForbiddenWrite \a property is not writable
+     * \throw BadType \a value can't be converted to the property's type
      */
     void set(const std::string& property, const Value& value) const;
 
@@ -155,6 +167,11 @@ public:
      * \param args Arguments to pass to the function
      *
      * \return Value returned by the function
+     *
+     * \throw FunctionNotFound \a function is not a function of the object class
+     * \throw ForbiddenCall \a function is not callable
+     * \throw NotEnoughArguments too few arguments are provided
+     * \throw BadArgument one of the arguments can't be converted to the requested type
      */
     Value call(const std::string& function, const Args& args = Args::empty) const;
 

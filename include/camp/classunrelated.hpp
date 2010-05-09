@@ -21,8 +21,8 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDOBJECT_HPP
-#define CAMP_INVALIDOBJECT_HPP
+#ifndef CAMP_CLASSUNRELATED_HPP
+#define CAMP_CLASSUNRELATED_HPP
 
 
 #include <camp/error.hpp>
@@ -30,49 +30,28 @@
 
 namespace camp
 {
-class UserObject;
-
 /**
- * \brief Error thrown when using an invalid user object
- *
- * This error may be thrown if user object is null, of if its type doesn't match the requested one
+ * \brief Error thrown when trying to convert an object to a class that is not a base nor a derived
  */
-class CAMP_API InvalidObject : public Error
+class CAMP_API ClassUnrelated : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param object User object
+     * \param sourceClass Name of the source class
+     * \param requestedClass Name of the requested class
      */
-    InvalidObject(const UserObject& object) throw();
+    ClassUnrelated(const std::string& sourceClass, const std::string& requestedClass);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidObject() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the user object
-     *
-     * \return Reference to the user object
-     */
-    const UserObject& object() const throw();
-
-private:
-
-    const UserObject* m_object; ///< User object
+    virtual ~ClassUnrelated() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDOBJECT_HPP
+#endif // CAMP_CLASSUNRELATED_HPP

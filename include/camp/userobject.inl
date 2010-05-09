@@ -41,22 +41,18 @@ UserObject::UserObject(const T& object)
 template <typename T>
 typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
 {
-    // Make sure we have a valid internal object
+    // Make sure that we have a valid internal object
     void* ptr = pointer();
     if (!ptr)
-        CAMP_ERROR(InvalidObject(*this));
+        CAMP_ERROR(NullObject(m_class));
 
     // Get the metaclass of T (we use classByTypeSafe because it may not exist)
     const Class* targetClass = classByTypeSafe<T>();
     if (!targetClass)
-        CAMP_ERROR(InvalidObject(*this));
+        CAMP_ERROR(ClassNotFound("unknown"));
 
     // Apply the proper offset to the pointer (solves multiple inheritance issues)
     ptr = classCast(ptr, *m_class, *targetClass);
-
-    // Check if the conversion was successful (i.e. if T is related to the actual metaclass of the object)
-    if (!ptr)
-        CAMP_ERROR(InvalidObject(*this));
 
     return detail::ObjectTraits<T>::get(ptr);
 }

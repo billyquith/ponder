@@ -21,8 +21,8 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDENUMVALUE_HPP
-#define CAMP_INVALIDENUMVALUE_HPP
+#ifndef CAMP_ENUMVALUENOTFOUND_HPP
+#define CAMP_ENUMVALUENOTFOUND_HPP
 
 
 #include <camp/error.hpp>
@@ -30,56 +30,28 @@
 
 namespace camp
 {
-class Enum;
-
 /**
- * \brief Error thrown when requesting the value of a pair which doesn't exist in a metaenum
+ * \brief Error thrown when a value in a metaenum couldn't be found
  */
-class CAMP_API InvalidEnumValue : public Error
+class CAMP_API EnumValueNotFound : public Error
 {
 public:
 
     /**
      * \brief Constructor
      *
-     * \param value Value of the requested pair
-     * \param ownerEnum Owner metaenum
+     * \param value Value of the requested metaenum member
+     * \param enumName Name of the owner metaenum
      */
-    InvalidEnumValue(long value, const Enum& ownerEnum) throw();
+    EnumValueNotFound(long value, const std::string& enumName);
 
     /**
      * \brief Destructor
      */
-    virtual ~InvalidEnumValue() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the requested pair value
-     *
-     * \return Value of the requested pair
-     */
-    long value() const throw();
-
-    /**
-     * \brief Return the owner metaenum
-     *
-     * \return Reference to the owner metaenum
-     */
-    const Enum& ownerEnum() const throw();
-
-private:
-
-    long m_value; ///< Value of the requested pair
-    const Enum* m_ownerEnum; ///< Owner metaenum
+    virtual ~EnumValueNotFound() throw();
 };
 
 } // namespace camp
 
 
-#endif // CAMP_INVALIDENUMVALUE_HPP
+#endif // CAMP_ENUMVALUENOTFOUND_HPP

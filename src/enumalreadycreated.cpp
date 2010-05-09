@@ -21,54 +21,20 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_INVALIDENUM_HPP
-#define CAMP_INVALIDENUM_HPP
-
-
-#include <camp/error.hpp>
+#include <camp/enumalreadycreated.hpp>
 
 
 namespace camp
 {
-/**
- * \brief Error thrown when requesting a metaenum which doesn't exist
- */
-class CAMP_API InvalidEnum : public Error
+//-------------------------------------------------------------------------------------------------
+EnumAlreadyCreated::EnumAlreadyCreated(const std::string& name, const std::string& type)
+    : Error("a metaenum named " + name + ", or bound to the type " + type + " already exists")
 {
-public:
+}
 
-    /**
-     * \brief Constructor
-     *
-     * \param enumName Name of the requested metaenum
-     */
-    InvalidEnum(const char* enumName) throw();
-
-    /**
-     * \brief Destructor
-     */
-    virtual ~InvalidEnum() throw();
-
-    /**
-     * \brief Return a message describing the error
-     *
-     * \return Pointer to a string describing the error
-     */
-    virtual const char* what() const throw();
-
-    /**
-     * \brief Return the requested metaenum name
-     *
-     * \return Name of the metaenum
-     */
-    const char* enumName() const throw();
-
-private:
-
-    char m_enumName[256]; ///< Name of the requested metaenum
-};
+//-------------------------------------------------------------------------------------------------
+EnumAlreadyCreated::~EnumAlreadyCreated() throw()
+{
+}
 
 } // namespace camp
-
-
-#endif // CAMP_INVALIDENUM_HPP

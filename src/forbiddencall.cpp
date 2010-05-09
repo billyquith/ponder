@@ -21,32 +21,20 @@
 ****************************************************************************/
 
 
-#include <camp/invalidobject.hpp>
+#include <camp/forbiddencall.hpp>
 
 
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
-InvalidObject::InvalidObject(const UserObject& object) throw()
-    : m_object(&object)
+ForbiddenCall::ForbiddenCall(const std::string& functionName)
+    : Error("the function " + functionName + " is not callable")
 {
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidObject::~InvalidObject() throw()
+ForbiddenCall::~ForbiddenCall() throw()
 {
-}
-
-//-------------------------------------------------------------------------------------------------
-const char* InvalidObject::what() const throw()
-{
-    return "Invalid object";
-}
-
-//-------------------------------------------------------------------------------------------------
-const UserObject& InvalidObject::object() const throw()
-{
-    return *m_object;
 }
 
 } // namespace camp

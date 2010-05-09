@@ -21,40 +21,20 @@
 ****************************************************************************/
 
 
-#include <camp/invalidconstruction.hpp>
-#include <camp/class.hpp>
+#include <camp/enumnotfound.hpp>
 
 
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
-InvalidConstruction::InvalidConstruction(const Args& args, const Class& ownerClass) throw()
-    : m_args(args)
-    , m_ownerClass(&ownerClass)
+EnumNotFound::EnumNotFound(const std::string& name)
+    : Error("the metaenum " + name + " couldn't be found")
 {
 }
 
 //-------------------------------------------------------------------------------------------------
-InvalidConstruction::~InvalidConstruction() throw()
+EnumNotFound::~EnumNotFound() throw()
 {
-}
-
-//-------------------------------------------------------------------------------------------------
-const char* InvalidConstruction::what() const throw()
-{
-    return "Invalid construction of an instance from the metaclass";
-}
-
-//-------------------------------------------------------------------------------------------------
-const Args& InvalidConstruction::args() const throw()
-{
-    return m_args;
-}
-
-//-------------------------------------------------------------------------------------------------
-const Class& InvalidConstruction::ownerClass() const throw()
-{
-    return *m_ownerClass;
 }
 
 } // namespace camp

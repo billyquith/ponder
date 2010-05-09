@@ -21,16 +21,37 @@
 ****************************************************************************/
 
 
-#include <camp/classcast.hpp>
-#include <camp/class.hpp>
+#ifndef CAMP_CLASSALREADYCREATED_HPP
+#define CAMP_CLASSALREADYCREATED_HPP
+
+
+#include <camp/error.hpp>
 
 
 namespace camp
 {
-//-------------------------------------------------------------------------------------------------
-void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
+/**
+ * \brief Error thrown when a declaring a metaclass that already exists
+ */
+class CAMP_API ClassAlreadyCreated : public Error
 {
-    return sourceClass.applyOffset(pointer, targetClass);
-}
+public:
+
+    /**
+     * \brief Constructor
+     *
+     * \param name Name of the class
+     * \param type Identifier of the C++ type
+     */
+    ClassAlreadyCreated(const std::string& name, const std::string& type);
+
+    /**
+     * \brief Destructor
+     */
+    virtual ~ClassAlreadyCreated() throw();
+};
 
 } // namespace camp
+
+
+#endif // CAMP_CLASSALREADYCREATED_HPP

@@ -29,8 +29,6 @@
 #include <camp/type.hpp>
 #include <camp/enumobject.hpp>
 #include <camp/userobject.hpp>
-#include <camp/invalidvalue.hpp>
-#include <camp/invalidobject.hpp>
 #include <camp/valuemapper.hpp>
 #include <camp/detail/valueimpl.hpp>
 #include <boost/operators.hpp>
@@ -115,7 +113,7 @@ public:
      *
      * \return Value converted to T
      *
-     * \throw InvalidValue the stored value is not convertible to T
+     * \throw BadType the stored value is not convertible to T
      */
     template <typename T>
     T to() const;
@@ -125,7 +123,7 @@ public:
      *
      * \return Value converted to T
      *
-     * \throw InvalidValue the stored value is not convertible to T
+     * \throw BadType the stored value is not convertible to T
      */
     template <typename T>
     operator T() const;

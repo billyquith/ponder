@@ -80,7 +80,7 @@ public:
      *
      * \return index-th tag
      *
-     * \throw InvalidIndex index is out of range
+     * \throw OutOfRange index is out of range
      */
     const Value& tagId(std::size_t index) const;
 

@@ -22,7 +22,8 @@
 
 
 #include <camp/property.hpp>
-#include <camp/invalidaccess.hpp>
+#include <camp/forbiddenread.hpp>
+#include <camp/forbiddenwrite.hpp>
 #include <camp/classvisitor.hpp>
 #include <camp/userobject.hpp>
 
@@ -63,7 +64,7 @@ Value Property::get(const UserObject& object) const
 {
     // Check if the property is readable
     if (!readable(object))
-        CAMP_ERROR(InvalidAccess(m_name.c_str(), InvalidAccess::Read));
+        CAMP_ERROR(ForbiddenRead(name()));
 
     return getValue(object);
 }
@@ -73,7 +74,7 @@ void Property::set(const UserObject& object, const Value& value) const
 {
     // Check if the property is writable
     if (!writable(object))
-        CAMP_ERROR(InvalidAccess(m_name.c_str(), InvalidAccess::Write));
+        CAMP_ERROR(ForbiddenWrite(name()));
 
     // Here we don't call setValue directly, we rather let the user object do it
     // and add any processing needed for proper propagation of the modification

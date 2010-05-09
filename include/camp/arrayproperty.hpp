@@ -76,8 +76,8 @@ public:
      *
      * \return Number of elements in the array
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess property is not readable
+     * \throw NullObject object is invalid
+     * \throw ForbiddenRead property is not readable
      */
     std::size_t size(const UserObject& object) const;
 
@@ -89,9 +89,9 @@ public:
      *
      * \return Value of the index-th element
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess property is not readable
-     * \throw InvalidIndex index is out of range
+     * \throw NullObject object is invalid
+     * \throw ForbiddenRead property is not readable
+     * \throw OutOfRange index is out of range
      */
     Value get(const UserObject& object, std::size_t index) const;
 
@@ -102,10 +102,10 @@ public:
      * \param index Index of the element to get
      * \param value New value to assign to the element
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess property is not writable
-     * \throw InvalidValue value can't be converted to the property's type
-     * \throw InvalidIndex index is out of range
+     * \throw NullObject object is invalid
+     * \throw ForbiddenWrite property is not writable
+     * \throw BadType \a value can't be converted to the property's type
+     * \throw OutOfRange index is out of range
      */
     void set(const UserObject& object, std::size_t index, const Value& value) const;
 
@@ -118,10 +118,10 @@ public:
      * \param before Index before which the new element will be inserted
      * \param value Value of the element to insert
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess array is not writable or not dynamic
-     * \throw InvalidValue value can't be converted to the property's type
-     * \throw InvalidIndex index is out of range
+     * \throw NullObject object is invalid
+     * \throw ForbiddenWrite array is not writable or not dynamic
+     * \throw BadType \a value can't be converted to the property's type
+     * \throw OutOfRange index is out of range
      */
     void insert(const UserObject& object, std::size_t before, const Value& value) const;
 
@@ -133,9 +133,9 @@ public:
      * \param object Object
      * \param index Index of the element to remove
      *
-     * \throw InvalidObject object has an invalid value
-     * \throw InvalidAccess array is not writable or not dynamic
-     * \throw InvalidIndex index is out of range
+     * \throw NullObject object is invalid
+     * \throw ForbiddenWrite array is not writable or not dynamic
+     * \throw OutOfRange index is out of range
      */
     void remove(const UserObject& object, std::size_t index) const;
 

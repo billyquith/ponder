@@ -55,7 +55,7 @@ std::size_t classCount();
  *
  * \return Reference to the index-th metaclass
  *
- * \throw InvalidIndex index is out of range
+ * \throw OutOfRange index is out of range
  */
 const Class& classByIndex(std::size_t index);
 
@@ -68,7 +68,7 @@ const Class& classByIndex(std::size_t index);
  *
  * \return Reference to the requested metaclass
  *
- * \throw InvalidClass name is not a valid metaclass name
+ * \throw ClassNotFound name is not a valid metaclass name
  */
 const Class& classByName(const std::string& name);
 
@@ -81,7 +81,7 @@ const Class& classByName(const std::string& name);
  *
  * \return Reference to the etaclass bound to type T
  *
- * \throw InvalidClass no metaclass has been declared for T
+ * \throw ClassNotFound no metaclass has been declared for T or any of its bases
  */
 template <typename T>
 const Class& classByObject(const T& object);
@@ -93,7 +93,7 @@ const Class& classByObject(const T& object);
  *
  * \return Reference to the metaclass bound to type T
  *
- * \throw InvalidClass no metaclass has been declared for T
+ * \throw ClassNotFound no metaclass has been declared for T
  */
 template <typename T>
 const Class& classByType();

@@ -22,7 +22,6 @@
 
 
 #include <camp/error.hpp>
-#include <string.h>
 
 
 namespace camp
@@ -35,30 +34,19 @@ Error::~Error() throw()
 //-------------------------------------------------------------------------------------------------
 const char* Error::what() const throw()
 {
-    return "Unknown CAMP error";
+    return m_message.c_str();
 }
 
 //-------------------------------------------------------------------------------------------------
-const char* Error::file() const throw()
+const char* Error::where() const throw()
 {
-    return m_file;
+    return m_location.c_str();
 }
 
 //-------------------------------------------------------------------------------------------------
-int Error::line() const throw()
-{
-    return m_line;
-}
-
-//-------------------------------------------------------------------------------------------------
-void Error::setContext(const char* file, int line) throw()
-{
-    strncpy(m_file, file, sizeof(m_file));
-    m_line = line;
-}
-
-//-------------------------------------------------------------------------------------------------
-Error::Error()
+Error::Error(const std::string& message)
+    : m_message(message)
+    , m_location("")
 {
 }
 
