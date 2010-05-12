@@ -25,6 +25,7 @@
 #include <camp/outofrange.hpp>
 #include <camp/enumnamenotfound.hpp>
 #include <camp/enumvaluenotfound.hpp>
+#include <camp/detail/enummanager.hpp>
 #include <algorithm>
 
 
@@ -63,6 +64,12 @@ namespace
 
 namespace camp
 {
+//-------------------------------------------------------------------------------------------------
+void Enum::undeclare(const std::string& name)
+{
+    detail::EnumManager::instance().unregister(name);
+}
+
 //-------------------------------------------------------------------------------------------------
 const std::string& Enum::name() const
 {

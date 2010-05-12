@@ -31,4 +31,11 @@ EnumBuilder Enum::declare(const std::string& name)
     return EnumBuilder(newEnum);
 }
 
+//-------------------------------------------------------------------------------------------------
+template <typename T>
+void Enum::undeclare()
+{
+    undeclare(enumByType<T>().name());
+}
+
 } // namespace camp

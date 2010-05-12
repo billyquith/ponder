@@ -27,7 +27,7 @@
 
 #include <camp/config.hpp>
 #include <camp/args.hpp>
-#include <camp/error.hpp>
+#include <camp/classget.hpp>
 #include <camp/constructornotfound.hpp>
 #include <camp/tagholder.hpp>
 #include <camp/detail/classmanager.hpp>
@@ -121,6 +121,29 @@ public:
      */
     template <typename T>
     static ClassBuilder<T> declare(const std::string& name);
+
+    /**
+     * \brief Undeclare an existing metaclass by its type
+     *
+     * This is the function to call to remove a metaclass that was declared
+     * with the Class::declare function.
+     *
+     * \param name Name of the metaclass
+     *
+     * \throw ClassNotFound T has no metaclass
+     */
+    template <typename T>
+    static void undeclare();
+
+    /**
+     * \brief Undeclare an existing metaclass by its name
+     *
+     * This is the function to call to remove a metaclass that was declared
+     * with the Class::declare function.
+     *
+     * \throw ClassNotFound \a name doesn't name an existing metaclass
+     */
+    static void undeclare(const std::string& name);
 
 public:
 

@@ -27,6 +27,7 @@
 
 #include <camp/config.hpp>
 #include <camp/enumbuilder.hpp>
+#include <camp/enumget.hpp>
 #include <camp/detail/enummanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
@@ -98,6 +99,31 @@ public:
      */
     template <typename T>
     static EnumBuilder declare(const std::string& name);
+
+    /**
+     * \brief Undeclare an existing metaenum by its type
+     *
+     * This is the function to call to remove a metaenum that was declared
+     * with the Enum::declare function.
+     *
+     * \param name Name of the metaenum
+     *
+     * \throw EnumNotFound T has no metaenum
+     */
+    template <typename T>
+    static void undeclare();
+
+    /**
+     * \brief Undeclare an existing metaenum by its name
+     *
+     * This is the function to call to remove a metaenum that was declared
+     * with the Enum::declare function.
+     *
+     * \throw EnumNotFound \a name doesn't name an existing metaenum
+     */
+    static void undeclare(const std::string& name);
+
+public:
 
     /**
      * \brief Return the name of the metaenum

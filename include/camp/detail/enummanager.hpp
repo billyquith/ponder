@@ -29,9 +29,13 @@
 #include <camp/detail/observernotifier.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <map>
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/multi_index/ordered_index.hpp>
 #include <string>
 
+
+namespace bm = boost::multi_index;
 
 namespace camp
 {
@@ -70,6 +74,15 @@ public:
      * \return Reference to the new metaenum
      */
     Enum& registerNew(const std::string& name, const std::string& id);
+
+    /**
+     * \brief Remove an existing metaenum by its name
+     *
+     * \param id Name of the metaenum to unregister
+     *
+     * \throw EnumNotFound \a name is not an existing metaenum
+     */
+    void unregister(const std::string& name);
 
     /**
      * \brief Get the total number of metaenums
@@ -149,12 +162,29 @@ private:
      */
     ~EnumManager();
 
-    typedef boost::shared_ptr<Enum> EnumPtr;
-    typedef std::map<std::string, EnumPtr> EnumByNameTable;
-    typedef std::map<std::string, EnumPtr> EnumByIdTable;
+    /**
+     * \brief Structure gathering an enum, its type identifier and its name
+     */
+    struct EnumInfo
+    {
+        std::string id;
+        std::string name;
+        boost::shared_ptr<Enum> enumPtr;
+    };
 
-    EnumByNameTable m_byName; ///< List of metaenums sorted by name
-    EnumByIdTable m_byId; ///< List of metaenums sorted by class id
+    struct Id;
+    struct Name;
+
+    typedef boost::multi_index_container<EnumInfo,
+        bm::indexed_by<bm::ordered_unique<bm::tag<Id>,   bm::member<EnumInfo, std::string, &EnumInfo::id> >,
+                       bm::ordered_unique<bm::tag<Name>, bm::member<EnumInfo, std::string, &EnumInfo::name> >
+        >
+    > EnumTable;
+
+    typedef EnumTable::nth_index<0>::type IdIndex;
+    typedef EnumTable::nth_index<1>::type NameIndex;
+
+    EnumTable m_enums; ///< Table storing enums indexed by their id and name
 };
 
 } // namespace detail

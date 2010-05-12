@@ -29,9 +29,14 @@
 #include <camp/detail/observernotifier.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <map>
+#include <boost/shared_ptr.hpp>
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/multi_index/ordered_index.hpp>
 #include <string>
 
+
+namespace bm = boost::multi_index;
 
 namespace camp
 {
@@ -68,8 +73,19 @@ public:
      * \param id Identifier of the C++ class bound to the metaclass
      *
      * \return Reference to the new metaclass
+     *
+     * \throw ClassAlreadyCreated \a name or \a id already exists
      */
     Class& registerNew(const std::string& name, const std::string& id);
+
+    /**
+     * \brief Remove an existing metaclass by its name
+     *
+     * \param id Name of the metaclass to unregister
+     *
+     * \throw ClassNotFound \a name is not an existing metaclass
+     */
+    void unregister(const std::string& name);
 
     /**
      * \brief Get the total number of metaclasses
@@ -149,12 +165,29 @@ private:
      */
     ~ClassManager();
 
-    typedef boost::shared_ptr<Class> ClassPtr;
-    typedef std::map<std::string, ClassPtr> ClassByNameTable;
-    typedef std::map<std::string, ClassPtr> ClassByIdTable;
+    /**
+     * \brief Structure gathering a class, its type identifier and its name
+     */
+    struct ClassInfo
+    {
+        std::string id;
+        std::string name;
+        boost::shared_ptr<Class> classPtr;
+    };
 
-    ClassByNameTable m_byName; ///< List of metaclasses sorted by name
-    ClassByIdTable m_byId; ///< List of metaclasses sorted by class id
+    struct Id;
+    struct Name;
+
+    typedef boost::multi_index_container<ClassInfo,
+        bm::indexed_by<bm::ordered_unique<bm::tag<Id>,   bm::member<ClassInfo, std::string, &ClassInfo::id> >,
+                       bm::ordered_unique<bm::tag<Name>, bm::member<ClassInfo, std::string, &ClassInfo::name> >
+        >
+    > ClassTable;
+
+    typedef ClassTable::nth_index<0>::type IdIndex;
+    typedef ClassTable::nth_index<1>::type NameIndex;
+
+    ClassTable m_classes; ///< Table storing classes indexed by their id and name
 };
 
 } // namespace detail

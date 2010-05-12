@@ -26,10 +26,17 @@
 #include <camp/classunrelated.hpp>
 #include <camp/functionnotfound.hpp>
 #include <camp/propertynotfound.hpp>
+#include <camp/detail/classmanager.hpp>
 
 
 namespace camp
 {
+//-------------------------------------------------------------------------------------------------
+void Class::undeclare(const std::string& name)
+{
+    detail::ClassManager::instance().unregister(name);
+}
+
 //-------------------------------------------------------------------------------------------------
 const std::string& Class::name() const
 {
