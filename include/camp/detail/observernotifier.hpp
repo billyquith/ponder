@@ -32,6 +32,8 @@
 namespace camp
 {
 class Observer;
+class Class;
+class Enum;
 
 namespace detail
 {
@@ -65,29 +67,42 @@ public:
 
 protected:
 
-    typedef std::set<Observer*> ObserverSet;
-    typedef ObserverSet::const_iterator ObserverIterator;
-
     /**
      * \brief Default constructor
      */
     ObserverNotifier();
 
     /**
-     * \brief Return an iterator on the beginning of the observers sequence
+     * \brief Notify all the registered observers of a class creation
      *
-     * \return Iterator on the observers' beginning
+     * \param theClass Class that have been added
      */
-    ObserverIterator observersBegin() const;
+    void notifyClassAdded(const Class& theClass);
 
     /**
-     * \brief Return an iterator on the end of the observers sequence
+     * \brief Notify all the registered observers of a class removal
      *
-     * \return Iterator on the observers' end
+     * \param theClass Class that have been removed
      */
-    ObserverIterator observersEnd() const;
+    void notifyClassRemoved(const Class& theClass);
+
+    /**
+     * \brief Notify all the registered observers of an enum creation
+     *
+     * \param theEnum Enum that have been added
+     */
+    void notifyEnumAdded(const Enum& theEnum);
+
+    /**
+     * \brief Notify all the registered observers of an enum removal
+     *
+     * \param theEnum Enum that have been removed
+     */
+    void notifyEnumRemoved(const Enum& theEnum);
 
 private:
+
+    typedef std::set<Observer*> ObserverSet;
 
     ObserverSet m_observers; ///< Sequence of registered observers
 };

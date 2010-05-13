@@ -27,7 +27,7 @@ namespace camp
 template <typename T>
 ClassBuilder<T> Class::declare(const std::string& name)
 {
-    Class& newClass = detail::ClassManager::instance().registerNew(name, detail::StaticTypeId<T>::get(false));
+    Class& newClass = detail::ClassManager::instance().addClass(name, detail::StaticTypeId<T>::get(false));
     return ClassBuilder<T>(newClass);
 }
 

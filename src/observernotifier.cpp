@@ -50,15 +50,39 @@ ObserverNotifier::ObserverNotifier()
 }
 
 //-------------------------------------------------------------------------------------------------
-ObserverNotifier::ObserverIterator ObserverNotifier::observersBegin() const
+void ObserverNotifier::notifyClassAdded(const Class& theClass)
 {
-    return m_observers.begin();
+    for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
+    {
+        (*it)->classAdded(theClass);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------
-ObserverNotifier::ObserverIterator ObserverNotifier::observersEnd() const
+void ObserverNotifier::notifyClassRemoved(const Class& theClass)
 {
-    return m_observers.end();
+    for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
+    {
+        (*it)->classRemoved(theClass);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------
+void ObserverNotifier::notifyEnumAdded(const Enum& theEnum)
+{
+    for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
+    {
+        (*it)->enumAdded(theEnum);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------
+void ObserverNotifier::notifyEnumRemoved(const Enum& theEnum)
+{
+    for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
+    {
+        (*it)->enumRemoved(theEnum);
+    }
 }
 
 } // namespace detail

@@ -41,7 +41,7 @@ ClassManager& ClassManager::instance()
 }
 
 //-------------------------------------------------------------------------------------------------
-Class& ClassManager::registerNew(const std::string& name, const std::string& id)
+Class& ClassManager::addClass(const std::string& name, const std::string& id)
 {
     const IdIndex&   ids   = m_classes.get<Id>();
     const NameIndex& names = m_classes.get<Name>();
@@ -61,17 +61,13 @@ Class& ClassManager::registerNew(const std::string& name, const std::string& id)
     m_classes.insert(info);
 
     // Notify observers
-    ObserverIterator end = observersEnd();
-    for (ObserverIterator it = observersBegin(); it != end; ++it)
-    {
-        (*it)->classAdded(*newClass);
-    }
+    notifyClassAdded(*newClass);
 
     return *newClass;
 }
 
 //-------------------------------------------------------------------------------------------------
-void ClassManager::unregister(const std::string& name)
+void ClassManager::removeClass(const std::string& name)
 {
     NameIndex& names = m_classes.get<Name>();
 
@@ -79,6 +75,9 @@ void ClassManager::unregister(const std::string& name)
     NameIndex::iterator it = names.find(name);
     if (it == names.end())
         CAMP_ERROR(ClassNotFound(name));
+
+    // Notify observers
+    notifyClassRemoved(*it->classPtr);
 
     // Remove it from the table
     names.erase(it);
@@ -155,15 +154,10 @@ ClassManager::ClassManager()
 //-------------------------------------------------------------------------------------------------
 ClassManager::~ClassManager()
 {
-    // Notify observers of classes destruction
-    ObserverIterator begin = observersBegin();
-    ObserverIterator end   = observersEnd();
-    for (ClassTable::const_iterator itClass = m_classes.begin(); itClass != m_classes.end(); ++itClass)
+    // Notify observers
+    for (ClassTable::const_iterator it = m_classes.begin(); it != m_classes.end(); ++it)
     {
-        for (ObserverIterator it = begin; it != end; ++it)
-        {
-            (*it)->classRemoved(*itClass->classPtr);
-        }
+        notifyClassRemoved(*it->classPtr);
     }
 }
 

@@ -41,7 +41,7 @@ EnumManager& EnumManager::instance()
 }
 
 //-------------------------------------------------------------------------------------------------
-Enum& EnumManager::registerNew(const std::string& name, const std::string& id)
+Enum& EnumManager::addClass(const std::string& name, const std::string& id)
 {
     const IdIndex&   ids   = m_enums.get<Id>();
     const NameIndex& names = m_enums.get<Name>();
@@ -61,17 +61,13 @@ Enum& EnumManager::registerNew(const std::string& name, const std::string& id)
     m_enums.insert(info);
 
     // Notify observers
-    ObserverIterator end = observersEnd();
-    for (ObserverIterator it = observersBegin(); it != end; ++it)
-    {
-        (*it)->enumAdded(*newEnum);
-    }
+    notifyEnumAdded(*newEnum);
 
     return *newEnum;
 }
 
 //-------------------------------------------------------------------------------------------------
-void EnumManager::unregister(const std::string& name)
+void EnumManager::removeClass(const std::string& name)
 {
     NameIndex& names = m_enums.get<Name>();
 
@@ -79,6 +75,9 @@ void EnumManager::unregister(const std::string& name)
     NameIndex::iterator it = names.find(name);
     if (it == names.end())
         CAMP_ERROR(EnumNotFound(name));
+
+    // Notify observers
+    notifyEnumRemoved(*it->enumPtr);
 
     // Remove it from the table
     names.erase(it);
@@ -155,15 +154,10 @@ EnumManager::EnumManager()
 //-------------------------------------------------------------------------------------------------
 EnumManager::~EnumManager()
 {
-    // Notify observers of classes destruction
-    ObserverIterator begin = observersBegin();
-    ObserverIterator end   = observersEnd();
-    for (EnumTable::const_iterator itEnum = m_enums.begin(); itEnum != m_enums.end(); ++itEnum)
+    // Notify observers
+    for (EnumTable::const_iterator it = m_enums.begin(); it != m_enums.end(); ++it)
     {
-        for (ObserverIterator it = begin; it != end; ++it)
-        {
-            (*it)->enumRemoved(*itEnum->enumPtr);
-        }
+        notifyEnumRemoved(*it->enumPtr);
     }
 }
 

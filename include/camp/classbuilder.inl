@@ -43,8 +43,8 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     std::string baseName = baseClass.name();
 
     // First make sure that the base class is not already a base of the current class
-    std::vector<Class::BaseInfo>::const_iterator endBase = m_target->m_bases.end();
-    for (std::vector<Class::BaseInfo>::const_iterator it = m_target->m_bases.begin(); it != endBase; ++it)
+    Class::BaseList::const_iterator endBase = m_target->m_bases.end();
+    for (Class::BaseList::const_iterator it = m_target->m_bases.begin(); it != endBase; ++it)
     {
         assert(it->base->name() != baseName);
     }
@@ -61,19 +61,19 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     m_target->m_bases.push_back(baseInfos);
 
     // Copy all properties of the base class into the current class
-    Class::PropertyTable::const_iterator endProp = baseClass.m_properties.end();
-    for (Class::PropertyTable::const_iterator it = baseClass.m_properties.begin(); it != endProp; ++it)
+    for (Class::PropertyTable::const_iterator it = baseClass.m_properties.begin();
+        it != baseClass.m_properties.end();
+        ++it)
     {
-        if (m_target->m_properties.insert(*it).second)
-            m_target->m_propertiesByIndex.push_back(it->second);
+        m_target->m_properties.push_back(*it);
     }
 
     // Copy all functions of the base class into the current class
-    Class::FunctionTable::const_iterator endFunc = baseClass.m_functions.end();
-    for (Class::FunctionTable::const_iterator it = baseClass.m_functions.begin(); it != endFunc; ++it)
+    for (Class::FunctionTable::const_iterator it = baseClass.m_functions.begin();
+        it != baseClass.m_functions.end();
+        ++it)
     {
-        if (m_target->m_functions.insert(*it).second)
-            m_target->m_functionsByIndex.push_back(it->second);
+        m_target->m_functions.push_back(*it);
     }
 
     return *this;
@@ -338,19 +338,15 @@ ClassBuilder<T>& ClassBuilder<T>::external()
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 {
-    Class::PropertyPtr newProperty(property);
-    Class::PropertyPtr& oldProperty = m_target->m_properties[property->name()];
-    if (oldProperty)
-    {
-        Class::PropertyArray::iterator it = std::find(m_target->m_propertiesByIndex.begin(), m_target->m_propertiesByIndex.end(), oldProperty);
-        *it = newProperty;
-    }
-    else
-    {
-        m_target->m_propertiesByIndex.push_back(newProperty);
-    }
+    // Retrieve the class' properties indexed by name
+    Class::PropertyNameIndex& properties = m_target->m_properties.get<Class::Name>();
 
-    oldProperty = newProperty;
+    // First remove any property that already exists with the same name
+    properties.erase(property->name());
+
+    // Insert the new property
+    properties.insert(Class::PropertyPtr(property));
+
     m_currentTagHolder = m_currentProperty = property;
     m_currentFunction = 0;
 
@@ -361,20 +357,15 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
 {
-    Class::FunctionPtr newFunction(function);
-    Class::FunctionPtr& oldFunction = m_target->m_functions[function->name()];
-    if (oldFunction)
-    {
-        Class::FunctionArray::iterator it = std::find(m_target->m_functionsByIndex.begin(), m_target->m_functionsByIndex.end(), oldFunction);
-        if (it != m_target->m_functionsByIndex.end())
-            *it = newFunction;
-    }
-    else
-    {
-        m_target->m_functionsByIndex.push_back(newFunction);
-    }
+    // Retrieve the class' functions indexed by name
+    Class::FunctionNameIndex& functions = m_target->m_functions.get<Class::Name>();
 
-    oldFunction = newFunction;
+    // First remove any function that already exists with the same name
+    functions.erase(function->name());
+
+    // Insert the new function
+    functions.insert(Class::FunctionPtr(function));
+
     m_currentTagHolder = m_currentFunction = function;
     m_currentProperty = 0;
 

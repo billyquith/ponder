@@ -34,7 +34,7 @@ namespace camp
 //-------------------------------------------------------------------------------------------------
 void Class::undeclare(const std::string& name)
 {
-    detail::ClassManager::instance().unregister(name);
+    detail::ClassManager::instance().removeClass(name);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -62,80 +62,86 @@ const Class& Class::base(std::size_t index) const
 //-------------------------------------------------------------------------------------------------
 std::size_t Class::functionCount() const
 {
-    return m_functionsByIndex.size();
+    return m_functions.size();
 }
 
 //-------------------------------------------------------------------------------------------------
 bool Class::hasFunction(const std::string& name) const
 {
-    return m_functions.find(name) != m_functions.end();
+    const FunctionNameIndex& names = m_functions.get<Name>();
+
+    return names.find(name) != names.end();
 }
 
 //-------------------------------------------------------------------------------------------------
 const Function& Class::function(std::size_t index) const
 {
     // Make sure that the index is not out of range
-    if (index >= m_functionsByIndex.size())
-        CAMP_ERROR(OutOfRange(index, m_functionsByIndex.size()));
+    if (index >= m_functions.size())
+        CAMP_ERROR(OutOfRange(index, m_functions.size()));
 
-    return *m_functionsByIndex[index];
+    return *m_functions[index];
 }
 
 //-------------------------------------------------------------------------------------------------
 const Function& Class::function(const std::string& name) const
 {
-    FunctionTable::const_iterator it = m_functions.find(name);
-    if (it == m_functions.end())
+    const FunctionNameIndex& names = m_functions.get<Name>();
+
+    FunctionNameIndex::const_iterator it = names.find(name);
+    if (it == names.end())
         CAMP_ERROR(FunctionNotFound(name, m_name));
 
-    return *it->second;
+    return **it;
 }
 
 //-------------------------------------------------------------------------------------------------
 std::size_t Class::propertyCount() const
 {
-    return m_propertiesByIndex.size();
+    return m_properties.size();
 }
 
 //-------------------------------------------------------------------------------------------------
 bool Class::hasProperty(const std::string& name) const
 {
-    return m_properties.find(name) != m_properties.end();
+    const PropertyNameIndex& names = m_properties.get<Name>();
+
+    return names.find(name) != names.end();
 }
 
 //-------------------------------------------------------------------------------------------------
 const Property& Class::property(std::size_t index) const
 {
     // Make sure that the index is not out of range
-    if (index >= m_propertiesByIndex.size())
-        CAMP_ERROR(OutOfRange(index, m_propertiesByIndex.size()));
+    if (index >= m_properties.size())
+        CAMP_ERROR(OutOfRange(index, m_properties.size()));
 
-    return *m_propertiesByIndex[index];
+    return *m_properties[index];
 }
 
 //-------------------------------------------------------------------------------------------------
 const Property& Class::property(const std::string& name) const
 {
-    PropertyTable::const_iterator it = m_properties.find(name);
-    if (it == m_properties.end())
+    const PropertyNameIndex& names = m_properties.get<Name>();
+
+    PropertyNameIndex::const_iterator it = names.find(name);
+    if (it == names.end())
         CAMP_ERROR(PropertyNotFound(name, m_name));
 
-    return *it->second;
+    return **it;
 }
 
 //-------------------------------------------------------------------------------------------------
 void Class::visit(ClassVisitor& visitor) const
 {
     // First visit properties
-    PropertyArray::const_iterator propEnd = m_propertiesByIndex.end();
-    for (PropertyArray::const_iterator it = m_propertiesByIndex.begin(); it != propEnd; ++it)
+    for (PropertyTable::const_iterator it = m_properties.begin(); it != m_properties.end(); ++it)
     {
         (*it)->accept(visitor);
     }
 
     // Then visit functions
-    FunctionArray::const_iterator funcEnd = m_functionsByIndex.end();
-    for (FunctionArray::const_iterator it = m_functionsByIndex.begin(); it != funcEnd; ++it)
+    for (FunctionTable::const_iterator it = m_functions.begin(); it != m_functions.end(); ++it)
     {
         (*it)->accept(visitor);
     }
@@ -188,8 +194,8 @@ int Class::baseOffset(const Class& base) const
         return 0;
 
     // Search base in the base classes
-    std::vector<BaseInfo>::const_iterator end = m_bases.end();
-    for (std::vector<BaseInfo>::const_iterator it = m_bases.begin(); it != end; ++it)
+    BaseList::const_iterator end = m_bases.end();
+    for (BaseList::const_iterator it = m_bases.begin(); it != end; ++it)
     {
         int offset = it->base->baseOffset(base);
         if (offset != -1)

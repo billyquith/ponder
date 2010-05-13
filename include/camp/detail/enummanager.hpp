@@ -73,7 +73,7 @@ public:
      *
      * \return Reference to the new metaenum
      */
-    Enum& registerNew(const std::string& name, const std::string& id);
+    Enum& addClass(const std::string& name, const std::string& id);
 
     /**
      * \brief Remove an existing metaenum by its name
@@ -82,7 +82,7 @@ public:
      *
      * \throw EnumNotFound \a name is not an existing metaenum
      */
-    void unregister(const std::string& name);
+    void removeClass(const std::string& name);
 
     /**
      * \brief Get the total number of metaenums
@@ -181,8 +181,8 @@ private:
         >
     > EnumTable;
 
-    typedef EnumTable::nth_index<0>::type IdIndex;
-    typedef EnumTable::nth_index<1>::type NameIndex;
+    typedef EnumTable::index<Id>::type IdIndex;
+    typedef EnumTable::index<Name>::type NameIndex;
 
     EnumTable m_enums; ///< Table storing enums indexed by their id and name
 };

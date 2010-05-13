@@ -29,45 +29,12 @@
 #include <algorithm>
 
 
-namespace
-{
-    /**
-     * \brief Function object which finds an enum pair by its name
-     */
-    struct FindByName
-    {
-        FindByName(const std::string& name) : m_name(name) {}
-
-        bool operator()(const camp::Enum::Pair& p) const
-        {
-            return p.name == m_name;
-        }
-
-        std::string m_name;
-    };
-
-    /**
-     * \brief Function object which finds an enum pair by its value
-     */
-    struct FindByValue
-    {
-        FindByValue(long value) : m_value(value) {}
-
-        bool operator()(const camp::Enum::Pair& p) const
-        {
-            return p.value == m_value;
-        }
-
-        long m_value;
-    };
-}
-
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
 void Enum::undeclare(const std::string& name)
 {
-    detail::EnumManager::instance().unregister(name);
+    detail::EnumManager::instance().removeClass(name);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -95,21 +62,26 @@ const Enum::Pair& Enum::pair(std::size_t index) const
 //-------------------------------------------------------------------------------------------------
 bool Enum::hasName(const std::string& name) const
 {
-    return std::find_if(m_pairs.begin(), m_pairs.end(), FindByName(name)) != m_pairs.end();
+    const NameIndex& names = m_pairs.get<Name>();
+
+    return names.find(name) != names.end();
 }
 
 //-------------------------------------------------------------------------------------------------
 bool Enum::hasValue(long value) const
 {
-    return std::find_if(m_pairs.begin(), m_pairs.end(), FindByValue(value)) != m_pairs.end();
+    const ValueIndex& values = m_pairs.get<Val>();
+
+    return values.find(value) != values.end();
 }
 
 //-------------------------------------------------------------------------------------------------
 const std::string& Enum::name(long value) const
 {
-    PairArray::const_iterator it = std::find_if(m_pairs.begin(), m_pairs.end(), FindByValue(value));
+    const ValueIndex& values = m_pairs.get<Val>();
 
-    if (it == m_pairs.end())
+    ValueIndex::const_iterator it = values.find(value);
+    if (it == values.end())
         CAMP_ERROR(EnumValueNotFound(value, name()));
 
     return it->name;
@@ -118,9 +90,10 @@ const std::string& Enum::name(long value) const
 //-------------------------------------------------------------------------------------------------
 long Enum::value(const std::string& name) const
 {
-    PairArray::const_iterator it = std::find_if(m_pairs.begin(), m_pairs.end(), FindByName(name));
+    const NameIndex& names = m_pairs.get<Name>();
 
-    if (it == m_pairs.end())
+    NameIndex::const_iterator it = names.find(name);
+    if (it == names.end())
         CAMP_ERROR(EnumNameNotFound(name, m_name));
 
     return it->value;

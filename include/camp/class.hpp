@@ -34,16 +34,21 @@
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <map>
+#include <camp/property.hpp>
+#include <camp/function.hpp>
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/mem_fun.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
 #include <string>
 
+
+namespace bm = boost::multi_index;
 
 namespace camp
 {
 template <typename T> class ClassBuilder;
 class UserObject;
-class Property;
-class Function;
 class Constructor;
 class Value;
 class ClassVisitor;
@@ -354,22 +359,33 @@ private:
     };
 
     typedef boost::shared_ptr<Property> PropertyPtr;
-    typedef std::map<std::string, PropertyPtr> PropertyTable;
-    typedef std::vector<PropertyPtr> PropertyArray;
-
     typedef boost::shared_ptr<Function> FunctionPtr;
-    typedef std::map<std::string, FunctionPtr> FunctionTable;
-    typedef std::vector<FunctionPtr> FunctionArray;
-
     typedef boost::shared_ptr<Constructor> ConstructorPtr;
     typedef std::vector<ConstructorPtr> ConstructorList;
+    typedef std::vector<BaseInfo> BaseList;
+
+    struct Id;
+    struct Name;
+
+    typedef boost::multi_index_container<PropertyPtr,
+        bm::indexed_by<bm::random_access<bm::tag<Id> >,
+                       bm::ordered_unique<bm::tag<Name>, bm::const_mem_fun<Property, const std::string&, &Property::name> >
+        >
+    > PropertyTable;
+
+    typedef boost::multi_index_container<FunctionPtr,
+        bm::indexed_by<bm::random_access<bm::tag<Id> >,
+                       bm::ordered_unique<bm::tag<Name>, bm::const_mem_fun<Function, const std::string&, &Function::name> >
+        >
+    > FunctionTable;
+
+    typedef PropertyTable::index<Name>::type PropertyNameIndex;
+    typedef FunctionTable::index<Name>::type FunctionNameIndex;
 
     std::string m_name; ///< Name of the metaclass
-    std::vector<BaseInfo> m_bases; ///< List of base metaclasses
-    FunctionTable m_functions; ///< List of metafunctions sorted by name
-    FunctionArray m_functionsByIndex; ///< List of metafunctions sorted by index
-    PropertyTable m_properties; ///< List of metaproperties sorted by name
-    PropertyArray m_propertiesByIndex; ///< List of metaproperties sorted by index
+    FunctionTable m_functions; ///< Table of metafunctions indexed by name
+    PropertyTable m_properties; ///< Table of metaproperties indexed by name
+    BaseList m_bases; ///< List of base metaclasses
     ConstructorList m_constructors; ///< List of metaconstructors
 };
 

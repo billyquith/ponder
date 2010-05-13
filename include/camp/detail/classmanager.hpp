@@ -76,7 +76,7 @@ public:
      *
      * \throw ClassAlreadyCreated \a name or \a id already exists
      */
-    Class& registerNew(const std::string& name, const std::string& id);
+    Class& addClass(const std::string& name, const std::string& id);
 
     /**
      * \brief Remove an existing metaclass by its name
@@ -85,7 +85,7 @@ public:
      *
      * \throw ClassNotFound \a name is not an existing metaclass
      */
-    void unregister(const std::string& name);
+    void removeClass(const std::string& name);
 
     /**
      * \brief Get the total number of metaclasses
@@ -184,8 +184,8 @@ private:
         >
     > ClassTable;
 
-    typedef ClassTable::nth_index<0>::type IdIndex;
-    typedef ClassTable::nth_index<1>::type NameIndex;
+    typedef ClassTable::index<Id>::type IdIndex;
+    typedef ClassTable::index<Name>::type NameIndex;
 
     ClassTable m_classes; ///< Table storing classes indexed by their id and name
 };

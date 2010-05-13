@@ -31,9 +31,14 @@
 #include <camp/detail/enummanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
 #include <string>
-#include <vector>
 
+
+namespace bm = boost::multi_index;
 
 namespace camp
 {
@@ -222,10 +227,22 @@ private:
      */
     Enum(const std::string& name);
 
-    typedef std::vector<Pair> PairArray;
+    struct Id;
+    struct Val;
+    struct Name;
+
+    typedef boost::multi_index_container<Pair,
+        bm::indexed_by<bm::random_access<bm::tag<Id> >,
+                       bm::ordered_unique<bm::tag<Val>, bm::member<Pair, long, &Pair::value> >,
+                       bm::ordered_unique<bm::tag<Name>, bm::member<Pair, std::string, &Pair::name> >
+        >
+    > PairTable;
+
+    typedef PairTable::index<Val>::type ValueIndex;
+    typedef PairTable::index<Name>::type NameIndex;
 
     std::string m_name; ///< Name of the metaenum
-    PairArray m_pairs; ///< List of pairs stored in the metaenum
+    PairTable m_pairs; ///< Table of pairs, indexed by their value and name
 };
 
 } // namespace camp
