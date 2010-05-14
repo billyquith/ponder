@@ -63,10 +63,21 @@ bool Value::operator<(const Value& other) const
 }
 
 //-------------------------------------------------------------------------------------------------
-CAMP_API std::ostream& operator<<(std::ostream& stream, const Value& value)
+std::istream& operator>>(std::istream& stream, Value& value)
 {
-    value.visit(detail::PrintVisitor(stream));
+    // Use the string conversion
+    std::string str;
+    if (stream >> str)
+        value = str;
+
     return stream;
+}
+
+//-------------------------------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& stream, const Value& value)
+{
+    // Use the string conversion
+    return stream << value.to<std::string>();
 }
 
 } // namespace camp

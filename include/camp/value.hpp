@@ -201,6 +201,16 @@ private:
 };
 
 /**
+ * \brief Overload of operator >> to extract a camp::Value from a standard stream
+ *
+ * \param stream Source input stream
+ * \param value Value to fill
+ *
+ * \return Reference to the input stream
+ */
+CAMP_API std::istream& operator>>(std::istream& stream, Value& value);
+
+/**
  * \brief Overload of operator << to print a camp::Value into a standard stream
  *
  * \param stream Target output stream

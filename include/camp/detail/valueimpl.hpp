@@ -25,8 +25,6 @@
 #define CAMP_DETAIL_VALUEIMPL_HPP
 
 #include <camp/type.hpp>
-#include <camp/enumobject.hpp>
-#include <camp/userobject.hpp>
 #include <camp/valuemapper.hpp>
 #include <camp/badtype.hpp>
 #include <boost/variant/static_visitor.hpp>
@@ -51,46 +49,16 @@ struct ConvertVisitor : public boost::static_visitor<T>
         return camp_ext::ValueMapper<T>::from(value);
     }
 
-    T operator()(T value) const
+    T operator()(const T& value) const
     {
         // Optimization when source type is the same as requested type
         return value;
-    }
-
-    T operator()(const UserObject& value) const
-    {
-        // The source value is a user object: there's only one conversion possible
-        return value.get<T>();
     }
 
     T operator()(NoType) const
     {
         // Error: trying to convert an empty value
         CAMP_ERROR(BadType(noType, mapType<T>()));
-    }
-};
-
-/**
- * \brief Specialization of ConvertVisitor for UserObject
- *
- * The generic version would work thanks to the ValueMapper<UserObject> specialization,
- * but it fails to compile because when T == UserObject there are two similar overloads of operator()
- * and the compiler gets confused.
- */
-template <>
-struct ConvertVisitor<UserObject> : public boost::static_visitor<UserObject>
-{
-    UserObject operator()(const UserObject& value) const
-    {
-        // The source value is a user object: just return it
-        return value;
-    }
-
-    template <typename U>
-    UserObject operator()(const U&) const
-    {
-        // Error: trying to convert a non-user type to a UserObject
-        CAMP_ERROR(BadType(mapType<U>(), userType));
     }
 };
 
@@ -144,47 +112,6 @@ struct EqualVisitor : public boost::static_visitor<bool>
         // No type (empty values) : they're considered equal
         return true;
     }
-};
-
-/**
- * \brief Value visitor which prints the stored value to a standard stream
- */
-struct PrintVisitor : public boost::static_visitor<>
-{
-    PrintVisitor(std::ostream& stream)
-        : m_stream(stream)
-    {
-    }
-
-    template <typename U>
-    void operator()(const U& value) const
-    {
-        // Generic version for all compatible types
-        m_stream << value;
-    }
-
-    void operator()(const EnumObject& value) const
-    {
-        // Enum object: print the value
-        m_stream << value.value();
-    }
-
-    void operator()(const UserObject& value) const
-    {
-        // User object: print the metaclass name
-        // @todo use the metaclass.toString() function if available?
-        m_stream << value.pointer();
-    }
-
-    void operator()(NoType) const
-    {
-        // No type: do nothing
-    }
-
-    // To remove VC++ warnings
-    PrintVisitor& operator=(const PrintVisitor&);
-
-    std::ostream& m_stream;
 };
 
 } // namespace detail
