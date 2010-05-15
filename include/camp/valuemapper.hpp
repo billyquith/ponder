@@ -234,9 +234,28 @@ struct ValueMapper<T, typename boost::enable_if<boost::is_enum<T> >::type>
     static T from(bool source)                    {return static_cast<T>(static_cast<long>(source));}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(static_cast<long>(source));}
-    static T from(const std::string& source)      {return static_cast<T>(camp::enumByType<T>().value(source));}
     static T from(const camp::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const camp::UserObject& source) {CAMP_ERROR(camp::BadType(camp::userType, camp::enumType));}
+
+    // The string -> enum conversion involves a little more work:
+    // we try two different conversions (as a name and as a value)
+    static T from(const std::string& source)
+    {
+        // Get the metaenum of T, if any
+        const camp::Enum* metaenum = camp::enumByTypeSafe<T>();
+
+        // First try as a name
+        if (metaenum && metaenum->hasName(source))
+            return static_cast<T>(metaenum->value(source));
+
+        // Then try as a number
+        long value = boost::lexical_cast<long>(source);
+        if (!metaenum || metaenum->hasValue(value))
+            return static_cast<T>(value);
+
+        // Not a valid enum name or number: throw an error
+        CAMP_ERROR(camp::BadType(camp::stringType, camp::enumType));
+    }
 };
 
 /*

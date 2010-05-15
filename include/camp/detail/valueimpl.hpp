@@ -28,8 +28,6 @@
 #include <camp/valuemapper.hpp>
 #include <camp/badtype.hpp>
 #include <boost/variant/static_visitor.hpp>
-#include <ostream>
-#include <string>
 
 
 namespace camp
