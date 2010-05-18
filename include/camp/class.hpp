@@ -28,14 +28,14 @@
 #include <camp/config.hpp>
 #include <camp/args.hpp>
 #include <camp/classget.hpp>
-#include <camp/constructornotfound.hpp>
+#include <camp/property.hpp>
+#include <camp/function.hpp>
 #include <camp/tagholder.hpp>
+#include <camp/errors.hpp>
 #include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <camp/property.hpp>
-#include <camp/function.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 #include <boost/multi_index/ordered_index.hpp>

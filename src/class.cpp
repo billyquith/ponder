@@ -22,10 +22,7 @@
 
 
 #include <camp/class.hpp>
-#include <camp/outofrange.hpp>
-#include <camp/classunrelated.hpp>
-#include <camp/functionnotfound.hpp>
-#include <camp/propertynotfound.hpp>
+#include <camp/errors.hpp>
 #include <camp/detail/classmanager.hpp>
 
 

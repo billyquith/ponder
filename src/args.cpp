@@ -23,7 +23,7 @@
 
 #include <camp/args.hpp>
 #include <camp/value.hpp>
-#include <camp/outofrange.hpp>
+#include <camp/errors.hpp>
 
 
 namespace camp

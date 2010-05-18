@@ -26,7 +26,7 @@
 
 
 #include <camp/simpleproperty.hpp>
-#include <camp/forbiddenwrite.hpp>
+#include <camp/errors.hpp>
 
 
 namespace camp

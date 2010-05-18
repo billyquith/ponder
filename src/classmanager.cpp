@@ -23,9 +23,7 @@
 
 #include <camp/detail/classmanager.hpp>
 #include <camp/class.hpp>
-#include <camp/classnotfound.hpp>
-#include <camp/classalreadycreated.hpp>
-#include <camp/outofrange.hpp>
+#include <camp/errors.hpp>
 #include <camp/observer.hpp>
 
 

@@ -23,7 +23,7 @@
 
 #include <camp/tagholder.hpp>
 #include <camp/value.hpp>
-#include <camp/outofrange.hpp>
+#include <camp/errors.hpp>
 #include <algorithm>
 
 

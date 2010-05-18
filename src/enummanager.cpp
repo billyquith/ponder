@@ -23,9 +23,7 @@
 
 #include <camp/detail/enummanager.hpp>
 #include <camp/enum.hpp>
-#include <camp/enumalreadycreated.hpp>
-#include <camp/enumnotfound.hpp>
-#include <camp/outofrange.hpp>
+#include <camp/errors.hpp>
 #include <camp/observer.hpp>
 
 

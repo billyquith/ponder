@@ -27,8 +27,7 @@
 
 #include <camp/args.hpp>
 #include <camp/classcast.hpp>
-#include <camp/nullobject.hpp>
-#include <camp/classnotfound.hpp>
+#include <camp/errors.hpp>
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>

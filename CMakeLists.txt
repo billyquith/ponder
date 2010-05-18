@@ -44,42 +44,8 @@ set(CAMP_SRCS
     src/property.cpp
     include/camp/observer.hpp
     src/observer.cpp
-    include/camp/badargument.hpp
-    src/badargument.cpp
-    include/camp/badtype.hpp
-    src/badtype.cpp
-    include/camp/classalreadycreated.hpp
-    src/classalreadycreated.cpp
-    include/camp/classnotfound.hpp
-    src/classnotfound.cpp
-    include/camp/classunrelated.hpp
-    src/classunrelated.cpp
-    include/camp/constructornotfound.hpp
-    src/constructornotfound.cpp
-    include/camp/enumalreadycreated.hpp
-    src/enumalreadycreated.cpp
-    include/camp/enumnamenotfound.hpp
-    src/enumnamenotfound.cpp
-    include/camp/enumnotfound.hpp
-    src/enumnotfound.cpp
-    include/camp/enumvaluenotfound.hpp
-    src/enumvaluenotfound.cpp
-    include/camp/forbiddencall.hpp
-    src/forbiddencall.cpp
-    include/camp/forbiddenread.hpp
-    src/forbiddenread.cpp
-    include/camp/forbiddenwrite.hpp
-    src/forbiddenwrite.cpp
-    include/camp/functionnotfound.hpp
-    src/functionnotfound.cpp
-    include/camp/notenougharguments.hpp
-    src/notenougharguments.cpp
-    include/camp/nullobject.hpp
-    src/nullobject.cpp
-    include/camp/propertynotfound.hpp
-    src/propertynotfound.cpp
-    include/camp/outofrange.hpp
-    src/outofrange.cpp
+    include/camp/errors.hpp
+    src/errors.cpp
     include/camp/function.hpp
     src/function.cpp
     include/camp/error.hpp

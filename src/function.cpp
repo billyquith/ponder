@@ -23,9 +23,7 @@
 
 #include <camp/function.hpp>
 #include <camp/classvisitor.hpp>
-#include <camp/outofrange.hpp>
-#include <camp/forbiddencall.hpp>
-#include <camp/notenougharguments.hpp>
+#include <camp/errors.hpp>
 
 
 namespace camp

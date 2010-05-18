@@ -23,11 +23,7 @@
 
 #include <camp/arrayproperty.hpp>
 #include <camp/classvisitor.hpp>
-#include <camp/forbiddenread.hpp>
-#include <camp/forbiddenwrite.hpp>
-#include <camp/nullobject.hpp>
-#include <camp/badtype.hpp>
-#include <camp/outofrange.hpp>
+#include <camp/errors.hpp>
 
 
 namespace camp

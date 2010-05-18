@@ -22,8 +22,7 @@
 
 
 #include <camp/property.hpp>
-#include <camp/forbiddenread.hpp>
-#include <camp/forbiddenwrite.hpp>
+#include <camp/errors.hpp>
 #include <camp/classvisitor.hpp>
 #include <camp/userobject.hpp>
 

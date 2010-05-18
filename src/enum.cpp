@@ -22,9 +22,7 @@
 
 
 #include <camp/enum.hpp>
-#include <camp/outofrange.hpp>
-#include <camp/enumnamenotfound.hpp>
-#include <camp/enumvaluenotfound.hpp>
+#include <camp/errors.hpp>
 #include <camp/detail/enummanager.hpp>
 #include <algorithm>
 

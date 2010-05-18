@@ -27,8 +27,7 @@
 
 #include <camp/function.hpp>
 #include <camp/value.hpp>
-#include <camp/badtype.hpp>
-#include <camp/badargument.hpp>
+#include <camp/errors.hpp>
 #include <camp/detail/callhelper.hpp>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>

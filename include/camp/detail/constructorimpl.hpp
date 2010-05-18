@@ -29,8 +29,7 @@
 #include <camp/valuemapper.hpp>
 #include <camp/value.hpp>
 #include <camp/valuevisitor.hpp>
-#include <camp/badtype.hpp>
-#include <camp/badargument.hpp>
+#include <camp/errors.hpp>
 
 
 namespace camp
