@@ -169,6 +169,11 @@ add_library(camp SHARED ${CAMP_SRCS})
 # define the export macro
 set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
 
+# define d suffix on windows
+if(WIN32)
+    set_target_properties(camp PROPERTIES DEBUG_POSTFIX d)
+endif()
+
 # add the test subdirectory, but do not build it by default
 if(BUILD_TEST)
     add_subdirectory(test)

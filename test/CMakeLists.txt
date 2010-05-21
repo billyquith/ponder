@@ -50,6 +50,11 @@ link_directories(
 # instruct CMake to build an executable from all of the source files
 add_executable(camptest ${CAMP_TEST_SRCS})
 
+# define d suffix on windows
+if(WIN32)
+    set_target_properties(camptest PROPERTIES DEBUG_POSTFIX d)
+endif()
+
 # last thing we have to do is to tell CMake what libraries our executable needs,
 target_link_libraries(camptest camp ${Boost_LIBRARIES})
 
