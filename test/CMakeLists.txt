@@ -28,8 +28,22 @@ project(CAMP_TEST)
 
 # all source files
 set(CAMP_TEST_SRCS
-    main.cpp
-    test.hpp
+    arrayproperty.cpp
+    arrayproperty.hpp
+    class.cpp
+    class.hpp
+    enum.cpp
+    enum.hpp
+    enumobject.cpp
+    enumobject.hpp
+    enumproperty.cpp
+    enumproperty.hpp
+    observer.cpp
+    observer.hpp
+    tagholder.cpp
+    tagholder.hpp
+    value.cpp
+    value.hpp
 )
 
 # find Boost
