@@ -55,7 +55,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     if(WIN32)
         execute_process(COMMAND "${CMAKE_CXX_COMPILER}" "-dumpversion" OUTPUT_VARIABLE GCC_VERSION_OUTPUT)
         string(REGEX REPLACE "([0-9]+\\.[0-9]+).*" "\\1" GCC_VERSION "${GCC_VERSION_OUTPUT}")
-        set(PACKAGE_COMPILER_NAME ${PACKAGE_COMPILER_NAME}${GCC_VERSION_OUTPUT})
+        set(PACKAGE_COMPILER_NAME ${PACKAGE_COMPILER_NAME}${GCC_VERSION})
     endif()
 elseif(MSVC80)
     set(PACKAGE_COMPILER_NAME "vc2005")
@@ -67,11 +67,3 @@ else()
     message(WARNING "Unsupported compiler for package generation")
     return()
 endif()
-
-# set package file name
-string(TOLOWER ${CPACK_PACKAGE_NAME} LOWER_PACKAGE_NAME)
-set(CPACK_PACKAGE_FILE_NAME
-    ${LOWER_PACKAGE_NAME}-${VERSION_STR}-${PACKAGE_SYSTEM_NAME}-${PACKAGE_COMPILER_NAME})
-set(CPACK_SOURCE_PACKAGE_FILE_NAME
-    ${LOWER_PACKAGE_NAME}-${VERSION_STR}-src)
-
