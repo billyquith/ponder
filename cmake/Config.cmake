@@ -1,12 +1,9 @@
 
 # setup version numbers
-include(${CMAKE_SOURCE_DIR}/cmake/GitTag.cmake)
-if (DEFINED GITTAG-NOTFOUND)
-    set(VERSION_MAJOR 0)
-    set(VERSION_MINOR 6)
-    set(VERSION_PATCH 0)
-    set(VERSION_STR "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
-endif()
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 6)
+set(VERSION_PATCH 0)
+set(VERSION_STR "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 message("Project version: ${VERSION_STR}")
 
 # Set the default build type to release with debug info
