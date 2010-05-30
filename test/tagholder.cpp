@@ -21,13 +21,11 @@
 ****************************************************************************/
 
 
-#define BOOST_TEST_NO_LIB
-#include <boost/test/unit_test.hpp>
-
 #include "tagholder.hpp"
 #include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/errors.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace TagHolderTest;
 

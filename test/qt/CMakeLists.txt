@@ -29,12 +29,15 @@ project(CAMP_TEST_QT)
 # all source files
 set(CAMP_TEST_QT_SRCS
     main.cpp
-    test.hpp
+    functionmapping.cpp
+    functionmapping.hpp
+    propertymapping.cpp
+    propertymapping.hpp
+    qstringmapping.cpp
 )
 
 # find Boost
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost 1.38.0 COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost 1.38.0)
 
 # find Qt4
 find_package(Qt4 4.5.0 COMPONENTS QtCore REQUIRED)
@@ -44,7 +47,7 @@ find_package(Qt4 4.5.0 COMPONENTS QtCore REQUIRED)
 include(${QT_USE_FILE})
 
 # this will run moc
-QT4_WRAP_CPP(CAMP_TEST_QT_MOC_SRCS test.hpp)
+QT4_WRAP_CPP(CAMP_TEST_QT_MOC_SRCS functionmapping.hpp propertymapping.hpp)
 
 # include files search paths
 include_directories(
@@ -56,6 +59,9 @@ include_directories(
 link_directories(
     ${CAMP_BINARY_DIR}
 )
+
+# no implicit link to boost.test library
+add_definitions(-DBOOST_TEST_NO_LIB)
 
 # instruct CMake to build an executable from all of the source files
 add_executable(camptest-qt ${CAMP_TEST_QT_SRCS} ${CAMP_TEST_QT_MOC_SRCS})

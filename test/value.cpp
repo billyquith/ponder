@@ -21,14 +21,12 @@
 ****************************************************************************/
 
 
-#define BOOST_TEST_NO_LIB
-#include <boost/test/unit_test.hpp>
-
 #include "value.hpp"
 #include <camp/class.hpp>
 #include <camp/enum.hpp>
 #include <camp/value.hpp>
 #include <camp/errors.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace ValueTest;
 

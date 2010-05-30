@@ -21,14 +21,11 @@
 ****************************************************************************/
 
 
-#define BOOST_TEST_NO_LIB
-#define BOOST_TEST_MODULE CAMP test // this macro should be set once in the entire project
-#include <boost/test/unit_test.hpp>
-
 #include "class.hpp"
 #include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/errors.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace ClassTest;
 

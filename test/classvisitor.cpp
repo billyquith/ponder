@@ -21,70 +21,55 @@
 ****************************************************************************/
 
 
-#include "observer.hpp"
+#include "classvisitor.hpp"
+#include <camp/class.hpp>
+#include <camp/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace ObserverTest;
+using namespace ClassVisitorTest;
 
 //-----------------------------------------------------------------------------
-struct ObserverFixture
+struct ClassVisitorFixture
 {
-    ObserverFixture()
+    ClassVisitorFixture()
     {
-        camp::addObserver(&observer);
+        camp::Enum::declare<MyEnum>("MyEnum");
+
+        camp::Class::declare<MyType>("MyType");
+
+        camp::Class::declare<MyClass>("MyClass")
+            .property("simple", &MyClass::simpleProp)
+            .property("array", &MyClass::arrayProp)
+            .property("enum", &MyClass::enumProp)
+            .property("user", &MyClass::userProp)
+            .function("function", &MyClass::function);
     }
 
-    ~ObserverFixture()
+    ~ClassVisitorFixture()
     {
-        camp::removeObserver(&observer);
+        camp::Class::undeclare<MyClass>();
+        camp::Class::undeclare<MyType>();
+        camp::Enum::undeclare<MyEnum>();
     }
-
-    MyObserver observer;
 };
 
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Observer
+//                         Tests for camp::ClassVisitor
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(OBSERVER, ObserverFixture)
+BOOST_FIXTURE_TEST_SUITE(CLASSVISITOR, ClassVisitorFixture)
 
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(classes)
+BOOST_AUTO_TEST_CASE(visit)
 {
-    BOOST_CHECK_EQUAL(observer.lastClassAdded, "");
+    MyClassVisitor visitor;
+    camp::classByType<MyClass>().visit(visitor);
 
-    camp::Class::declare<MyClass>("MyClass");
-    BOOST_CHECK_EQUAL(observer.lastClassAdded, "MyClass");
-
-    camp::Class::undeclare<MyClass>();
-    BOOST_CHECK_EQUAL(observer.lastClassRemoved, "MyClass");
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(enums)
-{
-    BOOST_CHECK_EQUAL(observer.lastEnumAdded, "");
-
-    camp::Enum::declare<MyEnum>("MyEnum");
-    BOOST_CHECK_EQUAL(observer.lastEnumAdded, "MyEnum");
-
-    camp::Enum::undeclare<MyEnum>();
-    BOOST_CHECK_EQUAL(observer.lastEnumRemoved, "MyEnum");
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(removeObserver)
-{
-    MyObserver observer2;
-    camp::addObserver(&observer2);
-
-    camp::Class::declare<MyClass>("MyClass");
-    BOOST_CHECK_EQUAL(observer2.lastClassAdded, "MyClass");
-
-    camp::removeObserver(&observer2);
-
-    camp::Class::undeclare<MyClass>();
-    BOOST_CHECK_EQUAL(observer2.lastClassRemoved, "");
+    BOOST_CHECK(visitor.simpleVisited);
+    BOOST_CHECK(visitor.arrayVisited);
+    BOOST_CHECK(visitor.enumVisited);
+    BOOST_CHECK(visitor.userVisited);
+    BOOST_CHECK(visitor.functionVisited);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

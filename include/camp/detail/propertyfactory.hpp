@@ -412,6 +412,7 @@ template <typename C, typename F1, typename F2, typename F3>
 struct PropertyFactory3
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
+    typedef typename FunctionTraits<F3>::ReturnType InnerType;
 
     static Property* get(const std::string& name, F1 accessor1, F2 accessor2, F3 accessor3)
     {
@@ -420,8 +421,8 @@ struct PropertyFactory3
         typedef camp_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
         typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
 
-        return new PropertyType(name, AccessorType(boost::bind(boost::type<ReturnType>(), accessor1, boost::bind(accessor3, _1)),
-                                                   boost::bind(boost::type<void>(), accessor2, boost::bind(accessor3, _1), _2)));
+        return new PropertyType(name, AccessorType(boost::bind(boost::type<ReturnType>(), accessor1, boost::bind(boost::type<InnerType>(), accessor3, _1)),
+                                                   boost::bind(boost::type<void>(), accessor2, boost::bind(boost::type<InnerType>(), accessor3, _1), _2)));
     }
 };
 

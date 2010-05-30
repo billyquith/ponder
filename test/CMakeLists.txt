@@ -28,6 +28,7 @@ project(CAMP_TEST)
 
 # all source files
 set(CAMP_TEST_SRCS
+    main.cpp
     arrayproperty.cpp
     arrayproperty.hpp
     class.cpp
@@ -44,11 +45,14 @@ set(CAMP_TEST_SRCS
     tagholder.hpp
     value.cpp
     value.hpp
+    property.cpp
+    property.hpp
+    classvisitor.cpp
+    classvisitor.hpp
 )
 
 # find Boost
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost 1.38.0 COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost 1.38.0)
 
 # include files search paths
 include_directories(
@@ -60,6 +64,9 @@ include_directories(
 link_directories(
     ${CAMP_BINARY_DIR}
 )
+
+# no implicit link to boost.test library
+add_definitions(-DBOOST_TEST_NO_LIB)
 
 # instruct CMake to build an executable from all of the source files
 add_executable(camptest ${CAMP_TEST_SRCS})

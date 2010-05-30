@@ -21,14 +21,12 @@
 ****************************************************************************/
 
 
-#define BOOST_TEST_NO_LIB
-#include <boost/test/unit_test.hpp>
-
 #include "enumobject.hpp"
 #include <camp/enum.hpp>
 #include <camp/enumget.hpp>
 #include <camp/enumobject.hpp>
 #include <camp/errors.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace EnumObjectTest;
 

@@ -20,37 +20,25 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_TAGHOLDER_HPP
-#define CAMPTEST_TAGHOLDER_HPP
+#ifndef CAMPTEST_USERPROPERTY_HPP
+#define CAMPTEST_USERPROPERTY_HPP
 
 #include <camp/camptype.hpp>
-#include <string>
 
 
-namespace TagHolderTest
+namespace UserPropertyTest
 {
-    struct MyClass
-    {
-        MyClass(int x) : prop(x) {}
-        std::string func() {return "func";}
-        int prop;
-    };
-
     struct MyType
     {
-        MyType(int x) : prop(x) {}
-        int prop;
     };
 
-    enum MyEnum
+    struct MyClass
     {
-        One = 1,
-        Ten = 10
+        MyType prop;
     };
 }
 
-CAMP_TYPE(TagHolderTest::MyClass);
-CAMP_TYPE(TagHolderTest::MyType);
-CAMP_TYPE(TagHolderTest::MyEnum);
+CAMP_TYPE(UserPropertyTest::MyType);
+CAMP_TYPE(UserPropertyTest::MyClass);
 
-#endif // CAMPTEST_TAGHOLDER_HPP
+#endif // CAMPTEST_USERPROPERTY_HPP

@@ -21,9 +21,6 @@
 ****************************************************************************/
 
 
-#define BOOST_TEST_NO_LIB
-#include <boost/test/unit_test.hpp>
-
 #include "enumproperty.hpp"
 #include <camp/class.hpp>
 #include <camp/enum.hpp>
@@ -31,6 +28,7 @@
 #include <camp/enumget.hpp>
 #include <camp/errors.hpp>
 #include <camp/enumproperty.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace EnumPropertyTest;
 

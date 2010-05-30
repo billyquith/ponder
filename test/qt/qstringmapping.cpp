@@ -21,70 +21,47 @@
 ****************************************************************************/
 
 
-#include "observer.hpp"
+#include <camp/value.hpp>
+#include <camp/qt/qt.hpp>
 #include <boost/test/unit_test.hpp>
+#include <QString>
 
-using namespace ObserverTest;
-
-//-----------------------------------------------------------------------------
-struct ObserverFixture
+// To make the boost.test logger happy
+inline std::ostream& operator<<(std::ostream& stream, const QString& string)
 {
-    ObserverFixture()
-    {
-        camp::addObserver(&observer);
-    }
-
-    ~ObserverFixture()
-    {
-        camp::removeObserver(&observer);
-    }
-
-    MyObserver observer;
-};
-
-
-//-----------------------------------------------------------------------------
-//                         Tests for camp::Observer
-//-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(OBSERVER, ObserverFixture)
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(classes)
-{
-    BOOST_CHECK_EQUAL(observer.lastClassAdded, "");
-
-    camp::Class::declare<MyClass>("MyClass");
-    BOOST_CHECK_EQUAL(observer.lastClassAdded, "MyClass");
-
-    camp::Class::undeclare<MyClass>();
-    BOOST_CHECK_EQUAL(observer.lastClassRemoved, "MyClass");
+    return stream << string.toStdString();
 }
 
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(enums)
+//                         Tests for camp_ext::ValueMapper<QString>
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_SUITE(QSTRING)
+
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(observer.lastEnumAdded, "");
+    camp::Value value = QString("hello");
 
-    camp::Enum::declare<MyEnum>("MyEnum");
-    BOOST_CHECK_EQUAL(observer.lastEnumAdded, "MyEnum");
-
-    camp::Enum::undeclare<MyEnum>();
-    BOOST_CHECK_EQUAL(observer.lastEnumRemoved, "MyEnum");
+    BOOST_CHECK_EQUAL(value.type(), camp::stringType);
 }
 
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(removeObserver)
+BOOST_AUTO_TEST_CASE(conversionsFromQString)
 {
-    MyObserver observer2;
-    camp::addObserver(&observer2);
+    camp::Value value = QString("-10");
 
-    camp::Class::declare<MyClass>("MyClass");
-    BOOST_CHECK_EQUAL(observer2.lastClassAdded, "MyClass");
+    BOOST_CHECK_EQUAL(value.to<int>(),         -10);
+    BOOST_CHECK_CLOSE(value.to<double>(),      -10., 1E-5);
+    BOOST_CHECK_EQUAL(value.to<std::string>(), "-10");
+    BOOST_CHECK_EQUAL(value.to<QString>(),     "-10");
+}
 
-    camp::removeObserver(&observer2);
-
-    camp::Class::undeclare<MyClass>();
-    BOOST_CHECK_EQUAL(observer2.lastClassRemoved, "");
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(conversionsToQString)
+{
+    BOOST_CHECK_EQUAL(camp::Value(false).to<QString>(),                QString("0"));
+    BOOST_CHECK_EQUAL(camp::Value(10).to<QString>(),                   QString("10"));
+    BOOST_CHECK_EQUAL(camp::Value(std::string("hello")).to<QString>(), QString("hello"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
