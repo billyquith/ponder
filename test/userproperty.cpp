@@ -38,6 +38,9 @@ struct UserPropertyFixture
 
         camp::Class::declare<MyClass>("MyClass")
             .property("prop", &MyClass::prop);
+
+        const camp::Class& metaclass = camp::classByType<MyClass>();
+        property = static_cast<const camp::UserProperty*>(&metaclass.property("prop"));
     }
 
     ~UserPropertyFixture()
@@ -45,6 +48,8 @@ struct UserPropertyFixture
         camp::Class::undeclare<MyClass>();
         camp::Class::undeclare<MyType>();
     }
+
+    const camp::UserProperty* property;
 };
 
 
@@ -54,58 +59,35 @@ struct UserPropertyFixture
 BOOST_FIXTURE_TEST_SUITE(USERPROPERTY, UserPropertyFixture)
 
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(xxx)
+BOOST_AUTO_TEST_CASE(type)
 {
+    BOOST_CHECK_EQUAL(property->type(), camp::userType);
+}
+
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(getClass)
+{
+    BOOST_CHECK(property->getClass() == camp::classByType<MyType>());
+}
+
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(get)
+{
+    BOOST_CHECK_EQUAL(property->get(MyClass(-1)).to<MyType>().x, -1);
+    BOOST_CHECK_EQUAL(property->get(MyClass(20)).to<MyType>().x, 20);
+}
+
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(set)
+{
+    MyClass object1(1);
+    MyClass object2(10);
+    property->set(object1, MyType(2));
+    property->set(object2, MyType(20));
+
+    // reverse order on purpose (to exhibit memory corruptions)
+    BOOST_CHECK_EQUAL(property->get(object2).to<MyType>().x, 20);
+    BOOST_CHECK_EQUAL(property->get(object1).to<MyType>().x, 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
-
-
-
-/*
-    camp::Class::declare<UserPropTest>("UserPropTest")
-        .property("c1", &UserPropTest::c1)
-        .property("c2", &UserPropTest::c2)
-        .property("c3", &UserPropTest::c3)
-        .property("c4", &UserPropTest::getC4, &UserPropTest::setC4)
-        ;
-
-    UserPropTest obj;
-    const camp::Class& c = camp::classByType<UserPropTest>();
-    const camp::UserProperty& c1 = static_cast<const camp::UserProperty&>(c.property("c1"));
-    const camp::UserProperty& c2 = static_cast<const camp::UserProperty&>(c.property("c2"));
-    const camp::UserProperty& c3 = static_cast<const camp::UserProperty&>(c.property("c3"));
-    const camp::UserProperty& c4 = static_cast<const camp::UserProperty&>(c.property("c4"));
-
-    // ***** type *****
-    BOOST_CHECK_EQUAL(c1.type(), camp::userType);
-    BOOST_CHECK_EQUAL(c2.type(), camp::userType);
-    BOOST_CHECK_EQUAL(c3.type(), camp::userType);
-    BOOST_CHECK_EQUAL(c4.type(), camp::userType);
-
-    // ***** getClass *****
-    BOOST_CHECK_EQUAL(c1.getClass() == camp::classByType<Comparable>(), true);
-    BOOST_CHECK_EQUAL(c2.getClass() == camp::classByType<Comparable>(), true);
-    BOOST_CHECK_EQUAL(c3.getClass() == camp::classByType<Comparable>(), true);
-    BOOST_CHECK_EQUAL(c4.getClass() == camp::classByType<Comparable>(), true);
-
-    // ***** get *****
-    BOOST_CHECK_EQUAL(c1.get(obj).to<Comparable>(), Comparable(10));
-    BOOST_CHECK_EQUAL(c2.get(obj).to<Comparable>(), Comparable(20));
-    BOOST_CHECK_EQUAL(c3.get(obj).to<Comparable>(), Comparable(30));
-    BOOST_CHECK_EQUAL(c4.get(obj).to<Comparable>(), Comparable(40));
-
-    // ***** set *****
-    c1.set(obj, Comparable(100));
-    c2.set(obj, Comparable(200));
-    c3.set(obj, Comparable(300));
-    c4.set(obj, Comparable(400));
-    camp::Value v4 = c4.get(obj); // reverse order on purpose (to exhibit memory corruptions)
-    camp::Value v3 = c3.get(obj);
-    camp::Value v2 = c2.get(obj);
-    camp::Value v1 = c1.get(obj);
-    BOOST_CHECK_EQUAL(v1.to<Comparable>(), Comparable(100));
-    BOOST_CHECK_EQUAL(v2.to<Comparable>(), Comparable(200));
-    BOOST_CHECK_EQUAL(v3.to<Comparable>(), Comparable(300));
-    BOOST_CHECK_EQUAL(v4.to<Comparable>(), Comparable(400));
-*/

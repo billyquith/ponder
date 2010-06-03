@@ -30,10 +30,13 @@ namespace UserPropertyTest
 {
     struct MyType
     {
+        MyType(int x_) : x(x_) {}
+        int x;
     };
 
     struct MyClass
     {
+        MyClass(int x) : prop(x) {}
         MyType prop;
     };
 }

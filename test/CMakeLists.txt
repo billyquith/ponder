@@ -49,6 +49,8 @@ set(CAMP_TEST_SRCS
     property.hpp
     classvisitor.cpp
     classvisitor.hpp
+    constructor.cpp
+    constructor.hpp
 )
 
 # find Boost
