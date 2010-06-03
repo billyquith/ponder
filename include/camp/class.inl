@@ -66,9 +66,17 @@ T* Class::construct(const Args& args) const
     // Get the metaclass of T (we use classByTypeSafe because it may not exist)
     const Class* targetClass = classByTypeSafe<T>();
 
-    // Apply the proper offset in case T is a base of this class
-    if (targetClass)
-        object = applyOffset(object, *targetClass);
+    try
+    {
+        // Apply the proper offset in case T is a base of this class
+        if (targetClass)
+            object = applyOffset(object, *targetClass);
+    }
+    catch (Error&)
+    {
+        destroy(static_cast<T*>(object));
+        throw;
+    }
 
     return static_cast<T*>(object);
 }
