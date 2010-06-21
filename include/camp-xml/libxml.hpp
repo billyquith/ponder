@@ -23,7 +23,7 @@
 #ifndef CAMP_XML_LIBXML_HPP
 #define CAMP_XML_LIBXML_HPP
 
-#include <camp/xml/common.hpp>
+#include <camp-xml/common.hpp>
 #include <libxml/tree.h>
 
 namespace camp
