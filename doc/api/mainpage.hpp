@@ -65,7 +65,7 @@
  * 
  *     // Set the age of a person
  *     void setAge(unsigned int age)
- *    {
+ *     {
  *         m_age = age;
  *     }
  * 
@@ -82,7 +82,7 @@
  * };
  * 
  * // Make the Person type available to CAMP
- * CAMP_TYPE(Person);
+ * CAMP_TYPE(Person)
  * 
  * 
  * int main()

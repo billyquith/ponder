@@ -33,8 +33,7 @@ set(CAMP_TEST_SRCS
 )
 
 # find Boost
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost 1.38.0 COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost 1.38.0)
 
 # include files search paths
 include_directories(
@@ -56,7 +55,7 @@ if(WIN32)
 endif()
 
 # last thing we have to do is to tell CMake what libraries our executable needs,
-target_link_libraries(camptest camp ${Boost_LIBRARIES})
+target_link_libraries(camptest camp)
 
 # add the qt subdirectory, but do not build it by default
 if(BUILD_TEST_QT)

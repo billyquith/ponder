@@ -33,8 +33,7 @@ set(CAMP_TEST_QT_SRCS
 )
 
 # find Boost
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost 1.38.0 COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost 1.38.0)
 
 # find Qt4
 find_package(Qt4 4.5.0 COMPONENTS QtCore REQUIRED)
@@ -61,5 +60,5 @@ link_directories(
 add_executable(camptest-qt ${CAMP_TEST_QT_SRCS} ${CAMP_TEST_QT_MOC_SRCS})
 
 # last thing we have to do is to tell CMake what libraries our executable needs
-target_link_libraries(camptest-qt camp ${Boost_LIBRARIES} ${QT_LIBRARIES})
+target_link_libraries(camptest-qt camp ${QT_LIBRARIES})
 

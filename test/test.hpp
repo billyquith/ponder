@@ -444,6 +444,16 @@ struct FunctionTest : public FunctionTestBase, boost::noncopyable
     void f5(TestEnum, TestEnum, TestEnum, TestEnum, TestEnum) {}
 
     camp::Value abstractFunc(camp::Value v) {return v;}
+
+    ConcreteClass concrete;
+    AbstractClass* ptrToAbstractRet() {return &concrete;}
+    AbstractClass& refToAbstractRet() {return concrete;}
+    const AbstractClass* ptrToAbstractConstRet() const {return &concrete;}
+    const AbstractClass& refToAbstractConstRet() const {return concrete;}
+    void ptrToAbstractArg(AbstractClass*) {}
+    void refToAbstractArg(AbstractClass&) {}
+    void ptrToAbstractConstArg(const AbstractClass*) {}
+    void refToAbstractConstArg(const AbstractClass&) {}
 };
 CAMP_TYPE(FunctionTest);
 
