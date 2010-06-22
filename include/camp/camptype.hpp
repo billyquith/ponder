@@ -51,8 +51,8 @@ CAMP_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
  *     {
  *     };
  * };
- * CAMP_TYPE(MyClass);
- * CAMP_TYPE(MyClass::MyNestedClass);
+ * CAMP_TYPE(MyClass)
+ * CAMP_TYPE(MyClass::MyNestedClass)
  * \endcode
  */
 #define CAMP_TYPE(type) \
@@ -87,7 +87,7 @@ CAMP_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
  *
  *     static void registerMetaClass();
  * };
- * CAMP_AUTO_TYPE(MyClass, &MyClass::registerMetaClass);
+ * CAMP_AUTO_TYPE(MyClass, &MyClass::registerMetaClass)
  *
  * void MyClass::registerMetaClass()
  * {
@@ -132,13 +132,13 @@ CAMP_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
  * {
  *     int x;
  * };
- * CAMP_TYPE_NONCOPYABLE(NonCopyable);
+ * CAMP_TYPE_NONCOPYABLE(NonCopyable)
  *
  * class MyClass
  * {
  *     NonCopyable* nc;
  * };
- * CAMP_TYPE(MyClass);
+ * CAMP_TYPE(MyClass)
  *
  * MyClass c;
  * const camp::Class& m1 = camp::classByObject(c);
