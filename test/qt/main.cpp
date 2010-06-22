@@ -23,9 +23,8 @@
 
 #include "test.hpp"
 
-#define BOOST_TEST_NO_LIB
 #define BOOST_TEST_MODULE CAMP testqt
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
 
 
 //////////////////////////////////////////////////////////////
