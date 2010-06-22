@@ -23,7 +23,7 @@
 #ifndef CAMP_XML_STRING_HPP
 #define CAMP_XML_STRING_HPP
 
-#include <camp/xml/common.hpp>
+#include <camp-xml/common.hpp>
 #include <camp/class.hpp>
 #include <string>
 #include <list>

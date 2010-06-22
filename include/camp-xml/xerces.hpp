@@ -20,11 +20,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMP_XML_TINYXML_HPP
-#define CAMP_XML_TINYXML_HPP
+#ifndef CAMP_XML_XERCES_HPP
+#define CAMP_XML_XERCES_HPP
 
-#include <camp/xml/common.hpp>
-#include <tinyxml.h>
+#include <camp-xml/common.hpp>
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMDocument.hpp>
+#include <xercesc/dom/DOMElement.hpp>
 
 namespace camp
 {
@@ -33,27 +35,36 @@ namespace xml
 namespace detail
 {
 /**
- * \brief Proxy that adapts the camp::xml functions to the TinyXml library
+ * \brief Proxy that adapts the camp::xml functions to the Xerces library
  */
-struct TinyXml
+struct Xerces
 {
-    typedef TiXmlElement* NodeType;
+    typedef xercesc::DOMElement* NodeType;
 
     static NodeType addChild(NodeType node, const std::string& name)
     {
-        return static_cast<NodeType>(node->InsertEndChild(TiXmlElement(name.c_str())));
+        XMLCh buffer[256];
+        xercesc::XMLString::transcode(name.c_str(), buffer, sizeof(buffer));
+
+        NodeType child = node->getOwnerDocument()->createElement(buffer);
+        node->appendChild(child);
+
+        return child;
     }
 
     static void setText(NodeType node, const std::string& text)
     {
-        node->InsertEndChild(TiXmlText(text.c_str()));
+        XMLCh buffer[256];
+        xercesc::XMLString::transcode(text.c_str(), buffer, sizeof(buffer));
+
+        node->setTextContent(buffer);
     }
 };
 
 } // namespace detail
 
 /**
- * \brief Serialize a CAMP object into a TinyXml TiXmlElement
+ * \brief Serialize a CAMP object into a Xerces DOMElement
  *
  * This function iterates over all the object's properties
  * and transforms them into valid XML nodes. Composed sub-objects
@@ -72,9 +83,9 @@ struct TinyXml
  * \param node Parent for the generated XML nodes
  * \param exclude Tag to exclude from the serialization process
  */
-inline void serialize(const UserObject& object, TiXmlElement* node, const Value& exclude = Value::nothing)
+inline void serialize(const UserObject& object, xercesc::DOMElement* node, const Value& exclude = Value::nothing)
 {
-    detail::serialize<detail::TinyXml>(object, node, exclude);
+    detail::serialize<detail::Xerces>(object, node, exclude);
 }
 } // namespace xml
 
