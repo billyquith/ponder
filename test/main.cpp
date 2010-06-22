@@ -651,11 +651,15 @@ BOOST_AUTO_TEST_CASE(campFunctionBindTest)
     .function("f20", boost::function<void (FunctionTest&, short)>(boost::bind(&FunctionTest::f3, _1, _2, 20, 30L)))
     .function("f21", boost::function<void (FunctionTest&, short)>(boost::bind(boost::bind(&FunctionTest::f3, _1, _2, _3, 30L), _1, _2, 20)))
 
-    // ***** constant value *****
-    //.function("f22", 50) // not implemented (to do or not?)
-
-    // ***** functor *****
-    //.function("f23", FunctorTest()) // not implemented (to do or not?)
+    // ***** functions dealing with abstract types (we only check if it compiles) *****
+    .function("f22", &FunctionTest::ptrToAbstractRet)
+    .function("f23", &FunctionTest::refToAbstractRet)
+    .function("f24", &FunctionTest::ptrToAbstractArg)
+    //.function("f25", &FunctionTest::refToAbstractArg)
+    //.function("f26", &FunctionTest::ptrToAbstractConstRet)
+    //.function("f27", &FunctionTest::refToAbstractConstRet)
+    .function("f28", &FunctionTest::ptrToAbstractConstArg)
+    //.function("f29", &FunctionTest::refToAbstractConstArg)
     ;
 
     // ***** return types *****
