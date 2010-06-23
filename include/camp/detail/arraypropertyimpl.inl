@@ -56,6 +56,13 @@ void ArrayPropertyImpl<A>::setElement(const UserObject& object, std::size_t inde
 
 //-------------------------------------------------------------------------------------------------
 template <typename A>
+void ArrayPropertyImpl<A>::insertElement(const UserObject& object, std::size_t before) const
+{
+    Mapper::insert(array(object), before, ElementType());
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename A>
 void ArrayPropertyImpl<A>::insertElement(const UserObject& object, std::size_t before, const Value& value) const
 {
     Mapper::insert(array(object), before, value.to<ElementType>());

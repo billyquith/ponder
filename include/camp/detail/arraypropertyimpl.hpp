@@ -80,6 +80,11 @@ protected:
     /**
      * \see ArrayProperty::insertElement
      */
+    virtual void insertElement(const UserObject& object, std::size_t before) const;
+
+    /**
+     * \see ArrayProperty::insertElement
+     */
     virtual void insertElement(const UserObject& object, std::size_t before, const Value& value) const;
 
     /**

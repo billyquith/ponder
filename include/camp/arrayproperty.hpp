@@ -82,6 +82,25 @@ public:
     std::size_t size(const UserObject& object) const;
 
     /**
+     * \brief Resize the array
+     *
+     * If \a size is lesser than the current size of the array,
+     * the last elements will be removed; if \a size is greater
+     * than the current size of the array, default-constructed
+     * elements will be added at the end.
+     *
+     * This function will throw an error if the array is not dynamic
+     *
+     * \param object Object
+     * \param newSize New size of the array
+     *
+     * \throw InvalidObject object has an invalid value
+     * \throw InvalidAccess array is not writable or not dynamic
+     * \throw InvalidIndex index is out of range
+     */
+    void resize(const UserObject& object, std::size_t newSize) const;
+
+    /**
      * \brief Get an element of the array for a given object
      *
      * \param object Object
@@ -189,6 +208,16 @@ protected:
      * \param value New value to assign to the element
      */
     virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const = 0;
+
+    /**
+     * \brief Do the actual insertion of a default-constructed element
+     *
+     * This function is a pure virtual which has to be implemented in derived classes
+     *
+     * \param object Object
+     * \param before Index before which the new element will be inserted
+     */
+    virtual void insertElement(const UserObject& object, std::size_t before) const = 0;
 
     /**
      * \brief Do the actual insertion of an element

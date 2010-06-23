@@ -48,6 +48,26 @@ struct TinyXml
     {
         node->InsertEndChild(TiXmlText(text.c_str()));
     }
+
+    static NodeType findFirstChild(NodeType node, const std::string& name)
+    {
+        return node->FirstChildElement(name.c_str());
+    }
+
+    static NodeType findNextSibling(NodeType node, const std::string& name)
+    {
+        return node->NextSiblingElement(name.c_str());
+    }
+
+    static std::string getText(NodeType node)
+    {
+        return node->GetText();
+    }
+
+    static bool isValid(NodeType node)
+    {
+        return node != 0;
+    }
 };
 
 } // namespace detail
@@ -76,6 +96,29 @@ inline void serialize(const UserObject& object, TiXmlElement* node, const Value&
 {
     detail::serialize<detail::TinyXml>(object, node, exclude);
 }
+
+/**
+ * \brief Deserialize a CAMP object from a TinyXml TiXmlElement
+ *
+ * This function iterates over all the object's properties
+ * and read their value from XML nodes. Composed sub-objects
+ * are deserialized recursively.
+ *
+ * You have the possibility to exclude some properties from
+ * being read with the last (optional) parameter, \a exclude.
+ * If it is defined, any property containing this value as a tag
+ * will be excluded from the deserialization process. It is empty
+ * by default, which means that no property will be excluded.
+ *
+ * \param object Object to fill with deserialized information
+ * \param node XML node to parse
+ * \param exclude Tag to exclude from the deserialization process
+ */
+inline void deserialize(const UserObject& object, TiXmlElement* node, const Value& exclude = Value::nothing)
+{
+    detail::deserialize<detail::TinyXml>(object, node, exclude);
+}
+
 } // namespace xml
 
 } // namespace camp

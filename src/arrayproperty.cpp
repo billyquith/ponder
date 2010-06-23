@@ -67,6 +67,32 @@ std::size_t ArrayProperty::size(const UserObject& object) const
 }
 
 //-------------------------------------------------------------------------------------------------
+void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
+{
+    // Check if the array is dynamic
+    if (!dynamic())
+        CAMP_ERROR(InvalidAccess(name().c_str(), InvalidAccess::Write));
+
+    // Check if the property is writable
+    if (!writable(object))
+        CAMP_ERROR(InvalidAccess(name().c_str(), InvalidAccess::Write));
+
+    std::size_t currentSize = size(object);
+    if (newSize > currentSize)
+    {
+        // Add elements to reach the new size
+        while (currentSize < newSize)
+            insertElement(object, currentSize++);
+    }
+    else if (newSize < currentSize)
+    {
+        // Remove elements to reach the new size
+        while (currentSize > newSize)
+            removeElement(object, --currentSize);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------
 Value ArrayProperty::get(const UserObject& object, std::size_t index) const
 {
     // Check if the property is readable

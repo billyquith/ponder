@@ -74,6 +74,6 @@ void deserialize(const UserObject& object, typename Proxy::NodeType node, const 
 
 } // namespace camp
 
-#include <camp/xml/common.inl>
+#include <camp-xml/common.inl>
 
 #endif // CAMP_XML_COMMON_HPP

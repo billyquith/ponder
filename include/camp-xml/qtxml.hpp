@@ -20,13 +20,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMP_XML_XERCES_HPP
-#define CAMP_XML_XERCES_HPP
+#ifndef CAMP_XML_QTXML_HPP
+#define CAMP_XML_QTXML_HPP
 
 #include <camp-xml/common.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMElement.hpp>
+#include <QDomDocument>
+#include <QDomElement>
 
 namespace camp
 {
@@ -35,80 +34,49 @@ namespace xml
 namespace detail
 {
 /**
- * \brief Proxy that adapts the camp::xml functions to the Xerces library
+ * \brief Proxy that adapts the camp::xml functions to the QtXml library
  */
-struct Xerces
+struct QtXml
 {
-    typedef xercesc::DOMElement* NodeType;
+    typedef QDomElement NodeType;
 
     static NodeType addChild(NodeType node, const std::string& name)
     {
-        XMLCh buffer[256];
-        xercesc::XMLString::transcode(name.c_str(), buffer, sizeof(buffer));
-
-        NodeType child = node->getOwnerDocument()->createElement(buffer);
-        node->appendChild(child);
-
+        QDomElement child = node.ownerDocument().createElement(name.c_str());
+        node.appendChild(child);
         return child;
     }
 
     static void setText(NodeType node, const std::string& text)
     {
-        XMLCh buffer[256];
-        xercesc::XMLString::transcode(text.c_str(), buffer, sizeof(buffer));
-
-        node->setTextContent(buffer);
+        node.appendChild(node.ownerDocument().createTextNode(text.c_str()));
     }
 
     static NodeType findFirstChild(NodeType node, const std::string& name)
     {
-        XMLCh buffer[256];
-        xercesc::XMLString::transcode(name.c_str(), buffer, sizeof(buffer));
-
-        xercesc::DOMNodeList* children = node->getElementsByTagName(buffer);
-        if (children && (children->getLength() > 0))
-            return static_cast<NodeType>(children->item(0));
-        else
-            return 0;
+        return node.firstChildElement(name.c_str());
     }
 
     static NodeType findNextSibling(NodeType node, const std::string& name)
     {
-        XMLCh buffer[256];
-        xercesc::XMLString::transcode(name.c_str(), buffer, sizeof(buffer));
-
-        xercesc::DOMNode* sibling = node->getNextSibling();
-        while (sibling)
-        {
-            bool same = xercesc::XMLString::compareString(sibling->getNodeName(), buffer) == 0;
-            if ((sibling->getNodeType() == xercesc::DOMNode::ELEMENT_NODE) && same)
-                return static_cast<NodeType>(sibling);
-            sibling = sibling->getNextSibling();
-        }
-
-        return 0;
+        return node.nextSiblingElement(name.c_str());
     }
 
     static std::string getText(NodeType node)
     {
-        const XMLCh* text = node->getTextContent();
-
-        char buffer[256];
-        xercesc::XMLString::transcode(text, buffer, sizeof(buffer) - 1);
-
-        return buffer;
+        return node.text().toStdString();
     }
 
     static bool isValid(NodeType node)
     {
-        return node != 0;
+        return !node.isNull();
     }
 };
 
 } // namespace detail
 
 /**
- * \brief Serialize a CAMP object into a Xerces DOMElement
+ * \brief Serialize a CAMP object into a QtXml QDomElement
  *
  * This function iterates over all the object's properties
  * and transforms them into valid XML nodes. Composed sub-objects
@@ -127,13 +95,13 @@ struct Xerces
  * \param node Parent for the generated XML nodes
  * \param exclude Tag to exclude from the serialization process
  */
-inline void serialize(const UserObject& object, xercesc::DOMElement* node, const Value& exclude = Value::nothing)
+inline void serialize(const UserObject& object, QDomElement node, const Value& exclude = Value::nothing)
 {
-    detail::serialize<detail::Xerces>(object, node, exclude);
+    detail::serialize<detail::QtXml>(object, node, exclude);
 }
 
 /**
- * \brief Deserialize a CAMP object from a Xerces DOMElement
+ * \brief Deserialize a CAMP object from a QtXml QDomElement
  *
  * This function iterates over all the object's properties
  * and read their value from XML nodes. Composed sub-objects
@@ -149,14 +117,13 @@ inline void serialize(const UserObject& object, xercesc::DOMElement* node, const
  * \param node XML node to parse
  * \param exclude Tag to exclude from the deserialization process
  */
-inline void deserialize(const UserObject& object, xercesc::DOMElement* node, const Value& exclude = Value::nothing)
+inline void deserialize(const UserObject& object, QDomElement node, const Value& exclude = Value::nothing)
 {
-    detail::deserialize<detail::Xerces>(object, node, exclude);
+    detail::deserialize<detail::QtXml>(object, node, exclude);
 }
-
 
 } // namespace xml
 
 } // namespace camp
 
-#endif // CAMP_XML_TINYXML_HPP
+#endif // CAMP_XML_QTXML_HPP
