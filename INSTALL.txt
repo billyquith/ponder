@@ -23,12 +23,9 @@ camp
 camptest
     builds the CAMP unit tests
 
-apidoc
+doc
     generates the API documentation in HTML format; on Windows, if the HTML Help Workshop program
-    is available, the CHM documentation is generated as well
-         
-apidoc_forced
-    regenerates the API documentation
+    is available, the CHM documentation is generated as well; requires doxygen to be installed
 
 install
     installs all the generated components to the standard path
