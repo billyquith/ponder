@@ -165,10 +165,14 @@ message("Generate version.hpp")
 configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_BINARY_DIR}/version.hpp @ONLY)
 
 # instruct CMake to build a shared library from all of the source files
-add_library(camp SHARED ${CAMP_SRCS})
+add_library(camp ${CAMP_SRCS})
 
 # define the export macro
-set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
+if(BUILD_SHARED_LIBS)
+    set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
+else()
+    add_definitions(-DCAMP_STATIC)
+endif()
 
 # define d suffix on windows
 if(WIN32)

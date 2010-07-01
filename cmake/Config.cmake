@@ -13,6 +13,13 @@ if(NOT CMAKE_BUILD_TYPE)
     )
 endif()
 
+# Add an option for choosing the build type (shared or static)
+if(NOT BUILD_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS TRUE
+        CACHE BOOL "TRUE to build CAMP as a shared library, FALSE to build it as a static library."
+    )
+endif()
+
 # Set the default test build option to false
 if(NOT BUILD_TEST)
     set(BUILD_TEST FALSE
