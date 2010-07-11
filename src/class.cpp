@@ -29,12 +29,6 @@
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
-void Class::undeclare(const std::string& name)
-{
-    detail::ClassManager::instance().removeClass(name);
-}
-
-//-------------------------------------------------------------------------------------------------
 const std::string& Class::name() const
 {
     return m_name;

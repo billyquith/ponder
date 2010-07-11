@@ -20,44 +20,16 @@
 **
 ****************************************************************************/
 
-
 #include "classvisitor.hpp"
-#include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ClassVisitorTest;
 
 //-----------------------------------------------------------------------------
-struct ClassVisitorFixture
-{
-    ClassVisitorFixture()
-    {
-        camp::Enum::declare<MyEnum>("MyEnum");
-
-        camp::Class::declare<MyType>("MyType");
-
-        camp::Class::declare<MyClass>("MyClass")
-            .property("simple", &MyClass::simpleProp)
-            .property("array", &MyClass::arrayProp)
-            .property("enum", &MyClass::enumProp)
-            .property("user", &MyClass::userProp)
-            .function("function", &MyClass::function);
-    }
-
-    ~ClassVisitorFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Class::undeclare<MyType>();
-        camp::Enum::undeclare<MyEnum>();
-    }
-};
-
-
-//-----------------------------------------------------------------------------
 //                         Tests for camp::ClassVisitor
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(CLASSVISITOR, ClassVisitorFixture)
+BOOST_AUTO_TEST_SUITE(CLASSVISITOR)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(visit)

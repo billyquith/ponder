@@ -20,16 +20,15 @@
 **
 ****************************************************************************/
 
-
 #ifndef CAMPTEST_QT_FUNCTIONMAPPING_HPP
 #define CAMPTEST_QT_FUNCTIONMAPPING_HPP
 
 #include <camp/camptype.hpp>
 #include <camp/qt/qt.hpp>
+#include <camp/class.hpp>
 #include <QObject>
 #include <QString>
 #include <iostream>
-
 
 namespace FunctionMappingTest
 {
@@ -68,9 +67,15 @@ namespace FunctionMappingTest
             return s1 + s2 + s3 + s4 + s5;
         }
     };
+
+    inline void declare()
+    {
+        camp::Class::declare<MyClass>("MyClass")
+            .external<camp_ext::QtMapper>();
+    }
 }
 
-CAMP_TYPE_NONCOPYABLE(FunctionMappingTest::MyClass);
+CAMP_AUTO_TYPE_NONCOPYABLE(FunctionMappingTest::MyClass, &FunctionMappingTest::declare);
 
 // To make the boost.test logger happy
 inline std::ostream& operator<<(std::ostream& stream, const QString& string)

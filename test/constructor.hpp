@@ -24,8 +24,9 @@
 #define CAMPTEST_CONSTRUCTOR_HPP
 
 #include <camp/camptype.hpp>
+#include <camp/class.hpp>
+#include <camp/enum.hpp>
 #include <string>
-
 
 namespace ConstructorTest
 {
@@ -74,12 +75,40 @@ namespace ConstructorTest
         MyEnum e;
         MyType u;
     };
+
+    void declare()
+    {
+        camp::Enum::declare<MyEnum>("ConstructorTest::MyEnum")
+            .value("zero",  zero)
+            .value("one",   one)
+            .value("two",   two)
+            .value("three", three)
+            .value("four",  four)
+            .value("five",  five);
+
+        camp::Class::declare<MyType>("ConstructorTest::MyType");
+
+        camp::Class::declare<MyBase1>("ConstructorTest::MyBase1");
+        camp::Class::declare<MyBase2>("ConstructorTest::MyBase2");
+
+        camp::Class::declare<MyClass>("ConstructorTest::MyClass")
+            .base<MyBase1>()
+            .base<MyBase2>()
+            .constructor0()
+            .constructor1<long>()
+            .constructor2<long, double>()
+            .constructor3<long, double, std::string>()
+            .constructor4<long, double, std::string, MyEnum>()
+
+            // trying types that don't exactly match those declared
+            .constructor5<unsigned short, float, std::string, MyEnum, int>();
+    }
 }
 
-CAMP_TYPE(ConstructorTest::MyEnum);
-CAMP_TYPE(ConstructorTest::MyType);
-CAMP_TYPE(ConstructorTest::MyBase1);
-CAMP_TYPE(ConstructorTest::MyBase2);
-CAMP_TYPE(ConstructorTest::MyClass);
+CAMP_AUTO_TYPE(ConstructorTest::MyEnum, &ConstructorTest::declare);
+CAMP_AUTO_TYPE(ConstructorTest::MyType, &ConstructorTest::declare);
+CAMP_AUTO_TYPE(ConstructorTest::MyBase1, &ConstructorTest::declare);
+CAMP_AUTO_TYPE(ConstructorTest::MyBase2, &ConstructorTest::declare);
+CAMP_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare);
 
 #endif // CAMPTEST_CONSTRUCTOR_HPP

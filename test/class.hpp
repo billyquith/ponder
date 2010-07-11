@@ -24,10 +24,18 @@
 #define CAMPTEST_CLASS_HPP
 
 #include <camp/camptype.hpp>
-
+#include <camp/class.hpp>
 
 namespace ClassTest
 {
+    struct MyTempClass
+    {
+    };
+
+    struct MyUndeclaredClass
+    {
+    };
+
     struct MyClass
     {
         void func() {}
@@ -55,13 +63,35 @@ namespace ClassTest
     struct Derived2NoRtti : Derived
     {
     };
+
+    void declare()
+    {
+        camp::Class::declare<MyClass>("ClassTest::MyClass")
+            .property("prop", &MyClass::prop)
+            .function("func", &MyClass::func);
+
+        camp::Class::declare<MyClass2>("ClassTest::MyClass2");
+
+        camp::Class::declare<Base>("ClassTest::Base");
+
+        camp::Class::declare<Derived>("ClassTest::Derived")
+            .base<Base>();
+
+        camp::Class::declare<DerivedNoRtti>("ClassTest::DerivedNoRtti")
+            .base<Base>();
+
+        camp::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
+            .base<Derived>();
+    }
 }
 
-CAMP_TYPE(ClassTest::MyClass);
-CAMP_TYPE(ClassTest::MyClass2);
-CAMP_TYPE(ClassTest::Base);
-CAMP_TYPE(ClassTest::Derived);
-CAMP_TYPE(ClassTest::DerivedNoRtti);
-CAMP_TYPE(ClassTest::Derived2NoRtti);
+CAMP_TYPE(ClassTest::MyUndeclaredClass /* never declared */);
+CAMP_TYPE(ClassTest::MyTempClass /* declared in a test */);
+CAMP_AUTO_TYPE(ClassTest::MyClass, &ClassTest::declare);
+CAMP_AUTO_TYPE(ClassTest::MyClass2, &ClassTest::declare);
+CAMP_AUTO_TYPE(ClassTest::Base, &ClassTest::declare);
+CAMP_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare);
+CAMP_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare);
+CAMP_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare);
 
 #endif // CAMPTEST_CLASS_HPP

@@ -33,13 +33,6 @@ ClassBuilder<T> Class::declare(const std::string& name)
 
 //-------------------------------------------------------------------------------------------------
 template <typename T>
-void Class::undeclare()
-{
-    undeclare(classByType<T>().name());
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
 T* Class::construct(const Args& args) const
 {
     void* object = 0;

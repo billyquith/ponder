@@ -20,9 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "tagholder.hpp"
-#include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
@@ -32,50 +30,13 @@ using namespace TagHolderTest;
 //-----------------------------------------------------------------------------
 struct TagHolderFixture
 {
-    TagHolderFixture() : object1(1), object2(2)
+    TagHolderFixture()
     {
-        camp::Enum::declare<MyEnum>("MyEnum");
-        camp::Class::declare<MyType>("MyType");
-
-        camp::Class::declare<MyClass>("MyClass")
-            .tag("a")
-            .tag("b", 0)
-            .tag(true)
-            .tag(10)
-            .tag(5.25)
-            .tag("hello")
-            .tag(Ten)
-            .tag(object1)
-            .tag("static1", true)
-            .tag("static2", 10)
-            .tag("static3", 5.25)
-            .tag("static4", "hello")
-            .tag("static5", Ten)
-            .tag("static6", object1)
-            .tag("dynamic1", &MyClass::prop)
-            .tag("dynamic2", &MyClass::func)
-            .property("prop", &MyClass::prop)
-                .tag("a")
-                .tag("b", 0)
-            .function("func", &MyClass::func)
-                .tag("a")
-                .tag("b", 0);
-
         metaclass = &camp::classByType<MyClass>();
     }
 
-    ~TagHolderFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Class::undeclare<MyType>();
-        camp::Enum::undeclare<MyEnum>();
-    }
-
-    MyType object1;
-    MyType object2;
     const camp::Class* metaclass;
 };
-
 
 //-----------------------------------------------------------------------------
 //                         Tests for camp::TagHolder

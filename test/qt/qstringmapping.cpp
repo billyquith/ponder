@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-
 #include <camp/value.hpp>
 #include <camp/qt/qt.hpp>
 #include <boost/test/unit_test.hpp>

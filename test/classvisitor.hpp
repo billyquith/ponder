@@ -24,13 +24,14 @@
 #define CAMPTEST_CLASSVISITOR_HPP
 
 #include <camp/camptype.hpp>
+#include <camp/class.hpp>
+#include <camp/enum.hpp>
 #include <camp/classvisitor.hpp>
 #include <camp/simpleproperty.hpp>
 #include <camp/arrayproperty.hpp>
 #include <camp/enumproperty.hpp>
 #include <camp/userproperty.hpp>
 #include <camp/function.hpp>
-
 
 namespace ClassVisitorTest
 {
@@ -95,10 +96,24 @@ namespace ClassVisitorTest
         MyType userProp;
         void function() {}
     };
+
+    void declare()
+    {
+        camp::Enum::declare<MyEnum>("ClassVisitorTest::MyEnum");
+
+        camp::Class::declare<MyType>("ClassVisitorTest::MyType");
+
+        camp::Class::declare<MyClass>("ClassVisitorTest::MyClass")
+            .property("simple", &MyClass::simpleProp)
+            .property("array", &MyClass::arrayProp)
+            .property("enum", &MyClass::enumProp)
+            .property("user", &MyClass::userProp)
+            .function("function", &MyClass::function);
+    }
 }
 
-CAMP_TYPE(ClassVisitorTest::MyEnum);
-CAMP_TYPE(ClassVisitorTest::MyType);
-CAMP_TYPE(ClassVisitorTest::MyClass);
+CAMP_AUTO_TYPE(ClassVisitorTest::MyEnum, &ClassVisitorTest::declare);
+CAMP_AUTO_TYPE(ClassVisitorTest::MyType, &ClassVisitorTest::declare);
+CAMP_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare);
 
 #endif // CAMPTEST_CLASSVISITOR_HPP

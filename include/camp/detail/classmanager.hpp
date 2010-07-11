@@ -79,15 +79,6 @@ public:
     Class& addClass(const std::string& name, const std::string& id);
 
     /**
-     * \brief Remove an existing metaclass by its name
-     *
-     * \param id Name of the metaclass to unregister
-     *
-     * \throw ClassNotFound \a name is not an existing metaclass
-     */
-    void removeClass(const std::string& name);
-
-    /**
      * \brief Get the total number of metaclasses
      *
      * \return Number of metaclasses that have been registered

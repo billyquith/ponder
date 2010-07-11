@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-
 #include "functionmapping.hpp"
 #include <camp/class.hpp>
 #include <camp/classget.hpp>
@@ -33,15 +32,7 @@ struct FunctionMappingFixture
 {
     FunctionMappingFixture()
     {
-        camp::Class::declare<MyClass>("MyClass")
-            .external<camp_ext::QtMapper>();
-
         metaclass = &camp::classByType<MyClass>();
-    }
-
-    ~FunctionMappingFixture()
-    {
-        camp::Class::undeclare<MyClass>();
     }
 
     MyClass object;

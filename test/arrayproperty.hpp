@@ -24,10 +24,10 @@
 #define CAMPTEST_ARRAYPROPERTY_HPP
 
 #include <camp/camptype.hpp>
+#include <camp/class.hpp>
 #include <boost/array.hpp>
 #include <list>
 #include <vector>
-
 
 namespace ArrayPropertyTest
 {
@@ -73,9 +73,20 @@ namespace ArrayPropertyTest
         std::vector<std::string> strings;
         std::list<MyType> objects;
     };
+
+    void declare()
+    {
+        camp::Class::declare<MyType>("ArrayPropertyTest::MyType");
+
+        camp::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
+            .property("bools", &MyClass::bools)
+            .property("ints", &MyClass::ints)
+            .property("strings", &MyClass::strings)
+            .property("objects", &MyClass::objects);
+    }
 }
 
-CAMP_TYPE(ArrayPropertyTest::MyType);
-CAMP_TYPE(ArrayPropertyTest::MyClass);
+CAMP_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare);
+CAMP_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare);
 
 #endif // CAMPTEST_ARRAYPROPERTY_HPP

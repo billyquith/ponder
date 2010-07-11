@@ -20,9 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "userproperty.hpp"
-#include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/userproperty.hpp>
 #include <boost/test/unit_test.hpp>
@@ -34,24 +32,12 @@ struct UserPropertyFixture
 {
     UserPropertyFixture()
     {
-        camp::Class::declare<MyType>("MyType");
-
-        camp::Class::declare<MyClass>("MyClass")
-            .property("prop", &MyClass::prop);
-
         const camp::Class& metaclass = camp::classByType<MyClass>();
         property = static_cast<const camp::UserProperty*>(&metaclass.property("prop"));
     }
 
-    ~UserPropertyFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Class::undeclare<MyType>();
-    }
-
     const camp::UserProperty* property;
 };
-
 
 //-----------------------------------------------------------------------------
 //                         Tests for camp::UserProperty

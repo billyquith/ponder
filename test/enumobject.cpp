@@ -20,9 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "enumobject.hpp"
-#include <camp/enum.hpp>
 #include <camp/enumget.hpp>
 #include <camp/enumobject.hpp>
 #include <camp/errors.hpp>
@@ -30,28 +28,10 @@
 
 using namespace EnumObjectTest;
 
-//-----------------------------------------------------------------------------
-struct EnumObjectFixtureBase
-{
-    EnumObjectFixtureBase()
-    {
-        camp::Enum::declare<MyEnum>("MyEnum")
-            .value("Zero", Zero)
-            .value("One",  One)
-            .value("Two",  Two);
-    }
-
-    ~EnumObjectFixtureBase()
-    {
-        camp::Enum::undeclare<MyEnum>();
-    }
-};
-
-struct EnumObjectFixture : EnumObjectFixtureBase
+struct EnumObjectFixture
 {
     EnumObjectFixture()
-        : EnumObjectFixtureBase()
-        , zero(Zero)
+        : zero(Zero)
         , one(One)
         , two(Two)
     {
@@ -62,7 +42,6 @@ struct EnumObjectFixture : EnumObjectFixtureBase
     camp::EnumObject two;
 };
 
-
 //-----------------------------------------------------------------------------
 //                         Tests for camp::EnumObject
 //-----------------------------------------------------------------------------
@@ -71,9 +50,9 @@ BOOST_FIXTURE_TEST_SUITE(ENUMOBJECT, EnumObjectFixture)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(error)
 {
-    // The meta-enum of MyEnum2 is *not* declared
+    // The meta-enum of MyUndeclaredEnum is *not* declared
 
-    BOOST_CHECK_THROW(camp::EnumObject obj(Zero2), camp::EnumNotFound);
+    BOOST_CHECK_THROW(camp::EnumObject obj(Undeclared), camp::EnumNotFound);
 }
 
 //-----------------------------------------------------------------------------
@@ -104,10 +83,6 @@ BOOST_AUTO_TEST_CASE(getEnum)
 BOOST_AUTO_TEST_CASE(equal)
 {
     // Setup
-    camp::Enum::declare<MyEnum2>("MyEnum2")
-        .value("Zero", Zero2)
-        .value("One",  One2)
-        .value("Two",  Two2);
     camp::EnumObject zero2(Zero2);
     camp::EnumObject one2(One2);
     camp::EnumObject two2(Two2);
@@ -124,9 +99,6 @@ BOOST_AUTO_TEST_CASE(equal)
     BOOST_CHECK_EQUAL(zero == zero2, false); // same value and name, different metaenum
     BOOST_CHECK_EQUAL(one  == one2,  false);
     BOOST_CHECK_EQUAL(two  == two2,  false);
-
-    // Cleanup
-    camp::Enum::undeclare<MyEnum2>();
 }
 
 //-----------------------------------------------------------------------------

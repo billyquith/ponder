@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-
 #ifndef CAMPTEST_QT_PROPERTYMAPPING_HPP
 #define CAMPTEST_QT_PROPERTYMAPPING_HPP
 
@@ -30,7 +29,6 @@
 #include <QObject>
 #include <QString>
 #include <iostream>
-
 
 namespace PropertyMappingTest
 {
@@ -95,10 +93,21 @@ namespace PropertyMappingTest
         QString m_string;
         Enum m_enum;
     };
+
+    inline void declare()
+    {
+        camp::Enum::declare<MyClass::Enum>("MyClass::Enum")
+            .value("one", MyClass::one)
+            .value("two", MyClass::two)
+            .value("three", MyClass::three);
+
+        camp::Class::declare<MyClass>("MyClass")
+            .external<camp_ext::QtMapper>();
+    }
 }
 
-CAMP_TYPE_NONCOPYABLE(PropertyMappingTest::MyClass);
-CAMP_TYPE(PropertyMappingTest::MyClass::Enum);
+CAMP_AUTO_TYPE_NONCOPYABLE(PropertyMappingTest::MyClass, &PropertyMappingTest::declare);
+CAMP_AUTO_TYPE(PropertyMappingTest::MyClass::Enum, &PropertyMappingTest::declare);
 Q_DECLARE_METATYPE(PropertyMappingTest::MyClass::Enum)
 
 // To make the boost.test logger happy

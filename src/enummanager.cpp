@@ -65,23 +65,6 @@ Enum& EnumManager::addClass(const std::string& name, const std::string& id)
 }
 
 //-------------------------------------------------------------------------------------------------
-void EnumManager::removeClass(const std::string& name)
-{
-    NameIndex& names = m_enums.get<Name>();
-
-    // Make sure that the metaclass exists
-    NameIndex::iterator it = names.find(name);
-    if (it == names.end())
-        CAMP_ERROR(EnumNotFound(name));
-
-    // Notify observers
-    notifyEnumRemoved(*it->enumPtr);
-
-    // Remove it from the table
-    names.erase(it);
-}
-
-//-------------------------------------------------------------------------------------------------
 std::size_t EnumManager::count() const
 {
     return m_enums.size();

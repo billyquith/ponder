@@ -20,9 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "enum.hpp"
-#include <camp/enum.hpp>
 #include <camp/enumget.hpp>
 #include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
@@ -34,27 +32,11 @@ struct EnumFixture
 {
     EnumFixture()
     {
-        camp::Enum::declare<MyEnum>("MyEnum")
-            .value("Zero", Zero)
-            .value("One",  One)
-            .value("Two",  Two);
-
         metaenum = &camp::enumByType<MyEnum>();
-    }
-
-    ~EnumFixture()
-    {
-        camp::Enum::undeclare<MyEnum>();
     }
 
     const camp::Enum* metaenum;
 };
-
-//-----------------------------------------------------------------------------
-struct EnumEmptyFixture
-{
-};
-
 
 //-----------------------------------------------------------------------------
 //                         Tests for camp::Enum
@@ -62,60 +44,49 @@ struct EnumEmptyFixture
 BOOST_FIXTURE_TEST_SUITE(ENUM, EnumFixture)
 
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_CASE(declare, EnumEmptyFixture)
+BOOST_AUTO_TEST_CASE(declare)
 {
-    BOOST_CHECK_EQUAL(camp::enumCount(), 0U);
+    std::size_t count = camp::enumCount();
 
-    camp::Enum::declare<MyEnum>("MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumCount(), 1U);
+    camp::Enum::declare<MyTempEnum>("EnumTest::MyTempEnum");
 
-    camp::Enum::undeclare<MyEnum>();
-    BOOST_CHECK_EQUAL(camp::enumCount(), 0U);
-
-    camp::Enum::declare<MyEnum>("MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumCount(), 1U);
-
-    camp::Enum::undeclare("MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumCount(), 0U);
+    BOOST_CHECK_EQUAL(camp::enumCount(), count + 1);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(declareExceptions)
 {
-    BOOST_CHECK_THROW(camp::Enum::declare<MyEnum>("MyEnum2"), camp::EnumAlreadyCreated);
-    BOOST_CHECK_THROW(camp::Enum::declare<MyEnum2>("MyEnum"), camp::EnumAlreadyCreated);
+    // to make sure it is declared
+    camp::enumByType<MyEnum>();
+
+    BOOST_CHECK_THROW(camp::Enum::declare<MyEnum>("EnumTest::MyUndeclaredEnum"), camp::EnumAlreadyCreated);
+    BOOST_CHECK_THROW(camp::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"), camp::EnumAlreadyCreated);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(get)
 {
     MyEnum object = MyEnum();
-    MyEnum2 object2 = MyEnum2();
+    MyUndeclaredEnum object2 = MyUndeclaredEnum();
 
-    BOOST_CHECK_EQUAL(camp::enumByIndex(0).name(),        "MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByName("MyEnum").name(),  "MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByType<MyEnum>().name(),  "MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByObject(object).name(),  "MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByObject(&object).name(), "MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByTypeSafe<MyEnum2>(),    static_cast<camp::Enum*>(0));
+    BOOST_CHECK_EQUAL(camp::enumByName("EnumTest::MyEnum").name(), "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(camp::enumByType<MyEnum>().name(),           "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(camp::enumByObject(object).name(),           "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(camp::enumByObject(&object).name(),          "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(camp::enumByTypeSafe<MyUndeclaredEnum>(),    static_cast<camp::Enum*>(0));
 
-    BOOST_CHECK_THROW(camp::enumByIndex(1).name(),  camp::OutOfRange);
-    BOOST_CHECK_THROW(camp::enumByName("MyEnum2"),  camp::EnumNotFound);
-    BOOST_CHECK_THROW(camp::enumByType<MyEnum2>(),  camp::EnumNotFound);
-    BOOST_CHECK_THROW(camp::enumByObject(object2),  camp::EnumNotFound);
-    BOOST_CHECK_THROW(camp::enumByObject(&object2), camp::EnumNotFound);
+    BOOST_CHECK_THROW(camp::enumByName("EnumTest::MyUndeclaredEnum"), camp::EnumNotFound);
+    BOOST_CHECK_THROW(camp::enumByType<MyUndeclaredEnum>(),           camp::EnumNotFound);
+    BOOST_CHECK_THROW(camp::enumByObject(object2),                    camp::EnumNotFound);
+    BOOST_CHECK_THROW(camp::enumByObject(&object2),                   camp::EnumNotFound);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(comparisons)
 {
-    camp::Enum::declare<MyEnum2>("MyEnum2");
-
     BOOST_CHECK(camp::enumByType<MyEnum>()  == camp::enumByType<MyEnum>());
     BOOST_CHECK(camp::enumByType<MyEnum>()  != camp::enumByType<MyEnum2>());
     BOOST_CHECK(camp::enumByType<MyEnum2>() != camp::enumByType<MyEnum>());
-
-    camp::Enum::undeclare<MyEnum2>();
 }
 
 //-----------------------------------------------------------------------------

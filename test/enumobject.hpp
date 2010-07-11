@@ -24,7 +24,7 @@
 #define CAMPTEST_ENUMOBJECT_HPP
 
 #include <camp/camptype.hpp>
-
+#include <camp/enum.hpp>
 
 namespace EnumObjectTest
 {
@@ -41,9 +41,28 @@ namespace EnumObjectTest
         One2  = 1,
         Two2  = 2
     };
+
+    enum MyUndeclaredEnum
+    {
+        Undeclared
+    };
+
+    void declare()
+    {
+        camp::Enum::declare<MyEnum>("EnumObjectTest::MyEnum")
+            .value("Zero", Zero)
+            .value("One",  One)
+            .value("Two",  Two);
+
+        camp::Enum::declare<MyEnum2>("EnumObjectTest::MyEnum2")
+            .value("Zero", Zero2)
+            .value("One",  One2)
+            .value("Two",  Two2);
+    }
 }
 
-CAMP_TYPE(EnumObjectTest::MyEnum);
-CAMP_TYPE(EnumObjectTest::MyEnum2);
+CAMP_TYPE(EnumObjectTest::MyUndeclaredEnum);
+CAMP_AUTO_TYPE(EnumObjectTest::MyEnum, &EnumObjectTest::declare);
+CAMP_AUTO_TYPE(EnumObjectTest::MyEnum2, &EnumObjectTest::declare);
 
 #endif // CAMPTEST_ENUMOBJECT_HPP

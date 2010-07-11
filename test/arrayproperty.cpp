@@ -20,9 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "arrayproperty.hpp"
-#include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/errors.hpp>
 #include <camp/arrayproperty.hpp>
@@ -35,25 +33,11 @@ struct ArrayPropertyFixture
 {
     ArrayPropertyFixture()
     {
-        camp::Class::declare<MyType>("MyType");
-
-        camp::Class::declare<MyClass>("MyClass")
-            .property("bools", &MyClass::bools)
-            .property("ints", &MyClass::ints)
-            .property("strings", &MyClass::strings)
-            .property("objects", &MyClass::objects);
-
         const camp::Class& metaclass = camp::classByType<MyClass>();
         bools   = &static_cast<const camp::ArrayProperty&>(metaclass.property("bools"));
         ints    = &static_cast<const camp::ArrayProperty&>(metaclass.property("ints"));
         strings = &static_cast<const camp::ArrayProperty&>(metaclass.property("strings"));
         objects = &static_cast<const camp::ArrayProperty&>(metaclass.property("objects"));
-    }
-
-    ~ArrayPropertyFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Class::undeclare<MyType>();
     }
 
     const camp::ArrayProperty* bools;

@@ -20,10 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "enumproperty.hpp"
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
 #include <camp/classget.hpp>
 #include <camp/enumget.hpp>
 #include <camp/errors.hpp>
@@ -37,19 +34,8 @@ struct EnumPropertyFixture
 {
     EnumPropertyFixture()
     {
-        camp::Enum::declare<MyEnum>("MyEnum");
-
-        camp::Class::declare<MyClass>("MyClass")
-            .property("x", &MyClass::x);
-
         const camp::Class& metaclass = camp::classByType<MyClass>();
         property = &static_cast<const camp::EnumProperty&>(metaclass.property("x"));
-    }
-
-    ~EnumPropertyFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Enum::undeclare<MyEnum>();
     }
 
     const camp::EnumProperty* property;

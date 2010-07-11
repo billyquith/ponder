@@ -24,7 +24,7 @@
 #define CAMPTEST_USERPROPERTY_HPP
 
 #include <camp/camptype.hpp>
-
+#include <camp/class.hpp>
 
 namespace UserPropertyTest
 {
@@ -39,9 +39,17 @@ namespace UserPropertyTest
         MyClass(int x) : prop(x) {}
         MyType prop;
     };
+
+    void declare()
+    {
+        camp::Class::declare<MyType>("UserPropertyTest::MyType");
+
+        camp::Class::declare<MyClass>("UserPropertyTest::MyClass")
+            .property("prop", &MyClass::prop);
+    }
 }
 
-CAMP_TYPE(UserPropertyTest::MyType);
-CAMP_TYPE(UserPropertyTest::MyClass);
+CAMP_AUTO_TYPE(UserPropertyTest::MyType, &UserPropertyTest::declare);
+CAMP_AUTO_TYPE(UserPropertyTest::MyClass, &UserPropertyTest::declare);
 
 #endif // CAMPTEST_USERPROPERTY_HPP

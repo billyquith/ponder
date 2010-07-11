@@ -20,10 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "value.hpp"
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
 #include <camp/value.hpp>
 #include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
@@ -35,11 +32,6 @@ struct ValueFixture
 {
     ValueFixture() : object1(1), object2(1)
     {
-        camp::Enum::declare<MyEnum>("MyEnum")
-            .value("One", One)
-            .value("Two", Two);
-        camp::Class::declare<MyClass>("MyClass");
-
         noValue      = camp::Value::nothing;
         boolValue    = true;
         charValue    = static_cast<char>(1);
@@ -56,12 +48,6 @@ struct ValueFixture
         stringValue  = std::string("1");
         enumValue    = One;
         objectValue  = object1;
-    }
-
-    ~ValueFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Enum::undeclare<MyEnum>();
     }
 
     static bool equivalent(const camp::Value& left, const camp::Value& right)

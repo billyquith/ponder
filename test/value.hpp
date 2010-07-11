@@ -24,11 +24,12 @@
 #define CAMPTEST_VALUE_HPP
 
 #include <camp/camptype.hpp>
+#include <camp/class.hpp>
+#include <camp/enum.hpp>
 #include <camp/type.hpp>
 #include <camp/valuevisitor.hpp>
 #include <camp/enumobject.hpp>
 #include <camp/userobject.hpp>
-
 
 namespace ValueTest
 {
@@ -96,9 +97,17 @@ namespace ValueTest
              return camp::userType;
          }
     };
+
+    void declare()
+    {
+        camp::Enum::declare<MyEnum>("ValueTest::MyEnum")
+            .value("One", One)
+            .value("Two", Two);
+        camp::Class::declare<MyClass>("ValueTest::MyClass");
+    }
 }
 
-CAMP_TYPE(ValueTest::MyClass);
-CAMP_TYPE(ValueTest::MyEnum);
+CAMP_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare);
+CAMP_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare);
 
 #endif // CAMPTEST_VALUE_HPP

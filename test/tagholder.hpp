@@ -24,8 +24,8 @@
 #define CAMPTEST_TAGHOLDER_HPP
 
 #include <camp/camptype.hpp>
+#include <camp/class.hpp>
 #include <string>
-
 
 namespace TagHolderTest
 {
@@ -47,10 +47,44 @@ namespace TagHolderTest
         One = 1,
         Ten = 10
     };
+
+    MyType object1(1);
+    MyType object2(2);
+
+    void declare()
+    {
+        camp::Enum::declare<MyEnum>("TagHolderTest::MyEnum");
+
+        camp::Class::declare<MyType>("TagHolderTest::MyType");
+
+        camp::Class::declare<MyClass>("TagHolderTest::MyClass")
+            .tag("a")
+            .tag("b", 0)
+            .tag(true)
+            .tag(10)
+            .tag(5.25)
+            .tag("hello")
+            .tag(Ten)
+            .tag(object1)
+            .tag("static1", true)
+            .tag("static2", 10)
+            .tag("static3", 5.25)
+            .tag("static4", "hello")
+            .tag("static5", Ten)
+            .tag("static6", object1)
+            .tag("dynamic1", &MyClass::prop)
+            .tag("dynamic2", &MyClass::func)
+            .property("prop", &MyClass::prop)
+                .tag("a")
+                .tag("b", 0)
+            .function("func", &MyClass::func)
+                .tag("a")
+                .tag("b", 0);
+    }
 }
 
-CAMP_TYPE(TagHolderTest::MyClass);
-CAMP_TYPE(TagHolderTest::MyType);
-CAMP_TYPE(TagHolderTest::MyEnum);
+CAMP_AUTO_TYPE(TagHolderTest::MyClass, &TagHolderTest::declare);
+CAMP_AUTO_TYPE(TagHolderTest::MyType,  &TagHolderTest::declare);
+CAMP_AUTO_TYPE(TagHolderTest::MyEnum,  &TagHolderTest::declare);
 
 #endif // CAMPTEST_TAGHOLDER_HPP

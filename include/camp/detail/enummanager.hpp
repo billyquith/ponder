@@ -76,15 +76,6 @@ public:
     Enum& addClass(const std::string& name, const std::string& id);
 
     /**
-     * \brief Remove an existing metaenum by its name
-     *
-     * \param id Name of the metaenum to unregister
-     *
-     * \throw EnumNotFound \a name is not an existing metaenum
-     */
-    void removeClass(const std::string& name);
-
-    /**
      * \brief Get the total number of metaenums
      *
      * \return Number of metaenums that have been registered

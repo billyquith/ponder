@@ -39,8 +39,6 @@ set(CAMP_TEST_SRCS
     enumobject.hpp
     enumproperty.cpp
     enumproperty.hpp
-    observer.cpp
-    observer.hpp
     tagholder.cpp
     tagholder.hpp
     value.cpp
@@ -51,6 +49,16 @@ set(CAMP_TEST_SRCS
     classvisitor.hpp
     constructor.cpp
     constructor.hpp
+    mapper.cpp
+    mapper.hpp
+    inheritance.cpp
+    inheritance.hpp
+    userobject.cpp
+    userobject.hpp
+    propertyaccess.cpp
+    propertyaccess.hpp
+    functionaccess.cpp
+    functionaccess.hpp
 )
 
 # find Boost

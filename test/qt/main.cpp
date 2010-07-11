@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-
 // This must be defined once in the entire project
 #define BOOST_TEST_MODULE CAMP testqt
 

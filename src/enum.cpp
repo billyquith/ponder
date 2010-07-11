@@ -30,12 +30,6 @@
 namespace camp
 {
 //-------------------------------------------------------------------------------------------------
-void Enum::undeclare(const std::string& name)
-{
-    detail::EnumManager::instance().removeClass(name);
-}
-
-//-------------------------------------------------------------------------------------------------
 const std::string& Enum::name() const
 {
     return m_name;

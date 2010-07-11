@@ -20,9 +20,7 @@
 **
 ****************************************************************************/
 
-
 #include "constructor.hpp"
-#include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
@@ -34,47 +32,11 @@ struct ConstructorFixture
 {
     ConstructorFixture()
     {
-        camp::Enum::declare<MyEnum>("MyEnum")
-            .value("zero",  zero)
-            .value("one",   one)
-            .value("two",   two)
-            .value("three", three)
-            .value("four",  four)
-            .value("five",  five);
-
-        camp::Class::declare<MyType>("MyType");
-
-        camp::Class::declare<MyBase1>("MyBase1");
-        camp::Class::declare<MyBase2>("MyBase2");
-
-        camp::Class::declare<MyClass>("MyClass")
-            .base<MyBase1>()
-            .base<MyBase2>()
-            .constructor0()
-            .constructor1<long>()
-            .constructor2<long, double>()
-            .constructor3<long, double, std::string>()
-            .constructor4<long, double, std::string, MyEnum>()
-
-            // trying types that don't exactly match those declared
-            .constructor5<unsigned short, float, std::string, MyEnum, int>()
-            ;
-
         metaclass = &camp::classByType<MyClass>();
-    }
-
-    ~ConstructorFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Class::undeclare<MyBase2>();
-        camp::Class::undeclare<MyBase1>();
-        camp::Class::undeclare<MyType>();
-        camp::Enum::undeclare<MyEnum>();
     }
 
     const camp::Class* metaclass;
 };
-
 
 //-----------------------------------------------------------------------------
 //                         Tests for camp::Constructor

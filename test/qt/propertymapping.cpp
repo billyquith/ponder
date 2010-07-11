@@ -20,7 +20,6 @@
 **
 ****************************************************************************/
 
-
 #include "propertymapping.hpp"
 #include <camp/class.hpp>
 #include <camp/classget.hpp>
@@ -33,14 +32,6 @@ struct PropertyMappingFixture
 {
     PropertyMappingFixture()
     {
-        camp::Enum::declare<MyClass::Enum>("MyClass::Enum")
-            .value("one", MyClass::one)
-            .value("two", MyClass::two)
-            .value("three", MyClass::three);
-
-        camp::Class::declare<MyClass>("MyClass")
-            .external<camp_ext::QtMapper>();
-
         metaclass = &camp::classByType<MyClass>();
 
         object.setBool(true);
@@ -51,16 +42,9 @@ struct PropertyMappingFixture
         object.setEnum(MyClass::two);
     }
 
-    ~PropertyMappingFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Enum::undeclare<MyClass::Enum>();
-    }
-
     MyClass object;
     const camp::Class* metaclass;
 };
-
 
 //-----------------------------------------------------------------------------
 //                         Tests for camp_ext::QtMapper (properties)

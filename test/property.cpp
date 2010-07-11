@@ -20,11 +20,8 @@
 **
 ****************************************************************************/
 
-
 #include "property.hpp"
-#include <camp/class.hpp>
 #include <camp/classget.hpp>
-#include <camp/enum.hpp>
 #include <camp/enumget.hpp>
 #include <camp/property.hpp>
 #include <camp/errors.hpp>
@@ -37,73 +34,16 @@ struct PropertyFixture
 {
     PropertyFixture()
     {
-        camp::Enum::declare<MyEnum>("MyEnum")
-            .value("Zero", Zero)
-            .value("One",  One)
-            .value("Two",  Two);
-
-        camp::Class::declare<MyType>("MyType");
-
-        camp::Class::declare<MyClass>("MyClass")
-
-            // ***** non-member functions *****
-            .property("p1", &getP1)         // read-only getter (const param)
-            .property("p2", &getP2)         // read-only getter (const return)
-            .property("p3", &getP3)         // read-write getter
-            .property("p4", &getP4, &setP4) // getter + setter
-
-            // ***** pointer to members *****
-            .property("p5", &MyClass::p5) // pointer to read-write member
-            .property("p6", &MyClass::p6) // pointer to const member
-            // TOFIX .property("p7", &MyClass::p7) // pointer to read-write pointer member
-            // TOFIX .property("p8", &MyClass::p8) // pointer to const pointer member
-            .property("p9", &MyClass::p9) // pointer to read-write smart pointer member
-
-            // ***** members functions *****
-            .property("p10", &MyClass::getP10)                   // read-only getter (return by value)
-            .property("p11", &MyClass::getP11)                   // read-only getter (const)
-            .property("p12", &MyClass::getP12)                   // read-write getter
-            .property("p13", &MyClass::getP13, &MyClass::setP13) // read-only getter + write-only setter
-
-            // ***** nested functions *****
-            .property("p14", &MyClass::Inner::p14, &MyClass::getInner)    // pointer to read-write member
-            .property("p15", &MyClass::Inner::p15, &MyClass::inner)       // Pointer to read-only member
-            .property("p16", &MyClass::Inner::getP16, &MyClass::getInner) // read-only getter
-            .property("p17", &MyClass::Inner::getP17,
-                             &MyClass::Inner::setP17, &MyClass::inner)    // read-only getter + write-only setter
-
-            // ***** boost::function *****
-            .property("p18", boost::function<bool (MyClass&)>(&MyClass::p18))    // pointer to read-write member
-            .property("p19", boost::function<int& (MyClass&)>(&MyClass::getP19)) // read-write getter
-            .property("p20", boost::function<double (MyClass&)>(&MyClass::getP20),
-                             boost::function<void (MyClass&, double)>(&MyClass::setP20)) // read-only getter + write-only setter
-
-            // ***** boost::bind *****
-            .property("p21", boost::bind(&getP21, _1))                 // non-member read-write getter
-            // TOFIX .property("p22", boost::bind(&MyClass::getP22, _1))        // read-write getter to pointer
-            .property("p23", boost::bind(&MyClass::getP23, _1, "str")) // read-only getter + extra parameter
-            .property("p24", boost::bind(&MyClass::getP24, _1),
-                             boost::bind(&MyClass::setP24, _1, _2))    // read-only getter + write-only setter
-            ;
-
-            const camp::Class& metaclass = camp::classByType<MyClass>();
-            for (int i = 1; i < 25; ++i)
-            {
-                if (i != 7 && i != 8 && i != 22) // remove when fixed
-                    properties[i] = &metaclass.property("p" + boost::lexical_cast<std::string>(i));
-            }
-    }
-
-    ~PropertyFixture()
-    {
-        camp::Class::undeclare<MyClass>();
-        camp::Class::undeclare<MyType>();
-        camp::Enum::undeclare<MyEnum>();
+        const camp::Class& metaclass = camp::classByType<MyClass>();
+        for (int i = 1; i < 25; ++i)
+        {
+            if (i != 7 && i != 8 && i != 22) // remove when fixed
+                properties[i] = &metaclass.property("p" + boost::lexical_cast<std::string>(i));
+        }
     }
 
     const camp::Property* properties[25];
 };
-
 
 //-----------------------------------------------------------------------------
 //                         Tests for camp::Property

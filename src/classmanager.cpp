@@ -65,23 +65,6 @@ Class& ClassManager::addClass(const std::string& name, const std::string& id)
 }
 
 //-------------------------------------------------------------------------------------------------
-void ClassManager::removeClass(const std::string& name)
-{
-    NameIndex& names = m_classes.get<Name>();
-
-    // Make sure that the metaclass exists
-    NameIndex::iterator it = names.find(name);
-    if (it == names.end())
-        CAMP_ERROR(ClassNotFound(name));
-
-    // Notify observers
-    notifyClassRemoved(*it->classPtr);
-
-    // Remove it from the table
-    names.erase(it);
-}
-
-//-------------------------------------------------------------------------------------------------
 std::size_t ClassManager::count() const
 {
     return m_classes.size();
