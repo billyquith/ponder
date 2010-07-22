@@ -107,7 +107,7 @@ namespace ValueTest
     }
 }
 
-CAMP_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare);
-CAMP_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare);
+CAMP_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare)
+CAMP_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
 
 #endif // CAMPTEST_VALUE_HPP

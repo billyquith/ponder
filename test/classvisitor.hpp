@@ -112,8 +112,8 @@ namespace ClassVisitorTest
     }
 }
 
-CAMP_AUTO_TYPE(ClassVisitorTest::MyEnum, &ClassVisitorTest::declare);
-CAMP_AUTO_TYPE(ClassVisitorTest::MyType, &ClassVisitorTest::declare);
-CAMP_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare);
+CAMP_AUTO_TYPE(ClassVisitorTest::MyEnum, &ClassVisitorTest::declare)
+CAMP_AUTO_TYPE(ClassVisitorTest::MyType, &ClassVisitorTest::declare)
+CAMP_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare)
 
 #endif // CAMPTEST_CLASSVISITOR_HPP

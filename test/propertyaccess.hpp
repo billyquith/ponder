@@ -69,6 +69,6 @@ namespace PropertyAccessTest
     }
 }
 
-CAMP_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare);
+CAMP_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
 
 #endif // CAMPTEST_PROPERTYACCESS_HPP

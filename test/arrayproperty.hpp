@@ -86,7 +86,7 @@ namespace ArrayPropertyTest
     }
 }
 
-CAMP_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare);
-CAMP_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare);
+CAMP_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare)
+CAMP_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare)
 
 #endif // CAMPTEST_ARRAYPROPERTY_HPP

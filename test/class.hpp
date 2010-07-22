@@ -85,13 +85,13 @@ namespace ClassTest
     }
 }
 
-CAMP_TYPE(ClassTest::MyUndeclaredClass /* never declared */);
-CAMP_TYPE(ClassTest::MyTempClass /* declared in a test */);
-CAMP_AUTO_TYPE(ClassTest::MyClass, &ClassTest::declare);
-CAMP_AUTO_TYPE(ClassTest::MyClass2, &ClassTest::declare);
-CAMP_AUTO_TYPE(ClassTest::Base, &ClassTest::declare);
-CAMP_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare);
-CAMP_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare);
-CAMP_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare);
+CAMP_TYPE(ClassTest::MyUndeclaredClass /* never declared */)
+CAMP_TYPE(ClassTest::MyTempClass /* declared in a test */)
+CAMP_AUTO_TYPE(ClassTest::MyClass, &ClassTest::declare)
+CAMP_AUTO_TYPE(ClassTest::MyClass2, &ClassTest::declare)
+CAMP_AUTO_TYPE(ClassTest::Base, &ClassTest::declare)
+CAMP_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
+CAMP_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
+CAMP_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
 
 #endif // CAMPTEST_CLASS_HPP

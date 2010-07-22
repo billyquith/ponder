@@ -49,7 +49,7 @@ namespace UserPropertyTest
     }
 }
 
-CAMP_AUTO_TYPE(UserPropertyTest::MyType, &UserPropertyTest::declare);
-CAMP_AUTO_TYPE(UserPropertyTest::MyClass, &UserPropertyTest::declare);
+CAMP_AUTO_TYPE(UserPropertyTest::MyType, &UserPropertyTest::declare)
+CAMP_AUTO_TYPE(UserPropertyTest::MyClass, &UserPropertyTest::declare)
 
 #endif // CAMPTEST_USERPROPERTY_HPP

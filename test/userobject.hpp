@@ -132,13 +132,13 @@ namespace UserObjectTest
     }
 }
 
-CAMP_AUTO_TYPE(UserObjectTest::MyBase, &UserObjectTest::declare);
-CAMP_AUTO_TYPE(UserObjectTest::MyClass, &UserObjectTest::declare);
-CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyNonCopyableClass, &UserObjectTest::declare);
-CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyAbstractClass, &UserObjectTest::declare);
-CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyConcreteClass, &UserObjectTest::declare);
-CAMP_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare);
-CAMP_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare);
-CAMP_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare);
+CAMP_AUTO_TYPE(UserObjectTest::MyBase, &UserObjectTest::declare)
+CAMP_AUTO_TYPE(UserObjectTest::MyClass, &UserObjectTest::declare)
+CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyNonCopyableClass, &UserObjectTest::declare)
+CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyAbstractClass, &UserObjectTest::declare)
+CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyConcreteClass, &UserObjectTest::declare)
+CAMP_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare)
+CAMP_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
+CAMP_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
 
 #endif // CAMPTEST_USEROBJECT_HPP

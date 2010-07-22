@@ -143,6 +143,6 @@ namespace MapperTest
     }
 }
 
-CAMP_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare);
+CAMP_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare)
 
 #endif // CAMPTEST_MAPPER_HPP

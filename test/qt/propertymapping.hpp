@@ -96,18 +96,18 @@ namespace PropertyMappingTest
 
     inline void declare()
     {
-        camp::Enum::declare<MyClass::Enum>("MyClass::Enum")
+        camp::Enum::declare<MyClass::Enum>("PropertyMappingTest::MyClass::Enum")
             .value("one", MyClass::one)
             .value("two", MyClass::two)
             .value("three", MyClass::three);
 
-        camp::Class::declare<MyClass>("MyClass")
+        camp::Class::declare<MyClass>("PropertyMappingTest::MyClass")
             .external<camp_ext::QtMapper>();
     }
 }
 
-CAMP_AUTO_TYPE_NONCOPYABLE(PropertyMappingTest::MyClass, &PropertyMappingTest::declare);
-CAMP_AUTO_TYPE(PropertyMappingTest::MyClass::Enum, &PropertyMappingTest::declare);
+CAMP_AUTO_TYPE_NONCOPYABLE(PropertyMappingTest::MyClass, &PropertyMappingTest::declare)
+CAMP_AUTO_TYPE(PropertyMappingTest::MyClass::Enum, &PropertyMappingTest::declare)
 Q_DECLARE_METATYPE(PropertyMappingTest::MyClass::Enum)
 
 // To make the boost.test logger happy

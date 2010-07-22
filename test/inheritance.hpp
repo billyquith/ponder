@@ -107,9 +107,9 @@ namespace InheritanceTest
     }
 }
 
-CAMP_AUTO_TYPE(InheritanceTest::MyClass1, &InheritanceTest::declare);
-CAMP_AUTO_TYPE(InheritanceTest::MyClass2, &InheritanceTest::declare);
-CAMP_AUTO_TYPE(InheritanceTest::MyClass3, &InheritanceTest::declare);
-CAMP_AUTO_TYPE(InheritanceTest::MyClass4, &InheritanceTest::declare);
+CAMP_AUTO_TYPE(InheritanceTest::MyClass1, &InheritanceTest::declare)
+CAMP_AUTO_TYPE(InheritanceTest::MyClass2, &InheritanceTest::declare)
+CAMP_AUTO_TYPE(InheritanceTest::MyClass3, &InheritanceTest::declare)
+CAMP_AUTO_TYPE(InheritanceTest::MyClass4, &InheritanceTest::declare)
 
 #endif // CAMPTEST_INHERITANCE_HPP

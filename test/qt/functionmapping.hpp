@@ -70,7 +70,7 @@ namespace FunctionMappingTest
 
     inline void declare()
     {
-        camp::Class::declare<MyClass>("MyClass")
+        camp::Class::declare<MyClass>("FunctionMappingTest::MyClass")
             .external<camp_ext::QtMapper>();
     }
 }

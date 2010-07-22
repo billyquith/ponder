@@ -105,10 +105,10 @@ namespace ConstructorTest
     }
 }
 
-CAMP_AUTO_TYPE(ConstructorTest::MyEnum, &ConstructorTest::declare);
-CAMP_AUTO_TYPE(ConstructorTest::MyType, &ConstructorTest::declare);
-CAMP_AUTO_TYPE(ConstructorTest::MyBase1, &ConstructorTest::declare);
-CAMP_AUTO_TYPE(ConstructorTest::MyBase2, &ConstructorTest::declare);
-CAMP_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare);
+CAMP_AUTO_TYPE(ConstructorTest::MyEnum, &ConstructorTest::declare)
+CAMP_AUTO_TYPE(ConstructorTest::MyType, &ConstructorTest::declare)
+CAMP_AUTO_TYPE(ConstructorTest::MyBase1, &ConstructorTest::declare)
+CAMP_AUTO_TYPE(ConstructorTest::MyBase2, &ConstructorTest::declare)
+CAMP_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare)
 
 #endif // CAMPTEST_CONSTRUCTOR_HPP

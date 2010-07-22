@@ -169,9 +169,9 @@ namespace FunctionTest
     }
 }
 
-CAMP_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare);
-CAMP_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare);
-CAMP_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare);
-CAMP_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare);
+CAMP_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
+CAMP_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
+CAMP_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
+CAMP_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
 
 #endif // CAMPTEST_FUNCTION_HPP

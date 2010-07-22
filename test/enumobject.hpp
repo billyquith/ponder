@@ -61,8 +61,8 @@ namespace EnumObjectTest
     }
 }
 
-CAMP_TYPE(EnumObjectTest::MyUndeclaredEnum);
-CAMP_AUTO_TYPE(EnumObjectTest::MyEnum, &EnumObjectTest::declare);
-CAMP_AUTO_TYPE(EnumObjectTest::MyEnum2, &EnumObjectTest::declare);
+CAMP_TYPE(EnumObjectTest::MyUndeclaredEnum)
+CAMP_AUTO_TYPE(EnumObjectTest::MyEnum, &EnumObjectTest::declare)
+CAMP_AUTO_TYPE(EnumObjectTest::MyEnum2, &EnumObjectTest::declare)
 
 #endif // CAMPTEST_ENUMOBJECT_HPP
