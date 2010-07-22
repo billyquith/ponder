@@ -28,6 +28,7 @@ project(CAMP)
 
 # include project configuration
 include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # all source files
 set(CAMP_SRCS
@@ -146,6 +147,18 @@ add_library(camp SHARED ${CAMP_SRCS})
 
 # define the export macro
 set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
+
+# define d suffix on windows
+if(WIN32)
+    set_target_properties(camp PROPERTIES DEBUG_POSTFIX d)
+endif()
+
+# gcc 4.x on Windows requires the -static-libgcc linker option to get rid of an extra DLL
+if (WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
+    if(${GCC_VERSION} MATCHES "4\\..*")
+        set_target_properties(camp PROPERTIES LINK_FLAGS -static-libgcc)
+    endif()
+endif()
 
 # add the test subdirectory, but do not build it by default
 if(BUILD_TEST)
