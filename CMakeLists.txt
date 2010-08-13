@@ -141,6 +141,7 @@ set(CAMP_SRCS
     include/camp/detail/yesnotype.hpp
     include/camp/detail/objectholder.hpp
     include/camp/detail/objectholder.inl
+    include/camp/detail/valueprovider.hpp
     include/camp/qt/qthelper.hpp
     include/camp/qt/qtsimpleproperty.hpp
     include/camp/qt/qtmapper.hpp

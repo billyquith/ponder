@@ -42,6 +42,24 @@ std::size_t ArrayPropertyImpl<A>::getSize(const UserObject& object) const
 
 //-------------------------------------------------------------------------------------------------
 template <typename A>
+void ArrayPropertyImpl<A>::setSize(const UserObject& object, std::size_t size) const
+{
+    std::size_t currentSize = getSize(object);
+    if (size < currentSize)
+    {
+        while (size < currentSize)
+            removeElement(object, --currentSize);
+    }
+    else if (size > currentSize)
+    {
+        ValueProvider<ElementType> provider;
+        while (size > currentSize)
+            insertElement(object, currentSize++, provider.value());
+    }
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename A>
 Value ArrayPropertyImpl<A>::getElement(const UserObject& object, std::size_t index) const
 {
     return Mapper::get(array(object), index);
@@ -52,13 +70,6 @@ template <typename A>
 void ArrayPropertyImpl<A>::setElement(const UserObject& object, std::size_t index, const Value& value) const
 {
     Mapper::set(array(object), index, value.to<ElementType>());
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename A>
-void ArrayPropertyImpl<A>::insertElement(const UserObject& object, std::size_t before) const
-{
-    Mapper::insert(array(object), before, ElementType());
 }
 
 //-------------------------------------------------------------------------------------------------

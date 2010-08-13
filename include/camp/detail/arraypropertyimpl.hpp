@@ -27,6 +27,7 @@
 
 #include <camp/arrayproperty.hpp>
 #include <camp/arraymapper.hpp>
+#include <camp/detail/valueprovider.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
 
@@ -68,6 +69,11 @@ protected:
     virtual std::size_t getSize(const UserObject& object) const;
 
     /**
+     * \see ArrayProperty::setSize
+     */
+    virtual void setSize(const UserObject& object, std::size_t size) const;
+
+    /**
      * \see ArrayProperty::getElement
      */
     virtual Value getElement(const UserObject& object, std::size_t index) const;
@@ -76,11 +82,6 @@ protected:
      * \see ArrayProperty::setElement
      */
     virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const;
-
-    /**
-     * \see ArrayProperty::insertElement
-     */
-    virtual void insertElement(const UserObject& object, std::size_t before) const;
 
     /**
      * \see ArrayProperty::insertElement

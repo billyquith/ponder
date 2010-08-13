@@ -77,19 +77,7 @@ void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
     if (!writable(object))
         CAMP_ERROR(InvalidAccess(name().c_str(), InvalidAccess::Write));
 
-    std::size_t currentSize = size(object);
-    if (newSize > currentSize)
-    {
-        // Add elements to reach the new size
-        while (currentSize < newSize)
-            insertElement(object, currentSize++);
-    }
-    else if (newSize < currentSize)
-    {
-        // Remove elements to reach the new size
-        while (currentSize > newSize)
-            removeElement(object, --currentSize);
-    }
+    setSize(object, newSize);
 }
 
 //-------------------------------------------------------------------------------------------------

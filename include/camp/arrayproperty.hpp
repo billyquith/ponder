@@ -187,6 +187,14 @@ protected:
     virtual std::size_t getSize(const UserObject& object) const = 0;
 
     /**
+     * \brief Do the actual resize of the array
+     *
+     * \param object Object
+     * \param size New size of the array
+     */
+    virtual void setSize(const UserObject& object, std::size_t size) const = 0;
+
+    /**
      * \brief Do the actual reading of an element
      *
      * This function is a pure virtual which has to be implemented in derived classes
@@ -208,16 +216,6 @@ protected:
      * \param value New value to assign to the element
      */
     virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const = 0;
-
-    /**
-     * \brief Do the actual insertion of a default-constructed element
-     *
-     * This function is a pure virtual which has to be implemented in derived classes
-     *
-     * \param object Object
-     * \param before Index before which the new element will be inserted
-     */
-    virtual void insertElement(const UserObject& object, std::size_t before) const = 0;
 
     /**
      * \brief Do the actual insertion of an element
