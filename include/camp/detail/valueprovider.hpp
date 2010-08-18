@@ -52,7 +52,7 @@ struct ValueProviderImpl
 template <typename T>
 struct ValueProviderImpl<T, userType>
 {
-    ValueProviderImpl() : m_value(classByType<T>().construct<T>()) {}
+    ValueProviderImpl() : m_value(classByType<T>().template construct<T>()) {}
     ~ValueProviderImpl() {classByType<T>().destroy(m_value);}
     T& value() {return *m_value;}
     T* m_value;
@@ -75,7 +75,7 @@ struct ValueProviderImpl<T*, Type>
 template <typename T>
 struct ValueProviderImpl<T*, userType>
 {
-    T* value() {return classByType<T>().construct<T>();}
+    T* value() {return classByType<T>().template construct<T>();}
 };
 
 /*
