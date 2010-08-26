@@ -49,9 +49,9 @@ class QtFunction : public camp::Function
 public:
 
     /**
-     * \brief Construct the property from a QMetaProperty
+     * \brief Construct the function from a QMetaMethod
      *
-     * \param metaProperty Qt meta property
+     * \param metaMethod Qt meta method
      */
     QtFunction(const QMetaMethod& metaMethod)
         : camp::Function(functionName(metaMethod), returnType(metaMethod), argTypes(metaMethod))
