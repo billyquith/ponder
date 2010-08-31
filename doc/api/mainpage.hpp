@@ -98,19 +98,16 @@
  *     const camp::Class& metaclass = camp::classByName("Person");
  * 
  *     // Use the metaclass to construct a new person named John
- *     Person* john = metaclass.construct<Person>(camp::Args("John"));
- *
- *     // Wrap it in a metaobject
- *     camp::UserObject metaobject = john;
+ *     camp::UserObject john = metaclass.construct(camp::Args("John"));
  *
  *     // Print its name
- *     std::cout << "John's name is: " << metaobject.get("name") << std::endl;
+ *     std::cout << "John's name is: " << john.get("name") << std::endl;
  *
  *     // Set its age to 24
- *     metaobject.set("age", 24);
+ *     john.set("age", 24);
  *
  *     // Make John say something
- *     metaobject.call("speak");
+ *     john.call("speak");
  * 
  *     // Kill John
  *     metaclass.destroy(john);
