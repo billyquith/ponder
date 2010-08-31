@@ -64,6 +64,20 @@ std::size_t ArrayProperty::size(const UserObject& object) const
 }
 
 //-------------------------------------------------------------------------------------------------
+void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
+{
+    // Check if the array is dynamic
+    if (!dynamic())
+        CAMP_ERROR(ForbiddenWrite(name()));
+
+    // Check if the property is writable
+    if (!writable(object))
+        CAMP_ERROR(ForbiddenWrite(name()));
+
+    setSize(object, newSize);
+}
+
+//-------------------------------------------------------------------------------------------------
 Value ArrayProperty::get(const UserObject& object, std::size_t index) const
 {
     // Check if the property is readable

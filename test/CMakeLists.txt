@@ -87,7 +87,7 @@ if(WIN32)
 endif()
 
 # last thing we have to do is to tell CMake what libraries our executable needs,
-target_link_libraries(camptest camp ${Boost_LIBRARIES})
+target_link_libraries(camptest camp)
 
 # add the qt subdirectory, but do not build it by default
 if(BUILD_TEST_QT)

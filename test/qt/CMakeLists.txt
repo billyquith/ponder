@@ -67,5 +67,5 @@ add_definitions(-DBOOST_TEST_NO_LIB)
 add_executable(camptest-qt ${CAMP_TEST_QT_SRCS} ${CAMP_TEST_QT_MOC_SRCS})
 
 # last thing we have to do is to tell CMake what libraries our executable needs
-target_link_libraries(camptest-qt camp ${Boost_LIBRARIES} ${QT_LIBRARIES})
+target_link_libraries(camptest-qt camp ${QT_LIBRARIES})
 

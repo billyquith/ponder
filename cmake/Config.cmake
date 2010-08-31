@@ -2,7 +2,7 @@
 # setup version numbers
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 7)
-set(VERSION_PATCH 0)
+set(VERSION_PATCH 1)
 set(VERSION_STR "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 message("Project version: ${VERSION_STR}")
 
@@ -10,6 +10,13 @@ message("Project version: ${VERSION_STR}")
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo
         CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+    )
+endif()
+
+# Add an option for choosing the build type (shared or static)
+if(NOT BUILD_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS TRUE
+        CACHE BOOL "TRUE to build CAMP as a shared library, FALSE to build it as a static library."
     )
 endif()
 

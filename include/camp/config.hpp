@@ -29,16 +29,25 @@
 // current operating system and build mode
 #if defined(_WIN32) || defined(__WIN32__)
 
-    // Windows platforms need specific keywords for import / export
-    #ifdef CAMP_EXPORTS
+    #ifndef CAMP_STATIC
 
-        // From DLL side, we must export
-        #define CAMP_API __declspec(dllexport)
+        // Windows platforms need specific keywords for import / export
+        #ifdef CAMP_EXPORTS
+
+            // From DLL side, we must export
+            #define CAMP_API __declspec(dllexport)
+
+        #else
+
+            // From client application side, we must import
+            #define CAMP_API __declspec(dllimport)
+
+        #endif
 
     #else
 
-        // From client application side, we must import
-        #define CAMP_API __declspec(dllimport)
+        // No specific directive needed for static build
+        #define CAMP_API
 
     #endif
 

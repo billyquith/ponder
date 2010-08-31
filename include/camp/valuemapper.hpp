@@ -123,6 +123,16 @@ struct ValueMapper
 };
 
 /*
+ * Specialization of ValueMapper for abstract types
+ */
+template <typename T>
+struct ValueMapper<T, typename boost::enable_if<boost::is_abstract<T> >::type>
+{
+    static const int type = camp::userType;
+    static camp::UserObject to(const T& source) {return camp::UserObject(source);}
+};
+
+/*
  * Specialization of ValueMapper for booleans
  */
 template <>
@@ -143,7 +153,10 @@ struct ValueMapper<bool>
  * Specialization of ValueMapper for integers
  */
 template <typename T>
-struct ValueMapper<T, typename boost::enable_if<boost::is_integral<T> >::type>
+struct ValueMapper<T, typename boost::enable_if_c<boost::is_integral<T>::value
+                                                  && !boost::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                                  && !boost::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                                                 >::type>
 {
     static const int type = camp::intType;
     static long to(T source) {return static_cast<long>(source);}
@@ -160,7 +173,10 @@ struct ValueMapper<T, typename boost::enable_if<boost::is_integral<T> >::type>
  * Specialization of ValueMapper for reals
  */
 template <typename T>
-struct ValueMapper<T, typename boost::enable_if<boost::is_float<T> >::type>
+struct ValueMapper<T, typename boost::enable_if_c<boost::is_float<T>::value
+                                                  && !boost::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                                  && !boost::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                                                 >::type>
 {
     static const int type = camp::realType;
     static double to(T source) {return static_cast<double>(source);}
@@ -226,7 +242,10 @@ struct ValueMapper<const char[N]>
  * Specialization of ValueMapper for enum types
  */
 template <typename T>
-struct ValueMapper<T, typename boost::enable_if<boost::is_enum<T> >::type>
+struct ValueMapper<T, typename boost::enable_if_c<boost::is_enum<T>::value
+                                                  && !boost::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                                  && !boost::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                                                 >::type>
 {
     static const int type = camp::enumType;
     static camp::EnumObject to(T source) {return camp::EnumObject(source);}
