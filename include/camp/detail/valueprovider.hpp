@@ -41,7 +41,7 @@ namespace detail
 template <typename T, int Type>
 struct ValueProviderImpl
 {
-    T value() {return T();}
+    T operator()() {return T();}
 };
 
 /*
@@ -52,9 +52,9 @@ struct ValueProviderImpl
 template <typename T>
 struct ValueProviderImpl<T, userType>
 {
-    ValueProviderImpl() : m_value(classByType<T>().template construct<T>()) {}
+    ValueProviderImpl() : m_value(classByType<T>().construct().template get<T*>()) {}
     ~ValueProviderImpl() {classByType<T>().destroy(m_value);}
-    T& value() {return *m_value;}
+    T& operator()() {return *m_value;}
     T* m_value;
 };
 
@@ -65,7 +65,7 @@ struct ValueProviderImpl<T, userType>
 template <typename T, int Type>
 struct ValueProviderImpl<T*, Type>
 {
-    T* value() {return new T;}
+    T* operator()() {return new T;}
 };
 
 /*
@@ -75,7 +75,7 @@ struct ValueProviderImpl<T*, Type>
 template <typename T>
 struct ValueProviderImpl<T*, userType>
 {
-    T* value() {return classByType<T>().template construct<T>();}
+    T* operator()() {return classByType<T>().construct().template get<T*>();}
 };
 
 /*

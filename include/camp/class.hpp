@@ -33,6 +33,7 @@
 #include <camp/function.hpp>
 #include <camp/tagholder.hpp>
 #include <camp/errors.hpp>
+#include <camp/userobject.hpp>
 #include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <boost/noncopyable.hpp>
@@ -49,7 +50,6 @@ namespace bm = boost::multi_index;
 namespace camp
 {
 template <typename T> class ClassBuilder;
-class UserObject;
 class Constructor;
 class Value;
 class ClassVisitor;
@@ -77,7 +77,7 @@ class ClassVisitor;
  *
  * camp::Class::declare<MyClass>("MyClass")
  *     .tag("help", "this is my class")
- *     .constructor()
+ *     .constructor0()
  *     .property("prop", &MyClass::getProp, &MyClass::setProp)
  *     .function("func", &MyClass::func);
  * \endcode
@@ -234,34 +234,26 @@ public:
     /**
      * \brief Construct a new instance of the C++ class bound to the metaclass
      *
-     * The template parameter T is the target C++ type. It can be the class bound
-     * to the metaclass, one of its base classes, or void. The returned instance
-     * must be destroyed with the Class::destroy function.
+     * If no constructor can match the provided arguments, UserObject::nothing
+     * is returned.
+     * The new instance is wrapped into a UserObject. It must be destroyed
+     * with the Class::destroy function.
      *
      * \param args Arguments to pass to the constructor (empty by default)
      *
-     * \return Pointer to the new instance, or 0 if it failed
-     *
-     * \throw ConstructorNotFound no matching constructor was found
-     * \throw ClassUnrelated T is not a base or derived class of this
-     * \throw BadArgument one of the arguments can't be converted to the requested type
+     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
      */
-    template <typename T>
-    T* construct(const Args& args = Args::empty) const;
+    UserObject construct(const Args& args = Args::empty) const;
 
     /**
      * \brief Destroy an instance of the C++ class bound to the metaclass
      *
      * This function must be called to destroy every instance created with
-     * Class::construct. The object to destroy must be properly typed
-     * (i.e. not be void*) so that its destructor gets called
+     * Class::construct.
      *
-     * \param object Pointer to the object to destroyed
-     *
-     * \return Pointer to the new instance, or 0 if it failed
+     * \param object Object to be destroyed
      */
-    template <typename T>
-    void destroy(const T* object) const;
+    void destroy(const UserObject& object) const;
 
     /**
      * \brief Start visitation of a class
@@ -359,12 +351,14 @@ private:
 
     typedef PropertyTable::index<Name>::type PropertyNameIndex;
     typedef FunctionTable::index<Name>::type FunctionNameIndex;
+    typedef void (*Destructor)(const UserObject&);
 
     std::string m_name; ///< Name of the metaclass
     FunctionTable m_functions; ///< Table of metafunctions indexed by name
     PropertyTable m_properties; ///< Table of metaproperties indexed by name
     BaseList m_bases; ///< List of base metaclasses
     ConstructorList m_constructors; ///< List of metaconstructors
+    Destructor m_destructor; ///< Destructor (function that is able to delete an abstract object)
 };
 
 } // namespace camp

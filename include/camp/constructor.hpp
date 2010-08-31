@@ -33,6 +33,7 @@
 namespace camp
 {
 class Value;
+class UserObject;
 
 /**
  * \brief camp::Constructor represents a metaconstructor which is used to create objects instances from metaclasses
@@ -64,9 +65,9 @@ public:
      *
      * \param args Set of arguments to pass to the constructor
      *
-     * \return Pointer to the new object, or 0 on failure
+     * \return Pointer to the new object wrapped in a UserObject, or UserObject::nothing on failure
      */
-    virtual void* create(const Args& args) const = 0;
+    virtual UserObject create(const Args& args) const = 0;
 };
 
 } // namespace camp

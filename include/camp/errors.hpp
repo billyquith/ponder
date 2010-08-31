@@ -133,21 +133,6 @@ public:
 };
 
 /**
- * \brief Error thrown when no constructor was found to match the provided list of arguments
- */
-class CAMP_API ConstructorNotFound : public Error
-{
-public:
-
-    /**
-     * \brief Constructor
-     *
-     * \param className Name of the owner class
-     */
-    ConstructorNotFound(const std::string& className);
-};
-
-/**
  * \brief Error thrown when a declaring a metaenum that already exists
  */
 class CAMP_API EnumAlreadyCreated : public Error

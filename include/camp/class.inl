@@ -23,62 +23,22 @@
 
 namespace camp
 {
+namespace detail
+{
+    template <typename T>
+    void destroy(const UserObject& object)
+    {
+        delete object.get<T*>();
+    }
+}
+
 //-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T> Class::declare(const std::string& name)
 {
     Class& newClass = detail::ClassManager::instance().addClass(name, detail::StaticTypeId<T>::get(false));
+    newClass.m_destructor = &detail::destroy<T>;
     return ClassBuilder<T>(newClass);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-T* Class::construct(const Args& args) const
-{
-    void* object = 0;
-
-    // Search an arguments match among the list of available constructors
-    ConstructorList::const_iterator end = m_constructors.end();
-    for (ConstructorList::const_iterator it = m_constructors.begin();
-         (it != end) && !object;
-         ++it)
-    {
-        Constructor& constructor = **it;
-
-        if (constructor.matches(args))
-        {
-            // Match found: use the constructor to create the new instance
-            object = constructor.create(args);
-        }
-    }
-
-    // Check if we found a constructor matching the provided list of arguments
-    if (!object)
-        CAMP_ERROR(ConstructorNotFound(name()));
-
-    // Get the metaclass of T (we use classByTypeSafe because it may not exist)
-    const Class* targetClass = classByTypeSafe<T>();
-
-    try
-    {
-        // Apply the proper offset in case T is a base of this class
-        if (targetClass)
-            object = applyOffset(object, *targetClass);
-    }
-    catch (Error&)
-    {
-        destroy(static_cast<T*>(object));
-        throw;
-    }
-
-    return static_cast<T*>(object);
-}
-
-//-------------------------------------------------------------------------------------------------
-template <typename T>
-void Class::destroy(const T* object) const
-{
-    delete object;
 }
 
 } // namespace camp

@@ -82,12 +82,6 @@ ClassUnrelated::ClassUnrelated(const std::string& sourceClass, const std::string
 }
 
 //-------------------------------------------------------------------------------------------------
-ConstructorNotFound::ConstructorNotFound(const std::string& className)
-    : Error("no constructor of " + className + " could match the provided list of arguments")
-{
-}
-
-//-------------------------------------------------------------------------------------------------
 EnumAlreadyCreated::EnumAlreadyCreated(const std::string& name, const std::string& type)
     : Error("a metaenum named " + name + ", or bound to the type " + type + " already exists")
 {

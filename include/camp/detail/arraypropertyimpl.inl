@@ -54,7 +54,7 @@ void ArrayPropertyImpl<A>::setSize(const UserObject& object, std::size_t size) c
     {
         ValueProvider<ElementType> provider;
         while (size > currentSize)
-            insertElement(object, currentSize++, provider.value());
+            insertElement(object, currentSize++, provider());
     }
 }
 

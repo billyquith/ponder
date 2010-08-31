@@ -30,6 +30,7 @@
 #include <camp/value.hpp>
 #include <camp/valuevisitor.hpp>
 #include <camp/errors.hpp>
+#include <camp/userobject.hpp>
 
 
 namespace camp
@@ -94,7 +95,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual void* create(const Args&) const
+    virtual UserObject create(const Args&) const
     {
         return new T();
     }
@@ -120,7 +121,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual void* create(const Args& args) const
+    virtual UserObject create(const Args& args) const
     {
         return new T(convertArg<A0>(args, 0));
     }
@@ -147,7 +148,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual void* create(const Args& args) const
+    virtual UserObject create(const Args& args) const
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1));
@@ -176,7 +177,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual void* create(const Args& args) const
+    virtual UserObject create(const Args& args) const
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1),
@@ -207,7 +208,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual void* create(const Args& args) const
+    virtual UserObject create(const Args& args) const
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1),
@@ -240,7 +241,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual void* create(const Args& args) const
+    virtual UserObject create(const Args& args) const
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1),

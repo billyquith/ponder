@@ -23,6 +23,7 @@
 
 #include <camp/class.hpp>
 #include <camp/errors.hpp>
+#include <camp/userobject.hpp>
 #include <camp/detail/classmanager.hpp>
 
 
@@ -120,6 +121,33 @@ const Property& Class::property(const std::string& name) const
         CAMP_ERROR(PropertyNotFound(name, m_name));
 
     return **it;
+}
+
+//-------------------------------------------------------------------------------------------------
+UserObject Class::construct(const Args& args) const
+{
+    // Search an arguments match among the list of available constructors
+    ConstructorList::const_iterator end = m_constructors.end();
+    for (ConstructorList::const_iterator it = m_constructors.begin();
+         it != end;
+         ++it)
+    {
+        Constructor& constructor = **it;
+        if (constructor.matches(args))
+        {
+            // Match found: use the constructor to create the new instance
+            return constructor.create(args);
+        }
+    }
+
+    // No match found
+    return UserObject::nothing;
+}
+
+//-------------------------------------------------------------------------------------------------
+void Class::destroy(const UserObject& object) const
+{
+    m_destructor(object);
 }
 
 //-------------------------------------------------------------------------------------------------

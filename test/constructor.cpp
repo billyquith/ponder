@@ -46,26 +46,26 @@ BOOST_FIXTURE_TEST_SUITE(CONSTRUCTOR, ConstructorFixture)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(invalidConstructions)
 {
-    BOOST_CHECK_THROW(metaclass->construct<MyClass>(camp::Args("hello")),         camp::ConstructorNotFound);
-    BOOST_CHECK_THROW(metaclass->construct<MyClass>(camp::Args(MyType(10))),      camp::ConstructorNotFound);
-    BOOST_CHECK_THROW(metaclass->construct<MyClass>(camp::Args(two, MyType(10))), camp::ConstructorNotFound);
-    BOOST_CHECK_THROW(metaclass->construct<MyClass>(camp::Args(5., "hello")),     camp::ConstructorNotFound);
-
-    BOOST_CHECK_THROW(metaclass->construct<MyType>(), camp::ClassUnrelated);
+    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args("hello")),         camp::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args(MyType(10))),      camp::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args(two, MyType(10))), camp::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args(5., "hello")),     camp::UserObject::nothing);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(zeroArg)
 {
-    MyClass* object = metaclass->construct<MyClass>();
+    camp::UserObject object = metaclass->construct();
 
-    BOOST_CHECK(object != 0);
+    BOOST_CHECK(object != camp::UserObject::nothing);
 
-    BOOST_CHECK_EQUAL(object->l, 0);
-    BOOST_CHECK_CLOSE(object->r, 0., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "0");
-    BOOST_CHECK_EQUAL(object->e, zero);
-    BOOST_CHECK_EQUAL(object->u.x, 0);
+    MyClass* instance = object.get<MyClass*>();
+
+    BOOST_CHECK_EQUAL(instance->l, 0);
+    BOOST_CHECK_CLOSE(instance->r, 0., 1E-5);
+    BOOST_CHECK_EQUAL(instance->s, "0");
+    BOOST_CHECK_EQUAL(instance->e, zero);
+    BOOST_CHECK_EQUAL(instance->u.x, 0);
 
     metaclass->destroy(object);
 }
@@ -73,15 +73,17 @@ BOOST_AUTO_TEST_CASE(zeroArg)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(oneArg)
 {
-    MyClass* object = metaclass->construct<MyClass>(camp::Args(1));
+    camp::UserObject object = metaclass->construct(camp::Args(1)).get<MyClass*>();
 
-    BOOST_CHECK(object != 0);
+    BOOST_CHECK(object != camp::UserObject::nothing);
 
-    BOOST_CHECK_EQUAL(object->l, 1);
-    BOOST_CHECK_CLOSE(object->r, 1., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "1");
-    BOOST_CHECK_EQUAL(object->e, one);
-    BOOST_CHECK_EQUAL(object->u.x, 1);
+    MyClass* instance = object.get<MyClass*>();
+
+    BOOST_CHECK_EQUAL(instance->l, 1);
+    BOOST_CHECK_CLOSE(instance->r, 1., 1E-5);
+    BOOST_CHECK_EQUAL(instance->s, "1");
+    BOOST_CHECK_EQUAL(instance->e, one);
+    BOOST_CHECK_EQUAL(instance->u.x, 1);
 
     metaclass->destroy(object);
 }
@@ -89,15 +91,17 @@ BOOST_AUTO_TEST_CASE(oneArg)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(twoArgs)
 {
-    MyClass* object = metaclass->construct<MyClass>(camp::Args(2, 2.));
+    camp::UserObject object = metaclass->construct(camp::Args(2, 2.));
 
-    BOOST_CHECK(object != 0);
+    BOOST_CHECK(object != camp::UserObject::nothing);
 
-    BOOST_CHECK_EQUAL(object->l, 2);
-    BOOST_CHECK_CLOSE(object->r, 2., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "2");
-    BOOST_CHECK_EQUAL(object->e, two);
-    BOOST_CHECK_EQUAL(object->u.x, 2);
+    MyClass* instance = object.get<MyClass*>();
+
+    BOOST_CHECK_EQUAL(instance->l, 2);
+    BOOST_CHECK_CLOSE(instance->r, 2., 1E-5);
+    BOOST_CHECK_EQUAL(instance->s, "2");
+    BOOST_CHECK_EQUAL(instance->e, two);
+    BOOST_CHECK_EQUAL(instance->u.x, 2);
 
     metaclass->destroy(object);
 }
@@ -105,15 +109,17 @@ BOOST_AUTO_TEST_CASE(twoArgs)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(threeArgs)
 {
-    MyClass* object = metaclass->construct<MyClass>(camp::Args(3, 3., "3"));
+    camp::UserObject object = metaclass->construct(camp::Args(3, 3., "3"));
 
-    BOOST_CHECK(object != 0);
+    BOOST_CHECK(object != camp::UserObject::nothing);
 
-    BOOST_CHECK_EQUAL(object->l, 3);
-    BOOST_CHECK_CLOSE(object->r, 3., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "3");
-    BOOST_CHECK_EQUAL(object->e, three);
-    BOOST_CHECK_EQUAL(object->u.x, 3);
+    MyClass* instance = object.get<MyClass*>();
+
+    BOOST_CHECK_EQUAL(instance->l, 3);
+    BOOST_CHECK_CLOSE(instance->r, 3., 1E-5);
+    BOOST_CHECK_EQUAL(instance->s, "3");
+    BOOST_CHECK_EQUAL(instance->e, three);
+    BOOST_CHECK_EQUAL(instance->u.x, 3);
 
     metaclass->destroy(object);
 }
@@ -121,15 +127,17 @@ BOOST_AUTO_TEST_CASE(threeArgs)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(fourArgs)
 {
-    MyClass* object = metaclass->construct<MyClass>(camp::Args(4, 4., "4", four));
+    camp::UserObject object = metaclass->construct(camp::Args(4, 4., "4", four));
 
-    BOOST_CHECK(object != 0);
+    BOOST_CHECK(object != camp::UserObject::nothing);
 
-    BOOST_CHECK_EQUAL(object->l, 4);
-    BOOST_CHECK_CLOSE(object->r, 4., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "4");
-    BOOST_CHECK_EQUAL(object->e, four);
-    BOOST_CHECK_EQUAL(object->u.x, 4);
+    MyClass* instance = object.get<MyClass*>();
+
+    BOOST_CHECK_EQUAL(instance->l, 4);
+    BOOST_CHECK_CLOSE(instance->r, 4., 1E-5);
+    BOOST_CHECK_EQUAL(instance->s, "4");
+    BOOST_CHECK_EQUAL(instance->e, four);
+    BOOST_CHECK_EQUAL(instance->u.x, 4);
 
     metaclass->destroy(object);
 }
@@ -137,43 +145,17 @@ BOOST_AUTO_TEST_CASE(fourArgs)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(fiveArgs)
 {
-    MyClass* object = metaclass->construct<MyClass>(camp::Args(5, 5., "5", five, 5));
+    camp::UserObject object = metaclass->construct(camp::Args(5, 5., "5", five, 5));
 
-    BOOST_CHECK(object != 0);
+    BOOST_CHECK(object != camp::UserObject::nothing);
 
-    BOOST_CHECK_EQUAL(object->l, 5);
-    BOOST_CHECK_CLOSE(object->r, 5., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "5");
-    BOOST_CHECK_EQUAL(object->e, five);
-    BOOST_CHECK_EQUAL(object->u.x, 5);
+    MyClass* instance = object.get<MyClass*>();
 
-    metaclass->destroy(object);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(constructAsBase)
-{
-    MyBase1* object1 = metaclass->construct<MyBase1>();
-    MyBase2* object2 = metaclass->construct<MyBase2>();
-
-    // Make sure that the pointers are pointing to the right location in memory
-    BOOST_CHECK_EQUAL(object1->base1, "base1");
-    BOOST_CHECK_EQUAL(object2->base2, "base2");
-
-    metaclass->destroy(object1);
-    metaclass->destroy(object2);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(constructAsVoid)
-{
-    MyClass* object = static_cast<MyClass*>(metaclass->construct<void>());
-
-    BOOST_CHECK_EQUAL(object->l, 0);
-    BOOST_CHECK_CLOSE(object->r, 0., 1E-5);
-    BOOST_CHECK_EQUAL(object->s, "0");
-    BOOST_CHECK_EQUAL(object->e, zero);
-    BOOST_CHECK_EQUAL(object->u.x, 0);
+    BOOST_CHECK_EQUAL(instance->l, 5);
+    BOOST_CHECK_CLOSE(instance->r, 5., 1E-5);
+    BOOST_CHECK_EQUAL(instance->s, "5");
+    BOOST_CHECK_EQUAL(instance->e, five);
+    BOOST_CHECK_EQUAL(instance->u.x, 5);
 
     metaclass->destroy(object);
 }

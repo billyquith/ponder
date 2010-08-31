@@ -139,6 +139,11 @@ bool UserObject::operator==(const UserObject& other) const
     {
         return (&m_parent->member == &other.m_parent->member) && (m_parent->object == other.m_parent->object);
     }
+    else if (!m_class && !other.m_class)
+    {
+        // Both are UserObject::nothing
+        return true;
+    }
     else
     {
         return false;
