@@ -45,8 +45,8 @@ BOOST_FIXTURE_TEST_SUITE(MAPPER, MapperFixture)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(count)
 {
-    BOOST_CHECK_EQUAL(metaclass->propertyCount(), MyClass::propertyCount);
-    BOOST_CHECK_EQUAL(metaclass->functionCount(), MyClass::functionCount);
+    BOOST_CHECK_EQUAL(metaclass->propertyCount(), static_cast<std::size_t>(MyClass::propertyCount));
+    BOOST_CHECK_EQUAL(metaclass->functionCount(), static_cast<std::size_t>(MyClass::functionCount));
 }
 
 //-----------------------------------------------------------------------------
