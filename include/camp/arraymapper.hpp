@@ -36,7 +36,6 @@
 
 #include <camp/config.hpp>
 #include <camp/detail/yesnotype.hpp>
-#include <boost/array.hpp>
 #include <list>
 #include <vector>
 
