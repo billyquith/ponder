@@ -84,7 +84,7 @@ namespace camp
  *
  * \sa Class, EnumBuilder
  */
-class CAMP_API Enum : boost::noncopyable
+class CAMP_API Enum : camp::noncopyable
 {
 public:
 

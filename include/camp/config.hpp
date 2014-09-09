@@ -76,5 +76,19 @@
 
 #endif
 
+namespace camp {
+    class noncopyable
+    {
+    protected:
+        noncopyable() {}
+        ~noncopyable() {}
+
+    private:
+        noncopyable( const noncopyable& ) = delete;
+        noncopyable& operator=( const noncopyable& ) = delete;
+    };
+}
+
+
 
 #endif // CAMP_CONFIG_HPP

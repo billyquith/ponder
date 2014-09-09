@@ -118,7 +118,7 @@ class ClassVisitor;
  *
  * \sa Enum, TagHolder, ClassBuilder, Function, Property
  */
-class CAMP_API Class : public TagHolder, boost::noncopyable
+class CAMP_API Class : public TagHolder, camp::noncopyable
 {
 public:
 

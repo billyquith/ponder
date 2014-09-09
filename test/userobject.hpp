@@ -79,7 +79,7 @@ namespace UserObjectTest
         return stream << m.x;
     }
 
-    struct MyNonCopyableClass : boost::noncopyable
+    struct MyNonCopyableClass : camp::noncopyable
     {
     };
 

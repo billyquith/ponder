@@ -60,7 +60,7 @@ namespace detail
  *
  * \sa Enum
  */
-class CAMP_API EnumManager : public ObserverNotifier, boost::noncopyable
+class CAMP_API EnumManager : public ObserverNotifier, camp::noncopyable
 {
 public:
 

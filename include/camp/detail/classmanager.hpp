@@ -61,7 +61,7 @@ namespace detail
  *
  * \sa Class
  */
-class CAMP_API ClassManager : public ObserverNotifier, boost::noncopyable
+class CAMP_API ClassManager : public ObserverNotifier, camp::noncopyable
 {
 public:
 
