@@ -35,7 +35,6 @@
 
 
 #include <camp/config.hpp>
-#include <boost/noncopyable.hpp>
 #include <string>
 
 

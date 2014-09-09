@@ -32,7 +32,6 @@
 
 #include <camp/camptype.hpp>
 #include <camp/class.hpp>
-#include <boost/noncopyable.hpp>
 #include <ostream>
 
 namespace UserObjectTest

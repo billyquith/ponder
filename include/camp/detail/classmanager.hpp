@@ -36,7 +36,6 @@
 
 #include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/multi_index_container.hpp>
