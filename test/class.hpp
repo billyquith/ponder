@@ -55,6 +55,7 @@ namespace ClassTest
 
     struct Base
     {
+        virtual ~Base() {}
         CAMP_RTTI();
     };
 

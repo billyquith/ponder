@@ -184,6 +184,7 @@ BOOST_AUTO_TEST_CASE(nonCopyableClass)
     MyNonCopyableClass object;
     camp::UserObject userObject(object);
     MyNonCopyableClass& ref = userObject.get<MyNonCopyableClass>();
+    (void)ref;
 }
 
 //-----------------------------------------------------------------------------
