@@ -36,7 +36,6 @@
 
 #include <camp/userobject.hpp>
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
 
 
 namespace camp
@@ -146,7 +145,7 @@ public:
 
 private:
 
-    boost::shared_ptr<GetterInterface<T> > m_getter; ///< Implementation of the getter
+    std::shared_ptr<GetterInterface<T> > m_getter; ///< Implementation of the getter
     T m_defaultValue; ///< Default value to return if no function or no object is specified
 };
 

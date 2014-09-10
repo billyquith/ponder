@@ -56,7 +56,7 @@ Class& ClassManager::addClass(const std::string& name, const std::string& id)
         CAMP_ERROR(ClassAlreadyCreated(name, id));
 
     // Create the new class
-    boost::shared_ptr<Class> newClass(new Class(name));
+    std::shared_ptr<Class> newClass(new Class(name));
 
     // Insert it into the table
     ClassInfo info;
