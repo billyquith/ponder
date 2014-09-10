@@ -1,5 +1,5 @@
 
-CAMP is a multi-purpose reflection library developped by Technogerma Systems France
+CAMP is a multi-purpose reflection library developped by Technogerma Systems France and then by Tegesoft (where the dev team has moved)
 (http://www.tegesoft.com).
 
 It provides an abstraction for most of the high-level concepts of C++:
