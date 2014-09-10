@@ -29,6 +29,10 @@ qtc-gdbmacros/
 *.a
 moc_*
 
+*.cmake
+CMakeFiles/
+CMakeScripts/
+
 # Auto-generated documentation files
 doc/api/*/*
 
