@@ -1,7 +1,7 @@
 ###############################################################################
 ##
-## Copyright (C) 2009-2010 TECHNOGERMA Systems France and/or its subsidiary(-ies).
-## Contact: Technogerma Systems France Information (contact@technogerma.fr)
+## Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
+## Contact: Tegesoft Information (contact@tegesoft.com)
 ##
 ## This file is part of the CAMP library.
 ##
