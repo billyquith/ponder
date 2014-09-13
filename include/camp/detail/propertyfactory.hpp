@@ -42,7 +42,6 @@
 #include <camp/detail/functiontraits.hpp>
 #include <boost/function.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_void.hpp>
 
 
@@ -240,7 +239,7 @@ public:
     typedef ObjectTraits<R> Traits;
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
-    typedef typename boost::remove_reference<R>::type ArgumentType;
+    typedef typename std::remove_reference<R>::type ArgumentType;
 
     enum
     {
@@ -401,7 +400,7 @@ template <typename C, typename F1, typename F2>
 struct PropertyFactory2<C, F1, F2, typename boost::enable_if_c<!boost::is_void<typename FunctionTraits<F2>::ReturnType>::value>::type>
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
-    typedef typename boost::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
+    typedef typename std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
 
     static Property* get(const std::string& name, F1 accessor1, F2 accessor2)
     {

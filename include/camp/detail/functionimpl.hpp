@@ -65,11 +65,11 @@ using boost::assign::list_of;
  * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
-inline typename boost::remove_reference<T>::type convertArg(const Args& args, std::size_t index, const std::string& function)
+inline typename std::remove_reference<T>::type convertArg(const Args& args, std::size_t index, const std::string& function)
 {
     try
     {
-        return args[index].to<typename boost::remove_reference<T>::type>();
+        return args[index].to<typename std::remove_reference<T>::type>();
     }
     catch (BadType&)
     {
