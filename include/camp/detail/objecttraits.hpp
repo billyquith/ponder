@@ -120,7 +120,7 @@ struct ObjectTraits<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::t
     typedef typename RawType<U>::Type DataType;
 
     static RefReturnType get(void* pointer) {return static_cast<U*>(pointer);}
-    static PointerType getPointer(T<U> value) {return boost::get_pointer(value);}
+    static PointerType getPointer(T<U> value) {return get_pointer(value);}
 };
 
 /*

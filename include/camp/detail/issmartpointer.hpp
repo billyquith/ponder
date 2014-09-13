@@ -40,6 +40,31 @@
 
 namespace camp
 {
+
+template<class T>
+T* get_pointer(T *p)
+{
+    return p;
+}
+    
+template<class T>
+T* get_pointer(std::auto_ptr<T> const& p)
+{
+    return p.get();
+}
+
+template<class T>
+T* get_pointer(std::unique_ptr<T> const& p)
+{
+    return p.get();
+}
+
+template<class T>
+T* get_pointer(std::shared_ptr<T> const& p)
+{
+    return p.get();
+}
+
 namespace detail
 {
 /**
@@ -65,7 +90,7 @@ struct IsSmartPointer
 };
 
 } // namespace detail
-
+    
 } // namespace camp
 
 

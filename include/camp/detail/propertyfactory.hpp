@@ -135,7 +135,7 @@ template <template <typename> class T, typename U>
 struct ReturnHelper<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::type>
 {
     typedef U* Type;
-    static Type get(T<U> value) {return boost::get_pointer(value);}
+    static Type get(T<U> value) {return get_pointer(value);}
 };
 
 /**
