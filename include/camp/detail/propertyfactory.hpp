@@ -42,7 +42,6 @@
 #include <camp/detail/functiontraits.hpp>
 #include <boost/function.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_void.hpp>
 
 
 namespace camp

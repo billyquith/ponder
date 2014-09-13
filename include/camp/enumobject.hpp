@@ -36,7 +36,6 @@
 
 #include <camp/config.hpp>
 #include <camp/enumget.hpp>
-#include <boost/type_traits.hpp>
 #include <boost/operators.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <string>
