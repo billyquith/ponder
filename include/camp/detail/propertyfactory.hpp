@@ -397,7 +397,7 @@ struct PropertyFactory2
  * Specialization of PropertyFactory2 with 2 getters (which will produce 1 composed getter)
  */
 template <typename C, typename F1, typename F2>
-struct PropertyFactory2<C, F1, F2, typename boost::enable_if_c<!boost::is_void<typename FunctionTraits<F2>::ReturnType>::value>::type>
+struct PropertyFactory2<C, F1, F2, typename boost::enable_if_c<!std::is_void<typename FunctionTraits<F2>::ReturnType>::value>::type>
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
     typedef typename std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;

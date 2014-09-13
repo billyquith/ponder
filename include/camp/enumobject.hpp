@@ -62,7 +62,7 @@ public:
      * \param value Value to store in the enum object
      */
     template <typename T>
-    EnumObject(T value, typename boost::enable_if<boost::is_enum<T> >::type* = 0);
+    EnumObject(T value, typename boost::enable_if<std::is_enum<T> >::type* = 0);
 
     /**
      * \brief Get the value of the enum object
