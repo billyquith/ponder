@@ -163,7 +163,7 @@ struct ValueMapper<bool>
  */
 template <typename T>
 struct ValueMapper<T, typename boost::enable_if_c<boost::is_integral<T>::value
-                                                  && !boost::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                                  && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
                                                   && !boost::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
                                                  >::type>
 {
@@ -183,7 +183,7 @@ struct ValueMapper<T, typename boost::enable_if_c<boost::is_integral<T>::value
  */
 template <typename T>
 struct ValueMapper<T, typename boost::enable_if_c<boost::is_float<T>::value
-                                                  && !boost::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                                  && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
                                                   && !boost::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
                                                  >::type>
 {
@@ -252,7 +252,7 @@ struct ValueMapper<const char[N]>
  */
 template <typename T>
 struct ValueMapper<T, typename boost::enable_if_c<boost::is_enum<T>::value
-                                                  && !boost::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                                  && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
                                                   && !boost::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
                                                  >::type>
 {
