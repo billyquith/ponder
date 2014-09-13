@@ -41,7 +41,6 @@
 #include <camp/detail/userpropertyimpl.hpp>
 #include <camp/detail/functiontraits.hpp>
 #include <boost/function.hpp>
-#include <boost/utility/enable_if.hpp>
 
 
 namespace camp
@@ -132,7 +131,7 @@ struct ReturnHelper
  * Specialization of ReturnHelper for smart pointer types
  */
 template <template <typename> class T, typename U>
-struct ReturnHelper<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::type>
+    struct ReturnHelper<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value >::type>
 {
     typedef U* Type;
     static Type get(T<U> value) {return get_pointer(value);}

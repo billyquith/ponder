@@ -36,7 +36,6 @@
 
 #include <camp/detail/rawtype.hpp>
 #include <camp/detail/issmartpointer.hpp>
-#include <boost/utility/enable_if.hpp>
 
 
 namespace camp
@@ -107,7 +106,7 @@ struct ObjectTraits<T*>
  * Specialized version for smart pointers
  */
 template <template <typename> class T, typename U>
-struct ObjectTraits<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::type>
+    struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
 {
     enum
     {
@@ -143,7 +142,7 @@ struct ObjectTraits<T[N]>
  * Specialized version for references to non-ref types
  */
 template <typename T>
-struct ObjectTraits<T&, typename boost::disable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type>
+    struct ObjectTraits<T&, typename std::enable_if<!std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
     enum
     {
@@ -163,7 +162,7 @@ struct ObjectTraits<T&, typename boost::disable_if<std::is_pointer<typename Obje
  * Specialized version for references to ref types -- just remove the reference modifier
  */
 template <typename T>
-struct ObjectTraits<T&, typename boost::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type> : ObjectTraits<T>
+    struct ObjectTraits<T&, typename std::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type> : ObjectTraits<T>
 {
 };
 

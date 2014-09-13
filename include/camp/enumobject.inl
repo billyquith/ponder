@@ -34,7 +34,7 @@ namespace camp
 {
 //-------------------------------------------------------------------------------------------------
 template <typename T>
-EnumObject::EnumObject(T value, typename boost::enable_if<std::is_enum<T> >::type*)
+EnumObject::EnumObject(T value, typename std::enable_if<std::is_enum<T>::value >::type*)
     : m_value(value)
     , m_enum(&enumByType<T>())
 {

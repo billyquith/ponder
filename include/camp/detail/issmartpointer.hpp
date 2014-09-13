@@ -35,7 +35,7 @@
 
 
 #include <camp/detail/yesnotype.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <type_traits>
 
 
 namespace camp
@@ -90,37 +90,37 @@ struct IsSmartPointer
 };
 
 } // namespace detail
-    
+
 } // namespace camp
 
 
-namespace boost
-{
-/**
- * \brief Specialization of boost::get_pointer for all smart pointer types (const version)
- *
- * This function is specialized for every type T for which IsSmartPointer<T> is true. It makes
- * the stored value available for all boost algorithms (especially for boost::bind).
- */
-template <template <typename> class T, typename U>
-U* get_pointer(const T<U>& obj, typename enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
-{
-    return obj.operator->();
-}
-
-/**
- * \brief Specialization of boost::get_pointer for all smart pointer types (non-const version)
- *
- * This function is specialized for every type T for which IsSmartPointer<T> is true. It makes
- * the stored value available for all boost algorithms (especially for boost::bind).
- */
-template <template <typename> class T, typename U>
-U* get_pointer(T<U>& obj, typename enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
-{
-    return obj.operator->();
-}
-
-} // namespace boost
+//namespace boost
+//{
+///**
+// * \brief Specialization of boost::get_pointer for all smart pointer types (const version)
+// *
+// * This function is specialized for every type T for which IsSmartPointer<T> is true. It makes
+// * the stored value available for all boost algorithms (especially for boost::bind).
+// */
+//template <template <typename> class T, typename U>
+//U* get_pointer(const T<U>& obj, typename boost::enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
+//{
+//    return obj.operator->();
+//}
+//
+///**
+// * \brief Specialization of boost::get_pointer for all smart pointer types (non-const version)
+// *
+// * This function is specialized for every type T for which IsSmartPointer<T> is true. It makes
+// * the stored value available for all boost algorithms (especially for boost::bind).
+// */
+//template <template <typename> class T, typename U>
+//U* get_pointer(T<U>& obj, typename boost::enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
+//{
+//    return obj.operator->();
+//}
+//
+//} // namespace boost
 
 
 #endif // CAMP_DETAIL_ISSMARTPOINTER_HPP

@@ -35,7 +35,6 @@
 
 
 #include <camp/detail/yesnotype.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <boost/function_types/is_callable_builtin.hpp>
 #include <boost/function_types/result_type.hpp>
 
@@ -82,7 +81,7 @@ struct FunctionTraits
  * Specialization for native callable types (function and pointer-to-member types)
  */
 template <typename T>
-struct FunctionTraits<T, typename boost::enable_if<boost::function_types::is_callable_builtin<T> >::type>
+struct FunctionTraits<T, typename std::enable_if<boost::function_types::is_callable_builtin<T>::value >::type>
 {
     enum {isFunction = true};
     typedef typename boost::function_types::result_type<T>::type ReturnType;
@@ -92,7 +91,7 @@ struct FunctionTraits<T, typename boost::enable_if<boost::function_types::is_cal
  * Specialization for functors (classes exporting a result_type type)
  */
 template <typename T>
-struct FunctionTraits<T, typename boost::enable_if<HasResultType<T> >::type>
+    struct FunctionTraits<T, typename std::enable_if<HasResultType<T>::value >::type>
 {
     enum {isFunction = true};
     typedef typename T::result_type ReturnType;

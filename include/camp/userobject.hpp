@@ -41,7 +41,6 @@
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <string>
 
 

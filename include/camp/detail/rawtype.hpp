@@ -97,7 +97,7 @@ struct RawType<T*>
  * Specialized version for smart pointers
  */
 template <template <typename> class T, typename U>
-struct RawType<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::type>
+struct RawType<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value >::type>
 {
     typedef typename RawType<U>::Type Type;
 };

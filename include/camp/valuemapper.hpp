@@ -40,7 +40,6 @@
 #include <camp/arraymapper.hpp>
 #include <camp/errors.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/utility/enable_if.hpp>
 
 
 namespace camp_ext
@@ -134,7 +133,7 @@ struct ValueMapper
  * Specialization of ValueMapper for abstract types
  */
 template <typename T>
-struct ValueMapper<T, typename boost::enable_if<std::is_abstract<T> >::type>
+    struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value >::type>
 {
     static const int type = camp::userType;
     static camp::UserObject to(const T& source) {return camp::UserObject(source);}
