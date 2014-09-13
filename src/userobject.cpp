@@ -122,7 +122,7 @@ Value UserObject::call(const std::string& function, const Args& args) const
 //-------------------------------------------------------------------------------------------------
 UserObject& UserObject::operator=(const UserObject& other)
 {
-    boost::scoped_ptr<ParentObject> parent(other.m_parent ? new ParentObject(other.m_parent->object, other.m_parent->member) : 0);
+    std::unique_ptr<ParentObject> parent(other.m_parent ? new ParentObject(other.m_parent->object, other.m_parent->member) : 0);
 
     m_class = other.m_class;
     m_holder = other.m_holder;
@@ -168,7 +168,7 @@ bool UserObject::operator<(const UserObject& other) const
         }
         else
         {
-            return other.m_parent != 0;
+            return other.m_parent;
         }
     }
     else if (m_parent)
