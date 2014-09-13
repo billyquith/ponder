@@ -114,11 +114,11 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_THROW(strings->get(object, 4), camp::OutOfRange);
 
     std::list<MyType>::const_iterator it = object.objects.begin();
-    BOOST_CHECK_EQUAL(objects->get(object, 0), camp::Value(*boost::next(it, 0)));
-    BOOST_CHECK_EQUAL(objects->get(object, 1), camp::Value(*boost::next(it, 1)));
-    BOOST_CHECK_EQUAL(objects->get(object, 2), camp::Value(*boost::next(it, 2)));
-    BOOST_CHECK_EQUAL(objects->get(object, 3), camp::Value(*boost::next(it, 3)));
-    BOOST_CHECK_EQUAL(objects->get(object, 4), camp::Value(*boost::next(it, 4)));
+    BOOST_CHECK_EQUAL(objects->get(object, 0), camp::Value(*std::next(it, 0)));
+    BOOST_CHECK_EQUAL(objects->get(object, 1), camp::Value(*std::next(it, 1)));
+    BOOST_CHECK_EQUAL(objects->get(object, 2), camp::Value(*std::next(it, 2)));
+    BOOST_CHECK_EQUAL(objects->get(object, 3), camp::Value(*std::next(it, 3)));
+    BOOST_CHECK_EQUAL(objects->get(object, 4), camp::Value(*std::next(it, 4)));
     BOOST_CHECK_THROW(objects->get(object, 5), camp::OutOfRange);
 }
 
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(set)
     BOOST_CHECK_EQUAL(object.bools[1],   true);
     BOOST_CHECK_EQUAL(object.ints[1],    20);
     BOOST_CHECK_EQUAL(object.strings[1], "hello");
-    BOOST_CHECK(*boost::next(object.objects.begin(), 1) == MyType(8));
+    BOOST_CHECK(*std::next(object.objects.begin(), 1) == MyType(8));
 
     BOOST_CHECK_THROW(bools->set(object, 10, true),        camp::OutOfRange);
     BOOST_CHECK_THROW(ints->set(object, 10, 1),            camp::OutOfRange);
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(insert)
     BOOST_CHECK_EQUAL(object.objects.size(), objectsSize + 1);
 
     BOOST_CHECK_EQUAL(object.strings[1], "bonjour");
-    BOOST_CHECK(*boost::next(object.objects.begin(), 1) == MyType(10));
+    BOOST_CHECK(*std::next(object.objects.begin(), 1) == MyType(10));
 }
 
 //-----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ BOOST_AUTO_TEST_CASE(remove)
     BOOST_CHECK_THROW(ints->remove(object, 0),  camp::ForbiddenWrite);
 
     std::string string1 = object.strings[1];
-    MyType      object1 = *boost::next(object.objects.begin(), 1);
+    MyType      object1 = *std::next(object.objects.begin(), 1);
 
     std::size_t stringsSize = object.strings.size();
     std::size_t objectsSize = object.objects.size();
