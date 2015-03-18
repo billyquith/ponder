@@ -187,6 +187,12 @@ endif()
 add_subdirectory(doc)
 
 ###############################
+# support files
+###############################
+# pkg-config
+configure_file(cmake/camp.pc.in ${CMAKE_BINARY_DIR}/camp.pc @ONLY)
+
+###############################
 # installing
 ###############################
 
@@ -204,6 +210,11 @@ install(TARGETS camp
     RUNTIME DESTINATION bin COMPONENT bin
     LIBRARY DESTINATION lib COMPONENT bin
     ARCHIVE DESTINATION lib COMPONENT devel
+)
+
+install(FILES ${CMAKE_BINARY_DIR}/camp.pc
+    DESTINATION lib/pkgconfig
+    COMPONENT devel
 )
 
 install(FILES README.txt COPYING.txt
