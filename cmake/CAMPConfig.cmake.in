@@ -1,0 +1,12 @@
+set(CAMP_VERSION "@VERSION_STR@")
+
+@PACKAGE_INIT@
+
+set_and_check(CAMP_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/include")
+
+include("${CMAKE_CURRENT_LIST_DIR}/CAMPTargets.cmake")
+
+# Convenience variables following find_package conventions for modules
+set(CAMP_INCLUDE_DIRS "${CAMP_INCLUDE_DIR}")
+set(CAMP_LIBRARIES camp::camp)
+

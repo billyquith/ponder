@@ -30,7 +30,7 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.8)
 
 # set project's name
 project(CAMP)
@@ -192,6 +192,20 @@ add_subdirectory(doc)
 # pkg-config
 configure_file(cmake/camp.pc.in ${CMAKE_BINARY_DIR}/camp.pc @ONLY)
 
+# cmake
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(cmake/CAMPConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfig.cmake
+    INSTALL_DESTINATION lib/camp/cmake
+)
+
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfigVersion.cmake
+    VERSION ${VERSION_STR}
+    COMPATIBILITY AnyNewerVersion
+)
+
 ###############################
 # installing
 ###############################
@@ -207,6 +221,7 @@ install(FILES ${CMAKE_BINARY_DIR}/version.hpp
 )
 
 install(TARGETS camp
+    EXPORT CAMPTargets
     RUNTIME DESTINATION bin COMPONENT bin
     LIBRARY DESTINATION lib COMPONENT bin
     ARCHIVE DESTINATION lib COMPONENT devel
@@ -214,6 +229,17 @@ install(TARGETS camp
 
 install(FILES ${CMAKE_BINARY_DIR}/camp.pc
     DESTINATION lib/pkgconfig
+    COMPONENT devel
+)
+
+install(EXPORT CAMPTargets
+    NAMESPACE camp::
+    DESTINATION lib/camp/cmake
+    COMPONENT devel
+)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfigVersion.cmake
+    DESTINATION lib/camp/cmake
     COMPONENT devel
 )
 
