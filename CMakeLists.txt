@@ -6,19 +6,19 @@
 ## This file is part of the CAMP library.
 ##
 ## The MIT License (MIT)
-## 
+##
 ## Copyright (c) 2009-2014 TEGESO/TEGESOFT
-## 
+##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
 ## in the Software without restriction, including without limitation the rights
 ## to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ## copies of the Software, and to permit persons to whom the Software is
 ## furnished to do so, subject to the following conditions:
-## 
+##
 ## The above copyright notice and this permission notice shall be included in
 ## all copies or substantial portions of the Software.
-## 
+##
 ## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.8)
 
 # set project's name
 project(CAMP)
@@ -176,6 +176,7 @@ endif()
 
 # add the test subdirectory, but do not build it by default
 if(BUILD_TEST)
+    enable_testing()
     add_subdirectory(test)
 endif()
 
@@ -184,6 +185,26 @@ endif()
 ###############################
 
 add_subdirectory(doc)
+
+###############################
+# support files
+###############################
+# pkg-config
+configure_file(cmake/camp.pc.in ${CMAKE_BINARY_DIR}/camp.pc @ONLY)
+
+# cmake
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(cmake/CAMPConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfig.cmake
+    INSTALL_DESTINATION lib/camp/cmake
+)
+
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfigVersion.cmake
+    VERSION ${VERSION_STR}
+    COMPATIBILITY AnyNewerVersion
+)
 
 ###############################
 # installing
@@ -200,12 +221,29 @@ install(FILES ${CMAKE_BINARY_DIR}/version.hpp
 )
 
 install(TARGETS camp
+    EXPORT CAMPTargets
     RUNTIME DESTINATION bin COMPONENT bin
-    LIBRARY DESTINATION lib COMPONENT bin 
+    LIBRARY DESTINATION lib COMPONENT bin
     ARCHIVE DESTINATION lib COMPONENT devel
 )
 
-install(FILES README.txt COPYING.txt LICENSE.LGPL3.txt
+install(FILES ${CMAKE_BINARY_DIR}/camp.pc
+    DESTINATION lib/pkgconfig
+    COMPONENT devel
+)
+
+install(EXPORT CAMPTargets
+    NAMESPACE camp::
+    DESTINATION lib/camp/cmake
+    COMPONENT devel
+)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfigVersion.cmake
+    DESTINATION lib/camp/cmake
+    COMPONENT devel
+)
+
+install(FILES README.txt COPYING.txt
     DESTINATION ${INSTALL_MISC_DIR}
 )
 
