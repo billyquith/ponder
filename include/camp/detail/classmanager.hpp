@@ -36,8 +36,7 @@
 
 #include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <camp/detail/singleton.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
@@ -61,7 +60,7 @@ namespace detail
  *
  * \sa Class
  */
-class CAMP_API ClassManager : public ObserverNotifier, boost::noncopyable
+class CAMP_API ClassManager : public ObserverNotifier, public Singleton<ClassManager>
 {
 public:
 
@@ -151,8 +150,6 @@ public:
      */
     bool classExists(const std::string& id) const;
 
-private:
-
     /**
      * \brief Default constructor
      */
@@ -164,6 +161,8 @@ private:
      * The destructor destroys all the registered metaclasses and notifies the observers.
      */
     ~ClassManager();
+
+private:
 
     /**
      * \brief Structure gathering a class, its type identifier and its name
