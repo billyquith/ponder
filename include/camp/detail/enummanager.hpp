@@ -168,7 +168,7 @@ private:
     {
         std::string id;
         std::string name;
-        std::shared_ptr<Enum> enumPtr;
+        Enum* enumPtr;  // No need for shared pointers in here, we're the one and only instance holder
     };
 
     struct Id;

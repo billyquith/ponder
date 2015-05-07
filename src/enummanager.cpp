@@ -56,7 +56,7 @@ Enum& EnumManager::addClass(const std::string& name, const std::string& id)
         CAMP_ERROR(EnumAlreadyCreated(name, id));
 
     // Create the new class
-    std::shared_ptr<Enum> newEnum(new Enum(name));
+    Enum* newEnum = new Enum(name);
 
     // Insert it into the table
     EnumInfo info;
@@ -145,7 +145,9 @@ EnumManager::~EnumManager()
     // Notify observers
     for (EnumTable::const_iterator it = m_enums.begin(); it != m_enums.end(); ++it)
     {
-        notifyEnumRemoved(*it->enumPtr);
+        Enum* enumPtr = it->enumPtr;
+        notifyEnumRemoved(*enumPtr);
+        delete enumPtr;
     }
 }
 
