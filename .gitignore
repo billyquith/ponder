@@ -13,6 +13,8 @@ CMakeScripts
 Makefile
 *.cmake
 install_manifest.txt
+*.pc
+Testing/**
 
 # VS temporary files
 *.ncb
