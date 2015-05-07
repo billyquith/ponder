@@ -60,11 +60,11 @@ namespace detail
  * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
-inline typename boost::remove_reference<T>::type convertArg(const Args& args, std::size_t index)
+inline typename std::remove_reference<T>::type convertArg(const Args& args, std::size_t index)
 {
     try
     {
-        return args[index].to<typename boost::remove_reference<T>::type>();
+        return args[index].to<typename std::remove_reference<T>::type>();
     }
     catch (BadType&)
     {

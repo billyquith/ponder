@@ -45,7 +45,7 @@ struct PropertyFixture
         for (int i = 1; i < 25; ++i)
         {
             if (i != 7 && i != 8 && i != 22) // remove when fixed
-                properties[i] = &metaclass.property("p" + boost::lexical_cast<std::string>(i));
+                properties[i] = &metaclass.property("p" + std::to_string(i));
         }
     }
 

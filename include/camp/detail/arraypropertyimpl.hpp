@@ -37,7 +37,6 @@
 #include <camp/arrayproperty.hpp>
 #include <camp/arraymapper.hpp>
 #include <camp/detail/valueprovider.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 
 
 namespace camp
@@ -104,7 +103,7 @@ protected:
 
 private:
 
-    typedef typename boost::remove_reference<typename A::DataType>::type ArrayType;
+    typedef typename std::remove_reference<typename A::DataType>::type ArrayType;
     typedef camp_ext::ArrayMapper<ArrayType> Mapper;
     typedef typename Mapper::ElementType ElementType;
 

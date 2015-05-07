@@ -93,7 +93,7 @@ struct ObjectTraits<T*>
 {
     enum
     {
-        isWritable = !boost::is_const<T>::value,
+        isWritable = !std::is_const<T>::value,
         isRef = true
     };
 
@@ -113,7 +113,7 @@ struct ObjectTraits<T<U>, typename boost::enable_if<IsSmartPointer<T<U>, U> >::t
 {
     enum
     {
-        isWritable = !boost::is_const<U>::value,
+        isWritable = !std::is_const<U>::value,
         isRef = true
     };
 
@@ -145,11 +145,11 @@ struct ObjectTraits<T[N]>
  * Specialized version for references to non-ref types
  */
 template <typename T>
-struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type>
+struct ObjectTraits<T&, typename boost::disable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type>
 {
     enum
     {
-        isWritable = !boost::is_const<T>::value,
+        isWritable = !std::is_const<T>::value,
         isRef = true
     };
 
@@ -165,7 +165,7 @@ struct ObjectTraits<T&, typename boost::disable_if<boost::is_pointer<typename Ob
  * Specialized version for references to ref types -- just remove the reference modifier
  */
 template <typename T>
-struct ObjectTraits<T&, typename boost::enable_if<boost::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type> : ObjectTraits<T>
+struct ObjectTraits<T&, typename boost::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType> >::type> : ObjectTraits<T>
 {
 };
 
