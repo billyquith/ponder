@@ -55,7 +55,7 @@ Class& ClassManager::addClass(const std::string& name, const std::string& id)
         CAMP_ERROR(ClassAlreadyCreated(name, id));
 
     // Create the new class
-    std::shared_ptr<Class> newClass(new Class(name));
+    Class* newClass = new Class(name);
 
     // Insert it into the table
     ClassInfo info;
@@ -144,7 +144,9 @@ ClassManager::~ClassManager()
     // Notify observers
     for (ClassTable::const_iterator it = m_classes.begin(); it != m_classes.end(); ++it)
     {
-        notifyClassRemoved(*it->classPtr);
+        Class* classPtr = it->classPtr;
+        notifyClassRemoved(*classPtr);
+        delete classPtr;
     }
 }
 
