@@ -131,6 +131,12 @@ const Property& Class::property(const std::string& name) const
 }
 
 //-------------------------------------------------------------------------------------------------
+std::size_t Class::constructorCount() const
+{
+    return m_constructors.size();
+}
+
+//-------------------------------------------------------------------------------------------------
 UserObject Class::construct(const Args& args) const
 {
     // Search an arguments match among the list of available constructors
