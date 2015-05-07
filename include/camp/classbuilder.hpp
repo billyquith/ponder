@@ -460,6 +460,12 @@ public:
     template <template <typename> class U>
     ClassBuilder<T>& external();
 
+    /**
+    * \brief Return the target metaclass to fill
+    *
+    * \return Reference to the target metaclass to fill
+    */
+    Class& getClass();
 private:
 
     /**

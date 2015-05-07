@@ -345,6 +345,13 @@ ClassBuilder<T>& ClassBuilder<T>::external()
 
 //-------------------------------------------------------------------------------------------------
 template <typename T>
+Class& ClassBuilder<T>::getClass()
+{
+    return *m_target;
+}
+
+//-------------------------------------------------------------------------------------------------
+template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 {
     // Retrieve the class' properties indexed by name
