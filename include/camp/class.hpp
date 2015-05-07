@@ -241,6 +241,13 @@ public:
     const Property& property(const std::string& name) const;
 
     /**
+    * \brief Return the total number of constructors of this metaclass
+    *
+    * \return Number of constructors
+    */
+    std::size_t constructorCount() const;
+
+    /**
      * \brief Construct a new instance of the C++ class bound to the metaclass
      *
      * If no constructor can match the provided arguments, UserObject::nothing
