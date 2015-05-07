@@ -120,7 +120,7 @@ const Class* ClassManager::getByIdSafe(const std::string& id) const
 
     IdIndex::const_iterator it = ids.find(id);
     if (it == ids.end())
-        return 0;
+        return nullptr;
 
     return &*it->classPtr;
 }

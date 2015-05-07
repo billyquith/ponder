@@ -40,7 +40,7 @@ namespace detail
 //-------------------------------------------------------------------------------------------------
 void ObserverNotifier::addObserver(Observer* observer)
 {
-    assert(observer != 0);
+    assert(observer != nullptr);
 
     m_observers.insert(observer);
 }

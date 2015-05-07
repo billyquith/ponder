@@ -41,10 +41,10 @@ const UserObject UserObject::nothing;
 
 //-------------------------------------------------------------------------------------------------
 UserObject::UserObject()
-    : m_class(0)
+    : m_class(nullptr)
     , m_holder()
     , m_parent()
-    , m_child(0)
+    , m_child(nullptr)
 {
 }
 
@@ -53,7 +53,7 @@ UserObject::UserObject(const UserObject& parent, const UserProperty& member)
     : m_class(&member.getClass())
     , m_holder()
     , m_parent(new ParentObject(parent, member))
-    , m_child(0)
+    , m_child(nullptr)
 {
     m_parent->object.m_child = this;
 }
@@ -62,7 +62,7 @@ UserObject::UserObject(const UserObject& parent, const UserProperty& member)
 UserObject::UserObject(const UserObject& copy)
     : m_class(copy.m_class)
     , m_holder(copy.m_holder)
-    , m_parent(copy.m_parent ? new ParentObject(copy.m_parent->object, copy.m_parent->member) : 0)
+    , m_parent(copy.m_parent ? new ParentObject(copy.m_parent->object, copy.m_parent->member) : nullptr)
 {
     if (m_parent)
         m_parent->object.m_child = this;
@@ -84,7 +84,7 @@ void* UserObject::pointer() const
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -122,12 +122,12 @@ Value UserObject::call(const std::string& function, const Args& args) const
 //-------------------------------------------------------------------------------------------------
 UserObject& UserObject::operator=(const UserObject& other)
 {
-    boost::scoped_ptr<ParentObject> parent(other.m_parent ? new ParentObject(other.m_parent->object, other.m_parent->member) : 0);
+    boost::scoped_ptr<ParentObject> parent(other.m_parent ? new ParentObject(other.m_parent->object, other.m_parent->member) : nullptr);
 
     m_class = other.m_class;
     m_holder = other.m_holder;
     m_parent.swap(parent);
-    m_child = 0;
+    m_child = nullptr;
 
     if (m_parent)
         m_parent->object.m_child = this;
@@ -168,7 +168,7 @@ bool UserObject::operator<(const UserObject& other) const
         }
         else
         {
-            return other.m_parent != 0;
+            return other.m_parent != nullptr;
         }
     }
     else if (m_parent)

@@ -102,7 +102,7 @@ public:
      *
      * \return Pointer to the object
      */
-    virtual void* object();
+    virtual void* object() override;
 
     /**
      * \brief Return a holder which is able to modify its stored object
@@ -112,7 +112,7 @@ public:
      *
      * \return Holder storing a writable object
      */
-    virtual AbstractObjectHolder* getWritable();
+    virtual AbstractObjectHolder* getWritable() override;
 
 private:
 
@@ -140,7 +140,7 @@ public:
      *
      * \return Pointer to the object
      */
-    virtual void* object();
+    virtual void* object() override;
 
     /**
      * \brief Return a holder which is able to modify its stored object
@@ -150,7 +150,7 @@ public:
      *
      * \return Holder storing a writable object
      */
-    virtual AbstractObjectHolder* getWritable();
+    virtual AbstractObjectHolder* getWritable() override;
 
 private:
 
@@ -178,7 +178,7 @@ public:
      *
      * \return Pointer to the object
      */
-    virtual void* object();
+    virtual void* object() override;
 
     /**
      * \brief Return a holder which is able to modify its stored object
@@ -188,7 +188,7 @@ public:
      *
      * \return Holder storing a writable object
      */
-    virtual AbstractObjectHolder* getWritable();
+    virtual AbstractObjectHolder* getWritable() override;
 
 private:
 

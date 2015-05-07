@@ -136,7 +136,7 @@ public:
      *
      * \param id Identifier of the C++ type
      *
-     * \return Pointer to the requested metaclass, or 0 if not found
+     * \return Pointer to the requested metaclass, or null pointer if not found
      */
     const Class* getByIdSafe(const std::string& id) const;
 

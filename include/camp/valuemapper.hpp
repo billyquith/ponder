@@ -155,7 +155,7 @@ struct ValueMapper<bool>
     static bool from(double source)                  {return source != 0.;}
     static bool from(const std::string& source)      {return boost::lexical_cast<bool>(source);}
     static bool from(const camp::EnumObject& source) {return source.value() != 0;}
-    static bool from(const camp::UserObject& source) {return source.pointer() != 0;}
+    static bool from(const camp::UserObject& source) {return source.pointer() != nullptr;}
 };
 
 /*

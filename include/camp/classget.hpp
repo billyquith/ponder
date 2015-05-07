@@ -112,7 +112,7 @@ const Class& classByType();
  *
  * \brief Get a metaclass from its C++ type
  *
- * \return Pointer to the metaclass bound to type T, or 0 if no metaclass has been declared
+ * \return Pointer to the metaclass bound to type T, or null pointer if no metaclass has been declared
  */
 template <typename T>
 const Class* classByTypeSafe();

@@ -92,7 +92,7 @@ Value ArrayProperty::get(const UserObject& object, std::size_t index) const
         CAMP_ERROR(ForbiddenRead(name()));
 
     // Make sure that the index is not out of range
-    std::size_t range = size(object);
+    const std::size_t range = size(object);
     if (index >= range)
         CAMP_ERROR(OutOfRange(index, range));
 
@@ -107,7 +107,7 @@ void ArrayProperty::set(const UserObject& object, std::size_t index, const Value
         CAMP_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
-    std::size_t range = size(object);
+    const std::size_t range = size(object);
     if (index >= range)
         CAMP_ERROR(OutOfRange(index, range));
 
@@ -126,7 +126,7 @@ void ArrayProperty::insert(const UserObject& object, std::size_t before, const V
         CAMP_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
-    std::size_t range = size(object) + 1;
+    const std::size_t range = size(object) + 1;
     if (before >= range)
         CAMP_ERROR(OutOfRange(before, range));
 
@@ -145,7 +145,7 @@ void ArrayProperty::remove(const UserObject& object, std::size_t index) const
         CAMP_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
-    std::size_t range = size(object);
+    const std::size_t range = size(object);
     if (index >= range)
         CAMP_ERROR(OutOfRange(index, range));
 
