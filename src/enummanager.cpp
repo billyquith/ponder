@@ -56,7 +56,7 @@ Enum& EnumManager::addClass(const std::string& name, const std::string& id)
         CAMP_ERROR(EnumAlreadyCreated(name, id));
 
     // Create the new class
-    boost::shared_ptr<Enum> newEnum(new Enum(name));
+    std::shared_ptr<Enum> newEnum(new Enum(name));
 
     // Insert it into the table
     EnumInfo info;

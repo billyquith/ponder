@@ -40,7 +40,6 @@
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <string>
@@ -285,7 +284,7 @@ private:
 private:
 
     const Class* m_class; ///< Metaclass of the stored object
-    boost::shared_ptr<detail::AbstractObjectHolder> m_holder; ///< Optional abstract holder storing the object
+    std::shared_ptr<detail::AbstractObjectHolder> m_holder; ///< Optional abstract holder storing the object
     boost::scoped_ptr<ParentObject> m_parent; ///< Optional parent object
     const UserObject* m_child; ///< Optional pointer to the child object (m_parent.object.m_child == this)
 };

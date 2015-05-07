@@ -33,7 +33,6 @@
 #include <camp/camptype.hpp>
 #include <camp/class.hpp>
 #include <camp/enum.hpp>
-#include <boost/shared_ptr.hpp>
 #include <string>
 
 namespace PropertyTest
@@ -91,7 +90,7 @@ namespace PropertyTest
         const int p6;
         std::string p7_impl; std::string* p7;
         MyEnum p8_impl; const MyEnum* p8;
-        boost::shared_ptr<MyType> p9;
+        std::shared_ptr<MyType> p9;
 
         // ***** member functions *****
         bool p10; bool getP10() {return p10;}

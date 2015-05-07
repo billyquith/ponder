@@ -37,7 +37,6 @@
 #include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
 #include <camp/detail/singleton.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -171,7 +170,7 @@ private:
     {
         std::string id;
         std::string name;
-        boost::shared_ptr<Class> classPtr;
+        std::shared_ptr<Class> classPtr;
     };
 
     struct Id;
