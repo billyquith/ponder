@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(declareExceptions)
     // to make sure it is declared
     camp::enumByType<MyEnum>();
 
-    BOOST_CHECK_THROW(camp::Enum::declare<MyEnum>("EnumTest::MyUndeclaredEnum"), camp::EnumAlreadyCreated);
+    BOOST_CHECK_THROW(camp::Enum::declare<MyEnum>(), camp::EnumAlreadyCreated);
     BOOST_CHECK_THROW(camp::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"), camp::EnumAlreadyCreated);
 }
 

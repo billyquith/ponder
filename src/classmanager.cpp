@@ -45,24 +45,22 @@ ClassManager& ClassManager::instance()
 }
 
 //-------------------------------------------------------------------------------------------------
-Class& ClassManager::addClass(const std::string& name, const std::string& id)
+Class& ClassManager::addClass(const std::string& id)
 {
-    const IdIndex&   ids   = m_classes.get<Id>();
-    const NameIndex& names = m_classes.get<Name>();
-
     // First make sure that the class doesn't already exist
-    if ((ids.find(id) != ids.end()) || (names.find(name) != names.end()))
-        CAMP_ERROR(ClassAlreadyCreated(name, id));
+    if (m_classes.find(id) != m_classes.end())
+    {
+        CAMP_ERROR(ClassAlreadyCreated(id));
+    }
 
     // Create the new class
-    Class *newClass = new Class(name);
+    Class *newClass = new Class(id);
 
     // Insert it into the table
     ClassInfo info;
     info.id = id;
-    info.name = name;
     info.classPtr = newClass;
-    m_classes.insert(info);
+    m_classes.insert(std::make_pair(id, info));
 
     // Notify observers
     notifyClassAdded(*newClass);
@@ -86,51 +84,30 @@ const Class& ClassManager::getByIndex(std::size_t index) const
     ClassTable::const_iterator it = m_classes.begin();
     std::advance(it, index);
 
-    return *it->classPtr;
-}
-
-//-------------------------------------------------------------------------------------------------
-const Class& ClassManager::getByName(const std::string& name) const
-{
-    const NameIndex& names = m_classes.get<Name>();
-
-    NameIndex::const_iterator it = names.find(name);
-    if (it == names.end())
-        CAMP_ERROR(ClassNotFound(name));
-
-    return *it->classPtr;
+    return *it->second.classPtr;
 }
 
 //-------------------------------------------------------------------------------------------------
 const Class& ClassManager::getById(const std::string& id) const
 {
-    const IdIndex& ids = m_classes.get<Id>();
-
-    IdIndex::const_iterator it = ids.find(id);
-    if (it == ids.end())
+    ClassTable::const_iterator it = m_classes.find(id);
+    if (it == m_classes.end())
         CAMP_ERROR(ClassNotFound(id));
 
-    return *it->classPtr;
+    return *it->second.classPtr;
 }
 
 //-------------------------------------------------------------------------------------------------
 const Class* ClassManager::getByIdSafe(const std::string& id) const
 {
-    const IdIndex& ids = m_classes.get<Id>();
-
-    IdIndex::const_iterator it = ids.find(id);
-    if (it == ids.end())
-        return nullptr;
-
-    return &*it->classPtr;
+    ClassTable::const_iterator it = m_classes.find(id);
+    return (it == m_classes.end()) ? nullptr : &*it->second.classPtr;
 }
 
 //-------------------------------------------------------------------------------------------------
 bool ClassManager::classExists(const std::string& id) const
 {
-    const IdIndex& ids = m_classes.get<Id>();
-
-    return ids.find(id) != ids.end();
+    return (m_classes.find(id) != m_classes.end());
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -144,7 +121,9 @@ ClassManager::~ClassManager()
     // Notify observers
     for (ClassTable::const_iterator it = m_classes.begin(); it != m_classes.end(); ++it)
     {
-        notifyClassRemoved(*it->classPtr);
+        Class* classPtr = it->second.classPtr;
+        notifyClassRemoved(*classPtr);
+        delete classPtr;
     }
 }
 

@@ -127,13 +127,14 @@ public:
      * parameter T is the C++ class that will be bound to the metaclass.
      *
      * \param name Name of the metaclass in CAMP. This name identifies
-     *             the metaclass and thus has to be unique
+     *             the metaclass and thus has to be unique. If not specified, the C++ type
+     *             id is used.
      *
      * \return A ClassBuilder<T> object that will provide functions
      *         to fill the new metaclass with properties, functions, etc.
      */
     template <typename T>
-    static ClassBuilder<T> declare(const std::string& name);
+    static ClassBuilder<T> declare(const std::string& name = std::string());
 
 public:
 

@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(declareExceptions)
     // to make sure it is declared
     camp::classByType<MyClass>();
 
-    BOOST_CHECK_THROW(camp::Class::declare<MyClass>("ClassTest::MyUndeclaredClass"), camp::ClassAlreadyCreated);
+    BOOST_CHECK_THROW(camp::Class::declare<MyClass>(), camp::ClassAlreadyCreated);
     BOOST_CHECK_THROW(camp::Class::declare<MyUndeclaredClass>("ClassTest::MyClass"), camp::ClassAlreadyCreated);
 }
 

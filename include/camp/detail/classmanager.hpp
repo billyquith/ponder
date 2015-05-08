@@ -37,13 +37,8 @@
 #include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
 #include <camp/detail/singleton.hpp>
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/member.hpp>
-#include <boost/multi_index/ordered_index.hpp>
 #include <string>
-
-
-namespace bm = boost::multi_index;
+#include <map>
 
 namespace camp
 {
@@ -76,14 +71,13 @@ public:
      * This is the entry point for every metaclass creation. This
      * function also notifies registered observers after successful creations.
      *
-     * \param name Name of the metaclass to create (must be unique)
-     * \param id Identifier of the C++ class bound to the metaclass
+     * \param id Identifier of the C++ class bound to the metaclass (unique)
      *
      * \return Reference to the new metaclass
      *
      * \throw ClassAlreadyCreated \a name or \a id already exists
      */
-    Class& addClass(const std::string& name, const std::string& id);
+    Class& addClass(const std::string& id);
 
     /**
      * \brief Get the total number of metaclasses
@@ -105,17 +99,6 @@ public:
      * \throw OutOfRange index is out of range
      */
     const Class& getByIndex(std::size_t index) const;
-
-    /**
-     * \brief Get a metaclass from its name
-     *
-     * \param name Name of the metaclass to retrieve
-     *
-     * \return Reference to the requested metaclass
-     *
-     * \throw ClassNotFound name is not the name of an existing metaclass
-     */
-    const Class& getByName(const std::string& name) const;
 
     /**
      * \brief Get a metaclass from a C++ type
@@ -169,23 +152,11 @@ private:
     struct ClassInfo
     {
         std::string id;
-        std::string name;
         Class *classPtr;
     };
 
-    struct Id;
-    struct Name;
-
-    typedef boost::multi_index_container<ClassInfo,
-        bm::indexed_by<bm::ordered_unique<bm::tag<Id>,   bm::member<ClassInfo, std::string, &ClassInfo::id> >,
-                       bm::ordered_unique<bm::tag<Name>, bm::member<ClassInfo, std::string, &ClassInfo::name> >
-        >
-    > ClassTable;
-
-    typedef ClassTable::index<Id>::type IdIndex;
-    typedef ClassTable::index<Name>::type NameIndex;
-
-    ClassTable m_classes; ///< Table storing classes indexed by their id and name
+    typedef std::map<std::string, ClassInfo> ClassTable;
+    ClassTable m_classes; ///< Table storing classes indexed by their ID
 };
 
 } // namespace detail

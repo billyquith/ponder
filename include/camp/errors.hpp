@@ -107,7 +107,7 @@ public:
      * \param name Name of the class
      * \param type Identifier of the C++ type
      */
-    ClassAlreadyCreated(const std::string& name, const std::string& type);
+    ClassAlreadyCreated(const std::string& idType);
 };
 
 /**
@@ -154,7 +154,7 @@ public:
      * \param name Name of the enum
      * \param type Identifier of the C++ type
      */
-    EnumAlreadyCreated(const std::string& name, const std::string& type);
+    EnumAlreadyCreated(const std::string& typeId);
 };
 
 /**

@@ -110,7 +110,7 @@ public:
      *         to fill the new metaenum with values.
      */
     template <typename T>
-    static EnumBuilder declare(const std::string& name);
+    static EnumBuilder declare(const std::string& name = std::string());
 
 public:
 

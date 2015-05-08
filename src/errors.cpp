@@ -71,8 +71,8 @@ BadArgument::BadArgument(Type provided, Type expected, std::size_t index, const 
 }
 
 //-------------------------------------------------------------------------------------------------
-ClassAlreadyCreated::ClassAlreadyCreated(const std::string& name, const std::string& type)
-    : Error("a metaclass named " + name + ", or bound to the type " + type + " already exists")
+ClassAlreadyCreated::ClassAlreadyCreated(const std::string& type)
+    : Error("class named " + type + " already exists")
 {
 }
 
@@ -89,8 +89,8 @@ ClassUnrelated::ClassUnrelated(const std::string& sourceClass, const std::string
 }
 
 //-------------------------------------------------------------------------------------------------
-EnumAlreadyCreated::EnumAlreadyCreated(const std::string& name, const std::string& type)
-    : Error("a metaenum named " + name + ", or bound to the type " + type + " already exists")
+EnumAlreadyCreated::EnumAlreadyCreated(const std::string& typeId)
+    : Error("enum named " + typeId + " already exists")
 {
 }
 

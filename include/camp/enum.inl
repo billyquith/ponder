@@ -36,7 +36,7 @@ namespace camp
 template <typename T>
 EnumBuilder Enum::declare(const std::string& name)
 {
-    Enum& newEnum = detail::EnumManager::instance().addClass(name, detail::StaticTypeId<T>::get(false));
+    Enum& newEnum = detail::EnumManager::instance().addClass(name.empty() ? detail::StaticTypeId<T>::get(false) : name);
     return EnumBuilder(newEnum);
 }
 

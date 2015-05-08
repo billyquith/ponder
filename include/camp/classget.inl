@@ -47,7 +47,7 @@ inline const Class& classByIndex(std::size_t index)
 //-------------------------------------------------------------------------------------------------
 inline const Class& classByName(const std::string& name)
 {
-    return detail::ClassManager::instance().getByName(name);
+    return detail::ClassManager::instance().getById(name);
 }
 
 //-------------------------------------------------------------------------------------------------

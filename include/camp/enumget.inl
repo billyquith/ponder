@@ -47,7 +47,7 @@ inline const Enum& enumByIndex(std::size_t index)
 //-------------------------------------------------------------------------------------------------
 inline const Enum& enumByName(const std::string& name)
 {
-    return detail::EnumManager::instance().getByName(name);
+    return detail::EnumManager::instance().getById(name);
 }
 
 //-------------------------------------------------------------------------------------------------
