@@ -45,14 +45,8 @@
 #include <camp/userobject.hpp>
 #include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/mem_fun.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/random_access_index.hpp>
 #include <string>
-
-
-namespace bm = boost::multi_index;
+#include <map>
 
 namespace camp
 {
@@ -348,29 +342,13 @@ private:
     typedef std::shared_ptr<Constructor> ConstructorPtr;
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-
-    struct Id;
-    struct Name;
-
-    typedef boost::multi_index_container<PropertyPtr,
-        bm::indexed_by<bm::random_access<bm::tag<Id> >,
-                       bm::ordered_unique<bm::tag<Name>, bm::const_mem_fun<Property, const std::string&, &Property::name> >
-        >
-    > PropertyTable;
-
-    typedef boost::multi_index_container<FunctionPtr,
-        bm::indexed_by<bm::random_access<bm::tag<Id> >,
-                       bm::ordered_unique<bm::tag<Name>, bm::const_mem_fun<Function, const std::string&, &Function::name> >
-        >
-    > FunctionTable;
-
-    typedef PropertyTable::index<Name>::type PropertyNameIndex;
-    typedef FunctionTable::index<Name>::type FunctionNameIndex;
+    typedef std::map<std::string, PropertyPtr> PropertyTable;
+    typedef std::map<std::string, FunctionPtr> FunctionTable;
     typedef void (*Destructor)(const UserObject&);
 
-    std::string m_name; ///< Name of the metaclass
-    FunctionTable m_functions; ///< Table of metafunctions indexed by name
-    PropertyTable m_properties; ///< Table of metaproperties indexed by name
+    std::string m_id;           ///< Name of the metaclass
+    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
+    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
     BaseList m_bases; ///< List of base metaclasses
     ConstructorList m_constructors; ///< List of metaconstructors
     Destructor m_destructor; ///< Destructor (function that is able to delete an abstract object)

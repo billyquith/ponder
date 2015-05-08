@@ -74,7 +74,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
         it != baseClass.m_properties.end();
         ++it)
     {
-        m_target->m_properties.push_back(*it);
+        m_target->m_properties.insert(std::make_pair(it->first, it->second));
     }
 
     // Copy all functions of the base class into the current class
@@ -82,7 +82,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
         it != baseClass.m_functions.end();
         ++it)
     {
-        m_target->m_functions.push_back(*it);
+        m_target->m_functions.insert(std::make_pair(it->first, it->second));
     }
 
     return *this;
@@ -348,13 +348,13 @@ template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 {
     // Retrieve the class' properties indexed by name
-    Class::PropertyNameIndex& properties = m_target->m_properties.get<Class::Name>();
+    Class::PropertyTable& properties = m_target->m_properties;
 
     // First remove any property that already exists with the same name
     properties.erase(property->name());
 
     // Insert the new property
-    properties.insert(Class::PropertyPtr(property));
+    properties.insert(std::make_pair(property->name(), Class::PropertyPtr(property)));
 
     m_currentTagHolder = m_currentProperty = property;
     m_currentFunction = nullptr;
@@ -367,13 +367,13 @@ template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
 {
     // Retrieve the class' functions indexed by name
-    Class::FunctionNameIndex& functions = m_target->m_functions.get<Class::Name>();
+    Class::FunctionTable& functions = m_target->m_functions;
 
     // First remove any function that already exists with the same name
     functions.erase(function->name());
 
     // Insert the new function
-    functions.insert(Class::FunctionPtr(function));
+    functions.insert(std::make_pair(function->name(), Class::FunctionPtr(function)));
 
     m_currentTagHolder = m_currentFunction = function;
     m_currentProperty = nullptr;

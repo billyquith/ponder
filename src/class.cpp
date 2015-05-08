@@ -39,7 +39,7 @@ namespace camp
 //-------------------------------------------------------------------------------------------------
 const std::string& Class::name() const
 {
-    return m_name;
+    return m_id;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -65,11 +65,9 @@ std::size_t Class::functionCount() const
 }
 
 //-------------------------------------------------------------------------------------------------
-bool Class::hasFunction(const std::string& name) const
+bool Class::hasFunction(const std::string& id) const
 {
-    const FunctionNameIndex& names = m_functions.get<Name>();
-
-    return names.find(name) != names.end();
+    return (m_functions.find(id) != m_functions.end());
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -79,19 +77,22 @@ const Function& Class::function(std::size_t index) const
     if (index >= m_functions.size())
         CAMP_ERROR(OutOfRange(index, m_functions.size()));
 
-    return *m_functions[index];
+    FunctionTable::const_iterator it = m_functions.begin();
+    std::advance(it, index);
+
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
-const Function& Class::function(const std::string& name) const
+const Function& Class::function(const std::string& id) const
 {
-    const FunctionNameIndex& names = m_functions.get<Name>();
+    FunctionTable::const_iterator it = m_functions.find(id);
+    if (it == m_functions.end())
+    {
+        CAMP_ERROR(FunctionNotFound(id, name()));
+    }
 
-    FunctionNameIndex::const_iterator it = names.find(name);
-    if (it == names.end())
-        CAMP_ERROR(FunctionNotFound(name, m_name));
-
-    return **it;
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -101,11 +102,9 @@ std::size_t Class::propertyCount() const
 }
 
 //-------------------------------------------------------------------------------------------------
-bool Class::hasProperty(const std::string& name) const
+bool Class::hasProperty(const std::string& id) const
 {
-    const PropertyNameIndex& names = m_properties.get<Name>();
-
-    return names.find(name) != names.end();
+    return (m_properties.find(id) != m_properties.end());
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -115,19 +114,22 @@ const Property& Class::property(std::size_t index) const
     if (index >= m_properties.size())
         CAMP_ERROR(OutOfRange(index, m_properties.size()));
 
-    return *m_properties[index];
+    PropertyTable::const_iterator it = m_properties.begin();
+    std::advance(it, index);
+
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
-const Property& Class::property(const std::string& name) const
+const Property& Class::property(const std::string& id) const
 {
-    const PropertyNameIndex& names = m_properties.get<Name>();
+    PropertyTable::const_iterator it = m_properties.find(id);
+    if (it == m_properties.end())
+    {
+        CAMP_ERROR(PropertyNotFound(id, name()));
+    }
 
-    PropertyNameIndex::const_iterator it = names.find(name);
-    if (it == names.end())
-        CAMP_ERROR(PropertyNotFound(name, m_name));
-
-    return **it;
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -169,13 +171,13 @@ void Class::visit(ClassVisitor& visitor) const
     // First visit properties
     for (PropertyTable::const_iterator it = m_properties.begin(); it != m_properties.end(); ++it)
     {
-        (*it)->accept(visitor);
+        it->second->accept(visitor);
     }
 
     // Then visit functions
     for (FunctionTable::const_iterator it = m_functions.begin(); it != m_functions.end(); ++it)
     {
-        (*it)->accept(visitor);
+        it->second->accept(visitor);
     }
 }
 
@@ -203,18 +205,18 @@ void* Class::applyOffset(void* pointer, const Class& target) const
 //-------------------------------------------------------------------------------------------------
 bool Class::operator==(const Class& other) const
 {
-    return m_name == other.m_name;
+    return m_id == other.m_id;
 }
 
 //-------------------------------------------------------------------------------------------------
 bool Class::operator!=(const Class& other) const
 {
-    return m_name != other.m_name;
+    return m_id != other.m_id;
 }
 
 //-------------------------------------------------------------------------------------------------
 Class::Class(const std::string& name)
-    : m_name(name)
+    : m_id(name)
 {
 }
 
