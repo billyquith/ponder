@@ -146,17 +146,7 @@ private:
      */
     ~EnumManager();
 
-    /**
-     * \brief Structure gathering an enum, its type identifier and its name
-     */
-    struct EnumInfo
-    {
-        std::string id;
-        std::string name;
-        Enum* enumPtr;  // No need for shared pointers in here, we're the one and only instance holder
-    };
-
-    typedef std::map<std::string, EnumInfo> EnumTable;
+    typedef std::map<std::string, Enum*> EnumTable;
     EnumTable m_enums; ///< Table storing enums indexed by their ID
 };
 

@@ -58,14 +58,12 @@ Enum& EnumManager::addClass(const std::string& id)
     Enum* newEnum = new Enum(id);
 
     // Insert it into the table
-    EnumInfo info;
-    info.id = id;
-    info.enumPtr = newEnum;
-    m_enums.insert(std::make_pair(id, info));
+    m_enums.insert(std::make_pair(id, newEnum));
 
     // Notify observers
     notifyEnumAdded(*newEnum);
 
+    // Done
     return *newEnum;
 }
 
@@ -85,7 +83,7 @@ const Enum& EnumManager::getByIndex(std::size_t index) const
     EnumTable::const_iterator it = m_enums.begin();
     std::advance(it, index);
 
-    return *it->second.enumPtr;
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -95,14 +93,14 @@ const Enum& EnumManager::getById(const std::string& id) const
     if (it == m_enums.end())
         CAMP_ERROR(EnumNotFound(id));
 
-    return *it->second.enumPtr;
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
 const Enum* EnumManager::getByIdSafe(const std::string& id) const
 {
     EnumTable::const_iterator it = m_enums.find(id);
-    return (it == m_enums.end()) ? nullptr : &*it->second.enumPtr;
+    return (it == m_enums.end()) ? nullptr : it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -122,7 +120,7 @@ EnumManager::~EnumManager()
     // Notify observers
     for (EnumTable::const_iterator it = m_enums.begin(); it != m_enums.end(); ++it)
     {
-        Enum* enumPtr = it->second.enumPtr;
+        Enum* enumPtr = it->second;
         notifyEnumRemoved(*enumPtr);
         delete enumPtr;
     }

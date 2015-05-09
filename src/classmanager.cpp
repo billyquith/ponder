@@ -57,14 +57,12 @@ Class& ClassManager::addClass(const std::string& id)
     Class *newClass = new Class(id);
 
     // Insert it into the table
-    ClassInfo info;
-    info.id = id;
-    info.classPtr = newClass;
-    m_classes.insert(std::make_pair(id, info));
+    m_classes.insert(std::make_pair(id, newClass));
 
     // Notify observers
     notifyClassAdded(*newClass);
 
+    // Done
     return *newClass;
 }
 
@@ -84,7 +82,7 @@ const Class& ClassManager::getByIndex(std::size_t index) const
     ClassTable::const_iterator it = m_classes.begin();
     std::advance(it, index);
 
-    return *it->second.classPtr;
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -94,14 +92,14 @@ const Class& ClassManager::getById(const std::string& id) const
     if (it == m_classes.end())
         CAMP_ERROR(ClassNotFound(id));
 
-    return *it->second.classPtr;
+    return *it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
 const Class* ClassManager::getByIdSafe(const std::string& id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
-    return (it == m_classes.end()) ? nullptr : &*it->second.classPtr;
+    return (it == m_classes.end()) ? nullptr : it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -121,7 +119,7 @@ ClassManager::~ClassManager()
     // Notify observers
     for (ClassTable::const_iterator it = m_classes.begin(); it != m_classes.end(); ++it)
     {
-        Class* classPtr = it->second.classPtr;
+        Class* classPtr = it->second;
         notifyClassRemoved(*classPtr);
         delete classPtr;
     }

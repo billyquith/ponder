@@ -146,16 +146,7 @@ public:
 
 private:
 
-    /**
-     * \brief Structure gathering a class, its type identifier and its name
-     */
-    struct ClassInfo
-    {
-        std::string id;
-        Class *classPtr;
-    };
-
-    typedef std::map<std::string, ClassInfo> ClassTable;
+    typedef std::map<std::string, Class*> ClassTable; ///< No need for shared pointers in here, we're the one and only instance holder
     ClassTable m_classes; ///< Table storing classes indexed by their ID
 };
 
