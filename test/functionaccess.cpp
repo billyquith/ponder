@@ -30,7 +30,6 @@
 #include "functionaccess.hpp"
 #include <camp/classget.hpp>
 #include <camp/function.hpp>
-#include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace FunctionAccessTest;

@@ -34,10 +34,6 @@
 #define CAMP_TYPE_HPP
 
 
-#include <string>
-#include <cassert>
-
-
 namespace camp
 {
 /**

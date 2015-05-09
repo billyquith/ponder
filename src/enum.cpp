@@ -30,7 +30,6 @@
 
 #include <camp/enum.hpp>
 #include <camp/errors.hpp>
-#include <algorithm>
 
 
 namespace camp

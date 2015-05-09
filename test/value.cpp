@@ -29,7 +29,6 @@
 
 #include "value.hpp"
 #include <camp/value.hpp>
-#include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ValueTest;

@@ -29,9 +29,6 @@
 
 
 #include <camp/tagholder.hpp>
-#include <camp/value.hpp>
-#include <camp/errors.hpp>
-#include <algorithm>
 
 
 namespace camp

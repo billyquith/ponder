@@ -38,7 +38,6 @@
 #include <camp/valuemapper.hpp>
 #include <camp/value.hpp>
 #include <camp/valuevisitor.hpp>
-#include <camp/errors.hpp>
 #include <camp/userobject.hpp>
 
 
@@ -66,7 +65,7 @@ inline typename std::remove_reference<T>::type convertArg(const Args& args, std:
     {
         return args[index].to<typename std::remove_reference<T>::type>();
     }
-    catch (BadType&)
+    catch (const BadType&)
     {
         CAMP_ERROR(BadArgument(args[index].type(), mapType<T>(), index, "constructor"));
     }

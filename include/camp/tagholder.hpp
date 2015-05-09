@@ -34,7 +34,6 @@
 #define CAMP_TAGHOLDER_HPP
 
 
-#include <camp/config.hpp>
 #include <camp/detail/getter.hpp>
 #include <camp/value.hpp>
 #include <map>

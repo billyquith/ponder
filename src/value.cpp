@@ -30,7 +30,6 @@
 
 
 #include <camp/value.hpp>
-#include <iostream>
 
 
 namespace camp

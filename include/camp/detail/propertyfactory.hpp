@@ -34,7 +34,6 @@
 #define CAMP_DETAIL_PROPERTYFACTORY_HPP
 
 
-#include <camp/type.hpp>
 #include <camp/detail/simplepropertyimpl.hpp>
 #include <camp/detail/arraypropertyimpl.hpp>
 #include <camp/detail/enumpropertyimpl.hpp>

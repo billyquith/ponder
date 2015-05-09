@@ -30,7 +30,6 @@
 
 #include <camp/arrayproperty.hpp>
 #include <camp/classvisitor.hpp>
-#include <camp/errors.hpp>
 
 
 namespace camp

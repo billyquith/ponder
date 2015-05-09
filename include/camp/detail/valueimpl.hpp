@@ -35,7 +35,6 @@
 
 #include <camp/type.hpp>
 #include <camp/valuemapper.hpp>
-#include <camp/errors.hpp>
 #include <boost/variant/static_visitor.hpp>
 
 

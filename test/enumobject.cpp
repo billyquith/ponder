@@ -28,9 +28,9 @@
 ****************************************************************************/
 
 #include "enumobject.hpp"
+#include <camp/errors.hpp>
 #include <camp/enumget.hpp>
 #include <camp/enumobject.hpp>
-#include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace EnumObjectTest;

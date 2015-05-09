@@ -30,7 +30,7 @@
 
 #include <camp/function.hpp>
 #include <camp/classvisitor.hpp>
-#include <camp/errors.hpp>
+#include <camp/args.hpp>
 
 
 namespace camp

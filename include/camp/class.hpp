@@ -34,16 +34,12 @@
 #define CAMP_CLASS_HPP
 
 
-#include <camp/config.hpp>
-#include <camp/args.hpp>
 #include <camp/classget.hpp>
 #include <camp/classcast.hpp>
 #include <camp/property.hpp>
 #include <camp/function.hpp>
 #include <camp/tagholder.hpp>
-#include <camp/errors.hpp>
 #include <camp/userobject.hpp>
-#include <camp/detail/classmanager.hpp>
 #include <camp/detail/typeid.hpp>
 #include <string>
 #include <map>
@@ -52,7 +48,7 @@ namespace camp
 {
 template <typename T> class ClassBuilder;
 class Constructor;
-class Value;
+class Args;
 class ClassVisitor;
 
 /**

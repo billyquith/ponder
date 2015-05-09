@@ -49,6 +49,7 @@ namespace camp
 class Property;
 class UserProperty;
 class Value;
+class Args;
 class ParentObject;
 
 /**
@@ -59,7 +60,7 @@ class ParentObject;
  *
  * \sa EnumObject
  */
-class CAMP_API UserObject : boost::totally_ordered<UserObject>
+class CAMP_API UserObject : public boost::totally_ordered<UserObject>
 {
 public:
 

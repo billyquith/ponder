@@ -34,18 +34,11 @@
 #define CAMP_PROPERTY_HPP
 
 
-#include <camp/config.hpp>
-#include <camp/detail/getter.hpp>
 #include <camp/tagholder.hpp>
 #include <camp/type.hpp>
-#include <string>
-
 
 namespace camp
 {
-template <typename T> class ClassBuilder;
-class Value;
-class UserObject;
 class ClassVisitor;
 
 /**

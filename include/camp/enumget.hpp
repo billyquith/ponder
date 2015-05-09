@@ -34,7 +34,6 @@
 #define CAMP_ENUMGET_HPP
 
 
-#include <camp/config.hpp>
 #include <camp/error.hpp>
 #include <camp/detail/typeid.hpp>
 #include <camp/detail/enummanager.hpp>

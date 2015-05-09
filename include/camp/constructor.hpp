@@ -34,14 +34,9 @@
 #define CAMP_CONSTRUCTOR_HPP
 
 
-#include <camp/config.hpp>
-#include <camp/args.hpp>
-#include <vector>
-
-
 namespace camp
 {
-class Value;
+class Args;
 class UserObject;
 
 /**

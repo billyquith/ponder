@@ -29,7 +29,6 @@
 
 #include "tagholder.hpp"
 #include <camp/classget.hpp>
-#include <camp/errors.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace TagHolderTest;

@@ -34,6 +34,7 @@
 #define CAMP_DETAIL_VALUEPROVIDER_HPP
 
 
+#include <camp/args.hpp>
 #include <camp/class.hpp>
 #include <camp/classget.hpp>
 #include <camp/valuemapper.hpp>
@@ -61,7 +62,7 @@ struct ValueProviderImpl
 template <typename T>
 struct ValueProviderImpl<T, userType>
 {
-    ValueProviderImpl() : m_value(classByType<T>().construct().template get<T*>()) {}
+    ValueProviderImpl() : m_value(classByType<T>().construct(Args::empty).template get<T*>()) {}
     ~ValueProviderImpl() {classByType<T>().destroy(m_value);}
     T& operator()() {return *m_value;}
     T* m_value;

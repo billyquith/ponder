@@ -30,7 +30,6 @@
 #include "enumproperty.hpp"
 #include <camp/classget.hpp>
 #include <camp/enumget.hpp>
-#include <camp/errors.hpp>
 #include <camp/enumproperty.hpp>
 #include <boost/test/unit_test.hpp>
 

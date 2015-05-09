@@ -47,6 +47,7 @@
 namespace camp
 {
 template <typename T> class ClassBuilder;
+class Args;
 class UserObject;
 class ClassVisitor;
 
@@ -112,7 +113,7 @@ public:
      * \brief Call the function
      *
      * \param object Object
-     * \param args Arguments to pass to the function (empty list by default)
+     * \param args Arguments to pass to the function, for example "camp::Args::empty"
      *
      * \return Value returned by the function call
      *

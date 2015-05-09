@@ -35,7 +35,6 @@
 
 
 #include <camp/simpleproperty.hpp>
-#include <camp/errors.hpp>
 
 
 namespace camp

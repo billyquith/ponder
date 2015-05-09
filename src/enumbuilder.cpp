@@ -30,7 +30,6 @@
 
 #include <camp/enumbuilder.hpp>
 #include <camp/enum.hpp>
-#include <cassert>
 
 
 namespace camp

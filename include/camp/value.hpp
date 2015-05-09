@@ -34,7 +34,6 @@
 #define CAMP_VALUE_HPP
 
 
-#include <camp/config.hpp>
 #include <camp/type.hpp>
 #include <camp/enumobject.hpp>
 #include <camp/userobject.hpp>

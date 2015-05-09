@@ -29,7 +29,6 @@
 
 #include "userobject.hpp"
 #include <camp/classget.hpp>
-#include <camp/errors.hpp>
 #include <camp/userobject.hpp>
 #include <boost/test/unit_test.hpp>
 

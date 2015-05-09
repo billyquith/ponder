@@ -31,7 +31,6 @@
 #include <camp/detail/enummanager.hpp>
 #include <camp/enum.hpp>
 #include <camp/errors.hpp>
-#include <camp/observer.hpp>
 
 
 namespace camp

@@ -30,8 +30,6 @@
 
 #include <camp/detail/classmanager.hpp>
 #include <camp/class.hpp>
-#include <camp/errors.hpp>
-#include <camp/observer.hpp>
 
 
 namespace camp

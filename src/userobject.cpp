@@ -29,10 +29,7 @@
 
 
 #include <camp/userobject.hpp>
-#include <camp/userproperty.hpp>
 #include <camp/class.hpp>
-#include <camp/function.hpp>
-#include <camp/property.hpp>
 
 
 namespace camp

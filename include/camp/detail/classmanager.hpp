@@ -33,8 +33,6 @@
 #ifndef CAMP_DETAIL_CLASSMANAGER_HPP
 #define CAMP_DETAIL_CLASSMANAGER_HPP
 
-
-#include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
 #include <camp/detail/singleton.hpp>
 #include <string>

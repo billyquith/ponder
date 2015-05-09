@@ -30,7 +30,6 @@
 
 #include <camp/args.hpp>
 #include <camp/value.hpp>
-#include <camp/errors.hpp>
 
 
 namespace camp

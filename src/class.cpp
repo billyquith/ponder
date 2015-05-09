@@ -29,9 +29,6 @@
 
 
 #include <camp/class.hpp>
-#include <camp/errors.hpp>
-#include <camp/userobject.hpp>
-#include <camp/detail/classmanager.hpp>
 
 
 namespace camp
