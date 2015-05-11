@@ -46,7 +46,6 @@
 
 namespace camp
 {
-template <typename T> class ClassBuilder;
 class Args;
 class UserObject;
 class ClassVisitor;

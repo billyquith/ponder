@@ -39,6 +39,7 @@
 #include <camp/enumproperty.hpp>
 #include <camp/userproperty.hpp>
 #include <camp/function.hpp>
+#include <camp/classbuilder.hpp>
 
 namespace ClassVisitorTest
 {

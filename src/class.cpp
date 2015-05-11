@@ -29,6 +29,7 @@
 
 
 #include <camp/class.hpp>
+#include <camp/constructor.hpp>
 
 
 namespace camp

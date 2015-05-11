@@ -99,13 +99,13 @@ long Enum::value(const std::string& name) const
 //-------------------------------------------------------------------------------------------------
 bool Enum::operator==(const Enum& other) const
 {
-    return m_name == other.m_name;
+    return name() == other.name();
 }
 
 //-------------------------------------------------------------------------------------------------
 bool Enum::operator!=(const Enum& other) const
 {
-    return m_name != other.m_name;
+    return name() != other.name();
 }
 
 //-------------------------------------------------------------------------------------------------

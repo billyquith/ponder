@@ -352,9 +352,6 @@ private:
 
 } // namespace camp
 
-// Must be included here because of mutual dependance between Class and ClassBuilder
-#include <camp/classbuilder.hpp>
-
 #include <camp/class.inl>
 
 

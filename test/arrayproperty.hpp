@@ -32,6 +32,7 @@
 
 #include <camp/camptype.hpp>
 #include <camp/class.hpp>
+#include <camp/classbuilder.hpp>
 #include <boost/array.hpp>
 #include <list>
 #include <vector>

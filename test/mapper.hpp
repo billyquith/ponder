@@ -34,6 +34,7 @@
 #include <camp/class.hpp>
 #include <camp/simpleproperty.hpp>
 #include <camp/function.hpp>
+#include <camp/classbuilder.hpp>
 #include <map>
 #include <string>
 
