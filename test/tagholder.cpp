@@ -13,10 +13,10 @@
 ** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ** copies of the Software, and to permit persons to whom the Software is
 ** furnished to do so, subject to the following conditions:
-** 
+**
 ** The above copyright notice and this permission notice shall be included in
 ** all copies or substantial portions of the Software.
-** 
+**
 ** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -64,9 +64,9 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_EQUAL(metaclass->hasTag("b"), true);
     BOOST_CHECK_EQUAL(metaclass->hasTag("x"), false);
 
-    BOOST_CHECK_NO_THROW(metaclass->tagId(0));
-    BOOST_CHECK_NO_THROW(metaclass->tagId(1));
-    BOOST_CHECK_THROW(metaclass->tagId(100), camp::OutOfRange);
+    BOOST_CHECK_NO_THROW(metaclass->getTagEntryByIndex(0));
+    BOOST_CHECK_NO_THROW(metaclass->getTagEntryByIndex(1));
+    BOOST_CHECK_THROW(metaclass->getTagEntryByIndex(100), camp::OutOfRange);
 }
 
 //-----------------------------------------------------------------------------

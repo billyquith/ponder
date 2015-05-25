@@ -90,6 +90,9 @@ add_definitions(-DBOOST_TEST_NO_LIB)
 # instruct CMake to build an executable from all of the source files
 add_executable(camptest ${CAMP_TEST_SRCS})
 
+# required standard level (needed to pass -std=c++11 to gcc and clang)
+set_property(TARGET camptest PROPERTY CXX_STANDARD 11)
+
 # define d suffix on windows
 if(WIN32)
     set_target_properties(camptest PROPERTIES DEBUG_POSTFIX d)
