@@ -62,9 +62,12 @@ public:
 
     typename Container::const_iterator find(const KEY &key) const
     {
-        //typename Container::const_iterator it = std::lower_bound(m_contents.cbegin(), m_contents.cend(), key, KeyCmp());
-//        return it;
-        return std::find_if(m_contents.begin(), m_contents.end(), CMP());
+        for (auto it = m_contents.begin(); it != m_contents.end(); ++it)
+        {
+            if (it->first == key)
+                return it;
+        }
+        return m_contents.end();
     }
 
     bool tryFind(const KEY &key, const_iterator &returnValue) const
@@ -87,9 +90,8 @@ public:
 
     void insert(const KEY &key, const VALUE &value)
     {
-//        auto it = find(key);
-//        m_contents.insert(it, pair(key,value));
-        m_contents.push_back(pait(key,value));
+        erase(key);
+        m_contents.push_back(pair(key,value));
     }
     
     void insert(const_iterator it)
