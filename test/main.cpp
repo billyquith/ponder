@@ -27,6 +27,8 @@
 **
 ****************************************************************************/
 
+#include <camp/detail/classmanager.hpp>
+
 // This must be defined once in the entire project
 #define BOOST_TEST_MODULE CAMP test
 
@@ -35,3 +37,20 @@
 // Note: to disable that and link to boost.test as a library,
 // simply remove "/included" from the header path below.
 #include <boost/test/included/unit_test.hpp>
+
+struct GlobalTestFixture
+{
+    camp::detail::ClassManager* m_classManagerInstance;
+
+    GlobalTestFixture() :
+        m_classManagerInstance(new camp::detail::ClassManager())
+    {
+    }
+
+    ~GlobalTestFixture()
+    {
+        delete m_classManagerInstance;
+    }
+};
+
+BOOST_GLOBAL_FIXTURE(GlobalTestFixture)

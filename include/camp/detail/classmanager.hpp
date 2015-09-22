@@ -15,10 +15,10 @@
 ** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ** copies of the Software, and to permit persons to whom the Software is
 ** furnished to do so, subject to the following conditions:
-** 
+**
 ** The above copyright notice and this permission notice shall be included in
 ** all copies or substantial portions of the Software.
-** 
+**
 ** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,6 +36,7 @@
 
 #include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
+#include <camp/detail/singleton.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -58,7 +59,7 @@ namespace detail
  *
  * \sa Class
  */
-class CAMP_API ClassManager : public ObserverNotifier, camp::noncopyable
+class CAMP_API ClassManager : public ObserverNotifier, public Singleton<ClassManager>
 {
 public:
 
@@ -148,8 +149,6 @@ public:
      */
     bool classExists(const std::string& id) const;
 
-private:
-
     /**
      * \brief Default constructor
      */
@@ -161,6 +160,8 @@ private:
      * The destructor destroys all the registered metaclasses and notifies the observers.
      */
     ~ClassManager();
+
+private:
 
     /**
      * \brief Structure gathering a class, its type identifier and its name
