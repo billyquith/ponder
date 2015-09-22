@@ -40,12 +40,12 @@ include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # all source files
-file(GLOB SRC_HEADERS include/camp/*.hpp include/camp/*.inl)
-file(GLOB SRC_DETAIL include/camp/detail/*.hpp include/camp/detail/*.inl)
+file(GLOB_RECURSE SRC_HEADERS
+    include/camp/*.hpp include/camp/*.inl
+)
 file(GLOB SRC_SOURCE src/*.cpp)
 set(CAMP_SRCS
     ${SRC_HEADERS}
-    ${SRC_DETAIL}
     ${SRC_SOURCE}
 )
 
