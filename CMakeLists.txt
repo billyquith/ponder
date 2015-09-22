@@ -30,7 +30,7 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 3.0)
 
 # set project's name
 project(CAMP)
@@ -40,103 +40,13 @@ include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # all source files
+file(GLOB SRC_HEADERS include/camp/*.hpp include/camp/*.inl)
+file(GLOB SRC_DETAIL include/camp/detail/*.hpp include/camp/detail/*.inl)
+file(GLOB SRC_SOURCE src/*.cpp)
 set(CAMP_SRCS
-    include/camp/userproperty.hpp
-    src/userproperty.cpp
-    include/camp/userobject.hpp
-    include/camp/userobject.inl
-    src/userobject.cpp
-    include/camp/tagholder.hpp
-    src/tagholder.cpp
-    include/camp/simpleproperty.hpp
-    src/simpleproperty.cpp
-    include/camp/property.hpp
-    src/property.cpp
-    include/camp/observer.hpp
-    src/observer.cpp
-    include/camp/errors.hpp
-    src/errors.cpp
-    include/camp/function.hpp
-    src/function.cpp
-    include/camp/error.hpp
-    src/error.cpp
-    include/camp/enumproperty.hpp
-    src/enumproperty.cpp
-    include/camp/enumobject.hpp
-    include/camp/enumobject.inl
-    src/enumobject.cpp
-    include/camp/enumbuilder.hpp
-    src/enumbuilder.cpp
-    include/camp/enum.hpp
-    include/camp/enum.inl
-    src/enum.cpp
-    include/camp/classvisitor.hpp
-    src/classvisitor.cpp
-    include/camp/class.hpp
-    include/camp/class.inl
-    src/class.cpp
-    include/camp/arrayproperty.hpp
-    src/arrayproperty.cpp
-    include/camp/args.hpp
-    src/args.cpp
-    include/camp/value.hpp
-    include/camp/value.inl
-    src/value.cpp
-    include/camp/detail/classmanager.hpp
-    src/classmanager.cpp
-    include/camp/detail/enummanager.hpp
-    src/enummanager.cpp
-    include/camp/detail/observernotifier.hpp
-    src/observernotifier.cpp
-    include/camp/camptype.hpp
-    src/camptype.cpp
-    include/camp/classcast.hpp
-    src/classcast.cpp
-    include/camp/type.hpp
-    include/camp/enumget.hpp
-    include/camp/enumget.inl
-    include/camp/constructor.hpp
-    include/camp/config.hpp
-    include/camp/classget.hpp
-    include/camp/classget.inl
-    include/camp/classbuilder.hpp
-    include/camp/classbuilder.inl
-    include/camp/arraymapper.hpp
-    include/camp/valuemapper.hpp
-    include/camp/valuevisitor.hpp
-    include/camp/detail/valueimpl.hpp
-    include/camp/detail/userpropertyimpl.hpp
-    include/camp/detail/userpropertyimpl.inl
-    include/camp/detail/typeid.hpp
-    include/camp/detail/simplepropertyimpl.hpp
-    include/camp/detail/simplepropertyimpl.inl
-    include/camp/detail/returntype.hpp
-    include/camp/detail/rawtype.hpp
-    include/camp/detail/propertyfactory.hpp
-    include/camp/detail/objecttraits.hpp
-    include/camp/detail/issmartpointer.hpp
-    include/camp/detail/getter.hpp
-    include/camp/detail/getter.inl
-    include/camp/detail/functiontraits.hpp
-    include/camp/detail/functionimpl.hpp
-    include/camp/detail/enumpropertyimpl.hpp
-    include/camp/detail/enumpropertyimpl.inl
-    include/camp/detail/constructorimpl.hpp
-    include/camp/detail/callhelper.hpp
-    include/camp/detail/arraypropertyimpl.hpp
-    include/camp/detail/arraypropertyimpl.inl
-    include/camp/detail/yesnotype.hpp
-    include/camp/detail/objectholder.hpp
-    include/camp/detail/objectholder.inl
-    include/camp/detail/valueprovider.hpp
-    include/camp/qt/qthelper.hpp
-    include/camp/qt/qtsimpleproperty.hpp
-    include/camp/qt/qtmapper.hpp
-    include/camp/qt/qt.hpp
-    include/camp/qt/qstring.hpp
-    include/camp/qt/qlist.hpp
-    include/camp/qt/qvector.hpp
-    include/camp/qt/qtfunction.hpp
+    ${SRC_HEADERS}
+    ${SRC_DETAIL}
+    ${SRC_SOURCE}
 )
 
 # find Boost
@@ -150,13 +60,13 @@ include_directories(
 
 # generate version.hpp
 message("Generate version.hpp")
-configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/version.hpp @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/camp/version.hpp @ONLY)
 
 # instruct CMake to build a shared library from all of the source files
 add_library(camp ${CAMP_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET camp PROPERTY CXX_STANDARD 11)
+#set_property(TARGET camp PROPERTY CXX_STANDARD 11)
 
 # define the export macro
 if(BUILD_SHARED_LIBS)
@@ -260,4 +170,3 @@ install(DIRECTORY cmake
 ###############################
 
 include(${CAMP_SOURCE_DIR}/cmake/Packaging.cmake OPTIONAL)
-
