@@ -74,7 +74,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
         it != baseClass.m_properties.end();
         ++it)
     {
-        m_target->m_properties.insert(std::make_pair(it->first, it->second));
+        m_target->m_properties.insert(it);
     }
 
     // Copy all functions of the base class into the current class
@@ -82,7 +82,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
         it != baseClass.m_functions.end();
         ++it)
     {
-        m_target->m_functions.insert(std::make_pair(it->first, it->second));
+        m_target->m_functions.insert(it);
     }
 
     return *this;
@@ -354,7 +354,7 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
     properties.erase(property->name());
 
     // Insert the new property
-    properties.insert(std::make_pair(property->name(), Class::PropertyPtr(property)));
+    properties.insert(property->name(), Class::PropertyPtr(property));
 
     m_currentTagHolder = m_currentProperty = property;
     m_currentFunction = nullptr;
@@ -373,7 +373,7 @@ ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
     functions.erase(function->name());
 
     // Insert the new function
-    functions.insert(std::make_pair(function->name(), Class::FunctionPtr(function)));
+    functions.insert(function->name(), Class::FunctionPtr(function));
 
     m_currentTagHolder = m_currentFunction = function;
     m_currentProperty = nullptr;

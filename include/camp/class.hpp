@@ -15,10 +15,10 @@
 ** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ** copies of the Software, and to permit persons to whom the Software is
 ** furnished to do so, subject to the following conditions:
-** 
+**
 ** The above copyright notice and this permission notice shall be included in
 ** all copies or substantial portions of the Software.
-** 
+**
 ** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,6 +41,7 @@
 #include <camp/tagholder.hpp>
 #include <camp/userobject.hpp>
 #include <camp/detail/typeid.hpp>
+#include <camp/dictionary.hpp>
 #include <string>
 #include <map>
 
@@ -336,10 +337,23 @@ private:
     typedef std::shared_ptr<Property> PropertyPtr;
     typedef std::shared_ptr<Function> FunctionPtr;
     typedef std::shared_ptr<Constructor> ConstructorPtr;
+
+    struct PropertyCmp {
+        bool operator () (const std::string& a, const std::string& b) const {
+            return a < b;
+        }
+    };
+
+    struct FunctionCmp {
+        bool operator () (const std::string& a, const std::string& b) const {
+            return a < b;
+        }
+    };
+
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef std::map<std::string, PropertyPtr> PropertyTable;
-    typedef std::map<std::string, FunctionPtr> FunctionTable;
+    typedef Dictionary<std::string, PropertyPtr, PropertyCmp> PropertyTable;
+    typedef Dictionary<std::string, FunctionPtr, FunctionCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&);
 
     std::string m_id;           ///< Name of the metaclass

@@ -65,7 +65,7 @@ std::size_t Class::functionCount() const
 //-------------------------------------------------------------------------------------------------
 bool Class::hasFunction(const std::string& id) const
 {
-    return (m_functions.find(id) != m_functions.end());
+    return m_functions.contains(id);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -84,8 +84,8 @@ const Function& Class::function(std::size_t index) const
 //-------------------------------------------------------------------------------------------------
 const Function& Class::function(const std::string& id) const
 {
-    FunctionTable::const_iterator it = m_functions.find(id);
-    if (it == m_functions.end())
+    FunctionTable::const_iterator it;
+    if (!m_functions.tryFind(id, it))
     {
         CAMP_ERROR(FunctionNotFound(id, name()));
     }
@@ -102,7 +102,7 @@ std::size_t Class::propertyCount() const
 //-------------------------------------------------------------------------------------------------
 bool Class::hasProperty(const std::string& id) const
 {
-    return (m_properties.find(id) != m_properties.end());
+    return m_properties.contains(id);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -121,8 +121,8 @@ const Property& Class::property(std::size_t index) const
 //-------------------------------------------------------------------------------------------------
 const Property& Class::property(const std::string& id) const
 {
-    PropertyTable::const_iterator it = m_properties.find(id);
-    if (it == m_properties.end())
+    PropertyTable::const_iterator it;
+    if (!m_properties.tryFind(id, it))
     {
         CAMP_ERROR(PropertyNotFound(id, name()));
     }
