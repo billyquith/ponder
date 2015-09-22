@@ -63,10 +63,6 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_EQUAL(metaclass->hasTag("a"), true);
     BOOST_CHECK_EQUAL(metaclass->hasTag("b"), true);
     BOOST_CHECK_EQUAL(metaclass->hasTag("x"), false);
-
-    BOOST_CHECK_NO_THROW(metaclass->getTagEntryByIndex(0));
-    BOOST_CHECK_NO_THROW(metaclass->getTagEntryByIndex(1));
-    BOOST_CHECK_THROW(metaclass->getTagEntryByIndex(100), camp::OutOfRange);
 }
 
 //-----------------------------------------------------------------------------
