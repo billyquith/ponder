@@ -61,7 +61,7 @@ public:
      *
      * \param target Target metaenum to construct
      */
-    EnumBuilder(Enum& target);
+    explicit EnumBuilder(Enum& target);
 
     /**
      * \brief Add a new pair to the metaenum

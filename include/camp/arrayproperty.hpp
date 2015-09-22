@@ -172,19 +172,19 @@ public:
      *
      * \param visitor Visitor to accept
      */
-    virtual void accept(ClassVisitor& visitor) const;
+    virtual void accept(ClassVisitor& visitor) const override;
 
 protected:
 
     /**
      * \see Property::getValue
      */
-    virtual Value getValue(const UserObject& object) const;
+    virtual Value getValue(const UserObject& object) const override;
 
     /**
      * \see Property::setValue
      */
-    virtual void setValue(const UserObject& object, const Value& value) const;
+    virtual void setValue(const UserObject& object, const Value& value) const override;
 
     /**
      * \brief Do the actual retrieval of the size

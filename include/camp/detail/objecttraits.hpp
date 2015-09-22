@@ -142,7 +142,7 @@ struct ObjectTraits<T[N]>
  * Specialized version for references to non-ref types
  */
 template <typename T>
-    struct ObjectTraits<T&, typename std::enable_if<!std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
+struct ObjectTraits<T&, typename std::enable_if<!std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
     enum
     {
@@ -162,7 +162,8 @@ template <typename T>
  * Specialized version for references to ref types -- just remove the reference modifier
  */
 template <typename T>
-    struct ObjectTraits<T&, typename std::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type> : ObjectTraits<T>
+struct ObjectTraits<T&, typename std::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
+    : ObjectTraits<T>
 {
 };
 

@@ -55,27 +55,27 @@ namespace ClassVisitorTest
         {
         }
 
-        virtual void visit(const camp::SimpleProperty& property)
+        virtual void visit(const camp::SimpleProperty& property) override
         {
             simpleVisited = true;
         }
 
-        virtual void visit(const camp::ArrayProperty& property)
+        virtual void visit(const camp::ArrayProperty& property) override
         {
             arrayVisited = true;
         }
 
-        virtual void visit(const camp::EnumProperty& property)
+        virtual void visit(const camp::EnumProperty& property) override
         {
             enumVisited = true;
         }
 
-        virtual void visit(const camp::UserProperty& property)
+        virtual void visit(const camp::UserProperty& property) override
         {
             userVisited = true;
         }
 
-        virtual void visit(const camp::Function& function)
+        virtual void visit(const camp::Function& function) override
         {
             functionVisited = true;
         }

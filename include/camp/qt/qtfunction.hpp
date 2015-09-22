@@ -71,7 +71,7 @@ public:
     /**
      * \see Function::execute
      */
-    virtual camp::Value execute(const camp::UserObject& object, const camp::Args& args) const
+    virtual camp::Value execute(const camp::UserObject& object, const camp::Args& args) const override
     {
         QVariant value(QtHelper::variantType(QMetaType::type(m_metaMethod.typeName())));
         QGenericReturnArgument ret(m_metaMethod.typeName(), value.data());

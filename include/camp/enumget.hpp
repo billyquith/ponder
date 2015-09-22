@@ -114,7 +114,7 @@ const Enum& enumByType();
  *
  * \brief Get a metaenum from its C++ type
  *
- * \return Pointer to the metaenum bound to type T, or 0 if no metaenum has been declared
+ * \return Pointer to the metaenum bound to type T, or null pointer if no metaenum has been declared
  */
 template <typename T>
 const Enum* enumByTypeSafe();

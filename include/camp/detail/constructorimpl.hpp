@@ -96,7 +96,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const
+    virtual bool matches(const Args& args) const override
     {
         return (args.count() == 0);
     }
@@ -104,7 +104,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args&) const
+    virtual UserObject create(const Args&) const override
     {
         return new T();
     }
@@ -121,7 +121,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const
+    virtual bool matches(const Args& args) const override
     {
         return (args.count() == 1)
                && checkArg<A0>(args[0]);
@@ -130,7 +130,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args& args) const
+    virtual UserObject create(const Args& args) const override
     {
         return new T(convertArg<A0>(args, 0));
     }
@@ -147,7 +147,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const
+    virtual bool matches(const Args& args) const override
     {
         return (args.count() == 2)
                && checkArg<A0>(args[0])
@@ -157,7 +157,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args& args) const
+    virtual UserObject create(const Args& args) const override
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1));
@@ -175,7 +175,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const
+    virtual bool matches(const Args& args) const override
     {
         return (args.count() == 3)
                && checkArg<A0>(args[0])
@@ -186,7 +186,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args& args) const
+    virtual UserObject create(const Args& args) const override
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1),
@@ -205,7 +205,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const
+    virtual bool matches(const Args& args) const override
     {
         return (args.count() == 4)
                && checkArg<A0>(args[0])
@@ -217,7 +217,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args& args) const
+    virtual UserObject create(const Args& args) const override
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1),
@@ -237,7 +237,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const
+    virtual bool matches(const Args& args) const override
     {
         return (args.count() == 5)
                && checkArg<A0>(args[0])
@@ -250,7 +250,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args& args) const
+    virtual UserObject create(const Args& args) const override
     {
         return new T(convertArg<A0>(args, 0),
                      convertArg<A1>(args, 1),

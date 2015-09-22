@@ -111,7 +111,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args&) const
+    virtual Value execute(const UserObject& object, const Args&) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>());
     }
@@ -143,7 +143,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name()));
@@ -176,7 +176,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -210,7 +210,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -245,7 +245,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -281,7 +281,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -320,7 +320,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args&) const
+    virtual Value execute(const UserObject& object, const Args&) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>());
     }
@@ -353,7 +353,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name()));
@@ -388,7 +388,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -424,7 +424,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                    , convertArg<A0>(args, 0, name())
@@ -461,7 +461,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -499,7 +499,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const
+    virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())

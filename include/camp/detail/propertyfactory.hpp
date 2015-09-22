@@ -41,6 +41,7 @@
 #include <camp/detail/userpropertyimpl.hpp>
 #include <camp/detail/functiontraits.hpp>
 #include <boost/function.hpp>
+#include <boost/utility/enable_if.hpp>
 
 
 namespace camp

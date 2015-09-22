@@ -37,8 +37,8 @@ template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)
     , m_currentTagHolder(m_target)
-    , m_currentProperty(0)
-    , m_currentFunction(0)
+    , m_currentProperty(nullptr)
+    , m_currentFunction(nullptr)
 {
 }
 
@@ -187,7 +187,7 @@ template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::readable(bool value)
 {
     // Make sure we have a valid property
-    assert(m_currentProperty != 0);
+    assert(m_currentProperty != nullptr);
 
     m_currentProperty->m_readable = detail::Getter<bool>(value);
 
@@ -200,7 +200,7 @@ template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::readable(F function)
 {
     // Make sure we have a valid property
-    assert(m_currentProperty != 0);
+    assert(m_currentProperty != nullptr);
 
     m_currentProperty->m_readable = detail::Getter<bool>(boost::function<bool (T&)>(function));
 
@@ -212,7 +212,7 @@ template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::writable(bool value)
 {
     // Make sure we have a valid property
-    assert(m_currentProperty != 0);
+    assert(m_currentProperty != nullptr);
 
     m_currentProperty->m_writable = detail::Getter<bool>(value);
 
@@ -225,7 +225,7 @@ template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::writable(F function)
 {
     // Make sure we have a valid property
-    assert(m_currentProperty != 0);
+    assert(m_currentProperty != nullptr);
 
     m_currentProperty->m_writable = detail::Getter<bool>(boost::function<bool (T&)>(function));
 
@@ -237,7 +237,7 @@ template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::callable(bool value)
 {
     // Make sure we have a valid function
-    assert(m_currentFunction != 0);
+    assert(m_currentFunction != nullptr);
 
     m_currentFunction->m_callable = detail::Getter<bool>(value);
 
@@ -250,7 +250,7 @@ template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::callable(F function)
 {
     // Make sure we have a valid function
-    assert(m_currentFunction != 0);
+    assert(m_currentFunction != nullptr);
 
     m_currentFunction->m_callable = detail::Getter<bool>(boost::function<bool (T&)>(function));
 
@@ -357,7 +357,7 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
     properties.insert(Class::PropertyPtr(property));
 
     m_currentTagHolder = m_currentProperty = property;
-    m_currentFunction = 0;
+    m_currentFunction = nullptr;
 
     return *this;
 }
@@ -376,7 +376,7 @@ ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
     functions.insert(Class::FunctionPtr(function));
 
     m_currentTagHolder = m_currentFunction = function;
-    m_currentProperty = 0;
+    m_currentProperty = nullptr;
 
     return *this;
 }

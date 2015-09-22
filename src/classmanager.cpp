@@ -55,7 +55,7 @@ Class& ClassManager::addClass(const std::string& name, const std::string& id)
         CAMP_ERROR(ClassAlreadyCreated(name, id));
 
     // Create the new class
-    std::shared_ptr<Class> newClass(new Class(name));
+    Class *newClass = new Class(name);
 
     // Insert it into the table
     ClassInfo info;
@@ -120,7 +120,7 @@ const Class* ClassManager::getByIdSafe(const std::string& id) const
 
     IdIndex::const_iterator it = ids.find(id);
     if (it == ids.end())
-        return 0;
+        return nullptr;
 
     return &*it->classPtr;
 }

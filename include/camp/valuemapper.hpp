@@ -133,7 +133,7 @@ struct ValueMapper
  * Specialization of ValueMapper for abstract types
  */
 template <typename T>
-    struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value >::type>
+struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value >::type>
 {
     static const int type = camp::userType;
     static camp::UserObject to(const T& source) {return camp::UserObject(source);}
@@ -153,14 +153,14 @@ struct ValueMapper<bool>
     static bool from(double source)                  {return source != 0.;}
     static bool from(const std::string& source)      {return boost::lexical_cast<bool>(source);}
     static bool from(const camp::EnumObject& source) {return source.value() != 0;}
-    static bool from(const camp::UserObject& source) {return source.pointer() != 0;}
+    static bool from(const camp::UserObject& source) {return source.pointer() != nullptr;}
 };
 
 /*
  * Specialization of ValueMapper for integers
  */
 template <typename T>
-struct ValueMapper<T, typename boost::enable_if_c<std::is_integral<T>::value
+struct ValueMapper<T, typename boost::enable_if_c<    std::is_integral<T>::value
                                                   && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
                                                   && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
                                                  >::type>

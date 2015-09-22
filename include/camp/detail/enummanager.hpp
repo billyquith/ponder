@@ -134,7 +134,7 @@ public:
      *
      * \param id Identifier of the C++ type
      *
-     * \return Pointer to the requested metaenum, or 0 if not found
+     * \return Pointer to the requested metaenum, or null pointer if not found
      */
     const Enum* getByIdSafe(const std::string& id) const;
 

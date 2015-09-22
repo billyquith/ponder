@@ -229,7 +229,7 @@ int Class::baseOffset(const Class& base) const
     BaseList::const_iterator end = m_bases.end();
     for (BaseList::const_iterator it = m_bases.begin(); it != end; ++it)
     {
-        int offset = it->base->baseOffset(base);
+        const int offset = it->base->baseOffset(base);
         if (offset != -1)
             return offset + it->offset;
     }
