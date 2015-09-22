@@ -75,18 +75,7 @@ namespace detail
 template <typename T, typename U>
 struct IsSmartPointer
 {
-    // Check non-const signature
-    template <typename V, U* (V::*)()> struct TestForMember {};
-    template <typename V> static TypeYes check(TestForMember<V, &V::operator-> >*);
-    template <typename V> static TypeNo  check(...);
-
-    // Check const signature
-    template <typename V, U* (V::*)() const> struct TestForConstMember {};
-    template <typename V> static TypeYes checkConst(TestForConstMember<V, &V::operator-> >*);
-    template <typename V> static TypeNo  checkConst(...);
-
-    enum {value = (sizeof(check<T>(0)) == sizeof(TypeYes))
-               || (sizeof(checkConst<T>(0)) == sizeof(TypeYes))};
+    enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
 };
 
 } // namespace detail
