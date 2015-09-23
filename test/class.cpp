@@ -33,10 +33,43 @@
 
 using namespace ClassTest;
 
+static void foo() {}
+static int bar(float) {return 0;}
+struct Callable {
+    void operator () () {}
+};
+struct NonCallable {
+    int x;
+};
+struct Methods
+{
+    void foo() {}
+};
+
 //-----------------------------------------------------------------------------
 //                         Tests for camp::Class
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(CLASS)
+
+BOOST_AUTO_TEST_CASE(isCallable)
+{
+    foo(); bar(0.f); // to stop warning
+
+    static_assert(std::is_function<decltype(foo)>::value, "std::is_function failed");
+    static_assert(std::is_function<void ()>::value, "std::is_function failed");
+    static_assert(!std::is_function<Callable>::value, "std::is_function failed");
+    static_assert(!std::is_function<NonCallable>::value, "std::is_function failed");
+    
+    typedef void (*foo_t)();
+    static_assert(std::is_void< std::result_of<decltype(foo)& ()>::type >::value, "std::result_of failed");
+    static_assert(std::is_void< std::result_of<decltype(&foo) ()>::type >::value, "std::result_of failed");
+    static_assert(std::is_void< std::result_of<foo_t ()>::type >::value, "std::result_of failed");
+
+    typedef int (*bar_t)(float);
+    static_assert(std::is_same< std::result_of<decltype(bar)& (float)>::type, int >::value, "std::result_of failed");
+    static_assert(std::is_same< std::result_of<decltype(&bar) (float)>::type, int >::value, "std::result_of failed");
+    static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value, "std::result_of failed");
+}
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(declare)
