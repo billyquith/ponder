@@ -92,7 +92,7 @@ struct IsSmartPointer
 // * the stored value available for all boost algorithms (especially for boost::bind).
 // */
 //template <template <typename> class T, typename U>
-//U* get_pointer(const T<U>& obj, typename boost::enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
+//U* get_pointer(const T<U>& obj, typename std::enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
 //{
 //    return obj.operator->();
 //}
@@ -104,7 +104,7 @@ struct IsSmartPointer
 // * the stored value available for all boost algorithms (especially for boost::bind).
 // */
 //template <template <typename> class T, typename U>
-//U* get_pointer(T<U>& obj, typename boost::enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
+//U* get_pointer(T<U>& obj, typename std::enable_if<camp::detail::IsSmartPointer<T<U>, U> >::type* = 0)
 //{
 //    return obj.operator->();
 //}
