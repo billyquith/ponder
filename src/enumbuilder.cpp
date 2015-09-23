@@ -41,15 +41,12 @@ EnumBuilder::EnumBuilder(Enum& target)
 }
 
 //-------------------------------------------------------------------------------------------------
-EnumBuilder& EnumBuilder::value(const std::string& name, long value)
+EnumBuilder& EnumBuilder::value(const std::string& name, Enum::EnumValue value)
 {
     assert(!m_target->hasName(name));
     assert(!m_target->hasValue(value));
 
-    Enum::Pair pair;
-    pair.name = name;
-    pair.value = value;
-    m_target->m_pairs.push_back(pair);
+    m_target->m_enums.insert(name, value);
 
     return *this;
 }

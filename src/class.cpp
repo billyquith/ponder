@@ -65,7 +65,7 @@ std::size_t Class::functionCount() const
 //-------------------------------------------------------------------------------------------------
 bool Class::hasFunction(const std::string& id) const
 {
-    return m_functions.contains(id);
+    return m_functions.containsKey(id);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ std::size_t Class::propertyCount() const
 //-------------------------------------------------------------------------------------------------
 bool Class::hasProperty(const std::string& id) const
 {
-    return m_properties.contains(id);
+    return m_properties.containsKey(id);
 }
 
 //-------------------------------------------------------------------------------------------------

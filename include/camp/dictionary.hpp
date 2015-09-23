@@ -60,7 +60,7 @@ public:
     const_iterator begin() const    { return m_contents.begin(); }
     const_iterator end() const      { return m_contents.end(); }
 
-    typename Container::const_iterator find(const KEY &key) const
+    const_iterator findKey(const KEY &key) const
     {
         for (auto it = m_contents.begin(); it != m_contents.end(); ++it)
         {
@@ -70,9 +70,19 @@ public:
         return m_contents.end();
     }
 
+    const_iterator findValue(const VALUE &value) const
+    {
+        for (auto it = m_contents.begin(); it != m_contents.end(); ++it)
+        {
+            if (it->second == value)
+                return it;
+        }
+        return m_contents.end();
+    }
+
     bool tryFind(const KEY &key, const_iterator &returnValue) const
     {
-        auto it = find(key);
+        auto it = findKey(key);
         if (it != m_contents.end())
         {
             returnValue = it;
@@ -81,9 +91,14 @@ public:
         return false; // not found
     }
     
-    bool contains(const KEY &key) const
+    bool containsKey(const KEY &key) const
     {
-        return find(key) != m_contents.end();
+        return findKey(key) != m_contents.end();
+    }
+    
+    bool containsValue(const VALUE &value) const
+    {
+        return findValue(value) != m_contents.end();
     }
     
     std::size_t size() const { return m_contents.size(); }
@@ -101,9 +116,16 @@ public:
     
     void erase(const KEY &key)
     {
-        auto it = find(key);
+        auto it = findKey(key);
         if (it != m_contents.end())
             m_contents.erase(it);
+    }
+    
+    const_iterator at(std::size_t index) const
+    {
+        const_iterator it(begin());
+        std::advance(it, index);
+        return it;
     }
 };
     

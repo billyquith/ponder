@@ -38,14 +38,9 @@
 #include <camp/enumbuilder.hpp>
 #include <camp/enumget.hpp>
 #include <camp/detail/typeid.hpp>
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/member.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/random_access_index.hpp>
+#include <camp/dictionary.hpp>
 #include <string>
 
-
-namespace bm = boost::multi_index;
 
 namespace camp
 {
@@ -73,7 +68,7 @@ namespace camp
  * bool b2 = metaenum.hasValue(5);        // b2 == false
  *
  * std::string s = metaenum.name(10);     // s == "ten"
- * long l = metaenum.value("two");        // l == 2
+ * EnumValue l = metaenum.value("two");        // l == 2
  *
  * camp::Enum::Pair p = metaenum.pair(0); // p == {"one", one}
  * \endcode
@@ -85,16 +80,18 @@ namespace camp
 class CAMP_API Enum : camp::noncopyable
 {
 public:
+    typedef long EnumValue;
 
     /**
      * \brief Structure defining the <name, value> pairs stored in metaenums
      */
-    struct Pair
-    {
-        std::string name; ///< Name of the pair
-        long value; ///< Value of the pair
+    struct Pair {
+        const std::string &name;
+        EnumValue value;
+        
+        Pair(const std::string &n, EnumValue v) : name(n), value(v) {}
     };
-
+    
 public:
 
     /**
@@ -137,7 +134,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    const Pair& pair(std::size_t index) const;
+    Pair pair(std::size_t index) const;
 
     /**
      * \brief Check if the enum contains a name
@@ -155,7 +152,7 @@ public:
      *
      * \return True if the metaenum contains a pair whose value is \a value
      */
-    bool hasValue(long value) const;
+    bool hasValue(EnumValue value) const;
 
     /**
      * \brief Return the name corresponding to given a value
@@ -166,7 +163,7 @@ public:
      *
      * \throw InvalidEnumValue value doesn't exist in the metaenum
      */
-    const std::string& name(long value) const;
+    const std::string& name(EnumValue value) const;
 
     /**
      * \brief Return the value corresponding to given a name
@@ -177,7 +174,7 @@ public:
      *
      * \throw InvalidEnumName name doesn't exist in the metaenum
      */
-    long value(const std::string& name) const;
+    EnumValue value(const std::string& name) const;
 
     /**
      * \brief Operator == to check equality between two metaenums
@@ -211,22 +208,14 @@ private:
      */
     Enum(const std::string& name);
 
-    struct Id;
-    struct Val;
-    struct Name;
-
-    typedef boost::multi_index_container<Pair,
-        bm::indexed_by<bm::random_access<bm::tag<Id> >,
-                       bm::ordered_unique<bm::tag<Val>, bm::member<Pair, long, &Pair::value> >,
-                       bm::ordered_unique<bm::tag<Name>, bm::member<Pair, std::string, &Pair::name> >
-        >
-    > PairTable;
-
-    typedef PairTable::index<Val>::type ValueIndex;
-    typedef PairTable::index<Name>::type NameIndex;
-
-    std::string m_name; ///< Name of the metaenum
-    PairTable m_pairs; ///< Table of pairs, indexed by their value and name
+    struct EnumCmp {
+        bool operator () (const std::string& a, const std::string& b) const { return a < b; }
+    };
+    
+    typedef Dictionary<std::string, EnumValue, EnumCmp> EnumTable;
+    
+    std::string m_name;     ///< Name of the metaenum
+    EnumTable m_enums;      ///< Table of enums
 };
 
 } // namespace camp

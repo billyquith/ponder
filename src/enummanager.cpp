@@ -99,13 +99,13 @@ const Enum& EnumManager::getById(const std::string& id) const
 const Enum* EnumManager::getByIdSafe(const std::string& id) const
 {
     EnumTable::const_iterator it = m_enums.find(id);
-    return (it == m_enums.end()) ? nullptr : it->second;
+    return it == m_enums.end() ? nullptr : it->second;
 }
 
 //-------------------------------------------------------------------------------------------------
 bool EnumManager::enumExists(const std::string& id) const
 {
-    return (m_enums.find(id) != m_enums.end());
+    return m_enums.find(id) != m_enums.end();
 }
 
 //-------------------------------------------------------------------------------------------------
