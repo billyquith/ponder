@@ -37,6 +37,7 @@
 #include <camp/detail/yesnotype.hpp>
 #include <boost/function_types/is_callable_builtin.hpp>
 #include <boost/function_types/result_type.hpp>
+#include <type_traits>
 
 
 namespace camp
