@@ -6,7 +6,17 @@ Thumbs.db
 ~*
 *.swp
 
-# IDE temporary files
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+*.cmake
+install_manifest.txt
+*.pc
+Testing/**
+
+# VS temporary files
 *.ncb
 *.pdb
 *.suo
@@ -14,6 +24,30 @@ Thumbs.db
 *.lnk
 *.user
 qtc-gdbmacros/
+
+# Xcode
+## Build generated
+build/
+DerivedData
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+
+**/*.build/**
+**/*.xcodeproj/**
+
+## Other
+*.xccheckout
+*.moved-aside
+*.xcuserstate
 
 # LaTeX temporary files
 *.aux
@@ -29,10 +63,11 @@ qtc-gdbmacros/
 *.a
 moc_*
 
-*.cmake
-CMakeFiles/
-CMakeScripts/
+# End products
+*.dll
+*.dylib
+**/camptest
 
 # Auto-generated documentation files
 doc/api/*/*
-
+*.doxy
