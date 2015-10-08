@@ -55,23 +55,8 @@ namespace detail
 template <typename R, typename C>
 struct CallHelper
 {
-    template <typename F>
-    static Value call(F func, C obj) {return func(obj);}
-
-    template <typename F, typename A0>
-    static Value call(F func, C obj, A0 a0) {return func(obj, a0);}
-
-    template <typename F, typename A0, typename A1>
-    static Value call(F func, C obj, A0 a0, A1 a1) {return func(obj, a0, a1);}
-
-    template <typename F, typename A0, typename A1, typename A2>
-    static Value call(F func, C obj, A0 a0, A1 a1, A2 a2) {return func(obj, a0, a1, a2);}
-
-    template <typename F, typename A0, typename A1, typename A2, typename A3>
-    static Value call(F func, C obj, A0 a0, A1 a1, A2 a2, A3 a3) {return func(obj, a0, a1, a2, a3);}
-
-    template <typename F, typename A0, typename A1, typename A2, typename A3, typename A4>
-    static Value call(F func, C obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) {return func(obj, a0, a1, a2, a3, a4);}
+    template <typename F, typename... A>
+    static Value call(F func, C obj, A... args) {return func(obj, args...);}
 };
 
 /*
@@ -80,23 +65,8 @@ struct CallHelper
 template <typename C>
 struct CallHelper<void, C>
 {
-    template <typename F>
-    static Value call(F func, C obj) {func(obj); return Value::nothing;}
-
-    template <typename F, typename A0>
-    static Value call(F func, C obj, A0 a0) {func(obj, a0); return Value::nothing;}
-
-    template <typename F, typename A0, typename A1>
-    static Value call(F func, C obj, A0 a0, A1 a1) {func(obj, a0, a1); return Value::nothing;}
-
-    template <typename F, typename A0, typename A1, typename A2>
-    static Value call(F func, C obj, A0 a0, A1 a1, A2 a2) {func(obj, a0, a1, a2); return Value::nothing;}
-
-    template <typename F, typename A0, typename A1, typename A2, typename A3>
-    static Value call(F func, C obj, A0 a0, A1 a1, A2 a2, A3 a3) {func(obj, a0, a1, a2, a3); return Value::nothing;}
-
-    template <typename F, typename A0, typename A1, typename A2, typename A3, typename A4>
-    static Value call(F func, C obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) {func(obj, a0, a1, a2, a3, a4); return Value::nothing;}
+    template <typename F, typename... A>
+    static Value call(F func, C obj, A... args) {func(obj, args...); return Value::nothing;}
 };
 
 } // namespace detail
