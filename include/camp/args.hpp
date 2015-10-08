@@ -70,54 +70,26 @@ class CAMP_API Args
 public:
 
     /**
-     * \brief Default constructor (empty list of argument)
-     */
-    Args();
-
-    /**
-     * \brief Construct the list with 1 argument
+     * \brief Construct the list with variable arguments.
      *
-     * \param a0 Argument to put in the list
+     * \param N Argument to put in the list.
      */
-    Args(const Value& a0);
-
+    template <typename... V>
+    Args(V... args)
+    {
+        init<std::initializer_list<Value>>({args...});
+    }
+    
     /**
-     * \brief Construct the list with 2 arguments
+     * \brief Initialise the list with an initialisation list.
      *
-     * \param a0 First argument to put in the list
-     * \param a1 Second argument to put in the list
+     * \param il Arguments to put in the list.
      */
-    Args(const Value& a0, const Value& a1);
-
-    /**
-     * \brief Construct the list with 3 arguments
-     *
-     * \param a0 First argument to put in the list
-     * \param a1 Second argument to put in the list
-     * \param a2 Third argument to put in the list
-     */
-    Args(const Value& a0, const Value& a1, const Value& a2);
-
-    /**
-     * \brief Construct the list with 4 arguments
-     *
-     * \param a0 First argument to put in the list
-     * \param a1 Second argument to put in the list
-     * \param a2 Third argument to put in the list
-     * \param a3 Fourth argument to put in the list
-     */
-    Args(const Value& a0, const Value& a1, const Value& a2, const Value& a3);
-
-    /**
-     * \brief Construct the list with 5 arguments
-     *
-     * \param a0 First argument to put in the list
-     * \param a1 Second argument to put in the list
-     * \param a2 Third argument to put in the list
-     * \param a3 Fourth argument to put in the list
-     * \param a4 Fifth argument to put in the list
-     */
-    Args(const Value& a0, const Value& a1, const Value& a2, const Value& a3, const Value& a4);
+    template <typename T>
+    void init(std::initializer_list<Value> il)
+    {
+        m_values = il;
+    }
 
     /**
      * \brief Return the number of arguments contained in the list
@@ -135,7 +107,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    const Value& operator[](std::size_t index) const;
+    const Value& operator [] (std::size_t index) const;
 
     /**
      * \brief Overload of operator + to concatenate a list and a new argument
@@ -144,7 +116,7 @@ public:
      *
      * \return New list
      */
-    Args operator+(const Value& arg) const;
+    Args operator + (const Value& arg) const;
 
     /**
      * \brief Overload of operator += to append a new argument to the list
@@ -153,7 +125,7 @@ public:
      *
      * \return Reference to this
      */
-    Args& operator+=(const Value& arg);
+    Args& operator += (const Value& arg);
 
 public:
 
