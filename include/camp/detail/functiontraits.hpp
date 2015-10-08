@@ -78,27 +78,11 @@ struct FunctionTraits
     enum {isFunction = false};
 };
 
-/// Specialisation for native callable types: function
+/**
+ * Specialization for native callable types (function and pointer-to-member types)
+ */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if< std::is_function<T>::value >::type >
-{
-    enum {isFunction = true};
-    //typedef typename boost::function_types::result_type<T>::type ReturnType;
-    typedef typename std::result_of<T>::type ReturnType;
-};
-
-/// Specialisation for native callable types: pointer-to-method
-template <typename T>
-struct FunctionTraits<T, typename std::enable_if< std::is_member_function_pointer<T>::value >::type >
-{
-    enum {isFunction = true};
-    typedef typename boost::function_types::result_type<T>::type ReturnType;
-//    typedef typename std::result_of<T>::type ReturnType;
-};
-
-/// Specialisation for native callable types: pointer-to-member
-template <typename T>
-struct FunctionTraits<T, typename std::enable_if< std::is_member_object_pointer<T>::value >::type >
+struct FunctionTraits<T, typename std::enable_if<boost::function_types::is_callable_builtin<T>::value >::type>
 {
     enum {isFunction = true};
     typedef typename boost::function_types::result_type<T>::type ReturnType;
@@ -108,7 +92,7 @@ struct FunctionTraits<T, typename std::enable_if< std::is_member_object_pointer<
  * Specialization for functors (classes exporting a result_type type)
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<HasResultType<T>::value >::type>
+    struct FunctionTraits<T, typename std::enable_if<HasResultType<T>::value >::type>
 {
     enum {isFunction = true};
     typedef typename T::result_type ReturnType;
