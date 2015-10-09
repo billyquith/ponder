@@ -31,6 +31,7 @@
 #include <camp/detail/functiontraits.hpp>
 #include <camp/detail/objecttraits.hpp>
 #include <boost/test/unit_test.hpp>
+#include <boost/function_types/function_type.hpp>
 
 
 static void foo() {}
@@ -165,5 +166,23 @@ BOOST_AUTO_TEST_CASE(objectTraits_dataType)
     static_assert(std::is_same<int, camp::detail::ObjectTraits<int **>::DataType>::value, "ObjectTraits<>::DataType failed");
     static_assert(std::is_same<int, camp::detail::ObjectTraits<decltype(intArray)>::DataType>::value, "ObjectTraits<>::DataType failed");
 }
+
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(boost_function)
+{
+    typedef void (*fn1_t)(void);
+    static_assert(std::is_same<void(), boost::function_types::function_type<fn1_t>::type>::value, "boost::function_types problem");
+
+    typedef int (*fn2_t)(int,const char*,float&);
+    static_assert(std::is_same<int(int,const char*,float&), boost::function_types::function_type<fn2_t>::type>::value, "boost::function_types problem");
+    
+    struct TestClass {
+        int foo(float) {return 0;}
+    };
+
+    typedef int (TestClass::*fn3_t)(float);
+    static_assert(std::is_same<int(TestClass&,float), boost::function_types::function_type<fn3_t>::type>::value, "boost::function_types problem");
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
