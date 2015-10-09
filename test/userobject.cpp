@@ -198,6 +198,28 @@ BOOST_AUTO_TEST_CASE(callMultiArgs3)
 //    BOOST_CHECK_EQUAL(object.lastCalled, "meth8");
 //    BOOST_CHECK_EQUAL(object.sum, 7+8-99+77-12+76+45+3);
 //}
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(callArgs1)
+{
+    Call object;
+    camp::UserObject userObject(object);
+    
+    BOOST_CHECK_THROW(userObject.call("cos"), std::exception);
+    
+    BOOST_CHECK_EQUAL(userObject.call("cos", camp::Args(0.0)), camp::Value(std::cos(0.0)));
+//    BOOST_CHECK_EQUAL(userObject.call("cos", 0.0), camp::Value(std::cos(0.0)));
+}
+
+BOOST_AUTO_TEST_CASE(callArgs2)
+{
+    Call object;
+    camp::UserObject userObject(object);
+    
+    BOOST_CHECK_THROW(userObject.call("concat"), std::exception);
+    
+    BOOST_CHECK_EQUAL(userObject.call("concat", camp::Args("one", "two")), camp::Value("onetwo"));
+//    BOOST_CHECK_EQUAL(userObject.call("concat", "one", "two"), camp::Value("onetwo"));
+}
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(assignment)

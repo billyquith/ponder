@@ -143,6 +143,16 @@ namespace UserObjectTest
 //            lastCalled = "meth8";
 //            sum += a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7;
 //        }
+        
+        double cos(double rad)
+        {
+            return std::cos(rad);
+        }
+        
+        std::string concat(const std::string &a, const std::string &b)
+        {
+            return a+b;
+        }
     };
 
     void declare()
@@ -169,7 +179,9 @@ namespace UserObjectTest
         camp::Class::declare<Call>("UserObjectTest::Call")
             .function("meth1", &Call::meth1)
             .function("meth2", &Call::meth2)
-        .function("meth3", &Call::meth3);
+            .function("meth3", &Call::meth3)
+            .function("cos", &Call::cos)
+            .function("concat", &Call::concat);
 //            .function("meth8", &Call::meth8);
     }
 }
