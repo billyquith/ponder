@@ -115,6 +115,35 @@ namespace UserObjectTest
         void set(Composed2 c) {composed = c;}
         Composed2 composed;
     };
+    
+    struct Call
+    {
+        const char *lastCalled;
+        int sum;
+        
+        Call() : lastCalled(nullptr), sum(0) {}
+        
+        void meth1(int a0)
+        {
+            lastCalled = "meth1";
+            sum += a0;
+        }
+        void meth2(int a0, int a1)
+        {
+            lastCalled = "meth2";
+            sum += a0 + a1;
+        }
+        void meth3(int a0,int a1, int a2)
+        {
+            lastCalled = "meth3";
+            sum += a0 + a1 + a2;
+        }
+//        void meth8(int a0,int a1, int a2, int a3, int a4, int a5, int a6, int a7)
+//        {
+//            lastCalled = "meth8";
+//            sum += a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7;
+//        }
+    };
 
     void declare()
     {
@@ -136,6 +165,12 @@ namespace UserObjectTest
             .property("p", &Composed2::get, &Composed2::set);
         camp::Class::declare<Composed1>("UserObjectTest::Composed1")
             .property("p", &Composed1::get, &Composed1::set);
+
+        camp::Class::declare<Call>("UserObjectTest::Call")
+            .function("meth1", &Call::meth1)
+            .function("meth2", &Call::meth2)
+        .function("meth3", &Call::meth3);
+//            .function("meth8", &Call::meth8);
     }
 }
 
@@ -147,5 +182,6 @@ CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyConcreteClass, &UserObjectTest::dec
 CAMP_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare)
 CAMP_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
 CAMP_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
+CAMP_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
 
 #endif // CAMPTEST_USEROBJECT_HPP
