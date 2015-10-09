@@ -187,6 +187,7 @@ BOOST_AUTO_TEST_CASE(callMultiArgs3)
     BOOST_CHECK_EQUAL(object.sum, 7+8-99);
 }
 
+// todo: variadic template:
 //BOOST_AUTO_TEST_CASE(callMultiArgs8)
 //{
 //    Call object;

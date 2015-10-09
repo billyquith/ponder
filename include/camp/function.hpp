@@ -123,6 +123,13 @@ public:
      */
     Value call(const UserObject& object, const Args& args = Args::empty) const;
 
+    // todo: pass args using variadic template:
+    //    template <typename ...A>
+    //    Value call(const UserObject& object, A... a) const
+    //    {
+    //        return call(object, callWithArgs(a...));
+    //    }
+
     /**
      * \brief Accept the visitation of a ClassVisitor
      *
