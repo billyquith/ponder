@@ -184,5 +184,27 @@ BOOST_AUTO_TEST_CASE(boost_function)
     static_assert(std::is_same<int(TestClass&,float), boost::function_types::function_type<fn3_t>::type>::value, "boost::function_types problem");
 }
 
+BOOST_AUTO_TEST_CASE(boost_callable)
+{
+    static_assert( ! boost::function_types::is_callable_builtin<void>::value, "boost::callable problem");
+    static_assert( ! boost::function_types::is_callable_builtin<int>::value, "boost::callable problem");
+    static_assert( ! boost::function_types::is_callable_builtin<char*>::value, "boost::callable problem");
+    
+    struct TestClass {
+        int foo(float) {return 0;}
+    };
+    static_assert(boost::function_types::is_callable_builtin<void()>::value, "boost::callable problem");
+    static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)(float)>::value, "boost::callable problem");
+}
+
+BOOST_AUTO_TEST_CASE(boost_result_type)
+{
+    struct TestClass {
+        int foo(float) {return 0;}
+    };
+    static_assert(std::is_same<int, boost::function_types::result_type<int()>::type>::value, "boost::ret result_type");
+    static_assert(std::is_same<int, boost::function_types::result_type<int(TestClass::*)(void)>::type>::value, "boost::ret result_type");
+    static_assert(std::is_same<float, boost::function_types::result_type<float(TestClass::*)(void)>::type>::value, "boost::ret result_type");
+}
 
 BOOST_AUTO_TEST_SUITE_END()
