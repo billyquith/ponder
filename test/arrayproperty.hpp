@@ -77,7 +77,7 @@ namespace ArrayPropertyTest
         }
 
         bool bools[2];
-        boost::array<int, 3> ints;
+        std::array<int, 3> ints;
         std::vector<std::string> strings;
         std::list<MyType> objects;
     };
@@ -85,6 +85,8 @@ namespace ArrayPropertyTest
     void declare()
     {
         camp::Class::declare<MyType>("ArrayPropertyTest::MyType");
+        
+        static_assert(camp::detail::FunctionTraits<decltype(&MyClass::bools)>::isMOP, "!MOP");
 
         camp::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
             .property("bools", &MyClass::bools)

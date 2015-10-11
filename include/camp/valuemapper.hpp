@@ -220,10 +220,10 @@ struct ValueMapper<std::string>
  * Warning: special case for char[] and const char[], they are strings not arrays
  */
 template <typename T>
-    struct ValueMapper<T, typename enable_if_c< camp::detail::IsArray<T>::value
-                                                  && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, char>::value
-                                                  && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, const char>::value
-                                                >::type >
+struct ValueMapper<T, typename enable_if_c< camp::detail::IsArray<T>::value
+                                            && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, char>::value
+                                            && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, const char>::value
+                                          >::type >
 {
     static const int type = camp::arrayType;
 };

@@ -157,10 +157,10 @@ struct ArrayMapper<T[N]>
 };
 
 /*
- * Specialization of ArrayMapper for boost::array
+ * Specialization of ArrayMapper for std::array
  */
 template <typename T, std::size_t N>
-struct ArrayMapper<boost::array<T, N> >
+struct ArrayMapper<std::array<T, N> >
 {
     typedef T ElementType;
 
@@ -169,29 +169,66 @@ struct ArrayMapper<boost::array<T, N> >
         return false;
     }
 
-    static std::size_t size(const boost::array<T, N>&)
+    static std::size_t size(const std::array<T, N>&)
     {
         return N;
     }
 
-    static const T& get(const boost::array<T, N>& arr, std::size_t index)
+    static const T& get(const std::array<T, N>& arr, std::size_t index)
     {
         return arr[index];
     }
 
-    static void set(boost::array<T, N>& arr, std::size_t index, const T& value)
+    static void set(std::array<T, N>& arr, std::size_t index, const T& value)
     {
         arr[index] = value;
     }
 
-    static void insert(boost::array<T, N>&, std::size_t, const T&)
+    static void insert(std::array<T, N>&, std::size_t, const T&)
     {
     }
 
-    static void remove(boost::array<T, N>&, std::size_t)
+    static void remove(std::array<T, N>&, std::size_t)
     {
     }
 };
+
+/*
+ * Specialization of ArrayMapper for boost::array
+ */
+//template <typename T, std::size_t N>
+//struct ArrayMapper<boost::array<T, N> >
+//{
+//    typedef T ElementType;
+//
+//    static bool dynamic()
+//    {
+//        return false;
+//    }
+//
+//    static std::size_t size(const boost::array<T, N>&)
+//    {
+//        return N;
+//    }
+//
+//    static const T& get(const boost::array<T, N>& arr, std::size_t index)
+//    {
+//        return arr[index];
+//    }
+//
+//    static void set(boost::array<T, N>& arr, std::size_t index, const T& value)
+//    {
+//        arr[index] = value;
+//    }
+//
+//    static void insert(boost::array<T, N>&, std::size_t, const T&)
+//    {
+//    }
+//
+//    static void remove(boost::array<T, N>&, std::size_t)
+//    {
+//    }
+//};
 
 /*
  * Specialization of ArrayMapper for std::vector

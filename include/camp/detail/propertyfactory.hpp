@@ -363,9 +363,16 @@ struct PropertyFactory1
     static Property* get(const std::string& name, F accessor)
     {
         typedef Accessor1<C, ReturnType> AccessorType;
+        
+        dumpType<ReturnType>(name+"_FTR");
+        dumpType<AccessorType>(name+"_AT");
+        dumpType<typename AccessorType::DataType>(name+"_ATDT");
 
         typedef camp_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
         typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
+        
+//        dumpType<ValueMapper::type>(name+"_VMT");
+        dumpType<PropertyType>(name+"_PT");
 
         return new PropertyType(name, AccessorType(accessor));
     }

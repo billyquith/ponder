@@ -96,6 +96,8 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F accessor)
     // Find the factory which will be able to construct a camp::Property from an accessor of type F
     typedef detail::PropertyFactory1<T, F> Factory;
 
+    dumpType<F>(name+"_ACC");
+    
     // Construct and add the metaproperty
     return addProperty(Factory::get(name, accessor));
 }

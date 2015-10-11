@@ -33,7 +33,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/function_types/function_type.hpp>
 
-
 static void foo() {}
 
 static int bar(float) {return 0;}
@@ -49,6 +48,7 @@ struct NonCallable {
 struct Methods
 {
     void foo() {}
+    std::string arr[10];
 };
 
 int intArray[10];
@@ -66,15 +66,17 @@ BOOST_AUTO_TEST_CASE(cpp11)
     foo(); bar(0.f); // to stop warning
     
     static_assert(std::is_function<decltype(foo)>::value, "std::is_function failed");
-    static_assert(std::is_function<void ()>::value, "std::is_function failed");
-    static_assert(!std::is_function<Callable>::value, "std::is_function failed");
-    static_assert(!std::is_function<NonCallable>::value, "std::is_function failed");
+    static_assert(std::is_function<void(void)>::value, "std::is_function failed");
+    static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
+    static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
+    static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");
     
     typedef void (*foo_t)();
     static_assert(std::is_void< std::result_of<decltype(foo)& ()>::type >::value, "std::result_of failed");
     static_assert(std::is_void< std::result_of<decltype(&foo) ()>::type >::value, "std::result_of failed");
     static_assert(std::is_void< std::result_of<foo_t ()>::type >::value, "std::result_of failed");
-    
+    static_assert( std::is_pointer<foo_t>::value, "");
+
     typedef int (*bar_t)(float);
     static_assert(std::is_same< std::result_of<decltype(bar)& (float)>::type, int >::value, "std::result_of failed");
     static_assert(std::is_same< std::result_of<decltype(&bar) (float)>::type, int >::value, "std::result_of failed");
@@ -82,7 +84,7 @@ BOOST_AUTO_TEST_CASE(cpp11)
 }
 
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(functionTraits)
+BOOST_AUTO_TEST_CASE(functionTraits_isFunction)
 {
     static_assert( ! camp::detail::FunctionTraits<int>::isFunction, "FunctionTraits<>::isFunction failed");
     static_assert( ! camp::detail::FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
@@ -106,6 +108,41 @@ BOOST_AUTO_TEST_CASE(functionTraits)
     static_assert(camp::detail::FunctionTraits<void(Methods::*)()>::isFunction, "FunctionTraits<>::isFunction failed");
     void (Methods::*meth_t)() = &Methods::foo;
     static_assert(camp::detail::FunctionTraits<decltype(meth_t)>::isFunction, "FunctionTraits<>::isFunction failed");
+}
+
+BOOST_AUTO_TEST_CASE(functionTraits_type)
+{
+    typedef void (*fn1_t)(void);
+    static_assert(std::is_same<void(), boost::function_types::function_type<fn1_t>::type>::value, "boost::function_types problem");
+    static_assert(std::is_same<void(), camp::detail::FunctionTraits<fn1_t>::type>::value, "camp::detail::FunctionTraits problem");
+    
+    typedef int (*fn2_t)(int,const char*,float&);
+    static_assert(std::is_same<int(int,const char*,float&), boost::function_types::function_type<fn2_t>::type>::value, "boost::function_types problem");
+    static_assert(std::is_same<int(int,const char*,float&), camp::detail::FunctionTraits<fn2_t>::type>::value, "camp::detail::FunctionTraits problem");
+    
+    struct TestClass {
+        int foo(float) {return 0;}
+    };
+
+    typedef int (TestClass::*fn3_t)(float);
+    static_assert(std::is_same<int(TestClass&,float), boost::function_types::function_type<fn3_t>::type>::value, "boost::function_types problem");
+    static_assert(std::is_same<int(TestClass&,float), camp::detail::MethodDetails<fn3_t>::FunctionType>::value, "camp::detail::MethodDetails problem");
+    static_assert(std::is_same<int(TestClass&,float), camp::detail::FunctionTraits<fn3_t>::type>::value, "camp::detail::FunctionTraits problem");
+    
+    
+    
+//    static_assert(std::is_same<int[10], boost::function_types::result_type<decltype(&Methods::arr)>::type>::value, "");
+    
+//    dumpType<decltype(&Methods::arr)>("MA");
+//    dumpType<boost::function_types::result_type<decltype(&Methods::arr)>::type>("MA");
+//    dumpType<camp::detail::RefDetails<decltype(&Methods::arr)>::RefType>("MA");
+    
+//    array_ACC : std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > ClassVisitorTest::MyClass::* [5]
+//    array_FTR : std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > [5]
+//    array_AT : camp::detail::Accessor1<ClassVisitorTest::MyClass, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > (&) [5], void>
+//    array_ATDT : std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > [5]
+//    array_PT : camp::detail::ArrayPropertyImpl<camp::detail::Accessor1<ClassVisitorTest::MyClass, std::__1::basic_string<char, std::__1::char_traits<char>,
+        
 }
 
 //-----------------------------------------------------------------------------
@@ -172,7 +209,7 @@ BOOST_AUTO_TEST_CASE(boost_function)
 {
     typedef void (*fn1_t)(void);
     static_assert(std::is_same<void(), boost::function_types::function_type<fn1_t>::type>::value, "boost::function_types problem");
-
+    
     typedef int (*fn2_t)(int,const char*,float&);
     static_assert(std::is_same<int(int,const char*,float&), boost::function_types::function_type<fn2_t>::type>::value, "boost::function_types problem");
     
@@ -192,9 +229,14 @@ BOOST_AUTO_TEST_CASE(boost_callable)
     
     struct TestClass {
         int foo(float) {return 0;}
+        int i;
+        int arr[5];
     };
     static_assert(boost::function_types::is_callable_builtin<void()>::value, "boost::callable problem");
     static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)(float)>::value, "boost::callable problem");
+    
+    static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)>::value, "boost::callable problem");
+    static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)[5]>::value, "boost::callable problem");
 }
 
 BOOST_AUTO_TEST_CASE(boost_result_type)

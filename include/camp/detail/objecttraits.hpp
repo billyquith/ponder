@@ -106,7 +106,7 @@ struct ObjectTraits<T*>
  * Specialized version for smart pointers
  */
 template <template <typename> class T, typename U>
-    struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
+struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
 {
     enum
     {

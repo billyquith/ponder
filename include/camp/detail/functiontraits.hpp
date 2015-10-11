@@ -35,9 +35,19 @@
 
 
 #include <camp/detail/yesnotype.hpp>
-#include <boost/function_types/is_callable_builtin.hpp>
 #include <boost/function_types/result_type.hpp>
 #include <type_traits>
+
+#include <boost/type_index.hpp> // boost::typeindex::type_id<T>().pretty_name() // human readable
+#include <iostream>
+
+
+//--- debug ---
+template <typename T>
+void dumpType(const std::string& comment = std::string()) {
+    std::cout << comment << (comment.empty() ? "" : " : ") << boost::typeindex::type_id<T>().pretty_name() << std::endl;
+}
+//--- debug ---
 
 
 namespace camp
@@ -58,7 +68,66 @@ struct HasResultType
 
     enum {value = sizeof(check<T>(0)) == sizeof(TypeYes)};
 };
+
+
+template <typename T>
+struct FunctionDetails
+{
+    typedef void ReturnType;
+};
     
+template <typename R, typename ...A>
+struct FunctionDetails<R(*)(A...)>
+{
+    typedef R ReturnType;
+};
+    
+    
+template <typename T>
+struct MethodDetails {};
+
+template <typename C, typename R, typename ...A>
+struct MethodDetails<R(C::*)(A...)>
+{
+    typedef C ClassType;
+    typedef R(FunctionType)(C&, A...);
+    typedef R ReturnType;
+};
+
+template <typename C, typename R, typename ...A>
+struct MethodDetails<R(C::*)(A...) const>
+{
+    typedef C ClassType;
+    typedef R(FunctionType)(C&, A...) const;
+    typedef R ReturnType;
+};
+    
+
+template <typename T>
+struct RefDetails
+{
+    typedef void ReturnType;
+};
+
+template <typename T>
+struct RefDetails<T*>
+{
+    typedef T RefType;
+};
+
+template <typename C, typename T>
+struct RefDetails<T(C::*)>
+{
+    typedef C ClassType;
+    typedef T RefType;
+};
+
+template <typename C, typename T, int S>
+struct RefDetails<T(C::*)[S]>
+{
+    typedef C ClassType;
+    typedef T RefType[S];
+};
 
 /**
  * \class FunctionTraits
@@ -76,24 +145,48 @@ struct HasResultType
 template <typename T, typename E = void>
 struct FunctionTraits
 {
-    enum {isFunction = false};
+    enum {isFunction = false, isMOP = false};
 };
 
 /**
- * Specialization for native callable types (function and pointer-to-member types)
+ * Specialization for native callable types (function and function pointer types)
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<boost::function_types::is_callable_builtin<T>::value >::type>
+struct FunctionTraits<T, typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type >
 {
     enum {isFunction = true};
-    typedef typename boost::function_types::result_type<T>::type ReturnType;
+    typedef typename std::remove_pointer<T>::type type;
+    typedef typename FunctionDetails<T>::ReturnType ReturnType;
+};
+
+/**
+ * Specialization for native callable types (method pointer types)
+ */
+template <typename T>
+struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type >
+{
+    enum {isFunction = true};
+    typedef typename MethodDetails<T>::FunctionType type;
+    typedef typename MethodDetails<T>::ReturnType ReturnType;
+};
+
+/**
+ * Specialization for native callable types (member pointer types)
+ */
+template <typename T>
+struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type >
+{
+    enum {isFunction = true, isMOP = true};
+    
+                    typedef typename boost::function_types::result_type<T>::type ReturnType;
+//                 typedef typename RefDetails<T>::RefType ReturnType;
 };
 
 /**
  * Specialization for functors (classes exporting a result_type type)
  */
 template <typename T>
-    struct FunctionTraits<T, typename std::enable_if<HasResultType<T>::value >::type>
+struct FunctionTraits<T, typename std::enable_if<HasResultType<T>::value >::type>
 {
     enum {isFunction = true};
     typedef typename T::result_type ReturnType;
