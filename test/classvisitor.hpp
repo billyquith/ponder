@@ -113,7 +113,7 @@ namespace ClassVisitorTest
         
         camp::Class::declare<MyClass>("ClassVisitorTest::MyClass")
             .property("simple", &MyClass::simpleProp)
-//            .property("array", &MyClass::arrayProp)
+            .property("array", &MyClass::arrayProp)
             .property("enum", &MyClass::enumProp)
             .property("user", &MyClass::userProp)
             .function("function", &MyClass::function);

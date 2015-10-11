@@ -37,6 +37,9 @@
 #include <camp/detail/yesnotype.hpp>
 #include <boost/function_types/result_type.hpp>
 #include <type_traits>
+#include <array>
+#include <vector>
+#include <list>
 
 #include <boost/type_index.hpp> // boost::typeindex::type_id<T>().pretty_name() // human readable
 #include <iostream>
@@ -90,16 +93,16 @@ template <typename C, typename R, typename ...A>
 struct MethodDetails<R(C::*)(A...)>
 {
     typedef C ClassType;
-    typedef R(FunctionType)(C&, A...);
     typedef R ReturnType;
+    typedef ReturnType(FunctionType)(ClassType&, A...);
 };
 
 template <typename C, typename R, typename ...A>
 struct MethodDetails<R(C::*)(A...) const>
 {
-    typedef C ClassType;
-    typedef R(FunctionType)(C&, A...) const;
-    typedef R ReturnType;
+    typedef const C ClassType;
+    typedef const R ReturnType;
+    typedef ReturnType(FunctionType)(ClassType&, A...) const;
 };
     
 
@@ -119,14 +122,35 @@ template <typename C, typename T>
 struct RefDetails<T(C::*)>
 {
     typedef C ClassType;
-    typedef T RefType;
+    typedef T& RefType;
 };
 
 template <typename C, typename T, int S>
 struct RefDetails<T(C::*)[S]>
 {
     typedef C ClassType;
-    typedef T RefType[S];
+    typedef T (&RefType)[S];
+};
+
+template <typename C, typename T, int S>
+struct RefDetails<std::array<T,S>(C::*)>
+{
+    typedef C ClassType;
+    typedef std::array<T,S>(&RefType);
+};
+
+template <typename C, typename T>
+struct RefDetails<std::vector<T>(C::*)>
+{
+    typedef C ClassType;
+    typedef std::vector<T>(&RefType);
+};
+
+template <typename C, typename T>
+struct RefDetails<std::list<T>(C::*)>
+{
+    typedef C ClassType;
+    typedef std::list<T>(&RefType);
 };
 
 /**
@@ -145,7 +169,7 @@ struct RefDetails<T(C::*)[S]>
 template <typename T, typename E = void>
 struct FunctionTraits
 {
-    enum {isFunction = false, isMOP = false};
+    enum {isFunction = false};
 };
 
 /**
@@ -176,10 +200,10 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type >
 {
-    enum {isFunction = true, isMOP = true};
+    enum {isFunction = true};
     
-                    typedef typename boost::function_types::result_type<T>::type ReturnType;
-//                 typedef typename RefDetails<T>::RefType ReturnType;
+//   typedef typename boost::function_types::result_type<T>::type ReturnType;
+     typedef typename RefDetails<T>::RefType ReturnType;
 };
 
 /**

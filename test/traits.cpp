@@ -32,6 +32,7 @@
 #include <camp/detail/objecttraits.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/function_types/function_type.hpp>
+#include <array>
 
 static void foo() {}
 
@@ -49,6 +50,11 @@ struct Methods
 {
     void foo() {}
     std::string arr[10];
+    int arri[7];
+    std::array<int, 6> arrv;
+    
+    int v;
+    const int& getV() const {return v;}
 };
 
 int intArray[10];
@@ -110,8 +116,32 @@ BOOST_AUTO_TEST_CASE(functionTraits_isFunction)
     static_assert(camp::detail::FunctionTraits<decltype(meth_t)>::isFunction, "FunctionTraits<>::isFunction failed");
 }
 
+template <typename T>
+static void testt(T t)
+{
+    typedef typename boost::function_types::result_type<T>::type atype;
+    typedef typename camp::detail::FunctionTraits<T>::ReturnType btype;
+//    dumpType<atype>("A");
+//    dumpType<btype>("B");
+    
+    static_assert( ! std::is_pointer<atype>::value, "oops");
+    static_assert( ! std::is_pointer<btype>::value, "oops");
+    
+    static_assert( ! std::is_array<atype>::value, "oops");
+    static_assert( ! std::is_array<btype>::value, "oops");
+    
+    static_assert( std::is_compound<atype>::value, "oops");
+    static_assert( std::is_compound<btype>::value, "oops");
+    
+    static_assert( std::is_same<atype, btype>::value, "oops");
+}
+
 BOOST_AUTO_TEST_CASE(functionTraits_type)
 {
+    testt(&Methods::arri);
+    testt(&Methods::arrv);
+    testt(&Methods::getV);
+    
     typedef void (*fn1_t)(void);
     static_assert(std::is_same<void(), boost::function_types::function_type<fn1_t>::type>::value, "boost::function_types problem");
     static_assert(std::is_same<void(), camp::detail::FunctionTraits<fn1_t>::type>::value, "camp::detail::FunctionTraits problem");
@@ -128,21 +158,6 @@ BOOST_AUTO_TEST_CASE(functionTraits_type)
     static_assert(std::is_same<int(TestClass&,float), boost::function_types::function_type<fn3_t>::type>::value, "boost::function_types problem");
     static_assert(std::is_same<int(TestClass&,float), camp::detail::MethodDetails<fn3_t>::FunctionType>::value, "camp::detail::MethodDetails problem");
     static_assert(std::is_same<int(TestClass&,float), camp::detail::FunctionTraits<fn3_t>::type>::value, "camp::detail::FunctionTraits problem");
-    
-    
-    
-//    static_assert(std::is_same<int[10], boost::function_types::result_type<decltype(&Methods::arr)>::type>::value, "");
-    
-//    dumpType<decltype(&Methods::arr)>("MA");
-//    dumpType<boost::function_types::result_type<decltype(&Methods::arr)>::type>("MA");
-//    dumpType<camp::detail::RefDetails<decltype(&Methods::arr)>::RefType>("MA");
-    
-//    array_ACC : std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > ClassVisitorTest::MyClass::* [5]
-//    array_FTR : std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > [5]
-//    array_AT : camp::detail::Accessor1<ClassVisitorTest::MyClass, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > (&) [5], void>
-//    array_ATDT : std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > [5]
-//    array_PT : camp::detail::ArrayPropertyImpl<camp::detail::Accessor1<ClassVisitorTest::MyClass, std::__1::basic_string<char, std::__1::char_traits<char>,
-        
 }
 
 //-----------------------------------------------------------------------------

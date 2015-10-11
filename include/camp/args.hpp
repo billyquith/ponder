@@ -34,6 +34,7 @@
 
 #include <camp/config.hpp>
 #include <vector>
+#include <initializer_list>
 
 
 namespace camp

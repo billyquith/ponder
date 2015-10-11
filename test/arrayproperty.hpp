@@ -86,8 +86,6 @@ namespace ArrayPropertyTest
     {
         camp::Class::declare<MyType>("ArrayPropertyTest::MyType");
         
-        static_assert(camp::detail::FunctionTraits<decltype(&MyClass::bools)>::isMOP, "!MOP");
-
         camp::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
             .property("bools", &MyClass::bools)
             .property("ints", &MyClass::ints)
