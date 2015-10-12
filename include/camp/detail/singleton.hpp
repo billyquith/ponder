@@ -2,13 +2,15 @@
 #define CAMP_DETAIL_SINGLETON_HPP
 
 //--------------------------------------------------------------------------------
-#include <boost/noncopyable.hpp>
+#include "../config.hpp"
 
 namespace camp {
 
 	//--------------------------------------------------------------------------------
 	
-	template <typename T> struct Singleton : public boost::noncopyable {		
+	template <typename T>
+    struct Singleton //: public noncopyable
+    {
 		Singleton() {
 			uintptr_t offs = (uintptr_t)(T*)1 - (uintptr_t)(Singleton<T>*)(T*)1;
 			_instance = (T*)((uintptr_t)this + offs);			

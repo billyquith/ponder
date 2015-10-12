@@ -40,7 +40,6 @@
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
 #include <boost/operators.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <string>
 
 

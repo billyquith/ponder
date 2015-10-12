@@ -35,23 +35,10 @@
 
 
 #include <camp/detail/yesnotype.hpp>
-#include <boost/function_types/result_type.hpp>
 #include <type_traits>
 #include <array>
 #include <vector>
 #include <list>
-
-#include <boost/type_index.hpp> // boost::typeindex::type_id<T>().pretty_name() // human readable
-#include <iostream>
-
-
-//--- debug ---
-template <typename T>
-void dumpType(const std::string& comment = std::string()) {
-    std::cout << comment << (comment.empty() ? "" : " : ") << boost::typeindex::type_id<T>().pretty_name() << std::endl;
-}
-//--- debug ---
-
 
 namespace camp
 {
@@ -129,7 +116,7 @@ template <typename C, typename T, int S>
 struct RefDetails<T(C::*)[S]>
 {
     typedef C ClassType;
-    typedef T (&RefType)[S];
+    typedef T(&RefType)[S];
 };
 
 template <typename C, typename T, int S>

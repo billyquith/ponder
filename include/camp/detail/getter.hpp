@@ -35,8 +35,6 @@
 
 
 #include <camp/userobject.hpp>
-#include <boost/function.hpp>
-
 
 namespace camp
 {
@@ -79,7 +77,7 @@ public:
     /**
      * \brief Construct the getter implementation from a function
      */
-    GetterImpl(boost::function<T (C&)> function);
+    GetterImpl(std::function<T (C&)> function);
 
     /**
      * \see GetterInterface::get
@@ -88,7 +86,7 @@ public:
 
 private:
 
-    boost::function<T (C&)> m_function; ///< Function object storing the actual getter
+    std::function<T (C&)> m_function; ///< Function object storing the actual getter
 };
 
 /**
@@ -123,7 +121,7 @@ public:
      * \param function Function object storing the actual getter
      */
     template <typename C>
-    Getter(boost::function<T (C&)> function);
+    Getter(std::function<T (C&)> function);
 
     /**
      * \brief Get the default value of the getter

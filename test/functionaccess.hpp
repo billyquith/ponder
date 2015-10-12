@@ -33,6 +33,7 @@
 #include <camp/camptype.hpp>
 #include <camp/class.hpp>
 #include <camp/classbuilder.hpp>
+#include <functional>
 
 namespace FunctionAccessTest
 {
@@ -61,9 +62,9 @@ namespace FunctionAccessTest
             // ***** function *****
             .function("f2", &MyClass::f).callable(&MyClass::b1)
             .function("f3", &MyClass::f).callable(&MyClass::b2)
-            .function("f4", &MyClass::f).callable(boost::bind(&MyClass::b1, _1))
+            .function("f4", &MyClass::f).callable(std::bind(&MyClass::b1, std::placeholders::_1))
             .function("f5", &MyClass::f).callable(&MyClass::m_b)
-            .function("f6", &MyClass::f).callable(boost::function<bool (MyClass&)>(&MyClass::m_b))
+            .function("f6", &MyClass::f).callable(std::function<bool (MyClass&)>(&MyClass::m_b))
             ;
     }
 }

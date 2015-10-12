@@ -39,13 +39,14 @@
 #include <camp/detail/enumpropertyimpl.hpp>
 #include <camp/detail/userpropertyimpl.hpp>
 #include <camp/detail/functiontraits.hpp>
-#include <boost/function.hpp>
 
 
 namespace camp
 {
 namespace detail
 {
+using namespace std::placeholders;
+    
 /*
  * Instanciate simple properties
  */
@@ -183,7 +184,7 @@ public:
 
 private:
 
-    boost::function<R (C&)> m_getter;
+    std::function<R (C&)> m_getter;
 };
 
 /*
@@ -222,7 +223,7 @@ public:
 
 private:
 
-    boost::function<R (C&)> m_getter;
+    std::function<R (C&)> m_getter;
 };
 
 /*
@@ -264,8 +265,8 @@ public:
 
 private:
 
-    boost::function<R (C&)> m_getter;
-    boost::function<void (C&, ArgumentType)> m_setter;
+    std::function<R (C&)> m_getter;
+    std::function<void (C&, ArgumentType)> m_setter;
 };
 
 /*
@@ -306,8 +307,8 @@ public:
 
 private:
 
-    boost::function<R (N&)> m_getter1;
-    boost::function<N& (C&)> m_getter2;
+    std::function<R (N&)> m_getter1;
+    std::function<N& (C&)> m_getter2;
 };
 
 /*
@@ -347,8 +348,8 @@ public:
 
 private:
 
-    boost::function<R (N&)> m_getter1;
-    boost::function<N& (C&)> m_getter2;
+    std::function<R (N&)> m_getter1;
+    std::function<N& (C&)> m_getter2;
 };
 
 
@@ -426,8 +427,8 @@ struct PropertyFactory3
         typedef camp_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
         typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
 
-        return new PropertyType(name, AccessorType(boost::bind(boost::type<ReturnType>(), accessor1, boost::bind(boost::type<InnerType>(), accessor3, _1)),
-                                                   boost::bind(boost::type<void>(), accessor2, boost::bind(boost::type<InnerType>(), accessor3, _1), _2)));
+        return new PropertyType(name, AccessorType(std::bind(accessor1, std::bind(accessor3, _1)),
+                                                   std::bind(accessor2, std::bind(accessor3, _1), _2)));
     }
 };
 

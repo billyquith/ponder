@@ -40,7 +40,6 @@
 #include <camp/detail/functiontraits.hpp>
 #include <camp/detail/constructorimpl.hpp>
 #include <camp/detail/propertyfactory.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/function_types/function_type.hpp>
 #include <cassert>
 #include <string>
@@ -214,17 +213,17 @@ public:
     ClassBuilder<T>& function(const std::string& name, F function);
 
     /**
-     * \brief Declare a new function from a boost::function
+     * \brief Declare a new function from a std::function
      *
-     * Overload handling functions of type boost::function.
+     * Overload handling functions of type std::function.
      *
      * \param name Name of the function (must be unique within the metaclass)
-     * \param function Instance of boost::function to bind to the function
+     * \param function Instance of std::function to bind to the function
      *
      * \return Reference to this, in order to chain other calls
      */
     template <typename F>
-    ClassBuilder<T>& function(const std::string& name, boost::function<F> function);
+    ClassBuilder<T>& function(const std::string& name, std::function<F> function);
 
     /**
      * \brief Declare a new function from two functions to compose

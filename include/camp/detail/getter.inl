@@ -42,7 +42,7 @@ GetterInterface<T>::~GetterInterface()
 
 //-------------------------------------------------------------------------------------------------
 template <typename T, typename C>
-GetterImpl<T, C>::GetterImpl(boost::function<T (C&)> function)
+GetterImpl<T, C>::GetterImpl(std::function<T (C&)> function)
     : m_function(function)
 {
 }
@@ -65,7 +65,7 @@ Getter<T>::Getter(const T& defaultValue)
 //-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename C>
-Getter<T>::Getter(boost::function<T (C&)> function)
+Getter<T>::Getter(std::function<T (C&)> function)
     : m_getter(new GetterImpl<T, C>(function))
 {
 }

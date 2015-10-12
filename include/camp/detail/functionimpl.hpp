@@ -36,17 +36,14 @@
 
 #include <camp/function.hpp>
 #include <camp/detail/callhelper.hpp>
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-#include <boost/assign/list_of.hpp>
+#include <vector>
 #include <string>
 
 
-namespace camp
-{
-namespace detail
-{
-using boost::assign::list_of;
+namespace camp {
+namespace detail {
+
+using namespace std::placeholders;
 
 /**
  * \brief Helper function which converts an argument to a C++ type
@@ -98,7 +95,7 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, boost::function<R (C)> function)
+    FunctionImpl(const std::string& name, std::function<R (C)> function)
         : Function(name, mapType<R>())
         , m_function(function)
     {
@@ -116,7 +113,7 @@ protected:
 
 private:
 
-    boost::function<R (C)> m_function; ///< Object containing the actual function to call
+    std::function<R (C)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -130,8 +127,8 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, boost::function<R (C, A0)> function)
-        : Function(name, mapType<R>(), list_of(mapType<A0>()))
+    FunctionImpl(const std::string& name, std::function<R (C, A0)> function)
+    : Function(name, mapType<R>(), std::vector<Type> { mapType<A0>() })
         , m_function(function)
     {
     }
@@ -149,7 +146,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -163,8 +160,8 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, boost::function<R (C, A0, A1)> function)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>()))
+    FunctionImpl(const std::string& name, std::function<R (C, A0, A1)> function)
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>()})
         , m_function(function)
     {
     }
@@ -183,7 +180,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -197,8 +194,8 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, boost::function<R (C, A0, A1, A2)> function)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>())(mapType<A2>()))
+    FunctionImpl(const std::string& name, std::function<R (C, A0, A1, A2)> function)
+    : Function(name, mapType<R>(), std::vector<Type>{mapType<A0>(), mapType<A1>(), mapType<A2>()})
         , m_function(function)
     {
     }
@@ -218,7 +215,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1, A2)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1, A2)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -232,8 +229,8 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, boost::function<R (C, A0, A1, A2, A3)> function)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>())(mapType<A2>())(mapType<A3>()))
+    FunctionImpl(const std::string& name, std::function<R (C, A0, A1, A2, A3)> function)
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
         , m_function(function)
     {
     }
@@ -254,7 +251,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1, A2, A3)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1, A2, A3)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -268,8 +265,8 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, boost::function<R (C, A0, A1, A2, A3, A4)> function)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>())(mapType<A2>())(mapType<A3>())(mapType<A4>()))
+    FunctionImpl(const std::string& name, std::function<R (C, A0, A1, A2, A3, A4)> function)
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
         , m_function(function)
     {
     }
@@ -291,7 +288,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1, A2, A3, A4)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1, A2, A3, A4)> m_function; ///< Object containing the actual function to call
 };
 
 
@@ -309,7 +306,7 @@ public:
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
         : Function(name, mapType<R>())
-        , m_function(boost::bind(function, boost::bind(accessor, _1)))
+        , m_function(std::bind(function, std::bind(accessor, _1)))
     {
     }
 
@@ -325,7 +322,7 @@ protected:
 
 private:
 
-    boost::function<R (C)> m_function; ///< Object containing the actual function to call
+    std::function<R (C)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -341,8 +338,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        : Function(name, mapType<R>(), list_of(mapType<A0>()))
-        , m_function(boost::bind(function, boost::bind(accessor, _1), _2))
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>()})
+        , m_function(std::bind(function, std::bind(accessor, _1), _2))
     {
     }
 
@@ -360,7 +357,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -376,8 +373,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>()))
-        , m_function(boost::bind(function, boost::bind(accessor, _1), _2, _3))
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>()})
+        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3))
     {
     }
 
@@ -396,7 +393,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -412,8 +409,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>())(mapType<A2>()))
-        , m_function(boost::bind(function, boost::bind(accessor, _1), _2, _3, _4))
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
+        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4))
     {
     }
 
@@ -433,7 +430,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1, A2)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1, A2)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -449,8 +446,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>())(mapType<A2>())(mapType<A3>()))
-        , m_function(boost::bind(function, boost::bind(accessor, _1), _2, _3, _4, _5))
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
+        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5))
     {
     }
 
@@ -471,7 +468,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1, A2, A3)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1, A2, A3)> m_function; ///< Object containing the actual function to call
 };
 
 /*
@@ -487,8 +484,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        : Function(name, mapType<R>(), list_of(mapType<A0>())(mapType<A1>())(mapType<A2>())(mapType<A3>())(mapType<A4>()))
-        , m_function(boost::bind(function, boost::bind(accessor, _1), _2, _3, _4, _5, _6))
+    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
+        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5, _6))
     {
     }
 
@@ -510,7 +507,7 @@ protected:
 
 private:
 
-    boost::function<R (C, A0, A1, A2, A3, A4)> m_function; ///< Object containing the actual function to call
+    std::function<R (C, A0, A1, A2, A3, A4)> m_function; ///< Object containing the actual function to call
 };
 
 } // namespace detail

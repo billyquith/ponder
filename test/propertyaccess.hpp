@@ -55,6 +55,8 @@ namespace PropertyAccessTest
 
     void declare()
     {
+        using namespace std::placeholders;
+        
         camp::Class::declare<MyClass>("PropertyAccessTest::MyClass")
 
             // ***** constant value *****
@@ -65,9 +67,9 @@ namespace PropertyAccessTest
             // ***** function *****
             .property("p3", &MyClass::p).readable(&MyClass::b1)
             .property("p4", &MyClass::p).readable(&MyClass::b2)
-            .property("p5", &MyClass::p).readable(boost::bind(&MyClass::b1, _1))
+            .property("p5", &MyClass::p).readable(std::bind(&MyClass::b1, _1))
             .property("p6", &MyClass::p).readable(&MyClass::m_b)
-            .property("p7", &MyClass::p).readable(boost::function<bool (MyClass&)>(&MyClass::m_b))
+            .property("p7", &MyClass::p).readable(std::function<bool (MyClass&)>(&MyClass::m_b))
 
             // ***** implicit - based on the availability of a getter/setter *****
             .property("p8",  &MyClass::get)

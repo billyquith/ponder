@@ -139,7 +139,7 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
 //-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, boost::function<F> function)
+ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, std::function<F> function)
 {
     return addFunction(new detail::FunctionImpl<F>(name, function));
 }
@@ -174,7 +174,7 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 
     // For the special case of Getter<Value>, the ambiguity between both constructors
     // cannot be automatically solved, so let's do it manually
-    typedef typename boost::mpl::if_c<detail::FunctionTraits<U>::isFunction, boost::function<Value (T&)>, Value>::type Type;
+    typedef typename boost::mpl::if_c<detail::FunctionTraits<U>::isFunction, std::function<Value (T&)>, Value>::type Type;
 
     // Add the new tag (override if already exists)
     m_currentTagHolder->m_tags[id] = detail::Getter<Value>(Type(value));
@@ -202,7 +202,7 @@ ClassBuilder<T>& ClassBuilder<T>::readable(F function)
     // Make sure we have a valid property
     assert(m_currentProperty != nullptr);
 
-    m_currentProperty->m_readable = detail::Getter<bool>(boost::function<bool (T&)>(function));
+    m_currentProperty->m_readable = detail::Getter<bool>(std::function<bool (T&)>(function));
 
     return *this;
 }
@@ -227,7 +227,7 @@ ClassBuilder<T>& ClassBuilder<T>::writable(F function)
     // Make sure we have a valid property
     assert(m_currentProperty != nullptr);
 
-    m_currentProperty->m_writable = detail::Getter<bool>(boost::function<bool (T&)>(function));
+    m_currentProperty->m_writable = detail::Getter<bool>(std::function<bool (T&)>(function));
 
     return *this;
 }
@@ -252,7 +252,7 @@ ClassBuilder<T>& ClassBuilder<T>::callable(F function)
     // Make sure we have a valid function
     assert(m_currentFunction != nullptr);
 
-    m_currentFunction->m_callable = detail::Getter<bool>(boost::function<bool (T&)>(function));
+    m_currentFunction->m_callable = detail::Getter<bool>(std::function<bool (T&)>(function));
 
     return *this;
 }

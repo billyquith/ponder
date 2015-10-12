@@ -36,10 +36,7 @@
 
 #include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
-#include <boost/noncopyable.hpp>
 #include <string>
-
-
 #include <map>
 
 namespace camp

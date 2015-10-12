@@ -32,6 +32,7 @@
 #include <camp/detail/objecttraits.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/function_types/function_type.hpp>
+#include <boost/function_types/result_type.hpp>
 #include <array>
 
 static void foo() {}
@@ -116,32 +117,8 @@ BOOST_AUTO_TEST_CASE(functionTraits_isFunction)
     static_assert(camp::detail::FunctionTraits<decltype(meth_t)>::isFunction, "FunctionTraits<>::isFunction failed");
 }
 
-template <typename T>
-static void testt(T t)
-{
-    typedef typename boost::function_types::result_type<T>::type atype;
-    typedef typename camp::detail::FunctionTraits<T>::ReturnType btype;
-//    dumpType<atype>("A");
-//    dumpType<btype>("B");
-    
-    static_assert( ! std::is_pointer<atype>::value, "oops");
-    static_assert( ! std::is_pointer<btype>::value, "oops");
-    
-    static_assert( ! std::is_array<atype>::value, "oops");
-    static_assert( ! std::is_array<btype>::value, "oops");
-    
-    static_assert( std::is_compound<atype>::value, "oops");
-    static_assert( std::is_compound<btype>::value, "oops");
-    
-    static_assert( std::is_same<atype, btype>::value, "oops");
-}
-
 BOOST_AUTO_TEST_CASE(functionTraits_type)
 {
-    testt(&Methods::arri);
-    testt(&Methods::arrv);
-    testt(&Methods::getV);
-    
     typedef void (*fn1_t)(void);
     static_assert(std::is_same<void(), boost::function_types::function_type<fn1_t>::type>::value, "boost::function_types problem");
     static_assert(std::is_same<void(), camp::detail::FunctionTraits<fn1_t>::type>::value, "camp::detail::FunctionTraits problem");

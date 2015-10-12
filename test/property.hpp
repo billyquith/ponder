@@ -111,12 +111,12 @@ namespace PropertyTest
         Inner inner;
         Inner& getInner() {return inner;}
 
-        // ***** properties used with boost::function *****
+        // ***** properties used with std::function *****
         bool p18;
         int p19; int& getP19() {return p19;}
         double p20; double getP20() const {return p20;} void setP20(double d) {p20 = d;}
 
-        // ***** properties used with boost::bind *****
+        // ***** properties used with std::bind *****
         int p21;
         MyEnum p22; MyEnum* getP22() {return &p22;}
         std::string getP23(const std::string& str) const {return str + "23";}
@@ -136,6 +136,8 @@ namespace PropertyTest
 
     void declare()
     {
+        using namespace std::placeholders;
+
         camp::Enum::declare<MyEnum>("PropertyTest::MyEnum")
             .value("Zero", Zero)
             .value("One",  One)
@@ -171,18 +173,18 @@ namespace PropertyTest
             .property("p17", &MyClass::Inner::getP17,
                              &MyClass::Inner::setP17, &MyClass::inner)    // read-only getter + write-only setter
 
-            // ***** boost::function *****
-            .property("p18", boost::function<bool (MyClass&)>(&MyClass::p18))    // pointer to read-write member
-            .property("p19", boost::function<int& (MyClass&)>(&MyClass::getP19)) // read-write getter
-            .property("p20", boost::function<double (MyClass&)>(&MyClass::getP20),
-                             boost::function<void (MyClass&, double)>(&MyClass::setP20)) // read-only getter + write-only setter
+            // ***** std::function *****
+            .property("p18", std::function<bool (MyClass&)>(&MyClass::p18))    // pointer to read-write member
+            .property("p19", std::function<int& (MyClass&)>(&MyClass::getP19)) // read-write getter
+            .property("p20", std::function<double (MyClass&)>(&MyClass::getP20),
+                             std::function<void (MyClass&, double)>(&MyClass::setP20)) // read-only getter + write-only setter
 
-            // ***** boost::bind *****
-            .property("p21", boost::bind(&getP21, _1))                 // non-member read-write getter
-            // TOFIX .property("p22", boost::bind(&MyClass::getP22, _1))        // read-write getter to pointer
-            .property("p23", boost::bind(&MyClass::getP23, _1, "str")) // read-only getter + extra parameter
-            .property("p24", boost::bind(&MyClass::getP24, _1),
-                             boost::bind(&MyClass::setP24, _1, _2))    // read-only getter + write-only setter
+            // ***** std::bind *****
+            .property("p21", std::bind(&getP21, _1))                 // non-member read-write getter
+            // TOFIX .property("p22", std::bind(&MyClass::getP22, _1))        // read-write getter to pointer
+            .property("p23", std::bind(&MyClass::getP23, _1, "str")) // read-only getter + extra parameter
+            .property("p24", std::bind(&MyClass::getP24, _1),
+                             std::bind(&MyClass::setP24, _1, _2))    // read-only getter + write-only setter
             ;
     }
 }

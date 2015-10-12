@@ -78,7 +78,6 @@
 
 namespace camp
 {
-    
     class noncopyable
     {
     protected:
@@ -88,8 +87,7 @@ namespace camp
     private:
         noncopyable( const noncopyable& ) = delete;
         noncopyable& operator=( const noncopyable& ) = delete;
-    };
-    
+    };    
 }
 
 namespace camp_ext
