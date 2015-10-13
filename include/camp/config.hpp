@@ -78,45 +78,47 @@
 
 namespace camp
 {
-    class noncopyable
-    {
-    protected:
-        noncopyable() {}
-        ~noncopyable() {}
-
-    private:
-        noncopyable( const noncopyable& ) = delete;
-        noncopyable& operator=( const noncopyable& ) = delete;
-    };    
-}
-
-namespace camp_ext
+namespace util
 {
-    template <bool B, class T = void>
-    struct enable_if_c {
-        typedef T type;
-    };
-    
-    template <class T>
-    struct enable_if_c<false, T> {};
-    
-    template <class Cond, class T = void>
-    struct enable_if : public enable_if_c<Cond::value, T> {};
-    
-    
-    template<bool C, typename T, typename F>
-    struct if_c
-    {
-        typedef T type;
-    };
-    
-    template<typename T, typename F>
-    struct if_c<false,T,F>
-    {
-        typedef F type;
-    };
-}
 
+class noncopyable
+{
+protected:
+    noncopyable() {}
+    ~noncopyable() {}
+
+private:
+    noncopyable( const noncopyable& ) = delete;
+    noncopyable& operator=( const noncopyable& ) = delete;
+};    
+
+
+template <bool B, class T = void>
+struct enable_if_c {
+    typedef T type;
+};
+
+template <class T>
+struct enable_if_c<false, T> {};
+
+template <class Cond, class T = void>
+struct enable_if : public enable_if_c<Cond::value, T> {};
+
+
+template<bool C, typename T, typename F>
+struct if_c
+{
+    typedef T type;
+};
+
+template<typename T, typename F>
+struct if_c<false,T,F>
+{
+    typedef F type;
+};
+    
+} // util
+} // camp
 
 
 #endif // CAMP_CONFIG_HPP

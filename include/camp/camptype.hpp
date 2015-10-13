@@ -137,7 +137,7 @@ CAMP_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
  * Example:
  *
  * \code
- * class NonCopyable : camp::noncopyable
+ * class NonCopyable : util::noncopyable
  * {
  *     int x;
  * };

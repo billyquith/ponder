@@ -53,7 +53,7 @@ namespace detail
  *
  * \sa Enum
  */
-class CAMP_API EnumManager : public ObserverNotifier, camp::noncopyable
+class CAMP_API EnumManager : public ObserverNotifier, util::noncopyable
 {
 public:
 

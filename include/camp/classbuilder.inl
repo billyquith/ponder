@@ -174,7 +174,7 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 
     // For the special case of Getter<Value>, the ambiguity between both constructors
     // cannot be automatically solved, so let's do it manually
-    typedef typename camp_ext::if_c<detail::FunctionTraits<U>::isFunction, std::function<Value (T&)>, Value>::type Type;
+    typedef typename util::if_c<detail::FunctionTraits<U>::isFunction, std::function<Value (T&)>, Value>::type Type;
 
     // Add the new tag (override if already exists)
     m_currentTagHolder->m_tags[id] = detail::Getter<Value>(Type(value));

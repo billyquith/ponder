@@ -295,7 +295,7 @@ private:
  *
  * A parent object is composed of a <object, property> pair.
  */
-class ParentObject : camp::noncopyable
+class ParentObject : util::noncopyable
 {
 public:
 

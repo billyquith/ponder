@@ -77,7 +77,7 @@ namespace camp
  *
  * \sa Class, EnumBuilder
  */
-class CAMP_API Enum : camp::noncopyable
+class CAMP_API Enum : util::noncopyable
 {
 public:
     typedef long EnumValue;
