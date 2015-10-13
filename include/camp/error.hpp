@@ -35,7 +35,6 @@
 
 
 #include <camp/config.hpp>
-#include <boost/current_function.hpp>
 #include <boost/lexical_cast.hpp>
 #include <exception>
 #include <string>
@@ -121,7 +120,7 @@ private:
 /**
  * \brief Trigger a CAMP error
  */
-#define CAMP_ERROR(error) throw camp::Error::prepare(error, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION)
+#define CAMP_ERROR(error) throw camp::Error::prepare(error, __FILE__, __LINE__, __func__)
 
 
 #endif // CAMP_ERROR_HPP
