@@ -35,19 +35,19 @@
 
 #include <camp/type.hpp>
 #include <camp/valuemapper.hpp>
-#include <boost/variant/static_visitor.hpp>
 
 
-namespace camp
-{
-namespace detail
-{
+namespace camp {
+namespace detail {
+    
 /**
  * \brief Value visitor which converts the stored value to a type T
  */
 template <typename T>
-struct ConvertVisitor : public boost::static_visitor<T>
+struct ConvertVisitor
 {
+    typedef T result_type;
+    
     template <typename U>
     T operator()(const U& value) const
     {
@@ -71,8 +71,10 @@ struct ConvertVisitor : public boost::static_visitor<T>
 /**
  * \brief Binary value visitor which compares two values using operator <
  */
-struct LessThanVisitor : public boost::static_visitor<bool>
+struct LessThanVisitor
 {
+    typedef bool result_type;
+    
     template <typename T, typename U>
     bool operator()(const T&, const U&) const
     {
@@ -97,8 +99,10 @@ struct LessThanVisitor : public boost::static_visitor<bool>
 /**
  * \brief Binary value visitor which compares two values using operator ==
  */
-struct EqualVisitor : public boost::static_visitor<bool>
+struct EqualVisitor
 {
+    typedef bool result_type;
+
     template <typename T, typename U>
     bool operator()(const T&, const U&) const
     {

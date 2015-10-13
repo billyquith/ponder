@@ -59,7 +59,7 @@ class ParentObject;
  *
  * \sa EnumObject
  */
-class CAMP_API UserObject : public boost::totally_ordered<UserObject>
+class CAMP_API UserObject
 {
 public:
 
@@ -188,7 +188,7 @@ public:
      *
      * \return Reference to this
      */
-    UserObject& operator=(const UserObject& other);
+    UserObject& operator = (const UserObject& other);
 
     /**
      * \brief Operator == to compare equality between two user objects
@@ -199,7 +199,9 @@ public:
      *
      * \return True if both user objects are the same, false otherwise
      */
-    bool operator==(const UserObject& other) const;
+    bool operator == (const UserObject& other) const;
+
+    bool operator != (const UserObject& other) const {return !(*this == other);}
 
     /**
      * \brief Operator < to compare two user objects
@@ -208,7 +210,7 @@ public:
      *
      * \return True if this < other
      */
-    bool operator<(const UserObject& other) const;
+    bool operator < (const UserObject& other) const;
 
 public:
 

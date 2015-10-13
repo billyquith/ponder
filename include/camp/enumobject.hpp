@@ -35,7 +35,6 @@
 
 
 #include <camp/enumget.hpp>
-#include <boost/operators.hpp>
 #include <string>
 
 
@@ -49,7 +48,7 @@ namespace camp
  *
  * \sa UserObject
  */
-class CAMP_API EnumObject : boost::totally_ordered<EnumObject>
+class CAMP_API EnumObject
 {
 public:
 
@@ -91,7 +90,7 @@ public:
      *
      * \return True if both enum objects are the same, false otherwise
      */
-    bool operator==(const EnumObject& other) const;
+    bool operator == (const EnumObject& other) const;
 
     /**
      * \brief Operator < to compare two enum objects
@@ -100,7 +99,7 @@ public:
      *
      * \return True if this < other
      */
-    bool operator<(const EnumObject& other) const;
+    bool operator < (const EnumObject& other) const;
 
 private:
 

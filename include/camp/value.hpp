@@ -38,7 +38,6 @@
 #include <camp/userobject.hpp>
 #include <camp/valuemapper.hpp>
 #include <camp/detail/valueimpl.hpp>
-#include <boost/operators.hpp>
 #include <camp/detail/variant.hpp>
 #include <iosfwd>
 #include <string>
@@ -72,7 +71,7 @@ namespace camp
  *
  * \sa ValueVisitor, camp_ext::ValueMapper
  */
-class CAMP_API Value : boost::totally_ordered<Value>
+class CAMP_API Value
 {
 public:
 

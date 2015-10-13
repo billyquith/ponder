@@ -34,9 +34,6 @@
 #define CAMP_VALUEVISITOR_HPP
 
 
-#include <boost/variant/static_visitor.hpp>
-
-
 namespace camp
 {
 /**
@@ -102,9 +99,10 @@ namespace camp
  * \endcode
  */
 template <typename T = void>
-class ValueVisitor : public boost::static_visitor<T>
+class ValueVisitor
 {
-
+public:
+    using result_type = T;
 };
 
 } // namespace camp
