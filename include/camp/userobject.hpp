@@ -39,6 +39,7 @@
 #include <camp/errors.hpp>
 #include <camp/detail/objecttraits.hpp>
 #include <camp/detail/objectholder.hpp>
+#include <camp/util.hpp>
 #include <string>
 
 

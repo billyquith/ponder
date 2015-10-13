@@ -34,8 +34,8 @@
 #define CAMP_DETAIL_ENUMMANAGER_HPP
 
 
-#include <camp/config.hpp>
 #include <camp/detail/observernotifier.hpp>
+#include <camp/util.hpp>
 #include <string>
 #include <map>
 
