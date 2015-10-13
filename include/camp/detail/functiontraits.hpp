@@ -89,7 +89,7 @@ struct MethodDetails<R(C::*)(A...) const>
 {
     typedef const C ClassType;
     typedef const R ReturnType;
-    typedef ReturnType(FunctionType)(ClassType&, A...) const;
+    typedef ReturnType(FunctionType)(ClassType const&, A...);
 };
     
 

@@ -130,7 +130,7 @@ template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
 {
     // Get a uniform function type from F, whatever it really is
-    typedef typename boost::function_types::function_type<F>::type Signature;
+    typedef typename detail::FunctionTraits<F>::type Signature;
 
     // Construct and add the metafunction
     return addFunction(new detail::FunctionImpl<Signature>(name, function));
@@ -150,8 +150,8 @@ template <typename F1, typename F2>
 ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F1 function1, F2 function2)
 {
     // Get uniform function types from F1 and F2, whatever they really are
-    typedef typename boost::function_types::function_type<F1>::type Signature1;
-    typedef typename boost::function_types::function_type<F2>::type Signature2;
+    typedef typename detail::FunctionTraits<F1>::type Signature1;
+    typedef typename detail::FunctionTraits<F2>::type Signature2;
 
     // Construct and add the metafunction
     return addFunction(new detail::FunctionImpl<Signature1, Signature2>(name, function1, function2));
@@ -174,7 +174,7 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 
     // For the special case of Getter<Value>, the ambiguity between both constructors
     // cannot be automatically solved, so let's do it manually
-    typedef typename boost::mpl::if_c<detail::FunctionTraits<U>::isFunction, std::function<Value (T&)>, Value>::type Type;
+    typedef typename camp_ext::if_c<detail::FunctionTraits<U>::isFunction, std::function<Value (T&)>, Value>::type Type;
 
     // Add the new tag (override if already exists)
     m_currentTagHolder->m_tags[id] = detail::Getter<Value>(Type(value));

@@ -102,6 +102,19 @@ namespace camp_ext
     
     template <class Cond, class T = void>
     struct enable_if : public enable_if_c<Cond::value, T> {};
+    
+    
+    template<bool C, typename T, typename F>
+    struct if_c
+    {
+        typedef T type;
+    };
+    
+    template<typename T, typename F>
+    struct if_c<false,T,F>
+    {
+        typedef F type;
+    };
 }
 
 

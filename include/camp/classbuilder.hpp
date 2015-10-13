@@ -40,7 +40,6 @@
 #include <camp/detail/functiontraits.hpp>
 #include <camp/detail/constructorimpl.hpp>
 #include <camp/detail/propertyfactory.hpp>
-#include <boost/function_types/function_type.hpp>
 #include <cassert>
 #include <string>
 
