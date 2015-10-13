@@ -33,28 +33,15 @@
 #ifndef CAMP_VALUE_HPP
 #define CAMP_VALUE_HPP
 
-
 #include <camp/type.hpp>
 #include <camp/enumobject.hpp>
 #include <camp/userobject.hpp>
 #include <camp/valuemapper.hpp>
 #include <camp/detail/valueimpl.hpp>
 #include <boost/operators.hpp>
+#include <camp/detail/variant.hpp>
 #include <iosfwd>
 #include <string>
-
-// Visual C++ produces some unnecessary warnings with boost/variant.hpp
-#ifdef _MSC_VER
-    #pragma warning(push)
-    #pragma warning(disable: 4100) // "assignment operator could not be generated"
-    #pragma warning(disable: 4512) // "unreferenced formal parameter"
-#endif
-
-#include <boost/variant.hpp>
-
-#ifdef _MSC_VER
-    #pragma warning(pop)
-#endif
 
 
 namespace camp
@@ -202,7 +189,7 @@ public:
 
 private:
 
-    typedef boost::variant<NoType, bool, long, double, std::string, EnumObject, UserObject> Variant;
+    typedef camp::util::variant<NoType, bool, long, double, std::string, EnumObject, UserObject> Variant;
 
     Variant m_value; ///< Stored value
     Type m_type; ///< CAMP type of the value

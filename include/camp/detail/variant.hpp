@@ -26,8 +26,8 @@
 //    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#ifndef MAPBOX_UTIL_VARIANT_HPP
-#define MAPBOX_UTIL_VARIANT_HPP
+#ifndef CAMP_UTIL_VARIANT_HPP
+#define CAMP_UTIL_VARIANT_HPP
 
 #include <utility>
 #include <typeinfo>
@@ -38,7 +38,7 @@
 #include <iosfwd>
 #include <string>
 
-#include "recursive_wrapper.hpp"
+#include "variant_recursive_wrapper.hpp"
 
 #ifdef _MSC_VER
  // http://msdn.microsoft.com/en-us/library/z8y1yy88.aspx
@@ -62,7 +62,7 @@
 // translates to 100
 #define VARIANT_VERSION (VARIANT_MAJOR_VERSION*100000) + (VARIANT_MINOR_VERSION*100) + (VARIANT_PATCH_VERSION)
 
-namespace mapbox { namespace util {
+namespace camp { namespace util {
 
 // static visitor
 template <typename R = void>
@@ -861,4 +861,4 @@ ResultType const& get(T const& var)
 
 }}
 
-#endif  // MAPBOX_UTIL_VARIANT_HPP
+#endif  // CAMP_UTIL_VARIANT_HPP

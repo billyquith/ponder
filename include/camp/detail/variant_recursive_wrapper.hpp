@@ -26,12 +26,12 @@
 //    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#ifndef MAPBOX_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
-#define MAPBOX_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
+#ifndef CAMP_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
+#define CAMP_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
 
 #include <utility>
 
-namespace mapbox { namespace util {
+namespace camp { namespace util {
 
 template <typename T>
 class recursive_wrapper
@@ -152,4 +152,4 @@ inline void swap(recursive_wrapper<T>& lhs, recursive_wrapper<T>& rhs) noexcept
 
 }}
 
-#endif // MAPBOX_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
+#endif // CAMP_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
