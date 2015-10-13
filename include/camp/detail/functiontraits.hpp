@@ -187,10 +187,8 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type >
 {
-    enum {isFunction = true};
-    
-//   typedef typename boost::function_types::result_type<T>::type ReturnType;
-     typedef typename RefDetails<T>::RefType ReturnType;
+    enum {isFunction = true};    
+    typedef typename RefDetails<T>::RefType ReturnType;
 };
 
 /**

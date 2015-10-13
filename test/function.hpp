@@ -105,8 +105,8 @@ namespace FunctionTest
         const Inner& getInner() const {return inner;}
         Inner* innerPtr;
         const Inner* getInnerPtr() const {return innerPtr;}
-        boost::shared_ptr<Inner> innerSmartPtr;
-        const boost::shared_ptr<Inner> getInnerSmartPtr() {return innerSmartPtr;}
+        std::shared_ptr<Inner> innerSmartPtr;
+        const std::shared_ptr<Inner> getInnerSmartPtr() {return innerSmartPtr;}
 
         int f20(int x) {return x;}
         int f21(int x, int y) {return x + y;}
