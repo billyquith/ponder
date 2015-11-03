@@ -335,8 +335,8 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_float)
 BOOST_AUTO_TEST_CASE(lexical_cast_to_double)
 {
     BOOST_CHECK_EQUAL(camp::util::convert<double>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(camp::util::convert<double>(std::string("100.25")), 100.25f);
-    BOOST_CHECK_EQUAL(camp::util::convert<double>(std::string("-27.75")), -27.75f);
+    BOOST_CHECK_EQUAL(camp::util::convert<double>(std::string("100.25")), 100.25);
+    BOOST_CHECK_EQUAL(camp::util::convert<double>(std::string("-27.75")), -27.75);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
