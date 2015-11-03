@@ -68,6 +68,8 @@ set(CAMP_TEST_SRCS
     propertyaccess.hpp
     functionaccess.cpp
     functionaccess.hpp
+    traits.hpp
+    traits.cpp
 )
 
 # find Boost
