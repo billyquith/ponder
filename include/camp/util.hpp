@@ -33,47 +33,114 @@
 #ifndef CAMP_UTIL_HPP
 #define CAMP_UTIL_HPP
 
+#include "format.h"
 
 namespace camp
 {
+
 namespace util
 {
+    
+    class noncopyable
+    {
+    protected:
+        noncopyable() {}
+        ~noncopyable() {}
+        
+    private:
+        noncopyable( const noncopyable& ) = delete;
+        noncopyable& operator=( const noncopyable& ) = delete;
+    };
+    
+    
+    template <bool B, class T = void>
+    struct enable_if_c {
+        typedef T type;
+    };
+    
+    template <class T>
+    struct enable_if_c<false, T> {};
+    
+    template <class Cond, class T = void>
+    struct enable_if : public enable_if_c<Cond::value, T> {};
+    
+    
+    template<bool C, typename T, typename F>
+    struct if_c
+    {
+        typedef T type;
+    };
+    
+    template<typename T, typename F>
+    struct if_c<false,T,F>
+    {
+        typedef F type;
+    };
+}
 
-class noncopyable
+namespace detail
 {
-protected:
-    noncopyable() {}
-    ~noncopyable() {}
+    class bad_conversion : std::exception {};
+    
+    template <typename T, typename U, typename O = void>
+    struct convert
+    {
+        T operator () (const U& from)
+        {
+            const T result = static_cast<T>(from);
+            return result;
+        }
+    };
+    
+    template <typename U>
+    std::string to_str(U from)
+    {
+        return fmt::format("{}", from);
+    }
+    
+    template <typename U>
+    struct convert <std::string, U>
+    {
+        std::string operator () (const U& from)
+        {
+            return detail::to_str(from);
+        }
+    };
+    
+    bool conv(const std::string& from, bool& to);
+    bool conv(const std::string& from, char& to);
+    bool conv(const std::string& from, unsigned char& to);
+    bool conv(const std::string& from, short& to);
+    bool conv(const std::string& from, unsigned short& to);
+    bool conv(const std::string& from, int& to);
+    bool conv(const std::string& from, unsigned int& to);
+    bool conv(const std::string& from, long long& to);
+    bool conv(const std::string& from, unsigned long long& to);
+    bool conv(const std::string& from, float& to);
+    bool conv(const std::string& from, double& to);
+    
+    template <typename T>
+    struct convert <T, std::string,
+        typename util::enable_if_c<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
+    {
+        T operator () (const std::string& from)
+        {
+            T result;
+            conv(from, result);
+            return result;
+        }
+    };
 
-private:
-    noncopyable( const noncopyable& ) = delete;
-    noncopyable& operator=( const noncopyable& ) = delete;
-};    
+}
 
-
-template <bool B, class T = void>
-struct enable_if_c {
-    typedef T type;
-};
-
-template <class T>
-struct enable_if_c<false, T> {};
-
-template <class Cond, class T = void>
-struct enable_if : public enable_if_c<Cond::value, T> {};
-
-
-template<bool C, typename T, typename F>
-struct if_c
+namespace util
 {
-    typedef T type;
-};
-
-template<typename T, typename F>
-struct if_c<false,T,F>
+    
+template <typename T, typename U>
+T convert(const U& from)
 {
-    typedef F type;
-};
+    return detail::convert<T,U>()(from);
+}
     
 } // util
 } // camp

@@ -25,7 +25,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "format.h"
+#include <camp/format.h>
 
 #include <string.h>
 

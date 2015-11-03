@@ -29,74 +29,99 @@
 
 
 #include <camp/util.hpp>
-#include "format.h"
 
-
-namespace camp
-{
-namespace util
-{
-
-//-------------------------------------------------------------------------------------------------
 // Convert to string:
+//  #include "format.h"
 //  http://zverovich.net/2013/09/07/integer-to-string-conversion-in-cplusplus.html
-    
-//bool, long, double, std::string, EnumObject, UserObject
 
-std::string conv_str(bool from)
-{
-    return fmt::format("{}", from);
-}
-
-std::string conv_str(int from)
-{
-    return fmt::format("{}", from);
-}
-
-std::string conv_str(long from)
-{
-    return fmt::format("{}", from);
-}
-
-std::string conv_str(unsigned long from)
-{
-    return fmt::format("{}", from);
-}
-
-std::string conv_str(double from)
-{
-    return fmt::format("{}", from);
-}
-
-//-------------------------------------------------------------------------------------------------
-
-int conv_int(bool from)
-{
-    return from ? 1 : 0;
-}
-
-//-------------------------------------------------------------------------------------------------
 // Convert from string:
 //  http://tinodidriksen.com/2010/02/16/cpp-convert-string-to-int-speed/
 
-bool conv_bool(std::string const& from)
+namespace camp
+{
+namespace detail
+{
+
+//-------------------------------------------------------------------------------------------------
+// parse string
+
+bool conv(const std::string& from, char& to)
+{
+    to = std::atoi(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, unsigned char& to)
+{
+    to = std::atoi(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, short& to)
+{
+    to = std::atoi(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, unsigned short& to)
+{
+    to = std::atoi(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, int& to)
+{
+    to = std::atoi(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, unsigned int& to)
+{
+    to = std::atoi(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, long long& to)
+{
+    to = std::atoll(from.c_str());
+    return true;
+}
+
+bool conv(const std::string& from, unsigned long long& to)
+{
+    to = std::atoll(from.c_str());
+    return true;
+}
+    
+bool conv(const std::string& from, bool& to)
 {
     const char *s = from.c_str();
     if (strcasecmp(s, "1")==0 || strcasecmp(s, "true")==0)
+    {
+        to = true;
         return true;
-    if (strcasecmp(s, "0")==0 || strcasecmp(s, "false")==0)
-        return false;
-    throw bad_lexical_cast();
+    }
+    else if (strcasecmp(s, "0")==0 || strcasecmp(s, "false")==0)
+    {
+        to = false;
+        return true;
+    }
+    return false;
 }
 
-    int conv_int(std::string const& from) { return 0; }
-    long conv_long(std::string const& from) { return 0; }
-    unsigned long conv_ulong(std::string const& from) { return 0; }
-    double conv_double(std::string const& from) { return 0.0; }
+bool conv(const std::string& from, float& to)
+{
+    to = std::atof(from.c_str());
+    return true;
+}
 
-// bool
-    
+bool conv(const std::string& from, double& to)
+{
+    to = std::atof(from.c_str());
+    return true;
+}
 
+//-------------------------------------------------------------------------------------------------
     
 } // namespace util
 } // namespace camp
