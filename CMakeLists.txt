@@ -49,7 +49,7 @@ set(CAMP_SRCS
     ${SRC_SOURCE}
 )
 
-# find Boost
+# find Boost - for unit testing
 find_package(Boost 1.38.0 REQUIRED)
 
 # include files search paths
@@ -66,7 +66,7 @@ configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/camp/v
 add_library(camp ${CAMP_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-#set_property(TARGET camp PROPERTY CXX_STANDARD 11)
+set_property(TARGET camp PROPERTY CXX_STANDARD 11)
 
 # define the export macro
 if(BUILD_SHARED_LIBS)
