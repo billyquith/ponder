@@ -35,7 +35,7 @@
 
 
 #include <camp/config.hpp>
-#include <boost/lexical_cast.hpp>
+#include <camp/util.hpp>
 #include <exception>
 #include <string>
 
