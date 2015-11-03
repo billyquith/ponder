@@ -66,7 +66,7 @@ T Value::to() const
     {
         return detail::ValueTo<T>::convert(*this);
     }
-    catch (boost::bad_lexical_cast&)
+    catch (camp::util::bad_conversion&)
     {
         CAMP_ERROR(BadType(type(), mapType<T>()));
     }

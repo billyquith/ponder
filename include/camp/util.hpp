@@ -76,37 +76,49 @@ namespace util
     {
         typedef F type;
     };
-}
+    
+    
+    class bad_conversion : std::exception {};
+    
+} // util
 
 namespace detail
 {
-    class bad_conversion : std::exception {};
-    
-    template <typename T, typename U, typename O = void>
+    template <typename T, typename F, typename O = void>
     struct convert
     {
-        T operator () (const U& from)
+        T operator () (const F& from)
         {
             const T result = static_cast<T>(from);
             return result;
         }
     };
     
-    template <typename U>
-    std::string to_str(U from)
+    template <typename F>
+    std::string to_str(F from)
     {
         return fmt::format("{}", from);
     }
     
-    template <typename U>
-    struct convert <std::string, U>
+    template <typename S>
+    struct convert <std::string, S>
     {
-        std::string operator () (const U& from)
+        std::string operator () (const S& from)
         {
             return detail::to_str(from);
         }
     };
-    
+
+    template <>
+    struct convert <std::string, bool>
+    {
+        std::string operator () (const bool& from)
+        {
+            static const std::string t("1"), f("0");
+            return from ? t : f;
+        }
+    };
+
     bool conv(const std::string& from, bool& to);
     bool conv(const std::string& from, char& to);
     bool conv(const std::string& from, unsigned char& to);
@@ -114,6 +126,8 @@ namespace detail
     bool conv(const std::string& from, unsigned short& to);
     bool conv(const std::string& from, int& to);
     bool conv(const std::string& from, unsigned int& to);
+    bool conv(const std::string& from, long& to);
+    bool conv(const std::string& from, unsigned long& to);
     bool conv(const std::string& from, long long& to);
     bool conv(const std::string& from, unsigned long long& to);
     bool conv(const std::string& from, float& to);
@@ -121,17 +135,20 @@ namespace detail
     
     template <typename T>
     struct convert <T, std::string,
-        typename util::enable_if_c<std::is_integral<T>::value || std::is_floating_point<T>::value>::type>
+        typename util::enable_if_c<(std::is_integral<T>::value || std::is_floating_point<T>::value)
+                                   && !std::is_const<T>::value
+                                   && !std::is_reference<T>::value >::type >
     {
         T operator () (const std::string& from)
         {
             T result;
-            conv(from, result);
+            if (!conv(from, result))
+                throw util::bad_conversion();
             return result;
         }
     };
 
-}
+} // detail
 
 namespace util
 {

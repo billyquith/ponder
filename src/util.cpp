@@ -44,52 +44,97 @@ namespace detail
 
 //-------------------------------------------------------------------------------------------------
 // parse string
+    
+template <typename T>
+static bool parse_integer(const std::string& from, T& to)
+{
+    try {
+        const long p = std::stol(from.c_str());
+        to = static_cast<T>(p);
+    } catch (std::logic_error&) {
+        return false;
+    }
+    return true;
+}
 
+template <typename T>
+static bool parse_float(const std::string& from, T& to)
+{
+    try {
+        const long p = std::stof(from.c_str());
+        to = static_cast<T>(p);
+    } catch (std::logic_error&) {
+        return false;
+    }
+    return true;
+}
+    
 bool conv(const std::string& from, char& to)
 {
-    to = std::atoi(from.c_str());
-    return true;
+    if (from.length() == 1)
+    {
+        to = from[0];
+        return true;
+    }
+    return false;
 }
 
 bool conv(const std::string& from, unsigned char& to)
 {
-    to = std::atoi(from.c_str());
+    char r;
+    if (!conv(from,r))
+        return false;
+    to = r;
     return true;
 }
 
 bool conv(const std::string& from, short& to)
 {
-    to = std::atoi(from.c_str());
-    return true;
+    return parse_integer(from, to);
 }
 
 bool conv(const std::string& from, unsigned short& to)
 {
-    to = std::atoi(from.c_str());
-    return true;
+    return parse_integer(from, to);
 }
 
 bool conv(const std::string& from, int& to)
 {
-    to = std::atoi(from.c_str());
-    return true;
+    return parse_integer(from, to);
 }
 
 bool conv(const std::string& from, unsigned int& to)
 {
-    to = std::atoi(from.c_str());
-    return true;
+    return parse_integer(from, to);
+}
+
+bool conv(const std::string& from, long& to)
+{
+    return parse_integer(from, to);
+}
+
+bool conv(const std::string& from, unsigned long& to)
+{
+    return parse_integer(from, to);
 }
 
 bool conv(const std::string& from, long long& to)
 {
-    to = std::atoll(from.c_str());
+    try {
+        to = std::stoll(from.c_str());
+    } catch (std::logic_error&) {
+        return false;
+    }
     return true;
 }
 
 bool conv(const std::string& from, unsigned long long& to)
 {
-    to = std::atoll(from.c_str());
+    try {
+        to = std::stoull(from.c_str());
+    } catch (std::logic_error&) {
+        return false;
+    }
     return true;
 }
     
@@ -111,13 +156,21 @@ bool conv(const std::string& from, bool& to)
 
 bool conv(const std::string& from, float& to)
 {
-    to = std::atof(from.c_str());
+    try {
+        to = std::stof(from.c_str());
+    } catch (std::logic_error&) {
+        return false;
+    }
     return true;
 }
 
 bool conv(const std::string& from, double& to)
 {
-    to = std::atof(from.c_str());
+    try {
+        to = std::stod(from.c_str());
+    } catch (std::logic_error&) {
+        return false;
+    }
     return true;
 }
 

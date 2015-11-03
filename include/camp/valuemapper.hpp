@@ -39,7 +39,7 @@
 #include <camp/userobject.hpp>
 #include <camp/arraymapper.hpp>
 #include <camp/errors.hpp>
-#include <boost/lexical_cast.hpp>
+#include <camp/util.hpp>
 
 
 namespace camp_ext
@@ -151,7 +151,7 @@ struct ValueMapper<bool>
     static bool from(bool source)                    {return source;}
     static bool from(long source)                    {return source != 0;}
     static bool from(double source)                  {return source != 0.;}
-    static bool from(const std::string& source)      {return boost::lexical_cast<bool>(source);}
+    static bool from(const std::string& source)      {return camp::util::convert<bool>(source);}
     static bool from(const camp::EnumObject& source) {return source.value() != 0;}
     static bool from(const camp::UserObject& source) {return source.pointer() != nullptr;}
 };
@@ -171,7 +171,7 @@ struct ValueMapper<T, typename camp::util::enable_if_c< std::is_integral<T>::val
     static T from(bool source)                    {return static_cast<T>(source);}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
-    static T from(const std::string& source)      {return boost::lexical_cast<T>(source);}
+    static T from(const std::string& source)      {return camp::util::convert<T>(source);}
     static T from(const camp::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const camp::UserObject&)        {CAMP_ERROR(camp::BadType(camp::userType, camp::intType));}
 };
@@ -191,7 +191,7 @@ struct ValueMapper<T, typename camp::util::enable_if_c< std::is_floating_point<T
     static T from(bool source)                    {return static_cast<T>(source);}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
-    static T from(const std::string& source)      {return boost::lexical_cast<T>(source);}
+    static T from(const std::string& source)      {return camp::util::convert<T>(source);}
     static T from(const camp::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const camp::UserObject&)        {CAMP_ERROR(camp::BadType(camp::userType, camp::realType));}
 };
@@ -205,9 +205,9 @@ struct ValueMapper<std::string>
     static const int type = camp::stringType;
     static const std::string& to(const std::string& source) {return source;}
 
-    static std::string from(bool source)                    {return boost::lexical_cast<std::string>(source);}
-    static std::string from(long source)                    {return boost::lexical_cast<std::string>(source);}
-    static std::string from(double source)                  {return boost::lexical_cast<std::string>(source);}
+    static std::string from(bool source)                    {return camp::util::convert<std::string>(source);}
+    static std::string from(long source)                    {return camp::util::convert<std::string>(source);}
+    static std::string from(double source)                  {return camp::util::convert<std::string>(source);}
     static std::string from(const std::string& source)      {return source;}
     static std::string from(const camp::EnumObject& source) {return source.name();}
     static std::string from(const camp::UserObject&)        {CAMP_ERROR(camp::BadType(camp::userType, camp::stringType));}
@@ -275,7 +275,7 @@ struct ValueMapper<T, typename camp::util::enable_if_c< std::is_enum<T>::value
             return static_cast<T>(metaenum->value(source));
 
         // Then try as a number
-        long value = boost::lexical_cast<long>(source);
+        long value = camp::util::convert<long>(source);
         if (!metaenum || metaenum->hasValue(value))
             return static_cast<T>(value);
 

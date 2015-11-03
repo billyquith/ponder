@@ -34,7 +34,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/function_types/function_type.hpp>
 #include <boost/function_types/result_type.hpp>
-#include <boost/lexical_cast.hpp>
 #include <array>
 
 static void foo() {}
@@ -247,31 +246,28 @@ BOOST_AUTO_TEST_CASE(boost_result_type)
 BOOST_AUTO_TEST_CASE(lexical_cast_to_string)
 {
     const unsigned int ui = 234;
-    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(ui), camp::util::convert<std::string>(ui));
-    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(ui), "234");
+    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(ui), std::to_string(ui));
     
     const int i = -17;
-    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(i), camp::util::convert<std::string>(i));
-    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(i), "-17");
+    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(i), std::to_string(i));
     
     const float f = 108.75f;
-    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(f), camp::util::convert<std::string>(f));
     BOOST_CHECK_EQUAL(camp::util::convert<std::string>(f), "108.75");
-    
+
+    const double d = 108.125;
+    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(d), "108.125");
+
     const bool bt = true, bf = false;
-    //BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(bt), camp::util::convert<std::string>(bt));    // "1" != "true"
-    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(bt), "true");
-    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(bf), "false");
+    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(bt), "1");
+    BOOST_CHECK_EQUAL(camp::util::convert<std::string>(bf), "0");
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_bool)
 {
     const std::string b1("1");
-    BOOST_CHECK_EQUAL(boost::lexical_cast<bool>(b1), camp::util::convert<bool>(b1));
     BOOST_CHECK_EQUAL(camp::util::convert<bool>(b1), true);
 
     const std::string b2("0");
-    BOOST_CHECK_EQUAL(boost::lexical_cast<bool>(b2), camp::util::convert<bool>(b2));
     BOOST_CHECK_EQUAL(camp::util::convert<bool>(b2), false);
 
     const std::string bt("true");
@@ -283,13 +279,15 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_bool)
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_char)
 {
-    BOOST_CHECK_EQUAL(camp::util::convert<char>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(camp::util::convert<char>(std::string("27")), 27);
-    BOOST_CHECK_EQUAL(camp::util::convert<char>(std::string("-27")), -27);
+    BOOST_CHECK_EQUAL(camp::util::convert<char>(std::string("0")), '0');
+    BOOST_CHECK_EQUAL(camp::util::convert<char>(std::string("g")), 'g');
+    BOOST_CHECK_THROW(camp::util::convert<char>(std::string()), camp::util::bad_conversion);
+    BOOST_CHECK_THROW(camp::util::convert<char>(std::string("27")), camp::util::bad_conversion);
     
-    BOOST_CHECK_EQUAL(camp::util::convert<unsigned char>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(camp::util::convert<unsigned char>(std::string("27")), 27u);
-    BOOST_CHECK_EQUAL(camp::util::convert<unsigned char>(std::string("-27")), static_cast<unsigned char>(-27u));
+    BOOST_CHECK_EQUAL(camp::util::convert<unsigned char>(std::string("0")), '0');
+    BOOST_CHECK_EQUAL(camp::util::convert<unsigned char>(std::string("g")), 'g');
+    BOOST_CHECK_THROW(camp::util::convert<unsigned char>(std::string()), camp::util::bad_conversion);
+    BOOST_CHECK_THROW(camp::util::convert<unsigned char>(std::string("27")), camp::util::bad_conversion);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_short)
@@ -312,6 +310,8 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_int)
     BOOST_CHECK_EQUAL(camp::util::convert<unsigned int>(std::string("0")), 0);
     BOOST_CHECK_EQUAL(camp::util::convert<unsigned int>(std::string("123456789")), 123456789u);
     BOOST_CHECK_EQUAL(camp::util::convert<unsigned int>(std::string("-27")), -27u);
+    
+    BOOST_CHECK_THROW(camp::util::convert<int>(std::string("bad number")), camp::util::bad_conversion);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_long)
