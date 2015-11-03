@@ -67,6 +67,7 @@ moc_*
 *.dll
 *.dylib
 **/camptest
+include/**/version.hpp
 
 # Auto-generated documentation files
 doc/api/*/*
