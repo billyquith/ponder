@@ -57,18 +57,6 @@ static bool parse_integer(const std::string& from, T& to)
     return true;
 }
 
-template <typename T>
-static bool parse_float(const std::string& from, T& to)
-{
-    try {
-        const long p = std::stof(from.c_str());
-        to = static_cast<T>(p);
-    } catch (std::logic_error&) {
-        return false;
-    }
-    return true;
-}
-    
 bool conv(const std::string& from, char& to)
 {
     if (from.length() == 1)
