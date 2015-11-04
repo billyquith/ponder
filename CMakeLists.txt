@@ -128,10 +128,10 @@ install(DIRECTORY include
     COMPONENT devel
 )
 
-install(FILES ${CMAKE_BINARY_DIR}/version.hpp
-    DESTINATION include/camp
-    COMPONENT devel
-)
+#install(FILES ${CMAKE_BINARY_DIR}/include/camp/version.hpp
+#    DESTINATION include/camp
+#    COMPONENT devel
+#)
 
 install(TARGETS camp
     EXPORT CAMPTargets
