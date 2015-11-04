@@ -160,10 +160,10 @@ struct ValueMapper<bool>
  * Specialization of ValueMapper for integers
  */
 template <typename T>
-struct ValueMapper<T, typename camp::util::enable_if_c< std::is_integral<T>::value
-                                            && !std::is_const<T>::value     // to avoid conflict with ValueMapper<const T>
-                                            && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
-                                          >::type >
+struct ValueMapper<T, typename std::enable_if< std::is_integral<T>::value
+                                               && !std::is_const<T>::value     // to avoid conflict with ValueMapper<const T>
+                                               && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                                             >::type >
 {
     static const int type = camp::intType;
     static long to(T source) {return static_cast<long>(source);}
@@ -180,10 +180,10 @@ struct ValueMapper<T, typename camp::util::enable_if_c< std::is_integral<T>::val
  * Specialization of ValueMapper for reals
  */
 template <typename T>
-struct ValueMapper<T, typename camp::util::enable_if_c< std::is_floating_point<T>::value
-                                            && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
-                                            && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
-                                          >::type >
+struct ValueMapper<T, typename std::enable_if< std::is_floating_point<T>::value
+                                               && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                               && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                                             >::type >
 {
     static const int type = camp::realType;
     static double to(T source) {return static_cast<double>(source);}
@@ -220,10 +220,10 @@ struct ValueMapper<std::string>
  * Warning: special case for char[] and const char[], they are strings not arrays
  */
 template <typename T>
-struct ValueMapper<T, typename camp::util::enable_if_c< camp::detail::IsArray<T>::value
-                                            && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, char>::value
-                                            && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, const char>::value
-                                          >::type >
+struct ValueMapper<T, typename std::enable_if< camp::detail::IsArray<T>::value
+                                               && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, char>::value
+                                               && !std::is_same<typename camp_ext::ArrayMapper<T>::ElementType, const char>::value
+                                             >::type >
 {
     static const int type = camp::arrayType;
 };
@@ -249,10 +249,10 @@ struct ValueMapper<const char[N]>
  * Specialization of ValueMapper for enum types
  */
 template <typename T>
-struct ValueMapper<T, typename camp::util::enable_if_c< std::is_enum<T>::value
-                                            && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
-                                            && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
-                                          >::type>
+struct ValueMapper<T, typename std::enable_if< std::is_enum<T>::value
+                                               && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                                               && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                                             >::type>
 {
     static const int type = camp::enumType;
     static camp::EnumObject to(T source) {return camp::EnumObject(source);}

@@ -104,7 +104,7 @@ struct CopyHelper
  * Specialization of CopyHelper for non-copyable types
  */
 template <typename T>
-struct CopyHelper<T, typename camp::util::enable_if_c< !StaticTypeId<T>::copyable>::type >
+struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type >
 {
     static bool copy(T&, const Value&)
     {
@@ -131,7 +131,7 @@ struct ReturnHelper
  * Specialization of ReturnHelper for smart pointer types
  */
 template <template <typename> class T, typename U>
-struct ReturnHelper<T<U>, typename camp::util::enable_if< typename IsSmartPointer<T<U>, U>::value >::type >
+struct ReturnHelper<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
 {
     typedef U* Type;
     static Type get(T<U> value) {return get_pointer(value);}
@@ -191,7 +191,7 @@ private:
  * Property accessor composed of 1 read-write accessor
  */
 template <typename C, typename R>
-class Accessor1<C, R, typename camp::util::enable_if_c< ObjectTraits<R>::isWritable>::type >
+class Accessor1<C, R, typename std::enable_if< ObjectTraits<R>::isWritable>::type >
 {
 public:
 
@@ -315,7 +315,7 @@ private:
  * Property accessor composed of 1 composed read-write accessor
  */
 template <typename C, typename N, typename R>
-class Accessor3<C, N, R, typename camp::util::enable_if_c< ObjectTraits<R>::isWritable>::type >
+class Accessor3<C, N, R, typename std::enable_if< ObjectTraits<R>::isWritable>::type >
 {
 public:
 
@@ -395,7 +395,7 @@ struct PropertyFactory2
  * Specialization of PropertyFactory2 with 2 getters (which will produce 1 composed getter)
  */
 template <typename C, typename F1, typename F2>
-struct PropertyFactory2<C, F1, F2, typename camp::util::enable_if_c< !std::is_void<typename FunctionTraits<F2>::ReturnType>::value>::type >
+struct PropertyFactory2<C, F1, F2, typename std::enable_if< !std::is_void<typename FunctionTraits<F2>::ReturnType>::value>::type >
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
     typedef typename std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
