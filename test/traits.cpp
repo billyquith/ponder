@@ -339,6 +339,34 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_double)
     BOOST_CHECK_EQUAL(camp::util::convert<double>(std::string("-27.75")), -27.75);
 }
 
+//-----------------------------------------------------------------------------
+
+// From: http://en.cppreference.com/w/cpp/utility/integer_sequence
+
+template<typename R, typename Array, std::size_t... I>
+R a2t_impl(const Array& a, camp::util::index_sequence<I...>)
+{
+    return std::make_tuple(a[I]...);
+}
+
+template<typename R, typename T, std::size_t N, typename Indices = camp::util::make_index_sequence<N>>
+R a2t(const std::array<T, N>& a)
+{
+    return a2t_impl<R>(a, Indices());
+}
+
+BOOST_AUTO_TEST_CASE(integer_sequence)
+{
+    auto is = camp::util::make_index_sequence<3>();
+    BOOST_CHECK_EQUAL(is.size(), 3);
+
+    std::array<int, 4> array {{1,2,3,4}};
+    
+    // convert an array into a tuple
+    auto tuple = a2t<std::tuple<int, int, int, int>>(array);
+    static_assert(std::is_same<decltype(tuple), std::tuple<int, int, int, int>>::value, "");
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
