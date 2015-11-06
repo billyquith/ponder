@@ -37,7 +37,7 @@
  *
  * \code
  * #include <camp/camptype.hpp>
- * #include <camp/class.hpp>
+ * #include <camp/classbuilder.hpp>
  * #include <string>
  * #include <iostream>
  * 

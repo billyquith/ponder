@@ -36,6 +36,7 @@
 
 #include <camp/type.hpp>
 #include <camp/classget.hpp>
+#include <camp/class.hpp>
 #include <camp/detail/functionimpl.hpp>
 #include <camp/detail/functiontraits.hpp>
 #include <camp/detail/constructorimpl.hpp>
