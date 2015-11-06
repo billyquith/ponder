@@ -48,6 +48,8 @@
 #ifdef _MSC_VER
 # include <intrin.h>  // _BitScanReverse, _BitScanReverse64
 
+namespace camp {
+namespace util {
 namespace fmt {
 namespace internal {
 # pragma intrinsic(_BitScanReverse)
@@ -77,6 +79,8 @@ inline uint32_t clzll(uint64_t x) {
   return 63 - r;
 }
 # define FMT_BUILTIN_CLZLL(n) fmt::internal::clzll(n)
+}
+}
 }
 }
 #endif
@@ -191,6 +195,8 @@ inline uint32_t clzll(uint64_t x) {
 # define FMT_ASSERT(condition, message) assert((condition) && message)
 #endif
 
+namespace camp {
+namespace util {
 namespace fmt {
 
 // Fix the warning about long long on older versions of GCC
@@ -3056,6 +3062,8 @@ operator"" _a(const wchar_t *s, std::size_t) { return {s}; }
 
 } // inline namespace literals
 } // namespace fmt
+} // namespace util
+} // namespace camp
 #endif // FMT_USE_USER_DEFINED_LITERALS
 
 // Restore warnings.

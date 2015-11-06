@@ -49,6 +49,9 @@
 # endif
 #endif
 
+namespace camp {
+namespace util {
+
 using fmt::internal::Arg;
 
 // Check if exceptions are disabled.
@@ -1323,3 +1326,6 @@ template int fmt::internal::CharTraits<wchar_t>::format_float(
 #if _MSC_VER
 # pragma warning(pop)
 #endif
+
+} // namespace util
+} // namespace camp

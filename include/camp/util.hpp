@@ -85,7 +85,7 @@ namespace detail
     template <typename F>
     std::string to_str(F from)
     {
-        return fmt::format("{}", from);
+        return util::fmt::format("{}", from);
     }
     
     template <typename S>
