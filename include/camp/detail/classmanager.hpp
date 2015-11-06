@@ -52,7 +52,7 @@ namespace detail
  *
  * \sa Class
  */
-class CAMP_API ClassManager : public ObserverNotifier, public Singleton<ClassManager>
+class CAMP_API ClassManager : public ObserverNotifier
 {
 public:
 
