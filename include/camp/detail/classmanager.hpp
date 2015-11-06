@@ -34,7 +34,6 @@
 #define CAMP_DETAIL_CLASSMANAGER_HPP
 
 #include <camp/detail/observernotifier.hpp>
-#include <camp/detail/singleton.hpp>
 #include <string>
 #include <map>
 
