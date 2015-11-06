@@ -350,71 +350,14 @@ public:
     ClassBuilder<T>& callable(F function);
 
     /**
-     * \brief Declare a default constructor for the metaclass
+     * \brief Declare a constructor for the metaclass.
+     * 
+     * Variable number of arguments can be passed.
      *
      * \return Reference to this, in order to chain other calls
      */
-    ClassBuilder<T>& constructor0();
-
-    /**
-     * \brief Declare a constructor with 1 parameter for the metaclass
-     *
-     * A0 is the type of the parameter
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename A0>
-    ClassBuilder<T>& constructor1();
-
-    /**
-     * \brief Declare a constructor with 2 parameters for the metaclass
-     *
-     * A0 is the type of the first parameter.
-     * A1 is the type of the second parameter.
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename A0, typename A1>
-    ClassBuilder<T>& constructor2();
-
-    /**
-     * \brief Declare a constructor with 3 parameters for the metaclass
-     *
-     * A0 is the type of the first parameter.
-     * A1 is the type of the second parameter.
-     * A2 is the type of the third parameter.
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename A0, typename A1, typename A2>
-    ClassBuilder<T>& constructor3();
-
-    /**
-     * \brief Declare a constructor with 4 parameters for the metaclass
-     *
-     * A0 is the type of the first parameter.
-     * A1 is the type of the second parameter.
-     * A2 is the type of the third parameter.
-     * A3 is the type of the fourth parameter.
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename A0, typename A1, typename A2, typename A3>
-    ClassBuilder<T>& constructor4();
-
-    /**
-     * \brief Declare a constructor with 5 parameters for the metaclass
-     *
-     * A0 is the type of the first parameter.
-     * A1 is the type of the second parameter.
-     * A2 is the type of the third parameter.
-     * A3 is the type of the fourth parameter.
-     * A4 is the type of the fifth parameter.
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename A0, typename A1, typename A2, typename A3, typename A4>
-    ClassBuilder<T>& constructor5();
+    template <typename... A>
+    ClassBuilder<T>& constructor();
 
     /**
      * \brief Add properties and/or functions from an external source

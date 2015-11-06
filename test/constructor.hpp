@@ -102,14 +102,14 @@ namespace ConstructorTest
         camp::Class::declare<MyClass>("ConstructorTest::MyClass")
             .base<MyBase1>()
             .base<MyBase2>()
-            .constructor0()
-            .constructor1<long>()
-            .constructor2<long, double>()
-            .constructor3<long, double, std::string>()
-            .constructor4<long, double, std::string, MyEnum>()
+            .constructor()
+            .constructor<long>()
+            .constructor<long, double>()
+            .constructor<long, double, std::string>()
+            .constructor<long, double, std::string, MyEnum>()
 
             // trying types that don't exactly match those declared
-            .constructor5<unsigned short, float, std::string, MyEnum, int>();
+            .constructor<unsigned short, float, std::string, MyEnum, int>();
     }
 }
 

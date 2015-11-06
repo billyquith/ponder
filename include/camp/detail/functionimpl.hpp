@@ -123,7 +123,7 @@ template <typename F1, typename F2 = void> class FunctionImpl;
 /*
  * Specialization of FunctionImpl for all functions.
  */
-template <typename C, typename R, typename ...A>
+template <typename C, typename R, typename... A>
 class FunctionImpl<R (C, A...)> : public Function
 {
 public:

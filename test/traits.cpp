@@ -367,6 +367,30 @@ BOOST_AUTO_TEST_CASE(integer_sequence)
     static_assert(std::is_same<decltype(tuple), std::tuple<int, int, int, int>>::value, "");
 }
 
+//-----------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(util_allTrue)
+{
+    BOOST_CHECK_EQUAL(camp::util::allTrue(), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true, true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true, true, true, true, true, true), true);
+    
+    BOOST_CHECK_EQUAL(camp::util::allTrue(false), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, false), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, false, true), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, false, true), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, true, false, true), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, false, true, true, true, true), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, true, false, true, true, true, true), false);
+    BOOST_CHECK_EQUAL(camp::util::allTrue(true, false, true, true, true, false, true, true), false);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

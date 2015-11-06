@@ -85,36 +85,23 @@ template <typename T>
 bool checkArg(const Value& value);
 
 /**
- * \brief Implementation of metaconstructors with no parameter
- */
-template <typename T>
-class ConstructorImpl0 : public Constructor
-{
-public:
-
-    /**
-     * \see Constructor::matches
-     */
-    virtual bool matches(const Args& args) const override
-    {
-        return (args.count() == 0);
-    }
-
-    /**
-     * \see Constructor::create
-     */
-    virtual UserObject create(const Args&) const override
-    {
-        return new T();
-    }
-};
-
-/**
  * \brief Implementation of metaconstructors with 1 parameter
  */
-template <typename T, typename A0>
-class ConstructorImpl1 : public Constructor
+template <typename T, typename... A>
+class ConstructorImpl : public Constructor
 {
+    template <typename... As, std::size_t... Is>
+    static inline bool checkArgs(const Args& args, util::index_sequence<Is...>)
+    {
+        return util::allTrue(checkArg<As>(args[Is])...);
+    }
+
+    template <typename... As, std::size_t... Is>
+    static inline UserObject createWithArgs(const Args& args, util::index_sequence<Is...>)
+    {
+        return new T(convertArg<As>(args, Is)...);
+    }
+
 public:
 
     /**
@@ -122,8 +109,7 @@ public:
      */
     virtual bool matches(const Args& args) const override
     {
-        return (args.count() == 1)
-               && checkArg<A0>(args[0]);
+        return args.count() == sizeof...(A) && checkArgs<A...>(args, util::make_index_sequence<sizeof...(A)>());
     }
 
     /**
@@ -131,131 +117,7 @@ public:
      */
     virtual UserObject create(const Args& args) const override
     {
-        return new T(convertArg<A0>(args, 0));
-    }
-};
-
-/**
- * \brief Implementation of metaconstructors with 2 parameters
- */
-template <typename T, typename A0, typename A1>
-class ConstructorImpl2 : public Constructor
-{
-public:
-
-    /**
-     * \see Constructor::matches
-     */
-    virtual bool matches(const Args& args) const override
-    {
-        return (args.count() == 2)
-               && checkArg<A0>(args[0])
-               && checkArg<A1>(args[1]);
-    }
-
-    /**
-     * \see Constructor::create
-     */
-    virtual UserObject create(const Args& args) const override
-    {
-        return new T(convertArg<A0>(args, 0),
-                     convertArg<A1>(args, 1));
-    }
-};
-
-/**
- * \brief Implementation of metaconstructors with 3 parameters
- */
-template <typename T, typename A0, typename A1, typename A2>
-class ConstructorImpl3 : public Constructor
-{
-public:
-
-    /**
-     * \see Constructor::matches
-     */
-    virtual bool matches(const Args& args) const override
-    {
-        return (args.count() == 3)
-               && checkArg<A0>(args[0])
-               && checkArg<A1>(args[1])
-               && checkArg<A2>(args[2]);
-    }
-
-    /**
-     * \see Constructor::create
-     */
-    virtual UserObject create(const Args& args) const override
-    {
-        return new T(convertArg<A0>(args, 0),
-                     convertArg<A1>(args, 1),
-                     convertArg<A2>(args, 2));
-    }
-};
-
-/**
- * \brief Implementation of metaconstructors with 4 parameters
- */
-template <typename T, typename A0, typename A1, typename A2, typename A3>
-class ConstructorImpl4 : public Constructor
-{
-public:
-
-    /**
-     * \see Constructor::matches
-     */
-    virtual bool matches(const Args& args) const override
-    {
-        return (args.count() == 4)
-               && checkArg<A0>(args[0])
-               && checkArg<A1>(args[1])
-               && checkArg<A2>(args[2])
-               && checkArg<A3>(args[3]);
-    }
-
-    /**
-     * \see Constructor::create
-     */
-    virtual UserObject create(const Args& args) const override
-    {
-        return new T(convertArg<A0>(args, 0),
-                     convertArg<A1>(args, 1),
-                     convertArg<A2>(args, 2),
-                     convertArg<A3>(args, 3));
-    }
-};
-
-/**
- * \brief Implementation of metaconstructors with 5 parameters
- */
-template <typename T, typename A0, typename A1, typename A2, typename A3, typename A4>
-class ConstructorImpl5 : public Constructor
-{
-public:
-
-    /**
-     * \see Constructor::matches
-     */
-    virtual bool matches(const Args& args) const override
-    {
-        return (args.count() == 5)
-               && checkArg<A0>(args[0])
-               && checkArg<A1>(args[1])
-               && checkArg<A2>(args[2])
-               && checkArg<A3>(args[3])
-               && checkArg<A4>(args[4]);
-    }
-
-    /**
-     * \see Constructor::create
-     */
-    virtual UserObject create(const Args& args) const override
-    {
-        return new T(convertArg<A0>(args, 0),
-                     convertArg<A1>(args, 1),
-                     convertArg<A2>(args, 2),
-                     convertArg<A3>(args, 3),
-                     convertArg<A4>(args, 4));
+        return createWithArgs<A...>(args, util::make_index_sequence<sizeof...(A)>());
     }
 };
 

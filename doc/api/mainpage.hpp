@@ -89,7 +89,7 @@
  * {
  *     // Bind our Person class to CAMP
  *     camp::Class::declare<Person>("Person")
- *         .constructor1<std::string>()
+ *         .constructor<std::string>()
  *         .property("name", &Person::name)
  *         .property("age", &Person::age, &Person::setAge)
  *         .function("speak", &Person::speak);
