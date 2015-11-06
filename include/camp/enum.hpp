@@ -38,7 +38,7 @@
 #include <camp/enumbuilder.hpp>
 #include <camp/enumget.hpp>
 #include <camp/detail/typeid.hpp>
-#include <camp/dictionary.hpp>
+#include <camp/detail/dictionary.hpp>
 #include <string>
 
 
@@ -212,7 +212,7 @@ private:
         bool operator () (const std::string& a, const std::string& b) const { return a < b; }
     };
     
-    typedef Dictionary<std::string, EnumValue, EnumCmp> EnumTable;
+    typedef detail::Dictionary<std::string, EnumValue, EnumCmp> EnumTable;
     
     std::string m_name;     ///< Name of the metaenum
     EnumTable m_enums;      ///< Table of enums

@@ -38,6 +38,8 @@
 
 namespace camp
 {
+namespace detail
+{
 
 template <typename KEY, typename VALUE, class CMP>
 class Dictionary
@@ -128,7 +130,8 @@ public:
         return it;
     }
 };
-    
-}
+
+} // detail
+} // camp
 
 #endif // CAMP_DICTIONARY_HPP

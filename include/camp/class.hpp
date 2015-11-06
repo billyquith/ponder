@@ -41,7 +41,7 @@
 #include <camp/tagholder.hpp>
 #include <camp/userobject.hpp>
 #include <camp/detail/typeid.hpp>
-#include <camp/dictionary.hpp>
+#include <camp/detail/dictionary.hpp>
 #include <string>
 #include <map>
 
@@ -352,8 +352,8 @@ private:
 
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef Dictionary<std::string, PropertyPtr, PropertyCmp> PropertyTable;
-    typedef Dictionary<std::string, FunctionPtr, FunctionCmp> FunctionTable;
+    typedef detail::Dictionary<std::string, PropertyPtr, PropertyCmp> PropertyTable;
+    typedef detail::Dictionary<std::string, FunctionPtr, FunctionCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&);
 
     std::string m_id;           ///< Name of the metaclass
