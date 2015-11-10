@@ -75,7 +75,7 @@ class ClassVisitor;
  *
  * camp::Class::declare<MyClass>("MyClass")
  *     .tag("help", "this is my class")
- *     .constructor0()
+ *     .constructor()
  *     .property("prop", &MyClass::getProp, &MyClass::setProp)
  *     .function("func", &MyClass::func);
  * \endcode
