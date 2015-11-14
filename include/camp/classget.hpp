@@ -38,6 +38,7 @@
 #include <camp/error.hpp>
 #include <camp/detail/typeid.hpp>
 #include <camp/detail/classmanager.hpp>
+#include <camp/util.hpp>
 #include <string>
 
 
