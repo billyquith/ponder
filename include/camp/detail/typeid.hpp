@@ -120,7 +120,7 @@ struct DynamicTypeId
  * Specialization of DynamicTypeId for types that don't implement CAMP RTTI
  */
 template <typename T>
-    struct DynamicTypeId<T, typename std::enable_if<!HasCampRtti<T>::value >::type>
+struct DynamicTypeId<T, typename std::enable_if<!HasCampRtti<T>::value >::type>
 {
     static const char* get(const T&)
     {
