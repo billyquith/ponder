@@ -171,6 +171,15 @@ public:
     bool operator==(const Value& other) const;
 
     /**
+     * \brief Operator != to compare equality between two values
+     *
+     * \see operator==
+     *
+     * \return True if both values are not the same, false otherwise
+     */
+    bool operator!=(const Value& other) const {return !(*this == other);}
+
+    /**
      * \brief Operator < to compare two values
      *
      * \param other Value to compare with this
