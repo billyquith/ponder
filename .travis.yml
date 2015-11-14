@@ -5,6 +5,9 @@ compiler: clang
 before_install:
   - echo $LANG
   - echo $LC_ALL
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew upgrade; fi
+  - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep boost` == '' ]]; then brew install boost; fi
+  - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep boost` == '' ]]; then brew install doxygen; fi
 
 before_script: cmake -G "Unix Makefiles" -DBUILD_TEST=TRUE
 
