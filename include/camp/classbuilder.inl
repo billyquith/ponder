@@ -52,10 +52,9 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     std::string baseName = baseClass.name();
 
     // First make sure that the base class is not already a base of the current class
-    Class::BaseList::const_iterator endBase = m_target->m_bases.end();
-    for (Class::BaseList::const_iterator it = m_target->m_bases.begin(); it != endBase; ++it)
+    for (Class::BaseInfo& bi : m_target->m_bases)
     {
-        assert(it->base->name() != baseName);
+        assert(bi.base->name() != baseName);
     }
 
     // Compute the offset to apply for pointer conversions
