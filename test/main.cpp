@@ -42,8 +42,8 @@ struct GlobalTestFixture
 {
     camp::detail::ClassManager* m_classManagerInstance;
 
-    GlobalTestFixture() :
-        m_classManagerInstance(new camp::detail::ClassManager())
+    GlobalTestFixture()
+    :   m_classManagerInstance(new camp::detail::ClassManager())
     {
     }
 
@@ -53,4 +53,4 @@ struct GlobalTestFixture
     }
 };
 
-BOOST_GLOBAL_FIXTURE(GlobalTestFixture)
+BOOST_GLOBAL_FIXTURE(GlobalTestFixture);
