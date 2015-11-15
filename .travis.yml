@@ -1,6 +1,8 @@
 language: cpp
 os: osx
-compiler: clang
+compiler:
+  - clang
+  - gcc
 
 before_install:
   - echo $LANG
@@ -16,8 +18,12 @@ before_script:
   - cmake --version
   - cmake -G "Unix Makefiles" -DBUILD_TEST=TRUE
 
-script: make
+script: make camptest
 
 after_success: ./test/camptest
 
-  
+notifications:
+  email:
+    on_failure: always
+    
+    
