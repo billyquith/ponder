@@ -8,6 +8,8 @@ before_install:
   - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep boost` == '' ]]; then brew install boost; fi
   - if [[ $TRAVIS_OS_NAME == osx ]]; then brew outdated boost || brew upgrade boost; fi
   - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep doxygen` == '' ]]; then brew install doxygen; fi
+  - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep cmake` == '' ]]; then brew install cmake; fi
+  - if [[ $TRAVIS_OS_NAME == osx ]]; then brew outdated cmake || brew upgrade cmake; fi
 
 before_script:
   - cmake --version
