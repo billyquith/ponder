@@ -93,7 +93,8 @@ add_definitions(-DBOOST_TEST_NO_LIB)
 add_executable(camptest ${CAMP_TEST_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET camptest PROPERTY CXX_STANDARD 11)
+set_property(TARGET camptest PROPERTY CXX_STANDARD 11) # fails silently
+target_compile_features(camptest PRIVATE cxx_range_for cxx_variable_templates) # required
 
 # define d suffix on windows
 if(WIN32)

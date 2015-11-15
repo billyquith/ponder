@@ -66,7 +66,8 @@ configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/camp/v
 add_library(camp ${CAMP_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET camp PROPERTY CXX_STANDARD 11)
+set_property(TARGET camp PROPERTY CXX_STANDARD 11) # fails silently
+target_compile_features(camp PRIVATE cxx_range_for cxx_variable_templates) # required
 
 # define the export macro
 if(BUILD_SHARED_LIBS)
