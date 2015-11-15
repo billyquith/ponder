@@ -1,13 +1,13 @@
 language: cpp
-
+os: osx
 compiler: clang
 
 before_install:
   - echo $LANG
   - echo $LC_ALL
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew upgrade; fi
   - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep boost` == '' ]]; then brew install boost; fi
-  - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep boost` == '' ]]; then brew install doxygen; fi
+  - if [[ $TRAVIS_OS_NAME == osx ]]; then brew outdated boost || brew upgrade boost; fi
+  - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep doxygen` == '' ]]; then brew install doxygen; fi
 
 before_script: cmake -G "Unix Makefiles" -DBUILD_TEST=TRUE
 
@@ -15,5 +15,4 @@ script: make
 
 after_success: ./test/camptest
 
-os: osx
   
