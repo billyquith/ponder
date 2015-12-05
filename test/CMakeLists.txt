@@ -70,6 +70,7 @@ set(CAMP_TEST_SRCS
     functionaccess.hpp
     traits.hpp
     traits.cpp
+    example_mainpage.cpp
 )
 
 # find Boost
