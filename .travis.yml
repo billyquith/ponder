@@ -16,9 +16,9 @@ before_install:
 
 before_script:
   - cmake --version
-  - cmake -G "Unix Makefiles" -DBUILD_TEST=TRUE
+  - cmake -G "Ninja" -DBUILD_TEST=TRUE
 
-script: make camptest
+script: ninja camptest
 
 after_success: ./test/camptest
 
