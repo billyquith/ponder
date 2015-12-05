@@ -1,4 +1,11 @@
 
+CAMP
+----
+
+[![Build Status](https://travis-ci.org/billyquith/camp.svg)](https://travis-ci.org/billyquith/camp)
+
+### About
+
 CAMP is a multi-purpose reflection library developped by Technogerma Systems France and then by Tegesoft (where the dev team has moved)
 (http://www.tegesoft.com).
 
