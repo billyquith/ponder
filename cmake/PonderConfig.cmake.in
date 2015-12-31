@@ -1,0 +1,12 @@
+set(PONDER_VERSION "@VERSION_STR@")
+
+@PACKAGE_INIT@
+
+set_and_check(PONDER_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/include")
+
+include("${CMAKE_CURRENT_LIST_DIR}/PonderTargets.cmake")
+
+# Convenience variables following find_package conventions for modules
+set(PONDER_INCLUDE_DIRS "${PONDER_INCLUDE_DIR}")
+set(PONDER_LIBRARIES ponder::ponder)
+

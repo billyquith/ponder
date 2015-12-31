@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/userproperty.hpp>
-#include <camp/classvisitor.hpp>
+#include <ponder/userproperty.hpp>
+#include <ponder/classvisitor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 UserProperty::UserProperty(const std::string& name, const Class& propClass)
@@ -58,4 +58,4 @@ void UserProperty::accept(ClassVisitor& visitor) const
     visitor.visit(*this);
 }
 
-} // namespace camp
+} // namespace ponder

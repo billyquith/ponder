@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_INHERITANCE_HPP
-#define CAMPTEST_INHERITANCE_HPP
+#ifndef PONDERTEST_INHERITANCE_HPP
+#define PONDERTEST_INHERITANCE_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 
 namespace InheritanceTest
 {
@@ -44,7 +44,7 @@ namespace InheritanceTest
         int f1() const {return 1;}
         int po1;
         int fo1() {return 1;}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct MyClass2
@@ -56,7 +56,7 @@ namespace InheritanceTest
         virtual int fv() const {return p2;}
         int po2;
         int fo2() {return 2;}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct MyClass3 : public MyClass1, public MyClass2
@@ -68,7 +68,7 @@ namespace InheritanceTest
         virtual int fv() const {return p3;}
         int po3;
         int fo3() {return 3;}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct MyClass4 : public MyClass3
@@ -80,25 +80,25 @@ namespace InheritanceTest
         virtual int fv() const {return p4;}
         int po4;
         int fo4() {return 4;}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     void declare()
     {
-        camp::Class::declare<MyClass1>("InheritanceTest::MyClass1")
+        ponder::Class::declare<MyClass1>("InheritanceTest::MyClass1")
             .function("f1", &MyClass1::f1)
             .property("p1", &MyClass1::p1)
             .function("overridden", &MyClass1::fo1)
             .property("overridden", &MyClass1::po1);
 
-        camp::Class::declare<MyClass2>("InheritanceTest::MyClass2")
+        ponder::Class::declare<MyClass2>("InheritanceTest::MyClass2")
             .function("f2", &MyClass2::f2)
             .property("p2", &MyClass2::p2)
             .function("virtual", &MyClass2::fv)
             .function("overridden", &MyClass2::fo2)
             .property("overridden", &MyClass2::po2);
 
-        camp::Class::declare<MyClass3>("InheritanceTest::MyClass3")
+        ponder::Class::declare<MyClass3>("InheritanceTest::MyClass3")
             .base<MyClass1>()
             .base<MyClass2>()
             .function("f3", &MyClass3::f3)
@@ -106,7 +106,7 @@ namespace InheritanceTest
             .function("overridden", &MyClass3::fo3)
             .property("overridden", &MyClass3::po3);
 
-        camp::Class::declare<MyClass4>("InheritanceTest::MyClass4")
+        ponder::Class::declare<MyClass4>("InheritanceTest::MyClass4")
             .base<MyClass3>()
             .function("f4", &MyClass4::f4)
             .property("p4", &MyClass4::p4)
@@ -115,9 +115,9 @@ namespace InheritanceTest
     }
 }
 
-CAMP_AUTO_TYPE(InheritanceTest::MyClass1, &InheritanceTest::declare)
-CAMP_AUTO_TYPE(InheritanceTest::MyClass2, &InheritanceTest::declare)
-CAMP_AUTO_TYPE(InheritanceTest::MyClass3, &InheritanceTest::declare)
-CAMP_AUTO_TYPE(InheritanceTest::MyClass4, &InheritanceTest::declare)
+PONDER_AUTO_TYPE(InheritanceTest::MyClass1, &InheritanceTest::declare)
+PONDER_AUTO_TYPE(InheritanceTest::MyClass2, &InheritanceTest::declare)
+PONDER_AUTO_TYPE(InheritanceTest::MyClass3, &InheritanceTest::declare)
+PONDER_AUTO_TYPE(InheritanceTest::MyClass4, &InheritanceTest::declare)
 
-#endif // CAMPTEST_INHERITANCE_HPP
+#endif // PONDERTEST_INHERITANCE_HPP

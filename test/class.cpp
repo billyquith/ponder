@@ -28,34 +28,34 @@
 ****************************************************************************/
 
 #include "class.hpp"
-#include <camp/classget.hpp>
+#include <ponder/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ClassTest;
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Class
+//                         Tests for ponder::Class
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(CLASS)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(declare)
 {
-    std::size_t count = camp::classCount();
+    std::size_t count = ponder::classCount();
 
-    camp::Class::declare<MyTempClass>("ClassTest::MyTempClass");
+    ponder::Class::declare<MyTempClass>("ClassTest::MyTempClass");
 
-    BOOST_CHECK_EQUAL(camp::classCount(), count + 1);
+    BOOST_CHECK_EQUAL(ponder::classCount(), count + 1);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(declareExceptions)
 {
     // to make sure it is declared
-    camp::classByType<MyClass>();
+    ponder::classByType<MyClass>();
 
-    BOOST_CHECK_THROW(camp::Class::declare<MyClass>(), camp::ClassAlreadyCreated);
-    BOOST_CHECK_THROW(camp::Class::declare<MyUndeclaredClass>("ClassTest::MyClass"), camp::ClassAlreadyCreated);
+    BOOST_CHECK_THROW(ponder::Class::declare<MyClass>(), ponder::ClassAlreadyCreated);
+    BOOST_CHECK_THROW(ponder::Class::declare<MyUndeclaredClass>("ClassTest::MyClass"), ponder::ClassAlreadyCreated);
 }
 
 //-----------------------------------------------------------------------------
@@ -64,23 +64,23 @@ BOOST_AUTO_TEST_CASE(get)
     MyClass object;
     MyUndeclaredClass object2;
 
-    BOOST_CHECK_EQUAL(camp::classByName("ClassTest::MyClass").name(), "ClassTest::MyClass");
-    BOOST_CHECK_EQUAL(camp::classByType<MyClass>().name(),            "ClassTest::MyClass");
-    BOOST_CHECK_EQUAL(camp::classByObject(object).name(),             "ClassTest::MyClass");
-    BOOST_CHECK_EQUAL(camp::classByObject(&object).name(),            "ClassTest::MyClass");
-    BOOST_CHECK_EQUAL(camp::classByTypeSafe<MyUndeclaredClass>(),     static_cast<camp::Class*>(0));
+    BOOST_CHECK_EQUAL(ponder::classByName("ClassTest::MyClass").name(), "ClassTest::MyClass");
+    BOOST_CHECK_EQUAL(ponder::classByType<MyClass>().name(),            "ClassTest::MyClass");
+    BOOST_CHECK_EQUAL(ponder::classByObject(object).name(),             "ClassTest::MyClass");
+    BOOST_CHECK_EQUAL(ponder::classByObject(&object).name(),            "ClassTest::MyClass");
+    BOOST_CHECK_EQUAL(ponder::classByTypeSafe<MyUndeclaredClass>(),     static_cast<ponder::Class*>(0));
 
-    BOOST_CHECK_THROW(camp::classByName("ClassTest::MyUndeclaredClass"), camp::ClassNotFound);
-    BOOST_CHECK_THROW(camp::classByType<MyUndeclaredClass>(),            camp::ClassNotFound);
-    BOOST_CHECK_THROW(camp::classByObject(object2),                      camp::ClassNotFound);
-    BOOST_CHECK_THROW(camp::classByObject(&object2),                     camp::ClassNotFound);
+    BOOST_CHECK_THROW(ponder::classByName("ClassTest::MyUndeclaredClass"), ponder::ClassNotFound);
+    BOOST_CHECK_THROW(ponder::classByType<MyUndeclaredClass>(),            ponder::ClassNotFound);
+    BOOST_CHECK_THROW(ponder::classByObject(object2),                      ponder::ClassNotFound);
+    BOOST_CHECK_THROW(ponder::classByObject(&object2),                     ponder::ClassNotFound);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(comparisons)
 {
-    const camp::Class& class1 = camp::classByType<MyClass>();
-    const camp::Class& class2 = camp::classByType<MyClass2>();
+    const ponder::Class& class1 = ponder::classByType<MyClass>();
+    const ponder::Class& class2 = ponder::classByType<MyClass2>();
 
     BOOST_CHECK(class1 == class1);
     BOOST_CHECK(class1 != class2);
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(comparisons)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(properties)
 {
-    const camp::Class& metaclass = camp::classByType<MyClass>();
+    const ponder::Class& metaclass = ponder::classByType<MyClass>();
 
     BOOST_CHECK_EQUAL(metaclass.propertyCount(), 1U);
     BOOST_CHECK_EQUAL(metaclass.hasProperty("prop"), true);
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(properties)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(functions)
 {
-    const camp::Class& metaclass = camp::classByType<MyClass>();
+    const ponder::Class& metaclass = ponder::classByType<MyClass>();
 
     BOOST_CHECK_EQUAL(metaclass.functionCount(), 1U);
     BOOST_CHECK_EQUAL(metaclass.hasFunction("func"), true);
@@ -110,11 +110,11 @@ BOOST_AUTO_TEST_CASE(functions)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(inheritance)
 {
-    const camp::Class& derived = camp::classByType<Derived>();
+    const ponder::Class& derived = ponder::classByType<Derived>();
 
     BOOST_CHECK_EQUAL(derived.baseCount(), 1U);
     BOOST_CHECK_EQUAL(derived.base(0).name(), "ClassTest::Base");
-    BOOST_CHECK_THROW(derived.base(1), camp::OutOfRange);
+    BOOST_CHECK_THROW(derived.base(1), ponder::OutOfRange);
 }
 
 //-----------------------------------------------------------------------------
@@ -125,14 +125,14 @@ BOOST_AUTO_TEST_CASE(rtti)
     Base* nortti  = new DerivedNoRtti;
     Base* nortti2 = new Derived2NoRtti;
 
-    BOOST_CHECK_EQUAL(camp::classByObject(base).name(),     "ClassTest::Base");    // base is really a base
-    BOOST_CHECK_EQUAL(camp::classByObject(*base).name(),    "ClassTest::Base");
-    BOOST_CHECK_EQUAL(camp::classByObject(derived).name(),  "ClassTest::Derived"); // CAMP finds its real type thanks to CAMP_RTTI
-    BOOST_CHECK_EQUAL(camp::classByObject(*derived).name(), "ClassTest::Derived");
-    BOOST_CHECK_EQUAL(camp::classByObject(nortti).name(),   "ClassTest::Base");    // CAMP fails to find its derived type without CAMP_RTTI
-    BOOST_CHECK_EQUAL(camp::classByObject(*nortti).name(),  "ClassTest::Base");
-    BOOST_CHECK_EQUAL(camp::classByObject(nortti2).name(),  "ClassTest::Derived"); // CAMP finds the closest derived type which has CAMP_RTTI
-    BOOST_CHECK_EQUAL(camp::classByObject(*nortti2).name(), "ClassTest::Derived");
+    BOOST_CHECK_EQUAL(ponder::classByObject(base).name(),     "ClassTest::Base");    // base is really a base
+    BOOST_CHECK_EQUAL(ponder::classByObject(*base).name(),    "ClassTest::Base");
+    BOOST_CHECK_EQUAL(ponder::classByObject(derived).name(),  "ClassTest::Derived"); // CAMP finds its real type thanks to PONDER_RTTI
+    BOOST_CHECK_EQUAL(ponder::classByObject(*derived).name(), "ClassTest::Derived");
+    BOOST_CHECK_EQUAL(ponder::classByObject(nortti).name(),   "ClassTest::Base");    // CAMP fails to find its derived type without PONDER_RTTI
+    BOOST_CHECK_EQUAL(ponder::classByObject(*nortti).name(),  "ClassTest::Base");
+    BOOST_CHECK_EQUAL(ponder::classByObject(nortti2).name(),  "ClassTest::Derived"); // CAMP finds the closest derived type which has PONDER_RTTI
+    BOOST_CHECK_EQUAL(ponder::classByObject(*nortti2).name(), "ClassTest::Derived");
 
     delete nortti2;
     delete nortti;
@@ -143,9 +143,9 @@ BOOST_AUTO_TEST_CASE(rtti)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(typeNames)
 {
-    BOOST_CHECK(strcmp(camp::util::typeAsString(camp::noType), "none")==0);
-    BOOST_CHECK(strcmp(camp::util::typeAsString(camp::realType), "real")==0);
-    BOOST_CHECK(strcmp(camp::util::typeAsString(camp::userType), "user")==0);
+    BOOST_CHECK(strcmp(ponder::util::typeAsString(ponder::noType), "none")==0);
+    BOOST_CHECK(strcmp(ponder::util::typeAsString(ponder::realType), "real")==0);
+    BOOST_CHECK(strcmp(ponder::util::typeAsString(ponder::userType), "user")==0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 
-#include <camp/value.hpp>
-#include <camp/qt/qt.hpp>
+#include <ponder/value.hpp>
+#include <ponder/qt/qt.hpp>
 #include <boost/test/unit_test.hpp>
 #include <QString>
 
@@ -46,15 +46,15 @@ BOOST_AUTO_TEST_SUITE(QSTRING)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
-    camp::Value value = QString("hello");
+    ponder::Value value = QString("hello");
 
-    BOOST_CHECK_EQUAL(value.type(), camp::stringType);
+    BOOST_CHECK_EQUAL(value.type(), ponder::stringType);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(conversionsFromQString)
 {
-    camp::Value value = QString("-10");
+    ponder::Value value = QString("-10");
 
     BOOST_CHECK_EQUAL(value.to<int>(),         -10);
     BOOST_CHECK_CLOSE(value.to<double>(),      -10., 1E-5);
@@ -65,9 +65,9 @@ BOOST_AUTO_TEST_CASE(conversionsFromQString)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(conversionsToQString)
 {
-    BOOST_CHECK_EQUAL(camp::Value(false).to<QString>(),                QString("0"));
-    BOOST_CHECK_EQUAL(camp::Value(10).to<QString>(),                   QString("10"));
-    BOOST_CHECK_EQUAL(camp::Value(std::string("hello")).to<QString>(), QString("hello"));
+    BOOST_CHECK_EQUAL(ponder::Value(false).to<QString>(),                QString("0"));
+    BOOST_CHECK_EQUAL(ponder::Value(10).to<QString>(),                   QString("10"));
+    BOOST_CHECK_EQUAL(ponder::Value(std::string("hello")).to<QString>(), QString("hello"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

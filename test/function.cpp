@@ -28,10 +28,10 @@
 ****************************************************************************/
 
 #include "function.hpp"
-#include <camp/classget.hpp>
-#include <camp/enumget.hpp>
-#include <camp/function.hpp>
-#include <camp/errors.hpp>
+#include <ponder/classget.hpp>
+#include <ponder/enumget.hpp>
+#include <ponder/function.hpp>
+#include <ponder/errors.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace FunctionTest;
@@ -41,7 +41,7 @@ struct FunctionFixture
 {
     FunctionFixture()
     {
-        const camp::Class& metaclass = camp::classByType<MyClass>();
+        const ponder::Class& metaclass = ponder::classByType<MyClass>();
         for (int i = 1; i < 23; ++i)
         {
             if (i != 14 && i != 17) // remove when fixed
@@ -49,39 +49,39 @@ struct FunctionFixture
         }
     }
 
-    const camp::Function* functions[23];
+    const ponder::Function* functions[23];
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Function
+//                         Tests for ponder::Function
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTION, FunctionFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(returnType)
 {
-    BOOST_CHECK_EQUAL(functions[1]->returnType(),  camp::noType);
-    BOOST_CHECK_EQUAL(functions[2]->returnType(),  camp::intType);
-    BOOST_CHECK_EQUAL(functions[3]->returnType(),  camp::stringType);
-    BOOST_CHECK_EQUAL(functions[4]->returnType(),  camp::userType);
-    BOOST_CHECK_EQUAL(functions[5]->returnType(),  camp::userType);
-    BOOST_CHECK_EQUAL(functions[6]->returnType(),  camp::noType);
-    BOOST_CHECK_EQUAL(functions[7]->returnType(),  camp::userType);
-    BOOST_CHECK_EQUAL(functions[8]->returnType(),  camp::noType);
-    BOOST_CHECK_EQUAL(functions[9]->returnType(),  camp::noType);
-    BOOST_CHECK_EQUAL(functions[10]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[11]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[12]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[13]->returnType(), camp::noType);
-    //BOOST_CHECK_EQUAL(functions[14]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[15]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[16]->returnType(), camp::intType);
-    //BOOST_CHECK_EQUAL(functions[17]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[18]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[19]->returnType(), camp::noType);
-    BOOST_CHECK_EQUAL(functions[20]->returnType(), camp::intType);
-    BOOST_CHECK_EQUAL(functions[21]->returnType(), camp::intType);
-    BOOST_CHECK_EQUAL(functions[22]->returnType(), camp::intType);
+    BOOST_CHECK_EQUAL(functions[1]->returnType(),  ponder::noType);
+    BOOST_CHECK_EQUAL(functions[2]->returnType(),  ponder::intType);
+    BOOST_CHECK_EQUAL(functions[3]->returnType(),  ponder::stringType);
+    BOOST_CHECK_EQUAL(functions[4]->returnType(),  ponder::userType);
+    BOOST_CHECK_EQUAL(functions[5]->returnType(),  ponder::userType);
+    BOOST_CHECK_EQUAL(functions[6]->returnType(),  ponder::noType);
+    BOOST_CHECK_EQUAL(functions[7]->returnType(),  ponder::userType);
+    BOOST_CHECK_EQUAL(functions[8]->returnType(),  ponder::noType);
+    BOOST_CHECK_EQUAL(functions[9]->returnType(),  ponder::noType);
+    BOOST_CHECK_EQUAL(functions[10]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[11]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[12]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[13]->returnType(), ponder::noType);
+    //BOOST_CHECK_EQUAL(functions[14]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[15]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[16]->returnType(), ponder::intType);
+    //BOOST_CHECK_EQUAL(functions[17]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[18]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[19]->returnType(), ponder::noType);
+    BOOST_CHECK_EQUAL(functions[20]->returnType(), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[21]->returnType(), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[22]->returnType(), ponder::intType);
 }
 
 //-----------------------------------------------------------------------------
@@ -114,38 +114,38 @@ BOOST_AUTO_TEST_CASE(argCount)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(argType)
 {
-    BOOST_CHECK_THROW(functions[1]->argType(0),  camp::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[2]->argType(0),  camp::intType);
-    BOOST_CHECK_THROW(functions[3]->argType(0),  camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[4]->argType(0),  camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[5]->argType(0),  camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[6]->argType(0),  camp::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[7]->argType(0),  camp::userType);
-    BOOST_CHECK_THROW(functions[8]->argType(0),  camp::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[9]->argType(0),  camp::boolType);
-    BOOST_CHECK_EQUAL(functions[10]->argType(0), camp::realType);
-    BOOST_CHECK_EQUAL(functions[10]->argType(1), camp::realType);
-    BOOST_CHECK_EQUAL(functions[11]->argType(0), camp::intType);
-    BOOST_CHECK_EQUAL(functions[11]->argType(1), camp::intType);
-    BOOST_CHECK_EQUAL(functions[11]->argType(2), camp::intType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(0), camp::stringType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(1), camp::stringType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(2), camp::stringType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(3), camp::stringType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(0), camp::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(1), camp::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(2), camp::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(3), camp::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(4), camp::enumType);
-    //BOOST_CHECK_THROW(functions[14]->argType(0), camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[15]->argType(0), camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[16]->argType(0), camp::OutOfRange);
-    //BOOST_CHECK_THROW(functions[17]->argType(0), camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[18]->argType(0), camp::OutOfRange);
-    BOOST_CHECK_THROW(functions[19]->argType(0), camp::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[20]->argType(0), camp::intType);
-    BOOST_CHECK_EQUAL(functions[21]->argType(0), camp::intType);
-    BOOST_CHECK_EQUAL(functions[22]->argType(0), camp::intType);
+    BOOST_CHECK_THROW(functions[1]->argType(0),  ponder::OutOfRange);
+    BOOST_CHECK_EQUAL(functions[2]->argType(0),  ponder::intType);
+    BOOST_CHECK_THROW(functions[3]->argType(0),  ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[4]->argType(0),  ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[5]->argType(0),  ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[6]->argType(0),  ponder::OutOfRange);
+    BOOST_CHECK_EQUAL(functions[7]->argType(0),  ponder::userType);
+    BOOST_CHECK_THROW(functions[8]->argType(0),  ponder::OutOfRange);
+    BOOST_CHECK_EQUAL(functions[9]->argType(0),  ponder::boolType);
+    BOOST_CHECK_EQUAL(functions[10]->argType(0), ponder::realType);
+    BOOST_CHECK_EQUAL(functions[10]->argType(1), ponder::realType);
+    BOOST_CHECK_EQUAL(functions[11]->argType(0), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[11]->argType(1), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[11]->argType(2), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[12]->argType(0), ponder::stringType);
+    BOOST_CHECK_EQUAL(functions[12]->argType(1), ponder::stringType);
+    BOOST_CHECK_EQUAL(functions[12]->argType(2), ponder::stringType);
+    BOOST_CHECK_EQUAL(functions[12]->argType(3), ponder::stringType);
+    BOOST_CHECK_EQUAL(functions[13]->argType(0), ponder::enumType);
+    BOOST_CHECK_EQUAL(functions[13]->argType(1), ponder::enumType);
+    BOOST_CHECK_EQUAL(functions[13]->argType(2), ponder::enumType);
+    BOOST_CHECK_EQUAL(functions[13]->argType(3), ponder::enumType);
+    BOOST_CHECK_EQUAL(functions[13]->argType(4), ponder::enumType);
+    //BOOST_CHECK_THROW(functions[14]->argType(0), ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[15]->argType(0), ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[16]->argType(0), ponder::OutOfRange);
+    //BOOST_CHECK_THROW(functions[17]->argType(0), ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[18]->argType(0), ponder::OutOfRange);
+    BOOST_CHECK_THROW(functions[19]->argType(0), ponder::OutOfRange);
+    BOOST_CHECK_EQUAL(functions[20]->argType(0), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[21]->argType(0), ponder::intType);
+    BOOST_CHECK_EQUAL(functions[22]->argType(0), ponder::intType);
 }
 
 //-----------------------------------------------------------------------------
@@ -153,43 +153,43 @@ BOOST_AUTO_TEST_CASE(call)
 {
     MyClass object;
 
-    BOOST_CHECK_EQUAL(functions[1]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[2]->call(object, camp::Args(10)), camp::Value(12));
-    BOOST_CHECK_EQUAL(functions[3]->call(object, camp::Args()), camp::Value("3"));
-    BOOST_CHECK_EQUAL(functions[4]->call(object, camp::Args()).to<MyType>(), MyType(4));
-    BOOST_CHECK_EQUAL(functions[5]->call(object, camp::Args()).to<MyType>(), MyType(5));
-    BOOST_CHECK_EQUAL(functions[6]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[7]->call(object, camp::Args("hi")), camp::Value("hi"));
-    BOOST_CHECK_EQUAL(functions[8]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[9]->call(object, camp::Args(true)), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[10]->call(object, camp::Args(1., 2.f)), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[11]->call(object, camp::Args(1, 2, 3)), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[12]->call(object, camp::Args("1", "2", "3", "4")), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[13]->call(object, camp::Args(Zero, One, Two, Zero, One)), camp::Value::nothing);
-    //BOOST_CHECK_EQUAL(functions[14]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[15]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[16]->call(object, camp::Args()), camp::Value(16));
-    //BOOST_CHECK_EQUAL(functions[17]->call(object, camp::Args(20)), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[18]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[19]->call(object, camp::Args()), camp::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[20]->call(object, camp::Args(10)), camp::Value(10));
-    BOOST_CHECK_EQUAL(functions[21]->call(object, camp::Args(10)), camp::Value(30));
-    BOOST_CHECK_EQUAL(functions[22]->call(object, camp::Args(10)), camp::Value(60));
+    BOOST_CHECK_EQUAL(functions[1]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[2]->call(object, ponder::Args(10)), ponder::Value(12));
+    BOOST_CHECK_EQUAL(functions[3]->call(object, ponder::Args()), ponder::Value("3"));
+    BOOST_CHECK_EQUAL(functions[4]->call(object, ponder::Args()).to<MyType>(), MyType(4));
+    BOOST_CHECK_EQUAL(functions[5]->call(object, ponder::Args()).to<MyType>(), MyType(5));
+    BOOST_CHECK_EQUAL(functions[6]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[7]->call(object, ponder::Args("hi")), ponder::Value("hi"));
+    BOOST_CHECK_EQUAL(functions[8]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[9]->call(object, ponder::Args(true)), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[10]->call(object, ponder::Args(1., 2.f)), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[11]->call(object, ponder::Args(1, 2, 3)), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[12]->call(object, ponder::Args("1", "2", "3", "4")), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero, One)), ponder::Value::nothing);
+    //BOOST_CHECK_EQUAL(functions[14]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[15]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[16]->call(object, ponder::Args()), ponder::Value(16));
+    //BOOST_CHECK_EQUAL(functions[17]->call(object, ponder::Args(20)), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[18]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[19]->call(object, ponder::Args()), ponder::Value::nothing);
+    BOOST_CHECK_EQUAL(functions[20]->call(object, ponder::Args(10)), ponder::Value(10));
+    BOOST_CHECK_EQUAL(functions[21]->call(object, ponder::Args(10)), ponder::Value(30));
+    BOOST_CHECK_EQUAL(functions[22]->call(object, ponder::Args(10)), ponder::Value(60));
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(callNullObject)
 {
-    BOOST_CHECK_THROW(functions[1]->call(camp::UserObject(), camp::Args()),  camp::NullObject);
-    BOOST_CHECK_THROW(functions[3]->call(camp::UserObject(), camp::Args()),  camp::NullObject);
-    BOOST_CHECK_THROW(functions[4]->call(camp::UserObject(), camp::Args()),  camp::NullObject);
-    BOOST_CHECK_THROW(functions[5]->call(camp::UserObject(), camp::Args()),  camp::NullObject);
-    BOOST_CHECK_THROW(functions[6]->call(camp::UserObject(), camp::Args()),  camp::NullObject);
-    BOOST_CHECK_THROW(functions[8]->call(camp::UserObject(), camp::Args()),  camp::NullObject);
-    BOOST_CHECK_THROW(functions[15]->call(camp::UserObject(), camp::Args()), camp::NullObject);
-    BOOST_CHECK_THROW(functions[16]->call(camp::UserObject(), camp::Args()), camp::NullObject);
-    BOOST_CHECK_THROW(functions[18]->call(camp::UserObject(), camp::Args()), camp::NullObject);
-    BOOST_CHECK_THROW(functions[19]->call(camp::UserObject(), camp::Args()), camp::NullObject);
+    BOOST_CHECK_THROW(functions[1]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
+    BOOST_CHECK_THROW(functions[3]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
+    BOOST_CHECK_THROW(functions[4]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
+    BOOST_CHECK_THROW(functions[5]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
+    BOOST_CHECK_THROW(functions[6]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
+    BOOST_CHECK_THROW(functions[8]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
+    BOOST_CHECK_THROW(functions[15]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
+    BOOST_CHECK_THROW(functions[16]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
+    BOOST_CHECK_THROW(functions[18]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
+    BOOST_CHECK_THROW(functions[19]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
 }
 
 //-----------------------------------------------------------------------------
@@ -197,16 +197,16 @@ BOOST_AUTO_TEST_CASE(callNotEnoughArguments)
 {
     MyClass object;
 
-    BOOST_CHECK_THROW(functions[2]->call(object, camp::Args()),                      camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[7]->call(object, camp::Args()),                      camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[9]->call(object, camp::Args()),                      camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[10]->call(object, camp::Args(1.)),                   camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[11]->call(object, camp::Args(1, 2)),                 camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[12]->call(object, camp::Args("1", "2", "3")),        camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[13]->call(object, camp::Args(Zero, One, Two, Zero)), camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[20]->call(object, camp::Args()),                     camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[21]->call(object, camp::Args()),                     camp::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[22]->call(object, camp::Args()),                     camp::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[2]->call(object, ponder::Args()),                      ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[7]->call(object, ponder::Args()),                      ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[9]->call(object, ponder::Args()),                      ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[10]->call(object, ponder::Args(1.)),                   ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[11]->call(object, ponder::Args(1, 2)),                 ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[12]->call(object, ponder::Args("1", "2", "3")),        ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero)), ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[20]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[21]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
+    BOOST_CHECK_THROW(functions[22]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
 }
 
 //-----------------------------------------------------------------------------
@@ -215,14 +215,14 @@ BOOST_AUTO_TEST_CASE(callBadArgument)
     MyClass object;
     MyType arg(0);
 
-    BOOST_CHECK_THROW(functions[2]->call(object, camp::Args(arg)),                      camp::BadArgument);
-    BOOST_CHECK_THROW(functions[10]->call(object, camp::Args(arg, arg)),                camp::BadArgument);
-    BOOST_CHECK_THROW(functions[11]->call(object, camp::Args(arg, arg, arg)),           camp::BadArgument);
-    BOOST_CHECK_THROW(functions[12]->call(object, camp::Args(arg, arg, arg, arg)),      camp::BadArgument);
-    BOOST_CHECK_THROW(functions[13]->call(object, camp::Args(arg, arg, arg, arg, arg)), camp::BadArgument);
-    BOOST_CHECK_THROW(functions[20]->call(object, camp::Args(arg)),                     camp::BadArgument);
-    BOOST_CHECK_THROW(functions[21]->call(object, camp::Args(arg)),                     camp::BadArgument);
-    BOOST_CHECK_THROW(functions[22]->call(object, camp::Args(arg)),                     camp::BadArgument);
+    BOOST_CHECK_THROW(functions[2]->call(object, ponder::Args(arg)),                      ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[10]->call(object, ponder::Args(arg, arg)),                ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[11]->call(object, ponder::Args(arg, arg, arg)),           ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[12]->call(object, ponder::Args(arg, arg, arg, arg)),      ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[13]->call(object, ponder::Args(arg, arg, arg, arg, arg)), ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[20]->call(object, ponder::Args(arg)),                     ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[21]->call(object, ponder::Args(arg)),                     ponder::BadArgument);
+    BOOST_CHECK_THROW(functions[22]->call(object, ponder::Args(arg)),                     ponder::BadArgument);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

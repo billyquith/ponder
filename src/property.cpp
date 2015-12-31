@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/property.hpp>
-#include <camp/classvisitor.hpp>
+#include <ponder/property.hpp>
+#include <ponder/classvisitor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 Property::~Property()
@@ -68,7 +68,7 @@ Value Property::get(const UserObject& object) const
 {
     // Check if the property is readable
     if (!readable(object))
-        CAMP_ERROR(ForbiddenRead(name()));
+        PONDER_ERROR(ForbiddenRead(name()));
 
     return getValue(object);
 }
@@ -78,7 +78,7 @@ void Property::set(const UserObject& object, const Value& value) const
 {
     // Check if the property is writable
     if (!writable(object))
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Here we don't call setValue directly, we rather let the user object do it
     // and add any processing needed for proper propagation of the modification
@@ -112,4 +112,4 @@ Property::Property(const std::string& name, Type type)
 {
 }
 
-} // namespace camp
+} // namespace ponder

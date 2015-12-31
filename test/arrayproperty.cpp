@@ -28,9 +28,9 @@
 ****************************************************************************/
 
 #include "arrayproperty.hpp"
-#include <camp/classget.hpp>
-#include <camp/errors.hpp>
-#include <camp/arrayproperty.hpp>
+#include <ponder/classget.hpp>
+#include <ponder/errors.hpp>
+#include <ponder/arrayproperty.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ArrayPropertyTest;
@@ -40,41 +40,41 @@ struct ArrayPropertyFixture
 {
     ArrayPropertyFixture()
     {
-        const camp::Class& metaclass = camp::classByType<MyClass>();
-        bools   = &static_cast<const camp::ArrayProperty&>(metaclass.property("bools"));
-        ints    = &static_cast<const camp::ArrayProperty&>(metaclass.property("ints"));
-        strings = &static_cast<const camp::ArrayProperty&>(metaclass.property("strings"));
-        objects = &static_cast<const camp::ArrayProperty&>(metaclass.property("objects"));
+        const ponder::Class& metaclass = ponder::classByType<MyClass>();
+        bools   = &static_cast<const ponder::ArrayProperty&>(metaclass.property("bools"));
+        ints    = &static_cast<const ponder::ArrayProperty&>(metaclass.property("ints"));
+        strings = &static_cast<const ponder::ArrayProperty&>(metaclass.property("strings"));
+        objects = &static_cast<const ponder::ArrayProperty&>(metaclass.property("objects"));
     }
 
-    const camp::ArrayProperty* bools;
-    const camp::ArrayProperty* ints;
-    const camp::ArrayProperty* strings;
-    const camp::ArrayProperty* objects;
+    const ponder::ArrayProperty* bools;
+    const ponder::ArrayProperty* ints;
+    const ponder::ArrayProperty* strings;
+    const ponder::ArrayProperty* objects;
     MyClass object;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::ArrayProperty
+//                         Tests for ponder::ArrayProperty
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ARRAYPROPERTY, ArrayPropertyFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(bools->type(),   camp::arrayType);
-    BOOST_CHECK_EQUAL(ints->type(),    camp::arrayType);
-    BOOST_CHECK_EQUAL(strings->type(), camp::arrayType);
-    BOOST_CHECK_EQUAL(objects->type(), camp::arrayType);
+    BOOST_CHECK_EQUAL(bools->type(),   ponder::arrayType);
+    BOOST_CHECK_EQUAL(ints->type(),    ponder::arrayType);
+    BOOST_CHECK_EQUAL(strings->type(), ponder::arrayType);
+    BOOST_CHECK_EQUAL(objects->type(), ponder::arrayType);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(elementType)
 {
-    BOOST_CHECK_EQUAL(bools->elementType(),   camp::boolType);
-    BOOST_CHECK_EQUAL(ints->elementType(),    camp::intType);
-    BOOST_CHECK_EQUAL(strings->elementType(), camp::stringType);
-    BOOST_CHECK_EQUAL(objects->elementType(), camp::userType);
+    BOOST_CHECK_EQUAL(bools->elementType(),   ponder::boolType);
+    BOOST_CHECK_EQUAL(ints->elementType(),    ponder::intType);
+    BOOST_CHECK_EQUAL(strings->elementType(), ponder::stringType);
+    BOOST_CHECK_EQUAL(objects->elementType(), ponder::userType);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,28 +98,28 @@ BOOST_AUTO_TEST_CASE(size)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(get)
 {
-    BOOST_CHECK_EQUAL(bools->get(object, 0), camp::Value(object.bools[0]));
-    BOOST_CHECK_EQUAL(bools->get(object, 1), camp::Value(object.bools[1]));
-    BOOST_CHECK_THROW(bools->get(object, 2), camp::OutOfRange);
+    BOOST_CHECK_EQUAL(bools->get(object, 0), ponder::Value(object.bools[0]));
+    BOOST_CHECK_EQUAL(bools->get(object, 1), ponder::Value(object.bools[1]));
+    BOOST_CHECK_THROW(bools->get(object, 2), ponder::OutOfRange);
 
-    BOOST_CHECK_EQUAL(ints->get(object, 0), camp::Value(object.ints[0]));
-    BOOST_CHECK_EQUAL(ints->get(object, 1), camp::Value(object.ints[1]));
-    BOOST_CHECK_EQUAL(ints->get(object, 2), camp::Value(object.ints[2]));
-    BOOST_CHECK_THROW(ints->get(object, 3), camp::OutOfRange);
+    BOOST_CHECK_EQUAL(ints->get(object, 0), ponder::Value(object.ints[0]));
+    BOOST_CHECK_EQUAL(ints->get(object, 1), ponder::Value(object.ints[1]));
+    BOOST_CHECK_EQUAL(ints->get(object, 2), ponder::Value(object.ints[2]));
+    BOOST_CHECK_THROW(ints->get(object, 3), ponder::OutOfRange);
 
-    BOOST_CHECK_EQUAL(strings->get(object, 0), camp::Value(object.strings[0]));
-    BOOST_CHECK_EQUAL(strings->get(object, 1), camp::Value(object.strings[1]));
-    BOOST_CHECK_EQUAL(strings->get(object, 2), camp::Value(object.strings[2]));
-    BOOST_CHECK_EQUAL(strings->get(object, 3), camp::Value(object.strings[3]));
-    BOOST_CHECK_THROW(strings->get(object, 4), camp::OutOfRange);
+    BOOST_CHECK_EQUAL(strings->get(object, 0), ponder::Value(object.strings[0]));
+    BOOST_CHECK_EQUAL(strings->get(object, 1), ponder::Value(object.strings[1]));
+    BOOST_CHECK_EQUAL(strings->get(object, 2), ponder::Value(object.strings[2]));
+    BOOST_CHECK_EQUAL(strings->get(object, 3), ponder::Value(object.strings[3]));
+    BOOST_CHECK_THROW(strings->get(object, 4), ponder::OutOfRange);
 
     std::list<MyType>::const_iterator it = object.objects.begin();
-    BOOST_CHECK_EQUAL(objects->get(object, 0), camp::Value(*std::next(it, 0)));
-    BOOST_CHECK_EQUAL(objects->get(object, 1), camp::Value(*std::next(it, 1)));
-    BOOST_CHECK_EQUAL(objects->get(object, 2), camp::Value(*std::next(it, 2)));
-    BOOST_CHECK_EQUAL(objects->get(object, 3), camp::Value(*std::next(it, 3)));
-    BOOST_CHECK_EQUAL(objects->get(object, 4), camp::Value(*std::next(it, 4)));
-    BOOST_CHECK_THROW(objects->get(object, 5), camp::OutOfRange);
+    BOOST_CHECK_EQUAL(objects->get(object, 0), ponder::Value(*std::next(it, 0)));
+    BOOST_CHECK_EQUAL(objects->get(object, 1), ponder::Value(*std::next(it, 1)));
+    BOOST_CHECK_EQUAL(objects->get(object, 2), ponder::Value(*std::next(it, 2)));
+    BOOST_CHECK_EQUAL(objects->get(object, 3), ponder::Value(*std::next(it, 3)));
+    BOOST_CHECK_EQUAL(objects->get(object, 4), ponder::Value(*std::next(it, 4)));
+    BOOST_CHECK_THROW(objects->get(object, 5), ponder::OutOfRange);
 }
 
 //-----------------------------------------------------------------------------
@@ -135,17 +135,17 @@ BOOST_AUTO_TEST_CASE(set)
     BOOST_CHECK_EQUAL(object.strings[1], "hello");
     BOOST_CHECK(*std::next(object.objects.begin(), 1) == MyType(8));
 
-    BOOST_CHECK_THROW(bools->set(object, 10, true),        camp::OutOfRange);
-    BOOST_CHECK_THROW(ints->set(object, 10, 1),            camp::OutOfRange);
-    BOOST_CHECK_THROW(strings->set(object, 10, "hi"),      camp::OutOfRange);
-    BOOST_CHECK_THROW(objects->set(object, 10, MyType(9)), camp::OutOfRange);
+    BOOST_CHECK_THROW(bools->set(object, 10, true),        ponder::OutOfRange);
+    BOOST_CHECK_THROW(ints->set(object, 10, 1),            ponder::OutOfRange);
+    BOOST_CHECK_THROW(strings->set(object, 10, "hi"),      ponder::OutOfRange);
+    BOOST_CHECK_THROW(objects->set(object, 10, MyType(9)), ponder::OutOfRange);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(insert)
 {
-    BOOST_CHECK_THROW(bools->insert(object, 0, true), camp::ForbiddenWrite);
-    BOOST_CHECK_THROW(ints->insert(object, 0, true),  camp::ForbiddenWrite);
+    BOOST_CHECK_THROW(bools->insert(object, 0, true), ponder::ForbiddenWrite);
+    BOOST_CHECK_THROW(ints->insert(object, 0, true),  ponder::ForbiddenWrite);
 
     std::size_t stringsSize = object.strings.size();
     std::size_t objectsSize = object.objects.size();
@@ -163,8 +163,8 @@ BOOST_AUTO_TEST_CASE(insert)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(remove)
 {
-    BOOST_CHECK_THROW(bools->remove(object, 0), camp::ForbiddenWrite);
-    BOOST_CHECK_THROW(ints->remove(object, 0),  camp::ForbiddenWrite);
+    BOOST_CHECK_THROW(bools->remove(object, 0), ponder::ForbiddenWrite);
+    BOOST_CHECK_THROW(ints->remove(object, 0),  ponder::ForbiddenWrite);
 
     std::string string1 = object.strings[1];
     MyType      object1 = *std::next(object.objects.begin(), 1);

@@ -66,8 +66,7 @@ moc_*
 # End products
 *.dll
 *.dylib
-**/camptest
-include/**/version.hpp
+include/ponder/version.hpp
 
 # Auto-generated documentation files
 doc/api/*/*

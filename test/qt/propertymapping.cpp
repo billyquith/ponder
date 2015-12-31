@@ -28,8 +28,8 @@
 ****************************************************************************/
 
 #include "propertymapping.hpp"
-#include <camp/class.hpp>
-#include <camp/classget.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace PropertyMappingTest;
@@ -39,7 +39,7 @@ struct PropertyMappingFixture
 {
     PropertyMappingFixture()
     {
-        metaclass = &camp::classByType<MyClass>();
+        metaclass = &ponder::classByType<MyClass>();
 
         object.setBool(true);
         object.setInt(-10);
@@ -50,7 +50,7 @@ struct PropertyMappingFixture
     }
 
     MyClass object;
-    const camp::Class* metaclass;
+    const ponder::Class* metaclass;
 };
 
 //-----------------------------------------------------------------------------
@@ -78,12 +78,12 @@ BOOST_AUTO_TEST_CASE(name)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(metaclass->property("m_bool_read").type(),   camp::boolType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_int_read").type(),    camp::intType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_ulong_read").type(),  camp::intType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_double_read").type(), camp::realType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_string_read").type(), camp::stringType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_enum_read").type(),   camp::enumType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_bool_read").type(),   ponder::boolType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_int_read").type(),    ponder::intType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_ulong_read").type(),  ponder::intType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_double_read").type(), ponder::realType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_string_read").type(), ponder::stringType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_enum_read").type(),   ponder::enumType);
 }
 
 //-----------------------------------------------------------------------------

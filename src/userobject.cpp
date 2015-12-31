@@ -28,12 +28,12 @@
 ****************************************************************************/
 
 
-#include <camp/userobject.hpp>
-#include <camp/userproperty.hpp>
-#include <camp/class.hpp>
+#include <ponder/userobject.hpp>
+#include <ponder/userproperty.hpp>
+#include <ponder/class.hpp>
 
 
-namespace camp
+namespace ponder
 {
 const UserObject UserObject::nothing;
 
@@ -95,7 +95,7 @@ const Class& UserObject::getClass() const
     }
     else
     {
-        CAMP_ERROR(NullObject(m_class));
+        PONDER_ERROR(NullObject(m_class));
     }
 }
 
@@ -212,7 +212,7 @@ void UserObject::set(const Property& property, const Value& value) const
     else
     {
         // Error, null object
-        CAMP_ERROR(NullObject(m_class));
+        PONDER_ERROR(NullObject(m_class));
     }
 }
 
@@ -248,4 +248,4 @@ void UserObject::cascadeSet(const UserObject& object, const Property& property, 
     m_parent->member.setValue(object, sub);
 }
 
-} // namespace camp
+} // namespace ponder

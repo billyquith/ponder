@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/class.hpp>
-#include <camp/constructor.hpp>
+#include <ponder/class.hpp>
+#include <ponder/constructor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 const std::string& Class::name() const
@@ -51,7 +51,7 @@ const Class& Class::base(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_bases.size())
-        CAMP_ERROR(OutOfRange(index, m_bases.size()));
+        PONDER_ERROR(OutOfRange(index, m_bases.size()));
 
     return *m_bases[index].base;
 }
@@ -73,7 +73,7 @@ const Function& Class::function(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_functions.size())
-        CAMP_ERROR(OutOfRange(index, m_functions.size()));
+        PONDER_ERROR(OutOfRange(index, m_functions.size()));
 
     FunctionTable::const_iterator it = m_functions.begin();
     std::advance(it, index);
@@ -87,7 +87,7 @@ const Function& Class::function(const std::string& id) const
     FunctionTable::const_iterator it;
     if (!m_functions.tryFind(id, it))
     {
-        CAMP_ERROR(FunctionNotFound(id, name()));
+        PONDER_ERROR(FunctionNotFound(id, name()));
     }
 
     return *it->second;
@@ -110,7 +110,7 @@ const Property& Class::property(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_properties.size())
-        CAMP_ERROR(OutOfRange(index, m_properties.size()));
+        PONDER_ERROR(OutOfRange(index, m_properties.size()));
 
     PropertyTable::const_iterator it = m_properties.begin();
     std::advance(it, index);
@@ -124,7 +124,7 @@ const Property& Class::property(const std::string& id) const
     PropertyTable::const_iterator it;
     if (!m_properties.tryFind(id, it))
     {
-        CAMP_ERROR(PropertyNotFound(id, name()));
+        PONDER_ERROR(PropertyNotFound(id, name()));
     }
 
     return *it->second;
@@ -197,7 +197,7 @@ void* Class::applyOffset(void* pointer, const Class& target) const
         return static_cast<void*>(static_cast<char*>(pointer) - offset);
 
     // No match found, target is not a base class nor a derived class of this
-    CAMP_ERROR(ClassUnrelated(name(), target.name()));
+    PONDER_ERROR(ClassUnrelated(name(), target.name()));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -237,4 +237,4 @@ int Class::baseOffset(const Class& base) const
     return -1;
 }
 
-} // namespace camp
+} // namespace ponder

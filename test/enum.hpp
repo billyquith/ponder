@@ -27,11 +27,11 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_ENUM_HPP
-#define CAMPTEST_ENUM_HPP
+#ifndef PONDERTEST_ENUM_HPP
+#define PONDERTEST_ENUM_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/enum.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/enum.hpp>
 
 namespace EnumTest
 {
@@ -56,18 +56,18 @@ namespace EnumTest
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("EnumTest::MyEnum")
+        ponder::Enum::declare<MyEnum>("EnumTest::MyEnum")
             .value("Zero", Zero)
             .value("One", One)
             .value("Two", Two);
 
-        camp::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
+        ponder::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
     }
 }
 
-CAMP_TYPE(EnumTest::MyUndeclaredEnum /* never declared */)
-CAMP_TYPE(EnumTest::MyTempEnum /* declared during tests */)
-CAMP_AUTO_TYPE(EnumTest::MyEnum, &EnumTest::declare)
-CAMP_AUTO_TYPE(EnumTest::MyEnum2, &EnumTest::declare)
+PONDER_TYPE(EnumTest::MyUndeclaredEnum /* never declared */)
+PONDER_TYPE(EnumTest::MyTempEnum /* declared during tests */)
+PONDER_AUTO_TYPE(EnumTest::MyEnum, &EnumTest::declare)
+PONDER_AUTO_TYPE(EnumTest::MyEnum2, &EnumTest::declare)
 
-#endif // CAMPTEST_ENUM_HPP
+#endif // PONDERTEST_ENUM_HPP

@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_TAGHOLDER_HPP
-#define CAMPTEST_TAGHOLDER_HPP
+#ifndef PONDERTEST_TAGHOLDER_HPP
+#define PONDERTEST_TAGHOLDER_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <string>
 
 namespace TagHolderTest
@@ -61,11 +61,11 @@ namespace TagHolderTest
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("TagHolderTest::MyEnum");
+        ponder::Enum::declare<MyEnum>("TagHolderTest::MyEnum");
 
-        camp::Class::declare<MyType>("TagHolderTest::MyType");
+        ponder::Class::declare<MyType>("TagHolderTest::MyType");
 
-        camp::Class::declare<MyClass>("TagHolderTest::MyClass")
+        ponder::Class::declare<MyClass>("TagHolderTest::MyClass")
             .tag("a")
             .tag("b", 0)
             .tag(true)
@@ -91,8 +91,8 @@ namespace TagHolderTest
     }
 }
 
-CAMP_AUTO_TYPE(TagHolderTest::MyClass, &TagHolderTest::declare)
-CAMP_AUTO_TYPE(TagHolderTest::MyType,  &TagHolderTest::declare)
-CAMP_AUTO_TYPE(TagHolderTest::MyEnum,  &TagHolderTest::declare)
+PONDER_AUTO_TYPE(TagHolderTest::MyClass, &TagHolderTest::declare)
+PONDER_AUTO_TYPE(TagHolderTest::MyType,  &TagHolderTest::declare)
+PONDER_AUTO_TYPE(TagHolderTest::MyEnum,  &TagHolderTest::declare)
 
-#endif // CAMPTEST_TAGHOLDER_HPP
+#endif // PONDERTEST_TAGHOLDER_HPP

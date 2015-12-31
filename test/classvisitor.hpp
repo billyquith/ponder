@@ -27,23 +27,23 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_CLASSVISITOR_HPP
-#define CAMPTEST_CLASSVISITOR_HPP
+#ifndef PONDERTEST_CLASSVISITOR_HPP
+#define PONDERTEST_CLASSVISITOR_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
-#include <camp/classvisitor.hpp>
-#include <camp/simpleproperty.hpp>
-#include <camp/arrayproperty.hpp>
-#include <camp/enumproperty.hpp>
-#include <camp/userproperty.hpp>
-#include <camp/function.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/classvisitor.hpp>
+#include <ponder/simpleproperty.hpp>
+#include <ponder/arrayproperty.hpp>
+#include <ponder/enumproperty.hpp>
+#include <ponder/userproperty.hpp>
+#include <ponder/function.hpp>
+#include <ponder/classbuilder.hpp>
 
 namespace ClassVisitorTest
 {
-    class MyClassVisitor : public camp::ClassVisitor
+    class MyClassVisitor : public ponder::ClassVisitor
     {
     public:
 
@@ -56,27 +56,27 @@ namespace ClassVisitorTest
         {
         }
 
-        virtual void visit(const camp::SimpleProperty& property) override
+        virtual void visit(const ponder::SimpleProperty& property) override
         {
             simpleVisited = true;
         }
 
-        virtual void visit(const camp::ArrayProperty& property) override
+        virtual void visit(const ponder::ArrayProperty& property) override
         {
             arrayVisited = true;
         }
 
-        virtual void visit(const camp::EnumProperty& property) override
+        virtual void visit(const ponder::EnumProperty& property) override
         {
             enumVisited = true;
         }
 
-        virtual void visit(const camp::UserProperty& property) override
+        virtual void visit(const ponder::UserProperty& property) override
         {
             userVisited = true;
         }
 
-        virtual void visit(const camp::Function& function) override
+        virtual void visit(const ponder::Function& function) override
         {
             functionVisited = true;
         }
@@ -107,11 +107,11 @@ namespace ClassVisitorTest
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("ClassVisitorTest::MyEnum");
+        ponder::Enum::declare<MyEnum>("ClassVisitorTest::MyEnum");
 
-        camp::Class::declare<MyType>("ClassVisitorTest::MyType");
+        ponder::Class::declare<MyType>("ClassVisitorTest::MyType");
         
-        camp::Class::declare<MyClass>("ClassVisitorTest::MyClass")
+        ponder::Class::declare<MyClass>("ClassVisitorTest::MyClass")
             .property("simple", &MyClass::simpleProp)
             .property("array", &MyClass::arrayProp)
             .property("enum", &MyClass::enumProp)
@@ -120,8 +120,8 @@ namespace ClassVisitorTest
     }
 }
 
-CAMP_AUTO_TYPE(ClassVisitorTest::MyEnum, &ClassVisitorTest::declare)
-CAMP_AUTO_TYPE(ClassVisitorTest::MyType, &ClassVisitorTest::declare)
-CAMP_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare)
+PONDER_AUTO_TYPE(ClassVisitorTest::MyEnum, &ClassVisitorTest::declare)
+PONDER_AUTO_TYPE(ClassVisitorTest::MyType, &ClassVisitorTest::declare)
+PONDER_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare)
 
-#endif // CAMPTEST_CLASSVISITOR_HPP
+#endif // PONDERTEST_CLASSVISITOR_HPP

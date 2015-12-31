@@ -27,13 +27,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_QT_PROPERTYMAPPING_HPP
-#define CAMPTEST_QT_PROPERTYMAPPING_HPP
+#ifndef PONDERTEST_QT_PROPERTYMAPPING_HPP
+#define PONDERTEST_QT_PROPERTYMAPPING_HPP
 
 #ifndef Q_MOC_RUN
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/qt/qt.hpp>
+#include <ponder/camptype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/qt/qt.hpp>
 #endif
 #include <QObject>
 #include <QString>
@@ -105,18 +105,18 @@ namespace PropertyMappingTest
 
     inline void declare()
     {
-        camp::Enum::declare<MyClass::Enum>("PropertyMappingTest::MyClass::Enum")
+        ponder::Enum::declare<MyClass::Enum>("PropertyMappingTest::MyClass::Enum")
             .value("one", MyClass::one)
             .value("two", MyClass::two)
             .value("three", MyClass::three);
 
-        camp::Class::declare<MyClass>("PropertyMappingTest::MyClass")
+        ponder::Class::declare<MyClass>("PropertyMappingTest::MyClass")
             .external<camp_ext::QtMapper>();
     }
 }
 
-CAMP_AUTO_TYPE_NONCOPYABLE(PropertyMappingTest::MyClass, &PropertyMappingTest::declare)
-CAMP_AUTO_TYPE(PropertyMappingTest::MyClass::Enum, &PropertyMappingTest::declare)
+PONDER_AUTO_TYPE_NONCOPYABLE(PropertyMappingTest::MyClass, &PropertyMappingTest::declare)
+PONDER_AUTO_TYPE(PropertyMappingTest::MyClass::Enum, &PropertyMappingTest::declare)
 Q_DECLARE_METATYPE(PropertyMappingTest::MyClass::Enum)
 
 // To make the boost.test logger happy
@@ -125,4 +125,4 @@ inline std::ostream& operator<<(std::ostream& stream, const QString& string)
     return stream << string.toStdString();
 }
 
-#endif // CAMPTEST_QT_PROPERTYMAPPING_HPP
+#endif // PONDERTEST_QT_PROPERTYMAPPING_HPP

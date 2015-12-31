@@ -33,10 +33,10 @@
 cmake_minimum_required(VERSION 3.0)
 
 # set project's name
-project(CAMP_TEST)
+project(PONDER_TEST)
 
 # all source files
-set(CAMP_TEST_SRCS
+set(PONDER_TEST_SRCS
     main.cpp
     arrayproperty.cpp
     arrayproperty.hpp
@@ -78,35 +78,35 @@ find_package(Boost 1.38.0)
 
 # include files search paths
 include_directories(
-    ${CAMP_SOURCE_DIR}/include
+    ${PONDER_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
 )
 
 # linker search paths
 link_directories(
-    ${CAMP_BINARY_DIR}
+    ${PONDER_BINARY_DIR}
 )
 
 # no implicit link to boost.test library
 add_definitions(-DBOOST_TEST_NO_LIB)
 
 # instruct CMake to build an executable from all of the source files
-add_executable(camptest ${CAMP_TEST_SRCS})
+add_executable(pondertest ${PONDER_TEST_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET camptest PROPERTY CXX_STANDARD 11) # fails silently
-target_compile_features(camptest PRIVATE cxx_range_for cxx_variable_templates) # required
+set_property(TARGET pondertest PROPERTY CXX_STANDARD 11) # fails silently
+target_compile_features(pondertest PRIVATE cxx_range_for cxx_variable_templates) # required
 
 # define d suffix on windows
 if(WIN32)
-    set_target_properties(camptest PROPERTIES DEBUG_POSTFIX d)
+    set_target_properties(pondertest PROPERTIES DEBUG_POSTFIX d)
 endif()
 
 # last thing we have to do is to tell CMake what libraries our executable needs,
-target_link_libraries(camptest camp)
+target_link_libraries(pondertest ponder)
 
 # - Add the executable as a CTest
-add_test(camptest camptest)
+add_test(pondertest pondertest)
 
 # add the qt subdirectory, but do not build it by default
 if(BUILD_TEST_QT)

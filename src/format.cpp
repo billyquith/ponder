@@ -25,7 +25,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <camp/format.h>
+#include <ponder/format.h>
 
 #include <string.h>
 
@@ -49,7 +49,7 @@
 # endif
 #endif
 
-namespace camp {
+namespace ponder {
 namespace util {
 
 using fmt::internal::Arg;
@@ -1328,4 +1328,4 @@ template int fmt::internal::CharTraits<wchar_t>::format_float(
 #endif
 
 } // namespace util
-} // namespace camp
+} // namespace ponder

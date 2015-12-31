@@ -27,13 +27,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_QT_FUNCTIONMAPPING_HPP
-#define CAMPTEST_QT_FUNCTIONMAPPING_HPP
+#ifndef PONDERTEST_QT_FUNCTIONMAPPING_HPP
+#define PONDERTEST_QT_FUNCTIONMAPPING_HPP
 
 #ifndef Q_MOC_RUN
-#include <camp/camptype.hpp>
-#include <camp/qt/qt.hpp>
-#include <camp/class.hpp>
+#include <ponder/camptype.hpp>
+#include <ponder/qt/qt.hpp>
+#include <ponder/class.hpp>
 #endif
 #include <QObject>
 #include <QString>
@@ -79,12 +79,12 @@ namespace FunctionMappingTest
 
     inline void declare()
     {
-        camp::Class::declare<MyClass>("FunctionMappingTest::MyClass")
+        ponder::Class::declare<MyClass>("FunctionMappingTest::MyClass")
             .external<camp_ext::QtMapper>();
     }
 }
 
-CAMP_AUTO_TYPE_NONCOPYABLE(FunctionMappingTest::MyClass, &FunctionMappingTest::declare);
+PONDER_AUTO_TYPE_NONCOPYABLE(FunctionMappingTest::MyClass, &FunctionMappingTest::declare);
 
 // To make the boost.test logger happy
 inline std::ostream& operator<<(std::ostream& stream, const QString& string)
@@ -92,4 +92,4 @@ inline std::ostream& operator<<(std::ostream& stream, const QString& string)
     return stream << string.toStdString();
 }
 
-#endif // CAMPTEST_QT_FUNCTIONMAPPING_HPP
+#endif // PONDERTEST_QT_FUNCTIONMAPPING_HPP

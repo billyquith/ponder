@@ -27,17 +27,17 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_VALUE_HPP
-#define CAMPTEST_VALUE_HPP
+#ifndef PONDERTEST_VALUE_HPP
+#define PONDERTEST_VALUE_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
-#include <camp/type.hpp>
-#include <camp/valuevisitor.hpp>
-#include <camp/enumobject.hpp>
-#include <camp/userobject.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/type.hpp>
+#include <ponder/valuevisitor.hpp>
+#include <ponder/enumobject.hpp>
+#include <ponder/userobject.hpp>
+#include <ponder/classbuilder.hpp>
 
 namespace ValueTest
 {
@@ -68,54 +68,54 @@ namespace ValueTest
         Two = 2
     };
 
-    struct Visitor : public camp::ValueVisitor<camp::Type>
+    struct Visitor : public ponder::ValueVisitor<ponder::Type>
     {
-         camp::Type operator()(camp::NoType)
+         ponder::Type operator()(ponder::NoType)
          {
-             return camp::noType;
+             return ponder::noType;
          }
 
-         camp::Type operator()(bool)
+         ponder::Type operator()(bool)
          {
-             return camp::boolType;
+             return ponder::boolType;
          }
          
-         camp::Type operator()(long)
+         ponder::Type operator()(long)
          {
-             return camp::intType;
+             return ponder::intType;
          }
          
-         camp::Type operator()(double)
+         ponder::Type operator()(double)
          {
-             return camp::realType;
+             return ponder::realType;
          }
          
-         camp::Type operator()(const std::string&)
+         ponder::Type operator()(const std::string&)
          {
-             return camp::stringType;
+             return ponder::stringType;
          }
          
-         camp::Type operator()(const camp::EnumObject&)
+         ponder::Type operator()(const ponder::EnumObject&)
          {
-             return camp::enumType;
+             return ponder::enumType;
          }
          
-         camp::Type operator()(const camp::UserObject&)
+         ponder::Type operator()(const ponder::UserObject&)
          {
-             return camp::userType;
+             return ponder::userType;
          }
     };
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("ValueTest::MyEnum")
+        ponder::Enum::declare<MyEnum>("ValueTest::MyEnum")
             .value("One", One)
             .value("Two", Two);
-        camp::Class::declare<MyClass>("ValueTest::MyClass");
+        ponder::Class::declare<MyClass>("ValueTest::MyClass");
     }
 }
 
-CAMP_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare)
-CAMP_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
+PONDER_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare)
+PONDER_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
 
-#endif // CAMPTEST_VALUE_HPP
+#endif // PONDERTEST_VALUE_HPP

@@ -19,9 +19,9 @@ before_script:
   - cmake --version
   - cmake -G "Ninja" -DBUILD_TEST=TRUE
 
-script: ninja camptest
+script: ninja pondertest
 
-after_success: ./test/camptest
+after_success: ./test/pondertest
 
 notifications:
   email:

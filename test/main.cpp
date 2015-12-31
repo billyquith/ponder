@@ -27,10 +27,10 @@
 **
 ****************************************************************************/
 
-#include <camp/detail/classmanager.hpp>
+#include <ponder/detail/classmanager.hpp>
 
 // This must be defined once in the entire project
-#define BOOST_TEST_MODULE CAMP test
+#define BOOST_TEST_MODULE Ponder test
 
 // This will embed the whole source code of boost.test,
 // so that we don't need to link to it as an external library.
@@ -40,10 +40,10 @@
 
 struct GlobalTestFixture
 {
-    camp::detail::ClassManager* m_classManagerInstance;
+    ponder::detail::ClassManager* m_classManagerInstance;
 
     GlobalTestFixture()
-    :   m_classManagerInstance(new camp::detail::ClassManager())
+    :   m_classManagerInstance(new ponder::detail::ClassManager())
     {
     }
 

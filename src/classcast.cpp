@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/classcast.hpp>
-#include <camp/class.hpp>
+#include <ponder/classcast.hpp>
+#include <ponder/class.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
@@ -40,4 +40,4 @@ void* classCast(void* pointer, const Class& sourceClass, const Class& targetClas
     return sourceClass.applyOffset(pointer, targetClass);
 }
 
-} // namespace camp
+} // namespace ponder

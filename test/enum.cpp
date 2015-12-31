@@ -28,8 +28,8 @@
 ****************************************************************************/
 
 #include "enum.hpp"
-#include <camp/enumget.hpp>
-#include <camp/errors.hpp>
+#include <ponder/enumget.hpp>
+#include <ponder/errors.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace EnumTest;
@@ -39,35 +39,35 @@ struct EnumFixture
 {
     EnumFixture()
     {
-        metaenum = &camp::enumByType<MyEnum>();
+        metaenum = &ponder::enumByType<MyEnum>();
     }
 
-    const camp::Enum* metaenum;
+    const ponder::Enum* metaenum;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Enum
+//                         Tests for ponder::Enum
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ENUM, EnumFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(declare)
 {
-    std::size_t count = camp::enumCount();
+    std::size_t count = ponder::enumCount();
 
-    camp::Enum::declare<MyTempEnum>("EnumTest::MyTempEnum");
+    ponder::Enum::declare<MyTempEnum>("EnumTest::MyTempEnum");
 
-    BOOST_CHECK_EQUAL(camp::enumCount(), count + 1);
+    BOOST_CHECK_EQUAL(ponder::enumCount(), count + 1);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(declareExceptions)
 {
     // to make sure it is declared
-    camp::enumByType<MyEnum>();
+    ponder::enumByType<MyEnum>();
 
-    BOOST_CHECK_THROW(camp::Enum::declare<MyEnum>(), camp::EnumAlreadyCreated);
-    BOOST_CHECK_THROW(camp::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"), camp::EnumAlreadyCreated);
+    BOOST_CHECK_THROW(ponder::Enum::declare<MyEnum>(), ponder::EnumAlreadyCreated);
+    BOOST_CHECK_THROW(ponder::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"), ponder::EnumAlreadyCreated);
 }
 
 //-----------------------------------------------------------------------------
@@ -76,24 +76,24 @@ BOOST_AUTO_TEST_CASE(get)
     MyEnum object = MyEnum();
     MyUndeclaredEnum object2 = MyUndeclaredEnum();
 
-    BOOST_CHECK_EQUAL(camp::enumByName("EnumTest::MyEnum").name(), "EnumTest::MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByType<MyEnum>().name(),           "EnumTest::MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByObject(object).name(),           "EnumTest::MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByObject(&object).name(),          "EnumTest::MyEnum");
-    BOOST_CHECK_EQUAL(camp::enumByTypeSafe<MyUndeclaredEnum>(),    static_cast<camp::Enum*>(0));
+    BOOST_CHECK_EQUAL(ponder::enumByName("EnumTest::MyEnum").name(), "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(ponder::enumByType<MyEnum>().name(),           "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(ponder::enumByObject(object).name(),           "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(ponder::enumByObject(&object).name(),          "EnumTest::MyEnum");
+    BOOST_CHECK_EQUAL(ponder::enumByTypeSafe<MyUndeclaredEnum>(),    static_cast<ponder::Enum*>(0));
 
-    BOOST_CHECK_THROW(camp::enumByName("EnumTest::MyUndeclaredEnum"), camp::EnumNotFound);
-    BOOST_CHECK_THROW(camp::enumByType<MyUndeclaredEnum>(),           camp::EnumNotFound);
-    BOOST_CHECK_THROW(camp::enumByObject(object2),                    camp::EnumNotFound);
-    BOOST_CHECK_THROW(camp::enumByObject(&object2),                   camp::EnumNotFound);
+    BOOST_CHECK_THROW(ponder::enumByName("EnumTest::MyUndeclaredEnum"), ponder::EnumNotFound);
+    BOOST_CHECK_THROW(ponder::enumByType<MyUndeclaredEnum>(),           ponder::EnumNotFound);
+    BOOST_CHECK_THROW(ponder::enumByObject(object2),                    ponder::EnumNotFound);
+    BOOST_CHECK_THROW(ponder::enumByObject(&object2),                   ponder::EnumNotFound);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(comparisons)
 {
-    BOOST_CHECK(camp::enumByType<MyEnum>()  == camp::enumByType<MyEnum>());
-    BOOST_CHECK(camp::enumByType<MyEnum>()  != camp::enumByType<MyEnum2>());
-    BOOST_CHECK(camp::enumByType<MyEnum2>() != camp::enumByType<MyEnum>());
+    BOOST_CHECK(ponder::enumByType<MyEnum>()  == ponder::enumByType<MyEnum>());
+    BOOST_CHECK(ponder::enumByType<MyEnum>()  != ponder::enumByType<MyEnum2>());
+    BOOST_CHECK(ponder::enumByType<MyEnum2>() != ponder::enumByType<MyEnum>());
 }
 
 //-----------------------------------------------------------------------------
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE(pairs)
     BOOST_CHECK_EQUAL(metaenum->pair(1).value, One);
     BOOST_CHECK_EQUAL(metaenum->pair(2).name, "Two");
     BOOST_CHECK_EQUAL(metaenum->pair(2).value, Two);
-    BOOST_CHECK_THROW(metaenum->pair(3), camp::OutOfRange);
+    BOOST_CHECK_THROW(metaenum->pair(3), ponder::OutOfRange);
 }
 
 //-----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(values)
     BOOST_CHECK_EQUAL(metaenum->value("Zero"), Zero);
     BOOST_CHECK_EQUAL(metaenum->value("One"),  One);
     BOOST_CHECK_EQUAL(metaenum->value("Two"),  Two);
-    BOOST_CHECK_THROW(metaenum->value("xxx"),  camp::EnumNameNotFound);
+    BOOST_CHECK_THROW(metaenum->value("xxx"),  ponder::EnumNameNotFound);
 }
 
 //-----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(names)
     BOOST_CHECK_EQUAL(metaenum->name(Zero), "Zero");
     BOOST_CHECK_EQUAL(metaenum->name(One),  "One");
     BOOST_CHECK_EQUAL(metaenum->name(Two),  "Two");
-    BOOST_CHECK_THROW(metaenum->name(100),  camp::EnumValueNotFound);
+    BOOST_CHECK_THROW(metaenum->name(100),  ponder::EnumValueNotFound);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

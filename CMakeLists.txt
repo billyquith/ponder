@@ -3,7 +3,7 @@
 ## Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ## Contact: Tegesoft Information (contact@tegesoft.com)
 ##
-## This file is part of the CAMP library.
+## This file is part of the Ponder library.
 ##
 ## The MIT License (MIT)
 ##
@@ -33,7 +33,9 @@
 cmake_minimum_required(VERSION 3.0)
 
 # set project's name
-project(CAMP)
+project(Ponder)
+
+set(PONDER_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 
 # include project configuration
 include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
@@ -41,10 +43,10 @@ include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # all source files
 file(GLOB_RECURSE SRC_HEADERS
-    include/camp/*.hpp include/camp/*.inl
+    include/ponder/*.hpp include/ponder/*.inl
 )
 file(GLOB SRC_SOURCE src/*.cpp)
-set(CAMP_SRCS
+set(PONDER_SRCS
     ${SRC_HEADERS}
     ${SRC_SOURCE}
 )
@@ -54,37 +56,37 @@ find_package(Boost 1.38.0 REQUIRED)
 
 # include files search paths
 include_directories(
-    ${CAMP_SOURCE_DIR}/include
+    ${PONDER_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
 )
 
 # generate version.hpp
 message("Generate version.hpp")
-configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/camp/version.hpp @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
 
 # instruct CMake to build a shared library from all of the source files
-add_library(camp ${CAMP_SRCS})
+add_library(ponder ${PONDER_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET camp PROPERTY CXX_STANDARD 11) # fails silently
-target_compile_features(camp PRIVATE cxx_range_for cxx_variable_templates) # required
+set_property(TARGET ponder PROPERTY CXX_STANDARD 11) # fails silently
+target_compile_features(ponder PRIVATE cxx_range_for cxx_variable_templates) # required
 
 # define the export macro
 if(BUILD_SHARED_LIBS)
-    set_target_properties(camp PROPERTIES DEFINE_SYMBOL CAMP_EXPORTS)
+    set_target_properties(ponder PROPERTIES DEFINE_SYMBOL PONDER_EXPORTS)
 else()
-    add_definitions(-DCAMP_STATIC)
+    add_definitions(-DPONDER_STATIC)
 endif()
 
 # define d suffix on windows
 if(WIN32)
-    set_target_properties(camp PROPERTIES DEBUG_POSTFIX d)
+    set_target_properties(ponder PROPERTIES DEBUG_POSTFIX d)
 endif()
 
 # gcc 4.x on Windows requires the -static-libgcc linker option to get rid of an extra DLL
 if (WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
     if(${GCC_VERSION} MATCHES "4\\..*")
-        set_target_properties(camp PROPERTIES LINK_FLAGS -static-libgcc)
+        set_target_properties(ponder PROPERTIES LINK_FLAGS -static-libgcc)
     endif()
 endif()
 
@@ -104,18 +106,18 @@ add_subdirectory(doc)
 # support files
 ###############################
 # pkg-config
-configure_file(cmake/camp.pc.in ${CMAKE_BINARY_DIR}/camp.pc @ONLY)
+configure_file(cmake/ponder.pc.in ${CMAKE_BINARY_DIR}/ponder.pc @ONLY)
 
 # cmake
 include(CMakePackageConfigHelpers)
 
-configure_package_config_file(cmake/CAMPConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfig.cmake
-    INSTALL_DESTINATION lib/camp/cmake
+configure_package_config_file(cmake/PonderConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/PonderConfig.cmake
+    INSTALL_DESTINATION lib/ponder/cmake
 )
 
 write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfigVersion.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/PonderConfigVersion.cmake
     VERSION ${VERSION_STR}
     COMPATIBILITY AnyNewerVersion
 )
@@ -129,31 +131,31 @@ install(DIRECTORY include
     COMPONENT devel
 )
 
-#install(FILES ${CMAKE_BINARY_DIR}/include/camp/version.hpp
-#    DESTINATION include/camp
+#install(FILES ${CMAKE_BINARY_DIR}/include/ponder/version.hpp
+#    DESTINATION include/ponder
 #    COMPONENT devel
 #)
 
-install(TARGETS camp
-    EXPORT CAMPTargets
+install(TARGETS ponder
+    EXPORT PonderTargets
     RUNTIME DESTINATION bin COMPONENT bin
     LIBRARY DESTINATION lib COMPONENT bin
     ARCHIVE DESTINATION lib COMPONENT devel
 )
 
-install(FILES ${CMAKE_BINARY_DIR}/camp.pc
+install(FILES ${CMAKE_BINARY_DIR}/ponder.pc
     DESTINATION lib/pkgconfig
     COMPONENT devel
 )
 
-install(EXPORT CAMPTargets
-    NAMESPACE camp::
-    DESTINATION lib/camp/cmake
+install(EXPORT PonderTargets
+    NAMESPACE ponder::
+    DESTINATION lib/ponder/cmake
     COMPONENT devel
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/CAMPConfigVersion.cmake
-    DESTINATION lib/camp/cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PonderConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/PonderConfigVersion.cmake
+    DESTINATION lib/ponder/cmake
     COMPONENT devel
 )
 
@@ -170,4 +172,4 @@ install(DIRECTORY cmake
 # packaging
 ###############################
 
-include(${CAMP_SOURCE_DIR}/cmake/Packaging.cmake OPTIONAL)
+include(${PONDER_SOURCE_DIR}/cmake/Packaging.cmake OPTIONAL)

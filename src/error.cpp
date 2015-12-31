@@ -28,10 +28,10 @@
 ****************************************************************************/
 
 
-#include <camp/error.hpp>
+#include <ponder/error.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 Error::~Error() throw()
@@ -57,4 +57,4 @@ Error::Error(const std::string& message)
 {
 }
 
-} // namespace camp
+} // namespace ponder

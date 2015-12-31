@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 #include "tagholder.hpp"
-#include <camp/classget.hpp>
+#include <ponder/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace TagHolderTest;
@@ -38,14 +38,14 @@ struct TagHolderFixture
 {
     TagHolderFixture()
     {
-        metaclass = &camp::classByType<MyClass>();
+        metaclass = &ponder::classByType<MyClass>();
     }
 
-    const camp::Class* metaclass;
+    const ponder::Class* metaclass;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::TagHolder
+//                         Tests for ponder::TagHolder
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(TAGHOLDER, TagHolderFixture)
 
@@ -86,20 +86,20 @@ BOOST_AUTO_TEST_CASE(staticTags)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(staticValues)
 {
-    BOOST_CHECK_EQUAL(metaclass->tag("static1"), camp::Value(true));
-    BOOST_CHECK_EQUAL(metaclass->tag("static2"), camp::Value(10));
-    BOOST_CHECK_EQUAL(metaclass->tag("static3"), camp::Value(5.25));
-    BOOST_CHECK_EQUAL(metaclass->tag("static4"), camp::Value("hello"));
-    BOOST_CHECK_EQUAL(metaclass->tag("static5"), camp::Value(Ten));
-    BOOST_CHECK_EQUAL(metaclass->tag("static6"), camp::Value(object1));
-    BOOST_CHECK_EQUAL(metaclass->tag("xxxxxxx"), camp::Value::nothing);
+    BOOST_CHECK_EQUAL(metaclass->tag("static1"), ponder::Value(true));
+    BOOST_CHECK_EQUAL(metaclass->tag("static2"), ponder::Value(10));
+    BOOST_CHECK_EQUAL(metaclass->tag("static3"), ponder::Value(5.25));
+    BOOST_CHECK_EQUAL(metaclass->tag("static4"), ponder::Value("hello"));
+    BOOST_CHECK_EQUAL(metaclass->tag("static5"), ponder::Value(Ten));
+    BOOST_CHECK_EQUAL(metaclass->tag("static6"), ponder::Value(object1));
+    BOOST_CHECK_EQUAL(metaclass->tag("xxxxxxx"), ponder::Value::nothing);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(dynamicValues)
 {
-    BOOST_CHECK_EQUAL(metaclass->tag("dynamic1", MyClass(10)), camp::Value(10));
-    BOOST_CHECK_EQUAL(metaclass->tag("dynamic2", MyClass(10)), camp::Value("func"));
+    BOOST_CHECK_EQUAL(metaclass->tag("dynamic1", MyClass(10)), ponder::Value(10));
+    BOOST_CHECK_EQUAL(metaclass->tag("dynamic2", MyClass(10)), ponder::Value("func"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

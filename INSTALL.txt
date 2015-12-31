@@ -1,27 +1,27 @@
 
-Building CAMP
--------------
+Building Ponder
+---------------
 
-The build system used for CAMP is CMake (http://cmake.org/).
+The build system used for Ponder is CMake (http://cmake.org/).
 
-Moreover, the CAMP library depends on Boost (http://www.boost.org/).
-
-CMake will find Boost automatically if it is properly installed. If not, the BOOST_ROOT CMake variable can
+Boost (http://www.boost.org/) is required to run the unit tests. CMake will find Boost
+automatically if it is properly installed. If not, the BOOST_ROOT CMake variable can
 be defined to locate it.
 
-Once you have generated the project files / makefiles for your favorite compiler (please refer to http://cmake.org/
-if you do not know how to do it), you can use them to compile the CAMP binaries.
+Once you have generated the project files / makefiles for your favorite compiler
+(please refer to http://cmake.org/ if you do not know how to do it),
+you can use them to compile the Ponder binaries.
  
 The following targets are defined:
  
 (empty)
     builds everything
 
-camp
-    builds the CAMP library
+ponder
+    builds the Ponder library
 
-camptest
-    builds the CAMP unit tests
+pondertest
+    builds the Ponder unit tests
 
 doc
     generates the API documentation in HTML format; on Windows, if the HTML Help Workshop program
@@ -31,17 +31,17 @@ install
     installs all the generated components to the standard path
 
 
-Installing CAMP
----------------
+Installing Ponder
+-----------------
 
-There are three ways to install CAMP:
+There are three ways to install Ponder:
 - Running the installer (on Windows and Mac OS X) and following the instructions
 - Uncompressing the binary archive to a standard path (C:\Program Files, /usr/local/, ...)
 - Using CMake and calling the "install" target (see above)
 
 This will create the following directories:
-- <INSTALL_PATH>/bin contains the CAMP binary files
+- <INSTALL_PATH>/bin contains the Ponder binary files
 - <INSTALL_PATH>/doc contains the API documentation
-- <INSTALL_PATH>/include contains the CAMP header files
-- <INSTALL_PATH>/lib contains the CAMP library files
-- <INSTALL_PATH>/utils contains various utilities related to CAMP
+- <INSTALL_PATH>/include contains the Ponder header files
+- <INSTALL_PATH>/lib contains the Ponder library files
+- <INSTALL_PATH>/utils contains various utilities related to Ponder

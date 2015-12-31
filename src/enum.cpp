@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/enum.hpp>
-#include <camp/errors.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/errors.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 const std::string& Enum::name() const
@@ -51,7 +51,7 @@ Enum::Pair Enum::pair(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_enums.size())
-        CAMP_ERROR(OutOfRange(index, m_enums.size()));
+        PONDER_ERROR(OutOfRange(index, m_enums.size()));
 
     auto it = m_enums.at(index);
     return Pair(it->first, it->second);
@@ -75,7 +75,7 @@ const std::string& Enum::name(EnumValue value) const
     auto it = m_enums.findValue(value);
     
     if (it == m_enums.end())
-        CAMP_ERROR(EnumValueNotFound(value, name()));
+        PONDER_ERROR(EnumValueNotFound(value, name()));
 
     return it->first;
 }
@@ -86,7 +86,7 @@ Enum::EnumValue Enum::value(const std::string& name) const
     auto it = m_enums.findKey(name);
 
     if (it == m_enums.end())
-        CAMP_ERROR(EnumNameNotFound(name, m_name));
+        PONDER_ERROR(EnumNameNotFound(name, m_name));
 
     return it->second;
 }
@@ -109,4 +109,4 @@ Enum::Enum(const std::string& name)
 {
 }
 
-} // namespace camp
+} // namespace ponder

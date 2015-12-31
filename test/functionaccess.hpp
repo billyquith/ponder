@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_FUNCTIONACCESS_HPP
-#define CAMPTEST_FUNCTIONACCESS_HPP
+#ifndef PONDERTEST_FUNCTIONACCESS_HPP
+#define PONDERTEST_FUNCTIONACCESS_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <functional>
 
 namespace FunctionAccessTest
@@ -53,7 +53,7 @@ namespace FunctionAccessTest
 
     void declare()
     {
-        camp::Class::declare<MyClass>("FunctionAccessTest::MyClass")
+        ponder::Class::declare<MyClass>("FunctionAccessTest::MyClass")
 
             // ***** constant value *****
             .function("f0", &MyClass::f).callable(false)
@@ -69,6 +69,6 @@ namespace FunctionAccessTest
     }
 }
 
-CAMP_AUTO_TYPE(FunctionAccessTest::MyClass, &FunctionAccessTest::declare);
+PONDER_AUTO_TYPE(FunctionAccessTest::MyClass, &FunctionAccessTest::declare);
 
-#endif // CAMPTEST_FUNCTIONACCESS_HPP
+#endif // PONDERTEST_FUNCTIONACCESS_HPP

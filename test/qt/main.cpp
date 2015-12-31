@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 // This must be defined once in the entire project
-#define BOOST_TEST_MODULE CAMP testqt
+#define BOOST_TEST_MODULE Ponder testqt
 
 // This will embed the whole source code of boost.test,
 // so that we don't need to link to it as an external library.

@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/simpleproperty.hpp>
-#include <camp/classvisitor.hpp>
+#include <ponder/simpleproperty.hpp>
+#include <ponder/classvisitor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 SimpleProperty::SimpleProperty(const std::string& name, Type type)
@@ -51,4 +51,4 @@ void SimpleProperty::accept(ClassVisitor& visitor) const
     visitor.visit(*this);
 }
 
-} // namespace camp
+} // namespace ponder

@@ -28,9 +28,9 @@
 ****************************************************************************/
 
 #include "enumobject.hpp"
-#include <camp/errors.hpp>
-#include <camp/enumget.hpp>
-#include <camp/enumobject.hpp>
+#include <ponder/errors.hpp>
+#include <ponder/enumget.hpp>
+#include <ponder/enumobject.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace EnumObjectTest;
@@ -44,13 +44,13 @@ struct EnumObjectFixture
     {
     }
 
-    camp::EnumObject zero;
-    camp::EnumObject one;
-    camp::EnumObject two;
+    ponder::EnumObject zero;
+    ponder::EnumObject one;
+    ponder::EnumObject two;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::EnumObject
+//                         Tests for ponder::EnumObject
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ENUMOBJECT, EnumObjectFixture)
 
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(error)
 {
     // The meta-enum of MyUndeclaredEnum is *not* declared
 
-    BOOST_CHECK_THROW(camp::EnumObject obj(Undeclared), camp::EnumNotFound);
+    BOOST_CHECK_THROW(ponder::EnumObject obj(Undeclared), ponder::EnumNotFound);
 }
 
 //-----------------------------------------------------------------------------
@@ -81,23 +81,23 @@ BOOST_AUTO_TEST_CASE(name)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(getEnum)
 {
-    BOOST_CHECK(zero.getEnum() == camp::enumByType<MyEnum>());
-    BOOST_CHECK(one.getEnum()  == camp::enumByType<MyEnum>());
-    BOOST_CHECK(two.getEnum()  == camp::enumByType<MyEnum>());
+    BOOST_CHECK(zero.getEnum() == ponder::enumByType<MyEnum>());
+    BOOST_CHECK(one.getEnum()  == ponder::enumByType<MyEnum>());
+    BOOST_CHECK(two.getEnum()  == ponder::enumByType<MyEnum>());
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(equal)
 {
     // Setup
-    camp::EnumObject zero2(Zero2);
-    camp::EnumObject one2(One2);
-    camp::EnumObject two2(Two2);
+    ponder::EnumObject zero2(Zero2);
+    ponder::EnumObject one2(One2);
+    ponder::EnumObject two2(Two2);
 
     // Tests
-    BOOST_CHECK_EQUAL(zero == camp::EnumObject(Zero), true);
-    BOOST_CHECK_EQUAL(one  == camp::EnumObject(One),  true);
-    BOOST_CHECK_EQUAL(two  == camp::EnumObject(Two),  true);
+    BOOST_CHECK_EQUAL(zero == ponder::EnumObject(Zero), true);
+    BOOST_CHECK_EQUAL(one  == ponder::EnumObject(One),  true);
+    BOOST_CHECK_EQUAL(two  == ponder::EnumObject(Two),  true);
 
     BOOST_CHECK_EQUAL(zero == one,  false);
     BOOST_CHECK_EQUAL(one  == two,  false);

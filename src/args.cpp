@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/args.hpp>
-#include <camp/value.hpp>
+#include <ponder/args.hpp>
+#include <ponder/value.hpp>
 
 
-namespace camp
+namespace ponder
 {
 const Args Args::empty;
 
@@ -47,7 +47,7 @@ const Value& Args::operator[](std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_values.size())
-        CAMP_ERROR(OutOfRange(index, m_values.size()));
+        PONDER_ERROR(OutOfRange(index, m_values.size()));
 
     return m_values[index];
 }
@@ -69,4 +69,4 @@ Args& Args::operator+=(const Value& arg)
     return *this;
 }
 
-} // namespace camp
+} // namespace ponder

@@ -27,13 +27,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_PROPERTY_HPP
-#define CAMPTEST_PROPERTY_HPP
+#ifndef PONDERTEST_PROPERTY_HPP
+#define PONDERTEST_PROPERTY_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/classbuilder.hpp>
 #include <string>
 
 namespace PropertyTest
@@ -138,14 +138,14 @@ namespace PropertyTest
     {
         using namespace std::placeholders;
 
-        camp::Enum::declare<MyEnum>("PropertyTest::MyEnum")
+        ponder::Enum::declare<MyEnum>("PropertyTest::MyEnum")
             .value("Zero", Zero)
             .value("One",  One)
             .value("Two",  Two);
 
-        camp::Class::declare<MyType>("PropertyTest::MyType");
+        ponder::Class::declare<MyType>("PropertyTest::MyType");
 
-        camp::Class::declare<MyClass>("PropertyTest::MyClass")
+        ponder::Class::declare<MyClass>("PropertyTest::MyClass")
 
             // ***** non-member functions *****
             .property("p1", &getP1)         // read-only getter (const param)
@@ -189,8 +189,8 @@ namespace PropertyTest
     }
 }
 
-CAMP_AUTO_TYPE(PropertyTest::MyEnum,  &PropertyTest::declare)
-CAMP_AUTO_TYPE(PropertyTest::MyType,  &PropertyTest::declare)
-CAMP_AUTO_TYPE(PropertyTest::MyClass, &PropertyTest::declare)
+PONDER_AUTO_TYPE(PropertyTest::MyEnum,  &PropertyTest::declare)
+PONDER_AUTO_TYPE(PropertyTest::MyType,  &PropertyTest::declare)
+PONDER_AUTO_TYPE(PropertyTest::MyClass, &PropertyTest::declare)
 
-#endif // CAMPTEST_PROPERTY_HPP
+#endif // PONDERTEST_PROPERTY_HPP

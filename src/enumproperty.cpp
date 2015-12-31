@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/enumproperty.hpp>
-#include <camp/classvisitor.hpp>
+#include <ponder/enumproperty.hpp>
+#include <ponder/classvisitor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 EnumProperty::EnumProperty(const std::string& name, const Enum& propEnum)
@@ -58,4 +58,4 @@ void EnumProperty::accept(ClassVisitor& visitor) const
     visitor.visit(*this);
 }
 
-} // namespace camp
+} // namespace ponder

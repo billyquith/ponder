@@ -27,13 +27,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_FUNCTION_HPP
-#define CAMPTEST_FUNCTION_HPP
+#ifndef PONDERTEST_FUNCTION_HPP
+#define PONDERTEST_FUNCTION_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/enum.hpp>
-#include <camp/class.hpp>
-#include <camp/value.hpp>
+#include <ponder/camptype.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/class.hpp>
+#include <ponder/value.hpp>
 #include <string>
 
 namespace FunctionTest
@@ -83,7 +83,7 @@ namespace FunctionTest
         MyType p4; const MyType& f4() {return p4;}
         MyType p5; const MyType& f5() const {return p5;}
         // f6 is inherited
-        camp::Value f7(camp::Value v) {return v;}
+        ponder::Value f7(ponder::Value v) {return v;}
 
         void f8() {}
         void f9(bool) {}
@@ -130,16 +130,16 @@ namespace FunctionTest
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("FunctionTest::MyEnum")
+        ponder::Enum::declare<MyEnum>("FunctionTest::MyEnum")
             .value("Zero", Zero)
             .value("One",  One)
             .value("Two",  Two);
 
-        camp::Class::declare<MyType>("FunctionTest::MyType");
+        ponder::Class::declare<MyType>("FunctionTest::MyType");
 
-        camp::Class::declare<MyBase>("FunctionTest::MyBase");
+        ponder::Class::declare<MyBase>("FunctionTest::MyBase");
 
-        camp::Class::declare<MyClass>("FunctionTest::MyClass")
+        ponder::Class::declare<MyClass>("FunctionTest::MyClass")
             .base<MyBase>()
 
             // ***** non-member functions *****
@@ -151,7 +151,7 @@ namespace FunctionTest
             .function("f4", &MyClass::f4) // non-const
             .function("f5", &MyClass::f5) // const
             .function("f6", &MyClass::f6) // inherited
-            .function("f7", &MyClass::f7) // camp::Value as return and argument types
+            .function("f7", &MyClass::f7) // ponder::Value as return and argument types
 
             // ***** arguments count ******
             .function("f8",  &MyClass::f8)  // 0 argument
@@ -177,9 +177,9 @@ namespace FunctionTest
     }
 }
 
-CAMP_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
-CAMP_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
-CAMP_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
-CAMP_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
 
-#endif // CAMPTEST_FUNCTION_HPP
+#endif // PONDERTEST_FUNCTION_HPP

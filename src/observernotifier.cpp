@@ -28,12 +28,12 @@
 ****************************************************************************/
 
 
-#include <camp/detail/observernotifier.hpp>
-#include <camp/observer.hpp>
+#include <ponder/detail/observernotifier.hpp>
+#include <ponder/observer.hpp>
 #include <cassert>
 
 
-namespace camp
+namespace ponder
 {
 namespace detail
 {
@@ -94,4 +94,4 @@ void ObserverNotifier::notifyEnumRemoved(const Enum& theEnum)
 
 } // namespace detail
 
-} // namespace camp
+} // namespace ponder

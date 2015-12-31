@@ -28,7 +28,7 @@
  ****************************************************************************/
 
 
-#include <camp/util.hpp>
+#include <ponder/util.hpp>
 
 // Convert to string:
 //  #include "format.h"
@@ -37,7 +37,7 @@
 // Convert from string:
 //  http://tinodidriksen.com/2010/02/16/cpp-convert-string-to-int-speed/
 
-namespace camp
+namespace ponder
 {
 namespace detail
 {
@@ -180,7 +180,7 @@ static const char* c_typeNames[] =
     "user",     //userType
 };
     
-//static_assert(sizeof(c_typeNames)/sizeof(c_typeNames[0])==camp::Type::userType+1, "typeNames out of sync");
+//static_assert(sizeof(c_typeNames)/sizeof(c_typeNames[0])==ponder::Type::userType+1, "typeNames out of sync");
 
 const char* typeAsString(Type t)
 {
@@ -188,4 +188,4 @@ const char* typeAsString(Type t)
 }
 
 } // namespace util
-} // namespace camp
+} // namespace ponder

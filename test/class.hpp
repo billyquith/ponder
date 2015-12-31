@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_CLASS_HPP
-#define CAMPTEST_CLASS_HPP
+#ifndef PONDERTEST_CLASS_HPP
+#define PONDERTEST_CLASS_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 
 namespace ClassTest
 {
@@ -57,12 +57,12 @@ namespace ClassTest
     struct Base
     {
         virtual ~Base() {}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct Derived : Base
     {
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct DerivedNoRtti : Base
@@ -75,32 +75,32 @@ namespace ClassTest
 
     void declare()
     {
-        camp::Class::declare<MyClass>("ClassTest::MyClass")
+        ponder::Class::declare<MyClass>("ClassTest::MyClass")
             .property("prop", &MyClass::prop)
             .function("func", &MyClass::func);
 
-        camp::Class::declare<MyClass2>("ClassTest::MyClass2");
+        ponder::Class::declare<MyClass2>("ClassTest::MyClass2");
 
-        camp::Class::declare<Base>("ClassTest::Base");
+        ponder::Class::declare<Base>("ClassTest::Base");
 
-        camp::Class::declare<Derived>("ClassTest::Derived")
+        ponder::Class::declare<Derived>("ClassTest::Derived")
             .base<Base>();
 
-        camp::Class::declare<DerivedNoRtti>("ClassTest::DerivedNoRtti")
+        ponder::Class::declare<DerivedNoRtti>("ClassTest::DerivedNoRtti")
             .base<Base>();
 
-        camp::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
+        ponder::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
             .base<Derived>();
     }
 }
 
-CAMP_TYPE(ClassTest::MyUndeclaredClass /* never declared */)
-CAMP_TYPE(ClassTest::MyTempClass /* declared in a test */)
-CAMP_AUTO_TYPE(ClassTest::MyClass, &ClassTest::declare)
-CAMP_AUTO_TYPE(ClassTest::MyClass2, &ClassTest::declare)
-CAMP_AUTO_TYPE(ClassTest::Base, &ClassTest::declare)
-CAMP_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
-CAMP_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
-CAMP_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
+PONDER_TYPE(ClassTest::MyUndeclaredClass /* never declared */)
+PONDER_TYPE(ClassTest::MyTempClass /* declared in a test */)
+PONDER_AUTO_TYPE(ClassTest::MyClass, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::MyClass2, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::Base, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
 
-#endif // CAMPTEST_CLASS_HPP
+#endif // PONDERTEST_CLASS_HPP

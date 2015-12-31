@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_USEROBJECT_HPP
-#define CAMPTEST_USEROBJECT_HPP
+#ifndef PONDERTEST_USEROBJECT_HPP
+#define PONDERTEST_USEROBJECT_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <ostream>
 
 namespace UserObjectTest
@@ -48,7 +48,7 @@ namespace UserObjectTest
         MyBase(int b_) : b(b_) {}
         virtual ~MyBase() {}
         int b;
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     bool operator==(const MyBase& left, const MyBase& right) 
@@ -66,7 +66,7 @@ namespace UserObjectTest
         MyClass(int x_) : MyBase(x_ + 1), x(x_) {}
         int x;
         int f() {return x;}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     bool operator==(const MyClass& left, const MyClass& right) 
@@ -79,7 +79,7 @@ namespace UserObjectTest
         return stream << m.x;
     }
 
-    struct MyNonCopyableClass : camp::util::noncopyable
+    struct MyNonCopyableClass : ponder::util::noncopyable
     {
     };
 
@@ -87,13 +87,13 @@ namespace UserObjectTest
     {
         virtual ~MyAbstractClass() {}
         virtual void f() = 0;
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct MyConcreteClass : MyAbstractClass
     {
         virtual void f() {}
-        CAMP_RTTI();
+        PONDER_RTTI();
     };
 
     struct Composed3
@@ -157,26 +157,26 @@ namespace UserObjectTest
 
     void declare()
     {
-        camp::Class::declare<MyBase>("UserObjectTest::MyBase");
-        camp::Class::declare<MyClass>("UserObjectTest::MyClass")
+        ponder::Class::declare<MyBase>("UserObjectTest::MyBase");
+        ponder::Class::declare<MyClass>("UserObjectTest::MyClass")
             .base<MyBase>()
             .property("p", &MyClass::x)
             .function("f", &MyClass::f);
 
-        camp::Class::declare<MyNonCopyableClass>("UserObjectTest::MyNonCopyableClass");
+        ponder::Class::declare<MyNonCopyableClass>("UserObjectTest::MyNonCopyableClass");
 
-        camp::Class::declare<MyAbstractClass>("UserObjectTest::MyAbstractClass");
-        camp::Class::declare<MyConcreteClass>("UserObjectTest::MyConcreteClass")
+        ponder::Class::declare<MyAbstractClass>("UserObjectTest::MyAbstractClass");
+        ponder::Class::declare<MyConcreteClass>("UserObjectTest::MyConcreteClass")
             .base<MyAbstractClass>();
 
-        camp::Class::declare<Composed3>("UserObjectTest::Composed3")
+        ponder::Class::declare<Composed3>("UserObjectTest::Composed3")
             .property("x", &Composed3::x);
-        camp::Class::declare<Composed2>("UserObjectTest::Composed2")
+        ponder::Class::declare<Composed2>("UserObjectTest::Composed2")
             .property("p", &Composed2::get, &Composed2::set);
-        camp::Class::declare<Composed1>("UserObjectTest::Composed1")
+        ponder::Class::declare<Composed1>("UserObjectTest::Composed1")
             .property("p", &Composed1::get, &Composed1::set);
 
-        camp::Class::declare<Call>("UserObjectTest::Call")
+        ponder::Class::declare<Call>("UserObjectTest::Call")
             .function("meth1", &Call::meth1)
             .function("meth2", &Call::meth2)
             .function("meth3", &Call::meth3)
@@ -186,14 +186,14 @@ namespace UserObjectTest
     }
 }
 
-CAMP_AUTO_TYPE(UserObjectTest::MyBase, &UserObjectTest::declare)
-CAMP_AUTO_TYPE(UserObjectTest::MyClass, &UserObjectTest::declare)
-CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyNonCopyableClass, &UserObjectTest::declare)
-CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyAbstractClass, &UserObjectTest::declare)
-CAMP_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyConcreteClass, &UserObjectTest::declare)
-CAMP_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare)
-CAMP_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
-CAMP_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
-CAMP_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::MyBase, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::MyClass, &UserObjectTest::declare)
+PONDER_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyNonCopyableClass, &UserObjectTest::declare)
+PONDER_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyAbstractClass, &UserObjectTest::declare)
+PONDER_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyConcreteClass, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
 
-#endif // CAMPTEST_USEROBJECT_HPP
+#endif // PONDERTEST_USEROBJECT_HPP

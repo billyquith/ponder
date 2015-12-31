@@ -28,8 +28,8 @@
 ****************************************************************************/
 
 #include "functionaccess.hpp"
-#include <camp/classget.hpp>
-#include <camp/function.hpp>
+#include <ponder/classget.hpp>
+#include <ponder/function.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace FunctionAccessTest;
@@ -41,16 +41,16 @@ struct FunctionAccessFixture
         : object_t(true)
         , object_f(false)
     {
-        metaclass = &camp::classByType<MyClass>();
+        metaclass = &ponder::classByType<MyClass>();
     }
 
     MyClass object_t;
     MyClass object_f;
-    const camp::Class* metaclass;
+    const ponder::Class* metaclass;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Function callable
+//                         Tests for ponder::Function callable
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTIONACCESS, FunctionAccessFixture)
 

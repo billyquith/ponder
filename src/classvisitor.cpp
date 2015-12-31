@@ -28,10 +28,10 @@
 ****************************************************************************/
 
 
-#include <camp/classvisitor.hpp>
+#include <ponder/classvisitor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 ClassVisitor::~ClassVisitor()
@@ -81,4 +81,4 @@ ClassVisitor::ClassVisitor()
     // Nothing to do
 }
 
-} // namespace camp
+} // namespace ponder

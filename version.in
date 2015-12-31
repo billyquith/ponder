@@ -30,14 +30,14 @@
 ****************************************************************************/
 
 
-#ifndef CAMP_VERSION_HPP
-#define CAMP_VERSION_HPP
+#ifndef PONDER_VERSION_HPP
+#define PONDER_VERSION_HPP
 
 // Define the version of CAMP.
-// If the version is x.y.z, then CAMP_VERSION is the integer x * 1000000 + y * 1000 + z.
-// CAMP_VERSION_STR is the string representation of the version.
-#define CAMP_VERSION     ((@VERSION_MAJOR@) * 1000000 + (@VERSION_MINOR@) * 1000 + (@VERSION_PATCH@))
-#define CAMP_VERSION_STR "@VERSION_STR@"
+// If the version is x.y.z, then PONDER_VERSION is the integer x * 1000000 + y * 1000 + z.
+// PONDER_VERSION_STR is the string representation of the version.
+#define PONDER_VERSION     ((@VERSION_MAJOR@) * 1000000 + (@VERSION_MINOR@) * 1000 + (@VERSION_PATCH@))
+#define PONDER_VERSION_STR "@VERSION_STR@"
 
-#endif // CAMP_VERSION_HPP
+#endif // PONDER_VERSION_HPP
 

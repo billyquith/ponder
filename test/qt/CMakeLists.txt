@@ -33,10 +33,10 @@
 cmake_minimum_required(VERSION 2.6)
 
 # set project's name
-project(CAMP_TEST_QT)
+project(PONDER_TEST_QT)
 
 # all source files
-set(CAMP_TEST_QT_SRCS
+set(PONDER_TEST_QT_SRCS
     main.cpp
     functionmapping.cpp
     functionmapping.hpp
@@ -56,11 +56,11 @@ find_package(Qt4 4.5.0 COMPONENTS QtCore REQUIRED)
 include(${QT_USE_FILE})
 
 # this will run moc
-QT4_WRAP_CPP(CAMP_TEST_QT_MOC_SRCS functionmapping.hpp propertymapping.hpp)
+QT4_WRAP_CPP(PONDER_TEST_QT_MOC_SRCS functionmapping.hpp propertymapping.hpp)
 
 # include files search paths
 include_directories(
-    ${CAMP_SOURCE_DIR}/include
+    ${PONDER_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
 )
 
@@ -68,11 +68,11 @@ include_directories(
 add_definitions(-DBOOST_TEST_NO_LIB)
 
 # instruct CMake to build an executable from all of the source files
-add_executable(camptest-qt ${CAMP_TEST_QT_SRCS} ${CAMP_TEST_QT_MOC_SRCS})
+add_executable(pondertest-qt ${PONDER_TEST_QT_SRCS} ${PONDER_TEST_QT_MOC_SRCS})
 
 # last thing we have to do is to tell CMake what libraries our executable needs
-target_link_libraries(camptest-qt camp ${QT_LIBRARIES})
+target_link_libraries(pondertest-qt ponder ${QT_LIBRARIES})
 
 # Add the CTest
-add_test(camptest-qt camptest-qt)
+add_test(pondertest-qt pondertest-qt)
 

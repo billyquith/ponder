@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_ARRAYPROPERTY_HPP
-#define CAMPTEST_ARRAYPROPERTY_HPP
+#ifndef PONDERTEST_ARRAYPROPERTY_HPP
+#define PONDERTEST_ARRAYPROPERTY_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <list>
 #include <vector>
 
@@ -83,9 +83,9 @@ namespace ArrayPropertyTest
 
     void declare()
     {
-        camp::Class::declare<MyType>("ArrayPropertyTest::MyType");
+        ponder::Class::declare<MyType>("ArrayPropertyTest::MyType");
         
-        camp::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
+        ponder::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
             .property("bools", &MyClass::bools)
             .property("ints", &MyClass::ints)
             .property("strings", &MyClass::strings)
@@ -93,7 +93,7 @@ namespace ArrayPropertyTest
     }
 }
 
-CAMP_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare)
-CAMP_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare)
+PONDER_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare)
+PONDER_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare)
 
-#endif // CAMPTEST_ARRAYPROPERTY_HPP
+#endif // PONDERTEST_ARRAYPROPERTY_HPP

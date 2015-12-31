@@ -27,13 +27,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_ENUMPROPERTY_HPP
-#define CAMPTEST_ENUMPROPERTY_HPP
+#ifndef PONDERTEST_ENUMPROPERTY_HPP
+#define PONDERTEST_ENUMPROPERTY_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/enum.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <list>
 #include <vector>
 
@@ -56,14 +56,14 @@ namespace EnumPropertyTest
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("EnumPropertyTest::MyEnum");
+        ponder::Enum::declare<MyEnum>("EnumPropertyTest::MyEnum");
 
-        camp::Class::declare<MyClass>("EnumPropertyTest::MyClass")
+        ponder::Class::declare<MyClass>("EnumPropertyTest::MyClass")
             .property("x", &MyClass::x);
     }
 }
 
-CAMP_AUTO_TYPE(EnumPropertyTest::MyEnum, &EnumPropertyTest::declare)
-CAMP_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
+PONDER_AUTO_TYPE(EnumPropertyTest::MyEnum, &EnumPropertyTest::declare)
+PONDER_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
 
-#endif // CAMPTEST_ENUMPROPERTY_HPP
+#endif // PONDERTEST_ENUMPROPERTY_HPP

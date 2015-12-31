@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/enumobject.hpp>
-#include <camp/enum.hpp>
+#include <ponder/enumobject.hpp>
+#include <ponder/enum.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 long EnumObject::value() const
@@ -71,4 +71,4 @@ bool EnumObject::operator<(const EnumObject& other) const
     }
 }
 
-} // namespace camp
+} // namespace ponder

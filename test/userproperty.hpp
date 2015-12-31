@@ -27,11 +27,11 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_USERPROPERTY_HPP
-#define CAMPTEST_USERPROPERTY_HPP
+#ifndef PONDERTEST_USERPROPERTY_HPP
+#define PONDERTEST_USERPROPERTY_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
+#include <ponder/camptype.hpp>
+#include <ponder/class.hpp>
 
 namespace UserPropertyTest
 {
@@ -49,14 +49,14 @@ namespace UserPropertyTest
 
     void declare()
     {
-        camp::Class::declare<MyType>("UserPropertyTest::MyType");
+        ponder::Class::declare<MyType>("UserPropertyTest::MyType");
 
-        camp::Class::declare<MyClass>("UserPropertyTest::MyClass")
+        ponder::Class::declare<MyClass>("UserPropertyTest::MyClass")
             .property("prop", &MyClass::prop);
     }
 }
 
-CAMP_AUTO_TYPE(UserPropertyTest::MyType, &UserPropertyTest::declare)
-CAMP_AUTO_TYPE(UserPropertyTest::MyClass, &UserPropertyTest::declare)
+PONDER_AUTO_TYPE(UserPropertyTest::MyType, &UserPropertyTest::declare)
+PONDER_AUTO_TYPE(UserPropertyTest::MyClass, &UserPropertyTest::declare)
 
-#endif // CAMPTEST_USERPROPERTY_HPP
+#endif // PONDERTEST_USERPROPERTY_HPP

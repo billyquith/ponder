@@ -28,12 +28,12 @@
 ****************************************************************************/
 
 
-#include <camp/function.hpp>
-#include <camp/classvisitor.hpp>
-#include <camp/args.hpp>
+#include <ponder/function.hpp>
+#include <ponder/classvisitor.hpp>
+#include <ponder/args.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 Function::~Function()
@@ -63,7 +63,7 @@ Type Function::argType(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_argTypes.size())
-        CAMP_ERROR(OutOfRange(index, m_argTypes.size()));
+        PONDER_ERROR(OutOfRange(index, m_argTypes.size()));
 
     return m_argTypes[index];
 }
@@ -79,11 +79,11 @@ Value Function::call(const UserObject& object, const Args& args) const
 {
     // Check if the function is callable
     if (!callable(object))
-        CAMP_ERROR(ForbiddenCall(name()));
+        PONDER_ERROR(ForbiddenCall(name()));
 
     // Check the number of arguments
     if (args.count() < m_argTypes.size())
-        CAMP_ERROR(NotEnoughArguments(name(), args.count(), m_argTypes.size()));
+        PONDER_ERROR(NotEnoughArguments(name(), args.count(), m_argTypes.size()));
 
     // Execute the function
     return execute(object, args);
@@ -104,4 +104,4 @@ Function::Function(const std::string& name, Type returnType, const std::vector<T
 {
 }
 
-} // namespace camp
+} // namespace ponder

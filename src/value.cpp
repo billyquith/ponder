@@ -29,10 +29,10 @@
 
 
 
-#include <camp/value.hpp>
+#include <ponder/value.hpp>
 
 
-namespace camp
+namespace ponder
 {
 const Value Value::nothing;
 
@@ -86,4 +86,4 @@ std::ostream& operator<<(std::ostream& stream, const Value& value)
     return stream << value.to<std::string>();
 }
 
-} // namespace camp
+} // namespace ponder

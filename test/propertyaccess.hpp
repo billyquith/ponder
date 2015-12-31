@@ -27,12 +27,12 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_PROPERTYACCESS_HPP
-#define CAMPTEST_PROPERTYACCESS_HPP
+#ifndef PONDERTEST_PROPERTYACCESS_HPP
+#define PONDERTEST_PROPERTYACCESS_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 
 namespace PropertyAccessTest
 {
@@ -57,7 +57,7 @@ namespace PropertyAccessTest
     {
         using namespace std::placeholders;
         
-        camp::Class::declare<MyClass>("PropertyAccessTest::MyClass")
+        ponder::Class::declare<MyClass>("PropertyAccessTest::MyClass")
 
             // ***** constant value *****
             .property("p0", &MyClass::p).readable(false).writable(true)
@@ -79,6 +79,6 @@ namespace PropertyAccessTest
     }
 }
 
-CAMP_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
+PONDER_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
 
-#endif // CAMPTEST_PROPERTYACCESS_HPP
+#endif // PONDERTEST_PROPERTYACCESS_HPP

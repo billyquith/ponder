@@ -27,14 +27,14 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_MAPPER_HPP
-#define CAMPTEST_MAPPER_HPP
+#ifndef PONDERTEST_MAPPER_HPP
+#define PONDERTEST_MAPPER_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/simpleproperty.hpp>
-#include <camp/function.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/simpleproperty.hpp>
+#include <ponder/function.hpp>
+#include <ponder/classbuilder.hpp>
 #include <map>
 #include <string>
 
@@ -90,7 +90,7 @@ namespace MapperTest
             return T::propertyCount;
         }
 
-        camp::Property* property(std::size_t index)
+        ponder::Property* property(std::size_t index)
         {
             return new MyProperty(T::property(index));
         }
@@ -100,43 +100,43 @@ namespace MapperTest
             return T::functionCount;
         }
 
-        camp::Function* function(std::size_t index)
+        ponder::Function* function(std::size_t index)
         {
             return new MyFunction(T::function(index));
         }
 
-        struct MyProperty : public camp::SimpleProperty
+        struct MyProperty : public ponder::SimpleProperty
         {
         public:
 
             MyProperty(const std::string& name)
-                : camp::SimpleProperty(name, camp::intType)
+                : ponder::SimpleProperty(name, ponder::intType)
             {
             }
 
-            virtual camp::Value getValue(const camp::UserObject& object) const
+            virtual ponder::Value getValue(const ponder::UserObject& object) const
             {
                 T& t = object.get<T>();
                 return t.prop(name());
             }
 
-            virtual void setValue(const camp::UserObject& object, const camp::Value& value) const
+            virtual void setValue(const ponder::UserObject& object, const ponder::Value& value) const
             {
                 T& t = object.get<T>();
                 t.prop(name()) = value.to<int>();
             }
         };
 
-        class MyFunction : public camp::Function
+        class MyFunction : public ponder::Function
         {
         public:
 
             MyFunction(const std::string& name)
-                : camp::Function(name, camp::stringType)
+                : ponder::Function(name, ponder::stringType)
             {
             }
 
-            virtual camp::Value execute(const camp::UserObject& object, const camp::Args&) const
+            virtual ponder::Value execute(const ponder::UserObject& object, const ponder::Args&) const
             {
                 T& t = object.get<T>();
                 return t.func(name());
@@ -146,11 +146,11 @@ namespace MapperTest
 
     void declare()
     {
-        camp::Class::declare<MyClass>("MapperTest::MyClass")
+        ponder::Class::declare<MyClass>("MapperTest::MyClass")
             .external<MyMapper>();
     }
 }
 
-CAMP_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare)
+PONDER_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare)
 
-#endif // CAMPTEST_MAPPER_HPP
+#endif // PONDERTEST_MAPPER_HPP

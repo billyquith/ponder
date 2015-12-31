@@ -28,9 +28,9 @@
 ****************************************************************************/
 
 #include "enumproperty.hpp"
-#include <camp/classget.hpp>
-#include <camp/enumget.hpp>
-#include <camp/enumproperty.hpp>
+#include <ponder/classget.hpp>
+#include <ponder/enumget.hpp>
+#include <ponder/enumproperty.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace EnumPropertyTest;
@@ -40,35 +40,35 @@ struct EnumPropertyFixture
 {
     EnumPropertyFixture()
     {
-        const camp::Class& metaclass = camp::classByType<MyClass>();
-        property = &static_cast<const camp::EnumProperty&>(metaclass.property("x"));
+        const ponder::Class& metaclass = ponder::classByType<MyClass>();
+        property = &static_cast<const ponder::EnumProperty&>(metaclass.property("x"));
     }
 
-    const camp::EnumProperty* property;
+    const ponder::EnumProperty* property;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::EnumProperty
+//                         Tests for ponder::EnumProperty
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ENUMPROPERTY, EnumPropertyFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(property->type(), camp::enumType);
+    BOOST_CHECK_EQUAL(property->type(), ponder::enumType);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(getEnum)
 {
-    BOOST_CHECK(property->getEnum() == camp::enumByType<MyEnum>());
+    BOOST_CHECK(property->getEnum() == ponder::enumByType<MyEnum>());
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(get)
 {
-    BOOST_CHECK_EQUAL(property->get(MyClass(Zero)), camp::Value(Zero));
-    BOOST_CHECK_EQUAL(property->get(MyClass(One)),  camp::Value(One));
+    BOOST_CHECK_EQUAL(property->get(MyClass(Zero)), ponder::Value(Zero));
+    BOOST_CHECK_EQUAL(property->get(MyClass(One)),  ponder::Value(One));
 }
 
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(set)
     MyClass object(Zero);
     property->set(object, One);
 
-    BOOST_CHECK_EQUAL(property->get(object), camp::Value(One));
+    BOOST_CHECK_EQUAL(property->get(object), ponder::Value(One));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

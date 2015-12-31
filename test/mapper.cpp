@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 #include "mapper.hpp"
-#include <camp/classget.hpp>
+#include <ponder/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace MapperTest;
@@ -38,10 +38,10 @@ struct MapperFixture
 {
     MapperFixture()
     {
-        metaclass = &camp::classByType<MyClass>();
+        metaclass = &ponder::classByType<MyClass>();
     }
 
-    const camp::Class* metaclass;
+    const ponder::Class* metaclass;
 };
 
 //-----------------------------------------------------------------------------
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(count)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(types)
 {
-    BOOST_CHECK_EQUAL(metaclass->property(0).type(), camp::intType);
-    BOOST_CHECK_EQUAL(metaclass->function(0).returnType(), camp::stringType);
+    BOOST_CHECK_EQUAL(metaclass->property(0).type(), ponder::intType);
+    BOOST_CHECK_EQUAL(metaclass->function(0).returnType(), ponder::stringType);
 }
 
 //-----------------------------------------------------------------------------
@@ -74,11 +74,11 @@ BOOST_AUTO_TEST_CASE(propertyGet)
 {
     MyClass object;
 
-    BOOST_CHECK_EQUAL(metaclass->property("prop0").get(object), camp::Value(object.prop("prop0")));
-    BOOST_CHECK_EQUAL(metaclass->property("prop1").get(object), camp::Value(object.prop("prop1")));
-    BOOST_CHECK_EQUAL(metaclass->property("prop2").get(object), camp::Value(object.prop("prop2")));
-    BOOST_CHECK_EQUAL(metaclass->property("prop3").get(object), camp::Value(object.prop("prop3")));
-    BOOST_CHECK_EQUAL(metaclass->property("prop4").get(object), camp::Value(object.prop("prop4")));
+    BOOST_CHECK_EQUAL(metaclass->property("prop0").get(object), ponder::Value(object.prop("prop0")));
+    BOOST_CHECK_EQUAL(metaclass->property("prop1").get(object), ponder::Value(object.prop("prop1")));
+    BOOST_CHECK_EQUAL(metaclass->property("prop2").get(object), ponder::Value(object.prop("prop2")));
+    BOOST_CHECK_EQUAL(metaclass->property("prop3").get(object), ponder::Value(object.prop("prop3")));
+    BOOST_CHECK_EQUAL(metaclass->property("prop4").get(object), ponder::Value(object.prop("prop4")));
 }
 
 //-----------------------------------------------------------------------------
@@ -104,9 +104,9 @@ BOOST_AUTO_TEST_CASE(functionCall)
 {
     MyClass object;
 
-    BOOST_CHECK_EQUAL(metaclass->function("func0").call(object), camp::Value(object.func("func0")));
-    BOOST_CHECK_EQUAL(metaclass->function("func1").call(object), camp::Value(object.func("func1")));
-    BOOST_CHECK_EQUAL(metaclass->function("func2").call(object), camp::Value(object.func("func2")));
+    BOOST_CHECK_EQUAL(metaclass->function("func0").call(object), ponder::Value(object.func("func0")));
+    BOOST_CHECK_EQUAL(metaclass->function("func1").call(object), ponder::Value(object.func("func1")));
+    BOOST_CHECK_EQUAL(metaclass->function("func2").call(object), ponder::Value(object.func("func2")));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 #include "value.hpp"
-#include <camp/value.hpp>
+#include <ponder/value.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ValueTest;
@@ -38,7 +38,7 @@ struct ValueFixture
 {
     ValueFixture() : object1(1), object2(1)
     {
-        noValue      = camp::Value::nothing;
+        noValue      = ponder::Value::nothing;
         boolValue    = true;
         charValue    = static_cast<char>(1);
         shortValue   = static_cast<short>(1);
@@ -56,55 +56,55 @@ struct ValueFixture
         objectValue  = object1;
     }
 
-    static bool equivalent(const camp::Value& left, const camp::Value& right)
+    static bool equivalent(const ponder::Value& left, const ponder::Value& right)
     {
         return !(left < right) && !(right < left);
     }
 
-    camp::Value noValue;
-    camp::Value boolValue;
-    camp::Value charValue;
-    camp::Value shortValue;
-    camp::Value intValue;
-    camp::Value longValue;
-    camp::Value ucharValue;
-    camp::Value ushortValue;
-    camp::Value uintValue;
-    camp::Value ulongValue;
-    camp::Value floatValue;
-    camp::Value doubleValue;
-    camp::Value cstringValue;
-    camp::Value stringValue;
-    camp::Value enumValue;
-    camp::Value objectValue;
+    ponder::Value noValue;
+    ponder::Value boolValue;
+    ponder::Value charValue;
+    ponder::Value shortValue;
+    ponder::Value intValue;
+    ponder::Value longValue;
+    ponder::Value ucharValue;
+    ponder::Value ushortValue;
+    ponder::Value uintValue;
+    ponder::Value ulongValue;
+    ponder::Value floatValue;
+    ponder::Value doubleValue;
+    ponder::Value cstringValue;
+    ponder::Value stringValue;
+    ponder::Value enumValue;
+    ponder::Value objectValue;
     MyClass object1;
     MyClass object2;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Value
+//                         Tests for ponder::Value
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(VALUE, ValueFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(noValue.type(),      camp::noType);
-    BOOST_CHECK_EQUAL(boolValue.type(),    camp::boolType);
-    BOOST_CHECK_EQUAL(charValue.type(),    camp::intType);
-    BOOST_CHECK_EQUAL(shortValue.type(),   camp::intType);
-    BOOST_CHECK_EQUAL(intValue.type(),     camp::intType);
-    BOOST_CHECK_EQUAL(longValue.type(),    camp::intType);
-    BOOST_CHECK_EQUAL(ucharValue.type(),   camp::intType);
-    BOOST_CHECK_EQUAL(ushortValue.type(),  camp::intType);
-    BOOST_CHECK_EQUAL(uintValue.type(),    camp::intType);
-    BOOST_CHECK_EQUAL(ulongValue.type(),   camp::intType);
-    BOOST_CHECK_EQUAL(floatValue.type(),   camp::realType);
-    BOOST_CHECK_EQUAL(doubleValue.type(),  camp::realType);
-    BOOST_CHECK_EQUAL(cstringValue.type(), camp::stringType);
-    BOOST_CHECK_EQUAL(stringValue.type(),  camp::stringType);
-    BOOST_CHECK_EQUAL(enumValue.type(),    camp::enumType);
-    BOOST_CHECK_EQUAL(objectValue.type(),  camp::userType);
+    BOOST_CHECK_EQUAL(noValue.type(),      ponder::noType);
+    BOOST_CHECK_EQUAL(boolValue.type(),    ponder::boolType);
+    BOOST_CHECK_EQUAL(charValue.type(),    ponder::intType);
+    BOOST_CHECK_EQUAL(shortValue.type(),   ponder::intType);
+    BOOST_CHECK_EQUAL(intValue.type(),     ponder::intType);
+    BOOST_CHECK_EQUAL(longValue.type(),    ponder::intType);
+    BOOST_CHECK_EQUAL(ucharValue.type(),   ponder::intType);
+    BOOST_CHECK_EQUAL(ushortValue.type(),  ponder::intType);
+    BOOST_CHECK_EQUAL(uintValue.type(),    ponder::intType);
+    BOOST_CHECK_EQUAL(ulongValue.type(),   ponder::intType);
+    BOOST_CHECK_EQUAL(floatValue.type(),   ponder::realType);
+    BOOST_CHECK_EQUAL(doubleValue.type(),  ponder::realType);
+    BOOST_CHECK_EQUAL(cstringValue.type(), ponder::stringType);
+    BOOST_CHECK_EQUAL(stringValue.type(),  ponder::stringType);
+    BOOST_CHECK_EQUAL(enumValue.type(),    ponder::enumType);
+    BOOST_CHECK_EQUAL(objectValue.type(),  ponder::userType);
 }
 
 //-----------------------------------------------------------------------------
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(boolConversions)
     BOOST_CHECK_CLOSE(boolValue.to<double>(),         1., 1E-5);
     BOOST_CHECK_EQUAL(boolValue.to<std::string>(),    "1");
     BOOST_CHECK_EQUAL(boolValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(boolValue.to<MyClass>(),        camp::BadType);
+    BOOST_CHECK_THROW(boolValue.to<MyClass>(),        ponder::BadType);
 
     BOOST_CHECK_EQUAL(boolValue.isCompatible<bool>(),           true);
     BOOST_CHECK_EQUAL(boolValue.isCompatible<char>(),           true);
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(intConversions)
     BOOST_CHECK_CLOSE(intValue.to<double>(),         1., 1E-5);
     BOOST_CHECK_EQUAL(intValue.to<std::string>(),    "1");
     BOOST_CHECK_EQUAL(intValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(intValue.to<MyClass>(),        camp::BadType);
+    BOOST_CHECK_THROW(intValue.to<MyClass>(),        ponder::BadType);
 
     BOOST_CHECK_EQUAL(intValue.isCompatible<bool>(),           true);
     BOOST_CHECK_EQUAL(intValue.isCompatible<char>(),           true);
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE(doubleConversions)
     BOOST_CHECK_CLOSE(doubleValue.to<double>(),         1., 1E-5);
     BOOST_CHECK_EQUAL(doubleValue.to<std::string>(),    "1");
     BOOST_CHECK_EQUAL(doubleValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(doubleValue.to<MyClass>(),        camp::BadType);
+    BOOST_CHECK_THROW(doubleValue.to<MyClass>(),        ponder::BadType);
 
     BOOST_CHECK_EQUAL(doubleValue.isCompatible<bool>(),           true);
     BOOST_CHECK_EQUAL(doubleValue.isCompatible<char>(),           true);
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(stringConversionsOk)
     BOOST_CHECK_CLOSE(stringValue.to<double>(),         1., 1E-5);
     BOOST_CHECK_EQUAL(stringValue.to<std::string>(),    "1");
     BOOST_CHECK_EQUAL(stringValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(stringValue.to<MyClass>(),        camp::BadType);
+    BOOST_CHECK_THROW(stringValue.to<MyClass>(),        ponder::BadType);
 
     BOOST_CHECK_EQUAL(stringValue.isCompatible<bool>(),           true);
     BOOST_CHECK_EQUAL(stringValue.isCompatible<char>(),           true);
@@ -246,35 +246,35 @@ BOOST_AUTO_TEST_CASE(stringConversionsOk)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(stringConversionsEnumOk)
 {
-    BOOST_CHECK_EQUAL(camp::Value("One").to<MyEnum>(), One);
-    BOOST_CHECK_EQUAL(camp::Value("Two").to<MyEnum>(), Two);
-    BOOST_CHECK_EQUAL(camp::Value("1").to<MyEnum>(),   One);
-    BOOST_CHECK_EQUAL(camp::Value("2").to<MyEnum>(),   Two);
+    BOOST_CHECK_EQUAL(ponder::Value("One").to<MyEnum>(), One);
+    BOOST_CHECK_EQUAL(ponder::Value("Two").to<MyEnum>(), Two);
+    BOOST_CHECK_EQUAL(ponder::Value("1").to<MyEnum>(),   One);
+    BOOST_CHECK_EQUAL(ponder::Value("2").to<MyEnum>(),   Two);
 
-    BOOST_CHECK_EQUAL(camp::Value("One").isCompatible<MyEnum>(), true);
-    BOOST_CHECK_EQUAL(camp::Value("Two").isCompatible<MyEnum>(), true);
-    BOOST_CHECK_EQUAL(camp::Value("1").isCompatible<MyEnum>(),   true);
-    BOOST_CHECK_EQUAL(camp::Value("2").isCompatible<MyEnum>(),   true);
+    BOOST_CHECK_EQUAL(ponder::Value("One").isCompatible<MyEnum>(), true);
+    BOOST_CHECK_EQUAL(ponder::Value("Two").isCompatible<MyEnum>(), true);
+    BOOST_CHECK_EQUAL(ponder::Value("1").isCompatible<MyEnum>(),   true);
+    BOOST_CHECK_EQUAL(ponder::Value("2").isCompatible<MyEnum>(),   true);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(stringConversionsNotOk)
 {
-    camp::Value badStringValue = "not a number";
+    ponder::Value badStringValue = "not a number";
 
-    BOOST_CHECK_THROW(badStringValue.to<bool>(),           camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<char>(),           camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<short>(),          camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<int>(),            camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<long>(),           camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned char>(),  camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned short>(), camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned int>(),   camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned long>(),  camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<float>(),          camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<double>(),         camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<MyEnum>(),         camp::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<MyClass>(),        camp::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<bool>(),           ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<char>(),           ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<short>(),          ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<int>(),            ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<long>(),           ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<unsigned char>(),  ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<unsigned short>(), ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<unsigned int>(),   ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<unsigned long>(),  ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<float>(),          ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<double>(),         ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<MyEnum>(),         ponder::BadType);
+    BOOST_CHECK_THROW(badStringValue.to<MyClass>(),        ponder::BadType);
 
     BOOST_CHECK_EQUAL(badStringValue.isCompatible<bool>(),           false);
     BOOST_CHECK_EQUAL(badStringValue.isCompatible<char>(),           false);
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE(enumConversions)
     BOOST_CHECK_CLOSE(enumValue.to<double>(),         1., 1E-5);
     BOOST_CHECK_EQUAL(enumValue.to<std::string>(),    "One");
     BOOST_CHECK_EQUAL(enumValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(enumValue.to<MyClass>(),        camp::BadType);
+    BOOST_CHECK_THROW(enumValue.to<MyClass>(),        ponder::BadType);
 
     BOOST_CHECK_EQUAL(enumValue.isCompatible<bool>(),           true);
     BOOST_CHECK_EQUAL(enumValue.isCompatible<char>(),           true);
@@ -330,20 +330,20 @@ BOOST_AUTO_TEST_CASE(enumConversions)
 BOOST_AUTO_TEST_CASE(objectConversions)
 {
     BOOST_CHECK_EQUAL(objectValue.to<bool>(),             true);
-    BOOST_CHECK_THROW(objectValue.to<char>(),             camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<short>(),            camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<int>(),              camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<long>(),             camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned char>(),    camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned short>(),   camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned int>(),     camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned long>(),    camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<float>(),            camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<double>(),           camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<std::string>(),      camp::BadType);
-    BOOST_CHECK_THROW(objectValue.to<MyEnum>(),           camp::BadType);
+    BOOST_CHECK_THROW(objectValue.to<char>(),             ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<short>(),            ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<int>(),              ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<long>(),             ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<unsigned char>(),    ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<unsigned short>(),   ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<unsigned int>(),     ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<unsigned long>(),    ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<float>(),            ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<double>(),           ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<std::string>(),      ponder::BadType);
+    BOOST_CHECK_THROW(objectValue.to<MyEnum>(),           ponder::BadType);
     BOOST_CHECK_EQUAL(objectValue.to<MyClass>(),          object1);
-    BOOST_CHECK_EQUAL(objectValue.to<camp::UserObject>(), camp::UserObject(object1));
+    BOOST_CHECK_EQUAL(objectValue.to<ponder::UserObject>(), ponder::UserObject(object1));
 
     BOOST_CHECK_EQUAL(objectValue.isCompatible<bool>(),           true);
     BOOST_CHECK_EQUAL(objectValue.isCompatible<char>(),           false);
@@ -366,22 +366,22 @@ BOOST_AUTO_TEST_CASE(visitor)
 {
     Visitor visitor;
 
-    BOOST_CHECK_EQUAL(noValue.visit(visitor),      camp::noType);
-    BOOST_CHECK_EQUAL(boolValue.visit(visitor),    camp::boolType);
-    BOOST_CHECK_EQUAL(charValue.visit(visitor),    camp::intType);
-    BOOST_CHECK_EQUAL(shortValue.visit(visitor),   camp::intType);
-    BOOST_CHECK_EQUAL(intValue.visit(visitor),     camp::intType);
-    BOOST_CHECK_EQUAL(longValue.visit(visitor),    camp::intType);
-    BOOST_CHECK_EQUAL(ucharValue.visit(visitor),   camp::intType);
-    BOOST_CHECK_EQUAL(ushortValue.visit(visitor),  camp::intType);
-    BOOST_CHECK_EQUAL(uintValue.visit(visitor),    camp::intType);
-    BOOST_CHECK_EQUAL(ulongValue.visit(visitor),   camp::intType);
-    BOOST_CHECK_EQUAL(floatValue.visit(visitor),   camp::realType);
-    BOOST_CHECK_EQUAL(doubleValue.visit(visitor),  camp::realType);
-    BOOST_CHECK_EQUAL(cstringValue.visit(visitor), camp::stringType);
-    BOOST_CHECK_EQUAL(stringValue.visit(visitor),  camp::stringType);
-    BOOST_CHECK_EQUAL(enumValue.visit(visitor),    camp::enumType);
-    BOOST_CHECK_EQUAL(objectValue.visit(visitor),  camp::userType);
+    BOOST_CHECK_EQUAL(noValue.visit(visitor),      ponder::noType);
+    BOOST_CHECK_EQUAL(boolValue.visit(visitor),    ponder::boolType);
+    BOOST_CHECK_EQUAL(charValue.visit(visitor),    ponder::intType);
+    BOOST_CHECK_EQUAL(shortValue.visit(visitor),   ponder::intType);
+    BOOST_CHECK_EQUAL(intValue.visit(visitor),     ponder::intType);
+    BOOST_CHECK_EQUAL(longValue.visit(visitor),    ponder::intType);
+    BOOST_CHECK_EQUAL(ucharValue.visit(visitor),   ponder::intType);
+    BOOST_CHECK_EQUAL(ushortValue.visit(visitor),  ponder::intType);
+    BOOST_CHECK_EQUAL(uintValue.visit(visitor),    ponder::intType);
+    BOOST_CHECK_EQUAL(ulongValue.visit(visitor),   ponder::intType);
+    BOOST_CHECK_EQUAL(floatValue.visit(visitor),   ponder::realType);
+    BOOST_CHECK_EQUAL(doubleValue.visit(visitor),  ponder::realType);
+    BOOST_CHECK_EQUAL(cstringValue.visit(visitor), ponder::stringType);
+    BOOST_CHECK_EQUAL(stringValue.visit(visitor),  ponder::stringType);
+    BOOST_CHECK_EQUAL(enumValue.visit(visitor),    ponder::enumType);
+    BOOST_CHECK_EQUAL(objectValue.visit(visitor),  ponder::userType);
 }
 
 //-----------------------------------------------------------------------------
@@ -443,19 +443,19 @@ BOOST_AUTO_TEST_CASE(equal)
     BOOST_CHECK_EQUAL(objectValue == enumValue,   false);
     BOOST_CHECK_EQUAL(objectValue == objectValue, true);
 
-    BOOST_CHECK_EQUAL(camp::Value(true)    == camp::Value(true),    true);
-    BOOST_CHECK_EQUAL(camp::Value(1)       == camp::Value(1),       true);
-    BOOST_CHECK_EQUAL(camp::Value(1.)      == camp::Value(1.),      true);
-    BOOST_CHECK_EQUAL(camp::Value("1")     == camp::Value("1"),     true);
-    BOOST_CHECK_EQUAL(camp::Value(One)     == camp::Value(One),     true);
-    BOOST_CHECK_EQUAL(camp::Value(object1) == camp::Value(object1), true);
+    BOOST_CHECK_EQUAL(ponder::Value(true)    == ponder::Value(true),    true);
+    BOOST_CHECK_EQUAL(ponder::Value(1)       == ponder::Value(1),       true);
+    BOOST_CHECK_EQUAL(ponder::Value(1.)      == ponder::Value(1.),      true);
+    BOOST_CHECK_EQUAL(ponder::Value("1")     == ponder::Value("1"),     true);
+    BOOST_CHECK_EQUAL(ponder::Value(One)     == ponder::Value(One),     true);
+    BOOST_CHECK_EQUAL(ponder::Value(object1) == ponder::Value(object1), true);
 
-    BOOST_CHECK_EQUAL(camp::Value(true)    == camp::Value(false),   false);
-    BOOST_CHECK_EQUAL(camp::Value(1)       == camp::Value(2),       false);
-    BOOST_CHECK_EQUAL(camp::Value(1.)      == camp::Value(2.),      false);
-    BOOST_CHECK_EQUAL(camp::Value("1")     == camp::Value("2"),     false);
-    BOOST_CHECK_EQUAL(camp::Value(One)     == camp::Value(Two),     false);
-    BOOST_CHECK_EQUAL(camp::Value(object1) == camp::Value(object2), false);
+    BOOST_CHECK_EQUAL(ponder::Value(true)    == ponder::Value(false),   false);
+    BOOST_CHECK_EQUAL(ponder::Value(1)       == ponder::Value(2),       false);
+    BOOST_CHECK_EQUAL(ponder::Value(1.)      == ponder::Value(2.),      false);
+    BOOST_CHECK_EQUAL(ponder::Value("1")     == ponder::Value("2"),     false);
+    BOOST_CHECK_EQUAL(ponder::Value(One)     == ponder::Value(Two),     false);
+    BOOST_CHECK_EQUAL(ponder::Value(object1) == ponder::Value(object2), false);
 }
 
 //-----------------------------------------------------------------------------
@@ -517,20 +517,20 @@ BOOST_AUTO_TEST_CASE(lessThan)
     BOOST_CHECK_EQUAL(equivalent(objectValue, enumValue),   false);
     BOOST_CHECK_EQUAL(equivalent(objectValue, objectValue), true);
 
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(),        camp::Value()),        true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(true),    camp::Value(true)),    true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(1),       camp::Value(1)),       true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(1.),      camp::Value(1.)),      true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value("1"),     camp::Value("1")),     true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(One),     camp::Value(One)),     true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(object1), camp::Value(object1)), true);
-    BOOST_CHECK_EQUAL(equivalent(camp::Value(object1), camp::Value(object2)), false);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(),        ponder::Value()),        true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(true),    ponder::Value(true)),    true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(1),       ponder::Value(1)),       true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(1.),      ponder::Value(1.)),      true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value("1"),     ponder::Value("1")),     true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(One),     ponder::Value(One)),     true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(object1), ponder::Value(object1)), true);
+    BOOST_CHECK_EQUAL(equivalent(ponder::Value(object1), ponder::Value(object2)), false);
 
-    BOOST_CHECK_EQUAL(camp::Value(false) < camp::Value(true), true);
-    BOOST_CHECK_EQUAL(camp::Value(1)     < camp::Value(2),    true);
-    BOOST_CHECK_EQUAL(camp::Value(1.)    < camp::Value(2.),   true);
-    BOOST_CHECK_EQUAL(camp::Value("1")   < camp::Value("2"),  true);
-    BOOST_CHECK_EQUAL(camp::Value(One)   < camp::Value(Two),  true);
+    BOOST_CHECK_EQUAL(ponder::Value(false) < ponder::Value(true), true);
+    BOOST_CHECK_EQUAL(ponder::Value(1)     < ponder::Value(2),    true);
+    BOOST_CHECK_EQUAL(ponder::Value(1.)    < ponder::Value(2.),   true);
+    BOOST_CHECK_EQUAL(ponder::Value("1")   < ponder::Value("2"),  true);
+    BOOST_CHECK_EQUAL(ponder::Value(One)   < ponder::Value(Two),  true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

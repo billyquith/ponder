@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/arrayproperty.hpp>
-#include <camp/classvisitor.hpp>
+#include <ponder/arrayproperty.hpp>
+#include <ponder/classvisitor.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 ArrayProperty::ArrayProperty(const std::string& name, Type elementType, bool dynamic)
@@ -64,7 +64,7 @@ std::size_t ArrayProperty::size(const UserObject& object) const
 {
     // Check if the property is readable
     if (!readable(object))
-        CAMP_ERROR(ForbiddenRead(name()));
+        PONDER_ERROR(ForbiddenRead(name()));
 
     return getSize(object);
 }
@@ -74,11 +74,11 @@ void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
 {
     // Check if the array is dynamic
     if (!dynamic())
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the property is writable
     if (!writable(object))
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     setSize(object, newSize);
 }
@@ -88,12 +88,12 @@ Value ArrayProperty::get(const UserObject& object, std::size_t index) const
 {
     // Check if the property is readable
     if (!readable(object))
-        CAMP_ERROR(ForbiddenRead(name()));
+        PONDER_ERROR(ForbiddenRead(name()));
 
     // Make sure that the index is not out of range
     const std::size_t range = size(object);
     if (index >= range)
-        CAMP_ERROR(OutOfRange(index, range));
+        PONDER_ERROR(OutOfRange(index, range));
 
     return getElement(object, index);
 }
@@ -103,12 +103,12 @@ void ArrayProperty::set(const UserObject& object, std::size_t index, const Value
 {
     // Check if the property is writable
     if (!writable(object))
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
     const std::size_t range = size(object);
     if (index >= range)
-        CAMP_ERROR(OutOfRange(index, range));
+        PONDER_ERROR(OutOfRange(index, range));
 
     return setElement(object, index, value);
 }
@@ -118,16 +118,16 @@ void ArrayProperty::insert(const UserObject& object, std::size_t before, const V
 {
     // Check if the array is dynamic
     if (!dynamic())
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the property is writable
     if (!writable(object))
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
     const std::size_t range = size(object) + 1;
     if (before >= range)
-        CAMP_ERROR(OutOfRange(before, range));
+        PONDER_ERROR(OutOfRange(before, range));
 
     return insertElement(object, before, value);
 }
@@ -137,16 +137,16 @@ void ArrayProperty::remove(const UserObject& object, std::size_t index) const
 {
     // Check if the array is dynamic
     if (!dynamic())
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the property is writable
     if (!writable(object))
-        CAMP_ERROR(ForbiddenWrite(name()));
+        PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
     const std::size_t range = size(object);
     if (index >= range)
-        CAMP_ERROR(OutOfRange(index, range));
+        PONDER_ERROR(OutOfRange(index, range));
 
     return removeElement(object, index);
 }
@@ -171,4 +171,4 @@ void ArrayProperty::setValue(const UserObject& object, const Value& value) const
     set(object, 0, value);
 }
 
-} // namespace camp
+} // namespace ponder

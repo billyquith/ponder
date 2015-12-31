@@ -28,12 +28,12 @@
 ****************************************************************************/
 
 
-#include <camp/observer.hpp>
-#include <camp/detail/classmanager.hpp>
-#include <camp/detail/enummanager.hpp>
+#include <ponder/observer.hpp>
+#include <ponder/detail/classmanager.hpp>
+#include <ponder/detail/enummanager.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 Observer::~Observer()
@@ -72,17 +72,17 @@ Observer::Observer()
 }
 
 //-------------------------------------------------------------------------------------------------
-CAMP_API void addObserver(Observer* observer)
+PONDER_API void addObserver(Observer* observer)
 {
     detail::ClassManager::instance().addObserver(observer);
     detail::EnumManager::instance().addObserver(observer);
 }
 
 //-------------------------------------------------------------------------------------------------
-CAMP_API void removeObserver(Observer* observer)
+PONDER_API void removeObserver(Observer* observer)
 {
     detail::ClassManager::instance().removeObserver(observer);
     detail::EnumManager::instance().removeObserver(observer);
 }
 
-} // namespace camp
+} // namespace ponder

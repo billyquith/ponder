@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/enumbuilder.hpp>
-#include <camp/enum.hpp>
+#include <ponder/enumbuilder.hpp>
+#include <ponder/enum.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 EnumBuilder::EnumBuilder(Enum& target)
@@ -51,4 +51,4 @@ EnumBuilder& EnumBuilder::value(const std::string& name, Enum::EnumValue value)
     return *this;
 }
 
-} // namespace camp
+} // namespace ponder

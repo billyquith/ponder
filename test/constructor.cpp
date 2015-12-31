@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 #include "constructor.hpp"
-#include <camp/classget.hpp>
+#include <ponder/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ConstructorTest;
@@ -38,32 +38,32 @@ struct ConstructorFixture
 {
     ConstructorFixture()
     {
-        metaclass = &camp::classByType<MyClass>();
+        metaclass = &ponder::classByType<MyClass>();
     }
 
-    const camp::Class* metaclass;
+    const ponder::Class* metaclass;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::Constructor
+//                         Tests for ponder::Constructor
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(CONSTRUCTOR, ConstructorFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(invalidConstructions)
 {
-    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args("hello")),         camp::UserObject::nothing);
-    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args(MyType(10))),      camp::UserObject::nothing);
-    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args(two, MyType(10))), camp::UserObject::nothing);
-    BOOST_CHECK_EQUAL(metaclass->construct(camp::Args(5., "hello")),     camp::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args("hello")),         ponder::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(MyType(10))),      ponder::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(two, MyType(10))), ponder::UserObject::nothing);
+    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(5., "hello")),     ponder::UserObject::nothing);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(zeroArg)
 {
-    camp::UserObject object = metaclass->construct();
+    ponder::UserObject object = metaclass->construct();
 
-    BOOST_CHECK(object != camp::UserObject::nothing);
+    BOOST_CHECK(object != ponder::UserObject::nothing);
 
     MyClass* instance = object.get<MyClass*>();
 
@@ -79,9 +79,9 @@ BOOST_AUTO_TEST_CASE(zeroArg)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(oneArg)
 {
-    camp::UserObject object = metaclass->construct(camp::Args(1)).get<MyClass*>();
+    ponder::UserObject object = metaclass->construct(ponder::Args(1)).get<MyClass*>();
 
-    BOOST_CHECK(object != camp::UserObject::nothing);
+    BOOST_CHECK(object != ponder::UserObject::nothing);
 
     MyClass* instance = object.get<MyClass*>();
 
@@ -97,9 +97,9 @@ BOOST_AUTO_TEST_CASE(oneArg)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(twoArgs)
 {
-    camp::UserObject object = metaclass->construct(camp::Args(2, 2.));
+    ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
 
-    BOOST_CHECK(object != camp::UserObject::nothing);
+    BOOST_CHECK(object != ponder::UserObject::nothing);
 
     MyClass* instance = object.get<MyClass*>();
 
@@ -115,9 +115,9 @@ BOOST_AUTO_TEST_CASE(twoArgs)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(threeArgs)
 {
-    camp::UserObject object = metaclass->construct(camp::Args(3, 3., "3"));
+    ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
 
-    BOOST_CHECK(object != camp::UserObject::nothing);
+    BOOST_CHECK(object != ponder::UserObject::nothing);
 
     MyClass* instance = object.get<MyClass*>();
 
@@ -133,9 +133,9 @@ BOOST_AUTO_TEST_CASE(threeArgs)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(fourArgs)
 {
-    camp::UserObject object = metaclass->construct(camp::Args(4, 4., "4", four));
+    ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
 
-    BOOST_CHECK(object != camp::UserObject::nothing);
+    BOOST_CHECK(object != ponder::UserObject::nothing);
 
     MyClass* instance = object.get<MyClass*>();
 
@@ -151,9 +151,9 @@ BOOST_AUTO_TEST_CASE(fourArgs)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(fiveArgs)
 {
-    camp::UserObject object = metaclass->construct(camp::Args(5, 5., "5", five, 5));
+    ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
 
-    BOOST_CHECK(object != camp::UserObject::nothing);
+    BOOST_CHECK(object != ponder::UserObject::nothing);
 
     MyClass* instance = object.get<MyClass*>();
 

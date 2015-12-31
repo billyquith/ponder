@@ -28,8 +28,8 @@
 ****************************************************************************/
 
 #include "userproperty.hpp"
-#include <camp/classget.hpp>
-#include <camp/userproperty.hpp>
+#include <ponder/classget.hpp>
+#include <ponder/userproperty.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace UserPropertyTest;
@@ -39,28 +39,28 @@ struct UserPropertyFixture
 {
     UserPropertyFixture()
     {
-        const camp::Class& metaclass = camp::classByType<MyClass>();
-        property = static_cast<const camp::UserProperty*>(&metaclass.property("prop"));
+        const ponder::Class& metaclass = ponder::classByType<MyClass>();
+        property = static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
     }
 
-    const camp::UserProperty* property;
+    const ponder::UserProperty* property;
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::UserProperty
+//                         Tests for ponder::UserProperty
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(USERPROPERTY, UserPropertyFixture)
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(property->type(), camp::userType);
+    BOOST_CHECK_EQUAL(property->type(), ponder::userType);
 }
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(getClass)
 {
-    BOOST_CHECK(property->getClass() == camp::classByType<MyType>());
+    BOOST_CHECK(property->getClass() == ponder::classByType<MyType>());
 }
 
 //-----------------------------------------------------------------------------

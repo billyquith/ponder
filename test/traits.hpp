@@ -27,10 +27,10 @@
  **
  ****************************************************************************/
 
-#ifndef CAMPTEST_TRAITS_HPP
-#define CAMPTEST_TRAITS_HPP
+#ifndef PONDERTEST_TRAITS_HPP
+#define PONDERTEST_TRAITS_HPP
 
 namespace TraitsTest
 {
 }
-#endif // CAMPTEST_TRAITS_HPP
+#endif // PONDERTEST_TRAITS_HPP

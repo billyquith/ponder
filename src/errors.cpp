@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/errors.hpp>
-#include <camp/class.hpp>
+#include <ponder/errors.hpp>
+#include <ponder/class.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 BadType::BadType(Type provided, Type expected)
@@ -160,4 +160,4 @@ PropertyNotFound::PropertyNotFound(const std::string& name, const std::string& c
 {
 }
 
-} // namespace camp
+} // namespace ponder

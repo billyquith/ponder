@@ -28,11 +28,11 @@
 ****************************************************************************/
 
 
-#include <camp/detail/classmanager.hpp>
-#include <camp/class.hpp>
+#include <ponder/detail/classmanager.hpp>
+#include <ponder/class.hpp>
 
 
-namespace camp
+namespace ponder
 {
 namespace detail
 {
@@ -49,7 +49,7 @@ Class& ClassManager::addClass(const std::string& id)
     // First make sure that the class doesn't already exist
     if (m_classes.find(id) != m_classes.end())
     {
-        CAMP_ERROR(ClassAlreadyCreated(id));
+        PONDER_ERROR(ClassAlreadyCreated(id));
     }
 
     // Create the new class
@@ -76,7 +76,7 @@ const Class& ClassManager::getByIndex(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_classes.size())
-        CAMP_ERROR(OutOfRange(index, m_classes.size()));
+        PONDER_ERROR(OutOfRange(index, m_classes.size()));
 
     ClassTable::const_iterator it = m_classes.begin();
     std::advance(it, index);
@@ -89,7 +89,7 @@ const Class& ClassManager::getById(const std::string& id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
     if (it == m_classes.end())
-        CAMP_ERROR(ClassNotFound(id));
+        PONDER_ERROR(ClassNotFound(id));
 
     return *it->second;
 }
@@ -126,4 +126,4 @@ ClassManager::~ClassManager()
 
 } // namespace detail
 
-} // namespace camp
+} // namespace ponder

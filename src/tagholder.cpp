@@ -28,10 +28,10 @@
 ****************************************************************************/
 
 
-#include <camp/tagholder.hpp>
+#include <ponder/tagholder.hpp>
 
 
-namespace camp
+namespace ponder
 {
 //-------------------------------------------------------------------------------------------------
 TagHolder::~TagHolder()
@@ -49,7 +49,7 @@ const Value& TagHolder::tagId(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_tags.size())
-        CAMP_ERROR(OutOfRange(index, m_tags.size()));
+        PONDER_ERROR(OutOfRange(index, m_tags.size()));
 
     TagsTable::const_iterator it = m_tags.begin();
     std::advance(it, index);
@@ -88,4 +88,4 @@ TagHolder::TagHolder()
 {
 }
 
-} // namespace camp
+} // namespace ponder

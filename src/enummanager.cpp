@@ -28,12 +28,12 @@
 ****************************************************************************/
 
 
-#include <camp/detail/enummanager.hpp>
-#include <camp/enum.hpp>
-#include <camp/errors.hpp>
+#include <ponder/detail/enummanager.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/errors.hpp>
 
 
-namespace camp
+namespace ponder
 {
 namespace detail
 {
@@ -50,7 +50,7 @@ Enum& EnumManager::addClass(const std::string& id)
     // First make sure that the enum doesn't already exist
     if (m_enums.find(id) != m_enums.end())
     {
-        CAMP_ERROR(EnumAlreadyCreated(id));
+        PONDER_ERROR(EnumAlreadyCreated(id));
     }
 
     // Create the new class
@@ -77,7 +77,7 @@ const Enum& EnumManager::getByIndex(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_enums.size())
-        CAMP_ERROR(OutOfRange(index, m_enums.size()));
+        PONDER_ERROR(OutOfRange(index, m_enums.size()));
 
     EnumTable::const_iterator it = m_enums.begin();
     std::advance(it, index);
@@ -90,7 +90,7 @@ const Enum& EnumManager::getById(const std::string& id) const
 {
     EnumTable::const_iterator it = m_enums.find(id);
     if (it == m_enums.end())
-        CAMP_ERROR(EnumNotFound(id));
+        PONDER_ERROR(EnumNotFound(id));
 
     return *it->second;
 }
@@ -127,4 +127,4 @@ EnumManager::~EnumManager()
 
 } // namespace detail
 
-} // namespace camp
+} // namespace ponder

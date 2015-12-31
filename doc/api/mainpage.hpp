@@ -36,8 +36,8 @@
  * Here is a simple example of how to use CAMP:
  *
  * \code
- * #include <camp/camptype.hpp>
- * #include <camp/classbuilder.hpp>
+ * #include <ponder/pondertype.hpp>
+ * #include <ponder/classbuilder.hpp>
  * #include <string>
  * #include <iostream>
  * 
@@ -88,17 +88,17 @@
  * int main()
  * {
  *     // Bind our Person class to CAMP
- *     camp::Class::declare<Person>("Person")
+ *     ponder::Class::declare<Person>("Person")
  *         .constructor<std::string>()
  *         .property("name", &Person::name)
  *         .property("age", &Person::age, &Person::setAge)
  *         .function("speak", &Person::speak);
  * 
  *     // Retrieve the metaclass by its name
- *     const camp::Class& metaclass = camp::classByName("Person");
+ *     const ponder::Class& metaclass = ponder::classByName("Person");
  * 
  *     // Use the metaclass to construct a new person named John
- *     camp::UserObject john = metaclass.construct(camp::Args("John"));
+ *     ponder::UserObject john = metaclass.construct(ponder::Args("John"));
  *
  *     // Print its name
  *     std::cout << "John's name is: " << john.get("name") << std::endl;

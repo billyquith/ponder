@@ -28,13 +28,13 @@
 ****************************************************************************/
 
 #include "classvisitor.hpp"
-#include <camp/classget.hpp>
+#include <ponder/classget.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace ClassVisitorTest;
 
 //-----------------------------------------------------------------------------
-//                         Tests for camp::ClassVisitor
+//                         Tests for ponder::ClassVisitor
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(CLASSVISITOR)
 
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_SUITE(CLASSVISITOR)
 BOOST_AUTO_TEST_CASE(visit)
 {
     MyClassVisitor visitor;
-    camp::classByType<MyClass>().visit(visitor);
+    ponder::classByType<MyClass>().visit(visitor);
 
     BOOST_CHECK(visitor.simpleVisited);
     BOOST_CHECK(visitor.arrayVisited);

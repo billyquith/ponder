@@ -16,7 +16,7 @@ endif()
 # Add an option for choosing the build type (shared or static)
 if(NOT BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS TRUE
-        CACHE BOOL "TRUE to build CAMP as a shared library, FALSE to build it as a static library."
+        CACHE BOOL "TRUE to build Ponder as a shared library, FALSE to build it as a static library."
     )
 endif()
 
@@ -38,7 +38,7 @@ endif()
 if(WIN32 AND NOT UNIX)
     set(INSTALL_MISC_DIR .)
 elseif(UNIX)
-    set(INSTALL_MISC_DIR share/camp)
+    set(INSTALL_MISC_DIR share/ponder)
 endif()
 
 # setup MacOSX build environment if necessary

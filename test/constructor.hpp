@@ -27,13 +27,13 @@
 **
 ****************************************************************************/
 
-#ifndef CAMPTEST_CONSTRUCTOR_HPP
-#define CAMPTEST_CONSTRUCTOR_HPP
+#ifndef PONDERTEST_CONSTRUCTOR_HPP
+#define PONDERTEST_CONSTRUCTOR_HPP
 
-#include <camp/camptype.hpp>
-#include <camp/class.hpp>
-#include <camp/enum.hpp>
-#include <camp/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/classbuilder.hpp>
 #include <string>
 
 namespace ConstructorTest
@@ -86,7 +86,7 @@ namespace ConstructorTest
 
     void declare()
     {
-        camp::Enum::declare<MyEnum>("ConstructorTest::MyEnum")
+        ponder::Enum::declare<MyEnum>("ConstructorTest::MyEnum")
             .value("zero",  zero)
             .value("one",   one)
             .value("two",   two)
@@ -94,12 +94,12 @@ namespace ConstructorTest
             .value("four",  four)
             .value("five",  five);
 
-        camp::Class::declare<MyType>("ConstructorTest::MyType");
+        ponder::Class::declare<MyType>("ConstructorTest::MyType");
 
-        camp::Class::declare<MyBase1>("ConstructorTest::MyBase1");
-        camp::Class::declare<MyBase2>("ConstructorTest::MyBase2");
+        ponder::Class::declare<MyBase1>("ConstructorTest::MyBase1");
+        ponder::Class::declare<MyBase2>("ConstructorTest::MyBase2");
 
-        camp::Class::declare<MyClass>("ConstructorTest::MyClass")
+        ponder::Class::declare<MyClass>("ConstructorTest::MyClass")
             .base<MyBase1>()
             .base<MyBase2>()
             .constructor()
@@ -113,10 +113,10 @@ namespace ConstructorTest
     }
 }
 
-CAMP_AUTO_TYPE(ConstructorTest::MyEnum, &ConstructorTest::declare)
-CAMP_AUTO_TYPE(ConstructorTest::MyType, &ConstructorTest::declare)
-CAMP_AUTO_TYPE(ConstructorTest::MyBase1, &ConstructorTest::declare)
-CAMP_AUTO_TYPE(ConstructorTest::MyBase2, &ConstructorTest::declare)
-CAMP_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare)
+PONDER_AUTO_TYPE(ConstructorTest::MyEnum, &ConstructorTest::declare)
+PONDER_AUTO_TYPE(ConstructorTest::MyType, &ConstructorTest::declare)
+PONDER_AUTO_TYPE(ConstructorTest::MyBase1, &ConstructorTest::declare)
+PONDER_AUTO_TYPE(ConstructorTest::MyBase2, &ConstructorTest::declare)
+PONDER_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare)
 
-#endif // CAMPTEST_CONSTRUCTOR_HPP
+#endif // PONDERTEST_CONSTRUCTOR_HPP
