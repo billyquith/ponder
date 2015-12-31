@@ -2,7 +2,7 @@
 Ponder
 ------
 
-[![Build Status](https://travis-ci.org/billyquith/camp.svg)](https://travis-ci.org/billyquith/camp)
+[![Build Status](https://travis-ci.org/billyquith/ponder.svg)](https://travis-ci.org/billyquith/ponder)
 
 ### About
 
@@ -29,10 +29,9 @@ and consistent interface for manipulating your objects outside C++ code.
 
 ### History
 
-Ponder is a multi-purpose reflection library which is a fork of [CAMP][2], which has been
-retired by the original authors. CAMP relies on Boost, and is pre-C++11. In Ponder,
-the Boost dependency has been removed (apart from testing) and instead C++11 features
-are used.
+Ponder is a fork of [CAMP][2], which has been retired by the original authors. CAMP relies
+on Boost, and is pre-C++11. In Ponder, the Boost dependency has been removed
+(apart from testing) and, instead, C++11 features are used.
 
 CAMP was developed by Technogerma Systems France and then by [Tegesoft][1]
 (where the dev team has moved) .
