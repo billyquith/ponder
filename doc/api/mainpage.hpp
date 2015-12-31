@@ -1,4 +1,4 @@
-/*! \mainpage CAMP C++ library documentation
+/*! \mainpage Ponder C++ library documentation
  *
  * \htmlonly
  * <div class="logo">
@@ -10,7 +10,7 @@
  *
  * \section overview Overview
  *
- * CAMP is a C++ library which provides runtime reflection for types.
+ * Ponder is a C++ library which provides runtime reflection for types.
  * It provides an abstraction for most of the high-level concepts of C++:
  *
  * \li Classes
@@ -20,11 +20,11 @@
  * \li Objects
  * \li Variables
  *
- * By wrapping all these concepts into abstract structures, CAMP provides an extra layer of
+ * By wrapping all these concepts into abstract structures, Ponder provides an extra layer of
  * flexibility to programs, and allow them to fully expose their data structures at runtime.
  *
- * Many applications can take advantage of CAMP, in order to automate tasks which would
- * otherwise require a huge amount of work. For example, CAMP can be used to expose and edit
+ * Many applications can take advantage of Ponder, in order to automate tasks which would
+ * otherwise require a huge amount of work. For example, Ponder can be used to expose and edit
  * objects' attributes into a graphical user interface. It can also be used to do
  * automatic binding of C++ classes to script languages such as Python or Lua.
  * Another possible application would be the serialization of objects to XML, text or
@@ -33,7 +33,7 @@
  *
  * \section example Quick example
  * 
- * Here is a simple example of how to use CAMP:
+ * Here is a simple example of how to use Ponder:
  *
  * \code
  * #include <ponder/pondertype.hpp>
@@ -81,13 +81,13 @@
  *     unsigned int m_age;
  * };
  * 
- * // Make the Person type available to CAMP
- * CAMP_TYPE(Person)
+ * // Make the Person type available to Ponder
+ * PONDER_TYPE(Person)
  * 
  * 
  * int main()
  * {
- *     // Bind our Person class to CAMP
+ *     // Bind our Person class to Ponder
  *     ponder::Class::declare<Person>("Person")
  *         .constructor<std::string>()
  *         .property("name", &Person::name)
@@ -118,7 +118,7 @@
  *
  * \section license License
  *
- * CAMP is distributed under the terms of the MIT license.
+ * Ponder is distributed under the terms of the MIT license.
  *
  * \verbatim
  * The MIT License (MIT)

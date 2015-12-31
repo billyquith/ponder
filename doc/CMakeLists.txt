@@ -44,7 +44,7 @@ if(DOXYGEN_FOUND)
     ###################################
 
     set(DOXYGEN_OUTPUT_TYPE html)
-    set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/campapi.doxy)
+    set(DOXYGEN_CONFIGURED_INPUT ${CMAKE_BINARY_DIR}/doc/api.doxy)
     set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc/api)
 
     if(WIN32)
