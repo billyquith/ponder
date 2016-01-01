@@ -1,13 +1,5 @@
 /*! \mainpage Ponder C++ library documentation
  *
- * \htmlonly
- * <div class="logo">
- * \endhtmlonly
- * \image html logo_camp.png
- * \htmlonly
- * </div>
- * \endhtmlonly
- *
  * \section overview Overview
  *
  * Ponder is a C++ library which provides runtime reflection for types.
