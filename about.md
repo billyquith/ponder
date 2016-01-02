@@ -4,8 +4,44 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Ponder is a C++11 reflection library. It allows you to describe your C++ API
+and then inspect this at runtime. This is useful for data-driven applications,
+script binding, automatic editing, etc.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+### Simple example
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+A class to expose:
+
+```cpp
+class Adder
+{
+public: 
+    Adder() : total_(0)     {}
+    void add(int value)     { total_ += value; }
+    int getTotal() const    { return total_; }
+private:
+    int total_;    
+};
+```
+
+How we would like to expose the object:
+
+```cpp
+ponder::Class::declare<Adder>("Adder")
+    .constructor<>()
+    .function("add",   &Adder::add)
+    .property("total", &Adder::getTotal);
+```
+
+Now we can make *runtime* instances of the object and manipulate them:
+
+```cpp
+auto& metaclass = ponder::classByName("Person"); // find the class
+
+auto adder = metaclass.construct(); // create an instance
+
+adder.call("add", 7); // call a function
+adder.call("add", 5);
+
+int total = adder.get("total"); // get a property -> 12 
+```
