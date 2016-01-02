@@ -9,4 +9,4 @@ url: "http://billyquith.github.io/ponder/"
 github_username:  billyquith
 
 markdown: redcarpet
-pygments: true
+highlighter: pygments
