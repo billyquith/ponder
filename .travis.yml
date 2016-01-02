@@ -8,23 +8,22 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
   - if [[ $TRAVIS_OS_NAME == osx ]]; then brew update; fi
-  - #if [[ $TRAVIS_OS_NAME == osx && `brew list | grep boost` == '' ]]; then brew install boost; fi
-  - #if [[ $TRAVIS_OS_NAME == osx ]]; then brew outdated boost || brew upgrade boost; fi
   - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep doxygen` == '' ]]; then brew install doxygen; fi
   - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep cmake` == '' ]]; then brew install cmake; fi
   - if [[ $TRAVIS_OS_NAME == osx ]]; then brew outdated cmake || brew upgrade cmake; fi
   - if [[ $TRAVIS_OS_NAME == osx && `brew list | grep ninja` == '' ]]; then brew install ninja; fi
-  
 before_script:
   - cmake --version
   - cmake -G "Ninja" -DBUILD_TEST=TRUE
-
-script: ninja pondertest
-
-after_success: ./test/pondertest
+script:
+  - ninja pondertest
+  - ninja doc
+after_success:
+  - ./test/pondertest
 
 notifications:
   email:
     on_failure: always
-    
-    
+env:
+  global:
+    secure: aAnZ/Lx4Kr1JwDYwSTefmB9tNwKPpSySFYzytf/l/DglgdAkShIrYbbLCirNoaORV5H1eEgG5jedQ5/1AwpIB7jXJbcHZke5Umh7iXJwuk90OdulgkOVWld9D0kVHYxiGQBXD+DmjI2lGlWhWkp7t3U2yElZKnLtEIvbrk3wHUy8OVuVfDynJmOCCWgPVn+s0+AZGAAgrV0Qlj1l4Bv7haE7P0BXFwApG0MwywiAy0E9DdPpSiG2wnbHxZIBS+VDtENa4TcL1whRKcLxHt5/5mAoYGsEu5JJ4gt1IMH9P65YK+man6DEINo4JL0fEIupcB05+0fMtZKpgmNcq/CNwtRtx1Xa/YTHmZa/lPql6ZNdlXS6q1VYrjHxo0KaIylkBBdlA4ACx+AYytLploP5+sTk3Y916Sr2e+7YXqrLQrrHxv3ZF3Zz0nSOkBY26b7urJm2YIpsC65lvu2P4yebz05XQbC0VZ6Oo39LDfE2MUxVcb2jGoK2ihzRumeAKsCcJTXcj2T81h+IKjVcBkd5qr0T6eWtLYKVdJorrSPP+Z/gYKxVPpz2g5x1Kns7W9Gm/qIn/Kge+O6nnQhg5GXHYYch7UPgeGVJAUpbRWqBFkmoAfTQad1663fT4FK+PxWEaBEEgaQezdY8idAHJVcvABVd6mPofmwHbSomi2GvTrw=
