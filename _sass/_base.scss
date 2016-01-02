@@ -130,8 +130,9 @@ code {
     font-size: 13px;
     font-family: "Menlo",monospace;
     border: 1px solid $grey-color-light;
-    border-radius: 3px;
-    background-color: #333;
+    border-radius: 5px;
+    color: $grey-color-light;
+    background-color: $grey-color-dark;
 }
 
 code {
