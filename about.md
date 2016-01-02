@@ -36,7 +36,7 @@ ponder::Class::declare<Adder>("Adder")
 Now we can make *runtime* instances of the object and manipulate them:
 
 ```cpp
-auto& metaclass = ponder::classByName("Person"); // find the class
+auto& metaclass = ponder::classByName("Adder"); // find the class
 
 auto adder = metaclass.construct(); // create an instance
 
