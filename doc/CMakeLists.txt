@@ -74,6 +74,9 @@ if(DOXYGEN_FOUND)
         configure_file(${file} ${DOXYGEN_OUTPUT_DIR}/${DOXYGEN_OUTPUT_TYPE}/${filename} COPYONLY)
     endforeach()
 
+    # need Bootstrap transformation code for HTML formatting
+    configure_file(${DOXYGEN_INPUT_DIR}/doc/api/doxy-boot.js ${DOXYGEN_OUTPUT_DIR}/html/doxy-boot.js @ONLY)
+
     # target setup
     add_custom_target(doc
         COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
@@ -81,7 +84,7 @@ if(DOXYGEN_FOUND)
         COMMAND ${CMAKE_COMMAND} -E echo "Done."
         WORKING_DIRECTORY ${DOXYGEN_INPUT_DIR}
     )
-
+    
     # install
     install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
         DESTINATION ${INSTALL_MISC_DIR}/doc
