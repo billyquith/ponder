@@ -109,7 +109,7 @@ a.qindexHL {
 }
 
 a.code, a.code:visited, a.line, a.line:visited {
-    color: #4665A2;
+    color: #66d9ef;
 }
 
 a.codeRef, a.codeRef:visited, a.lineRef, a.lineRef:visited {
@@ -122,9 +122,14 @@ dl.el {
     margin-left: -1cm;
 }
 
+div.well, pre.well {
+    color: #f8f8f2;  /* default text col */
+    background-color: #333;
+}
+
 pre.fragment {
     border: 1px solid #C4CFE5;
-    background-color: #FBFCFD;
+    background-color: #333;
     padding: 4px 6px;
     margin: 4px 8px 4px 2px;
     overflow: auto;
@@ -142,7 +147,7 @@ div.fragment {
 }
 
 div.line {
-    font-family: monospace, fixed;
+    font-family: 'Menlo', monospace, fixed;
     font-size: 13px;
     min-height: 13px;
     line-height: 1.0;
@@ -203,11 +208,11 @@ div.groupText {
 /* @group Code Colorization */
 
 span.keyword {
-    color: #008000
+    color: #66d9ef
 }
 
 span.keywordtype {
-    color: #604020
+    color: #66d9ef
 }
 
 span.keywordflow {
@@ -215,19 +220,19 @@ span.keywordflow {
 }
 
 span.comment {
-    color: #800000
+    color: #85817e
 }
 
 span.preprocessor {
-    color: #806020
+    color: #a6e22e
 }
 
 span.stringliteral {
-    color: #002080
+    color: #e6db74
 }
 
 span.charliteral {
-    color: #008080
+    color: #e6db74
 }
 
 span.vhdldigit {
