@@ -127,12 +127,12 @@ blockquote {
  */
 pre,
 code {
-    font-size: 13px;
+    font-size: 0.9em;
     font-family: "Menlo",monospace;
     border: 1px solid $grey-color-light;
     border-radius: 5px;
     color: $grey-color-light;
-    background-color: $grey-color-dark;
+    background-color: #333;
 }
 
 code {
