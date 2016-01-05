@@ -106,8 +106,8 @@ public:
      * };
      *
      * ponder::Class::declare<Point>("Point")
-     *     .property("x",      &Point::x);      // getter + setter
-     *     .property("y",      &Point::y);      // getter + setter
+     *     .property("x",      &Point::x)       // getter + setter
+     *     .property("y",      &Point::y)       // getter + setter
      *     .property("length", &Point::length); // getter only
      * \endcode
 
@@ -142,7 +142,7 @@ public:
      * };
      *
      * ponder::Class::declare<Entity>("Entity")
-     *     .property("x", &Point::x, &Entity::p); // will internally resolve to e.p.x
+     *     .property("x", &Point::x, &Entity::p)  // will internally resolve to e.p.x
      *     .property("y", &Point::y, &Entity::p); // will internally resolve to e.p.y
      * \endcode
      *
@@ -184,7 +184,7 @@ public:
      * };
      *
      * ponder::Class::declare<Entity>("Entity")
-     *     .property("x", &Point::getX, &Point::setX, &Entity::p); // will internally resolve to e.p.get/setX()
+     *     .property("x", &Point::getX, &Point::setX, &Entity::p)  // will internally resolve to e.p.get/setX()
      *     .property("y", &Point::getY, &Point::setY, &Entity::p); // will internally resolve to e.p.get/setY()
      * \endcode
      *
