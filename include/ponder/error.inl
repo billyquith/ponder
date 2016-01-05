@@ -44,7 +44,7 @@ T Error::prepare(T error, const std::string& file, int line, const std::string& 
 template <typename T>
 std::string Error::str(T value)
 {
-    return util::convert<std::string>(value);
+    return detail::convert<std::string>(value);
 }
 
 } // namespace ponder

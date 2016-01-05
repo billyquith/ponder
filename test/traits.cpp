@@ -246,97 +246,97 @@ BOOST_AUTO_TEST_CASE(boost_result_type)
 BOOST_AUTO_TEST_CASE(lexical_cast_to_string)
 {
     const unsigned int ui = 234;
-    BOOST_CHECK_EQUAL(ponder::util::convert<std::string>(ui), std::to_string(ui));
+    BOOST_CHECK_EQUAL(ponder::detail::convert<std::string>(ui), std::to_string(ui));
     
     const int i = -17;
-    BOOST_CHECK_EQUAL(ponder::util::convert<std::string>(i), std::to_string(i));
+    BOOST_CHECK_EQUAL(ponder::detail::convert<std::string>(i), std::to_string(i));
     
     const float f = 108.75f;
-    BOOST_CHECK_EQUAL(ponder::util::convert<std::string>(f), "108.75");
+    BOOST_CHECK_EQUAL(ponder::detail::convert<std::string>(f), "108.75");
 
     const double d = 108.125;
-    BOOST_CHECK_EQUAL(ponder::util::convert<std::string>(d), "108.125");
+    BOOST_CHECK_EQUAL(ponder::detail::convert<std::string>(d), "108.125");
 
     const bool bt = true, bf = false;
-    BOOST_CHECK_EQUAL(ponder::util::convert<std::string>(bt), "1");
-    BOOST_CHECK_EQUAL(ponder::util::convert<std::string>(bf), "0");
+    BOOST_CHECK_EQUAL(ponder::detail::convert<std::string>(bt), "1");
+    BOOST_CHECK_EQUAL(ponder::detail::convert<std::string>(bf), "0");
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_bool)
 {
     const std::string b1("1");
-    BOOST_CHECK_EQUAL(ponder::util::convert<bool>(b1), true);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<bool>(b1), true);
 
     const std::string b2("0");
-    BOOST_CHECK_EQUAL(ponder::util::convert<bool>(b2), false);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<bool>(b2), false);
 
     const std::string bt("true");
-    BOOST_CHECK_EQUAL(ponder::util::convert<bool>(bt), true);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<bool>(bt), true);
 
     const std::string bf("false");
-    BOOST_CHECK_EQUAL(ponder::util::convert<bool>(bf), false);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<bool>(bf), false);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_char)
 {
-    BOOST_CHECK_EQUAL(ponder::util::convert<char>(std::string("0")), '0');
-    BOOST_CHECK_EQUAL(ponder::util::convert<char>(std::string("g")), 'g');
-    BOOST_CHECK_THROW(ponder::util::convert<char>(std::string()), ponder::util::bad_conversion);
-    BOOST_CHECK_THROW(ponder::util::convert<char>(std::string("27")), ponder::util::bad_conversion);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<char>(std::string("0")), '0');
+    BOOST_CHECK_EQUAL(ponder::detail::convert<char>(std::string("g")), 'g');
+    BOOST_CHECK_THROW(ponder::detail::convert<char>(std::string()), ponder::util::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<char>(std::string("27")), ponder::util::bad_conversion);
     
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned char>(std::string("0")), '0');
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned char>(std::string("g")), 'g');
-    BOOST_CHECK_THROW(ponder::util::convert<unsigned char>(std::string()), ponder::util::bad_conversion);
-    BOOST_CHECK_THROW(ponder::util::convert<unsigned char>(std::string("27")), ponder::util::bad_conversion);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned char>(std::string("0")), '0');
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned char>(std::string("g")), 'g');
+    BOOST_CHECK_THROW(ponder::detail::convert<unsigned char>(std::string()), ponder::util::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<unsigned char>(std::string("27")), ponder::util::bad_conversion);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_short)
 {
-    BOOST_CHECK_EQUAL(ponder::util::convert<short>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<short>(std::string("2600")), 2600);
-    BOOST_CHECK_EQUAL(ponder::util::convert<short>(std::string("-27")), -27);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<short>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<short>(std::string("2600")), 2600);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<short>(std::string("-27")), -27);
     
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned short>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned short>(std::string("2600")), 2600u);
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned short>(std::string("-27")), static_cast<unsigned short>(-27u));
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned short>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned short>(std::string("2600")), 2600u);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned short>(std::string("-27")), static_cast<unsigned short>(-27u));
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_int)
 {
-    BOOST_CHECK_EQUAL(ponder::util::convert<int>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<int>(std::string("123456789")), 123456789);
-    BOOST_CHECK_EQUAL(ponder::util::convert<int>(std::string("-27")), -27);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<int>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<int>(std::string("123456789")), 123456789);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<int>(std::string("-27")), -27);
 
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned int>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned int>(std::string("123456789")), 123456789u);
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned int>(std::string("-27")), -27u);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned int>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned int>(std::string("123456789")), 123456789u);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned int>(std::string("-27")), -27u);
     
-    BOOST_CHECK_THROW(ponder::util::convert<int>(std::string("bad number")), ponder::util::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<int>(std::string("bad number")), ponder::util::bad_conversion);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_long)
 {
-    BOOST_CHECK_EQUAL(ponder::util::convert<long long>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<long long>(std::string("1125899906842624")), 1125899906842624ll);
-    BOOST_CHECK_EQUAL(ponder::util::convert<long long>(std::string("-27")), -27);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<long long>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<long long>(std::string("1125899906842624")), 1125899906842624ll);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<long long>(std::string("-27")), -27);
     
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned long long>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned long long>(std::string("1125899906842624")), 1125899906842624ull);
-    BOOST_CHECK_EQUAL(ponder::util::convert<unsigned long long>(std::string("-27")), -27ull);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned long long>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned long long>(std::string("1125899906842624")), 1125899906842624ull);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned long long>(std::string("-27")), -27ull);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_float)
 {
-    BOOST_CHECK_EQUAL(ponder::util::convert<float>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<float>(std::string("100.25")), 100.25f);
-    BOOST_CHECK_EQUAL(ponder::util::convert<float>(std::string("-27.75")), -27.75f);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<float>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<float>(std::string("100.25")), 100.25f);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<float>(std::string("-27.75")), -27.75f);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_double)
 {
-    BOOST_CHECK_EQUAL(ponder::util::convert<double>(std::string("0")), 0);
-    BOOST_CHECK_EQUAL(ponder::util::convert<double>(std::string("100.25")), 100.25);
-    BOOST_CHECK_EQUAL(ponder::util::convert<double>(std::string("-27.75")), -27.75);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<double>(std::string("0")), 0);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<double>(std::string("100.25")), 100.25);
+    BOOST_CHECK_EQUAL(ponder::detail::convert<double>(std::string("-27.75")), -27.75);
 }
 
 //-----------------------------------------------------------------------------

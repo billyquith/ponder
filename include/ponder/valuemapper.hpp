@@ -151,7 +151,7 @@ struct ValueMapper<bool>
     static bool from(bool source)                    {return source;}
     static bool from(long source)                    {return source != 0;}
     static bool from(double source)                  {return source != 0.;}
-    static bool from(const std::string& source)      {return ponder::util::convert<bool>(source);}
+    static bool from(const std::string& source)      {return ponder::detail::convert<bool>(source);}
     static bool from(const ponder::EnumObject& source) {return source.value() != 0;}
     static bool from(const ponder::UserObject& source) {return source.pointer() != nullptr;}
 };
@@ -171,7 +171,7 @@ struct ValueMapper<T, typename std::enable_if< std::is_integral<T>::value
     static T from(bool source)                    {return static_cast<T>(source);}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
-    static T from(const std::string& source)      {return ponder::util::convert<T>(source);}
+    static T from(const std::string& source)      {return ponder::detail::convert<T>(source);}
     static T from(const ponder::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)        {PONDER_ERROR(ponder::BadType(ponder::userType, ponder::intType));}
 };
@@ -191,7 +191,7 @@ struct ValueMapper<T, typename std::enable_if< std::is_floating_point<T>::value
     static T from(bool source)                    {return static_cast<T>(source);}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
-    static T from(const std::string& source)      {return ponder::util::convert<T>(source);}
+    static T from(const std::string& source)      {return ponder::detail::convert<T>(source);}
     static T from(const ponder::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)        {PONDER_ERROR(ponder::BadType(ponder::userType, ponder::realType));}
 };
@@ -205,9 +205,9 @@ struct ValueMapper<std::string>
     static const int type = ponder::stringType;
     static const std::string& to(const std::string& source) {return source;}
 
-    static std::string from(bool source)                    {return ponder::util::convert<std::string>(source);}
-    static std::string from(long source)                    {return ponder::util::convert<std::string>(source);}
-    static std::string from(double source)                  {return ponder::util::convert<std::string>(source);}
+    static std::string from(bool source)                    {return ponder::detail::convert<std::string>(source);}
+    static std::string from(long source)                    {return ponder::detail::convert<std::string>(source);}
+    static std::string from(double source)                  {return ponder::detail::convert<std::string>(source);}
     static std::string from(const std::string& source)      {return source;}
     static std::string from(const ponder::EnumObject& source) {return source.name();}
     static std::string from(const ponder::UserObject&)        {PONDER_ERROR(ponder::BadType(ponder::userType, ponder::stringType));}
@@ -275,7 +275,7 @@ struct ValueMapper<T, typename std::enable_if< std::is_enum<T>::value
             return static_cast<T>(metaenum->value(source));
 
         // Then try as a number
-        long value = ponder::util::convert<long>(source);
+        long value = ponder::detail::convert<long>(source);
         if (!metaenum || metaenum->hasValue(value))
             return static_cast<T>(value);
 

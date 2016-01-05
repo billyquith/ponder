@@ -73,7 +73,7 @@ namespace util
 namespace detail
 {
     template <typename T, typename F, typename O = void>
-    struct convert
+    struct convert_impl
     {
         T operator () (const F& from)
         {
@@ -89,7 +89,7 @@ namespace detail
     }
     
     template <typename S>
-    struct convert <std::string, S>
+    struct convert_impl <std::string, S>
     {
         std::string operator () (const S& from)
         {
@@ -98,7 +98,7 @@ namespace detail
     };
 
     template <>
-    struct convert <std::string, bool>
+    struct convert_impl <std::string, bool>
     {
         std::string operator () (const bool& from)
         {
@@ -122,7 +122,7 @@ namespace detail
     bool conv(const std::string& from, double& to);
     
     template <typename T>
-    struct convert <T, std::string,
+    struct convert_impl <T, std::string,
         typename std::enable_if< (std::is_integral<T>::value || std::is_floating_point<T>::value)
                                   && !std::is_const<T>::value
                                   && !std::is_reference<T>::value >::type >
@@ -135,7 +135,12 @@ namespace detail
             return result;
         }
     };
-    
+
+    template <typename T, typename U>
+    T convert(const U& from)
+    {
+        return convert_impl<T,U>()(from);
+    }
     
     // index_sequence
     // From: http://stackoverflow.com/a/32223343/3233
@@ -179,13 +184,6 @@ namespace detail
 
 namespace util
 {
-    
-template <typename T, typename U>
-T convert(const U& from)
-{
-    return detail::convert<T,U>()(from);
-}
-
 
 const char* typeAsString(Type t);
     
