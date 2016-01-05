@@ -162,12 +162,8 @@ bool conv(const std::string& from, double& to)
     return true;
 }
 
-} // namespace detail
-
 //-------------------------------------------------------------------------------------------------
 
-namespace util {
-    
 static const char* c_typeNames[] =
 {
     "none",     // noType
@@ -179,13 +175,11 @@ static const char* c_typeNames[] =
     "array",    // arrayType,
     "user",     //userType
 };
-    
-//static_assert(sizeof(c_typeNames)/sizeof(c_typeNames[0])==ponder::Type::userType+1, "typeNames out of sync");
 
 const char* typeAsString(Type t)
 {
     return c_typeNames[t];
 }
 
-} // namespace util
+} // namespace detail
 } // namespace ponder

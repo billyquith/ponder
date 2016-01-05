@@ -143,9 +143,9 @@ BOOST_AUTO_TEST_CASE(rtti)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(typeNames)
 {
-    BOOST_CHECK(strcmp(ponder::util::typeAsString(ponder::noType), "none")==0);
-    BOOST_CHECK(strcmp(ponder::util::typeAsString(ponder::realType), "real")==0);
-    BOOST_CHECK(strcmp(ponder::util::typeAsString(ponder::userType), "user")==0);
+    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);
+    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::realType), "real")==0);
+    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::userType), "user")==0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

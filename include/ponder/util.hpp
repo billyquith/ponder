@@ -179,15 +179,11 @@ namespace detail
     static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4) {return a0 & a1 & a2 & a3 & a4;}
     static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5) {return a0 & a1 & a2 & a3 & a4 & a5;}
     static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6) {return a0 & a1 & a2 & a3 & a4 & a5 & a6;}
-    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7) {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}    
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7) {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}
+
+    const char* typeAsString(Type t);
+
 } // detail
-
-namespace util
-{
-
-const char* typeAsString(Type t);
-    
-} // util
 } // camp
 
 
