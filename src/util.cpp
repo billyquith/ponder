@@ -28,7 +28,7 @@
  ****************************************************************************/
 
 
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 
 // Convert to string:
 //  #include "format.h"

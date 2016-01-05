@@ -38,7 +38,7 @@
 #include <ponder/error.hpp>
 #include <ponder/detail/typeid.hpp>
 #include <ponder/detail/classmanager.hpp>
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 #include <string>
 
 

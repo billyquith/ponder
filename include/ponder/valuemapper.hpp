@@ -39,7 +39,7 @@
 #include <ponder/userobject.hpp>
 #include <ponder/arraymapper.hpp>
 #include <ponder/errors.hpp>
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 
 
 namespace ponder_ext

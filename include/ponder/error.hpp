@@ -35,7 +35,7 @@
 
 
 #include <ponder/config.hpp>
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 #include <exception>
 #include <string>
 

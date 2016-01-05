@@ -39,7 +39,7 @@
 #include <ponder/errors.hpp>
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/objectholder.hpp>
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 #include <string>
 
 

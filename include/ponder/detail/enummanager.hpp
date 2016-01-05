@@ -35,7 +35,7 @@
 
 
 #include <ponder/detail/observernotifier.hpp>
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 #include <string>
 #include <map>
 

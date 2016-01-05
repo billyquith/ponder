@@ -30,7 +30,7 @@
 #include "traits.hpp"
 #include <ponder/detail/functiontraits.hpp>
 #include <ponder/detail/objecttraits.hpp>
-#include <ponder/util.hpp>
+#include <ponder/detail/util.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/function_types/function_type.hpp>
 #include <boost/function_types/result_type.hpp>
