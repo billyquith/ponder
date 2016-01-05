@@ -344,12 +344,12 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_double)
 // From: http://en.cppreference.com/w/cpp/utility/integer_sequence
 
 template<typename R, typename Array, std::size_t... I>
-R a2t_impl(const Array& a, ponder::util::index_sequence<I...>)
+R a2t_impl(const Array& a, ponder::detail::index_sequence<I...>)
 {
     return std::make_tuple(a[I]...);
 }
 
-template<typename R, typename T, std::size_t N, typename Indices = ponder::util::make_index_sequence<N>>
+template<typename R, typename T, std::size_t N, typename Indices = ponder::detail::make_index_sequence<N>>
 R a2t(const std::array<T, N>& a)
 {
     return a2t_impl<R>(a, Indices());
@@ -357,7 +357,7 @@ R a2t(const std::array<T, N>& a)
 
 BOOST_AUTO_TEST_CASE(integer_sequence)
 {
-    auto is = ponder::util::make_index_sequence<3>();
+    auto is = ponder::detail::make_index_sequence<3>();
     BOOST_CHECK_EQUAL(is.size(), 3);
 
     std::array<int, 4> array {{1,2,3,4}};
@@ -371,24 +371,24 @@ BOOST_AUTO_TEST_CASE(integer_sequence)
 
 BOOST_AUTO_TEST_CASE(util_allTrue)
 {
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true, true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true, true, true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true, true, true, true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true, true, true, true, true), true);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true, true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true, true, true, true, true), true);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true, true, true, true, true, true), true);
     
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(false), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, false), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, false, true), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, false, true), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, true, false, true), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, false, true, true, true, true), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, true, false, true, true, true, true), false);
-    BOOST_CHECK_EQUAL(ponder::util::allTrue(true, false, true, true, true, false, true, true), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(false), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, false), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, false, true), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, false, true), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, true, false, true), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, false, true, true, true, true), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, true, false, true, true, true, true), false);
+    BOOST_CHECK_EQUAL(ponder::detail::allTrue(true, false, true, true, true, false, true, true), false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

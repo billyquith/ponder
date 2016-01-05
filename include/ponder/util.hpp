@@ -136,6 +136,45 @@ namespace detail
         }
     };
     
+    
+    // index_sequence
+    // From: http://stackoverflow.com/a/32223343/3233
+    //
+    template <size_t... Ints>
+    struct index_sequence
+    {
+        using type = index_sequence;
+        using value_type = size_t;
+        static constexpr std::size_t size() { return sizeof...(Ints); }
+    };
+    
+    template <class Sequence1, class Sequence2>
+    struct _merge_and_renumber;
+    
+    template <size_t... I1, size_t... I2>
+    struct _merge_and_renumber<index_sequence<I1...>, index_sequence<I2...>>
+    : index_sequence<I1..., (sizeof...(I1)+I2)...>
+    {};
+    
+    template <size_t N>
+    struct make_index_sequence
+    : _merge_and_renumber<typename make_index_sequence<N/2>::type,
+    typename make_index_sequence<N - N/2>::type>
+    {};
+    
+    template<> struct make_index_sequence<0> : index_sequence<> { };
+    template<> struct make_index_sequence<1> : index_sequence<0> { };
+    
+    // Return true if all args true. Useful for variadic template expansions.
+    static inline bool allTrue() {return true;}
+    static inline bool allTrue(bool a0) {return a0;}
+    static inline bool allTrue(bool a0,bool a1) {return a0 & a1;}
+    static inline bool allTrue(bool a0,bool a1,bool a2) {return a0 & a1 & a2;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3) {return a0 & a1 & a2 & a3;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4) {return a0 & a1 & a2 & a3 & a4;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5) {return a0 & a1 & a2 & a3 & a4 & a5;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6) {return a0 & a1 & a2 & a3 & a4 & a5 & a6;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7) {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}    
 } // detail
 
 namespace util
@@ -147,44 +186,6 @@ T convert(const U& from)
     return detail::convert<T,U>()(from);
 }
 
-// index_sequence
-// From: http://stackoverflow.com/a/32223343/3233
-//
-template <size_t... Ints>
-struct index_sequence
-{
-    using type = index_sequence;
-    using value_type = size_t;
-    static constexpr std::size_t size() { return sizeof...(Ints); }
-};
-
-template <class Sequence1, class Sequence2>
-struct _merge_and_renumber;
-
-template <size_t... I1, size_t... I2>
-struct _merge_and_renumber<index_sequence<I1...>, index_sequence<I2...>>
-: index_sequence<I1..., (sizeof...(I1)+I2)...>
-{};
-
-template <size_t N>
-struct make_index_sequence
-: _merge_and_renumber<typename make_index_sequence<N/2>::type,
-                      typename make_index_sequence<N - N/2>::type>
-{};
-
-template<> struct make_index_sequence<0> : index_sequence<> { };
-template<> struct make_index_sequence<1> : index_sequence<0> { };
-    
-// Return true if all args true. Useful for variadic template expansions.
-static inline bool allTrue() {return true;}
-static inline bool allTrue(bool a0) {return a0;}
-static inline bool allTrue(bool a0,bool a1) {return a0 & a1;}
-static inline bool allTrue(bool a0,bool a1,bool a2) {return a0 & a1 & a2;}
-static inline bool allTrue(bool a0,bool a1,bool a2,bool a3) {return a0 & a1 & a2 & a3;}
-static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4) {return a0 & a1 & a2 & a3 & a4;}
-static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5) {return a0 & a1 & a2 & a3 & a4 & a5;}
-static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6) {return a0 & a1 & a2 & a3 & a4 & a5 & a6;}
-static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7) {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}
 
 const char* typeAsString(Type t);
     

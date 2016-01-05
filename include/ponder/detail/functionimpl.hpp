@@ -76,7 +76,7 @@ template <typename R, typename C>
 struct CallHelper
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, C obj, const Args& args, const std::string& name, ponder::util::index_sequence<Is...>)
+    static Value call(F func, C obj, const Args& args, const std::string& name, index_sequence<Is...>)
     {
         return func(obj, convertArg<A>(args,Is,name)...);
     }
@@ -84,7 +84,7 @@ struct CallHelper
     template <typename F, typename... A>
     static Value call(F func, C obj, const Args& args, const std::string& name)
     {
-        return call<F, A...>(func, obj, args, name, ponder::util::make_index_sequence<sizeof...(A)>());
+        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
@@ -95,7 +95,7 @@ template <typename C>
 struct CallHelper<void, C>
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, C obj, const Args& args, const std::string& name, ponder::util::index_sequence<Is...>)
+    static Value call(F func, C obj, const Args& args, const std::string& name, index_sequence<Is...>)
     {
         return func(obj, convertArg<A>(args,Is,name)...), Value::nothing;
     }
@@ -103,7 +103,7 @@ struct CallHelper<void, C>
     template <typename F, typename... A>
     static Value call(F func, C obj, const Args& args, const std::string& name)
     {
-        return call<F, A...>(func, obj, args, name, ponder::util::make_index_sequence<sizeof...(A)>());
+        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 

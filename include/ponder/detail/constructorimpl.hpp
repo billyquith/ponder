@@ -91,13 +91,13 @@ template <typename T, typename... A>
 class ConstructorImpl : public Constructor
 {
     template <typename... As, std::size_t... Is>
-    static inline bool checkArgs(const Args& args, util::index_sequence<Is...>)
+    static inline bool checkArgs(const Args& args, index_sequence<Is...>)
     {
-        return util::allTrue(checkArg<As>(args[Is])...);
+        return allTrue(checkArg<As>(args[Is])...);
     }
 
     template <typename... As, std::size_t... Is>
-    static inline UserObject createWithArgs(const Args& args, util::index_sequence<Is...>)
+    static inline UserObject createWithArgs(const Args& args, index_sequence<Is...>)
     {
         return new T(convertArg<As>(args, Is)...);
     }
@@ -109,7 +109,7 @@ public:
      */
     virtual bool matches(const Args& args) const override
     {
-        return args.count() == sizeof...(A) && checkArgs<A...>(args, util::make_index_sequence<sizeof...(A)>());
+        return args.count() == sizeof...(A) && checkArgs<A...>(args, make_index_sequence<sizeof...(A)>());
     }
 
     /**
@@ -117,7 +117,7 @@ public:
      */
     virtual UserObject create(const Args& args) const override
     {
-        return createWithArgs<A...>(args, util::make_index_sequence<sizeof...(A)>());
+        return createWithArgs<A...>(args, make_index_sequence<sizeof...(A)>());
     }
 };
 
