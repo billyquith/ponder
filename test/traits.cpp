@@ -281,13 +281,13 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_char)
 {
     BOOST_CHECK_EQUAL(ponder::detail::convert<char>(std::string("0")), '0');
     BOOST_CHECK_EQUAL(ponder::detail::convert<char>(std::string("g")), 'g');
-    BOOST_CHECK_THROW(ponder::detail::convert<char>(std::string()), ponder::util::bad_conversion);
-    BOOST_CHECK_THROW(ponder::detail::convert<char>(std::string("27")), ponder::util::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<char>(std::string()), ponder::detail::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<char>(std::string("27")), ponder::detail::bad_conversion);
     
     BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned char>(std::string("0")), '0');
     BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned char>(std::string("g")), 'g');
-    BOOST_CHECK_THROW(ponder::detail::convert<unsigned char>(std::string()), ponder::util::bad_conversion);
-    BOOST_CHECK_THROW(ponder::detail::convert<unsigned char>(std::string("27")), ponder::util::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<unsigned char>(std::string()), ponder::detail::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<unsigned char>(std::string("27")), ponder::detail::bad_conversion);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_short)
@@ -311,7 +311,7 @@ BOOST_AUTO_TEST_CASE(lexical_cast_to_int)
     BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned int>(std::string("123456789")), 123456789u);
     BOOST_CHECK_EQUAL(ponder::detail::convert<unsigned int>(std::string("-27")), -27u);
     
-    BOOST_CHECK_THROW(ponder::detail::convert<int>(std::string("bad number")), ponder::util::bad_conversion);
+    BOOST_CHECK_THROW(ponder::detail::convert<int>(std::string("bad number")), ponder::detail::bad_conversion);
 }
 
 BOOST_AUTO_TEST_CASE(lexical_cast_to_long)

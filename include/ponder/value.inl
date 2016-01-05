@@ -66,7 +66,7 @@ T Value::to() const
     {
         return detail::ValueTo<T>::convert(*this);
     }
-    catch (ponder::util::bad_conversion&)
+    catch (detail::bad_conversion&)
     {
         PONDER_ERROR(BadType(type(), mapType<T>()));
     }

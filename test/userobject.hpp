@@ -79,7 +79,7 @@ namespace UserObjectTest
         return stream << m.x;
     }
 
-    struct MyNonCopyableClass : ponder::util::noncopyable
+    struct MyNonCopyableClass : ponder::detail::noncopyable
     {
     };
 

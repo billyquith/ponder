@@ -38,7 +38,7 @@
 
 namespace ponder
 {
-namespace util
+namespace detail
 {
     
     class noncopyable
@@ -65,13 +65,8 @@ namespace util
         typedef F type;
     };
     
-    
     class bad_conversion : std::exception {};
     
-} // util
-
-namespace detail
-{
     template <typename T, typename F, typename O = void>
     struct convert_impl
     {
@@ -131,7 +126,7 @@ namespace detail
         {
             T result;
             if (!conv(from, result))
-                throw util::bad_conversion();
+                throw detail::bad_conversion();
             return result;
         }
     };

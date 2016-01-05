@@ -107,7 +107,7 @@ class ClassVisitor;
  *
  * \sa Enum, TagHolder, ClassBuilder, Function, Property
  */
-class PONDER_API Class : public TagHolder, util::noncopyable
+class PONDER_API Class : public TagHolder, detail::noncopyable
 {
 public:
 
