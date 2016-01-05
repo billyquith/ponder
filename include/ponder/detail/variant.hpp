@@ -26,8 +26,8 @@
 //    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#ifndef PONDER_UTIL_VARIANT_HPP
-#define PONDER_UTIL_VARIANT_HPP
+#ifndef MAPBOX_UTIL_VARIANT_HPP
+#define MAPBOX_UTIL_VARIANT_HPP
 
 #include <utility>
 #include <typeinfo>
@@ -62,7 +62,7 @@
 // translates to 100
 #define VARIANT_VERSION (VARIANT_MAJOR_VERSION*100000) + (VARIANT_MINOR_VERSION*100) + (VARIANT_PATCH_VERSION)
 
-namespace ponder { namespace util {
+namespace mapbox { namespace util {
 
 // static visitor
 template <typename R = void>
@@ -861,4 +861,4 @@ ResultType const& get(T const& var)
 
 }}
 
-#endif  // PONDER_UTIL_VARIANT_HPP
+#endif  // MAPBOX_UTIL_VARIANT_HPP

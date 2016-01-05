@@ -197,7 +197,7 @@ public:
 
 private:
 
-    typedef ponder::util::variant<NoType, bool, long, double, std::string, EnumObject, UserObject> Variant;
+    typedef mapbox::util::variant<NoType, bool, long, double, std::string, EnumObject, UserObject> Variant;
 
     Variant m_value; ///< Stored value
     Type m_type; ///< Ponder type of the value

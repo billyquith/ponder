@@ -26,12 +26,12 @@
 //    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#ifndef PONDER_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
-#define PONDER_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
+#ifndef MAPBOX_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
+#define MAPBOX_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
 
 #include <utility>
 
-namespace ponder { namespace util {
+namespace mapbox { namespace util {
 
 template <typename T>
 class recursive_wrapper
@@ -152,4 +152,4 @@ inline void swap(recursive_wrapper<T>& lhs, recursive_wrapper<T>& rhs) noexcept
 
 }}
 
-#endif // PONDER_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
+#endif // MAPBOX_UTIL_VARIANT_RECURSIVE_WRAPPER_HPP
