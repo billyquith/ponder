@@ -201,6 +201,11 @@ public:
      */
     bool operator == (const UserObject& other) const;
 
+    /**
+     * \brief Operator != to compare inequality between two user objects
+     *
+     * \see operator ==
+     */
     bool operator != (const UserObject& other) const {return !(*this == other);}
 
     /**

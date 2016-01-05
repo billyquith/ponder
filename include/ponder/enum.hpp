@@ -80,16 +80,22 @@ namespace ponder
 class PONDER_API Enum : detail::noncopyable
 {
 public:
-    typedef long EnumValue;
+    typedef long EnumValue;         //!< Type used to hold the enum value.
 
     /**
      * \brief Structure defining the <name, value> pairs stored in metaenums
      */
     struct Pair {
-        const std::string &name;
-        EnumValue value;
+        const std::string& name;    //!< Enum name
+        EnumValue value;            //!< Enum value
         
-        Pair(const std::string &n, EnumValue v) : name(n), value(v) {}
+        /**
+         * \brief Constructor.
+         * 
+         * \param name_ Name of the enum item.
+         * \param value_ Value of the enum item.
+         */
+        Pair(const std::string &name_, EnumValue value_) : name(name_), value(value_) {}
     };
     
 public:
@@ -185,7 +191,7 @@ public:
      *
      * \return True if both metaenums are the same, false otherwise
      */
-    bool operator==(const Enum& other) const;
+    bool operator == (const Enum& other) const;
 
     /**
      * \brief Operator != to check inequality between two metaenums
@@ -194,7 +200,7 @@ public:
      *
      * \return True if metaenums are different, false if they are equal
      */
-    bool operator!=(const Enum& other) const;
+    bool operator != (const Enum& other) const;
 
 private:
 

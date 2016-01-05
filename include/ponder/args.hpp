@@ -73,7 +73,7 @@ public:
     /**
      * \brief Construct the list with variable arguments.
      *
-     * \param N Argument to put in the list.
+     * \param args Parameter pack to be used.
      */
     template <typename... V>
     Args(V... args)

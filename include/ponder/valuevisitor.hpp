@@ -102,7 +102,7 @@ template <typename T = void>
 class ValueVisitor
 {
 public:
-    using result_type = T;
+    using result_type = T; //!< Type of value visited.
 };
 
 } // namespace ponder

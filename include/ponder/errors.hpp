@@ -104,8 +104,7 @@ public:
     /**
      * \brief Constructor
      *
-     * \param name Name of the class
-     * \param type Identifier of the C++ type
+     * \param idType Name of the class
      */
     ClassAlreadyCreated(const std::string& idType);
 };
@@ -151,8 +150,7 @@ public:
     /**
      * \brief Constructor
      *
-     * \param name Name of the enum
-     * \param type Identifier of the C++ type
+     * \param typeId Name of the enum
      */
     EnumAlreadyCreated(const std::string& typeId);
 };
