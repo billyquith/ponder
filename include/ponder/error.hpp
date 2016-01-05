@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -43,7 +43,7 @@
 namespace ponder
 {
 /**
- * \brief Base class for every exception thrown in CAMP
+ * \brief Base class for every exception thrown in Ponder.
  */
 class PONDER_API Error : public std::exception
 {
@@ -118,7 +118,7 @@ private:
 #include <ponder/error.inl>
 
 /**
- * \brief Trigger a CAMP error
+ * \brief Trigger a Ponder error
  */
 #define PONDER_ERROR(error) throw ponder::Error::prepare(error, __FILE__, __LINE__, __func__)
 

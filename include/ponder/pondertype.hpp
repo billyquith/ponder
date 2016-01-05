@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -47,9 +47,9 @@ PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
 }
 
 /**
- * \brief Macro used to register a C++ type to CAMP
+ * \brief Macro used to register a C++ type to Ponder
  *
- * Every type manipulated by CAMP must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
  *
  * Example:
  *
@@ -78,14 +78,14 @@ PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
     }
 
 /**
- * \brief Macro used to register a C++ type to CAMP with automatic metaclass creation
+ * \brief Macro used to register a C++ type to Ponder with automatic metaclass creation
  *
- * Using this macro rather than PONDER_TYPE will make CAMP automatically call
+ * Using this macro rather than PONDER_TYPE will make Ponder automatically call
  * the provided registration function the first time the metaclass is requested.
  * This is useful when you don't want to have to manually call an "init" function to
  * create your metaclass.
  *
- * Every type manipulated by CAMP must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
  *
  * Example:
  *
@@ -126,13 +126,13 @@ PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
     }
 
 /**
- * \brief Macro used to register a non-copyable C++ type to CAMP
+ * \brief Macro used to register a non-copyable C++ type to Ponder
  *
- * Disabled copy and assignment cannot be detected at compile-time, thus users have to explicitely tell CAMP
+ * Disabled copy and assignment cannot be detected at compile-time, thus users have to explicitely tell Ponder
  * when a type is not copyable/assignable. Objects of a non-copyable class can be modified through their metaproperties,
  * but they can't be written with a single call to replace to whole object.
  *
- * Every type manipulated by CAMP must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
  *
  * Example:
  *
@@ -174,14 +174,14 @@ PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
     }
 
 /**
- * \brief Macro used to register a non-copyable C++ type to CAMP with automatic metaclass creation
+ * \brief Macro used to register a non-copyable C++ type to Ponder with automatic metaclass creation
  *
- * Using this macro rather than PONDER_TYPE_NONCOPYABLE will make CAMP automatically call
+ * Using this macro rather than PONDER_TYPE_NONCOPYABLE will make Ponder automatically call
  * the provided registration function the first time the metaclass is requested.
  * This is useful when you don't want to have to manually call an "init" function to
  * create your metaclass.
  *
- * Every type manipulated by CAMP must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE or their NONCOPYABLE versions.
  *
  * \sa PONDER_AUTO_TYPE, PONDER_TYPE_NONCOPYABLE
  */
@@ -204,9 +204,9 @@ PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
     }
 
 /**
- * \brief Macro used to activate the CAMP RTTI system into a hierarchy of classes
+ * \brief Macro used to activate the Ponder RTTI system into a hierarchy of classes
  *
- * This macro must be inserted in both base and derived classes if you want CAMP
+ * This macro must be inserted in both base and derived classes if you want Ponder
  * to be able to retrieve the dynamic type of polymorphic objects.
  *
  * Example:
@@ -228,7 +228,7 @@ PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
  * \endcode
  */
 #define PONDER_RTTI() \
-    public: virtual const char* campClassId() const {return ponder::detail::staticTypeId(this);} \
+    public: virtual const char* ponderClassId() const {return ponder::detail::staticTypeId(this);} \
     private:
 
 } // namespace ponder

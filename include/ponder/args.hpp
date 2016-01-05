@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -45,7 +45,7 @@ class Value;
  * \brief Wrapper for packing an arbitrary number of arguments into a single object
  *
  * ponder::Args is defined as a list of arguments of any type (wrapped in ponder::Value instances),
- * which can conveniently be passed to all the CAMP entities which may need an arbitrary number of arguments
+ * which can conveniently be passed to all the Ponder entities which may need an arbitrary number of arguments
  * in a uniform way.
  *
  * Arguments lists can be constructed on the fly using one of the constructors (accept up to 5 arguments):

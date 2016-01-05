@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -51,11 +51,11 @@ namespace ponder_ext
 namespace ponder
 {
 /**
- * \brief Map a C++ type to a CAMP type
+ * \brief Map a C++ type to a Ponder type
  *
  * This function simply returns the mapping defined by ValueMapper (i.e. \c ValueMapper<T>::type).
  *
- * \return CAMP type which T maps to
+ * \return Ponder type which T maps to
  */
 template <typename T>
 Type mapType()
@@ -71,13 +71,13 @@ namespace ponder_ext
 /**
  * \class ValueMapper
  *
- * \brief Template providing a mapping between C++ types/values and CAMP types/values
+ * \brief Template providing a mapping between C++ types/values and Ponder types/values
  *
  * ValueMapper<T> defines three things in order to make T fully compliant with the system:
  *
- * \li The abstract CAMP type that T is mapped to
- * \li A function to convert from T to the mapped CAMP type
- * \li A function to convert from all supported CAMP types to T
+ * \li The abstract Ponder type that T is mapped to
+ * \li A function to convert from T to the mapped Ponder type
+ * \li A function to convert from all supported Ponder types to T
  *
  * ValueMapper is specialized for every supported type, and can be specialized
  * for any of your own types in order to extend the system.
@@ -90,7 +90,7 @@ namespace ponder_ext
  *     template <>
  *     struct ValueMapper<MyStringClass>
  *     {
- *         // The corresponding CAMP type is "string"
+ *         // The corresponding Ponder type is "string"
  *         static const int type = ponder::string;
  *  
  *         // Convert from MyStringClass to std::string

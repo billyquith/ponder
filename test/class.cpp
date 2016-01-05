@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -127,11 +127,11 @@ BOOST_AUTO_TEST_CASE(rtti)
 
     BOOST_CHECK_EQUAL(ponder::classByObject(base).name(),     "ClassTest::Base");    // base is really a base
     BOOST_CHECK_EQUAL(ponder::classByObject(*base).name(),    "ClassTest::Base");
-    BOOST_CHECK_EQUAL(ponder::classByObject(derived).name(),  "ClassTest::Derived"); // CAMP finds its real type thanks to PONDER_RTTI
+    BOOST_CHECK_EQUAL(ponder::classByObject(derived).name(),  "ClassTest::Derived"); // Ponder finds its real type thanks to PONDER_RTTI
     BOOST_CHECK_EQUAL(ponder::classByObject(*derived).name(), "ClassTest::Derived");
-    BOOST_CHECK_EQUAL(ponder::classByObject(nortti).name(),   "ClassTest::Base");    // CAMP fails to find its derived type without PONDER_RTTI
+    BOOST_CHECK_EQUAL(ponder::classByObject(nortti).name(),   "ClassTest::Base");    // Ponder fails to find its derived type without PONDER_RTTI
     BOOST_CHECK_EQUAL(ponder::classByObject(*nortti).name(),  "ClassTest::Base");
-    BOOST_CHECK_EQUAL(ponder::classByObject(nortti2).name(),  "ClassTest::Derived"); // CAMP finds the closest derived type which has PONDER_RTTI
+    BOOST_CHECK_EQUAL(ponder::classByObject(nortti2).name(),  "ClassTest::Derived"); // Ponder finds the closest derived type which has PONDER_RTTI
     BOOST_CHECK_EQUAL(ponder::classByObject(*nortti2).name(), "ClassTest::Derived");
 
     delete nortti2;

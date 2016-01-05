@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -46,7 +46,7 @@
 namespace ponder
 {
 /**
- * \brief Variant class which is used to wrap values in the CAMP system
+ * \brief Variant class which is used to wrap values in the Ponder system
  *
  * The Value class can store any type of variable, and supports conversion
  * to any type compatible with the stored type.
@@ -96,7 +96,7 @@ public:
     Value(const T& val);
 
     /**
-     * \brief Return the CAMP type of the value
+     * \brief Return the Ponder type of the value
      *
      * \return Type of the value
      */
@@ -161,7 +161,7 @@ public:
     /**
      * \brief Operator == to compare equality between two values
      *
-     * Two values are equal if their CAMP type and value are equal.
+     * Two values are equal if their Ponder type and value are equal.
      * It uses the == operator of the stored type.
      *
      * \param other Value to compare with this
@@ -200,7 +200,7 @@ private:
     typedef ponder::util::variant<NoType, bool, long, double, std::string, EnumObject, UserObject> Variant;
 
     Variant m_value; ///< Stored value
-    Type m_type; ///< CAMP type of the value
+    Type m_type; ///< Ponder type of the value
 };
 
 /**

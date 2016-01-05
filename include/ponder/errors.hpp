@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -67,7 +67,7 @@ protected:
     BadType(const std::string& message);
 
     /**
-     * \brief Get the string name of a CAMP type
+     * \brief Get the string name of a Ponder type
      *
      * \param type Type to convert
      *

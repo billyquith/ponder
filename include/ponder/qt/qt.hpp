@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -35,11 +35,11 @@
 
 
 /**
- * This file extends CAMP for the Qt library; it contains all the mappings needed to
- * make Qt work seamlessly with CAMP:
+ * This file extends Ponder for the Qt library; it contains all the mappings needed to
+ * make Qt work seamlessly with Ponder:
  * - QString is declared as a string type
  * - QVector and QList are declared as array types
- * - QMapper maps Qt properties to CAMP properties
+ * - QMapper maps Qt properties to Ponder properties
  */
 
 #include <ponder/qt/qstring.hpp>

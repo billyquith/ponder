@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -41,18 +41,18 @@
 namespace ponder_ext
 {
 /**
- * \brief Utility class to perform various conversions between CAMP and Qt
+ * \brief Utility class to perform various conversions between Ponder and Qt
  */
 class QtHelper
 {
 public:
 
     /**
-     * \brief Extract the CAMP type of a Qt type in string form
+     * \brief Extract the Ponder type of a Qt type in string form
      *
      * \param typeName Qt type
      *
-     * \return Corresponding CAMP type
+     * \return Corresponding Ponder type
      */
     static ponder::Type type(const char* typeName)
     {
@@ -60,7 +60,7 @@ public:
     }
 
     /**
-     * \brief Convert a QVariant type to a CAMP type
+     * \brief Convert a QVariant type to a Ponder type
      *
      * \param theType Source QVariant type to convert
      *
@@ -159,7 +159,7 @@ public:
     }
 
     /**
-     * \brief Convert a CAMP value to a QVariant
+     * \brief Convert a Ponder value to a QVariant
      *
      * \param value Source ponder::Value to convert
      *
@@ -181,7 +181,7 @@ public:
     }
 
     /**
-     * \brief Convert a QVariant to a CAMP value
+     * \brief Convert a QVariant to a Ponder value
      *
      * \param variant Source QVariant to convert
      *

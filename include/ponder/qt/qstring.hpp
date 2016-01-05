@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -44,13 +44,13 @@ namespace ponder_ext
 /**
  * \brief Value mapper for QString
  *
- * This class tells CAMP how to handle QString as a string type
+ * This class tells Ponder how to handle QString as a string type
  */
 template <>
 struct ValueMapper<QString>
 {
     /**
-     * \brief CAMP type associated to QString
+     * \brief Ponder type associated to QString
      */
     static const int type = ponder::stringType;
 

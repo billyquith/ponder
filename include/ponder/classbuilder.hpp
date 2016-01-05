@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -364,7 +364,7 @@ public:
      *
      * The purpose of this function is to allow the binding of classes
      * that already use a similar system of metaproperties and metafunctions,
-     * with a direct mapping from external attributes to CAMP ones.
+     * with a direct mapping from external attributes to Ponder ones.
      *
      * The mapping process must be done in a specific mapper class (see below), thus avoiding
      * to manually write the mapping for every class.

@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -55,7 +55,7 @@ class ClassVisitor;
 /**
  * \brief ponder::Class represents a metaclass composed of properties and functions
  *
- * ponder::Class is the main class of the CAMP API. It defines a metaclass, which
+ * ponder::Class is the main class of the Ponder API. It defines a metaclass, which
  * is an abstract representation of a C++ class with its own properties,
  * functions, constructors, base classes, etc.
  *
@@ -117,7 +117,7 @@ public:
      * This is the function to call to create a new metaclass. The template
      * parameter T is the C++ class that will be bound to the metaclass.
      *
-     * \param name Name of the metaclass in CAMP. This name identifies
+     * \param name Name of the metaclass in Ponder. This name identifies
      *             the metaclass and thus has to be unique. If not specified, the C++ type
      *             id is used.
      *

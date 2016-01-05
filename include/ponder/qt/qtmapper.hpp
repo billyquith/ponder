@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -46,9 +46,9 @@ namespace ponder_ext
 /**
  * \brief Mapper for Qt properties
  *
- * This class tells CAMP how to build metaproperties and metafunctions from Qt's metatypes.
+ * This class tells Ponder how to build metaproperties and metafunctions from Qt's metatypes.
  *
- * This mapper is not complete due to some limitations of either CAMP or Qt:
+ * This mapper is not complete due to some limitations of either Ponder or Qt:
  * \li enum properties are not mapped using ponder::EnumProperty, but ponder::SimpleProperty
  * \li arrays and user defined classes are not supported for meta-properties
  * \li arrays, user defined enums and classes are not supported for meta-functions
@@ -139,11 +139,11 @@ public:
 private:
 
     /**
-     * \brief Check if a property is mappable to CAMP
+     * \brief Check if a property is mappable to Ponder
      *
      * \param property Property to check
      *
-     * \return True if the property can be bound to CAMP
+     * \return True if the property can be bound to Ponder
      */
     static bool filter(const QMetaProperty& property)
     {
@@ -152,11 +152,11 @@ private:
     }
 
     /**
-     * \brief Check if a function is mappable to CAMP
+     * \brief Check if a function is mappable to Ponder
      *
      * \param function Function to check
      *
-     * \return True if the function can be bound to CAMP
+     * \return True if the function can be bound to Ponder
      */
     static bool filter(const QMetaMethod& function)
     {

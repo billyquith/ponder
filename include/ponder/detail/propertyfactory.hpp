@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -88,7 +88,7 @@ struct PropertyMapper<A, ponder::userType>
  *
  * The purpose of this structure is to avoid a compiler error when the copied
  * type is not copyable. Instead, we just return an error so that the caller
- * can throw a CAMP exception.
+ * can throw a Ponder exception.
  */
 template <typename T, typename E = void>
 struct CopyHelper

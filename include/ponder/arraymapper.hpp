@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -45,7 +45,7 @@ namespace ponder_ext
 /**
  * \class ArrayMapper
  *
- * \brief Template providing a mapping between C++ arrays and CAMP ArrayProperty
+ * \brief Template providing a mapping between C++ arrays and Ponder ArrayProperty
  *
  * ArrayMapper<T> must define the following members in order to make T fully compliant with the system:
  *

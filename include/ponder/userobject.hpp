@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -52,10 +52,10 @@ class Args;
 class ParentObject;
 
 /**
- * \brief Wrapper to manipulate user objects in the CAMP system
+ * \brief Wrapper to manipulate user objects in the Ponder system
  *
  * ponder::UserObject is an abstract representation of object instances, which can safely
- * be passed to and manipulated by all the entities in CAMP.
+ * be passed to and manipulated by all the entities in Ponder.
  *
  * \sa EnumObject
  */

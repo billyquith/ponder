@@ -3,7 +3,7 @@
  ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
  ** Contact: Tegesoft Information (contact@tegesoft.com)
  **
- ** This file is part of the CAMP library.
+ ** This file is part of the Ponder library, formerly CAMP.
  **
  ** The MIT License (MIT)
  **
@@ -132,6 +132,6 @@ public:
 };
 
 } // detail
-} // camp
+} // ponder
 
 #endif // PONDER_DICTIONARY_HPP

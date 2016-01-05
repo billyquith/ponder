@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -49,7 +49,7 @@ namespace ponder
  * The template parameter T is the type returned by the visitor.
  *
  * To handle one of the possible types of the value, just write the corresponding \c operator() function.
- * Here is the list of the mapping between CAMP types and their corresponding C++ types:
+ * Here is the list of the mapping between Ponder types and their corresponding C++ types:
  *
  * \li ponder::noType --> ponder::NoType
  * \li ponder::boolType --> bool

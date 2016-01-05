@@ -3,7 +3,7 @@
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Contact: Tegesoft Information (contact@tegesoft.com)
 **
-** This file is part of the CAMP library.
+** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
 **
@@ -100,7 +100,7 @@ public:
      * This is the function to call to create a new metaenum. The template
      * parameter T is the C++ enum type that will be bound to the metaclass.
      *
-     * \param name Name of the metaenum in CAMP. This name identifies
+     * \param name Name of the metaenum in Ponder. This name identifies
      *             the metaenum and thus has to be unique
      *
      * \return A EnumBuilder object that will provide functions

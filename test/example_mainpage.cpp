@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** This file is part of the CAMP library.
+ ** This file is part of the Ponder library, formerly CAMP.
  **
  ** The MIT License (MIT)
  **
@@ -73,14 +73,14 @@ private:
     unsigned int m_age;
     bool m_spoke;
 };
-// Make the Person type available to CAMP
+// Make the Person type available to Ponder
 PONDER_TYPE(Person)
 
 BOOST_AUTO_TEST_SUITE(EXAMPLE)
 
 BOOST_AUTO_TEST_CASE(mainpage)
 {
-    // Bind our Person class to CAMP
+    // Bind our Person class to Ponder
     ponder::Class::declare<Person>("Person")
     .constructor<std::string>()
     .property("name", &Person::name)
