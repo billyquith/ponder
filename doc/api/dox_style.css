@@ -172,6 +172,7 @@ dl.el {
 pre.fragment {
 	border: 1px solid #C4CFE5;
 	background-color: #333;
+	color: #f8f8f2;
 	padding: 4px 6px;
 	margin: 4px 8px 4px 2px;
 	overflow: auto;
@@ -350,11 +351,11 @@ span.keyword {
 }
 
 span.keywordtype {
-    color: #66d9ef
+    color: #F7A827
 }
 
 span.keywordflow {
-    color: #e08000
+    color: #66d9ef
 }
 
 span.comment {
@@ -362,7 +363,7 @@ span.comment {
 }
 
 span.preprocessor {
-    color: #a6e22e
+    color: #F7CA88
 }
 
 span.stringliteral {
