@@ -1132,26 +1132,27 @@ dl.section dd {
  
 #projectalign
 {
-        vertical-align: middle;
+    vertical-align: middle;
 }
 
 #projectname
 {
-	font: 300% Tahoma, Arial,sans-serif;
-	margin: 0px;
-	padding: 2px 0px;
+	font: 1em Arial,sans-serif;
+	margin-left: 1em;
+	padding: 1px 8px 1px 8px;
+	background-color: #eee;
 }
     
 #projectbrief
 {
-	font: 120% Tahoma, Arial,sans-serif;
+	font: 100% Arial,sans-serif;
 	margin: 0px;
 	padding: 0px;
 }
 
 #projectnumber
 {
-	font: 50% Tahoma, Arial,sans-serif;
+	font: 90% Arial,sans-serif;
 	margin: 0px;
 	padding: 0px;
 }
@@ -1162,6 +1163,13 @@ dl.section dd {
 	margin: 0px;
 	width: 100%;
 	border-bottom: 1px solid #5373B4;
+	background-color: #444;
+}
+
+.title_link {
+	padding: 1px 8px 1px 8px;
+	background-color: #ddd;
+	margin-left: 1em;
 }
 
 .image
