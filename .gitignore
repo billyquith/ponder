@@ -67,6 +67,8 @@ moc_*
 *.dll
 *.dylib
 include/ponder/version.hpp
+test/Debug
+test/Release
 
 # Auto-generated documentation files
 doc/api/*/*
