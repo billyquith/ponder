@@ -1,0 +1,95 @@
+@import 'vars';
+@import 'mixins';
+
+/*
+	Arcana by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Lists */
+
+	ul {
+		&.actions {
+			li {
+				display: block;
+				padding: 1.5em 0 0 0;
+		
+				&:first-child {
+					padding: 0;
+				}
+			}
+		}
+	}
+
+/* Icon */
+
+	.icon {
+		&.major {
+			width: 4em;
+			height: 4em;
+			line-height: 4em;
+			box-shadow: 0 0 0 7px white, 0 0 0 8px $color-border;
+			
+			&:before {
+				font-size: 24px;
+			}
+		}
+	}
+
+/* Button */
+
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	.button {
+		width: 100%;
+		display: block;
+	}
+	
+/* Box */
+
+	.box {
+		&.highlight {
+			padding-left: calc(4em + 30px);
+		}
+
+		&.post {
+			.inner {
+				margin-left: calc(30% + 20px);
+			}
+
+			.image {
+				width: 30%;
+			}
+		}
+	}
+	
+/* Banner */
+
+	#banner {
+		height: 20em;
+		
+		header {
+			padding: 20px;
+		}
+	}
+
+/* Wrapper */
+
+	.wrapper {
+		padding: 2em 20px 1px 20px;
+	}
+
+/* CTA */
+
+	#cta {
+		padding: 20px;
+	}
+	
+/* Footer */
+
+	#footer {
+		padding: 2em 20px;
+		text-align: left;
+	}

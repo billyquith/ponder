@@ -1,15 +1,24 @@
----
-layout: default
----
-<div class="post">
+{% include header.html %}
+<!-- Main -->
+	<section class="wrapper style1">
+		<div class="container">
 
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
+			<!-- Blog -->
+				<section>
+					<header class="major">
+						<h2>{{ page.title }}</h2>
+						<p>Posted {{ page.date | date_to_string }}</p>
   </header>
+					<div class="row">
+						<div class="8u -2u">
+							<section class="box">
+								<a href="#" class="image left"><img src="{{ site.baseurl }}{{ page.featured }}" alt="" /></a>
+								{{ page.content }}
+							</section>
+						</div>
+					</div>
+				</section>
 
-  <article class="post-content">
-    {{ content }}
-  </article>
-
-</div>
+		</div>
+	</section>
+{% include footer.html %}

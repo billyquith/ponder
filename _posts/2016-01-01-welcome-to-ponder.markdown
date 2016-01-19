@@ -5,9 +5,7 @@ date:   2016-01-01 20:46:12
 categories: ponder update
 ---
 
-**ponder**
-
-* *synonyms*:	reflect on
+**ponder** *synonyms*: reflect on
 
 Ponder is a fork of [CAMP][1], which reached the end of its life. Ponder 1.0 keeps the same API as CAMP, but makes some changes, like removing the Boost dependency, instead using C++11 features.
 

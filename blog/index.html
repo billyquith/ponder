@@ -1,0 +1,40 @@
+---
+title: Blog
+layout: default
+---
+
+<!-- Main -->
+	<section class="wrapper style1">
+		<div class="container">
+			<div id="content">
+				<div class="row">
+					<div class="12u">
+
+						<!-- Blog -->
+							<section>
+								<header class="major">
+									<h2>The Blog</h2>
+								</header>
+								{% for post in site.posts offset: 0 limit: 4 %}
+									<div class="row">
+										<section class="12u">
+											<div class="box post">
+												<a href="#" class="image left"><img src="{{ site.baseurl }}{{ post.featured }}" alt=""></a>
+												<div class="inner">
+													<h3>{{ post.title }}</h3>
+													{{ post.excerpt }}
+													<footer>
+														<a href="{{ site.baseurl }}{{ post.url }}" class="button">Continue Reading</a>
+													</footer>
+												</div>
+											</div>
+
+										</section>
+									</div>
+								{% endfor %}
+							</section>
+
+					</div>
+				</div>
+		</div>
+	</section>

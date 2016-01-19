@@ -1,0 +1,74 @@
+@import 'vars';
+@import 'mixins';
+
+/*
+	Arcana by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 11pt;
+		line-height: 1.35em;
+	}
+	
+	h2 {
+		font-size: 1.25em;
+		letter-spacing: 0;
+		line-height: 1.35em;
+	}
+
+	h3 {
+		font-size: 1em;
+		letter-spacing: 0;
+		line-height: 1.35em;
+	}
+
+	header {
+		p {
+			margin-top: -0.5em;
+			font-size: 1em;
+		}
+		
+		&.major {
+			padding: 0 20px;
+			
+			h2 {
+				font-size: 1.25em;
+			}
+			
+			p {
+				top: 0;
+				margin-top: 1.25em;
+				font-size: 1em;
+			}
+		}
+	}
+
+/* Lists */
+
+	ul {
+		&.menu {
+			li {
+				border: 0;
+				padding: 0;
+				margin: 0;
+				display: block;
+				line-height: 2em;
+			}
+		}
+	}
+
+/* Banner */
+
+	#banner {
+		height: 18em;
+	}
+	
+/* Wrapper */
+
+	.wrapper {
+		padding: 2em 0 1px 0;
+	}

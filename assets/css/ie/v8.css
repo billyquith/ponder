@@ -1,0 +1,73 @@
+/*
+	Arcana by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Form */
+
+	input[type="text"],
+	input[type="password"],
+	input[type="email"],
+	textarea {
+		position: relative;
+		-ms-behavior: url("css/ie/PIE.htc");
+	}
+
+/* Image */
+
+	.image {
+		-ms-behavior: url("css/ie/PIE.htc");
+	}
+
+		.image img {
+			position: relative;
+			-ms-behavior: url("css/ie/PIE.htc");
+		}
+
+/* Icon */
+
+	.icon.major {
+		position: relative;
+		-ms-behavior: url("css/ie/PIE.htc");
+	}
+
+/* Button */
+
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	.button {
+		position: relative;
+		-ms-behavior: url("css/ie/PIE.htc");
+	}
+
+/* Box */
+
+	.box.post .inner {
+		margin-left: 35%;
+	}
+
+/* Header */
+
+	#nav > ul > li.current:before {
+		display: none;
+	}
+
+/* Dropotron */
+
+	.dropotron {
+		-ms-behavior: url("css/ie/PIE.htc");
+	}
+
+/* Banner */
+
+	#banner {
+		-ms-behavior: url("css/ie/backgroundsize.min.htc");
+	}
+
+/* Wrapper */
+
+	.wrapper.style2 {
+		background: #fdfdfd url("../images/bg01.png");
+	}

@@ -1,0 +1,65 @@
+/*
+	Arcana by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 13pt;
+		line-height: 1.5em;
+	}
+
+/* Lists */
+
+	ol.default {
+		list-style: decimal;
+		padding-left: 1.25em;
+	}
+
+		ol.default li {
+			padding-left: 0.25em;
+		}
+
+	ul.icons li a, ul.icons li span {
+		font-size: 1.5em;
+	}
+
+/* Header */
+
+	#header {
+		padding: 2em 0 0 0;
+	}
+
+		#header h1 {
+			padding: 0 0 1.75em 0;
+		}
+
+/* Banner */
+
+	#banner {
+		height: 20em;
+	}
+
+/* Wrapper */
+
+	.wrapper {
+		padding: 3em 0 1em 0;
+	}
+
+/* CTA */
+
+	#cta {
+		padding: 2em 0;
+	}
+
+/* Footer */
+
+	#footer {
+		padding: 3em 0 3em 0;
+	}
+
+		#footer .container {
+			margin-bottom: 1em;
+		}

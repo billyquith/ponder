@@ -1,0 +1,199 @@
+@import 'vars';
+@import 'mixins';
+
+/*
+	Arcana by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 13pt;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		margin-bottom: 0.5em;
+	}
+
+	header {
+		p {
+			margin-top: -0.75em;
+		}
+		
+		&.major {
+			text-align: center;
+			margin: 0 0 2em 0;
+			
+			h2 {
+				font-size: 1.75em;
+			}
+			
+			p {
+				top: -0.25em;
+				font-size: 1.25em;
+			}
+		}
+	}
+	
+	#skel-layers-wrapper {
+		padding-top: 44px;
+		overflow-x: hidden;
+	}
+
+/* Box */
+
+	.box {
+		&.highlight {
+			text-align: left;
+			position: relative;
+			padding-left: 7em;
+		
+			i {
+				position: absolute;
+				margin: 0;
+				left: 0;
+				top: 0.25em;
+			}
+		}
+
+		&.post {
+			.inner {
+				margin-left: calc(20% + 2em);
+			}
+
+			.image {
+				width: 20%;
+			}
+		}
+	}
+
+/* Header */
+
+	#header {
+		display: none;
+	}
+
+/* Banner */
+
+	#banner {
+		height: 20em;
+
+		header {
+			h2 {
+				display: block;
+			}
+			
+			.button {
+				margin: 1em 0 0 0;
+			}
+		}
+	}
+
+/* CTA */
+
+	#cta {
+		padding: 1.5em 0;
+
+		header {
+			h2 {
+				display: block;
+			}
+			
+			.button {
+				margin: 1em 0 0 0;
+			}
+		}
+	}
+
+/* Footer */
+
+	#footer {
+		text-align: center;
+
+		.container {
+			margin-bottom: 4em;
+		}
+	}
+
+/* Layers */
+
+	#titleBar {
+		background-color: #333;
+		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png")');
+		height: 44px;
+		line-height: 44px;
+		box-shadow: 0 4px 0 0 $color-accent-bg;
+
+		.title {
+			display: block;
+			position: relative;
+			font-weight: 600;
+			text-align: center;
+			color: #fff;
+			z-index: 1;
+
+			em {
+				font-style: normal;
+				font-weight: 300;
+			}
+		}
+
+		.toggle {
+			@include icon;
+			height: 60px;
+			left: 0;
+			position: absolute;
+			top: 0;
+			width: 80px;
+			z-index: 2;
+
+			&:before {
+				content: '\f0c9';
+				display: block;
+				height: 44px;
+				text-align: center;
+				width: 44px;
+				color: #fff;
+				opacity: 0.5;
+			}
+			
+			&:active {
+				&:before {
+					opacity: 0.75;
+				}
+			}
+		}
+	}
+
+	#navPanel {
+		background-color: #1f1f1f;
+		box-shadow: inset -1px 0 3px 0 rgba(0,0,0,0.5);
+		@include vendor-value('background-image', 'linear-gradient(left, rgba(0,0,0,0) 75%, rgba(0,0,0,0.15)), url("images/bg01.png")');
+
+		.link {
+			border-bottom: 0;
+			border-top: solid 1px rgba(255,255,255,0.05);
+			color: #888;
+			display: block;
+			height: 48px;
+			line-height: 48px;
+			padding: 0 1em 0 1em;
+			text-decoration: none;
+		
+			&:first-child {
+				border-top: 0;
+			}
+			
+			&.depth-0 {
+				color: #fff;
+			}
+			
+			.indent-1 { display: inline-block; width: 1em; }
+			.indent-2 { display: inline-block; width: 2em; }
+			.indent-3 { display: inline-block; width: 3em; }
+			.indent-4 { display: inline-block; width: 4em; }
+			.indent-5 { display: inline-block; width: 5em; }
+		}
+	}
