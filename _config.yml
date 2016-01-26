@@ -18,7 +18,7 @@ sass:
     
 ponder:
   dev: 0
-  rss: /feed.xml
+  rss: feed.xml
 
 github:
   url: https://github.com/billyquith/ponder
