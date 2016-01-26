@@ -4,6 +4,7 @@ title: Ponder
 description: >
   Ponder is a C++11 reflection library. This is useful for data-driven applications,
   script binding, automatic editing, etc.
+url: https://github.com/billyquith
 baseurl: /ponder
 
 markdown: kramdown
