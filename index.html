@@ -19,7 +19,7 @@ layout: default
 					<div class="box highlight">
 						<i class="icon major fa-bolt"></i>
 						<h3>C++ Reflection</h3>
-						<p>Non intrusive C++ type meta-data exposure for use by data-driven apps, scripting, etc.</p>
+						<p>Non intrusive C++ type data exposure for use by data-driven apps, scripting, etc.</p>
 					</div>
 				</section>
 				<section class="4u">
@@ -28,7 +28,7 @@ layout: default
 						<h3>Usage</h3>
 						<ul><li>C++ 11, no Boost dependency.</li>
 							<li>Liberal MIT licence.</li>
-							<li><a href="docs/">Documentation.</a></li>
+							<li><a href="/docs/index.html">Documentation.</a></li>
 						</ul>
 					</div>
 				</section>
@@ -81,10 +81,10 @@ build times.</p>
 					</div>
 				</section>
 			</div>
-			<div class="row">
-				<section class="12u">
-					<div class="box post">
 <h3>Expose class details</h3>
+			<div class="row">
+				<section class="6u">
+					<div class="box post">
 {% highlight cpp %}
 class Adder
 {
@@ -96,6 +96,11 @@ private:
     int total_;    
 };
 {% endhighlight %}
+					</div>
+				</section>
+				<section class="6u">
+					<div class="box post">
+						This a class that we would like to expose for reflection.
 					</div>
 				</section>
 			</div>

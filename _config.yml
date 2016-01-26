@@ -6,14 +6,14 @@ description: >
   script binding, automatic editing, etc.
 baseurl: /ponder
 
-markdown: redcarpet
+markdown: kramdown
 highlighter: pygments
 
 paginate: 10
 
 sass:
   sass_dir: css
-  #style: compressed
+  style: compressed
     
 ponder:
   dev: 0
