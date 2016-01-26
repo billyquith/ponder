@@ -18,8 +18,8 @@ layout: default
 				<section class="4u">
 					<div class="box highlight">
 						<i class="icon major fa-bolt"></i>
-						<h3>C++ Reflection</h3>
-						<p>Non intrusive C++ type data exposure for use by data-driven apps, scripting, etc.</p>
+						<h3>What?</h3>
+						<p>C++ type reflection library for exposing type data in C++11 programs.</p>
 					</div>
 				</section>
 				<section class="4u">
@@ -28,19 +28,20 @@ layout: default
 						<h3>Usage</h3>
 						<ul><li>C++ 11, no Boost dependency.</li>
 							<li>Liberal MIT licence.</li>
-							<li><a href="/docs/index.html">Documentation.</a></li>
+							<li><a href="/docs/">Documentation.</a></li>
 						</ul>
 					</div>
 				</section>
-				<section class="4u">					
+				<section class="4u">
 					<div class="box highlight">
 						<i class="icon major fa-github"></i>
 						<h3>Github</h3>
 						<p><a href="{{ site.github.url }}">Hosted on Github</a></p>
+						<p><a href="https://travis-ci.org/billyquith/ponder">
+								<img src="https://travis-ci.org/billyquith/ponder.svg" /></a></li></p>			
 					</div>
-				</section>
+			<section>
 			</div>
-		</div>
 	</section>
 
 <!-- Gigantic Heading -->
@@ -81,9 +82,9 @@ build times.</p>
 					</div>
 				</section>
 			</div>
-<h3>Expose class details</h3>
+<h3>Simple Example</h3>
 			<div class="row">
-				<section class="6u">
+				<section class="7u">
 					<div class="box post">
 {% highlight cpp %}
 class Adder
@@ -98,9 +99,49 @@ private:
 {% endhighlight %}
 					</div>
 				</section>
-				<section class="6u">
+				<section class="5u">
 					<div class="box post">
-						This a class that we would like to expose for reflection.
+A C++ class that we would like to expose for reflection.
+					</div>
+				</section>
+			</div>
+			<div class="row">
+				<section class="7u">
+					<div class="box post">
+{% highlight cpp %}
+ponder::Class::declare<Adder>("Adder")
+    .constructor<>()
+    .function("add",   &Adder::add)
+    .property("total", &Adder::getTotal);
+{% endhighlight %}
+					</div>
+				</section>
+				<section class="5u">
+					<div class="box post">
+How we would like to expose the class using Ponder. We expose a constructor,
+an "add" function, and a "total" property.
+					</div>
+				</section>
+			</div>
+			<div class="row">
+				<section class="7u">
+					<div class="box post">
+{% highlight cpp %}
+auto& metaclass = ponder::classByName("Adder"); // find the class
+
+auto adder = metaclass.construct(); // create an instance
+
+adder.call("add", 7); // call a function
+adder.call("add", 5);
+
+int total = adder.get("total"); // get a property -> 12 
+{% endhighlight %}
+					</div>
+				</section>
+				<section class="5u">
+					<div class="box post">
+Now we can make <em>runtime</em> instances of the object and manipulate them.
+See <a href="/docs/">documentation</a> for more details.
 					</div>
 				</section>
 			</div>
