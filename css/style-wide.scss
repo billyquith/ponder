@@ -1,3 +1,6 @@
+---
+---
+
 @import 'vars';
 @import 'mixins';
 
@@ -10,6 +13,12 @@
 /* Basic */
 
 	body, input, select, textarea {
-		font-size: 12pt;
+		font-size: 14pt;
 		line-height: 1.5em;
+	}
+	
+/* Banner */
+
+	#banner {
+		height: 24em;
 	}

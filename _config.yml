@@ -11,6 +11,10 @@ highlighter: pygments
 
 paginate: 10
 
+sass:
+  sass_dir: css
+  #style: compressed
+    
 ponder:
   dev: 0
   rss: /feed.xml
@@ -21,5 +25,3 @@ github:
   
 stackoverflow:
   url: http://stackoverflow.com/questions/tagged/ponder
-  
-  

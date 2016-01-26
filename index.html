@@ -48,54 +48,57 @@ layout: default
 		<div class="container">
 			<header class="major">
 				<h2>About</h2>
-				<p>[ WORK IN PROGRESS! ]</p>
+				<p>Purpose of this library</p>
 			</header>
 		</div>
 	</section>
 
 <!-- Posts -->
-	<!-- section class="wrapper style1">
+	<section class="wrapper style1">
 		<div class="container">
 			<div class="row">
 				<section class="6u">
 					<div class="box post">
-						<a href="#" class="image left"><img src="{{ site.baseurl }}/assets/images/pic01.jpg" alt="" /></a>
+						<a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic03.jpg" alt="" /></a>
 						<div class="inner">
-							<h3>The First Thing</h3>
-							<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+<h3>What is reflection?</h3>
+<p><a href="https://en.wikipedia.org/wiki/Reflection_(computer_programming)" target="_blank">Reflection</a>
+allows a program to inspect its own type data at runtime. For example, this is useful for
+data-driven programs: we might create classes from descriptions in data read at runtime.</p>
 						</div>
 					</div>
 				</section>
 				<section class="6u">
 					<div class="box post">
-						<a href="#" class="image left"><img src="{{ site.baseurl }}/assets/images/pic02.jpg" alt="" /></a>
+						<a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic01.jpg" alt="" /></a>
 						<div class="inner">
-							<h3>The Second Thing</h3>
-							<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
+<h3>Fork of CAMP</h3>
+<p>Ponder continues the from <a href="https://github.com/tegesoft/camp" target="_blank">CAMP</a>, removing the
+Boost dependency, instead, using C++11 features. The aim here is to
+<a href="https://youtu.be/nesCaocNjtQ" target="_blank">allow simplification</a> using C++11, and improve
+build times.</p>
 						</div>
 					</div>
 				</section>
 			</div>
 			<div class="row">
-				<section class="6u">
+				<section class="12u">
 					<div class="box post">
-						<a href="#" class="image left"><img src="{{ site.baseurl }}/assets/images/pic03.jpg" alt="" /></a>
-						<div class="inner">
-							<h3>The Third Thing</h3>
-							<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-						</div>
-					</div>
-				</section>
-				<section class="6u">
-					<div class="box post">
-						<a href="#" class="image left"><img src="{{ site.baseurl }}/assets/images/pic04.jpg" alt="" /></a>
-						<div class="inner">
-							<h3>The Fourth Thing</h3>
-							<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-						</div>
+<h3>Expose class details</h3>
+{% highlight cpp %}
+class Adder
+{
+public: 
+    Adder() : total_(0)     {}
+    void add(int value)     { total_ += value; }
+    int getTotal() const    { return total_; }
+private:
+    int total_;    
+};
+{% endhighlight %}
 					</div>
 				</section>
 			</div>
 		</div>
-	</section -->
+	</section>
 	
