@@ -18,7 +18,7 @@
 
 	body,
 	#skel-layers-wrapper {
-		background: $color-bg url('/images/bg01.png');
+		background: $color-bg url('{{ site.baseurl }}/images/bg01.png');
 	}
 
 	body {
@@ -280,7 +280,7 @@
 			text-align: center;
 			cursor: default;
 			background-color: $color-accent-bg;
-			@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("/images/bg01.png")');
+			@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("{{ site.baseurl }}/images/bg01.png")');
 			color: $color-accent-fg;
 			border-radius: 100%;
 			display: inline-block;
@@ -415,7 +415,7 @@
 		
 			thead {
 				background-color: #555555;
-				@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("/images/bg01.png")');
+				@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("{{ site.baseurl }}/images/bg01.png")');
 				color: #fff;
 			}
 			
@@ -436,7 +436,7 @@
 		@include vendor-property('appearance', 'none');
 		@include vendor-property('transition', 'background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out');
 		background-color: $color-accent-bg;
-		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("/images/bg01.png")');
+		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("{{ site.baseurl }}/images/bg01.png")');
 		border-radius: $size-radius;
 		border: 0;
 		color: $color-accent-fg;
@@ -526,7 +526,7 @@
 		text-align: center;
 		padding: 3em 0 0 0;
 		background-color: #fff;
-		background-image:			url('/images/bg02.png'),	url('/images/bg02.png'),	url('/images/bg01.png');
+		background-image:			url('{{ site.baseurl }}/images/bg02.png'),	url('{{ site.baseurl }}/images/bg02.png'),	url('{{ site.baseurl }}/images/bg01.png');
 		background-position:		top left,					top left,					top left;
 		background-size:			100% 6em,					100% 6em,					auto;
 		background-repeat:			no-repeat,					no-repeat,					repeat;
@@ -546,7 +546,7 @@
 	#nav {
 		cursor: default;
 		background-color: #333;
-		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("/images/bg01.png")');
+		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("{{ site.baseurl }}/images/bg01.png")');
 		padding: 0;
 		
 		&:after {
@@ -555,7 +555,7 @@
 			width: 100%;
 			height: 0.75em;
 			background-color: $color-accent-bg;
-			background-image: url("/images/bg01.png");
+			background-image: url("{{ site.baseurl }}/images/bg01.png");
 		}
 
 		> ul {
@@ -598,7 +598,7 @@
 						left: 50%;
 						margin-left: -0.375em;
 						background-color: $color-accent-bg;
-						background-image: url("/images/bg01.png");
+						background-image: url("{{ site.baseurl }}/images/bg01.png");
 					}
 					
 					a {
@@ -623,7 +623,7 @@
 
 	.dropotron {
 		background-color: #333;
-		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0.3), rgba(0,0,0,0)), url("/images/bg01.png")');
+		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0.3), rgba(0,0,0,0)), url("{{ site.baseurl }}/images/bg01.png")');
 		border-radius: $size-radius;
 		color: #fff;
 		min-width: 10em;
@@ -660,7 +660,7 @@
 /* Banner */
 
 	#banner {
-		background-image: url('/images/banner.jpg');
+		background-image: url('{{ site.baseurl }}/images/banner.jpg');
 		background-position: center center;
 		background-size: cover;
 		height: 28em;
@@ -714,7 +714,7 @@
 		
 		&.style2 {
 			background-color:		#fff;
-			background-image:		url('/images/bg02.png'),		url('/images/bg03.png'),		url('/images/bg01.png');
+			background-image:		url('{{ site.baseurl }}/images/bg02.png'),		url('{{ site.baseurl }}/images/bg03.png'),		url('{{ site.baseurl }}/images/bg01.png');
 			background-position:	top left,						bottom left,					top left;
 			background-size:		100% 6em,						100% 6em,						auto;
 			background-repeat:		no-repeat,						no-repeat,						repeat;
@@ -722,7 +722,7 @@
 		
 		&.style3 {
 			background-color: $color-accent-bg;
-			@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("/images/bg01.png")');
+			@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("{{ site.baseurl }}/images/bg01.png")');
 			color: $color-accent-fg;
 			
 			.button {
