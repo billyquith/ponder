@@ -73,7 +73,7 @@ set(PONDER_TEST_SRCS
     example_mainpage.cpp
 )
 
-# find Boost
+# find Boost, for unit testing
 find_package(Boost 1.38.0)
 
 # include files search paths

@@ -51,13 +51,9 @@ set(PONDER_SRCS
     ${SRC_SOURCE}
 )
 
-# find Boost - for unit testing
-find_package(Boost 1.38.0 REQUIRED)
-
 # include files search paths
 include_directories(
     ${PONDER_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIRS}
 )
 
 # generate version.hpp
