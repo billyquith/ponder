@@ -1,19 +1,10 @@
 <div id="sidebar">
 
-	<!-- Sidebar -->
-	<!-- {% for post in site.posts offset: 0 limit: 2 %}
-		<section>
-			<h3>{{ post.title }}</h3>
-			{{ post.excerpt }}
-			<footer>
-				<a href="{{ site.baseurl }}{{ post.url }}" class="button">Continue Reading</a>
-			</footer>
-		</section>
-	{% endfor %} -->
-
 	<!-- tag count -->
 	<div class="tag-box inline">
-	{% assign tags_list = site.categories %}
+		Tags:
+		<div>
+	  {% assign tags_list = site.categories %}
 	  {% if tags_list.first[0] == null %}
 	    {% for tag in tags_list %}
 	      <a href="#{{ tag }}">{{ tag | capitalize }} <span class="tag-item">{{ site.tags[tag].size }}</span></a>
@@ -23,8 +14,9 @@
 	      <a href="#{{ tag[0] }}" class="tag-item"><b>{{ tag[0] | capitalize }}</b> x{{ tag[1].size }}</a>
 	    {% endfor %}
 	  {% endif %}
+	  </div>
 	{% assign tags_list = nil %}
-</div>
+	</div>
 
 	<!-- section list -->
 	{% for tag in site.categories %}

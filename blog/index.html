@@ -3,66 +3,32 @@ title: Blog
 layout: default
 ---
 
+<section class="wrapper style1">
+	<div class="container">
+		<div class="row double">
+			<div class="8u">
+				<div id="content">
+					
+					<h3>Recent entries:</h3>
 
-<!-- Main -->
-	<!-- <section class="wrapper style1">
-		<div class="container">
-			<div id="content">
-				<div class="row">
-					<div class="12u">
-
-						<!-- Blog -->
-							<!-- <section>
-								<header class="major">
-									<h2>The Blog</h2>
-								</header>
-								{% for post in site.posts offset: 0 limit: 4 %}
-									<div class="row">
-										<section class="12u">
-											<div class="box post">
-												<a href="#" class="image left"><img src="{{ site.baseurl }}{{ post.featured }}" alt=""></a>
-												<div>
-													<h3>[{{ post.date | date_to_string }}]  {{ post.title }}</h3>
-													<div class="box">
-													{{ post.content }}
-													</div>
-												</div>
-											</div>
-
-										</section>
-									</div>
-								{% endfor %}
-							</section> -->
-
-					<!-- </div>
-				</div>
-		</div>
-	</section> -->
-	
-	<section class="wrapper style1">
-		<div class="container">
-			<div class="row double">
-				<div class="8u">
-					<div id="content">
-
-						<!-- show latest post -->
-						{% for post in site.posts limit:1 %}
-						<article>
-							<header>
-								<h2>{{ post.title }}</h2>
-								<p>{{ post.date | date_to_string }}</p>
-							</header>
-							
-							{{ post.content }}
-							
-						</article>
-						{% endfor %}
-				
-					</div>
-				</div>
-				<div class="4u">
-					{% include sidebar.html %}
+					<!-- show latest post -->
+					{% for post in site.posts offset:0 limit:5 %}
+					<article class="blog-summary">
+						<header>
+							<a href="{{ site.baseurl }}{{ post.url }}"><h2>{{ post.title }}</h2></a>
+							<p>{{ post.date | date_to_string }}</p>
+						</header>							
+						<div>
+						{{ post.excerpt }} ...					
+						</div>							
+					</article>
+					{% endfor %}
+									
 				</div>
 			</div>
+			<div class="4u">
+				{% include sidebar.html %}
+			</div>
 		</div>
-	</section>			
+	</div>
+</section>			

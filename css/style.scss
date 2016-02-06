@@ -806,7 +806,6 @@
 		border-color: #d8d8d8;
 		padding: 1em;
 		border-radius: 7px;
-		//box-shadow: -2px 2px 5px #f0f0f0;
 		margin-bottom: 0.8em;
 	
 		.tag-item {
@@ -817,6 +816,7 @@
 			background-color: #f8f8f8;
 			border-radius: 5px;
 			margin: 0.25em;
+			line-height: 2.5;
 		}
 				
 		h3 {
@@ -842,6 +842,15 @@
 	.blog-post {
 		border-style: solid;
 		padding: 1em 0 2em 0;
+	}
+	
+	.blog-summary {
+		padding: 1em;
+		border-radius: 13px;
+		border-color: #eee;
+		border-width: 1px;
+		border-style: solid;
+		margin-bottom: 1.5em;		
 	}
 	
 	
