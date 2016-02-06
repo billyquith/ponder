@@ -2,7 +2,7 @@
 layout: post
 title:  "Start pondering!"
 date:   2016-01-01 20:46:12
-categories: ponder update
+categories: news
 ---
 
 **ponder** *synonyms*: reflect on

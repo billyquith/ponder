@@ -8,12 +8,12 @@
 					<header class="major">
 						<h2>{{ page.title }}</h2>
 						<p>Posted {{ page.date | date_to_string }}</p>
-  </header>
-					<div class="row">
-						<div class="8u -2u">
+  				    </header>
+					<div class="row blog-post">
+						<div class="10u -1u">
 							<section class="box">
-								<a href="#" class="image left"><img src="{{ site.baseurl }}{{ page.featured }}" alt="" /></a>
-								{{ page.content }}
+								<!-- <a href="#" class="image left"><img src="{{ site.baseurl }}{{ page.featured }}" alt="" /></a> -->
+								{{ content }}
 							</section>
 						</div>
 					</div>

@@ -3,15 +3,16 @@ title: Blog
 layout: default
 ---
 
+
 <!-- Main -->
-	<section class="wrapper style1">
+	<!-- <section class="wrapper style1">
 		<div class="container">
 			<div id="content">
 				<div class="row">
 					<div class="12u">
 
 						<!-- Blog -->
-							<section>
+							<!-- <section>
 								<header class="major">
 									<h2>The Blog</h2>
 								</header>
@@ -20,21 +21,48 @@ layout: default
 										<section class="12u">
 											<div class="box post">
 												<a href="#" class="image left"><img src="{{ site.baseurl }}{{ post.featured }}" alt=""></a>
-												<div class="inner">
-													<h3>{{ post.title }}</h3>
-													{{ post.excerpt }}
-													<footer>
-														<a href="{{ site.baseurl }}{{ post.url }}" class="button">Continue Reading</a>
-													</footer>
+												<div>
+													<h3>[{{ post.date | date_to_string }}]  {{ post.title }}</h3>
+													<div class="box">
+													{{ post.content }}
+													</div>
 												</div>
 											</div>
 
 										</section>
 									</div>
 								{% endfor %}
-							</section>
+							</section> -->
 
-					</div>
+					<!-- </div>
 				</div>
 		</div>
-	</section>
+	</section> -->
+	
+	<section class="wrapper style1">
+		<div class="container">
+			<div class="row double">
+				<div class="8u">
+					<div id="content">
+
+						<!-- show latest post -->
+						{% for post in site.posts limit:1 %}
+						<article>
+							<header>
+								<h2>{{ post.title }}</h2>
+								<p>{{ post.date | date_to_string }}</p>
+							</header>
+							
+							{{ post.content }}
+							
+						</article>
+						{% endfor %}
+				
+					</div>
+				</div>
+				<div class="4u">
+					{% include sidebar.html %}
+				</div>
+			</div>
+		</div>
+	</section>			
