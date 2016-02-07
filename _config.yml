@@ -8,7 +8,7 @@ url: https://github.com/billyquith
 baseurl: /ponder
 
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 
 paginate: 10
 
