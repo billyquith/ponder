@@ -1,4 +1,4 @@
 ---
-title: Docs
+title: Ponder documentation
 permalink: /docs/
 ---
