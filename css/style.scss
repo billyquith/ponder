@@ -620,44 +620,6 @@
 		}
 	}
 	
-/* Dropotron */
-
-	.dropotron {
-		background-color: #333;
-		@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0.3), rgba(0,0,0,0)), url("{{ site.baseurl }}/images/bg01.png")');
-		border-radius: $size-radius;
-		color: #fff;
-		min-width: 10em;
-		padding: 1em 0;
-		text-align: center;
-		box-shadow: 0 1em 1em 0 rgba(0,0,0,0.5);
-		
-		> li {
-			line-height: 2em;
-			padding: 0 1.1em 0 1em;
-			
-			> a {
-				color: #c0c0c0;
-				text-decoration: none;
-				border: 0;
-			}
-			
-			&.active,
-			&:hover {
-				> a {
-					color: #fff;
-				}
-			}
-		}
-		
-		&.level-0 {
-			border-radius: 0 0 $size-radius $size-radius;
-			font-size: 0.9em;
-			padding-top: 0;
-			margin-top: -1px;
-		}
-	}
-
 /* Banner */
 
 	#banner {
