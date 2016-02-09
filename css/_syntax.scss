@@ -17,10 +17,12 @@ pre {
 
 .highlight
 {
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	
+	pre & {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;		
+	}
+		
     .hll {
       background-color: #ffffcc; }
     .c {
