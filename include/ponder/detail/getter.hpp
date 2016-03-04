@@ -35,6 +35,7 @@
 
 
 #include <ponder/userobject.hpp>
+#include <functional>
 
 namespace ponder
 {

@@ -65,7 +65,7 @@ add_library(ponder ${PONDER_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
 set_property(TARGET ponder PROPERTY CXX_STANDARD 11) # fails silently
-target_compile_features(ponder PRIVATE cxx_range_for cxx_variable_templates) # required
+target_compile_features(ponder PUBLIC cxx_range_for cxx_variadic_templates) # required
 
 # define the export macro
 if(BUILD_SHARED_LIBS)

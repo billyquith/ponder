@@ -16,7 +16,14 @@ install_manifest.txt
 *.pc
 Testing/**
 
-# VS temporary files
+# Visual Studio
+## Project
+*.sln
+*.vcproj
+*.vcxproj
+*.vcxproj.filters
+
+## temporary files
 *.ncb
 *.pdb
 *.suo
@@ -30,7 +37,7 @@ qtc-gdbmacros/
 build/
 DerivedData
 
-## Various settings
+## Project
 *.pbxuser
 !default.pbxuser
 *.mode1v3

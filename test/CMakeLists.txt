@@ -95,7 +95,7 @@ add_executable(pondertest ${PONDER_TEST_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
 set_property(TARGET pondertest PROPERTY CXX_STANDARD 11) # fails silently
-target_compile_features(pondertest PRIVATE cxx_range_for cxx_variable_templates) # required
+target_compile_features(pondertest PRIVATE cxx_range_for cxx_variadic_templates) # required
 
 # define d suffix on windows
 if(WIN32)

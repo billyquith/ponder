@@ -42,6 +42,15 @@ namespace ponder
 namespace detail
 {
 
+static inline int stricmp(const char* a, const char* b)
+{
+#ifdef WIN32
+	return _strcmpi(a, b);
+#else
+	return strcasecmp(a, b);
+#endif
+}
+
 //-------------------------------------------------------------------------------------------------
 // parse string
     
@@ -129,12 +138,12 @@ bool conv(const std::string& from, unsigned long long& to)
 bool conv(const std::string& from, bool& to)
 {
     const char *s = from.c_str();
-    if (strcasecmp(s, "1")==0 || strcasecmp(s, "true")==0)
+    if (stricmp(s, "1")==0 || stricmp(s, "true")==0)
     {
         to = true;
         return true;
     }
-    else if (strcasecmp(s, "0")==0 || strcasecmp(s, "false")==0)
+    else if (stricmp(s, "0")==0 || stricmp(s, "false")==0)
     {
         to = false;
         return true;
