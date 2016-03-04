@@ -89,7 +89,9 @@ BOOST_AUTO_TEST_CASE(dynamic)
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(size)
 {
-    BOOST_CHECK_EQUAL(bools->size(object),   std::extent<typeof object.bools>::value);
+#ifndef _WIN32
+    BOOST_CHECK_EQUAL(bools->size(object),   std::extent<typeof object.bools>::value); // TODO - Compilation fails on Windows.
+#endif
     BOOST_CHECK_EQUAL(ints->size(object),    object.ints.size());
     BOOST_CHECK_EQUAL(strings->size(object), object.strings.size());
     BOOST_CHECK_EQUAL(objects->size(object), object.objects.size());

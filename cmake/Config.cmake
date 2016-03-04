@@ -2,7 +2,7 @@
 # setup version numbers
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 0)
+set(VERSION_PATCH 2)
 set(VERSION_STR "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 message("Project version: ${VERSION_STR}")
 
