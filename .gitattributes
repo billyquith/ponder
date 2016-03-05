@@ -1,0 +1,11 @@
+* text=auto
+
+*.hpp text
+*.inl text
+*.cpp text
+*.doxy text
+*.html text
+*.css text
+*.in text
+
+*.png binary
