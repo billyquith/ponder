@@ -33,13 +33,13 @@
 #ifndef PONDER_ENUMBUILDER_HPP
 #define PONDER_ENUMBUILDER_HPP
 
-
 #include <ponder/config.hpp>
 #include <string>
 
 
 namespace ponder
 {
+    
 class Enum;
 
 /**
@@ -70,6 +70,13 @@ public:
      * \param value Value of the pair
      */
     EnumBuilder& value(const std::string& name, long value);
+    
+    // This overload is to deal with enum classes.
+    template <typename E>
+    EnumBuilder& value(const std::string& name, E enumValue)
+    {
+        return value(name, static_cast<long>(enumValue));
+    }
 
 private:
 

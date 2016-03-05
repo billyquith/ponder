@@ -138,4 +138,20 @@ BOOST_AUTO_TEST_CASE(names)
     BOOST_CHECK_THROW(metaenum->name(100),  ponder::EnumValueNotFound);
 }
 
+//-----------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(enumClass)
+{
+    const ponder::Enum *clsenum = &ponder::enumByType<MyEnumClass>();
+    BOOST_CHECK_EQUAL(clsenum->hasValue(MyEnumClass::Red), true);
+    BOOST_CHECK_EQUAL(clsenum->hasValue(MyEnumClass::Green), true);
+    BOOST_CHECK_EQUAL(clsenum->hasValue(MyEnumClass::Blue), true);
+    BOOST_CHECK_EQUAL(clsenum->hasValue(100),  false);
+    
+    BOOST_CHECK_EQUAL(clsenum->value<MyEnumClass>("Red") == MyEnumClass::Red, true);
+    BOOST_CHECK_EQUAL(clsenum->value<MyEnumClass>("Green") == MyEnumClass::Green, true);
+    BOOST_CHECK_EQUAL(clsenum->value<MyEnumClass>("Blue") == MyEnumClass::Blue, true);
+    BOOST_CHECK_EQUAL(clsenum->value<MyEnumClass>("Blue") == MyEnumClass::Red, false);
+    BOOST_CHECK_THROW(clsenum->value("xxx"),  ponder::EnumNameNotFound);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

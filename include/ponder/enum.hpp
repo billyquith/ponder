@@ -68,7 +68,7 @@ namespace ponder
  * bool b2 = metaenum.hasValue(5);        // b2 == false
  *
  * std::string s = metaenum.name(10);     // s == "ten"
- * EnumValue l = metaenum.value("two");        // l == 2
+ * EnumValue l = metaenum.value("two");   // l == 2
  *
  * ponder::Enum::Pair p = metaenum.pair(0); // p == {"one", one}
  * \endcode
@@ -160,6 +160,12 @@ public:
      */
     bool hasValue(EnumValue value) const;
 
+    template <typename E>
+    bool hasValue(E value) const
+    {
+        return hasValue(static_cast<EnumValue>(value));
+    }
+
     /**
      * \brief Return the name corresponding to given a value
      *
@@ -181,6 +187,10 @@ public:
      * \throw InvalidEnumName name doesn't exist in the metaenum
      */
     EnumValue value(const std::string& name) const;
+
+    // This is to deal with enum classes.
+    template <typename E>
+    E value(const std::string& name) const { return static_cast<E>(value(name)); }
 
     /**
      * \brief Operator == to check equality between two metaenums
@@ -213,7 +223,7 @@ private:
      * \param name Name of the metaenum
      */
     Enum(const std::string& name);
-
+    
     struct EnumCmp {
         bool operator () (const std::string& a, const std::string& b) const { return a < b; }
     };

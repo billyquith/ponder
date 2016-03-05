@@ -54,6 +54,13 @@ namespace EnumTest
     {
     };
 
+    enum class MyEnumClass
+    {
+        Red,
+        Green,
+        Blue
+    };
+
     void declare()
     {
         ponder::Enum::declare<MyEnum>("EnumTest::MyEnum")
@@ -62,6 +69,11 @@ namespace EnumTest
             .value("Two", Two);
 
         ponder::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
+        
+        ponder::Enum::declare<MyEnumClass>("EnumTest::MyEnumClass")
+            .value("Red", MyEnumClass::Red)
+            .value("Green", MyEnumClass::Green)
+            .value("Blue", MyEnumClass::Blue);
     }
 }
 
@@ -69,5 +81,6 @@ PONDER_TYPE(EnumTest::MyUndeclaredEnum /* never declared */)
 PONDER_TYPE(EnumTest::MyTempEnum /* declared during tests */)
 PONDER_AUTO_TYPE(EnumTest::MyEnum, &EnumTest::declare)
 PONDER_AUTO_TYPE(EnumTest::MyEnum2, &EnumTest::declare)
+PONDER_AUTO_TYPE(EnumTest::MyEnumClass, &EnumTest::declare)
 
 #endif // PONDERTEST_ENUM_HPP
