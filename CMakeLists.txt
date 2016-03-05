@@ -42,10 +42,118 @@ include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # all source files
-file(GLOB_RECURSE SRC_HEADERS
-    include/ponder/*.hpp include/ponder/*.inl
+set(SRC_HEADERS
+    include/ponder/args.hpp
+    include/ponder/arraymapper.hpp
+    include/ponder/arrayproperty.hpp
+    include/ponder/class.hpp
+    include/ponder/class.inl
+    include/ponder/classbuilder.hpp
+    include/ponder/classbuilder.inl
+    include/ponder/classcast.hpp
+    include/ponder/classget.hpp
+    include/ponder/classget.inl
+    include/ponder/classvisitor.hpp
+    include/ponder/config.hpp
+    include/ponder/constructor.hpp
+    include/ponder/enum.hpp
+    include/ponder/enum.inl
+    include/ponder/enumbuilder.hpp
+    include/ponder/enumget.hpp
+    include/ponder/enumget.inl
+    include/ponder/enumobject.hpp
+    include/ponder/enumobject.inl
+    include/ponder/enumproperty.hpp
+    include/ponder/error.hpp
+    include/ponder/error.inl
+    include/ponder/errors.hpp
+    include/ponder/format.h
+    include/ponder/function.hpp
+    include/ponder/observer.hpp
+    include/ponder/pondertype.hpp
+    include/ponder/property.hpp
+    include/ponder/simpleproperty.hpp
+    include/ponder/tagholder.hpp
+    include/ponder/type.hpp
+    include/ponder/userobject.hpp
+    include/ponder/userobject.inl
+    include/ponder/userproperty.hpp
+    include/ponder/value.hpp
+    include/ponder/value.inl
+    include/ponder/valuemapper.hpp
+    include/ponder/valuevisitor.hpp
+    include/ponder/version.hpp
+    # detail
+    include/ponder/detail/arraypropertyimpl.hpp
+    include/ponder/detail/arraypropertyimpl.inl
+    include/ponder/detail/classmanager.hpp
+    include/ponder/detail/constructorimpl.hpp
+    include/ponder/detail/dictionary.hpp
+    include/ponder/detail/enummanager.hpp
+    include/ponder/detail/enumpropertyimpl.hpp
+    include/ponder/detail/enumpropertyimpl.inl
+    include/ponder/detail/functionimpl.hpp
+    include/ponder/detail/functiontraits.hpp
+    include/ponder/detail/getter.hpp
+    include/ponder/detail/getter.inl
+    include/ponder/detail/issmartpointer.hpp
+    include/ponder/detail/objectholder.hpp
+    include/ponder/detail/objectholder.inl
+    include/ponder/detail/objecttraits.hpp
+    include/ponder/detail/observernotifier.hpp
+    include/ponder/detail/propertyfactory.hpp
+    include/ponder/detail/rawtype.hpp
+    include/ponder/detail/returntype.hpp
+    include/ponder/detail/simplepropertyimpl.hpp
+    include/ponder/detail/simplepropertyimpl.inl
+    include/ponder/detail/typeid.hpp
+    include/ponder/detail/userpropertyimpl.hpp
+    include/ponder/detail/userpropertyimpl.inl
+    include/ponder/detail/util.hpp
+    include/ponder/detail/valueimpl.hpp
+    include/ponder/detail/valueprovider.hpp
+    include/ponder/detail/variant.hpp
+    include/ponder/detail/variant_recursive_wrapper.hpp
+    include/ponder/detail/yesnotype.hpp
+    # Qt
+    include/ponder/qt/qlist.hpp
+    include/ponder/qt/qstring.hpp
+    include/ponder/qt/qt.hpp
+    include/ponder/qt/qtfunction.hpp
+    include/ponder/qt/qthelper.hpp
+    include/ponder/qt/qtmapper.hpp
+    include/ponder/qt/qtsimpleproperty.hpp
+    include/ponder/qt/qvector.hpp        
 )
-file(GLOB SRC_SOURCE src/*.cpp)
+
+set(SRC_SOURCE
+    src/args.cpp
+    src/arrayproperty.cpp
+    src/class.cpp
+    src/classcast.cpp
+    src/classmanager.cpp
+    src/classvisitor.cpp
+    src/enum.cpp
+    src/enumbuilder.cpp
+    src/enummanager.cpp
+    src/enumobject.cpp
+    src/enumproperty.cpp
+    src/error.cpp
+    src/errors.cpp
+    src/format.cpp
+    src/function.cpp
+    src/observer.cpp
+    src/observernotifier.cpp
+    src/pondertype.cpp
+    src/property.cpp
+    src/simpleproperty.cpp
+    src/tagholder.cpp
+    src/userobject.cpp
+    src/userproperty.cpp
+    src/util.cpp
+    src/value.cpp
+)
+
 set(PONDER_SRCS
     ${SRC_HEADERS}
     ${SRC_SOURCE}
@@ -126,11 +234,6 @@ install(DIRECTORY include
     DESTINATION .
     COMPONENT devel
 )
-
-#install(FILES ${CMAKE_BINARY_DIR}/include/ponder/version.hpp
-#    DESTINATION include/ponder
-#    COMPONENT devel
-#)
 
 install(TARGETS ponder
     EXPORT PonderTargets
