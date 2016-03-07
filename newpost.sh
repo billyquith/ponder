@@ -9,9 +9,9 @@ if [ -z "$TITLE" ]; then
 fi
 
 # replace ' ' with '-'
-TITLE=$(echo "$TITLE" | sed 's/ /-/g')
+TITLENS=$(echo "$TITLE" | sed 's/ /-/g')
 
-FILE=$POSTS/$DATE-$TITLE.md
+FILE=$POSTS/$DATE-$TITLENS.md
 
 cat >$FILE <<EOM
 ---
