@@ -30,22 +30,27 @@
 #include <ponder/detail/classmanager.hpp>
 
 // This must be defined once in the entire project
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#define BOOST_TEST_MODULE Ponder test
 
-// struct GlobalTestFixture
-// {
-//     ponder::detail::ClassManager* m_classManagerInstance;
-//
-//     GlobalTestFixture()
-//     :   m_classManagerInstance(new ponder::detail::ClassManager())
-//     {
-//     }
-//
-//     ~GlobalTestFixture()
-//     {
-//         delete m_classManagerInstance;
-//     }
-// };
-//
-// BOOST_GLOBAL_FIXTURE(GlobalTestFixture);
+// This will embed the whole source code of boost.test,
+// so that we don't need to link to it as an external library.
+// Note: to disable that and link to boost.test as a library,
+// simply remove "/included" from the header path below.
+#include <boost/test/included/unit_test.hpp>
+
+struct GlobalTestFixture
+{
+    ponder::detail::ClassManager* m_classManagerInstance;
+
+    GlobalTestFixture()
+    :   m_classManagerInstance(new ponder::detail::ClassManager())
+    {
+    }
+
+    ~GlobalTestFixture()
+    {
+        delete m_classManagerInstance;
+    }
+};
+
+BOOST_GLOBAL_FIXTURE(GlobalTestFixture);

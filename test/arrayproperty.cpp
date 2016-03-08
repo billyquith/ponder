@@ -33,6 +33,7 @@
 #include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
+#include <boost/test/unit_test.hpp>
 #include <list>
 #include <vector>
 
@@ -40,7 +41,9 @@ namespace ArrayPropertyTest
 {
     struct MyType
     {
-        MyType(int x_) : x(x_) {}
+        MyType(int x_) : x(x_)
+        {
+        }
         
         bool operator ==(const MyType& other) const
         {
@@ -84,10 +87,10 @@ namespace ArrayPropertyTest
         ponder::Class::declare<MyType>("ArrayPropertyTest::MyType");
         
         ponder::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
-            .property("bools", &MyClass::bools)
-            .property("ints", &MyClass::ints)
-            .property("strings", &MyClass::strings)
-            .property("objects", &MyClass::objects);
+        .property("bools", &MyClass::bools)
+        .property("ints", &MyClass::ints)
+        .property("strings", &MyClass::strings)
+        .property("objects", &MyClass::objects);
     }
 }
 
