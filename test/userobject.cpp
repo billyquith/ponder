@@ -203,7 +203,7 @@ using namespace UserObjectTest;
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(USEROBJECT)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(getObject)
 {
     MyClass object(1);
@@ -219,7 +219,7 @@ BOOST_AUTO_TEST_CASE(getObject)
     BOOST_CHECK_EQUAL(userObject.get<const MyClass*>(),  &object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(getAsBase)
 {
     MyClass object(2);
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE(getAsBase)
     BOOST_CHECK_EQUAL(userObject.get<const MyBase*>(),  &base);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(getFromPointer)
 {
     MyClass object(3);
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE(getFromPointer)
     BOOST_CHECK_EQUAL(userObject.get<const MyClass*>(),  &object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     MyClass object(4);
@@ -262,7 +262,7 @@ BOOST_AUTO_TEST_CASE(copy)
     BOOST_CHECK_NE(userObject.get<MyClass*>(),   &object); // different address
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(ref)
 {
     MyClass object(5);
@@ -272,7 +272,7 @@ BOOST_AUTO_TEST_CASE(ref)
     BOOST_CHECK_EQUAL(userObject.get<MyClass*>(), &object); // same address
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(getClass)
 {
     MyClass object(6);
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(getClass)
     BOOST_CHECK(ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>());
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     MyClass object(7);
@@ -293,7 +293,7 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_EQUAL(userObject.get("p"), ponder::Value(7));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(set)
 {
     MyClass object(0);
@@ -303,7 +303,7 @@ BOOST_AUTO_TEST_CASE(set)
     BOOST_CHECK_EQUAL(object.x, 8);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(callBasic)
 {
     MyClass object(9);
@@ -312,7 +312,7 @@ BOOST_AUTO_TEST_CASE(callBasic)
     BOOST_CHECK_EQUAL(userObject.call("f"), ponder::Value(9));
 }
 
-//----------------------------------------------------------------------------- ****
+
 BOOST_AUTO_TEST_CASE(callMultiArgs1)
 {
     Call object;
@@ -363,7 +363,7 @@ BOOST_AUTO_TEST_CASE(callMultiArgs3)
 //    BOOST_CHECK_EQUAL(object.lastCalled, "meth8");
 //    BOOST_CHECK_EQUAL(object.sum, 7+8-99+77-12+76+45+3);
 //}
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(callArgs1)
 {
     Call object;
@@ -386,7 +386,7 @@ BOOST_AUTO_TEST_CASE(callArgs2)
 //    BOOST_CHECK_EQUAL(userObject.call("concat", "one", "two"), ponder::Value("onetwo"));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(assignment)
 {
     MyClass object1(10);
@@ -397,7 +397,7 @@ BOOST_AUTO_TEST_CASE(assignment)
     BOOST_CHECK(userObject1.get<MyClass*>() == userObject2.get<MyClass*>());
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(equality)
 {
     MyClass object1(11);
@@ -414,7 +414,7 @@ BOOST_AUTO_TEST_CASE(equality)
     BOOST_CHECK_EQUAL(ponder::UserObject(object1) == ponder::UserObject::copy(&object1), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(nonCopyableClass)
 {
     // This is a compile check
@@ -424,7 +424,7 @@ BOOST_AUTO_TEST_CASE(nonCopyableClass)
     (void)ref;
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(abstractClass)
 {
     // This is a compile check
@@ -437,7 +437,7 @@ BOOST_AUTO_TEST_CASE(abstractClass)
     userObject2.get<MyConcreteClass>();
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(composedObjects)
 {
     const ponder::UserProperty& p1 = static_cast<const ponder::UserProperty&>(ponder::classByType<Composed1>().property("p"));

@@ -105,7 +105,7 @@ struct EnumObjectFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ENUMOBJECT, EnumObjectFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(error)
 {
     // The meta-enum of MyUndeclaredEnum is *not* declared
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE(error)
     BOOST_CHECK_THROW(ponder::EnumObject obj(Undeclared), ponder::EnumNotFound);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(value)
 {
     BOOST_CHECK_EQUAL(zero.value(), Zero);
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(value)
     BOOST_CHECK_EQUAL(two.value(),  Two);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(name)
 {
     BOOST_CHECK_EQUAL(zero.name(), "Zero");
@@ -129,7 +129,7 @@ BOOST_AUTO_TEST_CASE(name)
     BOOST_CHECK_EQUAL(two.name(),  "Two");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(getEnum)
 {
     BOOST_CHECK(zero.getEnum() == ponder::enumByType<MyEnum>());
@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_CASE(getEnum)
     BOOST_CHECK(two.getEnum()  == ponder::enumByType<MyEnum>());
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(equal)
 {
     // Setup
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE(equal)
     BOOST_CHECK_EQUAL(two  == two2,  false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(lessThan)
 {
     BOOST_CHECK_EQUAL(zero < zero, false);

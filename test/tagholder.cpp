@@ -96,7 +96,7 @@ PONDER_AUTO_TYPE(TagHolderTest::MyEnum,  &TagHolderTest::declare)
 
 using namespace TagHolderTest;
 
-//-----------------------------------------------------------------------------
+
 struct TagHolderFixture
 {
     TagHolderFixture()
@@ -112,7 +112,7 @@ struct TagHolderFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(TAGHOLDER, TagHolderFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(declare)
 {
     BOOST_CHECK_EQUAL(metaclass->tagCount(), 16);
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(declare)
     BOOST_CHECK_EQUAL(metaclass->function("func").tagCount(), 2);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     BOOST_CHECK_EQUAL(metaclass->hasTag("a"), true);
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_EQUAL(metaclass->hasTag("x"), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(staticTags)
 {
     BOOST_CHECK_EQUAL(metaclass->hasTag(true),    true);
@@ -146,7 +146,7 @@ BOOST_AUTO_TEST_CASE(staticTags)
     BOOST_CHECK_EQUAL(metaclass->hasTag(object2), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(staticValues)
 {
     BOOST_CHECK_EQUAL(metaclass->tag("static1"), ponder::Value(true));
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(staticValues)
     BOOST_CHECK_EQUAL(metaclass->tag("xxxxxxx"), ponder::Value::nothing);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(dynamicValues)
 {
     BOOST_CHECK_EQUAL(metaclass->tag("dynamic1", MyClass(10)), ponder::Value(10));

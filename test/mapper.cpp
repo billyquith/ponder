@@ -154,7 +154,7 @@ PONDER_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare)
 
 using namespace MapperTest;
 
-//-----------------------------------------------------------------------------
+
 struct MapperFixture
 {
     MapperFixture()
@@ -170,27 +170,27 @@ struct MapperFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(MAPPER, MapperFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(count)
 {
     BOOST_CHECK_EQUAL(metaclass->propertyCount(), static_cast<std::size_t>(MyClass::propertyCount));
     BOOST_CHECK_EQUAL(metaclass->functionCount(), static_cast<std::size_t>(MyClass::functionCount));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(types)
 {
     BOOST_CHECK_EQUAL(metaclass->property(0).type(), ponder::intType);
     BOOST_CHECK_EQUAL(metaclass->function(0).returnType(), ponder::stringType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(argCount)
 {
     BOOST_CHECK_EQUAL(metaclass->function(0).argCount(), 0);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(propertyGet)
 {
     MyClass object;
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(propertyGet)
     BOOST_CHECK_EQUAL(metaclass->property("prop4").get(object), ponder::Value(object.prop("prop4")));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(propertySet)
 {
     MyClass object;
@@ -220,7 +220,7 @@ BOOST_AUTO_TEST_CASE(propertySet)
     BOOST_CHECK_EQUAL(object.prop("prop4"), 400);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(functionCall)
 {
     MyClass object;

@@ -121,7 +121,7 @@ PONDER_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare)
 
 using namespace ConstructorTest;
 
-//-----------------------------------------------------------------------------
+
 struct ConstructorFixture
 {
     ConstructorFixture()
@@ -137,7 +137,7 @@ struct ConstructorFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(CONSTRUCTOR, ConstructorFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(invalidConstructions)
 {
     BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args("hello")),         ponder::UserObject::nothing);
@@ -146,7 +146,7 @@ BOOST_AUTO_TEST_CASE(invalidConstructions)
     BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(5., "hello")),     ponder::UserObject::nothing);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(zeroArg)
 {
     ponder::UserObject object = metaclass->construct();
@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE(zeroArg)
     metaclass->destroy(object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(oneArg)
 {
     ponder::UserObject object = metaclass->construct(ponder::Args(1)).get<MyClass*>();
@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE(oneArg)
     metaclass->destroy(object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(twoArgs)
 {
     ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE(twoArgs)
     metaclass->destroy(object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(threeArgs)
 {
     ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(threeArgs)
     metaclass->destroy(object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(fourArgs)
 {
     ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE(fourArgs)
     metaclass->destroy(object);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(fiveArgs)
 {
     ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));

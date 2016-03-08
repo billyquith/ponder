@@ -64,16 +64,16 @@ namespace EnumTest
     void declare()
     {
         ponder::Enum::declare<MyEnum>("EnumTest::MyEnum")
-        .value("Zero", Zero)
-        .value("One", One)
-        .value("Two", Two);
+            .value("Zero", Zero)
+            .value("One", One)
+            .value("Two", Two);
         
         ponder::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
         
         ponder::Enum::declare<MyEnumClass>("EnumTest::MyEnumClass")
-        .value("Red", MyEnumClass::Red)
-        .value("Green", MyEnumClass::Green)
-        .value("Blue", MyEnumClass::Blue);
+            .value("Red", MyEnumClass::Red)
+            .value("Green", MyEnumClass::Green)
+            .value("Blue", MyEnumClass::Blue);
     }
 }
 
@@ -85,7 +85,7 @@ PONDER_AUTO_TYPE(EnumTest::MyEnumClass, &EnumTest::declare)
 
 using namespace EnumTest;
 
-//-----------------------------------------------------------------------------
+
 struct EnumFixture
 {
     EnumFixture()
@@ -101,7 +101,7 @@ struct EnumFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ENUM, EnumFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(declare)
 {
     std::size_t count = ponder::enumCount();
@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(declare)
     BOOST_CHECK_EQUAL(ponder::enumCount(), count + 1);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(declareExceptions)
 {
     // to make sure it is declared
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(declareExceptions)
     BOOST_CHECK_THROW(ponder::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"), ponder::EnumAlreadyCreated);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     MyEnum object = MyEnum();
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_THROW(ponder::enumByObject(&object2),                   ponder::EnumNotFound);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(comparisons)
 {
     BOOST_CHECK(ponder::enumByType<MyEnum>()  == ponder::enumByType<MyEnum>());
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(comparisons)
     BOOST_CHECK(ponder::enumByType<MyEnum2>() != ponder::enumByType<MyEnum>());
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(pairs)
 {
     BOOST_CHECK_EQUAL(metaenum->size(), 3U);
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE(pairs)
     BOOST_CHECK_THROW(metaenum->pair(3), ponder::OutOfRange);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(values)
 {
     BOOST_CHECK_EQUAL(metaenum->hasValue(Zero), true);
@@ -175,7 +175,7 @@ BOOST_AUTO_TEST_CASE(values)
     BOOST_CHECK_THROW(metaenum->value("xxx"),  ponder::EnumNameNotFound);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(names)
 {
     BOOST_CHECK_EQUAL(metaenum->hasName("Zero"),    true);
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(names)
     BOOST_CHECK_THROW(metaenum->name(100),  ponder::EnumValueNotFound);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(enumClass)
 {
     const ponder::Enum *clsenum = &ponder::enumByType<MyEnumClass>();

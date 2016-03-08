@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(cpp11)
     static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value, "std::result_of failed");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(functionTraits_isFunction)
 {
     static_assert( ! ponder::detail::FunctionTraits<int>::isFunction, "FunctionTraits<>::isFunction failed");
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(functionTraits_type)
     static_assert(std::is_same<int(TestClass&,float), ponder::detail::FunctionTraits<fn3_t>::type>::value, "ponder::detail::FunctionTraits problem");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(objectTraits_writable)
 {
     // is writable
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(objectTraits_writable)
     static_assert( ! ponder::detail::ObjectTraits<decltype(intArray)>::isWritable, "ObjectTraits<>::isWriteable failed");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(objectTraits_ref)
 {
     // is ref
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE(objectTraits_ref)
     static_assert( ! ponder::detail::ObjectTraits<void(...)>::isRef, "ObjectTraits<>::isRef failed");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(objectTraits_refReturnType)
 {
     static_assert(std::is_same<int&, ponder::detail::ObjectTraits<int>::RefReturnType>::value, "ObjectTraits<>::RefReturnType failed");
@@ -181,7 +181,7 @@ BOOST_AUTO_TEST_CASE(objectTraits_refReturnType)
     static_assert(std::is_same<const int*, ponder::detail::ObjectTraits<const int*>::RefReturnType>::value, "ObjectTraits<>::RefReturnType failed");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(objectTraits_pointerType)
 {
     // pointer type
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(objectTraits_pointerType)
     static_assert(std::is_same<const int*, ponder::detail::ObjectTraits<const int*>::PointerType>::value, "ObjectTraits<>::PointerType failed");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(objectTraits_dataType)
 {
     static_assert(std::is_same<int, ponder::detail::ObjectTraits<int>::DataType>::value, "ObjectTraits<>::DataType failed");
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE(objectTraits_dataType)
     static_assert(std::is_same<int, ponder::detail::ObjectTraits<decltype(intArray)>::DataType>::value, "ObjectTraits<>::DataType failed");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(boost_function)
 {
     typedef void (*fn1_t)(void);
@@ -245,7 +245,7 @@ BOOST_AUTO_TEST_CASE(boost_result_type)
     static_assert(std::is_same<float, boost::function_types::result_type<float(TestClass::*)(void)>::type>::value, "boost::ret result_type");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(lexical_cast_to_string)
 {
     const unsigned int ui = 234;

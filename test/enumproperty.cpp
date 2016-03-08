@@ -69,7 +69,7 @@ PONDER_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
 
 using namespace EnumPropertyTest;
 
-//-----------------------------------------------------------------------------
+
 struct EnumPropertyFixture
 {
     EnumPropertyFixture()
@@ -86,26 +86,26 @@ struct EnumPropertyFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ENUMPROPERTY, EnumPropertyFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(type)
 {
     BOOST_CHECK_EQUAL(property->type(), ponder::enumType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(getEnum)
 {
     BOOST_CHECK(property->getEnum() == ponder::enumByType<MyEnum>());
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     BOOST_CHECK_EQUAL(property->get(MyClass(Zero)), ponder::Value(Zero));
     BOOST_CHECK_EQUAL(property->get(MyClass(One)),  ponder::Value(One));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(set)
 {
     MyClass object(Zero);

@@ -130,7 +130,7 @@ using namespace ClassVisitorTest;
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(CLASSVISITOR)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(visit)
 {
     MyClassVisitor visitor;

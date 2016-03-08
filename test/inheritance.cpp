@@ -122,7 +122,7 @@ PONDER_AUTO_TYPE(InheritanceTest::MyClass4, &InheritanceTest::declare)
 
 using namespace InheritanceTest;
 
-//-----------------------------------------------------------------------------
+
 struct InheritanceFixture
 {
     InheritanceFixture()
@@ -144,7 +144,7 @@ struct InheritanceFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(INHERITANCE, InheritanceFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(regularFunctions)
 {
     MyClass1 object1;
@@ -166,7 +166,7 @@ BOOST_AUTO_TEST_CASE(regularFunctions)
     BOOST_CHECK_EQUAL(class4->function("f4").call(object4), ponder::Value(4));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(virtualFunctions)
 {
     MyClass1 object1;
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(virtualFunctions)
     BOOST_CHECK_EQUAL(class2->function("virtual").call(object4), ponder::Value(40));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(properties)
 {
     MyClass1 object1;
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE(properties)
     BOOST_CHECK_EQUAL(class4->property("p4").get(object4), ponder::Value(40));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(castWithPointerOffset)
 {
     MyClass3 object3;
@@ -223,7 +223,7 @@ BOOST_AUTO_TEST_CASE(castWithPointerOffset)
     BOOST_CHECK_EQUAL(class4->property("p4").get(base4), ponder::Value(40));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(overriddenFunction)
 {
     MyClass1 object1;
@@ -241,7 +241,7 @@ BOOST_AUTO_TEST_CASE(overriddenFunction)
     BOOST_CHECK_EQUAL(class4->function("overridden").call(object3), ponder::Value(4));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(overriddenProperty)
 {
     MyClass1 object1;

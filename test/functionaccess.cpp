@@ -73,7 +73,7 @@ PONDER_AUTO_TYPE(FunctionAccessTest::MyClass, &FunctionAccessTest::declare);
 
 using namespace FunctionAccessTest;
 
-//-----------------------------------------------------------------------------
+
 struct FunctionAccessFixture
 {
     FunctionAccessFixture()
@@ -93,7 +93,7 @@ struct FunctionAccessFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTIONACCESS, FunctionAccessFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(callableStatic)
 {
     BOOST_CHECK_EQUAL(metaclass->function("f0").callable(object_t), false);
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(callableStatic)
     BOOST_CHECK_EQUAL(metaclass->function("f4").callable(object_f), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(callableDynamic)
 {
     BOOST_CHECK_EQUAL(metaclass->function("f5").callable(object_t), true);

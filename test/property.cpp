@@ -196,7 +196,7 @@ PONDER_AUTO_TYPE(PropertyTest::MyClass, &PropertyTest::declare)
 
 using namespace PropertyTest;
 
-//-----------------------------------------------------------------------------
+
 struct PropertyFixture
 {
     PropertyFixture()
@@ -217,7 +217,7 @@ struct PropertyFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(PROPERTY, PropertyFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(type)
 {
     BOOST_CHECK_EQUAL(properties[1]->type(),  ponder::boolType);
@@ -246,7 +246,7 @@ BOOST_AUTO_TEST_CASE(type)
     BOOST_CHECK_EQUAL(properties[24]->type(), ponder::userType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(name)
 {
     BOOST_CHECK_EQUAL(properties[1]->name(),  "p1");
@@ -275,7 +275,7 @@ BOOST_AUTO_TEST_CASE(name)
     BOOST_CHECK_EQUAL(properties[24]->name(), "p24");
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(readable)
 {
     MyClass object;
@@ -306,7 +306,7 @@ BOOST_AUTO_TEST_CASE(readable)
     BOOST_CHECK_EQUAL(properties[24]->readable(object), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(writable)
 {
     MyClass object;
@@ -337,7 +337,7 @@ BOOST_AUTO_TEST_CASE(writable)
     BOOST_CHECK_EQUAL(properties[24]->writable(object), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     MyClass object;
@@ -368,7 +368,7 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_EQUAL(properties[24]->get(object), ponder::Value(object.p24));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(set)
 {
     MyClass object;

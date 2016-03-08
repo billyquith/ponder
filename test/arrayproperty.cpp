@@ -99,7 +99,7 @@ PONDER_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare)
 
 using namespace ArrayPropertyTest;
 
-//-----------------------------------------------------------------------------
+
 struct ArrayPropertyFixture
 {
     ArrayPropertyFixture()
@@ -123,7 +123,7 @@ struct ArrayPropertyFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(ARRAYPROPERTY, ArrayPropertyFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(type)
 {
     BOOST_CHECK_EQUAL(bools->type(),   ponder::arrayType);
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(type)
     BOOST_CHECK_EQUAL(objects->type(), ponder::arrayType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(elementType)
 {
     BOOST_CHECK_EQUAL(bools->elementType(),   ponder::boolType);
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(elementType)
     BOOST_CHECK_EQUAL(objects->elementType(), ponder::userType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(dynamic)
 {
     BOOST_CHECK_EQUAL(bools->dynamic(),   false);
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(dynamic)
     BOOST_CHECK_EQUAL(objects->dynamic(), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(size)
 {
 #ifndef _WIN32
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE(size)
     BOOST_CHECK_EQUAL(objects->size(object), object.objects.size());
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     BOOST_CHECK_EQUAL(bools->get(object, 0), ponder::Value(object.bools[0]));
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_THROW(objects->get(object, 5), ponder::OutOfRange);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(set)
 {
     bools->set(object, 1, true);
@@ -207,7 +207,7 @@ BOOST_AUTO_TEST_CASE(set)
     BOOST_CHECK_THROW(objects->set(object, 10, MyType(9)), ponder::OutOfRange);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(insert)
 {
     BOOST_CHECK_THROW(bools->insert(object, 0, true), ponder::ForbiddenWrite);
@@ -226,7 +226,7 @@ BOOST_AUTO_TEST_CASE(insert)
     BOOST_CHECK(*std::next(object.objects.begin(), 1) == MyType(10));
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(remove)
 {
     BOOST_CHECK_THROW(bools->remove(object, 0), ponder::ForbiddenWrite);

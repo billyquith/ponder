@@ -109,7 +109,7 @@ using namespace ClassTest;
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(CLASS)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(declare)
 {
     std::size_t count = ponder::classCount();
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE(declare)
     BOOST_CHECK_EQUAL(ponder::classCount(), count + 1);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(declareExceptions)
 {
     // to make sure it is declared
@@ -129,7 +129,7 @@ BOOST_AUTO_TEST_CASE(declareExceptions)
     BOOST_CHECK_THROW(ponder::Class::declare<MyUndeclaredClass>("ClassTest::MyClass"), ponder::ClassAlreadyCreated);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(get)
 {
     MyClass object;
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_THROW(ponder::classByObject(&object2),                     ponder::ClassNotFound);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(comparisons)
 {
     const ponder::Class& class1 = ponder::classByType<MyClass>();
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(comparisons)
     BOOST_CHECK(class2 != class1);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(properties)
 {
     const ponder::Class& metaclass = ponder::classByType<MyClass>();
@@ -168,7 +168,7 @@ BOOST_AUTO_TEST_CASE(properties)
     BOOST_CHECK_EQUAL(metaclass.hasProperty("xxxx"), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(functions)
 {
     const ponder::Class& metaclass = ponder::classByType<MyClass>();
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE(functions)
     BOOST_CHECK_EQUAL(metaclass.hasFunction("xxxx"), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(inheritance)
 {
     const ponder::Class& derived = ponder::classByType<Derived>();
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(inheritance)
     BOOST_CHECK_THROW(derived.base(1), ponder::OutOfRange);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(rtti)
 {
     Base* base    = new Base;
@@ -211,7 +211,7 @@ BOOST_AUTO_TEST_CASE(rtti)
     delete base;
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(typeNames)
 {
     BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);

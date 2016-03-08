@@ -119,7 +119,7 @@ PONDER_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
 
 using namespace ValueTest;
 
-//-----------------------------------------------------------------------------
+
 struct ValueFixture
 {
     ValueFixture() : object1(1), object2(1)
@@ -172,7 +172,7 @@ struct ValueFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(VALUE, ValueFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(type)
 {
     BOOST_CHECK_EQUAL(noValue.type(),      ponder::noType);
@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE(type)
     BOOST_CHECK_EQUAL(objectValue.type(),  ponder::userType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(boolConversions)
 {
     BOOST_CHECK_EQUAL(boolValue.to<bool>(),           true);
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE(boolConversions)
     BOOST_CHECK_EQUAL(boolValue.isCompatible<MyClass>(),        false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(intConversions)
 {
     BOOST_CHECK_EQUAL(intValue.to<bool>(),           true);
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(intConversions)
     BOOST_CHECK_EQUAL(intValue.isCompatible<MyClass>(),        false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(doubleConversions)
 {
     BOOST_CHECK_EQUAL(doubleValue.to<bool>(),           true);
@@ -295,7 +295,7 @@ BOOST_AUTO_TEST_CASE(doubleConversions)
     BOOST_CHECK_EQUAL(doubleValue.isCompatible<MyClass>(),        false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(stringConversionsOk)
 {
     BOOST_CHECK_EQUAL(stringValue.to<bool>(),           true);
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE(stringConversionsOk)
     BOOST_CHECK_EQUAL(stringValue.isCompatible<MyClass>(),        false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(stringConversionsEnumOk)
 {
     BOOST_CHECK_EQUAL(ponder::Value("One").to<MyEnum>(), One);
@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE(stringConversionsEnumOk)
     BOOST_CHECK_EQUAL(ponder::Value("2").isCompatible<MyEnum>(),   true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(stringConversionsNotOk)
 {
     ponder::Value badStringValue = "not a number";
@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(stringConversionsNotOk)
     BOOST_CHECK_EQUAL(badStringValue.isCompatible<MyClass>(),        false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(enumConversions)
 {
     BOOST_CHECK_EQUAL(enumValue.to<bool>(),           true);
@@ -412,7 +412,7 @@ BOOST_AUTO_TEST_CASE(enumConversions)
     BOOST_CHECK_EQUAL(enumValue.isCompatible<MyClass>(),        false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(objectConversions)
 {
     BOOST_CHECK_EQUAL(objectValue.to<bool>(),             true);
@@ -447,7 +447,7 @@ BOOST_AUTO_TEST_CASE(objectConversions)
     BOOST_CHECK_EQUAL(objectValue.isCompatible<MyClass>(),        true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(visitor)
 {
     Visitor visitor;
@@ -470,7 +470,7 @@ BOOST_AUTO_TEST_CASE(visitor)
     BOOST_CHECK_EQUAL(objectValue.visit(visitor),  ponder::userType);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(equal)
 {
     BOOST_CHECK_EQUAL(noValue == noValue,     true);
@@ -544,7 +544,7 @@ BOOST_AUTO_TEST_CASE(equal)
     BOOST_CHECK_EQUAL(ponder::Value(object1) == ponder::Value(object2), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(lessThan)
 {
     BOOST_CHECK_EQUAL(equivalent(noValue, noValue),     true);

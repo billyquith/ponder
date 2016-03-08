@@ -83,7 +83,7 @@ PONDER_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
 
 using namespace PropertyAccessTest;
 
-//-----------------------------------------------------------------------------
+
 struct PropertyAccessFixture
 {
     PropertyAccessFixture()
@@ -103,7 +103,7 @@ struct PropertyAccessFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(PROPERTYACCESS, PropertyAccessFixture)
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(readableImplicit)
 {
     BOOST_CHECK_EQUAL(metaclass->property("p8").readable(object_t), true);
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(readableImplicit)
     BOOST_CHECK_EQUAL(metaclass->property("p10").readable(object_f), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(readableStatic)
 {
     BOOST_CHECK_EQUAL(metaclass->property("p0").readable(object_t), false);
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(readableStatic)
     BOOST_CHECK_EQUAL(metaclass->property("p5").readable(object_f), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(readableDynamic)
 {
     BOOST_CHECK_EQUAL(metaclass->property("p6").readable(object_t), true);
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(readableDynamic)
     BOOST_CHECK_EQUAL(metaclass->property("p7").readable(object_f), false);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(writableImplicit)
 {
     BOOST_CHECK_EQUAL(metaclass->property("p8").writable(object_t), false);
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE(writableImplicit)
     BOOST_CHECK_EQUAL(metaclass->property("p10").writable(object_f), true);
 }
 
-//-----------------------------------------------------------------------------
+
 BOOST_AUTO_TEST_CASE(writableStatic)
 {
     BOOST_CHECK_EQUAL(metaclass->property("p0").writable(object_t), true);
