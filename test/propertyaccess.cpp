@@ -27,10 +27,59 @@
 **
 ****************************************************************************/
 
-#include "propertyaccess.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/property.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <boost/test/unit_test.hpp>
+
+namespace PropertyAccessTest
+{
+    struct MyClass
+    {
+        MyClass(bool b = true)
+        : m_b(b)
+        {
+        }
+        
+        void set(int x) {p = x;}
+        int get() const {return p;}
+        int& ref() {return p;}
+        int p;
+        
+        bool m_b;
+        bool b1() {return true;}
+        bool b2() const {return false;}
+    };
+    
+    void declare()
+    {
+        using namespace std::placeholders;
+        
+        ponder::Class::declare<MyClass>("PropertyAccessTest::MyClass")
+        
+        // ***** constant value *****
+        .property("p0", &MyClass::p).readable(false).writable(true)
+        .property("p1", &MyClass::p).readable(true).writable(false)
+        .property("p2", &MyClass::p).readable(false).writable(false)
+        
+        // ***** function *****
+        .property("p3", &MyClass::p).readable(&MyClass::b1)
+        .property("p4", &MyClass::p).readable(&MyClass::b2)
+        .property("p5", &MyClass::p).readable(std::bind(&MyClass::b1, _1))
+        .property("p6", &MyClass::p).readable(&MyClass::m_b)
+        .property("p7", &MyClass::p).readable(std::function<bool (MyClass&)>(&MyClass::m_b))
+        
+        // ***** implicit - based on the availability of a getter/setter *****
+        .property("p8",  &MyClass::get)
+        .property("p9",  &MyClass::ref)
+        .property("p10", &MyClass::get, &MyClass::set)
+        ;
+    }
+}
+
+PONDER_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
 
 using namespace PropertyAccessTest;
 

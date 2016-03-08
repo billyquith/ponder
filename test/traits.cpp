@@ -27,7 +27,6 @@
  **
  ****************************************************************************/
 
-#include "traits.hpp"
 #include <ponder/detail/functiontraits.hpp>
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/util.hpp>
@@ -35,6 +34,10 @@
 #include <boost/function_types/function_type.hpp>
 #include <boost/function_types/result_type.hpp>
 #include <array>
+
+namespace TraitsTest
+{
+}
 
 static void foo() {}
 

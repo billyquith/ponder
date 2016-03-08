@@ -27,11 +27,62 @@
 **
 ****************************************************************************/
 
-#include "enumobject.hpp"
 #include <ponder/errors.hpp>
 #include <ponder/enumget.hpp>
 #include <ponder/enumobject.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/enum.hpp>
 #include <boost/test/unit_test.hpp>
+
+namespace EnumObjectTest
+{
+    enum MyEnum
+    {
+        Zero = 0,
+        One  = 1,
+        Two  = 2
+    };
+    
+    enum MyEnum2
+    {
+        Zero2 = 0,
+        One2  = 1,
+        Two2  = 2
+    };
+    
+    enum MyUndeclaredEnum
+    {
+        Undeclared
+    };
+    
+    enum class MyEnumClass
+    {
+        Red, Green, Blue
+    };
+    
+    void declare()
+    {
+        ponder::Enum::declare<MyEnum>("EnumObjectTest::MyEnum")
+        .value("Zero", Zero)
+        .value("One",  One)
+        .value("Two",  Two);
+        
+        ponder::Enum::declare<MyEnum2>("EnumObjectTest::MyEnum2")
+        .value("Zero", Zero2)
+        .value("One",  One2)
+        .value("Two",  Two2);
+        
+        ponder::Enum::declare<MyEnumClass>("EnumObjectTest::MyEnumClass")
+        .value("Red",   MyEnumClass::Red)
+        .value("Green", MyEnumClass::Green)
+        .value("Blue",  MyEnumClass::Blue);
+    }
+}
+
+PONDER_TYPE(EnumObjectTest::MyUndeclaredEnum)
+PONDER_AUTO_TYPE(EnumObjectTest::MyEnum, &EnumObjectTest::declare)
+PONDER_AUTO_TYPE(EnumObjectTest::MyEnum2, &EnumObjectTest::declare)
+PONDER_AUTO_TYPE(EnumObjectTest::MyEnumClass, &EnumObjectTest::declare)
 
 using namespace EnumObjectTest;
 

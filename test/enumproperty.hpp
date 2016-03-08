@@ -30,40 +30,5 @@
 #ifndef PONDERTEST_ENUMPROPERTY_HPP
 #define PONDERTEST_ENUMPROPERTY_HPP
 
-#include <ponder/pondertype.hpp>
-#include <ponder/enum.hpp>
-#include <ponder/class.hpp>
-#include <ponder/classbuilder.hpp>
-#include <list>
-#include <vector>
-
-namespace EnumPropertyTest
-{
-    enum MyEnum
-    {
-        Zero = 0,
-        One  = 1
-    };
-
-    struct MyClass
-    {
-        MyClass(MyEnum x_) : x(x_)
-        {
-        }
-
-        MyEnum x;
-    };
-
-    void declare()
-    {
-        ponder::Enum::declare<MyEnum>("EnumPropertyTest::MyEnum");
-
-        ponder::Class::declare<MyClass>("EnumPropertyTest::MyClass")
-            .property("x", &MyClass::x);
-    }
-}
-
-PONDER_AUTO_TYPE(EnumPropertyTest::MyEnum, &EnumPropertyTest::declare)
-PONDER_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
 
 #endif // PONDERTEST_ENUMPROPERTY_HPP

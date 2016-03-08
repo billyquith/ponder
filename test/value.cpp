@@ -27,9 +27,95 @@
 **
 ****************************************************************************/
 
-#include "value.hpp"
 #include <ponder/value.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/type.hpp>
+#include <ponder/valuevisitor.hpp>
+#include <ponder/enumobject.hpp>
+#include <ponder/userobject.hpp>
+#include <ponder/classbuilder.hpp>
 #include <boost/test/unit_test.hpp>
+
+namespace ValueTest
+{
+    struct MyClass
+    {
+        MyClass(int x_) : x(x_) {}
+        int x;
+    };
+    
+    bool operator==(const MyClass& left, const MyClass& right)
+    {
+        return left.x == right.x;
+    }
+    
+    bool operator<(const MyClass& left, const MyClass& right)
+    {
+        return left.x < right.x;
+    }
+    
+    std::ostream& operator<<(std::ostream& stream, const MyClass& object)
+    {
+        return stream << object.x;
+    }
+    
+    enum MyEnum
+    {
+        One = 1,
+        Two = 2
+    };
+    
+    struct Visitor : public ponder::ValueVisitor<ponder::Type>
+    {
+        ponder::Type operator()(ponder::NoType)
+        {
+            return ponder::noType;
+        }
+        
+        ponder::Type operator()(bool)
+        {
+            return ponder::boolType;
+        }
+        
+        ponder::Type operator()(long)
+        {
+            return ponder::intType;
+        }
+        
+        ponder::Type operator()(double)
+        {
+            return ponder::realType;
+        }
+        
+        ponder::Type operator()(const std::string&)
+        {
+            return ponder::stringType;
+        }
+        
+        ponder::Type operator()(const ponder::EnumObject&)
+        {
+            return ponder::enumType;
+        }
+        
+        ponder::Type operator()(const ponder::UserObject&)
+        {
+            return ponder::userType;
+        }
+    };
+    
+    void declare()
+    {
+        ponder::Enum::declare<MyEnum>("ValueTest::MyEnum")
+        .value("One", One)
+        .value("Two", Two);
+        ponder::Class::declare<MyClass>("ValueTest::MyClass");
+    }
+}
+
+PONDER_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare)
+PONDER_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
 
 using namespace ValueTest;
 

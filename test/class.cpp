@@ -27,9 +27,80 @@
 **
 ****************************************************************************/
 
-#include "class.hpp"
 #include <ponder/classget.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <boost/test/unit_test.hpp>
+
+namespace ClassTest
+{
+    struct MyTempClass
+    {
+    };
+    
+    struct MyUndeclaredClass
+    {
+    };
+    
+    struct MyClass
+    {
+        void func() {}
+        int prop;
+    };
+    
+    struct MyClass2
+    {
+    };
+    
+    struct Base
+    {
+        virtual ~Base() {}
+        PONDER_RTTI();
+    };
+    
+    struct Derived : Base
+    {
+        PONDER_RTTI();
+    };
+    
+    struct DerivedNoRtti : Base
+    {
+    };
+    
+    struct Derived2NoRtti : Derived
+    {
+    };
+    
+    void declare()
+    {
+        ponder::Class::declare<MyClass>("ClassTest::MyClass")
+        .property("prop", &MyClass::prop)
+        .function("func", &MyClass::func);
+        
+        ponder::Class::declare<MyClass2>("ClassTest::MyClass2");
+        
+        ponder::Class::declare<Base>("ClassTest::Base");
+        
+        ponder::Class::declare<Derived>("ClassTest::Derived")
+        .base<Base>();
+        
+        ponder::Class::declare<DerivedNoRtti>("ClassTest::DerivedNoRtti")
+        .base<Base>();
+        
+        ponder::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
+        .base<Derived>();
+    }
+}
+
+PONDER_TYPE(ClassTest::MyUndeclaredClass /* never declared */)
+PONDER_TYPE(ClassTest::MyTempClass /* declared in a test */)
+PONDER_AUTO_TYPE(ClassTest::MyClass, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::MyClass2, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::Base, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
 
 using namespace ClassTest;
 

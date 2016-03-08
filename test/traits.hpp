@@ -30,7 +30,4 @@
 #ifndef PONDERTEST_TRAITS_HPP
 #define PONDERTEST_TRAITS_HPP
 
-namespace TraitsTest
-{
-}
 #endif // PONDERTEST_TRAITS_HPP

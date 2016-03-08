@@ -30,46 +30,5 @@
 #ifndef PONDERTEST_ENUMOBJECT_HPP
 #define PONDERTEST_ENUMOBJECT_HPP
 
-#include <ponder/pondertype.hpp>
-#include <ponder/enum.hpp>
-
-namespace EnumObjectTest
-{
-    enum MyEnum
-    {
-        Zero = 0,
-        One  = 1,
-        Two  = 2
-    };
-
-    enum MyEnum2
-    {
-        Zero2 = 0,
-        One2  = 1,
-        Two2  = 2
-    };
-
-    enum MyUndeclaredEnum
-    {
-        Undeclared
-    };
-
-    void declare()
-    {
-        ponder::Enum::declare<MyEnum>("EnumObjectTest::MyEnum")
-            .value("Zero", Zero)
-            .value("One",  One)
-            .value("Two",  Two);
-
-        ponder::Enum::declare<MyEnum2>("EnumObjectTest::MyEnum2")
-            .value("Zero", Zero2)
-            .value("One",  One2)
-            .value("Two",  Two2);
-    }
-}
-
-PONDER_TYPE(EnumObjectTest::MyUndeclaredEnum)
-PONDER_AUTO_TYPE(EnumObjectTest::MyEnum, &EnumObjectTest::declare)
-PONDER_AUTO_TYPE(EnumObjectTest::MyEnum2, &EnumObjectTest::declare)
 
 #endif // PONDERTEST_ENUMOBJECT_HPP

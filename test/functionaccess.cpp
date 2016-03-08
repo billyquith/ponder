@@ -27,10 +27,49 @@
 **
 ****************************************************************************/
 
-#include "functionaccess.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/function.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <boost/test/unit_test.hpp>
+#include <functional>
+
+namespace FunctionAccessTest
+{
+    struct MyClass
+    {
+        MyClass(bool b = true)
+        : m_b(b)
+        {
+        }
+        
+        void f() {}
+        
+        bool m_b;
+        bool b1() {return true;}
+        bool b2() const {return false;}
+    };
+    
+    void declare()
+    {
+        ponder::Class::declare<MyClass>("FunctionAccessTest::MyClass")
+        
+        // ***** constant value *****
+        .function("f0", &MyClass::f).callable(false)
+        .function("f1", &MyClass::f).callable(true)
+        
+        // ***** function *****
+        .function("f2", &MyClass::f).callable(&MyClass::b1)
+        .function("f3", &MyClass::f).callable(&MyClass::b2)
+        .function("f4", &MyClass::f).callable(std::bind(&MyClass::b1, std::placeholders::_1))
+        .function("f5", &MyClass::f).callable(&MyClass::m_b)
+        .function("f6", &MyClass::f).callable(std::function<bool (MyClass&)>(&MyClass::m_b))
+        ;
+    }
+}
+
+PONDER_AUTO_TYPE(FunctionAccessTest::MyClass, &FunctionAccessTest::declare);
 
 using namespace FunctionAccessTest;
 

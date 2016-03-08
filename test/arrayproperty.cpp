@@ -27,11 +27,75 @@
 **
 ****************************************************************************/
 
-#include "arrayproperty.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/errors.hpp>
 #include <ponder/arrayproperty.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
 #include <boost/test/unit_test.hpp>
+#include <list>
+#include <vector>
+
+namespace ArrayPropertyTest
+{
+    struct MyType
+    {
+        MyType(int x_) : x(x_)
+        {
+        }
+        
+        bool operator ==(const MyType& other) const
+        {
+            return x == other.x;
+        }
+        
+        int x;
+    };
+    
+    struct MyClass
+    {
+        MyClass()
+        {
+            bools[0] = true;
+            bools[1] = false;
+            
+            ints[0] = -10;
+            ints[1] = 10;
+            ints[2] = 100;
+            
+            strings.push_back("string 0");
+            strings.push_back("string 1");
+            strings.push_back("string 2");
+            strings.push_back("string 3");
+            
+            objects.push_back(MyType(0));
+            objects.push_back(MyType(1));
+            objects.push_back(MyType(2));
+            objects.push_back(MyType(3));
+            objects.push_back(MyType(4));
+        }
+        
+        bool bools[2];
+        std::array<int, 3> ints;
+        std::vector<std::string> strings;
+        std::list<MyType> objects;
+    };
+    
+    void declare()
+    {
+        ponder::Class::declare<MyType>("ArrayPropertyTest::MyType");
+        
+        ponder::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
+        .property("bools", &MyClass::bools)
+        .property("ints", &MyClass::ints)
+        .property("strings", &MyClass::strings)
+        .property("objects", &MyClass::objects);
+    }
+}
+
+PONDER_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare)
+PONDER_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare)
 
 using namespace ArrayPropertyTest;
 
