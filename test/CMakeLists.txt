@@ -39,23 +39,23 @@ project(PONDER_TEST)
 set(PONDER_TEST_SRCS
     catch.hpp
     arrayproperty.cpp
-    class.cpp
-    classvisitor.cpp
-    constructor.cpp
-    enum.cpp
-    enumobject.cpp
-    enumproperty.cpp
-    example_mainpage.cpp
-    functionaccess.cpp
-    inheritance.cpp
+    # class.cpp
+    # classvisitor.cpp
+    # constructor.cpp
+    # enum.cpp
+    # enumobject.cpp
+    # enumproperty.cpp
+    # example_mainpage.cpp
+    # functionaccess.cpp
+    # inheritance.cpp
     main.cpp
-    mapper.cpp
-    property.cpp
-    propertyaccess.cpp
-    tagholder.cpp
-    traits.cpp
-    userobject.cpp
-    value.cpp
+    # mapper.cpp
+    # property.cpp
+    # propertyaccess.cpp
+    # tagholder.cpp
+    # traits.cpp
+    # userobject.cpp
+    # value.cpp
 )
 
 # find Boost, for unit testing
