@@ -127,7 +127,7 @@ TEST_CASE("Classes need to be declared")
     {
         ponder::classByType<MyClass>(); // to make sure it is declared
     
-        // deplicate by type
+        // duplicate by type
         REQUIRE_THROWS_AS(ponder::Class::declare<MyClass>(), ponder::ClassAlreadyCreated);
         
         // duplicate by name
@@ -140,9 +140,9 @@ TEST_CASE("Classes need to be declared")
         const ponder::Class& class1 = ponder::classByType<MyClass>();
         const ponder::Class& class2 = ponder::classByType<MyClass2>();
         
-        REQUIRE(class1 == class1);
-        REQUIRE(class1 != class2);
-        REQUIRE(class2 != class1);
+        REQUIRE( (class1 == class1) );
+        REQUIRE( (class1 != class2) );
+        REQUIRE( (class2 != class1) );
     }    
 }
 
@@ -163,6 +163,7 @@ TEST_CASE("Class metadata can be retrieved")
     SECTION("by type")
     {
         REQUIRE(ponder::classByType<MyClass>().name() == "ClassTest::MyClass");
+        
         REQUIRE(ponder::classByTypeSafe<MyUndeclaredClass>() == static_cast<ponder::Class*>(0));    
         
         REQUIRE_THROWS_AS(ponder::classByType<MyUndeclaredClass>(),            
