@@ -41,8 +41,8 @@ set(PONDER_TEST_SRCS
     arrayproperty.cpp
     class.cpp
     classvisitor.cpp
-    # constructor.cpp
-    # enum.cpp
+    constructor.cpp
+    enum.cpp
     # enumobject.cpp
     # enumproperty.cpp
     # example_mainpage.cpp
