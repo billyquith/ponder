@@ -39,8 +39,8 @@ project(PONDER_TEST)
 set(PONDER_TEST_SRCS
     catch.hpp
     arrayproperty.cpp
-    # class.cpp
-    # classvisitor.cpp
+    class.cpp
+    classvisitor.cpp
     # constructor.cpp
     # enum.cpp
     # enumobject.cpp

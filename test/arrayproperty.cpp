@@ -138,7 +138,7 @@ TEST_CASE("Array property can be inspected")
     REQUIRE(strings != nullptr);
     REQUIRE(objects != nullptr);
 
-    SECTION("property array should be array type")
+    SECTION("should be array type")
     {
         REQUIRE(bools->type() == ponder::arrayType);
         REQUIRE(ints->type() == ponder::arrayType);
@@ -146,7 +146,7 @@ TEST_CASE("Array property can be inspected")
         REQUIRE(objects->type() == ponder::arrayType);
     }
     
-     SECTION("property arrays have a type")
+     SECTION("arrays have a type")
      {
          REQUIRE(bools->elementType() == ponder::boolType);
          REQUIRE(ints->elementType() == ponder::intType);
@@ -154,7 +154,7 @@ TEST_CASE("Array property can be inspected")
          REQUIRE(objects->elementType() == ponder::userType);
      }
      
-     SECTION("propety arrays can be dynamic")
+     SECTION("can be dynamic")
      {
          REQUIRE(bools->dynamic() == false);
          REQUIRE(ints->dynamic() == false);
@@ -162,7 +162,7 @@ TEST_CASE("Array property can be inspected")
          REQUIRE(objects->dynamic() == true);
      }
      
-    SECTION("property arrays have a size")
+    SECTION("have a size")
     {
 #ifndef _WIN32
         // TODO - Compilation fails on Windows.
@@ -174,7 +174,7 @@ TEST_CASE("Array property can be inspected")
     }
 }
 
-TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be read")
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be read")
 {
     REQUIRE(bools->get(object, 0) == ponder::Value(object.bools[0]));
     REQUIRE(bools->get(object, 1) == ponder::Value(object.bools[1]));
@@ -201,7 +201,7 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be read")
     //        REQUIRE_THROWS_AS(objects->get(object, 5), ponder::OutOfRange);
 }
 
-TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be written to")
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be written to")
 {
     bools->set(object, 1, true);
     ints->set(object, 1, 20);
@@ -219,7 +219,7 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be written to")
     REQUIRE_THROWS_AS(objects->set(object, 10, MyType(9)), ponder::OutOfRange);
 }
 
-TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be inserted into")
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be inserted into")
 {
     REQUIRE_THROWS_AS(bools->insert(object, 0, true), ponder::ForbiddenWrite);
     REQUIRE_THROWS_AS(ints->insert(object, 0, true),  ponder::ForbiddenWrite);
@@ -238,7 +238,7 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be inserted into")
 }
 
 
-TEST_CASE_METHOD(ArrayPropertyFixture, "property arrays can be removed from")
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be removed from")
 {
     REQUIRE_THROWS_AS(bools->remove(object, 0), ponder::ForbiddenWrite);
     REQUIRE_THROWS_AS(ints->remove(object, 0),  ponder::ForbiddenWrite);
