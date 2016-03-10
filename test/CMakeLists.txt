@@ -58,22 +58,26 @@ set(PONDER_TEST_SRCS
     value.cpp
 )
 
+# Ponder, which was CAMP, used to rely on Boost. This is here in case we need to
+# test against Boost, which is a useful reference. At some point in the future
+# this may be removed.
+#
 # find Boost, for unit testing
-find_package(Boost 1.38.0)
+# find_package(Boost 1.38.0)
 
 # include files search paths
 include_directories(
     ${PONDER_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIRS}
+    # ${Boost_INCLUDE_DIRS}
 )
+
+# no implicit link to boost.test library
+# add_definitions(-DBOOST_TEST_NO_LIB)
 
 # linker search paths
 link_directories(
     ${PONDER_BINARY_DIR}
 )
-
-# no implicit link to boost.test library
-add_definitions(-DBOOST_TEST_NO_LIB)
 
 # instruct CMake to build an executable from all of the source files
 add_executable(pondertest ${PONDER_TEST_SRCS})
