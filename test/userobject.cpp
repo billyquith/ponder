@@ -138,11 +138,11 @@ namespace UserObjectTest
             lastCalled = "meth3";
             sum += a0 + a1 + a2;
         }
-        //        void meth8(int a0,int a1, int a2, int a3, int a4, int a5, int a6, int a7)
-        //        {
-        //            lastCalled = "meth8";
-        //            sum += a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7;
-        //        }
+        void meth8(int a0,int a1, int a2, int a3, int a4, int a5, int a6, int a7)
+        {
+            lastCalled = "meth8";
+            sum += a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7;
+        }
         
         double cos(double rad)
         {
@@ -181,8 +181,8 @@ namespace UserObjectTest
             .function("meth2", &Call::meth2)
             .function("meth3", &Call::meth3)
             .function("cos", &Call::cos)
-            .function("concat", &Call::concat);
-            //            .function("meth8", &Call::meth8);
+            .function("concat", &Call::concat)
+            .function("meth8", &Call::meth8);
     }
 }
 
@@ -383,18 +383,17 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE(object.sum == 7+8-99);
     }
 
-    // TODO - variadic template:
-    //SECTION("callMultiArgs8")
-    //{
-    //    Call object;
-    //    ponder::UserObject userObject(object);
-    //    
-    //    REQUIRE_THROWS_AS(userObject.call("meth8"), std::exception);
-    //    
-    //    userObject.call("meth8", ponder::Args(7, 8, -99, 77, 12, 76, 45, 3));
-    //    REQUIRE(object.lastCalled, "meth8");
-    //    REQUIRE(object.sum, 7+8-99+77-12+76+45+3);
-    //}
+    SECTION("callMultiArgs8")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+        
+        REQUIRE_THROWS_AS(userObject.call("meth8"), std::exception);
+        
+        userObject.call("meth8", ponder::Args(7, 8, -99, 77, 12, 76, 45, 3));
+        REQUIRE(object.lastCalled == "meth8");
+        REQUIRE(object.sum == 7+8-99+77+12+76+45+3);
+    }
 
     SECTION("objects methods can return values")
     {
