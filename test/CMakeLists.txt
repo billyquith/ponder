@@ -43,19 +43,19 @@ set(PONDER_TEST_SRCS
     classvisitor.cpp
     constructor.cpp
     enum.cpp
-    # enumobject.cpp
-    # enumproperty.cpp
-    # example_mainpage.cpp
-    # functionaccess.cpp
-    # inheritance.cpp
+    enumobject.cpp
+    enumproperty.cpp
+    example_mainpage.cpp
+    functionaccess.cpp
+    inheritance.cpp
     main.cpp
-    # mapper.cpp
-    # property.cpp
-    # propertyaccess.cpp
-    # tagholder.cpp
-    # traits.cpp
-    # userobject.cpp
-    # value.cpp
+    mapper.cpp
+    property.cpp
+    propertyaccess.cpp
+    tagholder.cpp
+    traits.cpp
+    userobject.cpp
+    value.cpp
 )
 
 # find Boost, for unit testing

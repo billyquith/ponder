@@ -29,7 +29,7 @@
 
 #include <ponder/value.hpp>
 #include <ponder/qt/qt.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 #include <QString>
 
 // To make the boost.test logger happy

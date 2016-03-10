@@ -32,7 +32,7 @@
 #include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 #include <functional>
 
 namespace FunctionAccessTest
@@ -40,9 +40,8 @@ namespace FunctionAccessTest
     struct MyClass
     {
         MyClass(bool b = true)
-        : m_b(b)
-        {
-        }
+            : m_b(b)
+        {}
         
         void f() {}
         
@@ -55,17 +54,17 @@ namespace FunctionAccessTest
     {
         ponder::Class::declare<MyClass>("FunctionAccessTest::MyClass")
         
-        // ***** constant value *****
-        .function("f0", &MyClass::f).callable(false)
-        .function("f1", &MyClass::f).callable(true)
+            // ***** constant value *****
+            .function("f0", &MyClass::f).callable(false)
+            .function("f1", &MyClass::f).callable(true)
         
-        // ***** function *****
-        .function("f2", &MyClass::f).callable(&MyClass::b1)
-        .function("f3", &MyClass::f).callable(&MyClass::b2)
-        .function("f4", &MyClass::f).callable(std::bind(&MyClass::b1, std::placeholders::_1))
-        .function("f5", &MyClass::f).callable(&MyClass::m_b)
-        .function("f6", &MyClass::f).callable(std::function<bool (MyClass&)>(&MyClass::m_b))
-        ;
+            // ***** function *****
+            .function("f2", &MyClass::f).callable(&MyClass::b1)
+            .function("f3", &MyClass::f).callable(&MyClass::b2)
+            .function("f4", &MyClass::f).callable(std::bind(&MyClass::b1, std::placeholders::_1))
+            .function("f5", &MyClass::f).callable(&MyClass::m_b)
+            .function("f6", &MyClass::f).callable(std::function<bool (MyClass&)>(&MyClass::m_b))
+            ;
     }
 }
 
@@ -73,48 +72,44 @@ PONDER_AUTO_TYPE(FunctionAccessTest::MyClass, &FunctionAccessTest::declare);
 
 using namespace FunctionAccessTest;
 
-
-struct FunctionAccessFixture
-{
-    FunctionAccessFixture()
-        : object_t(true)
-        , object_f(false)
-    {
-        metaclass = &ponder::classByType<MyClass>();
-    }
-
-    MyClass object_t;
-    MyClass object_f;
-    const ponder::Class* metaclass;
-};
-
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::Function callable
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(FUNCTIONACCESS, FunctionAccessFixture)
 
-
-BOOST_AUTO_TEST_CASE(callableStatic)
+TEST_CASE("Functions can be inspected")
 {
-    BOOST_CHECK_EQUAL(metaclass->function("f0").callable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->function("f0").callable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->function("f1").callable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f1").callable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f2").callable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f2").callable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f3").callable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->function("f3").callable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->function("f4").callable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f4").callable(object_f), true);
+    MyClass object_t(true);
+    MyClass object_f(false);
+    
+    const ponder::Class* metaclass = &ponder::classByType<MyClass>();;
+    
+    SECTION("callable can be constant")
+    {
+        REQUIRE(metaclass->function("f0").callable(object_t) == false);
+        REQUIRE(metaclass->function("f0").callable(object_f) == false);
+        
+        REQUIRE(metaclass->function("f1").callable(object_t) == true);
+        REQUIRE(metaclass->function("f1").callable(object_f) == true);
+    }
+        
+    SECTION("callable can be dynamic, bound to function")
+    {
+        REQUIRE(metaclass->function("f2").callable(object_t) == true);
+        REQUIRE(metaclass->function("f2").callable(object_f) == true);
+        
+        REQUIRE(metaclass->function("f3").callable(object_t) == false);
+        REQUIRE(metaclass->function("f3").callable(object_f) == false);
+        
+        REQUIRE(metaclass->function("f4").callable(object_t) == true);
+        REQUIRE(metaclass->function("f4").callable(object_f) == true);
+    }    
+
+    SECTION("callable can be dynamic, bound to variable")
+    {
+        REQUIRE(metaclass->function("f5").callable(object_t) == true);
+        REQUIRE(metaclass->function("f5").callable(object_f) == false);
+        
+        REQUIRE(metaclass->function("f6").callable(object_t) == true);
+        REQUIRE(metaclass->function("f6").callable(object_f) == false);
+    }
 }
-
-
-BOOST_AUTO_TEST_CASE(callableDynamic)
-{
-    BOOST_CHECK_EQUAL(metaclass->function("f5").callable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f5").callable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->function("f6").callable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->function("f6").callable(object_f), false);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
