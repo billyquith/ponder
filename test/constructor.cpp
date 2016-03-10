@@ -32,7 +32,7 @@
 #include <ponder/class.hpp>
 #include <ponder/enum.hpp>
 #include <ponder/classbuilder.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 #include <string>
 
 namespace ConstructorTest
@@ -69,12 +69,23 @@ namespace ConstructorTest
     
     struct MyClass : MyBase1, MyBase2
     {
-        MyClass() : l(0), r(0.), s("0"), e(zero), u(0) {}
-        MyClass(long l_) : l(l_), r(1.), s("1"), e(one), u(1) {}
-        MyClass(long l_, double r_) : l(l_), r(r_), s("2"), e(two), u(2) {}
-        MyClass(long l_, double r_, std::string s_) : l(l_), r(r_), s(s_), e(three), u(3) {}
-        MyClass(long l_, double r_, std::string s_, MyEnum e_) : l(l_), r(r_), s(s_), e(e_), u(4) {}
-        MyClass(long l_, double r_, std::string s_, MyEnum e_, MyType t_) : l(l_), r(r_), s(s_), e(e_), u(t_) {}
+        MyClass()
+            : l(0), r(0.), s("0"), e(zero), u(0) {}
+            
+        MyClass(long l_)
+            : l(l_), r(1.), s("1"), e(one), u(1) {}
+        
+        MyClass(long l_, double r_)
+            : l(l_), r(r_), s("2"), e(two), u(2) {}
+        
+        MyClass(long l_, double r_, std::string s_)
+            : l(l_), r(r_), s(s_), e(three), u(3) {}
+        
+        MyClass(long l_, double r_, std::string s_, MyEnum e_)
+            : l(l_), r(r_), s(s_), e(e_), u(4) {}
+        
+        MyClass(long l_, double r_, std::string s_, MyEnum e_, MyType t_)
+            : l(l_), r(r_), s(s_), e(e_), u(t_) {}
         
         long l;
         double r;
@@ -86,12 +97,12 @@ namespace ConstructorTest
     void declare()
     {
         ponder::Enum::declare<MyEnum>("ConstructorTest::MyEnum")
-        .value("zero",  zero)
-        .value("one",   one)
-        .value("two",   two)
-        .value("three", three)
-        .value("four",  four)
-        .value("five",  five);
+            .value("zero",  zero)
+            .value("one",   one)
+            .value("two",   two)
+            .value("three", three)
+            .value("four",  four)
+            .value("five",  five);
         
         ponder::Class::declare<MyType>("ConstructorTest::MyType");
         
@@ -99,16 +110,15 @@ namespace ConstructorTest
         ponder::Class::declare<MyBase2>("ConstructorTest::MyBase2");
         
         ponder::Class::declare<MyClass>("ConstructorTest::MyClass")
-        .base<MyBase1>()
-        .base<MyBase2>()
-        .constructor()
-        .constructor<long>()
-        .constructor<long, double>()
-        .constructor<long, double, std::string>()
-        .constructor<long, double, std::string, MyEnum>()
-        
-        // trying types that don't exactly match those declared
-        .constructor<unsigned short, float, std::string, MyEnum, int>();
+            .base<MyBase1>()
+            .base<MyBase2>()
+            .constructor()
+            .constructor<long>()
+            .constructor<long, double>()
+            .constructor<long, double, std::string>()
+            .constructor<long, double, std::string, MyEnum>()        
+            // trying types that don't exactly match those declared
+            .constructor<unsigned short, float, std::string, MyEnum, int>();
     }
 }
 
@@ -135,123 +145,122 @@ struct ConstructorFixture
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::Constructor
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(CONSTRUCTOR, ConstructorFixture)
 
-
-BOOST_AUTO_TEST_CASE(invalidConstructions)
+TEST_CASE("Classes can have constructors")
 {
-    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args("hello")),         ponder::UserObject::nothing);
-    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(MyType(10))),      ponder::UserObject::nothing);
-    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(two, MyType(10))), ponder::UserObject::nothing);
-    BOOST_CHECK_EQUAL(metaclass->construct(ponder::Args(5., "hello")),     ponder::UserObject::nothing);
+    const ponder::Class* metaclass = &ponder::classByType<MyClass>();
+    
+    REQUIRE(metaclass != nullptr);
+
+    SECTION("with no arguments")
+    {
+        ponder::UserObject object = metaclass->construct();
+
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 0);
+        REQUIRE(instance->r == Approx(0.).epsilon(1E-5));
+        REQUIRE(instance->s == "0");
+        REQUIRE(instance->e == zero);
+        REQUIRE(instance->u.x == 0);
+
+        metaclass->destroy(object);
+    }
+
+    SECTION("with one argument")
+    {
+        ponder::UserObject object = metaclass->construct(ponder::Args(1)).get<MyClass*>();
+
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 1);
+        REQUIRE(instance->r == Approx(1.).epsilon(1E-5));
+        REQUIRE(instance->s == "1");
+        REQUIRE(instance->e == one);
+        REQUIRE(instance->u.x == 1);
+
+        metaclass->destroy(object);
+    }
+
+    SECTION("with two arguments")
+    {
+        ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
+
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 2);
+        REQUIRE(instance->r == Approx(2.).epsilon(1E-5));
+        REQUIRE(instance->s == "2");
+        REQUIRE(instance->e == two);
+        REQUIRE(instance->u.x == 2);
+
+        metaclass->destroy(object);
+    }
+
+
+    SECTION("with three arguments")
+    {
+        ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
+
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 3);
+        REQUIRE(instance->r == Approx(3.).epsilon(1E-5));
+        REQUIRE(instance->s == "3");
+        REQUIRE(instance->e == three);
+        REQUIRE(instance->u.x == 3);
+
+        metaclass->destroy(object);
+    }
+
+    SECTION("with four arguments")
+    {
+        ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
+
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 4);
+        REQUIRE(instance->r == Approx(4.).epsilon(1E-5));
+        REQUIRE(instance->s == "4");
+        REQUIRE(instance->e == four);
+        REQUIRE(instance->u.x == 4);
+
+        metaclass->destroy(object);
+    }
+
+    SECTION("with five arguments")
+    {
+        ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
+
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 5);
+        REQUIRE(instance->r == Approx(5.).epsilon(1E-5));
+        REQUIRE(instance->s == "5");
+        REQUIRE(instance->e == five);
+        REQUIRE(instance->u.x == 5);
+
+        metaclass->destroy(object);
+    }
+
+    SECTION("with invalid arguments")
+    {
+        REQUIRE(( metaclass->construct(ponder::Args("hello")) == ponder::UserObject::nothing ));
+        REQUIRE(( metaclass->construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing ));
+        REQUIRE(( metaclass->construct(ponder::Args(two, MyType(10))) == ponder::UserObject::nothing ));
+        REQUIRE(( metaclass->construct(ponder::Args(5., "hello")) == ponder::UserObject::nothing ));
+    }    
 }
 
-
-BOOST_AUTO_TEST_CASE(zeroArg)
-{
-    ponder::UserObject object = metaclass->construct();
-
-    BOOST_CHECK(object != ponder::UserObject::nothing);
-
-    MyClass* instance = object.get<MyClass*>();
-
-    BOOST_CHECK_EQUAL(instance->l, 0);
-    BOOST_CHECK_CLOSE(instance->r, 0., 1E-5);
-    BOOST_CHECK_EQUAL(instance->s, "0");
-    BOOST_CHECK_EQUAL(instance->e, zero);
-    BOOST_CHECK_EQUAL(instance->u.x, 0);
-
-    metaclass->destroy(object);
-}
-
-
-BOOST_AUTO_TEST_CASE(oneArg)
-{
-    ponder::UserObject object = metaclass->construct(ponder::Args(1)).get<MyClass*>();
-
-    BOOST_CHECK(object != ponder::UserObject::nothing);
-
-    MyClass* instance = object.get<MyClass*>();
-
-    BOOST_CHECK_EQUAL(instance->l, 1);
-    BOOST_CHECK_CLOSE(instance->r, 1., 1E-5);
-    BOOST_CHECK_EQUAL(instance->s, "1");
-    BOOST_CHECK_EQUAL(instance->e, one);
-    BOOST_CHECK_EQUAL(instance->u.x, 1);
-
-    metaclass->destroy(object);
-}
-
-
-BOOST_AUTO_TEST_CASE(twoArgs)
-{
-    ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
-
-    BOOST_CHECK(object != ponder::UserObject::nothing);
-
-    MyClass* instance = object.get<MyClass*>();
-
-    BOOST_CHECK_EQUAL(instance->l, 2);
-    BOOST_CHECK_CLOSE(instance->r, 2., 1E-5);
-    BOOST_CHECK_EQUAL(instance->s, "2");
-    BOOST_CHECK_EQUAL(instance->e, two);
-    BOOST_CHECK_EQUAL(instance->u.x, 2);
-
-    metaclass->destroy(object);
-}
-
-
-BOOST_AUTO_TEST_CASE(threeArgs)
-{
-    ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
-
-    BOOST_CHECK(object != ponder::UserObject::nothing);
-
-    MyClass* instance = object.get<MyClass*>();
-
-    BOOST_CHECK_EQUAL(instance->l, 3);
-    BOOST_CHECK_CLOSE(instance->r, 3., 1E-5);
-    BOOST_CHECK_EQUAL(instance->s, "3");
-    BOOST_CHECK_EQUAL(instance->e, three);
-    BOOST_CHECK_EQUAL(instance->u.x, 3);
-
-    metaclass->destroy(object);
-}
-
-
-BOOST_AUTO_TEST_CASE(fourArgs)
-{
-    ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
-
-    BOOST_CHECK(object != ponder::UserObject::nothing);
-
-    MyClass* instance = object.get<MyClass*>();
-
-    BOOST_CHECK_EQUAL(instance->l, 4);
-    BOOST_CHECK_CLOSE(instance->r, 4., 1E-5);
-    BOOST_CHECK_EQUAL(instance->s, "4");
-    BOOST_CHECK_EQUAL(instance->e, four);
-    BOOST_CHECK_EQUAL(instance->u.x, 4);
-
-    metaclass->destroy(object);
-}
-
-
-BOOST_AUTO_TEST_CASE(fiveArgs)
-{
-    ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
-
-    BOOST_CHECK(object != ponder::UserObject::nothing);
-
-    MyClass* instance = object.get<MyClass*>();
-
-    BOOST_CHECK_EQUAL(instance->l, 5);
-    BOOST_CHECK_CLOSE(instance->r, 5., 1E-5);
-    BOOST_CHECK_EQUAL(instance->s, "5");
-    BOOST_CHECK_EQUAL(instance->e, five);
-    BOOST_CHECK_EQUAL(instance->u.x, 5);
-
-    metaclass->destroy(object);
-}
-
-BOOST_AUTO_TEST_SUITE_END()

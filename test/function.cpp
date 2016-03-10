@@ -32,7 +32,7 @@
 #include <ponder/enumget.hpp>
 #include <ponder/function.hpp>
 #include <ponder/errors.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 using namespace FunctionTest;
 

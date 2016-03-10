@@ -32,7 +32,7 @@
 #include <ponder/enumobject.hpp>
 #include <ponder/pondertype.hpp>
 #include <ponder/enum.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 namespace EnumObjectTest
 {
@@ -63,19 +63,19 @@ namespace EnumObjectTest
     void declare()
     {
         ponder::Enum::declare<MyEnum>("EnumObjectTest::MyEnum")
-        .value("Zero", Zero)
-        .value("One",  One)
-        .value("Two",  Two);
+            .value("Zero", Zero)
+            .value("One",  One)
+            .value("Two",  Two);
         
         ponder::Enum::declare<MyEnum2>("EnumObjectTest::MyEnum2")
-        .value("Zero", Zero2)
-        .value("One",  One2)
-        .value("Two",  Two2);
+            .value("Zero", Zero2)
+            .value("One",  One2)
+            .value("Two",  Two2);
         
         ponder::Enum::declare<MyEnumClass>("EnumObjectTest::MyEnumClass")
-        .value("Red",   MyEnumClass::Red)
-        .value("Green", MyEnumClass::Green)
-        .value("Blue",  MyEnumClass::Blue);
+            .value("Red",   MyEnumClass::Red)
+            .value("Green", MyEnumClass::Green)
+            .value("Blue",  MyEnumClass::Blue);
     }
 }
 
@@ -86,93 +86,84 @@ PONDER_AUTO_TYPE(EnumObjectTest::MyEnumClass, &EnumObjectTest::declare)
 
 using namespace EnumObjectTest;
 
-struct EnumObjectFixture
-{
-    EnumObjectFixture()
-        : zero(Zero)
-        , one(One)
-        , two(Two)
-    {
-    }
-
-    ponder::EnumObject zero;
-    ponder::EnumObject one;
-    ponder::EnumObject two;
-};
-
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::EnumObject
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(ENUMOBJECT, EnumObjectFixture)
 
-
-BOOST_AUTO_TEST_CASE(error)
+TEST_CASE("Enum objects")
 {
-    // The meta-enum of MyUndeclaredEnum is *not* declared
+    ponder::EnumObject zero(Zero);
+    ponder::EnumObject one(One);
+    ponder::EnumObject two(Two);
 
-    BOOST_CHECK_THROW(ponder::EnumObject obj(Undeclared), ponder::EnumNotFound);
+    SECTION("has names")
+    {
+        REQUIRE(zero.name() == "Zero");
+        REQUIRE(one.name() == "One");
+        REQUIRE(two.name() == "Two");
+    }
+
+    SECTION("has values")
+    {
+        REQUIRE(zero.value() == Zero);
+        REQUIRE(one.value() == One);
+        REQUIRE(two.value() == Two);
+    }
+    
+    SECTION("wrap an Enum type")
+    {
+        REQUIRE(zero.getEnum() == ponder::enumByType<MyEnum>());
+        REQUIRE(one.getEnum()  == ponder::enumByType<MyEnum>());
+        REQUIRE(two.getEnum()  == ponder::enumByType<MyEnum>());
+    }
+    
+    SECTION("can be compared ==")
+    {
+        ponder::EnumObject zero2(Zero2);
+        ponder::EnumObject one2(One2);
+        ponder::EnumObject two2(Two2);
+
+        REQUIRE(zero == ponder::EnumObject(Zero));
+        REQUIRE(one  == ponder::EnumObject(One));
+        REQUIRE(two  == ponder::EnumObject(Two));
+
+        REQUIRE((zero == one) == false);
+        REQUIRE((one  == two) == false);
+        REQUIRE((two  == zero) == false);
+
+        REQUIRE((zero == zero2) == false); // same value and name, different metaenum
+        REQUIRE((one  == one2) == false);
+        REQUIRE((two  == two2) == false);
+    }
+    
+    SECTION("can be compared <")
+    {
+        REQUIRE((zero < zero) == false);
+        REQUIRE(zero < one);
+        REQUIRE(zero < two);
+
+        REQUIRE((one < zero) == false);
+        REQUIRE((one < one) == false);
+        REQUIRE(one < two);
+
+        REQUIRE((two < zero) == false);
+        REQUIRE((two < one) == false);
+        REQUIRE((two < two) == false);
+    }
+    
+    SECTION("must be declared")
+    {
+        // The meta-enum of MyUndeclaredEnum is *not* declared
+        REQUIRE_THROWS_AS(ponder::EnumObject obj(Undeclared), ponder::EnumNotFound);
+    }    
 }
+    
 
 
-BOOST_AUTO_TEST_CASE(value)
-{
-    BOOST_CHECK_EQUAL(zero.value(), Zero);
-    BOOST_CHECK_EQUAL(one.value(),  One);
-    BOOST_CHECK_EQUAL(two.value(),  Two);
-}
 
 
-BOOST_AUTO_TEST_CASE(name)
-{
-    BOOST_CHECK_EQUAL(zero.name(), "Zero");
-    BOOST_CHECK_EQUAL(one.name(),  "One");
-    BOOST_CHECK_EQUAL(two.name(),  "Two");
-}
 
 
-BOOST_AUTO_TEST_CASE(getEnum)
-{
-    BOOST_CHECK(zero.getEnum() == ponder::enumByType<MyEnum>());
-    BOOST_CHECK(one.getEnum()  == ponder::enumByType<MyEnum>());
-    BOOST_CHECK(two.getEnum()  == ponder::enumByType<MyEnum>());
-}
 
 
-BOOST_AUTO_TEST_CASE(equal)
-{
-    // Setup
-    ponder::EnumObject zero2(Zero2);
-    ponder::EnumObject one2(One2);
-    ponder::EnumObject two2(Two2);
 
-    // Tests
-    BOOST_CHECK_EQUAL(zero == ponder::EnumObject(Zero), true);
-    BOOST_CHECK_EQUAL(one  == ponder::EnumObject(One),  true);
-    BOOST_CHECK_EQUAL(two  == ponder::EnumObject(Two),  true);
-
-    BOOST_CHECK_EQUAL(zero == one,  false);
-    BOOST_CHECK_EQUAL(one  == two,  false);
-    BOOST_CHECK_EQUAL(two  == zero, false);
-
-    BOOST_CHECK_EQUAL(zero == zero2, false); // same value and name, different metaenum
-    BOOST_CHECK_EQUAL(one  == one2,  false);
-    BOOST_CHECK_EQUAL(two  == two2,  false);
-}
-
-
-BOOST_AUTO_TEST_CASE(lessThan)
-{
-    BOOST_CHECK_EQUAL(zero < zero, false);
-    BOOST_CHECK_EQUAL(zero < one,  true);
-    BOOST_CHECK_EQUAL(zero < two,  true);
-
-    BOOST_CHECK_EQUAL(one < zero, false);
-    BOOST_CHECK_EQUAL(one < one,  false);
-    BOOST_CHECK_EQUAL(one < two,  true);
-
-    BOOST_CHECK_EQUAL(two < zero, false);
-    BOOST_CHECK_EQUAL(two < one,  false);
-    BOOST_CHECK_EQUAL(two < two,  false);
-}
-
-BOOST_AUTO_TEST_SUITE_END()

@@ -27,12 +27,12 @@
  **
  ****************************************************************************/
 
+#include "catch.hpp"
 #include <ponder/pondertype.hpp>
 #include <ponder/classbuilder.hpp>
 #include <string>
 #include <iostream>
 
-#include <boost/test/unit_test.hpp>
 
 // Let's define a class for handling persons
 class Person
@@ -60,7 +60,8 @@ public:
     // Make a person speak (tell about its name and age)
     void speak()
     {
-        //std::cout << "Hi! My name is " << m_name << " and I'm " << m_age << " years old." << std::endl;
+        //std::cout << "Hi! My name is " << m_name << " and I'm " << m_age << " years old."
+        //          << std::endl;
         m_spoke = true;
     }
     bool spoke() const
@@ -76,17 +77,16 @@ private:
 // Make the Person type available to Ponder
 PONDER_TYPE(Person)
 
-BOOST_AUTO_TEST_SUITE(EXAMPLE)
 
-BOOST_AUTO_TEST_CASE(mainpage)
+TEST_CASE("Documentation examples: main page")
 {
     // Bind our Person class to Ponder
     ponder::Class::declare<Person>("Person")
-    .constructor<std::string>()
-    .property("name", &Person::name)
-    .property("age", &Person::age, &Person::setAge)
-    .function("speak", &Person::speak)
-    ;
+        .constructor<std::string>()
+        .property("name", &Person::name)
+        .property("age", &Person::age, &Person::setAge)
+        .function("speak", &Person::speak)
+        ;
     
     // Retrieve the metaclass by its name
     const ponder::Class& metaclass = ponder::classByName("Person");
@@ -96,17 +96,16 @@ BOOST_AUTO_TEST_CASE(mainpage)
     
     // Print its name
     //std::cout << "John's name is: " << john.get("name") << std::endl;
-    BOOST_CHECK(john.get("name") == std::string("John"));
+    REQUIRE(john.get("name") == std::string("John"));
     
     // Set its age to 24
     john.set("age", 24);
     
     // Make John say something
     john.call("speak");
-    BOOST_CHECK_EQUAL(john.get<Person>().spoke(), true);
+    REQUIRE(john.get<Person>().spoke() == true);
     
     // Kill John
     metaclass.destroy(john);
 }
 
-BOOST_AUTO_TEST_SUITE_END()

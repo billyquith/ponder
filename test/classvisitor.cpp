@@ -38,7 +38,7 @@
 #include <ponder/userproperty.hpp>
 #include <ponder/function.hpp>
 #include <ponder/classbuilder.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 namespace ClassVisitorTest
 {
@@ -52,8 +52,7 @@ namespace ClassVisitorTest
         , enumVisited(false)
         , userVisited(false)
         , functionVisited(false)
-        {
-        }
+        {}
         
         virtual void visit(const ponder::SimpleProperty& property) override
         {
@@ -111,11 +110,11 @@ namespace ClassVisitorTest
         ponder::Class::declare<MyType>("ClassVisitorTest::MyType");
         
         ponder::Class::declare<MyClass>("ClassVisitorTest::MyClass")
-        .property("simple", &MyClass::simpleProp)
-        .property("array", &MyClass::arrayProp)
-        .property("enum", &MyClass::enumProp)
-        .property("user", &MyClass::userProp)
-        .function("function", &MyClass::function);
+            .property("simple", &MyClass::simpleProp)
+            .property("array", &MyClass::arrayProp)
+            .property("enum", &MyClass::enumProp)
+            .property("user", &MyClass::userProp)
+            .function("function", &MyClass::function);
     }
 }
 
@@ -128,19 +127,16 @@ using namespace ClassVisitorTest;
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::ClassVisitor
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_SUITE(CLASSVISITOR)
 
-
-BOOST_AUTO_TEST_CASE(visit)
+TEST_CASE("Classes can have visitors")
 {
     MyClassVisitor visitor;
     ponder::classByType<MyClass>().visit(visitor);
 
-    BOOST_CHECK(visitor.simpleVisited);
-    BOOST_CHECK(visitor.arrayVisited);
-    BOOST_CHECK(visitor.enumVisited);
-    BOOST_CHECK(visitor.userVisited);
-    BOOST_CHECK(visitor.functionVisited);
+    REQUIRE(visitor.simpleVisited);
+    REQUIRE(visitor.arrayVisited);
+    REQUIRE(visitor.enumVisited);
+    REQUIRE(visitor.userVisited);
+    REQUIRE(visitor.functionVisited);
 }
 
-BOOST_AUTO_TEST_SUITE_END()

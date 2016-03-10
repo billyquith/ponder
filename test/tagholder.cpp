@@ -31,7 +31,7 @@
 #include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 #include <string>
 
 namespace TagHolderTest
@@ -65,28 +65,28 @@ namespace TagHolderTest
         ponder::Class::declare<MyType>("TagHolderTest::MyType");
         
         ponder::Class::declare<MyClass>("TagHolderTest::MyClass")
-        .tag("a")
-        .tag("b", 0)
-        .tag(true)
-        .tag(10)
-        .tag(5.25)
-        .tag("hello")
-        .tag(Ten)
-        .tag(object1)
-        .tag("static1", true)
-        .tag("static2", 10)
-        .tag("static3", 5.25)
-        .tag("static4", "hello")
-        .tag("static5", Ten)
-        .tag("static6", object1)
-        .tag("dynamic1", &MyClass::prop)
-        .tag("dynamic2", &MyClass::func)
-        .property("prop", &MyClass::prop)
-        .tag("a")
-        .tag("b", 0)
-        .function("func", &MyClass::func)
-        .tag("a")
-        .tag("b", 0);
+            .tag("a")
+            .tag("b", 0)
+            .tag(true)
+            .tag(10)
+            .tag(5.25)
+            .tag("hello")
+            .tag(Ten)
+            .tag(object1)
+            .tag("static1", true)
+            .tag("static2", 10)
+            .tag("static3", 5.25)
+            .tag("static4", "hello")
+            .tag("static5", Ten)
+            .tag("static6", object1)
+            .tag("dynamic1", &MyClass::prop)
+            .tag("dynamic2", &MyClass::func)
+            .property("prop", &MyClass::prop)
+            .tag("a")
+            .tag("b", 0)
+            .function("func", &MyClass::func)
+            .tag("a")
+            .tag("b", 0);
     }
 }
 
@@ -96,73 +96,58 @@ PONDER_AUTO_TYPE(TagHolderTest::MyEnum,  &TagHolderTest::declare)
 
 using namespace TagHolderTest;
 
-
-struct TagHolderFixture
-{
-    TagHolderFixture()
-    {
-        metaclass = &ponder::classByType<MyClass>();
-    }
-
-    const ponder::Class* metaclass;
-};
-
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::TagHolder
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(TAGHOLDER, TagHolderFixture)
 
-
-BOOST_AUTO_TEST_CASE(declare)
+TEST_CASE("Objects can be assigned tags")
 {
-    BOOST_CHECK_EQUAL(metaclass->tagCount(), 16);
-    BOOST_CHECK_EQUAL(metaclass->property("prop").tagCount(), 2);
-    BOOST_CHECK_EQUAL(metaclass->function("func").tagCount(), 2);
+    const ponder::Class* metaclass = &ponder::classByType<MyClass>();
+    
+    REQUIRE(metaclass->tagCount() == 16);
+    REQUIRE(metaclass->property("prop").tagCount() == 2);
+    REQUIRE(metaclass->function("func").tagCount() == 2);
+
+    SECTION("can check tags attached")
+    {
+        REQUIRE(metaclass->hasTag("a") == true);
+        REQUIRE(metaclass->hasTag("b") == true);
+        REQUIRE(metaclass->hasTag("x") == false);
+    }
+
+    SECTION("can have values")
+    {
+        REQUIRE(metaclass->hasTag(true) ==      true);
+        REQUIRE(metaclass->hasTag(10) ==        true);
+        REQUIRE(metaclass->hasTag(5.25) ==      true);
+        REQUIRE(metaclass->hasTag("hello") ==   true);
+        REQUIRE(metaclass->hasTag(Ten) ==       true);
+        REQUIRE(metaclass->hasTag(object1) ==   true);
+
+        REQUIRE(metaclass->hasTag(false) ==     false);
+        REQUIRE(metaclass->hasTag(20) ==        false);
+        REQUIRE(metaclass->hasTag(8.78) ==      false);
+        REQUIRE(metaclass->hasTag("hi") ==      false);
+        REQUIRE(metaclass->hasTag(One) ==       false);
+        REQUIRE(metaclass->hasTag(object2) ==   false);
+    }
+
+    SECTION("can have named values")
+    {
+        REQUIRE(metaclass->tag("static1") == ponder::Value(true));
+        REQUIRE(metaclass->tag("static2") == ponder::Value(10));
+        REQUIRE(metaclass->tag("static3") == ponder::Value(5.25));
+        REQUIRE(metaclass->tag("static4") == ponder::Value("hello"));
+        REQUIRE(( metaclass->tag("static5") == ponder::Value(Ten) ));
+        REQUIRE(( metaclass->tag("static6") == ponder::Value(object1) ));
+        REQUIRE(( metaclass->tag("xxxxxxx") == ponder::Value::nothing ));
+    }
+
+    SECTION("can have dynamic values")
+    {
+        REQUIRE(metaclass->tag("dynamic1", MyClass(10)) == ponder::Value(10));
+        REQUIRE(metaclass->tag("dynamic2", MyClass(10)) == ponder::Value("func"));
+    }    
 }
 
 
-BOOST_AUTO_TEST_CASE(get)
-{
-    BOOST_CHECK_EQUAL(metaclass->hasTag("a"), true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag("b"), true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag("x"), false);
-}
-
-
-BOOST_AUTO_TEST_CASE(staticTags)
-{
-    BOOST_CHECK_EQUAL(metaclass->hasTag(true),    true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(10),      true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(5.25),    true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag("hello"), true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(Ten),     true);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(object1), true);
-
-    BOOST_CHECK_EQUAL(metaclass->hasTag(false),   false);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(20),      false);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(8.78),    false);
-    BOOST_CHECK_EQUAL(metaclass->hasTag("hi"),    false);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(One),     false);
-    BOOST_CHECK_EQUAL(metaclass->hasTag(object2), false);
-}
-
-
-BOOST_AUTO_TEST_CASE(staticValues)
-{
-    BOOST_CHECK_EQUAL(metaclass->tag("static1"), ponder::Value(true));
-    BOOST_CHECK_EQUAL(metaclass->tag("static2"), ponder::Value(10));
-    BOOST_CHECK_EQUAL(metaclass->tag("static3"), ponder::Value(5.25));
-    BOOST_CHECK_EQUAL(metaclass->tag("static4"), ponder::Value("hello"));
-    BOOST_CHECK_EQUAL(metaclass->tag("static5"), ponder::Value(Ten));
-    BOOST_CHECK_EQUAL(metaclass->tag("static6"), ponder::Value(object1));
-    BOOST_CHECK_EQUAL(metaclass->tag("xxxxxxx"), ponder::Value::nothing);
-}
-
-
-BOOST_AUTO_TEST_CASE(dynamicValues)
-{
-    BOOST_CHECK_EQUAL(metaclass->tag("dynamic1", MyClass(10)), ponder::Value(10));
-    BOOST_CHECK_EQUAL(metaclass->tag("dynamic2", MyClass(10)), ponder::Value("func"));
-}
-
-BOOST_AUTO_TEST_SUITE_END()

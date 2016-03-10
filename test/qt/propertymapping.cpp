@@ -30,7 +30,7 @@
 #include "propertymapping.hpp"
 #include <ponder/class.hpp>
 #include <ponder/classget.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 using namespace PropertyMappingTest;
 
