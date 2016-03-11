@@ -37,14 +37,13 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
+    
 EnumManager& EnumManager::instance()
 {
     static EnumManager manager;
     return manager;
 }
 
-//-------------------------------------------------------------------------------------------------
 Enum& EnumManager::addClass(const std::string& id)
 {
     // First make sure that the enum doesn't already exist
@@ -66,13 +65,11 @@ Enum& EnumManager::addClass(const std::string& id)
     return *newEnum;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t EnumManager::count() const
 {
     return m_enums.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 const Enum& EnumManager::getByIndex(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -85,7 +82,6 @@ const Enum& EnumManager::getByIndex(std::size_t index) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 const Enum& EnumManager::getById(const std::string& id) const
 {
     EnumTable::const_iterator it = m_enums.find(id);
@@ -95,25 +91,21 @@ const Enum& EnumManager::getById(const std::string& id) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 const Enum* EnumManager::getByIdSafe(const std::string& id) const
 {
     EnumTable::const_iterator it = m_enums.find(id);
     return it == m_enums.end() ? nullptr : it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool EnumManager::enumExists(const std::string& id) const
 {
     return m_enums.find(id) != m_enums.end();
 }
 
-//-------------------------------------------------------------------------------------------------
 EnumManager::EnumManager()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 EnumManager::~EnumManager()
 {
     // Notify observers

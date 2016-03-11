@@ -35,30 +35,26 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 Function::~Function()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 const std::string& Function::name() const
 {
     return m_name;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t Function::argCount() const
 {
     return m_argTypes.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 Type Function::returnType() const
 {
     return m_returnType;
 }
 
-//-------------------------------------------------------------------------------------------------
 Type Function::argType(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -68,13 +64,11 @@ Type Function::argType(std::size_t index) const
     return m_argTypes[index];
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Function::callable(const UserObject& object) const
 {
     return m_callable.get(object);
 }
 
-//-------------------------------------------------------------------------------------------------
 Value Function::call(const UserObject& object, const Args& args) const
 {
     // Check if the function is callable
@@ -89,13 +83,11 @@ Value Function::call(const UserObject& object, const Args& args) const
     return execute(object, args);
 }
 
-//-------------------------------------------------------------------------------------------------
 void Function::accept(ClassVisitor& visitor) const
 {
     visitor.visit(*this);
 }
 
-//-------------------------------------------------------------------------------------------------
 Function::Function(const std::string& name, Type returnType, const std::vector<Type>& argTypes)
     : m_name(name)
     , m_returnType(returnType)

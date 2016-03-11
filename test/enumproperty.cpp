@@ -70,9 +70,7 @@ PONDER_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
 using namespace EnumPropertyTest;
 
 
-//-----------------------------------------------------------------------------
 //                         Tests for ponder::EnumProperty
-//-----------------------------------------------------------------------------
 
 TEST_CASE("Enum properties")
 {

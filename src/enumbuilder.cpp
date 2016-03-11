@@ -34,13 +34,12 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 EnumBuilder::EnumBuilder(Enum& target)
     : m_target(&target)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 EnumBuilder& EnumBuilder::value(const std::string& name, Enum::EnumValue value)
 {
     assert(!m_target->hasName(name));

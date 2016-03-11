@@ -83,9 +83,7 @@ PONDER_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
 
 using namespace PropertyAccessTest;
 
-//-----------------------------------------------------------------------------
 //                  Tests for ponder::Property readable/writable
-//-----------------------------------------------------------------------------
 
 TEST_CASE("Properties can be accessed")
 {

@@ -32,39 +32,33 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
 inline std::size_t enumCount()
 {
     return detail::EnumManager::instance().count();
 }
 
-//-------------------------------------------------------------------------------------------------
 inline const Enum& enumByIndex(std::size_t index)
 {
     return detail::EnumManager::instance().getByIndex(index);
 }
 
-//-------------------------------------------------------------------------------------------------
 inline const Enum& enumByName(const std::string& name)
 {
     return detail::EnumManager::instance().getById(name);
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const Enum& enumByObject(T)
 {
     return detail::EnumManager::instance().getById(detail::typeId<T>());
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const Enum& enumByType()
 {
     return detail::EnumManager::instance().getById(detail::typeId<T>());
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const Enum* enumByTypeSafe()
 {

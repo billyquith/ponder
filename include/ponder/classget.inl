@@ -32,39 +32,33 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
 inline std::size_t classCount()
 {
     return detail::ClassManager::instance().count();
 }
 
-//-------------------------------------------------------------------------------------------------
 inline const Class& classByIndex(std::size_t index)
 {
     return detail::ClassManager::instance().getByIndex(index);
 }
 
-//-------------------------------------------------------------------------------------------------
 inline const Class& classByName(const std::string& name)
 {
     return detail::ClassManager::instance().getById(name);
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const Class& classByObject(const T& object)
 {
     return detail::ClassManager::instance().getById(detail::typeId(object));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const Class& classByType()
 {
     return detail::ClassManager::instance().getById(detail::typeId<T>());
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const Class* classByTypeSafe()
 {

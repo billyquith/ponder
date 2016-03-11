@@ -50,7 +50,6 @@ struct ValueTo<Value>
 
 } // namespace detail
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 Value::Value(const T& val)
     : m_value(ponder_ext::ValueMapper<T>::to(val))
@@ -58,7 +57,6 @@ Value::Value(const T& val)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 T Value::to() const
 {
@@ -72,14 +70,12 @@ T Value::to() const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 Value::operator T() const
 {
     return to<T>();
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 bool Value::isCompatible() const
 {
@@ -94,14 +90,12 @@ bool Value::isCompatible() const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 typename T::result_type Value::visit(T visitor) const
 {
     return mapbox::util::apply_visitor(visitor, m_value);
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 typename T::result_type Value::visit(T visitor, const Value& other) const
 {

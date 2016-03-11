@@ -72,9 +72,7 @@ PONDER_AUTO_TYPE(FunctionAccessTest::MyClass, &FunctionAccessTest::declare);
 
 using namespace FunctionAccessTest;
 
-//-----------------------------------------------------------------------------
 //                         Tests for ponder::Function callable
-//-----------------------------------------------------------------------------
 
 TEST_CASE("Functions can be inspected")
 {

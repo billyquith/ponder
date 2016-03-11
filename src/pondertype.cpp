@@ -38,7 +38,7 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
+    
 void ensureTypeRegistered(const char* id, void (*registerFunc)())
 {
     if (registerFunc

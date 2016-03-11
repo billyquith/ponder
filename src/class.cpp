@@ -34,19 +34,17 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 const std::string& Class::name() const
 {
     return m_id;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t Class::baseCount() const
 {
     return m_bases.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 const Class& Class::base(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -56,19 +54,16 @@ const Class& Class::base(std::size_t index) const
     return *m_bases[index].base;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t Class::functionCount() const
 {
     return m_functions.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Class::hasFunction(const std::string& id) const
 {
     return m_functions.containsKey(id);
 }
 
-//-------------------------------------------------------------------------------------------------
 const Function& Class::function(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -81,7 +76,6 @@ const Function& Class::function(std::size_t index) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 const Function& Class::function(const std::string& id) const
 {
     FunctionTable::const_iterator it;
@@ -93,19 +87,16 @@ const Function& Class::function(const std::string& id) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t Class::propertyCount() const
 {
     return m_properties.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Class::hasProperty(const std::string& id) const
 {
     return m_properties.containsKey(id);
 }
 
-//-------------------------------------------------------------------------------------------------
 const Property& Class::property(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -118,7 +109,6 @@ const Property& Class::property(std::size_t index) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 const Property& Class::property(const std::string& id) const
 {
     PropertyTable::const_iterator it;
@@ -130,13 +120,11 @@ const Property& Class::property(const std::string& id) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t Class::constructorCount() const
 {
     return m_constructors.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 UserObject Class::construct(const Args& args) const
 {
     // Search an arguments match among the list of available constructors
@@ -157,13 +145,11 @@ UserObject Class::construct(const Args& args) const
     return UserObject::nothing;
 }
 
-//-------------------------------------------------------------------------------------------------
 void Class::destroy(const UserObject& object) const
 {
     m_destructor(object);
 }
 
-//-------------------------------------------------------------------------------------------------
 void Class::visit(ClassVisitor& visitor) const
 {
     // First visit properties
@@ -179,7 +165,6 @@ void Class::visit(ClassVisitor& visitor) const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 void* Class::applyOffset(void* pointer, const Class& target) const
 {
     // Special case for null pointers: don't apply offset to leave them null
@@ -200,25 +185,21 @@ void* Class::applyOffset(void* pointer, const Class& target) const
     PONDER_ERROR(ClassUnrelated(name(), target.name()));
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Class::operator==(const Class& other) const
 {
     return m_id == other.m_id;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Class::operator!=(const Class& other) const
 {
     return m_id != other.m_id;
 }
 
-//-------------------------------------------------------------------------------------------------
 Class::Class(const std::string& name)
     : m_id(name)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 int Class::baseOffset(const Class& base) const
 {
     // Check self

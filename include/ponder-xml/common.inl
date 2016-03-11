@@ -35,7 +35,6 @@ namespace xml
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
 template <typename Proxy>
 void serialize(const UserObject& object, typename Proxy::NodeType node, const Value& exclude)
 {
@@ -93,7 +92,6 @@ void serialize(const UserObject& object, typename Proxy::NodeType node, const Va
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename Proxy>
 void deserialize(const UserObject& object, typename Proxy::NodeType node, const Value& exclude)
 {

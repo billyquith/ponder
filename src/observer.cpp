@@ -35,50 +35,43 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 Observer::~Observer()
 {
     // Nothing to do
 }
 
-//-------------------------------------------------------------------------------------------------
 void Observer::classAdded(const Class&)
 {
     // Default implementation does nothing
 }
 
-//-------------------------------------------------------------------------------------------------
 void Observer::classRemoved(const Class&)
 {
     // Default implementation does nothing
 }
 
-//-------------------------------------------------------------------------------------------------
 void Observer::enumAdded(const Enum&)
 {
     // Default implementation does nothing
 }
 
-//-------------------------------------------------------------------------------------------------
 void Observer::enumRemoved(const Enum&)
 {
     // Default implementation does nothing
 }
 
-//-------------------------------------------------------------------------------------------------
 Observer::Observer()
 {
     // Nothing to do
 }
 
-//-------------------------------------------------------------------------------------------------
 PONDER_API void addObserver(Observer* observer)
 {
     detail::ClassManager::instance().addObserver(observer);
     detail::EnumManager::instance().addObserver(observer);
 }
 
-//-------------------------------------------------------------------------------------------------
 PONDER_API void removeObserver(Observer* observer)
 {
     detail::ClassManager::instance().removeObserver(observer);

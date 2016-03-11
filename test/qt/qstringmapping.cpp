@@ -38,12 +38,9 @@ inline std::ostream& operator<<(std::ostream& stream, const QString& string)
     return stream << string.toStdString();
 }
 
-//-----------------------------------------------------------------------------
 //                         Tests for camp_ext::ValueMapper<QString>
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(QSTRING)
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
     ponder::Value value = QString("hello");
@@ -51,7 +48,6 @@ BOOST_AUTO_TEST_CASE(type)
     BOOST_CHECK_EQUAL(value.type(), ponder::stringType);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(conversionsFromQString)
 {
     ponder::Value value = QString("-10");
@@ -62,7 +58,6 @@ BOOST_AUTO_TEST_CASE(conversionsFromQString)
     BOOST_CHECK_EQUAL(value.to<QString>(),     "-10");
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(conversionsToQString)
 {
     BOOST_CHECK_EQUAL(ponder::Value(false).to<QString>(),                QString("0"));

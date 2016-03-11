@@ -32,7 +32,6 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 UserObject::UserObject(const T& object)
     : m_class(&classByObject(object))
@@ -46,7 +45,6 @@ UserObject::UserObject(const T& object)
     m_holder.reset(new Holder(Traits::getPointer(const_cast<T&>(object))));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
 {
@@ -66,14 +64,12 @@ typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
     return detail::ObjectTraits<T>::get(ptr);
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 UserObject UserObject::ref(T& object)
 {
     return UserObject(object);
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 UserObject UserObject::ref(const T& object)
 {
@@ -87,7 +83,6 @@ UserObject UserObject::ref(const T& object)
     return userObject;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 UserObject UserObject::copy(const T& object)
 {

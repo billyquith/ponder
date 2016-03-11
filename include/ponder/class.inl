@@ -41,7 +41,6 @@ namespace detail
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T> Class::declare(const std::string& name)
 {

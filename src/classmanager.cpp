@@ -36,14 +36,13 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
+    
 ClassManager& ClassManager::instance()
 {
     static ClassManager cm;
     return cm;
 }
 
-//-------------------------------------------------------------------------------------------------
 Class& ClassManager::addClass(const std::string& id)
 {
     // First make sure that the class doesn't already exist
@@ -65,13 +64,11 @@ Class& ClassManager::addClass(const std::string& id)
     return *newClass;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t ClassManager::count() const
 {
     return m_classes.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 const Class& ClassManager::getByIndex(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -84,7 +81,6 @@ const Class& ClassManager::getByIndex(std::size_t index) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 const Class& ClassManager::getById(const std::string& id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
@@ -94,25 +90,21 @@ const Class& ClassManager::getById(const std::string& id) const
     return *it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 const Class* ClassManager::getByIdSafe(const std::string& id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
     return (it == m_classes.end()) ? nullptr : it->second;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool ClassManager::classExists(const std::string& id) const
 {
     return (m_classes.find(id) != m_classes.end());
 }
 
-//-------------------------------------------------------------------------------------------------
 ClassManager::ClassManager()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 ClassManager::~ClassManager()
 {
     // Notify observers
