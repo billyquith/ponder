@@ -34,56 +34,57 @@
 #include <ponder/enum.hpp>
 #include "catch.hpp"
 
-namespace EnumObjectTest
+namespace EnumClassObjectTest
 {
-    enum MyEnum
+    enum class MyUndeclaredEnum
+    {
+        Undeclared
+    };
+    
+    enum class MyEnum
     {
         Zero = 0,
         One  = 1,
         Two  = 2
     };
     
-    enum MyEnum2
+    enum class MyEnum2
     {
         Zero2 = 0,
         One2  = 1,
         Two2  = 2
     };
     
-    enum MyUndeclaredEnum
-    {
-        Undeclared
-    };
-    
     void declare()
     {
-        ponder::Enum::declare<MyEnum>("EnumObjectTest::MyEnum")
-            .value("Zero", Zero)
-            .value("One",  One)
-            .value("Two",  Two);
+        ponder::Enum::declare<MyEnum>("EnumClassObjectTest::MyEnum")
+            .value("Zero", MyEnum::Zero)
+            .value("One",  MyEnum::One)
+            .value("Two",  MyEnum::Two);
         
-        ponder::Enum::declare<MyEnum2>("EnumObjectTest::MyEnum2")
-            .value("Zero", Zero2)
-            .value("One",  One2)
-            .value("Two",  Two2);
+        // same names as MyEnum
+        ponder::Enum::declare<MyEnum2>("EnumClassObjectTest::MyEnum2")
+            .value("Zero", MyEnum2::Zero2)
+            .value("One",  MyEnum2::One2)
+            .value("Two",  MyEnum2::Two2);
     }
 }
 
-PONDER_TYPE(EnumObjectTest::MyUndeclaredEnum)
-PONDER_AUTO_TYPE(EnumObjectTest::MyEnum, &EnumObjectTest::declare)
-PONDER_AUTO_TYPE(EnumObjectTest::MyEnum2, &EnumObjectTest::declare)
+PONDER_TYPE(EnumClassObjectTest::MyUndeclaredEnum)
+PONDER_AUTO_TYPE(EnumClassObjectTest::MyEnum, &EnumClassObjectTest::declare)
+PONDER_AUTO_TYPE(EnumClassObjectTest::MyEnum2, &EnumClassObjectTest::declare)
 
-using namespace EnumObjectTest;
+using namespace EnumClassObjectTest;
 
 //-----------------------------------------------------------------------------
-//                         Tests for ponder::EnumObject
+//                Tests for ponder::EnumObject for enum class
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Enum objects")
+TEST_CASE("Enum class objects")
 {
-    ponder::EnumObject zero(Zero);
-    ponder::EnumObject one(One);
-    ponder::EnumObject two(Two);
+    ponder::EnumObject zero(MyEnum::Zero);
+    ponder::EnumObject one(MyEnum::One);
+    ponder::EnumObject two(MyEnum::Two);
 
     SECTION("has names")
     {
@@ -94,12 +95,12 @@ TEST_CASE("Enum objects")
 
     SECTION("has values")
     {
-        REQUIRE(zero.value() == Zero);
-        REQUIRE(one.value() == One);
-        REQUIRE(two.value() == Two);
+        REQUIRE(zero.value<MyEnum>() == MyEnum::Zero);
+        REQUIRE(one.value<MyEnum>() == MyEnum::One);
+        REQUIRE(two.value<MyEnum>() == MyEnum::Two);
     }
     
-    SECTION("wrap an Enum type")
+    SECTION("wraps an Enum class type")
     {
         REQUIRE(zero.getEnum() == ponder::enumByType<MyEnum>());
         REQUIRE(one.getEnum()  == ponder::enumByType<MyEnum>());
@@ -108,13 +109,13 @@ TEST_CASE("Enum objects")
     
     SECTION("can be compared ==")
     {
-        ponder::EnumObject zero2(Zero2);
-        ponder::EnumObject one2(One2);
-        ponder::EnumObject two2(Two2);
+        ponder::EnumObject zero2(MyEnum2::Zero2);
+        ponder::EnumObject one2(MyEnum2::One2);
+        ponder::EnumObject two2(MyEnum2::Two2);
 
-        REQUIRE(zero == ponder::EnumObject(Zero));
-        REQUIRE(one  == ponder::EnumObject(One));
-        REQUIRE(two  == ponder::EnumObject(Two));
+        REQUIRE(zero == ponder::EnumObject(MyEnum::Zero));
+        REQUIRE(one  == ponder::EnumObject(MyEnum::One));
+        REQUIRE(two  == ponder::EnumObject(MyEnum::Two));
 
         REQUIRE((zero == one) == false);
         REQUIRE((one  == two) == false);
@@ -143,7 +144,8 @@ TEST_CASE("Enum objects")
     SECTION("must be declared")
     {
         // The meta-enum of MyUndeclaredEnum is *not* declared
-        REQUIRE_THROWS_AS(ponder::EnumObject obj(Undeclared), ponder::EnumNotFound);
+        REQUIRE_THROWS_AS(ponder::EnumObject obj(MyUndeclaredEnum::Undeclared),
+                          ponder::EnumNotFound);
     }    
 }
     

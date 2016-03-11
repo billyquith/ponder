@@ -96,6 +96,9 @@ public:
          * \param value_ Value of the enum item.
          */
         Pair(const std::string &name_, EnumValue value_) : name(name_), value(value_) {}
+        
+        template <typename E>
+        E valueAs() const {return static_cast<E>(value);}
     };
     
 public:
@@ -123,7 +126,7 @@ public:
      * \return String containing the name of the metaenum
      */
     const std::string& name() const;
-
+        
     /**
      * \brief Return the size of the metaenum
      *
@@ -177,6 +180,10 @@ public:
      */
     const std::string& name(EnumValue value) const;
 
+    // This is to deal with enum classes.
+    template <typename E>
+    const std::string& name(E value) const {return name(static_cast<EnumValue>(value));}
+
     /**
      * \brief Return the value corresponding to given a name
      *
@@ -190,7 +197,7 @@ public:
 
     // This is to deal with enum classes.
     template <typename E>
-    E value(const std::string& name) const { return static_cast<E>(value(name)); }
+    E value(const std::string& name) const {return static_cast<E>(value(name));}
 
     /**
      * \brief Operator == to check equality between two metaenums
@@ -225,7 +232,7 @@ private:
     Enum(const std::string& name);
     
     struct EnumCmp {
-        bool operator () (const std::string& a, const std::string& b) const { return a < b; }
+        bool operator () (const std::string& a, const std::string& b) const {return a < b;}
     };
     
     typedef detail::Dictionary<std::string, EnumValue, EnumCmp> EnumTable;

@@ -33,19 +33,3 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-// struct GlobalTestFixture
-// {
-//     ponder::detail::ClassManager* m_classManagerInstance;
-//
-//     GlobalTestFixture()
-//     :   m_classManagerInstance(new ponder::detail::ClassManager())
-//     {
-//     }
-//
-//     ~GlobalTestFixture()
-//     {
-//         delete m_classManagerInstance;
-//     }
-// };
-//
-// BOOST_GLOBAL_FIXTURE(GlobalTestFixture);
