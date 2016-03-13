@@ -71,7 +71,14 @@ public:
      */
     EnumBuilder& value(const std::string& name, long value);
     
-    // This overload is to deal with enum classes.
+    /**
+     * \brief Add a new pair to the metaenum using enum class
+     *
+     * e.g. `value("one", MyEnum::One)`
+     *
+     * \param name Name of the pair
+     * \param enumValue Value of the pair
+     */
     template <typename E>
     EnumBuilder& value(const std::string& name, E enumValue)
     {

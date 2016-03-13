@@ -137,7 +137,7 @@ public:
      * \brief Get the value of an object's property
      *
      * This function is defined for convenience, it is a shortcut
-     * for <tt>object.getClass().property(name).get(object);</tt>
+     * for `object.getClass().property(name).get(object);`
      *
      * \param property Name of the property to get
      *
@@ -152,7 +152,7 @@ public:
      * \brief Set the value of an object's property
      *
      * This function is defined for convenience, it is a shortcut
-     * for <tt>object.getClass().property(name).set(object, value);</tt>
+     * for `object.getClass().property(name).set(object, value);`
      *
      * \param property Name of the property to set
      * \param value Value to set
@@ -167,7 +167,7 @@ public:
      * \brief Call an object's function
      *
      * This function is defined for convenience, it is a shortcut
-     * for <tt>object.getClass().function(name).call(object, args);</tt>
+     * for `object.getClass().function(name).call(object, args);`
      *
      * \param function Name of the function to call
      * \param args Arguments to pass to the function
