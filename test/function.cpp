@@ -51,7 +51,9 @@ struct FunctionFixture
     const ponder::Function* functions[23];
 };
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::Function
+//-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTION, FunctionFixture)
 
 BOOST_AUTO_TEST_CASE(returnType)

@@ -142,7 +142,9 @@ struct ConstructorFixture
     const ponder::Class* metaclass;
 };
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::Constructor
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Classes can have constructors")
 {

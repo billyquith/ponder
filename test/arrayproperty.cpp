@@ -116,7 +116,9 @@ struct ArrayPropertyFixture
     MyClass object;
 };
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::ArrayProperty
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Array property can be inspected")
 {

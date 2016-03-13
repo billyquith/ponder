@@ -80,7 +80,9 @@ PONDER_AUTO_TYPE(EnumClassTest::MyEnum2, &EnumClassTest::declare)
 using namespace EnumClassTest;
 
 
+//-----------------------------------------------------------------------------
 //                   Tests for ponder::Enum for enum class
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Enums classes need to be declared")
 {

@@ -156,7 +156,9 @@ PONDER_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare)
 
 using namespace MapperTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for mappers
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Mapper test data checks")
 {

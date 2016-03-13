@@ -96,7 +96,9 @@ PONDER_AUTO_TYPE(TagHolderTest::MyEnum,  &TagHolderTest::declare)
 
 using namespace TagHolderTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::TagHolder
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Objects can be assigned tags")
 {

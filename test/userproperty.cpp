@@ -45,7 +45,9 @@ struct UserPropertyFixture
     const ponder::UserProperty* property;
 };
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::UserProperty
+//-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(USERPROPERTY, UserPropertyFixture)
 
 BOOST_AUTO_TEST_CASE(type)

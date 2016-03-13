@@ -139,7 +139,9 @@ using namespace InheritanceTest;
 //     const ponder::Class* class4;
 // };
 
+//-----------------------------------------------------------------------------
 //                         Tests for inherited metaclasses
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Classes support inheritence")
 {    

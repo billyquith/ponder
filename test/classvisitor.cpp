@@ -124,7 +124,9 @@ PONDER_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare)
 
 using namespace ClassVisitorTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::ClassVisitor
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Classes can have visitors")
 {

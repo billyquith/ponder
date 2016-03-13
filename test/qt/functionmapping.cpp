@@ -46,7 +46,9 @@ struct FunctionMappingFixture
 };
 
 
+//-----------------------------------------------------------------------------
 //                         Tests for camp_ext::QtMapper (functions)
+//-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTIONMAPPING, FunctionMappingFixture)
 
 BOOST_AUTO_TEST_CASE(name)

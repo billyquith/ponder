@@ -110,7 +110,9 @@ PONDER_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
 
 using namespace ClassTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::Class
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Classes need to be declared")
 {

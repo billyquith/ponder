@@ -119,7 +119,9 @@ PONDER_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
 
 using namespace ValueTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::Value
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Ponder has variant values")
 {

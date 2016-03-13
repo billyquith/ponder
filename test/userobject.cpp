@@ -198,7 +198,9 @@ PONDER_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
 
 using namespace UserObjectTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::UserObject
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Ponder supports user objects")
 {

@@ -76,7 +76,9 @@ PONDER_AUTO_TYPE(EnumClassObjectTest::MyEnum2, &EnumClassObjectTest::declare)
 
 using namespace EnumClassObjectTest;
 
+//-----------------------------------------------------------------------------
 //                Tests for ponder::EnumObject for enum class
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Enum class objects")
 {

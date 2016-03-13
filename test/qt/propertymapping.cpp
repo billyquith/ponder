@@ -52,7 +52,9 @@ struct PropertyMappingFixture
     const ponder::Class* metaclass;
 };
 
+//-----------------------------------------------------------------------------
 //                         Tests for camp_ext::QtMapper (properties)
+//-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(PROPERTYMAPPING, PropertyMappingFixture)
 
 BOOST_AUTO_TEST_CASE(name)

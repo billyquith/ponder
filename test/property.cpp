@@ -212,7 +212,9 @@ struct PropertyFixture
     const ponder::Property* properties[25];
 };
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder::Property
+//-----------------------------------------------------------------------------
 
 TEST_CASE("Classes can have properties")
 {

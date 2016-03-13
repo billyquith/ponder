@@ -68,7 +68,9 @@ namespace TraitsTest
 
 using namespace TraitsTest;
 
+//-----------------------------------------------------------------------------
 //                         Tests for ponder traits
+//-----------------------------------------------------------------------------
 
 // Sanity check: make sure compiler supports features we need.
 TEST_CASE("C++11 features and syntax")

@@ -38,7 +38,9 @@ inline std::ostream& operator<<(std::ostream& stream, const QString& string)
     return stream << string.toStdString();
 }
 
+//-----------------------------------------------------------------------------
 //                         Tests for camp_ext::ValueMapper<QString>
+//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(QSTRING)
 
 BOOST_AUTO_TEST_CASE(type)
