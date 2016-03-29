@@ -202,252 +202,252 @@ using namespace UserObjectTest;
 //                         Tests for ponder::UserObject
 //-----------------------------------------------------------------------------
 
-//TEST_CASE("Ponder supports user objects")
-//{
-//    SECTION("user objects reference other objects")
-//    {
-//        MyClass object(1);
-//        ponder::UserObject userObject(object); //reference
-//
-//        REQUIRE(userObject.get<MyClass>() ==         object);
-//        REQUIRE(&userObject.get<MyClass>() ==        &object);
-//        REQUIRE(userObject.get<MyClass&>() ==        object);
-//        REQUIRE(&userObject.get<MyClass&>() ==       &object);
-//        REQUIRE(userObject.get<const MyClass&>() ==  object);
-//        REQUIRE(&userObject.get<const MyClass&>() == &object);
-//        REQUIRE(userObject.get<MyClass*>() ==        &object);
-//        REQUIRE(userObject.get<const MyClass*>() ==  &object);
-//    }
-//
-//    SECTION("user objects can reference other objects using pointers")
-//    {
-//        MyClass object(3);
-//        ponder::UserObject userObject(&object); // pointer
-//
-//        REQUIRE(userObject.get<MyClass>() ==         object);
-//        REQUIRE(&userObject.get<MyClass>() ==        &object);
-//        REQUIRE(userObject.get<MyClass&>() ==        object);
-//        REQUIRE(&userObject.get<MyClass&>() ==       &object);
-//        REQUIRE(userObject.get<const MyClass&>() ==  object);
-//        REQUIRE(&userObject.get<const MyClass&>() == &object);
-//        REQUIRE(userObject.get<MyClass*>() ==        &object);
-//        REQUIRE(userObject.get<const MyClass*>() ==  &object);
-//    }
-//
-//    SECTION("user object references should handle inheritance")
-//    {
-//        MyClass object(2);
-//        ponder::UserObject userObject(object);
-//        MyBase& base = object;
-//
-//        REQUIRE(userObject.get<MyBase>() ==         base);
-//        REQUIRE(&userObject.get<MyBase>() ==        &base);
-//        REQUIRE(userObject.get<MyBase&>() ==        base);
-//        REQUIRE(&userObject.get<MyBase&>() ==       &base);
-//        REQUIRE(userObject.get<const MyBase&>() ==  base);
-//        REQUIRE(&userObject.get<const MyBase&>() == &base);
-//        REQUIRE(userObject.get<MyBase*>() ==        &base);
-//        REQUIRE(userObject.get<const MyBase*>() ==  &base);
-//    }
-//    
-//    SECTION("user objects can be assigned to")
-//    {
-//        MyClass object1(10);
-//        ponder::UserObject userObject1(object1);
-//        ponder::UserObject userObject2;
-//        
-//        userObject2 = userObject1;
-//
-//        REQUIRE(userObject1.get<MyClass*>() == userObject2.get<MyClass*>());
-//    }
-//
-//    SECTION("objects can be tested for equality")
-//    {
-//        MyClass object1(11);
-//        MyClass object2(11);
-//
-//        REQUIRE((ponder::UserObject(object1)  == ponder::UserObject(object1)));
-//        REQUIRE((ponder::UserObject(object1)  == ponder::UserObject(&object1)));
-//        REQUIRE((ponder::UserObject(&object1) == ponder::UserObject(&object1)));
-//        REQUIRE((ponder::UserObject(object1)  != ponder::UserObject(object2)));
-//
-//        REQUIRE((ponder::UserObject(object1) == ponder::UserObject::ref(object1)));
-//        REQUIRE((ponder::UserObject(object1) == ponder::UserObject::ref(&object1)));
-//        REQUIRE((ponder::UserObject(object1) != ponder::UserObject::copy(object1)));
-//        REQUIRE((ponder::UserObject(object1) != ponder::UserObject::copy(&object1)));
-//    }
-//
-//    SECTION("check we can reference non-copyable objects")
-//    {
-//        // This is a compile check
-//        MyNonCopyableClass object;
-//        ponder::UserObject userObject(object);
-//        MyNonCopyableClass& ref = userObject.get<MyNonCopyableClass>();
-//        (void)ref;
-//    }
-//
-//    SECTION("we can refer to concrete objects using abstract base references")
-//    {
-//        // This is a compile check
-//        MyConcreteClass object;
-//
-//        ponder::UserObject userObject1(object);
-//        userObject1.get<MyAbstractClass>();
-//
-//        ponder::UserObject userObject2(static_cast<MyAbstractClass&>(object));
-//        userObject2.get<MyConcreteClass>();
-//    }    
-//
-//    SECTION("objects can be cloned/deep copied")
-//    {
-//        MyClass object(4);
-//        ponder::UserObject userObject = ponder::UserObject::copy(object);
-//
-//        REQUIRE(userObject.get<MyClass>() == object);  // same value
-//        REQUIRE(userObject.get<MyClass*>() != &object); // different address
-//    }
-//
-//    SECTION("objects can referenced/shallow copied")
-//    {
-//        MyClass object(5);
-//        ponder::UserObject userObject = ponder::UserObject::ref(object);
-//
-//        REQUIRE(userObject.get<MyClass>() == object);  // same value
-//        REQUIRE(userObject.get<MyClass*>() ==&object); // same address
-//    }
-//
-//    SECTION("object type information can be inspected")
-//    {
-//        MyClass object(6);
-//        MyBase base(6);
-//        MyBase& objectAsBase = object;
-//
-//        REQUIRE((ponder::UserObject(base).getClass() == ponder::classByType<MyBase>()));
-//        REQUIRE((ponder::UserObject(object).getClass() == ponder::classByType<MyClass>()));
-//        REQUIRE((ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>()));
-//    }
-//
-//    SECTION("we can get object values")
-//    {
-//        MyClass object(7);
-//        ponder::UserObject userObject(object);
-//
-//        REQUIRE(userObject.get("p") == ponder::Value(7));
-//    }
-//
-//    SECTION("we can set object values")
-//    {
-//        MyClass object(0);
-//        ponder::UserObject userObject(object);
-//        REQUIRE(userObject.get("p") == ponder::Value(0));
-//        
-//        userObject.set("p", 8);
-//        REQUIRE(object.x == 8);
-//    }
-//
-//    SECTION("object methods can have one argument")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//
-//        REQUIRE_THROWS_AS(userObject.call("meth1"), std::exception); // TODO - wrong num args.
-//    
-//        userObject.call("meth1", ponder::Args(7));
-//        REQUIRE(object.lastCalled == "meth1");
-//        REQUIRE(object.sum == 7);
-//    }
-//
-//    SECTION("object methods can have two argument")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("meth2"), std::exception);
-//        REQUIRE_THROWS_AS(userObject.call("meth2", ponder::Args(11)), std::exception);
-////        REQUIRE_THROWS_AS(userObject.call("meth2", ponder::Args(11,2,333)), std::exception); TODO - fix?
-//    
-//        userObject.call("meth2", ponder::Args(7, 8));
-//        REQUIRE(object.lastCalled == "meth2");
-//        REQUIRE(object.sum == 7+8);
-//    }
-//
-//    SECTION("object methods can have three argument")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("meth3"), std::exception);
-//    
-//        userObject.call("meth3", ponder::Args(7, 8, -99));
-//        REQUIRE(object.lastCalled == "meth3");
-//        REQUIRE(object.sum == 7+8-99);
-//    }
-//
-//    SECTION("callMultiArgs8")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//        
-//        REQUIRE_THROWS_AS(userObject.call("meth8"), std::exception);
-//        
-//        userObject.call("meth8", ponder::Args(7, 8, -99, 77, 12, 76, 45, 3));
-//        REQUIRE(object.lastCalled == "meth8");
-//        REQUIRE(object.sum == 7+8-99+77+12+76+45+3);
-//    }
-//
-//    SECTION("objects methods can return values")
-//    {
-//        MyClass object(9);
-//        ponder::UserObject userObject(object);
-//
-//        REQUIRE(userObject.call("f") == ponder::Value(9));
-//    }
-//
-//    SECTION("objects methods with argument can return values")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("cos"), std::exception);
-//    
-//        REQUIRE(userObject.call("cos", ponder::Args(0.0)) == ponder::Value(std::cos(0.0)));
-//    //    REQUIRE(userObject.call("cos", 0.0), ponder::Value(std::cos(0.0))); 
-//    }
-//
-//    SECTION("objects methods with 2 args can return values")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("concat"), std::exception);
-//    
-//        REQUIRE(userObject.call("concat", ponder::Args("one", "two")) == ponder::Value("onetwo"));
-//    //    REQUIRE(userObject.call("concat", "one", "two"), ponder::Value("onetwo")); TODO - Args optional
-//    }
-//
-//    SECTION("objects can be composed of other objects")
-//    {
-//        const ponder::UserProperty& p1 =
-//            static_cast<const ponder::UserProperty&>(
-//                ponder::classByType<Composed1>().property("p") );
-//        
-//        const ponder::UserProperty& p2 =
-//            static_cast<const ponder::UserProperty&>(
-//                ponder::classByType<Composed2>().property("p") );
-//
-//        Composed1 composed1;
-//        ponder::UserObject composed2(composed1, p1);
-//        ponder::UserObject composed3(composed2, p2);
-//
-//        composed3.set("x", 1);
-//        REQUIRE(composed1.get().get().x ==1);
-//        REQUIRE(composed2.get<Composed2>().get().x ==1);
-//        REQUIRE(composed3.get<Composed3>().x ==1);
-//
-//        composed3.set("x", 2);
-//        REQUIRE(composed1.get().get().x ==2);
-//        REQUIRE(composed2.get<Composed2>().get().x ==2);
-//        REQUIRE(composed3.get<Composed3>().x ==2);
-//    }    
-//}
-//
+TEST_CASE("Ponder supports user objects")
+{
+    SECTION("user objects reference other objects")
+    {
+        MyClass object(1);
+        ponder::UserObject userObject(object); //reference
+
+        REQUIRE(userObject.get<MyClass>() ==         object);
+        REQUIRE(&userObject.get<MyClass>() ==        &object);
+        REQUIRE(userObject.get<MyClass&>() ==        object);
+        REQUIRE(&userObject.get<MyClass&>() ==       &object);
+        REQUIRE(userObject.get<const MyClass&>() ==  object);
+        REQUIRE(&userObject.get<const MyClass&>() == &object);
+        REQUIRE(userObject.get<MyClass*>() ==        &object);
+        REQUIRE(userObject.get<const MyClass*>() ==  &object);
+    }
+
+    SECTION("user objects can reference other objects using pointers")
+    {
+        MyClass object(3);
+        ponder::UserObject userObject(&object); // pointer
+
+        REQUIRE(userObject.get<MyClass>() ==         object);
+        REQUIRE(&userObject.get<MyClass>() ==        &object);
+        REQUIRE(userObject.get<MyClass&>() ==        object);
+        REQUIRE(&userObject.get<MyClass&>() ==       &object);
+        REQUIRE(userObject.get<const MyClass&>() ==  object);
+        REQUIRE(&userObject.get<const MyClass&>() == &object);
+        REQUIRE(userObject.get<MyClass*>() ==        &object);
+        REQUIRE(userObject.get<const MyClass*>() ==  &object);
+    }
+
+    SECTION("user object references should handle inheritance")
+    {
+        MyClass object(2);
+        ponder::UserObject userObject(object);
+        MyBase& base = object;
+
+        REQUIRE(userObject.get<MyBase>() ==         base);
+        REQUIRE(&userObject.get<MyBase>() ==        &base);
+        REQUIRE(userObject.get<MyBase&>() ==        base);
+        REQUIRE(&userObject.get<MyBase&>() ==       &base);
+        REQUIRE(userObject.get<const MyBase&>() ==  base);
+        REQUIRE(&userObject.get<const MyBase&>() == &base);
+        REQUIRE(userObject.get<MyBase*>() ==        &base);
+        REQUIRE(userObject.get<const MyBase*>() ==  &base);
+    }
+    
+    SECTION("user objects can be assigned to")
+    {
+        MyClass object1(10);
+        ponder::UserObject userObject1(object1);
+        ponder::UserObject userObject2;
+        
+        userObject2 = userObject1;
+
+        REQUIRE(userObject1.get<MyClass*>() == userObject2.get<MyClass*>());
+    }
+
+    SECTION("objects can be tested for equality")
+    {
+        MyClass object1(11);
+        MyClass object2(11);
+
+        REQUIRE((ponder::UserObject(object1)  == ponder::UserObject(object1)));
+        REQUIRE((ponder::UserObject(object1)  == ponder::UserObject(&object1)));
+        REQUIRE((ponder::UserObject(&object1) == ponder::UserObject(&object1)));
+        REQUIRE((ponder::UserObject(object1)  != ponder::UserObject(object2)));
+
+        REQUIRE((ponder::UserObject(object1) == ponder::UserObject::ref(object1)));
+        REQUIRE((ponder::UserObject(object1) == ponder::UserObject::ref(&object1)));
+        REQUIRE((ponder::UserObject(object1) != ponder::UserObject::copy(object1)));
+        REQUIRE((ponder::UserObject(object1) != ponder::UserObject::copy(&object1)));
+    }
+
+    SECTION("check we can reference non-copyable objects")
+    {
+        // This is a compile check
+        MyNonCopyableClass object;
+        ponder::UserObject userObject(object);
+        MyNonCopyableClass& ref = userObject.get<MyNonCopyableClass>();
+        (void)ref;
+    }
+
+    SECTION("we can refer to concrete objects using abstract base references")
+    {
+        // This is a compile check
+        MyConcreteClass object;
+
+        ponder::UserObject userObject1(object);
+        userObject1.get<MyAbstractClass>();
+
+        ponder::UserObject userObject2(static_cast<MyAbstractClass&>(object));
+        userObject2.get<MyConcreteClass>();
+    }    
+
+    SECTION("objects can be cloned/deep copied")
+    {
+        MyClass object(4);
+        ponder::UserObject userObject = ponder::UserObject::copy(object);
+
+        REQUIRE(userObject.get<MyClass>() == object);  // same value
+        REQUIRE(userObject.get<MyClass*>() != &object); // different address
+    }
+
+    SECTION("objects can referenced/shallow copied")
+    {
+        MyClass object(5);
+        ponder::UserObject userObject = ponder::UserObject::ref(object);
+
+        REQUIRE(userObject.get<MyClass>() == object);  // same value
+        REQUIRE(userObject.get<MyClass*>() ==&object); // same address
+    }
+
+    SECTION("object type information can be inspected")
+    {
+        MyClass object(6);
+        MyBase base(6);
+        MyBase& objectAsBase = object;
+
+        REQUIRE((ponder::UserObject(base).getClass() == ponder::classByType<MyBase>()));
+        REQUIRE((ponder::UserObject(object).getClass() == ponder::classByType<MyClass>()));
+        REQUIRE((ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>()));
+    }
+
+    SECTION("we can get object values")
+    {
+        MyClass object(7);
+        ponder::UserObject userObject(object);
+
+        REQUIRE(userObject.get("p") == ponder::Value(7));
+    }
+
+    SECTION("we can set object values")
+    {
+        MyClass object(0);
+        ponder::UserObject userObject(object);
+        REQUIRE(userObject.get("p") == ponder::Value(0));
+        
+        userObject.set("p", 8);
+        REQUIRE(object.x == 8);
+    }
+
+    SECTION("object methods can have one argument")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+
+        REQUIRE_THROWS_AS(userObject.call("meth1"), std::exception); // TODO - wrong num args.
+    
+        userObject.call("meth1", ponder::Args(7));
+        REQUIRE(object.lastCalled == "meth1");
+        REQUIRE(object.sum == 7);
+    }
+
+    SECTION("object methods can have two argument")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+    
+        REQUIRE_THROWS_AS(userObject.call("meth2"), std::exception);
+        REQUIRE_THROWS_AS(userObject.call("meth2", ponder::Args(11)), std::exception);
+//        REQUIRE_THROWS_AS(userObject.call("meth2", ponder::Args(11,2,333)), std::exception); TODO - fix?
+    
+        userObject.call("meth2", ponder::Args(7, 8));
+        REQUIRE(object.lastCalled == "meth2");
+        REQUIRE(object.sum == 7+8);
+    }
+
+    SECTION("object methods can have three argument")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+    
+        REQUIRE_THROWS_AS(userObject.call("meth3"), std::exception);
+    
+        userObject.call("meth3", ponder::Args(7, 8, -99));
+        REQUIRE(object.lastCalled == "meth3");
+        REQUIRE(object.sum == 7+8-99);
+    }
+
+    SECTION("callMultiArgs8")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+        
+        REQUIRE_THROWS_AS(userObject.call("meth8"), std::exception);
+        
+        userObject.call("meth8", ponder::Args(7, 8, -99, 77, 12, 76, 45, 3));
+        REQUIRE(object.lastCalled == "meth8");
+        REQUIRE(object.sum == 7+8-99+77+12+76+45+3);
+    }
+
+    SECTION("objects methods can return values")
+    {
+        MyClass object(9);
+        ponder::UserObject userObject(object);
+
+        REQUIRE(userObject.call("f") == ponder::Value(9));
+    }
+
+    SECTION("objects methods with argument can return values")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+    
+        REQUIRE_THROWS_AS(userObject.call("cos"), std::exception);
+    
+        REQUIRE(userObject.call("cos", ponder::Args(0.0)) == ponder::Value(std::cos(0.0)));
+    //    REQUIRE(userObject.call("cos", 0.0), ponder::Value(std::cos(0.0))); 
+    }
+
+    SECTION("objects methods with 2 args can return values")
+    {
+        Call object;
+        ponder::UserObject userObject(object);
+    
+        REQUIRE_THROWS_AS(userObject.call("concat"), std::exception);
+    
+        REQUIRE(userObject.call("concat", ponder::Args("one", "two")) == ponder::Value("onetwo"));
+    //    REQUIRE(userObject.call("concat", "one", "two"), ponder::Value("onetwo")); TODO - Args optional
+    }
+
+    SECTION("objects can be composed of other objects")
+    {
+        const ponder::UserProperty& p1 =
+            static_cast<const ponder::UserProperty&>(
+                ponder::classByType<Composed1>().property("p") );
+        
+        const ponder::UserProperty& p2 =
+            static_cast<const ponder::UserProperty&>(
+                ponder::classByType<Composed2>().property("p") );
+
+        Composed1 composed1;
+        ponder::UserObject composed2(composed1, p1);
+        ponder::UserObject composed3(composed2, p2);
+
+        composed3.set("x", 1);
+        REQUIRE(composed1.get().get().x ==1);
+        REQUIRE(composed2.get<Composed2>().get().x ==1);
+        REQUIRE(composed3.get<Composed3>().x ==1);
+
+        composed3.set("x", 2);
+        REQUIRE(composed1.get().get().x ==2);
+        REQUIRE(composed2.get<Composed2>().get().x ==2);
+        REQUIRE(composed3.get<Composed3>().x ==2);
+    }    
+}
+
