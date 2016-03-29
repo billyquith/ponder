@@ -51,7 +51,6 @@ static inline int stricmp(const char* a, const char* b)
 #endif
 }
 
-//-------------------------------------------------------------------------------------------------
 // parse string
     
 template <typename T>
@@ -171,7 +170,6 @@ bool conv(const std::string& from, double& to)
     return true;
 }
 
-//-------------------------------------------------------------------------------------------------
 
 static const char* c_typeNames[] =
 {

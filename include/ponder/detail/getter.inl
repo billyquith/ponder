@@ -34,27 +34,23 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 GetterInterface<T>::~GetterInterface()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T, typename C>
 GetterImpl<T, C>::GetterImpl(std::function<T (C&)> function)
     : m_function(function)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T, typename C>
 T GetterImpl<T, C>::get(const UserObject& object) const
 {
     return m_function(object.get<C>());
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 Getter<T>::Getter(const T& defaultValue)
     : m_getter()
@@ -62,7 +58,6 @@ Getter<T>::Getter(const T& defaultValue)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename C>
 Getter<T>::Getter(std::function<T (C&)> function)
@@ -70,14 +65,12 @@ Getter<T>::Getter(std::function<T (C&)> function)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 const T& Getter<T>::get() const
 {
     return m_defaultValue;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 T Getter<T>::get(const UserObject& object) const
 {

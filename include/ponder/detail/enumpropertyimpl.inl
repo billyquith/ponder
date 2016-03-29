@@ -34,7 +34,6 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 EnumPropertyImpl<A>::EnumPropertyImpl(const std::string& name, const A& accessor)
     : EnumProperty(name, enumByType<typename A::DataType>())
@@ -42,14 +41,12 @@ EnumPropertyImpl<A>::EnumPropertyImpl(const std::string& name, const A& accessor
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 Value EnumPropertyImpl<A>::getValue(const UserObject& object) const
 {
     return m_accessor.get(object.get<typename A::ClassType>());
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 void EnumPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
@@ -57,14 +54,12 @@ void EnumPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 bool EnumPropertyImpl<A>::isReadable() const
 {
     return A::canRead;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 bool EnumPropertyImpl<A>::isWritable() const
 {

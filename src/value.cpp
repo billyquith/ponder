@@ -34,41 +34,36 @@
 
 namespace ponder
 {
+    
 const Value Value::nothing;
 
-//-------------------------------------------------------------------------------------------------
 Value::Value()
     : m_value(NoType())
     , m_type(noType)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 Value::Value(const Value& other)
     : m_value(other.m_value)
     , m_type(other.m_type)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 Type Value::type() const
 {
     return m_type;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Value::operator==(const Value& other) const
 {
     return visit(detail::EqualVisitor(), other);
 }
 
-//-------------------------------------------------------------------------------------------------
 bool Value::operator<(const Value& other) const
 {
     return visit(detail::LessThanVisitor(), other);
 }
 
-//-------------------------------------------------------------------------------------------------
 std::istream& operator>>(std::istream& stream, Value& value)
 {
     // Use the string conversion
@@ -79,7 +74,6 @@ std::istream& operator>>(std::istream& stream, Value& value)
     return stream;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& stream, const Value& value)
 {
     // Use the string conversion

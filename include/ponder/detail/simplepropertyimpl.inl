@@ -34,7 +34,6 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 SimplePropertyImpl<A>::SimplePropertyImpl(const std::string& name, const A& accessor)
     : SimpleProperty(name, mapType<typename A::DataType>())
@@ -42,14 +41,12 @@ SimplePropertyImpl<A>::SimplePropertyImpl(const std::string& name, const A& acce
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 Value SimplePropertyImpl<A>::getValue(const UserObject& object) const
 {
     return m_accessor.get(object.get<typename A::ClassType>());
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 void SimplePropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
@@ -57,14 +54,12 @@ void SimplePropertyImpl<A>::setValue(const UserObject& object, const Value& valu
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 bool SimplePropertyImpl<A>::isReadable() const
 {
     return A::canRead;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 bool SimplePropertyImpl<A>::isWritable() const
 {

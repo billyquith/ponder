@@ -33,55 +33,65 @@
 #include <ponder/enum.hpp>
 #include "catch.hpp"
 
-namespace EnumTest
+namespace EnumClassTest
 {
-    enum MyExplicitylyDeclaredEnum
+    enum class MyExplicitylyDeclaredEnum
     {
     };
     
-    enum MyUndeclaredEnum
+    enum class MyUndeclaredEnum
     {
     };
     
-    enum MyEnum
+    enum class MyEnum
     {
         Zero = 0,
         One  = 1,
         Two  = 2
     };
     
-    enum MyEnum2
+    enum class MyEnum2
     {
+    };
+    
+    enum class MyEnumClass
+    {
+        Red,
+        Green,
+        Blue
     };
     
     void declare()
     {
-        ponder::Enum::declare<MyEnum>("EnumTest::MyEnum")
-            .value("Zero", Zero)
-            .value("One", One)
-            .value("Two", Two);
+        ponder::Enum::declare<MyEnum>("EnumClassTest::MyEnum")
+            .value("Zero", MyEnum::Zero)
+            .value("One", MyEnum::One)
+            .value("Two", MyEnum::Two);
         
-        ponder::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
+        ponder::Enum::declare<MyEnum2>("EnumClassTest::MyEnum2");
     }
 }
 
-PONDER_TYPE(EnumTest::MyUndeclaredEnum /* never declared */)
-PONDER_TYPE(EnumTest::MyExplicitylyDeclaredEnum /* declared during tests */)
-PONDER_AUTO_TYPE(EnumTest::MyEnum, &EnumTest::declare)
-PONDER_AUTO_TYPE(EnumTest::MyEnum2, &EnumTest::declare)
+PONDER_TYPE(EnumClassTest::MyUndeclaredEnum /* never declared */)
+PONDER_TYPE(EnumClassTest::MyExplicitylyDeclaredEnum /* declared during tests */)
+PONDER_AUTO_TYPE(EnumClassTest::MyEnum, &EnumClassTest::declare)
+PONDER_AUTO_TYPE(EnumClassTest::MyEnum2, &EnumClassTest::declare)
 
-using namespace EnumTest;
+using namespace EnumClassTest;
+
 
 //-----------------------------------------------------------------------------
-//                         Tests for ponder::Enum
+//                   Tests for ponder::Enum for enum class
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Enums need to be declared")
+TEST_CASE("Enums classes need to be declared")
 {
     SECTION("explicit declaration")
     {
         const std::size_t count = ponder::enumCount();
-        ponder::Enum::declare<MyExplicitylyDeclaredEnum>("EnumTest::MyExplicitylyDeclaredEnum");
+        
+        ponder::Enum::declare<MyExplicitylyDeclaredEnum>(
+            "EnumClassTest::MyExplicitylyDeclaredEnum");
 
         REQUIRE(ponder::enumCount() == count + 1);        
     }
@@ -94,7 +104,7 @@ TEST_CASE("Enums need to be declared")
         REQUIRE_THROWS_AS(ponder::Enum::declare<MyEnum>(), ponder::EnumAlreadyCreated);
         
         // duplicate by name
-        REQUIRE_THROWS_AS(ponder::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"),
+        REQUIRE_THROWS_AS(ponder::Enum::declare<MyUndeclaredEnum>("EnumClassTest::MyEnum"),
                           ponder::EnumAlreadyCreated);
     }
     
@@ -107,21 +117,22 @@ TEST_CASE("Enums need to be declared")
 }
 
 
-TEST_CASE("Enum metadata can be retrieved")
+TEST_CASE("Enum class metadata can be retrieved")
 {
     MyEnum object = MyEnum();
     MyUndeclaredEnum object2 = MyUndeclaredEnum();
 
     SECTION("by name")
     {
-        REQUIRE(ponder::enumByName("EnumTest::MyEnum").name() == "EnumTest::MyEnum");
+        REQUIRE(ponder::enumByName("EnumClassTest::MyEnum").name() == "EnumClassTest::MyEnum");
         
-        REQUIRE_THROWS_AS(ponder::enumByName("EnumTest::MyUndeclaredEnum"), ponder::EnumNotFound);
+        REQUIRE_THROWS_AS(ponder::enumByName("EnumClassTest::MyUndeclaredEnum"),
+                          ponder::EnumNotFound);
     }
     
     SECTION("by type")
     {
-        REQUIRE(ponder::enumByType<MyEnum>().name() == "EnumTest::MyEnum");
+        REQUIRE(ponder::enumByType<MyEnum>().name() == "EnumClassTest::MyEnum");
 
         REQUIRE(ponder::enumByTypeSafe<MyUndeclaredEnum>() == static_cast<ponder::Enum*>(0));      
         
@@ -130,8 +141,8 @@ TEST_CASE("Enum metadata can be retrieved")
     
     SECTION("by instance")
     {
-        REQUIRE(ponder::enumByObject(object).name() == "EnumTest::MyEnum");
-        REQUIRE(ponder::enumByObject(&object).name() == "EnumTest::MyEnum");
+        REQUIRE(ponder::enumByObject(object).name() == "EnumClassTest::MyEnum");
+        REQUIRE(ponder::enumByObject(&object).name() == "EnumClassTest::MyEnum");
         
         REQUIRE_THROWS_AS(ponder::enumByObject(object2), ponder::EnumNotFound);
         REQUIRE_THROWS_AS(ponder::enumByObject(&object2), ponder::EnumNotFound);
@@ -139,7 +150,7 @@ TEST_CASE("Enum metadata can be retrieved")
 }
 
 
-TEST_CASE("Enum values can be read")
+TEST_CASE("Enum class values can be read")
 {
     const ponder::Enum* metaenum = &ponder::enumByType<MyEnum>();
 
@@ -148,11 +159,11 @@ TEST_CASE("Enum values can be read")
     SECTION("as pairs")
     {
         REQUIRE(metaenum->pair(0).name == "Zero");
-        REQUIRE(metaenum->pair(0).value == Zero);
+        REQUIRE(metaenum->pair(0).valueAs<MyEnum>() == MyEnum::Zero);
         REQUIRE(metaenum->pair(1).name == "One");
-        REQUIRE(metaenum->pair(1).value == One);
+        REQUIRE(metaenum->pair(1).valueAs<MyEnum>() == MyEnum::One);
         REQUIRE(metaenum->pair(2).name == "Two");
-        REQUIRE(metaenum->pair(2).value == Two);
+        REQUIRE(metaenum->pair(2).valueAs<MyEnum>() == MyEnum::Two);
         
         REQUIRE_THROWS_AS(metaenum->pair(3), ponder::OutOfRange);
     }
@@ -165,24 +176,23 @@ TEST_CASE("Enum values can be read")
         REQUIRE(metaenum->hasName("Hundred") == false);
 
         REQUIRE(metaenum->name(MyEnum::Zero) == "Zero");
-        REQUIRE(metaenum->name(One) == "One");
-        REQUIRE(metaenum->name(Two) == "Two");
+        REQUIRE(metaenum->name(MyEnum::One) == "One");
+        REQUIRE(metaenum->name(MyEnum::Two) == "Two");
         
         REQUIRE_THROWS_AS(metaenum->name(100), ponder::EnumValueNotFound);
     }    
     
     SECTION("values")
     {
-        REQUIRE(metaenum->hasValue(Zero) == true);
-        REQUIRE(metaenum->hasValue(One) == true);
-        REQUIRE(metaenum->hasValue(Two) == true);
+        REQUIRE(metaenum->hasValue(MyEnum::Zero) == true);
+        REQUIRE(metaenum->hasValue(MyEnum::One) == true);
+        REQUIRE(metaenum->hasValue(MyEnum::Two) == true);
         REQUIRE(metaenum->hasValue(100) == false);
 
-        REQUIRE(metaenum->value("Zero") == Zero);
-        REQUIRE(metaenum->value("One") == One);
-        REQUIRE(metaenum->value("Two") == Two);
+        REQUIRE(metaenum->value<MyEnum>("Zero") == MyEnum::Zero);
+        REQUIRE(metaenum->value<MyEnum>("One") == MyEnum::One);
+        REQUIRE(metaenum->value<MyEnum>("Two") == MyEnum::Two);
         
         REQUIRE_THROWS_AS(metaenum->value("xxx"), ponder::EnumNameNotFound);
     }
 }
-

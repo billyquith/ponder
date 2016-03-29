@@ -27,28 +27,116 @@
 **
 ****************************************************************************/
 
-#include "classvisitor.hpp"
 #include <ponder/classget.hpp>
-#include <boost/test/unit_test.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/classvisitor.hpp>
+#include <ponder/simpleproperty.hpp>
+#include <ponder/arrayproperty.hpp>
+#include <ponder/enumproperty.hpp>
+#include <ponder/userproperty.hpp>
+#include <ponder/function.hpp>
+#include <ponder/classbuilder.hpp>
+#include "catch.hpp"
+
+namespace ClassVisitorTest
+{
+    class MyClassVisitor : public ponder::ClassVisitor
+    {
+    public:
+        
+        MyClassVisitor()
+        : simpleVisited(false)
+        , arrayVisited(false)
+        , enumVisited(false)
+        , userVisited(false)
+        , functionVisited(false)
+        {}
+        
+        virtual void visit(const ponder::SimpleProperty& property) override
+        {
+            simpleVisited = true;
+        }
+        
+        virtual void visit(const ponder::ArrayProperty& property) override
+        {
+            arrayVisited = true;
+        }
+        
+        virtual void visit(const ponder::EnumProperty& property) override
+        {
+            enumVisited = true;
+        }
+        
+        virtual void visit(const ponder::UserProperty& property) override
+        {
+            userVisited = true;
+        }
+        
+        virtual void visit(const ponder::Function& function) override
+        {
+            functionVisited = true;
+        }
+        
+        bool simpleVisited;
+        bool arrayVisited;
+        bool enumVisited;
+        bool userVisited;
+        bool functionVisited;
+    };
+    
+    enum MyEnum
+    {
+    };
+    
+    struct MyType
+    {
+    };
+    
+    struct MyClass
+    {
+        int simpleProp;
+        std::string arrayProp[5];
+        MyEnum enumProp;
+        MyType userProp;
+        void function() {}
+    };
+    
+    void declare()
+    {
+        ponder::Enum::declare<MyEnum>("ClassVisitorTest::MyEnum");
+        
+        ponder::Class::declare<MyType>("ClassVisitorTest::MyType");
+        
+        ponder::Class::declare<MyClass>("ClassVisitorTest::MyClass")
+            //.property("simple", &MyClass::simpleProp)
+            .property("array", &MyClass::arrayProp);
+            //.property("enum", &MyClass::enumProp)
+            //.property("user", &MyClass::userProp);
+            //.function("function", &MyClass::function);
+    }
+}
+
+PONDER_AUTO_TYPE(ClassVisitorTest::MyEnum, &ClassVisitorTest::declare)
+PONDER_AUTO_TYPE(ClassVisitorTest::MyType, &ClassVisitorTest::declare)
+PONDER_AUTO_TYPE(ClassVisitorTest::MyClass, &ClassVisitorTest::declare)
 
 using namespace ClassVisitorTest;
 
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::ClassVisitor
 //-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_SUITE(CLASSVISITOR)
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(visit)
+TEST_CASE("Classes can have visitors")
 {
     MyClassVisitor visitor;
     ponder::classByType<MyClass>().visit(visitor);
 
-    BOOST_CHECK(visitor.simpleVisited);
-    BOOST_CHECK(visitor.arrayVisited);
-    BOOST_CHECK(visitor.enumVisited);
-    BOOST_CHECK(visitor.userVisited);
-    BOOST_CHECK(visitor.functionVisited);
+    REQUIRE(visitor.simpleVisited);
+    REQUIRE(visitor.arrayVisited);
+    REQUIRE(visitor.enumVisited);
+    REQUIRE(visitor.userVisited);
+    REQUIRE(visitor.functionVisited);
 }
 
-BOOST_AUTO_TEST_SUITE_END()

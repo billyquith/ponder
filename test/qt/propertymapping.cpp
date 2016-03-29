@@ -30,11 +30,10 @@
 #include "propertymapping.hpp"
 #include <ponder/class.hpp>
 #include <ponder/classget.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 using namespace PropertyMappingTest;
 
-//-----------------------------------------------------------------------------
 struct PropertyMappingFixture
 {
     PropertyMappingFixture()
@@ -58,7 +57,6 @@ struct PropertyMappingFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(PROPERTYMAPPING, PropertyMappingFixture)
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(name)
 {
     BOOST_CHECK(metaclass->hasProperty("m_bool_read"));
@@ -75,7 +73,6 @@ BOOST_AUTO_TEST_CASE(name)
     BOOST_CHECK(metaclass->hasProperty("m_enum"));
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
     BOOST_CHECK_EQUAL(metaclass->property("m_bool_read").type(),   ponder::boolType);
@@ -86,7 +83,6 @@ BOOST_AUTO_TEST_CASE(type)
     BOOST_CHECK_EQUAL(metaclass->property("m_enum_read").type(),   ponder::enumType);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(get)
 {
     BOOST_CHECK_EQUAL(metaclass->property("m_bool_read").get(object).to<bool>(),           true);
@@ -97,7 +93,6 @@ BOOST_AUTO_TEST_CASE(get)
     BOOST_CHECK_EQUAL(metaclass->property("m_enum_read").get(object).to<MyClass::Enum>(),  MyClass::two);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(set)
 {
     metaclass->property("m_bool").set(object, false);

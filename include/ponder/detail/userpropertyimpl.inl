@@ -73,7 +73,6 @@ struct ToUserObject<true>
     }
 };
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 UserPropertyImpl<A>::UserPropertyImpl(const std::string& name, const A& accessor)
     : UserProperty(name, classByType<typename A::DataType>())
@@ -81,14 +80,12 @@ UserPropertyImpl<A>::UserPropertyImpl(const std::string& name, const A& accessor
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
     return ToUserObject<A::Traits::isRef>::get(m_accessor.get(object.get<typename A::ClassType>()));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
@@ -96,14 +93,12 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 bool UserPropertyImpl<A>::isReadable() const
 {
     return A::canRead;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename A>
 bool UserPropertyImpl<A>::isWritable() const
 {

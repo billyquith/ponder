@@ -30,11 +30,10 @@
 #include "userproperty.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/userproperty.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 using namespace UserPropertyTest;
 
-//-----------------------------------------------------------------------------
 struct UserPropertyFixture
 {
     UserPropertyFixture()
@@ -51,26 +50,22 @@ struct UserPropertyFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(USERPROPERTY, UserPropertyFixture)
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(type)
 {
     BOOST_CHECK_EQUAL(property->type(), ponder::userType);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(getClass)
 {
     BOOST_CHECK(property->getClass() == ponder::classByType<MyType>());
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(get)
 {
     BOOST_CHECK_EQUAL(property->get(MyClass(-1)).to<MyType>().x, -1);
     BOOST_CHECK_EQUAL(property->get(MyClass(20)).to<MyType>().x, 20);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(set)
 {
     MyClass object1(1);

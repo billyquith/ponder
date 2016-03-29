@@ -27,90 +27,125 @@
 **
 ****************************************************************************/
 
-#include "propertyaccess.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/property.hpp>
-#include <boost/test/unit_test.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
+#include "catch.hpp"
+
+namespace PropertyAccessTest
+{
+    struct MyClass
+    {
+        MyClass(bool b = true)
+        : m_b(b)
+        {
+        }
+        
+        void set(int x) {p = x;}
+        int get() const {return p;}
+        int& ref() {return p;}
+        int p;
+        
+        bool m_b;
+        bool b1() {return true;}
+        bool b2() const {return false;}
+    };
+    
+    void declare()
+    {
+        using namespace std::placeholders;
+        
+        ponder::Class::declare<MyClass>("PropertyAccessTest::MyClass")
+        
+            // ***** constant value *****
+            .property("p0", &MyClass::p).readable(false).writable(true)
+            .property("p1", &MyClass::p).readable(true).writable(false)
+            .property("p2", &MyClass::p).readable(false).writable(false)
+        
+            // ***** function *****
+            .property("p3", &MyClass::p).readable(&MyClass::b1)
+            .property("p4", &MyClass::p).readable(&MyClass::b2)
+            .property("p5", &MyClass::p).readable(std::bind(&MyClass::b1, _1))
+            .property("p6", &MyClass::p).readable(&MyClass::m_b)
+            .property("p7", &MyClass::p).readable(std::function<bool (MyClass&)>(&MyClass::m_b))
+        
+            // ***** implicit - based on the availability of a getter/setter *****
+            .property("p8",  &MyClass::get)
+            .property("p9",  &MyClass::ref)
+            .property("p10", &MyClass::get, &MyClass::set)
+            ;
+    }
+}
+
+PONDER_AUTO_TYPE(PropertyAccessTest::MyClass, &PropertyAccessTest::declare)
 
 using namespace PropertyAccessTest;
 
 //-----------------------------------------------------------------------------
-struct PropertyAccessFixture
+//                  Tests for ponder::Property readable/writable
+//-----------------------------------------------------------------------------
+
+TEST_CASE("Properties can be accessed")
 {
-    PropertyAccessFixture()
-        : object_t(true)
-        , object_f(false)
+    MyClass object_t(true);
+    MyClass object_f(false);
+    
+    const ponder::Class* metaclass = &ponder::classByType<MyClass>();
+    
+    SECTION("readableImplicit")
     {
-        metaclass = &ponder::classByType<MyClass>();
+        REQUIRE(metaclass->property("p8").readable(object_t) == true);
+        REQUIRE(metaclass->property("p8").readable(object_f) == true);
+        REQUIRE(metaclass->property("p9").readable(object_t) == true);
+        REQUIRE(metaclass->property("p9").readable(object_f) == true);
+        REQUIRE(metaclass->property("p10").readable(object_t) == true);
+        REQUIRE(metaclass->property("p10").readable(object_f) == true);
     }
 
-    MyClass object_t;
-    MyClass object_f;
-    const ponder::Class* metaclass;
-};
+    SECTION("readableStatic")
+    {
+        REQUIRE(metaclass->property("p0").readable(object_t) == false);
+        REQUIRE(metaclass->property("p0").readable(object_f) == false);
+        REQUIRE(metaclass->property("p1").readable(object_t) == true);
+        REQUIRE(metaclass->property("p1").readable(object_f) == true);
+        REQUIRE(metaclass->property("p2").readable(object_t) == false);
+        REQUIRE(metaclass->property("p2").readable(object_f) == false);
+        REQUIRE(metaclass->property("p3").readable(object_t) == true);
+        REQUIRE(metaclass->property("p3").readable(object_f) == true);
+        REQUIRE(metaclass->property("p4").readable(object_t) == false);
+        REQUIRE(metaclass->property("p4").readable(object_f) == false);
+        REQUIRE(metaclass->property("p5").readable(object_t) == true);
+        REQUIRE(metaclass->property("p5").readable(object_f) == true);
+    }
 
-//-----------------------------------------------------------------------------
-//                         Tests for ponder::Property readable/writable
-//-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(PROPERTYACCESS, PropertyAccessFixture)
+    SECTION("readableDynamic")
+    {
+        REQUIRE(metaclass->property("p6").readable(object_t) == true);
+        REQUIRE(metaclass->property("p6").readable(object_f) == false);
+        REQUIRE(metaclass->property("p7").readable(object_t) == true);
+        REQUIRE(metaclass->property("p7").readable(object_f) == false);
+    }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(readableImplicit)
-{
-    BOOST_CHECK_EQUAL(metaclass->property("p8").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p8").readable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p9").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p9").readable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p10").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p10").readable(object_f), true);
+    SECTION("writableImplicit")
+    {
+        REQUIRE(metaclass->property("p8").writable(object_t) == false);
+        REQUIRE(metaclass->property("p8").writable(object_f) == false);
+        REQUIRE(metaclass->property("p9").writable(object_t) == true);
+        REQUIRE(metaclass->property("p9").writable(object_f) == true);
+        REQUIRE(metaclass->property("p10").writable(object_t) == true);
+        REQUIRE(metaclass->property("p10").writable(object_f) == true);
+    }
+
+    SECTION("writableStatic")
+    {
+        REQUIRE(metaclass->property("p0").writable(object_t) == true);
+        REQUIRE(metaclass->property("p0").writable(object_f) == true);
+        REQUIRE(metaclass->property("p1").writable(object_t) == false);
+        REQUIRE(metaclass->property("p1").writable(object_f) == false);
+        REQUIRE(metaclass->property("p2").writable(object_t) == false);
+        REQUIRE(metaclass->property("p2").writable(object_f) == false);
+    }    
 }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(readableStatic)
-{
-    BOOST_CHECK_EQUAL(metaclass->property("p0").readable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p0").readable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p1").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p1").readable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p2").readable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p2").readable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p3").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p3").readable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p4").readable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p4").readable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p5").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p5").readable(object_f), true);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(readableDynamic)
-{
-    BOOST_CHECK_EQUAL(metaclass->property("p6").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p6").readable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p7").readable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p7").readable(object_f), false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(writableImplicit)
-{
-    BOOST_CHECK_EQUAL(metaclass->property("p8").writable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p8").writable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p9").writable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p9").writable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p10").writable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p10").writable(object_f), true);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(writableStatic)
-{
-    BOOST_CHECK_EQUAL(metaclass->property("p0").writable(object_t), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p0").writable(object_f), true);
-    BOOST_CHECK_EQUAL(metaclass->property("p1").writable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p1").writable(object_f), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p2").writable(object_t), false);
-    BOOST_CHECK_EQUAL(metaclass->property("p2").writable(object_f), false);
-}
-
-BOOST_AUTO_TEST_SUITE_END()

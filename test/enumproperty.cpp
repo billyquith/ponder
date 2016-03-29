@@ -27,57 +27,82 @@
 **
 ****************************************************************************/
 
-#include "enumproperty.hpp"
+#include "catch.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/enumget.hpp>
 #include <ponder/enumproperty.hpp>
-#include <boost/test/unit_test.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
+#include <list>
+#include <vector>
+
+namespace EnumPropertyTest
+{
+    enum MyEnum
+    {
+        Zero = 0,
+        One  = 1
+    };
+    
+    struct MyClass
+    {
+        MyClass(MyEnum x_) : x(x_)
+        {
+        }
+        
+        MyEnum x;
+    };
+    
+    void declare()
+    {
+        ponder::Enum::declare<MyEnum>("EnumPropertyTest::MyEnum");
+        
+        ponder::Class::declare<MyClass>("EnumPropertyTest::MyClass")
+            .property("x", &MyClass::x);
+    }
+}
+
+PONDER_AUTO_TYPE(EnumPropertyTest::MyEnum, &EnumPropertyTest::declare)
+PONDER_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
 
 using namespace EnumPropertyTest;
 
-//-----------------------------------------------------------------------------
-struct EnumPropertyFixture
-{
-    EnumPropertyFixture()
-    {
-        const ponder::Class& metaclass = ponder::classByType<MyClass>();
-        property = &static_cast<const ponder::EnumProperty&>(metaclass.property("x"));
-    }
-
-    const ponder::EnumProperty* property;
-};
 
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::EnumProperty
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(ENUMPROPERTY, EnumPropertyFixture)
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(type)
+TEST_CASE("Enum properties")
 {
-    BOOST_CHECK_EQUAL(property->type(), ponder::enumType);
+    const ponder::Class& metaclass = ponder::classByType<MyClass>();
+    
+    const ponder::EnumProperty* property =
+        &static_cast<const ponder::EnumProperty&>(metaclass.property("x"));
+    
+    SECTION("have enum type")
+    {
+        REQUIRE(property->type() == ponder::enumType);
+    }
+
+    SECTION("wrap an Enum")
+    {
+        REQUIRE(( property->getEnum() == ponder::enumByType<MyEnum>() ));
+    }
+
+    SECTION("have values")
+    {
+        REQUIRE(( property->get(MyClass(Zero)) == ponder::Value(Zero) ));
+        REQUIRE(( property->get(MyClass(One)) == ponder::Value(One) ));
+    }
+
+    SECTION("allow setting of values")
+    {
+        MyClass object(Zero);
+        property->set(object, One);
+
+        REQUIRE(( property->get(object) == ponder::Value(One) ));
+    }    
 }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(getEnum)
-{
-    BOOST_CHECK(property->getEnum() == ponder::enumByType<MyEnum>());
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(get)
-{
-    BOOST_CHECK_EQUAL(property->get(MyClass(Zero)), ponder::Value(Zero));
-    BOOST_CHECK_EQUAL(property->get(MyClass(One)),  ponder::Value(One));
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(set)
-{
-    MyClass object(Zero);
-    property->set(object, One);
-
-    BOOST_CHECK_EQUAL(property->get(object), ponder::Value(One));
-}
-
-BOOST_AUTO_TEST_SUITE_END()

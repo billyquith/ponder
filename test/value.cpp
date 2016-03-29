@@ -27,510 +27,559 @@
 **
 ****************************************************************************/
 
-#include "value.hpp"
 #include <ponder/value.hpp>
-#include <boost/test/unit_test.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/enum.hpp>
+#include <ponder/type.hpp>
+#include <ponder/valuevisitor.hpp>
+#include <ponder/enumobject.hpp>
+#include <ponder/userobject.hpp>
+#include <ponder/classbuilder.hpp>
+#include "catch.hpp"
+
+namespace ValueTest
+{
+    struct MyClass
+    {
+        MyClass(int x_) : x(x_) {}
+        int x;
+    };
+    
+    bool operator==(const MyClass& left, const MyClass& right)
+    {
+        return left.x == right.x;
+    }
+    
+    bool operator<(const MyClass& left, const MyClass& right)
+    {
+        return left.x < right.x;
+    }
+    
+    std::ostream& operator<<(std::ostream& stream, const MyClass& object)
+    {
+        return stream << object.x;
+    }
+    
+    enum MyEnum
+    {
+        One = 1,
+        Two = 2
+    };
+    
+    struct Visitor : public ponder::ValueVisitor<ponder::Type>
+    {
+        ponder::Type operator()(ponder::NoType)
+        {
+            return ponder::noType;
+        }
+        
+        ponder::Type operator()(bool)
+        {
+            return ponder::boolType;
+        }
+        
+        ponder::Type operator()(long)
+        {
+            return ponder::intType;
+        }
+        
+        ponder::Type operator()(double)
+        {
+            return ponder::realType;
+        }
+        
+        ponder::Type operator()(const std::string&)
+        {
+            return ponder::stringType;
+        }
+        
+        ponder::Type operator()(const ponder::EnumObject&)
+        {
+            return ponder::enumType;
+        }
+        
+        ponder::Type operator()(const ponder::UserObject&)
+        {
+            return ponder::userType;
+        }
+    };
+    
+    void declare()
+    {
+        ponder::Enum::declare<MyEnum>("ValueTest::MyEnum")
+            .value("One", One)
+            .value("Two", Two);
+        ponder::Class::declare<MyClass>("ValueTest::MyClass");
+    }
+}
+
+PONDER_AUTO_TYPE(ValueTest::MyClass, &ValueTest::declare)
+PONDER_AUTO_TYPE(ValueTest::MyEnum, &ValueTest::declare)
 
 using namespace ValueTest;
 
 //-----------------------------------------------------------------------------
-struct ValueFixture
-{
-    ValueFixture() : object1(1), object2(1)
-    {
-        noValue      = ponder::Value::nothing;
-        boolValue    = true;
-        charValue    = static_cast<char>(1);
-        shortValue   = static_cast<short>(1);
-        intValue     = static_cast<int>(1);
-        longValue    = static_cast<long>(1);
-        ucharValue   = static_cast<unsigned char>(1);
-        ushortValue  = static_cast<unsigned short>(1);
-        uintValue    = static_cast<unsigned int>(1);
-        ulongValue   = static_cast<unsigned long>(1);
-        floatValue   = 1.f;
-        doubleValue  = 1.;
-        cstringValue = "1";
-        stringValue  = std::string("1");
-        enumValue    = One;
-        objectValue  = object1;
-    }
-
-    static bool equivalent(const ponder::Value& left, const ponder::Value& right)
-    {
-        return !(left < right) && !(right < left);
-    }
-
-    ponder::Value noValue;
-    ponder::Value boolValue;
-    ponder::Value charValue;
-    ponder::Value shortValue;
-    ponder::Value intValue;
-    ponder::Value longValue;
-    ponder::Value ucharValue;
-    ponder::Value ushortValue;
-    ponder::Value uintValue;
-    ponder::Value ulongValue;
-    ponder::Value floatValue;
-    ponder::Value doubleValue;
-    ponder::Value cstringValue;
-    ponder::Value stringValue;
-    ponder::Value enumValue;
-    ponder::Value objectValue;
-    MyClass object1;
-    MyClass object2;
-};
-
-//-----------------------------------------------------------------------------
 //                         Tests for ponder::Value
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(VALUE, ValueFixture)
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(type)
-{
-    BOOST_CHECK_EQUAL(noValue.type(),      ponder::noType);
-    BOOST_CHECK_EQUAL(boolValue.type(),    ponder::boolType);
-    BOOST_CHECK_EQUAL(charValue.type(),    ponder::intType);
-    BOOST_CHECK_EQUAL(shortValue.type(),   ponder::intType);
-    BOOST_CHECK_EQUAL(intValue.type(),     ponder::intType);
-    BOOST_CHECK_EQUAL(longValue.type(),    ponder::intType);
-    BOOST_CHECK_EQUAL(ucharValue.type(),   ponder::intType);
-    BOOST_CHECK_EQUAL(ushortValue.type(),  ponder::intType);
-    BOOST_CHECK_EQUAL(uintValue.type(),    ponder::intType);
-    BOOST_CHECK_EQUAL(ulongValue.type(),   ponder::intType);
-    BOOST_CHECK_EQUAL(floatValue.type(),   ponder::realType);
-    BOOST_CHECK_EQUAL(doubleValue.type(),  ponder::realType);
-    BOOST_CHECK_EQUAL(cstringValue.type(), ponder::stringType);
-    BOOST_CHECK_EQUAL(stringValue.type(),  ponder::stringType);
-    BOOST_CHECK_EQUAL(enumValue.type(),    ponder::enumType);
-    BOOST_CHECK_EQUAL(objectValue.type(),  ponder::userType);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(boolConversions)
-{
-    BOOST_CHECK_EQUAL(boolValue.to<bool>(),           true);
-    BOOST_CHECK_EQUAL(boolValue.to<char>(),           1);
-    BOOST_CHECK_EQUAL(boolValue.to<short>(),          1);
-    BOOST_CHECK_EQUAL(boolValue.to<int>(),            1);
-    BOOST_CHECK_EQUAL(boolValue.to<long>(),           1);
-    BOOST_CHECK_EQUAL(boolValue.to<unsigned char>(),  1);
-    BOOST_CHECK_EQUAL(boolValue.to<unsigned short>(), 1);
-    BOOST_CHECK_EQUAL(boolValue.to<unsigned int>(),   1);
-    BOOST_CHECK_EQUAL(boolValue.to<unsigned long>(),  1);
-    BOOST_CHECK_CLOSE(boolValue.to<float>(),          1.f, 1E-5f);
-    BOOST_CHECK_CLOSE(boolValue.to<double>(),         1., 1E-5);
-    BOOST_CHECK_EQUAL(boolValue.to<std::string>(),    "1");
-    BOOST_CHECK_EQUAL(boolValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(boolValue.to<MyClass>(),        ponder::BadType);
-
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<bool>(),           true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<char>(),           true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<short>(),          true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<int>(),            true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<long>(),           true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<unsigned char>(),  true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<unsigned short>(), true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<unsigned int>(),   true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<unsigned long>(),  true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<float>(),          true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<double>(),         true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<std::string>(),    true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<MyEnum>(),         true);
-    BOOST_CHECK_EQUAL(boolValue.isCompatible<MyClass>(),        false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(intConversions)
-{
-    BOOST_CHECK_EQUAL(intValue.to<bool>(),           true);
-    BOOST_CHECK_EQUAL(intValue.to<char>(),           1);
-    BOOST_CHECK_EQUAL(intValue.to<short>(),          1);
-    BOOST_CHECK_EQUAL(intValue.to<int>(),            1);
-    BOOST_CHECK_EQUAL(intValue.to<long>(),           1);
-    BOOST_CHECK_EQUAL(intValue.to<unsigned char>(),  1);
-    BOOST_CHECK_EQUAL(intValue.to<unsigned short>(), 1);
-    BOOST_CHECK_EQUAL(intValue.to<unsigned int>(),   1);
-    BOOST_CHECK_EQUAL(intValue.to<unsigned long>(),  1);
-    BOOST_CHECK_CLOSE(intValue.to<float>(),          1.f, 1E-5f);
-    BOOST_CHECK_CLOSE(intValue.to<double>(),         1., 1E-5);
-    BOOST_CHECK_EQUAL(intValue.to<std::string>(),    "1");
-    BOOST_CHECK_EQUAL(intValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(intValue.to<MyClass>(),        ponder::BadType);
-
-    BOOST_CHECK_EQUAL(intValue.isCompatible<bool>(),           true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<char>(),           true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<short>(),          true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<int>(),            true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<long>(),           true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<unsigned char>(),  true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<unsigned short>(), true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<unsigned int>(),   true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<unsigned long>(),  true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<float>(),          true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<double>(),         true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<std::string>(),    true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<MyEnum>(),         true);
-    BOOST_CHECK_EQUAL(intValue.isCompatible<MyClass>(),        false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(doubleConversions)
-{
-    BOOST_CHECK_EQUAL(doubleValue.to<bool>(),           true);
-    BOOST_CHECK_EQUAL(doubleValue.to<char>(),           1);
-    BOOST_CHECK_EQUAL(doubleValue.to<short>(),          1);
-    BOOST_CHECK_EQUAL(doubleValue.to<int>(),            1);
-    BOOST_CHECK_EQUAL(doubleValue.to<long>(),           1);
-    BOOST_CHECK_EQUAL(doubleValue.to<unsigned char>(),  1);
-    BOOST_CHECK_EQUAL(doubleValue.to<unsigned short>(), 1);
-    BOOST_CHECK_EQUAL(doubleValue.to<unsigned int>(),   1);
-    BOOST_CHECK_EQUAL(doubleValue.to<unsigned long>(),  1);
-    BOOST_CHECK_CLOSE(doubleValue.to<float>(),          1.f, 1E-5f);
-    BOOST_CHECK_CLOSE(doubleValue.to<double>(),         1., 1E-5);
-    BOOST_CHECK_EQUAL(doubleValue.to<std::string>(),    "1");
-    BOOST_CHECK_EQUAL(doubleValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(doubleValue.to<MyClass>(),        ponder::BadType);
-
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<bool>(),           true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<char>(),           true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<short>(),          true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<int>(),            true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<long>(),           true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<unsigned char>(),  true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<unsigned short>(), true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<unsigned int>(),   true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<unsigned long>(),  true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<float>(),          true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<double>(),         true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<std::string>(),    true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<MyEnum>(),         true);
-    BOOST_CHECK_EQUAL(doubleValue.isCompatible<MyClass>(),        false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(stringConversionsOk)
-{
-    BOOST_CHECK_EQUAL(stringValue.to<bool>(),           true);
-    BOOST_CHECK_EQUAL(stringValue.to<char>(),           '1');
-    BOOST_CHECK_EQUAL(stringValue.to<short>(),          1);
-    BOOST_CHECK_EQUAL(stringValue.to<int>(),            1);
-    BOOST_CHECK_EQUAL(stringValue.to<long>(),           1);
-    BOOST_CHECK_EQUAL(stringValue.to<unsigned char>(),  '1');
-    BOOST_CHECK_EQUAL(stringValue.to<unsigned short>(), 1);
-    BOOST_CHECK_EQUAL(stringValue.to<unsigned int>(),   1);
-    BOOST_CHECK_EQUAL(stringValue.to<unsigned long>(),  1);
-    BOOST_CHECK_CLOSE(stringValue.to<float>(),          1.f, 1E-5f);
-    BOOST_CHECK_CLOSE(stringValue.to<double>(),         1., 1E-5);
-    BOOST_CHECK_EQUAL(stringValue.to<std::string>(),    "1");
-    BOOST_CHECK_EQUAL(stringValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(stringValue.to<MyClass>(),        ponder::BadType);
-
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<bool>(),           true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<char>(),           true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<short>(),          true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<int>(),            true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<long>(),           true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<unsigned char>(),  true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<unsigned short>(), true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<unsigned int>(),   true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<unsigned long>(),  true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<float>(),          true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<double>(),         true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<std::string>(),    true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<MyEnum>(),         true);
-    BOOST_CHECK_EQUAL(stringValue.isCompatible<MyClass>(),        false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(stringConversionsEnumOk)
-{
-    BOOST_CHECK_EQUAL(ponder::Value("One").to<MyEnum>(), One);
-    BOOST_CHECK_EQUAL(ponder::Value("Two").to<MyEnum>(), Two);
-    BOOST_CHECK_EQUAL(ponder::Value("1").to<MyEnum>(),   One);
-    BOOST_CHECK_EQUAL(ponder::Value("2").to<MyEnum>(),   Two);
-
-    BOOST_CHECK_EQUAL(ponder::Value("One").isCompatible<MyEnum>(), true);
-    BOOST_CHECK_EQUAL(ponder::Value("Two").isCompatible<MyEnum>(), true);
-    BOOST_CHECK_EQUAL(ponder::Value("1").isCompatible<MyEnum>(),   true);
-    BOOST_CHECK_EQUAL(ponder::Value("2").isCompatible<MyEnum>(),   true);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(stringConversionsNotOk)
-{
-    ponder::Value badStringValue = "not a number";
-
-    BOOST_CHECK_THROW(badStringValue.to<bool>(),           ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<char>(),           ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<short>(),          ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<int>(),            ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<long>(),           ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned char>(),  ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned short>(), ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned int>(),   ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<unsigned long>(),  ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<float>(),          ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<double>(),         ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<MyEnum>(),         ponder::BadType);
-    BOOST_CHECK_THROW(badStringValue.to<MyClass>(),        ponder::BadType);
-
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<bool>(),           false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<char>(),           false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<short>(),          false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<int>(),            false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<long>(),           false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<unsigned char>(),  false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<unsigned short>(), false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<unsigned int>(),   false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<unsigned long>(),  false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<float>(),          false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<double>(),         false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<std::string>(),    true);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<MyEnum>(),         false);
-    BOOST_CHECK_EQUAL(badStringValue.isCompatible<MyClass>(),        false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(enumConversions)
-{
-    BOOST_CHECK_EQUAL(enumValue.to<bool>(),           true);
-    BOOST_CHECK_EQUAL(enumValue.to<char>(),           1);
-    BOOST_CHECK_EQUAL(enumValue.to<short>(),          1);
-    BOOST_CHECK_EQUAL(enumValue.to<int>(),            1);
-    BOOST_CHECK_EQUAL(enumValue.to<long>(),           1);
-    BOOST_CHECK_EQUAL(enumValue.to<unsigned char>(),  1);
-    BOOST_CHECK_EQUAL(enumValue.to<unsigned short>(), 1);
-    BOOST_CHECK_EQUAL(enumValue.to<unsigned int>(),   1);
-    BOOST_CHECK_EQUAL(enumValue.to<unsigned long>(),  1);
-    BOOST_CHECK_CLOSE(enumValue.to<float>(),          1.f, 1E-5f);
-    BOOST_CHECK_CLOSE(enumValue.to<double>(),         1., 1E-5);
-    BOOST_CHECK_EQUAL(enumValue.to<std::string>(),    "One");
-    BOOST_CHECK_EQUAL(enumValue.to<MyEnum>(),         One);
-    BOOST_CHECK_THROW(enumValue.to<MyClass>(),        ponder::BadType);
-
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<bool>(),           true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<char>(),           true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<short>(),          true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<int>(),            true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<long>(),           true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<unsigned char>(),  true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<unsigned short>(), true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<unsigned int>(),   true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<unsigned long>(),  true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<float>(),          true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<double>(),         true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<std::string>(),    true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<MyEnum>(),         true);
-    BOOST_CHECK_EQUAL(enumValue.isCompatible<MyClass>(),        false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(objectConversions)
-{
-    BOOST_CHECK_EQUAL(objectValue.to<bool>(),             true);
-    BOOST_CHECK_THROW(objectValue.to<char>(),             ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<short>(),            ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<int>(),              ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<long>(),             ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned char>(),    ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned short>(),   ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned int>(),     ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<unsigned long>(),    ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<float>(),            ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<double>(),           ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<std::string>(),      ponder::BadType);
-    BOOST_CHECK_THROW(objectValue.to<MyEnum>(),           ponder::BadType);
-    BOOST_CHECK_EQUAL(objectValue.to<MyClass>(),          object1);
-    BOOST_CHECK_EQUAL(objectValue.to<ponder::UserObject>(), ponder::UserObject(object1));
-
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<bool>(),           true);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<char>(),           false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<short>(),          false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<int>(),            false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<long>(),           false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<unsigned char>(),  false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<unsigned short>(), false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<unsigned int>(),   false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<unsigned long>(),  false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<float>(),          false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<double>(),         false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<std::string>(),    false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<MyEnum>(),         false);
-    BOOST_CHECK_EQUAL(objectValue.isCompatible<MyClass>(),        true);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(visitor)
-{
-    Visitor visitor;
-
-    BOOST_CHECK_EQUAL(noValue.visit(visitor),      ponder::noType);
-    BOOST_CHECK_EQUAL(boolValue.visit(visitor),    ponder::boolType);
-    BOOST_CHECK_EQUAL(charValue.visit(visitor),    ponder::intType);
-    BOOST_CHECK_EQUAL(shortValue.visit(visitor),   ponder::intType);
-    BOOST_CHECK_EQUAL(intValue.visit(visitor),     ponder::intType);
-    BOOST_CHECK_EQUAL(longValue.visit(visitor),    ponder::intType);
-    BOOST_CHECK_EQUAL(ucharValue.visit(visitor),   ponder::intType);
-    BOOST_CHECK_EQUAL(ushortValue.visit(visitor),  ponder::intType);
-    BOOST_CHECK_EQUAL(uintValue.visit(visitor),    ponder::intType);
-    BOOST_CHECK_EQUAL(ulongValue.visit(visitor),   ponder::intType);
-    BOOST_CHECK_EQUAL(floatValue.visit(visitor),   ponder::realType);
-    BOOST_CHECK_EQUAL(doubleValue.visit(visitor),  ponder::realType);
-    BOOST_CHECK_EQUAL(cstringValue.visit(visitor), ponder::stringType);
-    BOOST_CHECK_EQUAL(stringValue.visit(visitor),  ponder::stringType);
-    BOOST_CHECK_EQUAL(enumValue.visit(visitor),    ponder::enumType);
-    BOOST_CHECK_EQUAL(objectValue.visit(visitor),  ponder::userType);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(equal)
-{
-    BOOST_CHECK_EQUAL(noValue == noValue,     true);
-    BOOST_CHECK_EQUAL(noValue == boolValue,   false);
-    BOOST_CHECK_EQUAL(noValue == intValue,    false);
-    BOOST_CHECK_EQUAL(noValue == doubleValue, false);
-    BOOST_CHECK_EQUAL(noValue == stringValue, false);
-    BOOST_CHECK_EQUAL(noValue == enumValue,   false);
-    BOOST_CHECK_EQUAL(noValue == objectValue, false);
-
-    BOOST_CHECK_EQUAL(boolValue == noValue,     false);
-    BOOST_CHECK_EQUAL(boolValue == boolValue,   true);
-    BOOST_CHECK_EQUAL(boolValue == intValue,    false);
-    BOOST_CHECK_EQUAL(boolValue == doubleValue, false);
-    BOOST_CHECK_EQUAL(boolValue == stringValue, false);
-    BOOST_CHECK_EQUAL(boolValue == enumValue,   false);
-    BOOST_CHECK_EQUAL(boolValue == objectValue, false);
-
-    BOOST_CHECK_EQUAL(intValue == noValue,     false);
-    BOOST_CHECK_EQUAL(intValue == boolValue,   false);
-    BOOST_CHECK_EQUAL(intValue == intValue,    true);
-    BOOST_CHECK_EQUAL(intValue == doubleValue, false);
-    BOOST_CHECK_EQUAL(intValue == stringValue, false);
-    BOOST_CHECK_EQUAL(intValue == enumValue,   false);
-    BOOST_CHECK_EQUAL(intValue == objectValue, false);
-
-    BOOST_CHECK_EQUAL(doubleValue == noValue,     false);
-    BOOST_CHECK_EQUAL(doubleValue == boolValue,   false);
-    BOOST_CHECK_EQUAL(doubleValue == intValue,    false);
-    BOOST_CHECK_EQUAL(doubleValue == doubleValue, true);
-    BOOST_CHECK_EQUAL(doubleValue == stringValue, false);
-    BOOST_CHECK_EQUAL(doubleValue == enumValue,   false);
-    BOOST_CHECK_EQUAL(doubleValue == objectValue, false);
-
-    BOOST_CHECK_EQUAL(stringValue == noValue,     false);
-    BOOST_CHECK_EQUAL(stringValue == boolValue,   false);
-    BOOST_CHECK_EQUAL(stringValue == intValue,    false);
-    BOOST_CHECK_EQUAL(stringValue == doubleValue, false);
-    BOOST_CHECK_EQUAL(stringValue == stringValue, true);
-    BOOST_CHECK_EQUAL(stringValue == enumValue,   false);
-    BOOST_CHECK_EQUAL(stringValue == objectValue, false);
-
-    BOOST_CHECK_EQUAL(enumValue == noValue,     false);
-    BOOST_CHECK_EQUAL(enumValue == boolValue,   false);
-    BOOST_CHECK_EQUAL(enumValue == intValue,    false);
-    BOOST_CHECK_EQUAL(enumValue == doubleValue, false);
-    BOOST_CHECK_EQUAL(enumValue == stringValue, false);
-    BOOST_CHECK_EQUAL(enumValue == enumValue,   true);
-    BOOST_CHECK_EQUAL(enumValue == objectValue, false);
-
-    BOOST_CHECK_EQUAL(objectValue == noValue,     false);
-    BOOST_CHECK_EQUAL(objectValue == boolValue,   false);
-    BOOST_CHECK_EQUAL(objectValue == intValue,    false);
-    BOOST_CHECK_EQUAL(objectValue == doubleValue, false);
-    BOOST_CHECK_EQUAL(objectValue == stringValue, false);
-    BOOST_CHECK_EQUAL(objectValue == enumValue,   false);
-    BOOST_CHECK_EQUAL(objectValue == objectValue, true);
-
-    BOOST_CHECK_EQUAL(ponder::Value(true)    == ponder::Value(true),    true);
-    BOOST_CHECK_EQUAL(ponder::Value(1)       == ponder::Value(1),       true);
-    BOOST_CHECK_EQUAL(ponder::Value(1.)      == ponder::Value(1.),      true);
-    BOOST_CHECK_EQUAL(ponder::Value("1")     == ponder::Value("1"),     true);
-    BOOST_CHECK_EQUAL(ponder::Value(One)     == ponder::Value(One),     true);
-    BOOST_CHECK_EQUAL(ponder::Value(object1) == ponder::Value(object1), true);
-
-    BOOST_CHECK_EQUAL(ponder::Value(true)    == ponder::Value(false),   false);
-    BOOST_CHECK_EQUAL(ponder::Value(1)       == ponder::Value(2),       false);
-    BOOST_CHECK_EQUAL(ponder::Value(1.)      == ponder::Value(2.),      false);
-    BOOST_CHECK_EQUAL(ponder::Value("1")     == ponder::Value("2"),     false);
-    BOOST_CHECK_EQUAL(ponder::Value(One)     == ponder::Value(Two),     false);
-    BOOST_CHECK_EQUAL(ponder::Value(object1) == ponder::Value(object2), false);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(lessThan)
-{
-    BOOST_CHECK_EQUAL(equivalent(noValue, noValue),     true);
-    BOOST_CHECK_EQUAL(equivalent(noValue, boolValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(noValue, intValue),    false);
-    BOOST_CHECK_EQUAL(equivalent(noValue, doubleValue), false);
-    BOOST_CHECK_EQUAL(equivalent(noValue, stringValue), false);
-    BOOST_CHECK_EQUAL(equivalent(noValue, enumValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(noValue, objectValue), false);
-
-    BOOST_CHECK_EQUAL(equivalent(boolValue, noValue),     false);
-    BOOST_CHECK_EQUAL(equivalent(boolValue, boolValue),   true);
-    BOOST_CHECK_EQUAL(equivalent(boolValue, intValue),    false);
-    BOOST_CHECK_EQUAL(equivalent(boolValue, doubleValue), false);
-    BOOST_CHECK_EQUAL(equivalent(boolValue, stringValue), false);
-    BOOST_CHECK_EQUAL(equivalent(boolValue, enumValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(boolValue, objectValue), false);
-
-    BOOST_CHECK_EQUAL(equivalent(intValue, noValue),     false);
-    BOOST_CHECK_EQUAL(equivalent(intValue, boolValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(intValue, intValue),    true);
-    BOOST_CHECK_EQUAL(equivalent(intValue, doubleValue), false);
-    BOOST_CHECK_EQUAL(equivalent(intValue, stringValue), false);
-    BOOST_CHECK_EQUAL(equivalent(intValue, enumValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(intValue, objectValue), false);
-
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, noValue),     false);
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, boolValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, intValue),    false);
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, doubleValue), true);
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, stringValue), false);
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, enumValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(doubleValue, objectValue), false);
-
-    BOOST_CHECK_EQUAL(equivalent(stringValue, noValue),     false);
-    BOOST_CHECK_EQUAL(equivalent(stringValue, boolValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(stringValue, intValue),    false);
-    BOOST_CHECK_EQUAL(equivalent(stringValue, doubleValue), false);
-    BOOST_CHECK_EQUAL(equivalent(stringValue, stringValue), true);
-    BOOST_CHECK_EQUAL(equivalent(stringValue, enumValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(stringValue, objectValue), false);
-
-    BOOST_CHECK_EQUAL(equivalent(enumValue, noValue),     false);
-    BOOST_CHECK_EQUAL(equivalent(enumValue, boolValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(enumValue, intValue),    false);
-    BOOST_CHECK_EQUAL(equivalent(enumValue, doubleValue), false);
-    BOOST_CHECK_EQUAL(equivalent(enumValue, stringValue), false);
-    BOOST_CHECK_EQUAL(equivalent(enumValue, enumValue),   true);
-    BOOST_CHECK_EQUAL(equivalent(enumValue, objectValue), false);
-
-    BOOST_CHECK_EQUAL(equivalent(objectValue, noValue),     false);
-    BOOST_CHECK_EQUAL(equivalent(objectValue, boolValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(objectValue, intValue),    false);
-    BOOST_CHECK_EQUAL(equivalent(objectValue, doubleValue), false);
-    BOOST_CHECK_EQUAL(equivalent(objectValue, stringValue), false);
-    BOOST_CHECK_EQUAL(equivalent(objectValue, enumValue),   false);
-    BOOST_CHECK_EQUAL(equivalent(objectValue, objectValue), true);
-
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(),        ponder::Value()),        true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(true),    ponder::Value(true)),    true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(1),       ponder::Value(1)),       true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(1.),      ponder::Value(1.)),      true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value("1"),     ponder::Value("1")),     true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(One),     ponder::Value(One)),     true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(object1), ponder::Value(object1)), true);
-    BOOST_CHECK_EQUAL(equivalent(ponder::Value(object1), ponder::Value(object2)), false);
-
-    BOOST_CHECK_EQUAL(ponder::Value(false) < ponder::Value(true), true);
-    BOOST_CHECK_EQUAL(ponder::Value(1)     < ponder::Value(2),    true);
-    BOOST_CHECK_EQUAL(ponder::Value(1.)    < ponder::Value(2.),   true);
-    BOOST_CHECK_EQUAL(ponder::Value("1")   < ponder::Value("2"),  true);
-    BOOST_CHECK_EQUAL(ponder::Value(One)   < ponder::Value(Two),  true);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
+//TEST_CASE("Ponder has variant values")
+//{
+//    MyClass object1(1);
+//    MyClass object2(2);                          
+//    ponder::Value noValue      = ponder::Value::nothing;
+//    ponder::Value boolValue    = true;
+//    ponder::Value charValue    = static_cast<char>(1);
+//    ponder::Value shortValue   = static_cast<short>(1);
+//    ponder::Value intValue     = static_cast<int>(1);
+//    ponder::Value longValue    = static_cast<long>(1);
+//    ponder::Value ucharValue   = static_cast<unsigned char>(1);
+//    ponder::Value ushortValue  = static_cast<unsigned short>(1);
+//    ponder::Value uintValue    = static_cast<unsigned int>(1);
+//    ponder::Value ulongValue   = static_cast<unsigned long>(1);
+//    ponder::Value floatValue   = 1.f;
+//    ponder::Value doubleValue  = 1.;
+//    ponder::Value cstringValue = "1";
+//    ponder::Value stringValue  = std::string("1");
+//    ponder::Value enumValue    = One;
+//    ponder::Value objectValue  = object1;
+//    
+//    SECTION("values have type")
+//    {
+//        REQUIRE(noValue.type() ==      ponder::noType);
+//        REQUIRE(boolValue.type() ==    ponder::boolType);
+//        REQUIRE(charValue.type() ==    ponder::intType);
+//        REQUIRE(shortValue.type() ==   ponder::intType);
+//        REQUIRE(intValue.type() ==     ponder::intType);
+//        REQUIRE(longValue.type() ==    ponder::intType);
+//        REQUIRE(ucharValue.type() ==   ponder::intType);
+//        REQUIRE(ushortValue.type() ==  ponder::intType);
+//        REQUIRE(uintValue.type() ==    ponder::intType);
+//        REQUIRE(ulongValue.type() ==   ponder::intType);
+//        REQUIRE(floatValue.type() ==   ponder::realType);
+//        REQUIRE(doubleValue.type() ==  ponder::realType);
+//        REQUIRE(cstringValue.type() == ponder::stringType);
+//        REQUIRE(stringValue.type() ==  ponder::stringType);
+//        REQUIRE(enumValue.type() ==    ponder::enumType);
+//        REQUIRE(objectValue.type() ==  ponder::userType);
+//    }
+//
+//    SECTION("boolean values can be converted to other types")
+//    {
+//        REQUIRE(boolValue.to<bool>() ==           true);
+//        REQUIRE(boolValue.to<char>() ==           1);
+//        REQUIRE(boolValue.to<short>() ==          1);
+//        REQUIRE(boolValue.to<int>() ==            1);
+//        REQUIRE(boolValue.to<long>() ==           1);
+//        REQUIRE(boolValue.to<unsigned char>() ==  1);
+//        REQUIRE(boolValue.to<unsigned short>() == 1);
+//        REQUIRE(boolValue.to<unsigned int>() ==   1);
+//        REQUIRE(boolValue.to<unsigned long>() ==  1);
+//        REQUIRE(boolValue.to<float>() == Approx(1.f).epsilon(1E-5f));
+//        REQUIRE(boolValue.to<double>() == Approx(1.).epsilon(1E-5));
+//        REQUIRE(boolValue.to<std::string>() ==    "1");
+//        REQUIRE(boolValue.to<MyEnum>() ==         One);
+//        REQUIRE_THROWS_AS(boolValue.to<MyClass>(), ponder::BadType);
+//
+//        REQUIRE(boolValue.isCompatible<bool>() ==           true);
+//        REQUIRE(boolValue.isCompatible<char>() ==           true);
+//        REQUIRE(boolValue.isCompatible<short>() ==          true);
+//        REQUIRE(boolValue.isCompatible<int>() ==            true);
+//        REQUIRE(boolValue.isCompatible<long>() ==           true);
+//        REQUIRE(boolValue.isCompatible<unsigned char>() ==  true);
+//        REQUIRE(boolValue.isCompatible<unsigned short>() == true);
+//        REQUIRE(boolValue.isCompatible<unsigned int>() ==   true);
+//        REQUIRE(boolValue.isCompatible<unsigned long>() ==  true);
+//        REQUIRE(boolValue.isCompatible<float>() ==          true);
+//        REQUIRE(boolValue.isCompatible<double>() ==         true);
+//        REQUIRE(boolValue.isCompatible<std::string>() ==    true);
+//        REQUIRE(boolValue.isCompatible<MyEnum>() ==         true);
+//        REQUIRE(boolValue.isCompatible<MyClass>() ==        false);
+//    }
+//
+//    SECTION("integer values can be converted to other types")
+//    {
+//        REQUIRE(intValue.to<bool>() ==           true);
+//        REQUIRE(intValue.to<char>() ==           1);
+//        REQUIRE(intValue.to<short>() ==          1);
+//        REQUIRE(intValue.to<int>() ==            1);
+//        REQUIRE(intValue.to<long>() ==           1);
+//        REQUIRE(intValue.to<unsigned char>() ==  1);
+//        REQUIRE(intValue.to<unsigned short>() == 1);
+//        REQUIRE(intValue.to<unsigned int>() ==   1);
+//        REQUIRE(intValue.to<unsigned long>() ==  1);
+//        REQUIRE(intValue.to<float>() == Approx(1.f).epsilon(1E-5f));
+//        REQUIRE(intValue.to<double>() == Approx(1.).epsilon(1E-5));
+//        REQUIRE(intValue.to<std::string>() ==    "1");
+//        REQUIRE(intValue.to<MyEnum>() ==         One);
+//        REQUIRE_THROWS_AS(intValue.to<MyClass>(),        ponder::BadType);
+//
+//        REQUIRE(intValue.isCompatible<bool>() ==           true);
+//        REQUIRE(intValue.isCompatible<char>() ==           true);
+//        REQUIRE(intValue.isCompatible<short>() ==          true);
+//        REQUIRE(intValue.isCompatible<int>() ==            true);
+//        REQUIRE(intValue.isCompatible<long>() ==           true);
+//        REQUIRE(intValue.isCompatible<unsigned char>() ==  true);
+//        REQUIRE(intValue.isCompatible<unsigned short>() == true);
+//        REQUIRE(intValue.isCompatible<unsigned int>() ==   true);
+//        REQUIRE(intValue.isCompatible<unsigned long>() ==  true);
+//        REQUIRE(intValue.isCompatible<float>() ==          true);
+//        REQUIRE(intValue.isCompatible<double>() ==         true);
+//        REQUIRE(intValue.isCompatible<std::string>() ==    true);
+//        REQUIRE(intValue.isCompatible<MyEnum>() ==         true);
+//        REQUIRE(intValue.isCompatible<MyClass>() ==        false);
+//    }
+//
+//    SECTION("double values can be converted to other types")
+//    {
+//        REQUIRE(doubleValue.to<bool>() ==           true);
+//        REQUIRE(doubleValue.to<char>() ==           1);
+//        REQUIRE(doubleValue.to<short>() ==          1);
+//        REQUIRE(doubleValue.to<int>() ==            1);
+//        REQUIRE(doubleValue.to<long>() ==           1);
+//        REQUIRE(doubleValue.to<unsigned char>() ==  1);
+//        REQUIRE(doubleValue.to<unsigned short>() == 1);
+//        REQUIRE(doubleValue.to<unsigned int>() ==   1);
+//        REQUIRE(doubleValue.to<unsigned long>() ==  1);
+//        REQUIRE(doubleValue.to<float>() == Approx(1.f).epsilon(1E-5f));
+//        REQUIRE(doubleValue.to<double>() == Approx(1.).epsilon(1E-5));
+//        REQUIRE(doubleValue.to<std::string>() ==    "1");
+//        REQUIRE(doubleValue.to<MyEnum>() ==         One);
+//        REQUIRE_THROWS_AS(doubleValue.to<MyClass>(), ponder::BadType);
+//
+//        REQUIRE(doubleValue.isCompatible<bool>() ==           true);
+//        REQUIRE(doubleValue.isCompatible<char>() ==           true);
+//        REQUIRE(doubleValue.isCompatible<short>() ==          true);
+//        REQUIRE(doubleValue.isCompatible<int>() ==            true);
+//        REQUIRE(doubleValue.isCompatible<long>() ==           true);
+//        REQUIRE(doubleValue.isCompatible<unsigned char>() ==  true);
+//        REQUIRE(doubleValue.isCompatible<unsigned short>() == true);
+//        REQUIRE(doubleValue.isCompatible<unsigned int>() ==   true);
+//        REQUIRE(doubleValue.isCompatible<unsigned long>() ==  true);
+//        REQUIRE(doubleValue.isCompatible<float>() ==          true);
+//        REQUIRE(doubleValue.isCompatible<double>() ==         true);
+//        REQUIRE(doubleValue.isCompatible<std::string>() ==    true);
+//        REQUIRE(doubleValue.isCompatible<MyEnum>() ==         true);
+//        REQUIRE(doubleValue.isCompatible<MyClass>() ==        false);
+//    }
+//
+//    SECTION("string values can be converted to other types")
+//    {
+//        REQUIRE(stringValue.to<bool>() ==           true);
+//        REQUIRE(stringValue.to<char>() ==           '1');
+//        REQUIRE(stringValue.to<short>() ==          1);
+//        REQUIRE(stringValue.to<int>() ==            1);
+//        REQUIRE(stringValue.to<long>() ==           1);
+//        REQUIRE(stringValue.to<unsigned char>() ==  '1');
+//        REQUIRE(stringValue.to<unsigned short>() == 1);
+//        REQUIRE(stringValue.to<unsigned int>() ==   1);
+//        REQUIRE(stringValue.to<unsigned long>() ==  1);
+//        REQUIRE(stringValue.to<float>() == Approx(1.f).epsilon(1E-5f));
+//        REQUIRE(stringValue.to<double>() == Approx(1.).epsilon(1E-5));
+//        REQUIRE(stringValue.to<std::string>() ==    "1");
+//        REQUIRE(stringValue.to<MyEnum>() ==         One);
+//        REQUIRE_THROWS_AS(stringValue.to<MyClass>(), ponder::BadType);
+//
+//        REQUIRE(stringValue.isCompatible<bool>() ==           true);
+//        REQUIRE(stringValue.isCompatible<char>() ==           true);
+//        REQUIRE(stringValue.isCompatible<short>() ==          true);
+//        REQUIRE(stringValue.isCompatible<int>() ==            true);
+//        REQUIRE(stringValue.isCompatible<long>() ==           true);
+//        REQUIRE(stringValue.isCompatible<unsigned char>() ==  true);
+//        REQUIRE(stringValue.isCompatible<unsigned short>() == true);
+//        REQUIRE(stringValue.isCompatible<unsigned int>() ==   true);
+//        REQUIRE(stringValue.isCompatible<unsigned long>() ==  true);
+//        REQUIRE(stringValue.isCompatible<float>() ==          true);
+//        REQUIRE(stringValue.isCompatible<double>() ==         true);
+//        REQUIRE(stringValue.isCompatible<std::string>() ==    true);
+//        REQUIRE(stringValue.isCompatible<MyEnum>() ==         true);
+//        REQUIRE(stringValue.isCompatible<MyClass>() ==        false);
+//    }
+//
+//    SECTION("strings can be converted to enums")
+//    {
+//        REQUIRE(ponder::Value("One").to<MyEnum>() == One);
+//        REQUIRE(ponder::Value("Two").to<MyEnum>() == Two);
+//        REQUIRE(ponder::Value("1").to<MyEnum>() ==   One);
+//        REQUIRE(ponder::Value("2").to<MyEnum>() ==   Two);
+//
+//        REQUIRE(ponder::Value("One").isCompatible<MyEnum>() == true);
+//        REQUIRE(ponder::Value("Two").isCompatible<MyEnum>() == true);
+//        REQUIRE(ponder::Value("1").isCompatible<MyEnum>() ==   true);
+//        REQUIRE(ponder::Value("2").isCompatible<MyEnum>() ==   true);
+//    }
+//
+//    SECTION("not all string values can be converted to other values")
+//    {
+//        const ponder::Value badStringValue = "not a number";
+//
+//        REQUIRE_THROWS_AS(badStringValue.to<bool>(),           ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<char>(),           ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<short>(),          ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<int>(),            ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<long>(),           ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<unsigned char>(),  ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<unsigned short>(), ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<unsigned int>(),   ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<unsigned long>(),  ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<float>(),          ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<double>(),         ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<MyEnum>(),         ponder::BadType);
+//        REQUIRE_THROWS_AS(badStringValue.to<MyClass>(),        ponder::BadType);
+//
+//        REQUIRE(badStringValue.isCompatible<bool>() ==           false);
+//        REQUIRE(badStringValue.isCompatible<char>() ==           false);
+//        REQUIRE(badStringValue.isCompatible<short>() ==          false);
+//        REQUIRE(badStringValue.isCompatible<int>() ==            false);
+//        REQUIRE(badStringValue.isCompatible<long>() ==           false);
+//        REQUIRE(badStringValue.isCompatible<unsigned char>() ==  false);
+//        REQUIRE(badStringValue.isCompatible<unsigned short>() == false);
+//        REQUIRE(badStringValue.isCompatible<unsigned int>() ==   false);
+//        REQUIRE(badStringValue.isCompatible<unsigned long>() ==  false);
+//        REQUIRE(badStringValue.isCompatible<float>() ==          false);
+//        REQUIRE(badStringValue.isCompatible<double>() ==         false);
+//        REQUIRE(badStringValue.isCompatible<std::string>() ==    true);
+//        REQUIRE(badStringValue.isCompatible<MyEnum>() ==         false);
+//        REQUIRE(badStringValue.isCompatible<MyClass>() ==        false);
+//    }
+//
+//    SECTION("enum values can be converted to other types")
+//    {
+//        REQUIRE(enumValue.to<bool>() ==           true);
+//        REQUIRE(enumValue.to<char>() ==           1);
+//        REQUIRE(enumValue.to<short>() ==          1);
+//        REQUIRE(enumValue.to<int>() ==            1);
+//        REQUIRE(enumValue.to<long>() ==           1);
+//        REQUIRE(enumValue.to<unsigned char>() ==  1);
+//        REQUIRE(enumValue.to<unsigned short>() == 1);
+//        REQUIRE(enumValue.to<unsigned int>() ==   1);
+//        REQUIRE(enumValue.to<unsigned long>() ==  1);
+//        REQUIRE(enumValue.to<float>() == Approx(1.f).epsilon(1E-5f));
+//        REQUIRE(enumValue.to<double>() == Approx(1.).epsilon(1E-5));
+//        REQUIRE(enumValue.to<std::string>() ==    "One");
+//        REQUIRE(enumValue.to<MyEnum>() ==         One);
+//        REQUIRE_THROWS_AS(enumValue.to<MyClass>(), ponder::BadType);
+//
+//        REQUIRE(enumValue.isCompatible<bool>() ==           true);
+//        REQUIRE(enumValue.isCompatible<char>() ==           true);
+//        REQUIRE(enumValue.isCompatible<short>() ==          true);
+//        REQUIRE(enumValue.isCompatible<int>() ==            true);
+//        REQUIRE(enumValue.isCompatible<long>() ==           true);
+//        REQUIRE(enumValue.isCompatible<unsigned char>() ==  true);
+//        REQUIRE(enumValue.isCompatible<unsigned short>() == true);
+//        REQUIRE(enumValue.isCompatible<unsigned int>() ==   true);
+//        REQUIRE(enumValue.isCompatible<unsigned long>() ==  true);
+//        REQUIRE(enumValue.isCompatible<float>() ==          true);
+//        REQUIRE(enumValue.isCompatible<double>() ==         true);
+//        REQUIRE(enumValue.isCompatible<std::string>() ==    true);
+//        REQUIRE(enumValue.isCompatible<MyEnum>() ==         true);
+//        REQUIRE(enumValue.isCompatible<MyClass>() ==        false);
+//    }
+//
+//    SECTION("user object values can be converted to other types")
+//    {
+//        REQUIRE(objectValue.to<bool>() == true);
+//        REQUIRE_THROWS_AS(objectValue.to<char>(),              ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<short>(),             ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<int>(),               ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<long>(),              ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<unsigned char>(),     ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<unsigned short>(),    ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<unsigned int>(),      ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<unsigned long>(),     ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<float>(),             ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<double>(),            ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<std::string>(),       ponder::BadType);
+//        REQUIRE_THROWS_AS(objectValue.to<MyEnum>(),            ponder::BadType);
+//        REQUIRE(objectValue.to<MyClass>() == object1);
+//        REQUIRE((objectValue.to<ponder::UserObject>() == ponder::UserObject(object1)));
+//
+//        REQUIRE(objectValue.isCompatible<bool>() ==           true);
+//        REQUIRE(objectValue.isCompatible<char>() ==           false);
+//        REQUIRE(objectValue.isCompatible<short>() ==          false);
+//        REQUIRE(objectValue.isCompatible<int>() ==            false);
+//        REQUIRE(objectValue.isCompatible<long>() ==           false);
+//        REQUIRE(objectValue.isCompatible<unsigned char>() ==  false);
+//        REQUIRE(objectValue.isCompatible<unsigned short>() == false);
+//        REQUIRE(objectValue.isCompatible<unsigned int>() ==   false);
+//        REQUIRE(objectValue.isCompatible<unsigned long>() ==  false);
+//        REQUIRE(objectValue.isCompatible<float>() ==          false);
+//        REQUIRE(objectValue.isCompatible<double>() ==         false);
+//        REQUIRE(objectValue.isCompatible<std::string>() ==    false);
+//        REQUIRE(objectValue.isCompatible<MyEnum>() ==         false);
+//        REQUIRE(objectValue.isCompatible<MyClass>() ==        true);
+//    }
+//
+//    SECTION("values have a type visitor")
+//    {
+//        Visitor visitor;
+//
+//        REQUIRE(noValue.visit(visitor) ==      ponder::noType);
+//        REQUIRE(boolValue.visit(visitor) ==    ponder::boolType);
+//        REQUIRE(charValue.visit(visitor) ==    ponder::intType);
+//        REQUIRE(shortValue.visit(visitor) ==   ponder::intType);
+//        REQUIRE(intValue.visit(visitor) ==     ponder::intType);
+//        REQUIRE(longValue.visit(visitor) ==    ponder::intType);
+//        REQUIRE(ucharValue.visit(visitor) ==   ponder::intType);
+//        REQUIRE(ushortValue.visit(visitor) ==  ponder::intType);
+//        REQUIRE(uintValue.visit(visitor) ==    ponder::intType);
+//        REQUIRE(ulongValue.visit(visitor) ==   ponder::intType);
+//        REQUIRE(floatValue.visit(visitor) ==   ponder::realType);
+//        REQUIRE(doubleValue.visit(visitor) ==  ponder::realType);
+//        REQUIRE(cstringValue.visit(visitor) == ponder::stringType);
+//        REQUIRE(stringValue.visit(visitor) ==  ponder::stringType);
+//        REQUIRE(enumValue.visit(visitor) ==    ponder::enumType);
+//        REQUIRE(objectValue.visit(visitor) ==  ponder::userType);
+//    }
+//
+//    SECTION("values can be compared for equality")
+//    {
+//        REQUIRE((noValue == noValue) ==     true);
+//        REQUIRE((noValue == boolValue) ==   false);
+//        REQUIRE((noValue == intValue) ==    false);
+//        REQUIRE((noValue == doubleValue) == false);
+//        REQUIRE((noValue == stringValue) == false);
+//        REQUIRE((noValue == enumValue) ==   false);
+//        REQUIRE((noValue == objectValue) == false);
+//
+//        REQUIRE((boolValue == noValue) ==     false);
+//        REQUIRE((boolValue == boolValue) ==   true);
+//        REQUIRE((boolValue == intValue) ==    false);
+//        REQUIRE((boolValue == doubleValue) == false);
+//        REQUIRE((boolValue == stringValue) == false);
+//        REQUIRE((boolValue == enumValue) ==   false);
+//        REQUIRE((boolValue == objectValue) == false);
+//
+//        REQUIRE((intValue == noValue) ==     false);
+//        REQUIRE((intValue == boolValue) ==   false);
+//        REQUIRE((intValue == intValue) ==    true);
+//        REQUIRE((intValue == doubleValue) == false);
+//        REQUIRE((intValue == stringValue) == false);
+//        REQUIRE((intValue == enumValue) ==   false);
+//        REQUIRE((intValue == objectValue) == false);
+//
+//        REQUIRE((doubleValue == noValue) ==     false);
+//        REQUIRE((doubleValue == boolValue) ==   false);
+//        REQUIRE((doubleValue == intValue) ==    false);
+//        REQUIRE((doubleValue == doubleValue) == true);
+//        REQUIRE((doubleValue == stringValue) == false);
+//        REQUIRE((doubleValue == enumValue) ==   false);
+//        REQUIRE((doubleValue == objectValue) == false);
+//
+//        REQUIRE((stringValue == noValue) ==     false);
+//        REQUIRE((stringValue == boolValue) ==   false);
+//        REQUIRE((stringValue == intValue) ==    false);
+//        REQUIRE((stringValue == doubleValue) == false);
+//        REQUIRE((stringValue == stringValue) == true);
+//        REQUIRE((stringValue == enumValue) ==   false);
+//        REQUIRE((stringValue == objectValue) == false);
+//
+//        REQUIRE((enumValue == noValue) ==     false);
+//        REQUIRE((enumValue == boolValue) ==   false);
+//        REQUIRE((enumValue == intValue) ==    false);
+//        REQUIRE((enumValue == doubleValue) == false);
+//        REQUIRE((enumValue == stringValue) == false);
+//        REQUIRE((enumValue == enumValue) ==   true);
+//        REQUIRE((enumValue == objectValue) == false);
+//
+//        REQUIRE((objectValue == noValue) ==     false);
+//        REQUIRE((objectValue == boolValue) ==   false);
+//        REQUIRE((objectValue == intValue) ==    false);
+//        REQUIRE((objectValue == doubleValue) == false);
+//        REQUIRE((objectValue == stringValue) == false);
+//        REQUIRE((objectValue == enumValue) ==   false);
+//        REQUIRE((objectValue == objectValue) == true);
+//
+//        REQUIRE(ponder::Value(true)    == ponder::Value(true));
+//        REQUIRE(ponder::Value(1)       == ponder::Value(1));
+//        REQUIRE(ponder::Value(1.)      == ponder::Value(1.));
+//        REQUIRE(ponder::Value("1")     == ponder::Value("1"));
+//        REQUIRE(ponder::Value(One)     == ponder::Value(One));
+//        REQUIRE((ponder::Value(object1) == ponder::Value(object1)));
+//
+//        REQUIRE(ponder::Value(true)    != ponder::Value(false));
+//        REQUIRE(ponder::Value(1)       != ponder::Value(2));
+//        REQUIRE(ponder::Value(1.)      != ponder::Value(2.));
+//        REQUIRE(ponder::Value("1")     != ponder::Value("2"));
+//        REQUIRE(ponder::Value(One)     != ponder::Value(Two));
+//        REQUIRE((ponder::Value(object1) != ponder::Value(object2)));
+//    }
+//
+//    SECTION("values can be compared using less than")
+//    {
+//#define equivalent(left, right) (!(left < right) && !(right < left))
+//
+//        REQUIRE(equivalent(noValue, noValue) ==     true);
+//        REQUIRE(equivalent(noValue, boolValue) ==   false);
+//        REQUIRE(equivalent(noValue, intValue) ==    false);
+//        REQUIRE(equivalent(noValue, doubleValue) == false);
+//        REQUIRE(equivalent(noValue, stringValue) == false);
+//        REQUIRE(equivalent(noValue, enumValue) ==   false);
+//        REQUIRE(equivalent(noValue, objectValue) == false);
+//
+//        REQUIRE(equivalent(boolValue, noValue) ==     false);
+//        REQUIRE(equivalent(boolValue, boolValue) ==   true);
+//        REQUIRE(equivalent(boolValue, intValue) ==    false);
+//        REQUIRE(equivalent(boolValue, doubleValue) == false);
+//        REQUIRE(equivalent(boolValue, stringValue) == false);
+//        REQUIRE(equivalent(boolValue, enumValue) ==   false);
+//        REQUIRE(equivalent(boolValue, objectValue) == false);
+//
+//        REQUIRE(equivalent(intValue, noValue) ==     false);
+//        REQUIRE(equivalent(intValue, boolValue) ==   false);
+//        REQUIRE(equivalent(intValue, intValue) ==    true);
+//        REQUIRE(equivalent(intValue, doubleValue) == false);
+//        REQUIRE(equivalent(intValue, stringValue) == false);
+//        REQUIRE(equivalent(intValue, enumValue) ==   false);
+//        REQUIRE(equivalent(intValue, objectValue) == false);
+//
+//        REQUIRE(equivalent(doubleValue, noValue) ==     false);
+//        REQUIRE(equivalent(doubleValue, boolValue) ==   false);
+//        REQUIRE(equivalent(doubleValue, intValue) ==    false);
+//        REQUIRE(equivalent(doubleValue, doubleValue) == true);
+//        REQUIRE(equivalent(doubleValue, stringValue) == false);
+//        REQUIRE(equivalent(doubleValue, enumValue) ==   false);
+//        REQUIRE(equivalent(doubleValue, objectValue) == false);
+//
+//        REQUIRE(equivalent(stringValue, noValue) ==     false);
+//        REQUIRE(equivalent(stringValue, boolValue) ==   false);
+//        REQUIRE(equivalent(stringValue, intValue) ==    false);
+//        REQUIRE(equivalent(stringValue, doubleValue) == false);
+//        REQUIRE(equivalent(stringValue, stringValue) == true);
+//        REQUIRE(equivalent(stringValue, enumValue) ==   false);
+//        REQUIRE(equivalent(stringValue, objectValue) == false);
+//
+//        REQUIRE(equivalent(enumValue, noValue) ==     false);
+//        REQUIRE(equivalent(enumValue, boolValue) ==   false);
+//        REQUIRE(equivalent(enumValue, intValue) ==    false);
+//        REQUIRE(equivalent(enumValue, doubleValue) == false);
+//        REQUIRE(equivalent(enumValue, stringValue) == false);
+//        REQUIRE(equivalent(enumValue, enumValue) ==   true);
+//        REQUIRE(equivalent(enumValue, objectValue) == false);
+//
+//        REQUIRE(equivalent(objectValue, noValue) ==     false);
+//        REQUIRE(equivalent(objectValue, boolValue) ==   false);
+//        REQUIRE(equivalent(objectValue, intValue) ==    false);
+//        REQUIRE(equivalent(objectValue, doubleValue) == false);
+//        REQUIRE(equivalent(objectValue, stringValue) == false);
+//        REQUIRE(equivalent(objectValue, enumValue) ==   false);
+//        REQUIRE(equivalent(objectValue, objectValue) == true);
+//
+//        REQUIRE(equivalent(ponder::Value(),        ponder::Value()) ==        true);
+//        REQUIRE(equivalent(ponder::Value(true),    ponder::Value(true)) ==    true);
+//        REQUIRE(equivalent(ponder::Value(1),       ponder::Value(1)) ==       true);
+//        REQUIRE(equivalent(ponder::Value(1.),      ponder::Value(1.)) ==      true);
+//        REQUIRE(equivalent(ponder::Value("1"),     ponder::Value("1")) ==     true);
+//        REQUIRE(equivalent(ponder::Value(One),     ponder::Value(One)) ==     true);
+//        REQUIRE(equivalent(ponder::Value(object1), ponder::Value(object1)) == true);
+//        REQUIRE(equivalent(ponder::Value(object1), ponder::Value(object2)) == false);
+//
+//        REQUIRE((ponder::Value(false) < ponder::Value(true)) == true);
+//        REQUIRE((ponder::Value(1)     < ponder::Value(2)) ==    true);
+//        REQUIRE((ponder::Value(1.)    < ponder::Value(2.)) ==   true);
+//        REQUIRE((ponder::Value("1")   < ponder::Value("2")) ==  true);
+//        REQUIRE((ponder::Value(One)   < ponder::Value(Two)) ==  true);
+//    }    
+//}
+//
+//

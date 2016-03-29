@@ -32,6 +32,9 @@ Testing/**
 *.user
 qtc-gdbmacros/
 *.tlog
+*.sdf
+*.opendb
+*.cache
 
 # Xcode
 ## Build generated
@@ -72,6 +75,7 @@ xcuserdata
 moc_*
 
 # End products
+*.lib
 *.dll
 *.dylib
 include/ponder/version.hpp

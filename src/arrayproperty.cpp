@@ -34,7 +34,7 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 ArrayProperty::ArrayProperty(const std::string& name, Type elementType, bool dynamic)
     : Property(name, arrayType)
     , m_elementType(elementType)
@@ -42,24 +42,20 @@ ArrayProperty::ArrayProperty(const std::string& name, Type elementType, bool dyn
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 ArrayProperty::~ArrayProperty()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 Type ArrayProperty::elementType() const
 {
     return m_elementType;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool ArrayProperty::dynamic() const
 {
     return m_dynamic;
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t ArrayProperty::size(const UserObject& object) const
 {
     // Check if the property is readable
@@ -69,7 +65,6 @@ std::size_t ArrayProperty::size(const UserObject& object) const
     return getSize(object);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
 {
     // Check if the array is dynamic
@@ -83,7 +78,6 @@ void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
     setSize(object, newSize);
 }
 
-//-------------------------------------------------------------------------------------------------
 Value ArrayProperty::get(const UserObject& object, std::size_t index) const
 {
     // Check if the property is readable
@@ -98,7 +92,6 @@ Value ArrayProperty::get(const UserObject& object, std::size_t index) const
     return getElement(object, index);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ArrayProperty::set(const UserObject& object, std::size_t index, const Value& value) const
 {
     // Check if the property is writable
@@ -113,7 +106,6 @@ void ArrayProperty::set(const UserObject& object, std::size_t index, const Value
     return setElement(object, index, value);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ArrayProperty::insert(const UserObject& object, std::size_t before, const Value& value) const
 {
     // Check if the array is dynamic
@@ -132,7 +124,6 @@ void ArrayProperty::insert(const UserObject& object, std::size_t before, const V
     return insertElement(object, before, value);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ArrayProperty::remove(const UserObject& object, std::size_t index) const
 {
     // Check if the array is dynamic
@@ -151,20 +142,17 @@ void ArrayProperty::remove(const UserObject& object, std::size_t index) const
     return removeElement(object, index);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ArrayProperty::accept(ClassVisitor& visitor) const
 {
     visitor.visit(*this);
 }
 
-//-------------------------------------------------------------------------------------------------
 Value ArrayProperty::getValue(const UserObject& object) const
 {
     // Return first element
     return get(object, 0);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ArrayProperty::setValue(const UserObject& object, const Value& value) const
 {
     // Set first element

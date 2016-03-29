@@ -32,11 +32,10 @@
 #include <ponder/enumget.hpp>
 #include <ponder/function.hpp>
 #include <ponder/errors.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 using namespace FunctionTest;
 
-//-----------------------------------------------------------------------------
 struct FunctionFixture
 {
     FunctionFixture()
@@ -57,7 +56,6 @@ struct FunctionFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTION, FunctionFixture)
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(returnType)
 {
     BOOST_CHECK_EQUAL(functions[1]->returnType(),  ponder::noType);
@@ -84,7 +82,6 @@ BOOST_AUTO_TEST_CASE(returnType)
     BOOST_CHECK_EQUAL(functions[22]->returnType(), ponder::intType);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(argCount)
 {
     BOOST_CHECK_EQUAL(functions[1]->argCount(),  0);
@@ -111,7 +108,6 @@ BOOST_AUTO_TEST_CASE(argCount)
     BOOST_CHECK_EQUAL(functions[22]->argCount(), 1);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(argType)
 {
     BOOST_CHECK_THROW(functions[1]->argType(0),  ponder::OutOfRange);
@@ -148,7 +144,6 @@ BOOST_AUTO_TEST_CASE(argType)
     BOOST_CHECK_EQUAL(functions[22]->argType(0), ponder::intType);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(call)
 {
     MyClass object;
@@ -177,7 +172,6 @@ BOOST_AUTO_TEST_CASE(call)
     BOOST_CHECK_EQUAL(functions[22]->call(object, ponder::Args(10)), ponder::Value(60));
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(callNullObject)
 {
     BOOST_CHECK_THROW(functions[1]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
@@ -192,7 +186,6 @@ BOOST_AUTO_TEST_CASE(callNullObject)
     BOOST_CHECK_THROW(functions[19]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(callNotEnoughArguments)
 {
     MyClass object;
@@ -209,7 +202,6 @@ BOOST_AUTO_TEST_CASE(callNotEnoughArguments)
     BOOST_CHECK_THROW(functions[22]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(callBadArgument)
 {
     MyClass object;

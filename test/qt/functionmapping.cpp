@@ -30,11 +30,10 @@
 #include "functionmapping.hpp"
 #include <ponder/class.hpp>
 #include <ponder/classget.hpp>
-#include <boost/test/unit_test.hpp>
+#include "catch.hpp"
 
 using namespace FunctionMappingTest;
 
-//-----------------------------------------------------------------------------
 struct FunctionMappingFixture
 {
     FunctionMappingFixture()
@@ -52,7 +51,6 @@ struct FunctionMappingFixture
 //-----------------------------------------------------------------------------
 BOOST_FIXTURE_TEST_SUITE(FUNCTIONMAPPING, FunctionMappingFixture)
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(name)
 {
     BOOST_CHECK(metaclass->hasFunction("f1"));
@@ -63,7 +61,6 @@ BOOST_AUTO_TEST_CASE(name)
     BOOST_CHECK(metaclass->hasFunction("f6"));
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(returnType)
 {
     BOOST_CHECK_EQUAL(metaclass->function("f1").returnType(), ponder::noType);
@@ -74,7 +71,6 @@ BOOST_AUTO_TEST_CASE(returnType)
     BOOST_CHECK_EQUAL(metaclass->function("f6").returnType(), ponder::stringType);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(argumentsCount)
 {
     BOOST_CHECK_EQUAL(metaclass->function("f1").argCount(), 0);
@@ -85,7 +81,6 @@ BOOST_AUTO_TEST_CASE(argumentsCount)
     BOOST_CHECK_EQUAL(metaclass->function("f6").argCount(), 5);
 }
 
-//-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_CASE(call)
 {
     BOOST_CHECK_EQUAL(metaclass->function("f1").call(object), ponder::Value::nothing);

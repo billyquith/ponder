@@ -37,7 +37,7 @@ namespace ponder
 {
 namespace detail
 {
-//-------------------------------------------------------------------------------------------------
+    
 void ObserverNotifier::addObserver(Observer* observer)
 {
     assert(observer != nullptr);
@@ -45,18 +45,15 @@ void ObserverNotifier::addObserver(Observer* observer)
     m_observers.insert(observer);
 }
 
-//-------------------------------------------------------------------------------------------------
 void ObserverNotifier::removeObserver(Observer* observer)
 {
     m_observers.erase(observer);
 }
 
-//-------------------------------------------------------------------------------------------------
 ObserverNotifier::ObserverNotifier()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 void ObserverNotifier::notifyClassAdded(const Class& theClass)
 {
     for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
@@ -65,7 +62,6 @@ void ObserverNotifier::notifyClassAdded(const Class& theClass)
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 void ObserverNotifier::notifyClassRemoved(const Class& theClass)
 {
     for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
@@ -74,7 +70,6 @@ void ObserverNotifier::notifyClassRemoved(const Class& theClass)
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 void ObserverNotifier::notifyEnumAdded(const Enum& theEnum)
 {
     for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)
@@ -83,7 +78,6 @@ void ObserverNotifier::notifyEnumAdded(const Enum& theEnum)
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 void ObserverNotifier::notifyEnumRemoved(const Enum& theEnum)
 {
     for (ObserverSet::iterator it = m_observers.begin(); it != m_observers.end(); ++it)

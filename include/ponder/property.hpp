@@ -47,7 +47,7 @@ class ClassVisitor;
  * Properties are members of metaclasses. Their main purpose is to be get and/or set;
  * They also provide detailed informations about their type.
  *
- * \sa PSimpleroperty, ArrayProperty, EnumProperty, ObjectProperty
+ * \sa SimpleProperty, ArrayProperty, EnumProperty, ObjectProperty
  */
 class PONDER_API Property : public TagHolder
 {

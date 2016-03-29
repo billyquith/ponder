@@ -27,15 +27,77 @@
 **
 ****************************************************************************/
 
-#include "arrayproperty.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/errors.hpp>
 #include <ponder/arrayproperty.hpp>
-#include <boost/test/unit_test.hpp>
+#include <ponder/pondertype.hpp>
+#include <ponder/class.hpp>
+#include <ponder/classbuilder.hpp>
+#include "catch.hpp"
+#include <list>
+#include <vector>
+
+namespace ArrayPropertyTest
+{
+    struct MyType
+    {
+        MyType(int x_) : x(x_) {}
+        
+        bool operator ==(const MyType& other) const
+        {
+            return x == other.x;
+        }
+        
+        int x;
+    };
+    
+    struct MyClass
+    {
+        MyClass()
+        {
+            bools[0] = true;
+            bools[1] = false;
+            
+            ints[0] = -10;
+            ints[1] = 10;
+            ints[2] = 100;
+            
+            strings.push_back("string 0");
+            strings.push_back("string 1");
+            strings.push_back("string 2");
+            strings.push_back("string 3");
+            
+            objects.push_back(MyType(0));
+            objects.push_back(MyType(1));
+            objects.push_back(MyType(2));
+            objects.push_back(MyType(3));
+            objects.push_back(MyType(4));
+        }
+        
+        bool bools[2];
+        std::array<int, 3> ints;
+        std::vector<std::string> strings;
+        std::list<MyType> objects;
+    };
+    
+    void declare()
+    {
+        ponder::Class::declare<MyType>("ArrayPropertyTest::MyType");
+        
+        ponder::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
+            .property("bools", &MyClass::bools)
+            .property("ints", &MyClass::ints)
+            .property("strings", &MyClass::strings)
+            .property("objects", &MyClass::objects);
+    }
+}
+
+PONDER_AUTO_TYPE(ArrayPropertyTest::MyType, &ArrayPropertyTest::declare)
+PONDER_AUTO_TYPE(ArrayPropertyTest::MyClass, &ArrayPropertyTest::declare)
 
 using namespace ArrayPropertyTest;
 
-//-----------------------------------------------------------------------------
+
 struct ArrayPropertyFixture
 {
     ArrayPropertyFixture()
@@ -57,131 +119,143 @@ struct ArrayPropertyFixture
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::ArrayProperty
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(ARRAYPROPERTY, ArrayPropertyFixture)
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(type)
+TEST_CASE("Array property can be inspected")
 {
-    BOOST_CHECK_EQUAL(bools->type(),   ponder::arrayType);
-    BOOST_CHECK_EQUAL(ints->type(),    ponder::arrayType);
-    BOOST_CHECK_EQUAL(strings->type(), ponder::arrayType);
-    BOOST_CHECK_EQUAL(objects->type(), ponder::arrayType);
-}
+    const ponder::Class& metaclass = ponder::classByType<MyClass>();
+    const ponder::ArrayProperty* bools =
+        &static_cast<const ponder::ArrayProperty&>(metaclass.property("bools"));
+    const ponder::ArrayProperty* ints =
+        &static_cast<const ponder::ArrayProperty&>(metaclass.property("ints"));
+    const ponder::ArrayProperty* strings =
+        &static_cast<const ponder::ArrayProperty&>(metaclass.property("strings"));
+    const ponder::ArrayProperty* objects =
+        &static_cast<const ponder::ArrayProperty&>(metaclass.property("objects"));
+    MyClass object;
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(elementType)
-{
-    BOOST_CHECK_EQUAL(bools->elementType(),   ponder::boolType);
-    BOOST_CHECK_EQUAL(ints->elementType(),    ponder::intType);
-    BOOST_CHECK_EQUAL(strings->elementType(), ponder::stringType);
-    BOOST_CHECK_EQUAL(objects->elementType(), ponder::userType);
-}
+    REQUIRE(bools != nullptr);
+    REQUIRE(ints != nullptr);
+    REQUIRE(strings != nullptr);
+    REQUIRE(objects != nullptr);
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(dynamic)
-{
-    BOOST_CHECK_EQUAL(bools->dynamic(),   false);
-    BOOST_CHECK_EQUAL(ints->dynamic(),    false);
-    BOOST_CHECK_EQUAL(strings->dynamic(), true);
-    BOOST_CHECK_EQUAL(objects->dynamic(), true);
-}
-
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(size)
-{
+    SECTION("should be array type")
+    {
+        REQUIRE(bools->type() == ponder::arrayType);
+        REQUIRE(ints->type() == ponder::arrayType);
+        REQUIRE(strings->type() == ponder::arrayType);
+        REQUIRE(objects->type() == ponder::arrayType);
+    }
+    
+     SECTION("arrays have a type")
+     {
+         REQUIRE(bools->elementType() == ponder::boolType);
+         REQUIRE(ints->elementType() == ponder::intType);
+         REQUIRE(strings->elementType() == ponder::stringType);
+         REQUIRE(objects->elementType() == ponder::userType);
+     }
+     
+     SECTION("can be dynamic")
+     {
+         REQUIRE(bools->dynamic() == false);
+         REQUIRE(ints->dynamic() == false);
+         REQUIRE(strings->dynamic() == true);
+         REQUIRE(objects->dynamic() == true);
+     }
+     
+    SECTION("have a size")
+    {
 #ifndef _WIN32
-    BOOST_CHECK_EQUAL(bools->size(object),   std::extent<typeof object.bools>::value); // TODO - Compilation fails on Windows.
+        // TODO - Compilation fails on Windows.
+        REQUIRE(bools->size(object) == std::extent<typeof object.bools>::value);
 #endif
-    BOOST_CHECK_EQUAL(ints->size(object),    object.ints.size());
-    BOOST_CHECK_EQUAL(strings->size(object), object.strings.size());
-    BOOST_CHECK_EQUAL(objects->size(object), object.objects.size());
+        REQUIRE(ints->size(object) == object.ints.size());
+        REQUIRE(strings->size(object) == object.strings.size());
+        REQUIRE(objects->size(object) == object.objects.size());
+    }
 }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(get)
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be read")
 {
-    BOOST_CHECK_EQUAL(bools->get(object, 0), ponder::Value(object.bools[0]));
-    BOOST_CHECK_EQUAL(bools->get(object, 1), ponder::Value(object.bools[1]));
-    BOOST_CHECK_THROW(bools->get(object, 2), ponder::OutOfRange);
-
-    BOOST_CHECK_EQUAL(ints->get(object, 0), ponder::Value(object.ints[0]));
-    BOOST_CHECK_EQUAL(ints->get(object, 1), ponder::Value(object.ints[1]));
-    BOOST_CHECK_EQUAL(ints->get(object, 2), ponder::Value(object.ints[2]));
-    BOOST_CHECK_THROW(ints->get(object, 3), ponder::OutOfRange);
-
-    BOOST_CHECK_EQUAL(strings->get(object, 0), ponder::Value(object.strings[0]));
-    BOOST_CHECK_EQUAL(strings->get(object, 1), ponder::Value(object.strings[1]));
-    BOOST_CHECK_EQUAL(strings->get(object, 2), ponder::Value(object.strings[2]));
-    BOOST_CHECK_EQUAL(strings->get(object, 3), ponder::Value(object.strings[3]));
-    BOOST_CHECK_THROW(strings->get(object, 4), ponder::OutOfRange);
-
+    REQUIRE(bools->get(object, 0) == ponder::Value(object.bools[0]));
+    REQUIRE(bools->get(object, 1) == ponder::Value(object.bools[1]));
+    REQUIRE_THROWS_AS(bools->get(object, 2), ponder::OutOfRange);
+    
+    REQUIRE(ints->get(object, 0) == ponder::Value(object.ints[0]));
+    REQUIRE(ints->get(object, 1) == ponder::Value(object.ints[1]));
+    REQUIRE(ints->get(object, 2) == ponder::Value(object.ints[2]));
+    REQUIRE_THROWS_AS(ints->get(object, 3), ponder::OutOfRange);
+    
+    REQUIRE(strings->get(object, 0) == ponder::Value(object.strings[0]));
+    REQUIRE(strings->get(object, 1) == ponder::Value(object.strings[1]));
+    REQUIRE(strings->get(object, 2) == ponder::Value(object.strings[2]));
+    REQUIRE(strings->get(object, 3) == ponder::Value(object.strings[3]));
+    REQUIRE_THROWS_AS(strings->get(object, 4), ponder::OutOfRange);
+    
     std::list<MyType>::const_iterator it = object.objects.begin();
-    BOOST_CHECK_EQUAL(objects->get(object, 0), ponder::Value(*std::next(it, 0)));
-    BOOST_CHECK_EQUAL(objects->get(object, 1), ponder::Value(*std::next(it, 1)));
-    BOOST_CHECK_EQUAL(objects->get(object, 2), ponder::Value(*std::next(it, 2)));
-    BOOST_CHECK_EQUAL(objects->get(object, 3), ponder::Value(*std::next(it, 3)));
-    BOOST_CHECK_EQUAL(objects->get(object, 4), ponder::Value(*std::next(it, 4)));
-    BOOST_CHECK_THROW(objects->get(object, 5), ponder::OutOfRange);
+    REQUIRE(( objects->get(object, 0) == ponder::Value(*std::next(it, 0)) ));
+    REQUIRE(( objects->get(object, 1) == ponder::Value(*std::next(it, 1)) ));
+    REQUIRE(( objects->get(object, 2) == ponder::Value(*std::next(it, 2)) ));
+    REQUIRE(( objects->get(object, 3) == ponder::Value(*std::next(it, 3)) ));
+    REQUIRE(( objects->get(object, 4) == ponder::Value(*std::next(it, 4)) ));
+    REQUIRE_THROWS_AS(objects->get(object, 5), ponder::OutOfRange);
 }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(set)
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be written to")
 {
     bools->set(object, 1, true);
     ints->set(object, 1, 20);
     strings->set(object, 1, "hello");
     objects->set(object, 1, MyType(8));
-
-    BOOST_CHECK_EQUAL(object.bools[1],   true);
-    BOOST_CHECK_EQUAL(object.ints[1],    20);
-    BOOST_CHECK_EQUAL(object.strings[1], "hello");
-    BOOST_CHECK(*std::next(object.objects.begin(), 1) == MyType(8));
-
-    BOOST_CHECK_THROW(bools->set(object, 10, true),        ponder::OutOfRange);
-    BOOST_CHECK_THROW(ints->set(object, 10, 1),            ponder::OutOfRange);
-    BOOST_CHECK_THROW(strings->set(object, 10, "hi"),      ponder::OutOfRange);
-    BOOST_CHECK_THROW(objects->set(object, 10, MyType(9)), ponder::OutOfRange);
+    
+    REQUIRE(object.bools[1] == true);
+    REQUIRE(object.ints[1] == 20);
+    REQUIRE(object.strings[1] == "hello");
+    REQUIRE(*std::next(object.objects.begin(), 1) == MyType(8));
+    
+    REQUIRE_THROWS_AS(bools->set(object, 10, true),        ponder::OutOfRange);
+    REQUIRE_THROWS_AS(ints->set(object, 10, 1),            ponder::OutOfRange);
+    REQUIRE_THROWS_AS(strings->set(object, 10, "hi"),      ponder::OutOfRange);
+    REQUIRE_THROWS_AS(objects->set(object, 10, MyType(9)), ponder::OutOfRange);
 }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(insert)
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be inserted into")
 {
-    BOOST_CHECK_THROW(bools->insert(object, 0, true), ponder::ForbiddenWrite);
-    BOOST_CHECK_THROW(ints->insert(object, 0, true),  ponder::ForbiddenWrite);
-
-    std::size_t stringsSize = object.strings.size();
-    std::size_t objectsSize = object.objects.size();
-
+    REQUIRE_THROWS_AS(bools->insert(object, 0, true), ponder::ForbiddenWrite);
+    REQUIRE_THROWS_AS(ints->insert(object, 0, true),  ponder::ForbiddenWrite);
+    
+    const std::size_t stringsSize = object.strings.size();
+    const std::size_t objectsSize = object.objects.size();
+    
     strings->insert(object, 1, "bonjour");
     objects->insert(object, 1, MyType(10));
-
-    BOOST_CHECK_EQUAL(object.strings.size(), stringsSize + 1);
-    BOOST_CHECK_EQUAL(object.objects.size(), objectsSize + 1);
-
-    BOOST_CHECK_EQUAL(object.strings[1], "bonjour");
-    BOOST_CHECK(*std::next(object.objects.begin(), 1) == MyType(10));
+    
+    REQUIRE(object.strings.size() == stringsSize + 1);
+    REQUIRE(object.objects.size() == objectsSize + 1);
+    
+    REQUIRE(object.strings[1] == "bonjour");
+    REQUIRE(*std::next(object.objects.begin(), 1) == MyType(10));
 }
 
-//-----------------------------------------------------------------------------
-BOOST_AUTO_TEST_CASE(remove)
+
+TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be removed from")
 {
-    BOOST_CHECK_THROW(bools->remove(object, 0), ponder::ForbiddenWrite);
-    BOOST_CHECK_THROW(ints->remove(object, 0),  ponder::ForbiddenWrite);
-
-    std::string string1 = object.strings[1];
-    MyType      object1 = *std::next(object.objects.begin(), 1);
-
-    std::size_t stringsSize = object.strings.size();
-    std::size_t objectsSize = object.objects.size();
-
+    REQUIRE_THROWS_AS(bools->remove(object, 0), ponder::ForbiddenWrite);
+    REQUIRE_THROWS_AS(ints->remove(object, 0),  ponder::ForbiddenWrite);
+    
+    const std::string string1 = object.strings[1];
+    const MyType      object1 = *std::next(object.objects.begin(), 1);
+    
+    const std::size_t stringsSize = object.strings.size();
+    const std::size_t objectsSize = object.objects.size();
+    
     strings->remove(object, 0);
     objects->remove(object, 0);
-
-    BOOST_CHECK_EQUAL(object.strings.size(), stringsSize - 1);
-    BOOST_CHECK_EQUAL(object.objects.size(), objectsSize - 1);
-
-    BOOST_CHECK(object.strings.front() == string1);
-    BOOST_CHECK(object.objects.front() == object1);
+    
+    REQUIRE(object.strings.size() == stringsSize - 1);
+    REQUIRE(object.objects.size() == objectsSize - 1);
+    
+    REQUIRE(object.strings.front() == string1);
+    REQUIRE(object.objects.front() == object1);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+

@@ -27,9 +27,10 @@
 **
 ****************************************************************************/
 
-#ifndef PONDERTEST_ENUMPROPERTY_HPP
-#define PONDERTEST_ENUMPROPERTY_HPP
-
+#include "catch.hpp"
+#include <ponder/classget.hpp>
+#include <ponder/enumget.hpp>
+#include <ponder/enumproperty.hpp>
 #include <ponder/pondertype.hpp>
 #include <ponder/enum.hpp>
 #include <ponder/class.hpp>
@@ -37,33 +38,71 @@
 #include <list>
 #include <vector>
 
-namespace EnumPropertyTest
+namespace EnumClassPropertyTest
 {
-    enum MyEnum
+    enum class MyEnum
     {
         Zero = 0,
         One  = 1
     };
-
+    
     struct MyClass
     {
         MyClass(MyEnum x_) : x(x_)
-        {
+        {            
         }
-
+        
         MyEnum x;
     };
-
+    
     void declare()
     {
-        ponder::Enum::declare<MyEnum>("EnumPropertyTest::MyEnum");
-
-        ponder::Class::declare<MyClass>("EnumPropertyTest::MyClass")
+        ponder::Enum::declare<MyEnum>("EnumClassPropertyTest::MyEnum");
+        
+        ponder::Class::declare<MyClass>("EnumClassPropertyTest::MyClass")
             .property("x", &MyClass::x);
     }
 }
 
-PONDER_AUTO_TYPE(EnumPropertyTest::MyEnum, &EnumPropertyTest::declare)
-PONDER_AUTO_TYPE(EnumPropertyTest::MyClass, &EnumPropertyTest::declare)
+PONDER_AUTO_TYPE(EnumClassPropertyTest::MyEnum, &EnumClassPropertyTest::declare)
+PONDER_AUTO_TYPE(EnumClassPropertyTest::MyClass, &EnumClassPropertyTest::declare)
 
-#endif // PONDERTEST_ENUMPROPERTY_HPP
+using namespace EnumClassPropertyTest;
+
+
+//-----------------------------------------------------------------------------
+//                  Tests for ponder::EnumProperty for enum class
+//-----------------------------------------------------------------------------
+
+TEST_CASE("Enum class properties")
+{
+    const ponder::Class& metaclass = ponder::classByType<MyClass>();
+    
+    const ponder::EnumProperty* property =
+        &static_cast<const ponder::EnumProperty&>(metaclass.property("x"));
+    
+    SECTION("have enum type")
+    {
+        REQUIRE(property->type() == ponder::enumType);
+    }
+
+    SECTION("wrap an Enum")
+    {
+        REQUIRE(( property->getEnum() == ponder::enumByType<MyEnum>() ));
+    }
+
+    SECTION("have values")
+    {
+        REQUIRE(( property->get(MyClass(MyEnum::Zero)) == ponder::Value(MyEnum::Zero) ));
+        REQUIRE(( property->get(MyClass(MyEnum::One)) == ponder::Value(MyEnum::One) ));
+    }
+
+    SECTION("allow setting of values")
+    {
+        MyClass object(MyEnum::Zero);
+        property->set(object, MyEnum::One);
+
+        REQUIRE(( property->get(object) == ponder::Value(MyEnum::One) ));
+    }    
+}
+

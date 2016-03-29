@@ -35,9 +35,9 @@
 
 namespace ponder
 {
+    
 const UserObject UserObject::nothing;
 
-//-------------------------------------------------------------------------------------------------
 UserObject::UserObject()
     : m_class(nullptr)
     , m_holder()
@@ -46,7 +46,6 @@ UserObject::UserObject()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 UserObject::UserObject(const UserObject& parent, const UserProperty& member)
     : m_class(&member.getClass())
     , m_holder()
@@ -56,7 +55,6 @@ UserObject::UserObject(const UserObject& parent, const UserProperty& member)
     m_parent->object.m_child = this;
 }
 
-//-------------------------------------------------------------------------------------------------
 UserObject::UserObject(const UserObject& copy)
     : m_class(copy.m_class)
     , m_holder(copy.m_holder)
@@ -66,7 +64,6 @@ UserObject::UserObject(const UserObject& copy)
         m_parent->object.m_child = this;
 }
 
-//-------------------------------------------------------------------------------------------------
 void* UserObject::pointer() const
 {
     if (m_holder)
@@ -86,7 +83,6 @@ void* UserObject::pointer() const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 const Class& UserObject::getClass() const
 {
     if (m_class)
@@ -99,25 +95,21 @@ const Class& UserObject::getClass() const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 Value UserObject::get(const std::string& property) const
 {
     return getClass().property(property).get(*this);
 }
 
-//-------------------------------------------------------------------------------------------------
 void UserObject::set(const std::string& property, const Value& value) const
 {
     getClass().property(property).set(*this, value);
 }
 
-//-------------------------------------------------------------------------------------------------
 Value UserObject::call(const std::string& function, const Args& args) const
 {
     return getClass().function(function).call(*this, args);
 }
 
-//-------------------------------------------------------------------------------------------------
 UserObject& UserObject::operator=(const UserObject& other)
 {
     std::unique_ptr<ParentObject> parent(other.m_parent
@@ -135,7 +127,6 @@ UserObject& UserObject::operator=(const UserObject& other)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool UserObject::operator==(const UserObject& other) const
 {
     if (m_holder && other.m_holder)
@@ -157,7 +148,6 @@ bool UserObject::operator==(const UserObject& other) const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 bool UserObject::operator<(const UserObject& other) const
 {
     if (m_holder)
@@ -191,7 +181,6 @@ bool UserObject::operator<(const UserObject& other) const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 void UserObject::set(const Property& property, const Value& value) const
 {
     if (m_holder)
@@ -216,7 +205,6 @@ void UserObject::set(const Property& property, const Value& value) const
     }
 }
 
-//-------------------------------------------------------------------------------------------------
 void UserObject::cascadeSet(const UserObject& object, const Property& property, const Value& value) const
 {
     // @todo Manually check the access (read / write) to the properties,

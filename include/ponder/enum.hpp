@@ -68,7 +68,7 @@ namespace ponder
  * bool b2 = metaenum.hasValue(5);        // b2 == false
  *
  * std::string s = metaenum.name(10);     // s == "ten"
- * EnumValue l = metaenum.value("two");        // l == 2
+ * EnumValue l = metaenum.value("two");   // l == 2
  *
  * ponder::Enum::Pair p = metaenum.pair(0); // p == {"one", one}
  * \endcode
@@ -96,6 +96,16 @@ public:
          * \param value_ Value of the enum item.
          */
         Pair(const std::string &name_, EnumValue value_) : name(name_), value(value_) {}
+        
+        /**
+         * \brief Helper to return value as require enum class type.
+         *
+         * E.g. `pair.valueAs<MyEnum>()`.
+         *
+         * \return Value as requested type
+         */
+        template <typename E>
+        E valueAs() const {return static_cast<E>(value);}
     };
     
 public:
@@ -123,7 +133,7 @@ public:
      * \return String containing the name of the metaenum
      */
     const std::string& name() const;
-
+        
     /**
      * \brief Return the size of the metaenum
      *
@@ -160,6 +170,12 @@ public:
      */
     bool hasValue(EnumValue value) const;
 
+    template <typename E>
+    bool hasValue(E value) const
+    {
+        return hasValue(static_cast<EnumValue>(value));
+    }
+
     /**
      * \brief Return the name corresponding to given a value
      *
@@ -172,6 +188,18 @@ public:
     const std::string& name(EnumValue value) const;
 
     /**
+     * \brief Return the name corresponding to given a value for enum class
+     * 
+     * \param value Value to get
+     *
+     * \return Name of the requested value
+     *
+     * \throw InvalidEnumValue value doesn't exist in the metaenum
+     */
+    template <typename E>
+    const std::string& name(E value) const {return name(static_cast<EnumValue>(value));}
+
+    /**
      * \brief Return the value corresponding to given a name
      *
      * \param name Name to get
@@ -181,6 +209,21 @@ public:
      * \throw InvalidEnumName name doesn't exist in the metaenum
      */
     EnumValue value(const std::string& name) const;
+
+    /**
+     * \brief Return the value corresponding to given a name for enum class
+     *
+     * Enum classes are strongly typed so the return type needs to be specified,
+     * e.g. `MyEnum a = enum.value<MyEnum>("one");`
+     *
+     * \param name Name to get
+     *
+     * \return Value of the requested name as requested type
+     *
+     * \throw InvalidEnumName name doesn't exist in the metaenum
+     */
+    template <typename E>
+    E value(const std::string& name) const {return static_cast<E>(value(name));}
 
     /**
      * \brief Operator == to check equality between two metaenums
@@ -213,9 +256,9 @@ private:
      * \param name Name of the metaenum
      */
     Enum(const std::string& name);
-
+    
     struct EnumCmp {
-        bool operator () (const std::string& a, const std::string& b) const { return a < b; }
+        bool operator () (const std::string& a, const std::string& b) const {return a < b;}
     };
     
     typedef detail::Dictionary<std::string, EnumValue, EnumCmp> EnumTable;

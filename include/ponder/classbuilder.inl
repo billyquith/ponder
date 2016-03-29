@@ -32,7 +32,6 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)
@@ -42,7 +41,6 @@ ClassBuilder<T>::ClassBuilder(Class& target)
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename U>
 ClassBuilder<T>& ClassBuilder<T>::base()
@@ -87,7 +85,6 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F accessor)
@@ -99,7 +96,6 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F accessor)
     return addProperty(Factory::get(name, accessor));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F1, typename F2>
 ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1, F2 accessor2)
@@ -111,7 +107,6 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1
     return addProperty(Factory::get(name, accessor1, accessor2));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F1, typename F2, typename F3>
 ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1, F2 accessor2, F3 accessor3)
@@ -123,7 +118,6 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1
     return addProperty(Factory::get(name, accessor1, accessor2, accessor3));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
@@ -135,7 +129,6 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
     return addFunction(new detail::FunctionImpl<Signature>(name, function));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, std::function<F> function)
@@ -143,7 +136,6 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, std::functio
     return addFunction(new detail::FunctionImpl<F>(name, function));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F1, typename F2>
 ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F1 function1, F2 function2)
@@ -156,14 +148,12 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F1 function1
     return addFunction(new detail::FunctionImpl<Signature1, Signature2>(name, function1, function2));
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id)
 {
     return tag(id, Value::nothing);
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename U>
 ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
@@ -181,7 +171,6 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::readable(bool value)
 {
@@ -193,7 +182,6 @@ ClassBuilder<T>& ClassBuilder<T>::readable(bool value)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::readable(F function)
@@ -206,7 +194,6 @@ ClassBuilder<T>& ClassBuilder<T>::readable(F function)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::writable(bool value)
 {
@@ -218,7 +205,6 @@ ClassBuilder<T>& ClassBuilder<T>::writable(bool value)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::writable(F function)
@@ -231,7 +217,6 @@ ClassBuilder<T>& ClassBuilder<T>::writable(F function)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::callable(bool value)
 {
@@ -243,7 +228,6 @@ ClassBuilder<T>& ClassBuilder<T>::callable(bool value)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::callable(F function)
@@ -256,7 +240,6 @@ ClassBuilder<T>& ClassBuilder<T>::callable(F function)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <typename... A>
 ClassBuilder<T>& ClassBuilder<T>::constructor()
@@ -267,7 +250,6 @@ ClassBuilder<T>& ClassBuilder<T>::constructor()
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 template <template <typename> class U>
 ClassBuilder<T>& ClassBuilder<T>::external()
@@ -288,7 +270,6 @@ ClassBuilder<T>& ClassBuilder<T>::external()
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
 {
@@ -307,7 +288,6 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
     return *this;
 }
 
-//-------------------------------------------------------------------------------------------------
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
 {

@@ -100,7 +100,7 @@ struct HasPonderRtti
  * \brief Utility class to get the Ponder identifier associated to a C++ object
  *
  * If the object has a dynamic type which is different from its static type
- * (i.e. <tt>Base* obj = new Derived</tt>), and both classes use the
+ * (i.e. `Base* obj = new Derived`), and both classes use the
  * PONDER_RTTI macro, then the system is able to return the identifier of
  * the true dynamic type of the object.
  */

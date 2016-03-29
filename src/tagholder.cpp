@@ -33,18 +33,16 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 TagHolder::~TagHolder()
 {
 }
 
-//-------------------------------------------------------------------------------------------------
 std::size_t TagHolder::tagCount() const
 {
     return m_tags.size();
 }
 
-//-------------------------------------------------------------------------------------------------
 const Value& TagHolder::tagId(std::size_t index) const
 {
     // Make sure that the index is not out of range
@@ -57,13 +55,11 @@ const Value& TagHolder::tagId(std::size_t index) const
     return it->first;
 }
 
-//-------------------------------------------------------------------------------------------------
 bool TagHolder::hasTag(const Value& id) const
 {
     return m_tags.find(id) != m_tags.end();
 }
 
-//-------------------------------------------------------------------------------------------------
 const Value& TagHolder::tag(const Value& id) const
 {
     TagsTable::const_iterator it = m_tags.find(id);
@@ -73,7 +69,6 @@ const Value& TagHolder::tag(const Value& id) const
     return Value::nothing;
 }
 
-//-------------------------------------------------------------------------------------------------
 Value TagHolder::tag(const Value& id, const UserObject& object) const
 {
     TagsTable::const_iterator it = m_tags.find(id);
@@ -83,7 +78,6 @@ Value TagHolder::tag(const Value& id, const UserObject& object) const
     return Value::nothing;
 }
 
-//-------------------------------------------------------------------------------------------------
 TagHolder::TagHolder()
 {
 }

@@ -66,7 +66,15 @@ public:
      * \return Integer value of the enum object
      */
     long value() const;
-
+    
+    /**
+     * \brief Get the value of the enum class object
+     *
+     * \return Enum typed value of the enum class object
+     */
+    template <typename E>
+    E value() const;
+    
     /**
      * \brief Get the name of the enum object
      *

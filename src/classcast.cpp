@@ -34,7 +34,7 @@
 
 namespace ponder
 {
-//-------------------------------------------------------------------------------------------------
+    
 void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
 {
     return sourceClass.applyOffset(pointer, targetClass);
