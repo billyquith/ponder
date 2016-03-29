@@ -33,6 +33,7 @@
 #ifndef PONDER_UTIL_HPP
 #define PONDER_UTIL_HPP
 
+#include <ponder/config.hpp>
 #include <ponder/format.h>
 #include <ponder/type.hpp>
 
@@ -102,19 +103,19 @@ namespace detail
         }
     };
 
-    bool conv(const std::string& from, bool& to);
-    bool conv(const std::string& from, char& to);
-    bool conv(const std::string& from, unsigned char& to);
-    bool conv(const std::string& from, short& to);
-    bool conv(const std::string& from, unsigned short& to);
-    bool conv(const std::string& from, int& to);
-    bool conv(const std::string& from, unsigned int& to);
-    bool conv(const std::string& from, long& to);
-    bool conv(const std::string& from, unsigned long& to);
-    bool conv(const std::string& from, long long& to);
-    bool conv(const std::string& from, unsigned long long& to);
-    bool conv(const std::string& from, float& to);
-    bool conv(const std::string& from, double& to);
+    PONDER_API bool conv(const std::string& from, bool& to);
+    PONDER_API bool conv(const std::string& from, char& to);
+    PONDER_API bool conv(const std::string& from, unsigned char& to);
+    PONDER_API bool conv(const std::string& from, short& to);
+    PONDER_API bool conv(const std::string& from, unsigned short& to);
+    PONDER_API bool conv(const std::string& from, int& to);
+    PONDER_API bool conv(const std::string& from, unsigned int& to);
+    PONDER_API bool conv(const std::string& from, long& to);
+    PONDER_API bool conv(const std::string& from, unsigned long& to);
+    PONDER_API bool conv(const std::string& from, long long& to);
+    PONDER_API bool conv(const std::string& from, unsigned long long& to);
+    PONDER_API bool conv(const std::string& from, float& to);
+    PONDER_API bool conv(const std::string& from, double& to);
     
     template <typename T>
     struct convert_impl <T, std::string,

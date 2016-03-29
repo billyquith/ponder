@@ -28,6 +28,8 @@
 #ifndef FMT_FORMAT_H_
 #define FMT_FORMAT_H_
 
+#include <ponder/config.hpp>
+
 #include <stdint.h>
 
 #include <cassert>
@@ -1337,7 +1339,7 @@ class PrintfFormatter : private FormatterBase {
 
 // A formatter.
 template <typename Char>
-class BasicFormatter : private internal::FormatterBase {
+class PONDER_API BasicFormatter : private internal::FormatterBase {
  private:
   BasicWriter<Char> &writer_;
   internal::ArgMap<Char> map_;
