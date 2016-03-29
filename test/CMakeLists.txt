@@ -89,11 +89,6 @@ add_executable(pondertest ${PONDER_TEST_SRCS})
 set_property(TARGET pondertest PROPERTY CXX_STANDARD 11) # fails silently
 target_compile_features(pondertest PRIVATE cxx_range_for cxx_variadic_templates) # required
 
-# define d suffix on windows
-if(WIN32)
-    set_target_properties(pondertest PROPERTIES DEBUG_POSTFIX d)
-endif()
-
 # last thing we have to do is to tell CMake what libraries our executable needs,
 target_link_libraries(pondertest ponder)
 
