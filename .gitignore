@@ -31,6 +31,7 @@ Testing/**
 *.lnk
 *.user
 qtc-gdbmacros/
+*.tlog
 
 # Xcode
 ## Build generated
