@@ -74,32 +74,32 @@ protected:
     /**
      * \see ArrayProperty::getSize
      */
-    virtual std::size_t getSize(const UserObject& object) const override;
+    std::size_t getSize(const UserObject& object) const override;
 
     /**
      * \see ArrayProperty::setSize
      */
-    virtual void setSize(const UserObject& object, std::size_t size) const override;
+    void setSize(const UserObject& object, std::size_t size) const override;
 
     /**
      * \see ArrayProperty::getElement
      */
-    virtual Value getElement(const UserObject& object, std::size_t index) const override;
+    Value getElement(const UserObject& object, std::size_t index) const override;
 
     /**
      * \see ArrayProperty::setElement
      */
-    virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const override;
+    void setElement(const UserObject& object, std::size_t index, const Value& value) const override;
 
     /**
      * \see ArrayProperty::insertElement
      */
-    virtual void insertElement(const UserObject& object, std::size_t before, const Value& value) const override;
+    void insertElement(const UserObject& object, std::size_t before, const Value& value) const override;
 
     /**
      * \see ArrayProperty::removeElement
      */
-    virtual void removeElement(const UserObject& object, std::size_t index) const override;
+    void removeElement(const UserObject& object, std::size_t index) const override;
 
 private:
 

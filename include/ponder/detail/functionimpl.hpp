@@ -165,8 +165,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>()})
-        , m_function(std::bind(function, std::bind(accessor, _1), _2))
+        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>()})
+        ,   m_function(std::bind(function, std::bind(accessor, _1), _2))
     {
     }
 
@@ -200,8 +200,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>()})
-        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3))
+        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>()})
+        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3))
     {
     }
 
@@ -236,8 +236,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
-        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4))
+        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
+        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4))
     {
     }
 
@@ -249,9 +249,9 @@ protected:
     virtual Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
-                                   , convertArg<A0>(args, 0, name())
-                                   , convertArg<A1>(args, 1, name())
-                                   , convertArg<A2>(args, 2, name()));
+                                      , convertArg<A0>(args, 0, name())
+                                      , convertArg<A1>(args, 1, name())
+                                      , convertArg<A2>(args, 2, name()));
 
     }
 
@@ -273,8 +273,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
-        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5))
+        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
+        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5))
     {
     }
 
@@ -311,8 +311,8 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-    : Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
-        , m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5, _6))
+        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
+        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5, _6))
     {
     }
 
