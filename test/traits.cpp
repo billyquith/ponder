@@ -115,7 +115,7 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder has function traits")
 {
-    SECTION("check isFunction")
+    SECTION("what is not a function")
     {
         static_assert( ! ponder::detail::FunctionTraits<int>::isFunction, "FunctionTraits<>::isFunction failed");
         static_assert( ! ponder::detail::FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
@@ -123,7 +123,10 @@ TEST_CASE("Ponder has function traits")
         static_assert( ! ponder::detail::FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
         static_assert( ! ponder::detail::FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
         static_assert( ! ponder::detail::FunctionTraits<std::string>::isFunction, "FunctionTraits<>::isFunction failed");
+    }
     
+    SECTION("what is a function")
+    {
         static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction, "FunctionTraits<>::isFunction failed");
         static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction, "FunctionTraits<>::isFunction failed");
         static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction, "FunctionTraits<>::isFunction failed");
@@ -139,6 +142,12 @@ TEST_CASE("Ponder has function traits")
         static_assert(ponder::detail::FunctionTraits<void(Methods::*)()>::isFunction, "FunctionTraits<>::isFunction failed");
         void (Methods::*meth_t)() = &Methods::foo;
         static_assert(ponder::detail::FunctionTraits<decltype(meth_t)>::isFunction, "FunctionTraits<>::isFunction failed");
+
+        struct Members {
+            int m;
+        };
+
+        static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction, "FunctionTraits<>::isFunction failed");
     }
 }
 
