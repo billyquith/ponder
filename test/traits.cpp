@@ -323,8 +323,7 @@ TEST_CASE("Lexical cast is used")
     
         REQUIRE(ponder::detail::convert<unsigned short>(std::string("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned short>(std::string("2600")) == 2600u);
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("-27"))
-                == static_cast<unsigned short>(-27u));
+        REQUIRE(ponder::detail::convert<unsigned short>(std::string("-27")) == unsigned short(-27));
     }
 
     SECTION("lexical_cast_to_int")
@@ -335,7 +334,7 @@ TEST_CASE("Lexical cast is used")
 
         REQUIRE(ponder::detail::convert<unsigned int>(std::string("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned int>(std::string("123456789")) == 123456789u);
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("-27")) == -27u);
+        REQUIRE(ponder::detail::convert<unsigned int>(std::string("-27")) == unsigned int(-27));
     
         REQUIRE_THROWS_AS(ponder::detail::convert<int>(std::string("bad number")),
                           ponder::detail::bad_conversion);
@@ -351,7 +350,7 @@ TEST_CASE("Lexical cast is used")
         REQUIRE(ponder::detail::convert<unsigned long long>(std::string("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned long long>(std::string("1125899906842624")) ==
                 1125899906842624ull);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("-27")) == -27ull);
+        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("-27")) == unsigned long long(-27));
     }
 
     SECTION("lexical_cast_to_float")
