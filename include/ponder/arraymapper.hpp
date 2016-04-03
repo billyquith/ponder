@@ -319,28 +319,4 @@ struct ArrayMapper<std::array<T, N> >
 } // namespace ponder_ext
 
 
-namespace ponder
-{
-namespace detail
-{
-/**
- * \brief Helper structure to check at compile time if a type is an array
- *
- * This structure check if the specialization of ArrayMapper for the
- * template parameter T exists (i.e. the ElementType member is properly defined).
- */
-template <typename T>
-struct IsArray
-{
-    template <typename U> static TypeYes check(typename U::ElementType*);
-    template <typename U> static TypeNo  check(...);
-
-    enum {value = sizeof(check<ponder_ext::ArrayMapper<T> >(0)) == sizeof(TypeYes)};
-};
-
-} // namespace detail
-
-} // namespace ponder
-
-
 #endif // PONDER_ARRAYMAPPER_HPP

@@ -75,7 +75,7 @@ using namespace TraitsTest;
 // Sanity check: make sure compiler supports features we need.
 TEST_CASE("C++11 features and syntax")
 {
-    SECTION("C++11 syntax checks")
+    SECTION("functions")
     {
         foo(); bar(0.f); // to stop unused warning
     
@@ -101,6 +101,14 @@ TEST_CASE("C++11 features and syntax")
                       "std::result_of failed");
         static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value,
                       "std::result_of failed");
+    }
+
+    SECTION("arrays")
+    {
+        static_assert(!std::is_array<int>::value, "std::is_array failed");
+        static_assert(std::is_array<int[10]>::value, "std::is_array failed");
+        static_assert(!std::is_array<int*>::value, "std::is_array failed");
+        static_assert(!std::is_array<int*>::value, "std::is_array failed");
     }
 }
 

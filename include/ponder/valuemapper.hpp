@@ -220,7 +220,7 @@ struct ValueMapper<std::string>
  * Warning: special case for char[] and const char[], they are strings not arrays
  */
 template <typename T>
-struct ValueMapper<T, typename std::enable_if< ponder::detail::IsArray<T>::value
+struct ValueMapper<T, typename std::enable_if< std::is_array<T>::value
                                                && !std::is_same<typename ponder_ext::ArrayMapper<T>::ElementType, char>::value
                                                && !std::is_same<typename ponder_ext::ArrayMapper<T>::ElementType, const char>::value
                                              >::type >
