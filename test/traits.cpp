@@ -30,6 +30,7 @@
 #include <ponder/detail/functiontraits.hpp>
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/util.hpp>
+#include <ponder/arraymapper.hpp>
 #include "catch.hpp"
 #include <array>
 
@@ -105,10 +106,10 @@ TEST_CASE("C++11 features and syntax")
 
     SECTION("arrays")
     {
-        static_assert(!std::is_array<int>::value, "std::is_array failed");
-        static_assert(std::is_array<int[10]>::value, "std::is_array failed");
-        static_assert(!std::is_array<int*>::value, "std::is_array failed");
-        static_assert(!std::is_array<int*>::value, "std::is_array failed");
+        static_assert( ! std::is_array<int>::value, "std::is_array failed");
+        static_assert(   std::is_array<int[10]>::value, "std::is_array failed");
+        static_assert( ! std::is_array<int*>::value, "std::is_array failed");
+        static_assert( ! std::is_array<int*>::value, "std::is_array failed");
     }
 }
 
@@ -226,6 +227,39 @@ TEST_CASE("Ponder has object traits")
             std::is_same<int, ponder::detail::ObjectTraits<decltype(intArray)>::DataType>::value,
             "ObjectTraits<>::DataType failed");
     }    
+}
+
+TEST_CASE("Types supporting array interface are supported")
+{
+    SECTION("not arrays")
+    {
+        static_assert( ! ponder_ext::ArrayMapper<int>::isArray, "ponder_ext::ArrayMapper failed");
+        static_assert( ! ponder_ext::ArrayMapper<char*>::isArray, "ponder_ext::ArrayMapper failed");
+    }
+
+    SECTION("C arrays")
+    {
+        static_assert(ponder_ext::ArrayMapper<int[10]>::isArray, "ponder_ext::ArrayMapper failed");
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+    }
+
+    SECTION("std::array")
+    {
+        static_assert(ponder_ext::ArrayMapper<std::array<int, 10>>::isArray, "ponder_ext::ArrayMapper failed");
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::array<int, 10>>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+    }
+
+    SECTION("std::vector")
+    {
+        static_assert(ponder_ext::ArrayMapper<std::vector<int>>::isArray, "ponder_ext::ArrayMapper failed");
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::vector<int>>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+    }
+
+    SECTION("std::list")
+    {
+        static_assert(ponder_ext::ArrayMapper<std::list<int>>::isArray, "ponder_ext::ArrayMapper failed");
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::list<int>>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+    }
 }
 
 TEST_CASE("Lexical cast is used")

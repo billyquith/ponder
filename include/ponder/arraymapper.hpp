@@ -117,6 +117,7 @@ namespace ponder_ext
 template <typename T>
 struct ArrayMapper
 {
+    enum { isArray = false };
 };
 
 /*
@@ -125,6 +126,7 @@ struct ArrayMapper
 template <typename T, std::size_t N>
 struct ArrayMapper<T[N]>
 {
+    enum { isArray = true };
     typedef T ElementType;
 
     static bool dynamic()
@@ -162,6 +164,7 @@ struct ArrayMapper<T[N]>
 template <typename T, std::size_t N>
 struct ArrayMapper<std::array<T, N> >
 {
+    enum { isArray = true };
     typedef T ElementType;
 
     static bool dynamic()
@@ -199,6 +202,7 @@ struct ArrayMapper<std::array<T, N> >
 //template <typename T, std::size_t N>
 //struct ArrayMapper<boost::array<T, N> >
 //{
+//    enum { isArray = true };
 //    typedef T ElementType;
 //
 //    static bool dynamic()
@@ -236,7 +240,8 @@ struct ArrayMapper<std::array<T, N> >
  template <typename T>
  struct ArrayMapper<std::vector<T> >
  {
-    typedef T ElementType;
+     enum { isArray = true };
+     typedef T ElementType;
 
     static bool dynamic()
     {
@@ -275,7 +280,8 @@ struct ArrayMapper<std::array<T, N> >
  template <typename T>
  struct ArrayMapper<std::list<T> >
  {
-    typedef T ElementType;
+     enum { isArray = true };
+     typedef T ElementType;
 
     static bool dynamic()
     {
