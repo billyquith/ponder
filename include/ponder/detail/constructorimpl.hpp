@@ -107,7 +107,7 @@ public:
     /**
      * \see Constructor::matches
      */
-    virtual bool matches(const Args& args) const override
+    bool matches(const Args& args) const override
     {
         return args.count() == sizeof...(A) && checkArgs<A...>(args, make_index_sequence<sizeof...(A)>());
     }
@@ -115,7 +115,7 @@ public:
     /**
      * \see Constructor::create
      */
-    virtual UserObject create(const Args& args) const override
+    UserObject create(const Args& args) const override
     {
         return createWithArgs<A...>(args, make_index_sequence<sizeof...(A)>());
     }

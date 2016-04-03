@@ -74,7 +74,7 @@ public:
      *
      * \param visitor Visitor to accept
      */
-    virtual void accept(ClassVisitor& visitor) const override;
+    void accept(ClassVisitor& visitor) const override;
 
 private:
 

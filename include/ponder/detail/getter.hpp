@@ -83,7 +83,7 @@ public:
     /**
      * \see GetterInterface::get
      */
-    virtual T get(const UserObject& object) const override;
+    T get(const UserObject& object) const override;
 
 private:
 

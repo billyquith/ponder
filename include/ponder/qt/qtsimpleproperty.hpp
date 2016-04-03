@@ -74,7 +74,7 @@ public:
      *
      * \return Current value of the property
      */
-    virtual ponder::Value getValue(const ponder::UserObject& object) const override
+    ponder::Value getValue(const ponder::UserObject& object) const override
     {
         return QtHelper::variantToValue(m_metaProperty.read(object.get<T*>()));
     }
@@ -85,7 +85,7 @@ public:
      * \param object Object to write
      * \param value New value of the property
      */
-    virtual void setValue(const ponder::UserObject& object, const ponder::Value& value) const override
+    void setValue(const ponder::UserObject& object, const ponder::Value& value) const override
     {
         m_metaProperty.write(object.get<T*>(), QtHelper::valueToVariant(value));
     }
@@ -95,7 +95,7 @@ public:
      *
      * \return True if the property is readable, false otherwise
      */
-    virtual bool isReadable() const override
+    bool isReadable() const override
     {
         return m_metaProperty.isReadable();
     }
@@ -105,7 +105,7 @@ public:
      *
      * \return True if the property is writable, false otherwise
      */
-    virtual bool isWritable() const override
+    bool isWritable() const override
     {
         return m_metaProperty.isWritable();
     }

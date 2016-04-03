@@ -142,7 +142,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const override
+    Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::template call<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
     }
@@ -175,7 +175,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const override
+    Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name()));
@@ -210,7 +210,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const override
+    Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -246,7 +246,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const override
+    Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -283,7 +283,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const override
+    Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())
@@ -321,7 +321,7 @@ protected:
     /**
      * \see Function::execute
      */
-    virtual Value execute(const UserObject& object, const Args& args) const override
+    Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::call(m_function, object.get<C>()
                                       , convertArg<A0>(args, 0, name())

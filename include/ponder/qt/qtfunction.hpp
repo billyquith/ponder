@@ -71,7 +71,7 @@ public:
     /**
      * \see Function::execute
      */
-    virtual ponder::Value execute(const ponder::UserObject& object, const ponder::Args& args) const override
+    ponder::Value execute(const ponder::UserObject& object, const ponder::Args& args) const override
     {
         QVariant value(QtHelper::variantType(QMetaType::type(m_metaMethod.typeName())));
         QGenericReturnArgument ret(m_metaMethod.typeName(), value.data());

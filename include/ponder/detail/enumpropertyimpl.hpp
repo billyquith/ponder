@@ -69,22 +69,22 @@ protected:
     /**
      * \see Property::isReadable
      */
-    virtual bool isReadable() const override;
+    bool isReadable() const override;
 
     /**
      * \see Property::isWritable
      */
-    virtual bool isWritable() const override;
+    bool isWritable() const override;
 
     /**
      * \see Property::getValue
      */
-    virtual Value getValue(const UserObject& object) const override;
+    Value getValue(const UserObject& object) const override;
 
     /**
      * \see Property::setValue
      */
-    virtual void setValue(const UserObject& object, const Value& value) const override;
+    void setValue(const UserObject& object, const Value& value) const override;
 
 private:
 
