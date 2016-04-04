@@ -33,6 +33,11 @@
 #ifndef PONDER_CONFIG_HPP
 #define PONDER_CONFIG_HPP
 
+// Earlier MSVC compilers have C++0x bugs which cause problems for Ponder.
+#if defined(_MSC_VER)
+    static_assert(_MSC_VER >= 1900, "MSVC 2015 is required.");
+    static_assert(_MSC_FULL_VER >= 190023918, "MSVC 2015 Update 2 required.");
+#endif
 
 // We define the PONDER_API macro according to the
 // current operating system and build mode
