@@ -54,27 +54,27 @@ namespace ClassVisitorTest
         , functionVisited(false)
         {}
         
-        virtual void visit(const ponder::SimpleProperty& property) override
+        void visit(const ponder::SimpleProperty& property) override
         {
             simpleVisited = true;
         }
         
-        virtual void visit(const ponder::ArrayProperty& property) override
+        void visit(const ponder::ArrayProperty& property) override
         {
             arrayVisited = true;
         }
         
-        virtual void visit(const ponder::EnumProperty& property) override
+        void visit(const ponder::EnumProperty& property) override
         {
             enumVisited = true;
         }
         
-        virtual void visit(const ponder::UserProperty& property) override
+        void visit(const ponder::UserProperty& property) override
         {
             userVisited = true;
         }
         
-        virtual void visit(const ponder::Function& function) override
+        void visit(const ponder::Function& function) override
         {
             functionVisited = true;
         }

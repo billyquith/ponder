@@ -73,7 +73,8 @@ struct ObjectTraits
     enum
     {
         isWritable = false,
-        isRef = false
+        isRef = false,
+        which = 0
     };
 
     typedef T& RefReturnType;
@@ -91,7 +92,8 @@ struct ObjectTraits<T*>
     enum
     {
         isWritable = !std::is_const<T>::value,
-        isRef = true
+        isRef = true,
+        which = 1
     };
 
     typedef T* RefReturnType;
@@ -111,7 +113,8 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
     enum
     {
         isWritable = !std::is_const<U>::value,
-        isRef = true
+        isRef = true,
+        which = 2
     };
 
     typedef U* RefReturnType;
@@ -131,7 +134,8 @@ struct ObjectTraits<T[N]>
     enum
     {
         isWritable = false,
-        isRef = true
+        isRef = true,
+        which = 3
     };
 
     typedef T(&RefReturnType)[N];
@@ -142,12 +146,13 @@ struct ObjectTraits<T[N]>
  * Specialized version for references to non-ref types
  */
 template <typename T>
-struct ObjectTraits<T&, typename std::enable_if<!std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
+struct ObjectTraits<T&, typename std::enable_if< !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
     enum
     {
         isWritable = !std::is_const<T>::value,
-        isRef = true
+        isRef = true,
+        which = 4
     };
 
     typedef T& RefReturnType;
@@ -165,6 +170,10 @@ template <typename T>
 struct ObjectTraits<T&, typename std::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
+    enum
+    {
+        which = 5
+    };
 };
 
 /*
@@ -173,6 +182,10 @@ struct ObjectTraits<T&, typename std::enable_if<std::is_pointer<typename ObjectT
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
 {
+    enum
+    {
+        which = 6
+    };
 };
 
 } // namespace detail

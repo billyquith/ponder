@@ -145,9 +145,12 @@ TEST_CASE("Ponder has function traits")
 
         struct Members {
             int m;
+            float a[5];
         };
 
         static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<float (Members::*)[]>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<decltype(&Members::a)>::isFunction, "FunctionTraits<>::isFunction failed");
     }
 }
 
