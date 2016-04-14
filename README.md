@@ -88,11 +88,10 @@ void use()
 ### History
 
 Ponder is a fork of [CAMP][2], which has been retired by the original authors. CAMP relies
-on Boost, and is pre-C++11. In Ponder, the Boost dependency has been removed
-(apart from testing) and, instead, C++11 features are used. CAMP was developed by
-Technogerma Systems France and then by [Tegesoft][1] (where the dev team has moved).
+on Boost, and is pre-C++11. In Ponder, the Boost dependency has been removed, and instead, 
+C++11 features are used. CAMP was developed by Technogerma Systems France and then by 
+[Tegesoft][1] (where the dev team has moved).
 
 
 [1]: http://www.tegesoft.com
 [2]: https://github.com/tegesoft/camp
-
