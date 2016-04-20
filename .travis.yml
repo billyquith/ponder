@@ -10,7 +10,9 @@ sudo: required
 addons:
   apt:
     packages:
-      - ninja-build
+    - cmake
+    - ninja-build
+    - doxygen
       
 before_install:
   - echo $LANG
