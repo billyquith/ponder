@@ -6,6 +6,7 @@ compiler:
   - clang
   - gcc
 
+sudo: required
 addons:
   apt:
     packages:
