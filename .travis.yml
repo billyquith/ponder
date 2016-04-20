@@ -1,5 +1,7 @@
 language: cpp
-os: osx
+os: 
+  - osx
+  - linux
 compiler:
   - clang
   - gcc
