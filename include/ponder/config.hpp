@@ -75,11 +75,16 @@
 
 // We disable some annoying warnings of VC++
 #if defined(_MSC_VER)
-
     #pragma warning(disable: 4275) // non dll-interface class 'X' used as base for dll-interface class 'Y'
     #pragma warning(disable: 4251) // class 'X' needs to have dll-interface to be used by clients of class 'Y'
-
 #endif
 
+#if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
+    // Workaround a bug in libstdc++ where erase() should accept const iterator
+    // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577
+    #define PONDER_WORKAROUND_GCC_N2350 1
+#else
+    #define PONDER_WORKAROUND_GCC_N2350 0
+#endif
 
 #endif // PONDER_CONFIG_HPP

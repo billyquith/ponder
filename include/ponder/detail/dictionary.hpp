@@ -84,7 +84,7 @@ public:
 
     bool tryFind(const KEY &key, const_iterator &returnValue) const
     {
-        auto it = findKey(key);
+        const_iterator it = findKey(key);
         if (it != m_contents.end())
         {
             returnValue = it;
@@ -118,9 +118,18 @@ public:
     
     void erase(const KEY &key)
     {
-        auto it = findKey(key);
+        const_iterator it = findKey(key);
         if (it != m_contents.end())
+        {
+            // Avoid std::vector.erase here due to bug in libstdc++ < v4.9
+#if PONDER_WORKAROUND_GCC_N2350
+            const std::size_t pos = it - m_contents.begin();
+            m_contents[pos] = m_contents[m_contents.size()-1];
+            m_contents.resize(m_contents.size() - 1);
+#else
             m_contents.erase(it);
+#endif
+        }
     }
     
     const_iterator at(std::size_t index) const
