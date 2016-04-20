@@ -140,7 +140,6 @@ TEST_CASE("Array property can be inspected")
 
     SECTION("should be array type")
     {
-        REQUIRE(false);
         REQUIRE(bools->type() == ponder::arrayType);
         REQUIRE(ints->type() == ponder::arrayType);
         REQUIRE(strings->type() == ponder::arrayType);
