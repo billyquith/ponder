@@ -155,6 +155,15 @@ set(SRC_SOURCE
     src/value.cpp
 )
 
+source_group("Headers"
+             REGULAR_EXPRESSION "include/ponder/[^/]+")
+source_group("Headers\\Detail"
+             REGULAR_EXPRESSION "include/ponder/detail/[^/]+")
+source_group("Headers\\XML"
+             REGULAR_EXPRESSION "include/ponder-xml/[^/]+")
+source_group("Source"
+             REGULAR_EXPRESSION "src/[^/]+\\.cpp")
+
 set(PONDER_SRCS
     ${SRC_HEADERS}
     ${SRC_SOURCE}
