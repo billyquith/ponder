@@ -14,6 +14,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" && -z `brew list | grep doxygen` ]]; then brew install doxygen; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && -z `brew list | grep cmake` ]]; then brew install cmake; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated cmake || brew upgrade cmake; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository https://launchpad.net/~roblib/+archive/ubuntu/ppa; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake doxygen; fi
   
@@ -29,3 +30,5 @@ notifications:
   email:
     on_failure: always
     on_success: change
+
+
