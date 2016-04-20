@@ -22,9 +22,7 @@ before_script:
   - cmake --version
   - cmake -G "Unix Makefiles" -DBUILD_TEST=TRUE
 script:
-  - make pondertest
-  - make doc
-  - ./test/pondertest
+  - make pondertest && make doc && ./test/pondertest
 
 notifications:
   email:
