@@ -2,7 +2,7 @@
 Ponder
 ------
 
-[![Build Status](https://travis-ci.org/billyquith/ponder.svg)](https://travis-ci.org/billyquith/ponder)
+Linux [![Build Status](https://travis-ci.org/billyquith/ponder.svg?branch=master&platform=linux)](https://travis-ci.org/billyquith/ponder) OSX [![Build Status](https://travis-ci.org/billyquith/ponder.svg?branch=master&platform=osx)](https://travis-ci.org/billyquith/ponder)
 
 ### About
 
