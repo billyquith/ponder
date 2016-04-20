@@ -6,6 +6,11 @@ compiler:
   - clang
   - gcc
 
+addons:
+  apt:
+    packages:
+      - ninja-build
+      
 before_install:
   - echo $LANG
   - echo $LC_ALL
