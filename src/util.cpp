@@ -30,6 +30,10 @@
 
 #include <ponder/detail/util.hpp>
 
+#if !defined(WIN32)
+#   include <strings.h>
+#endif
+
 // Convert to string:
 //  #include "format.h"
 //  http://zverovich.net/2013/09/07/integer-to-string-conversion-in-cplusplus.html
