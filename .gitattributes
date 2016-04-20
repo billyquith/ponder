@@ -7,5 +7,7 @@
 *.html text
 *.css text
 *.in text
+*.txt text
+*.cmake text
 
 *.png binary

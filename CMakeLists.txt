@@ -30,7 +30,9 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 3.0)
+set(CMAKE_MACOSX_RPATH TRUE)
+cmake_minimum_required(VERSION 2.8)
+cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 # set project's name
 project(Ponder)
