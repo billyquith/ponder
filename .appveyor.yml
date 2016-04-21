@@ -5,7 +5,7 @@ shallow_clone: true
 init:
 
 build_script:
-- cmd: mkdir build && cd build && cmake -G "Visual Studio 14 Win64" .. && cmake --build . --config Debug && cmake --build . --config Release
+- cmd: mkdir build && pushd build && cmake -DBUILD_TEST=ON -G "Visual Studio 14 Win64" .. && cmake --build . --config Debug && cmake --build . --config Release && popd
 
 test_script:
 - cmd: cd test && ctest -C Debug -V && ctest -C Release -V
