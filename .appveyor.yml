@@ -18,11 +18,10 @@ build:
   parallel: true
 
 build_script:
-  - cmd: cmake --version
-  - cmd: md build
+  - cmd: mkdir build
   - cmd: cd build
   - cmd: cmake -DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF -G "%GENERATOR%" ..
-  - cmd: cmake --build .
+  - cmd: cmake --build . --config "%CFG%"
 
 test_script:
   - cmd: cd test && ctest --output-on-failure -C "%CFG%" -V
