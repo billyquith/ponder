@@ -1,11 +1,29 @@
 os: Visual Studio 2015
 platform: x64
 shallow_clone: true
+version: 1.0.{build}
 
-init:
+environment:
+  matrix:
+    - GENERATOR: Visual Studio 14 2015
+      CFG: Debug
+    - GENERATOR: Visual Studio 14 2015
+      CFG: Release
+    - GENERATOR: Visual Studio 14 2015 Win64
+      CFG: Debug
+    - GENERATOR: Visual Studio 14 2015 Win64
+      CFG: Release
+
+build:
+  parallel: true
 
 build_script:
-- cmd: mkdir build && pushd build && cmake -DBUILD_TEST=ON -G "Visual Studio 14 Win64" .. && cmake --build . --config Debug && cmake --build . --config Release && popd
+  - cmd: cmake --version
+  - cmd: md build
+  - cmd: cd build
+  - cmd: cmake -DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF -G "%GENERATOR%" ..
+  - cmd: cmake --build .
 
 test_script:
-- cmd: cd test && ctest -C Debug -V && ctest -C Release -V
+  - cmd: cd test && ctest --output-on-failure -C "%CFG%" -V
+  
