@@ -579,7 +579,21 @@ TEST_CASE("Ponder has variant values")
         REQUIRE((ponder::Value(1.)    < ponder::Value(2.)) ==   true);
         REQUIRE((ponder::Value("1")   < ponder::Value("2")) ==  true);
         REQUIRE((ponder::Value(One)   < ponder::Value(Two)) ==  true);
-    }    
+        
+#undef equivalent
+    }
+}
+
+
+TEST_CASE("Values can be held in containers")
+{
+    SECTION("a std::map")
+    {
+        std::map<std::string, ponder::Value> testmap;
+        ponder::Value value = "Hello";
+        testmap["1"] = value;
+        REQUIRE(testmap["1"] == std::string("Hello"));
+    }
 }
 
 
