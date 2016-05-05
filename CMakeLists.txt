@@ -176,7 +176,8 @@ include_directories(
 
 # generate version.hpp
 message("Generate version.hpp")
-configure_file(${CMAKE_SOURCE_DIR}/version.in ${CMAKE_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/version.in
+               ${CMAKE_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
