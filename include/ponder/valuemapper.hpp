@@ -109,11 +109,9 @@ namespace ponder_ext
  *     };
  * }
  * \endcode
- */
-
-/*
+ *
  * Generic version of ValueMapper -- T doesn't match with any specialization
- * and is thus treated as a user object
+ * and is thus treated as a user object    
  */
 template <typename T, typename C>
 struct ValueMapper

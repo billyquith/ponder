@@ -170,6 +170,15 @@ public:
      */
     bool hasValue(EnumValue value) const;
 
+    /**
+     * \brief Check if the enum contains a value
+     *
+     * This generic version of hasValue() allows enum classes to be queried.
+     *
+     * \param value Value to check
+     *
+     * \return True if the metaenum contains a pair whose value is \a value
+     */
     template <typename E>
     bool hasValue(E value) const
     {
