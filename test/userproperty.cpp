@@ -27,55 +27,71 @@
 **
 ****************************************************************************/
 
-#include "userproperty.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/userproperty.hpp>
+#include <ponder/classbuilder.hpp>
+#include <ponder/pondertype.hpp>
 #include "catch.hpp"
 
-using namespace UserPropertyTest;
 
-struct UserPropertyFixture
+namespace UserPropertyTest
 {
-    UserPropertyFixture()
+    struct MyType
     {
-        const ponder::Class& metaclass = ponder::classByType<MyClass>();
-        property = static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
+        MyType(int x_) : x(x_) {}
+        int x;
+    };
+    
+    struct MyClass
+    {
+        MyClass(int x) : prop(x) {}
+        MyType prop;
+    };
+    
+    static void declare()
+    {
+        ponder::Class::declare<UserPropertyTest::MyType>("UserPropertyTest::MyType");
+        
+        ponder::Class::declare<UserPropertyTest::MyClass>("UserPropertyTest::MyClass")
+            .property("prop", &MyClass::prop);
     }
+}
 
-    const ponder::UserProperty* property;
-};
+PONDER_AUTO_TYPE(UserPropertyTest::MyType, &UserPropertyTest::declare)
+PONDER_AUTO_TYPE(UserPropertyTest::MyClass, &UserPropertyTest::declare)
 
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::UserProperty
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(USERPROPERTY, UserPropertyFixture)
 
-BOOST_AUTO_TEST_CASE(type)
+TEST_CASE("Ponder has user properties")
 {
-    BOOST_CHECK_EQUAL(property->type(), ponder::userType);
+    const ponder::Class& metaclass = ponder::classByType<UserPropertyTest::MyClass>();
+    
+    const ponder::UserProperty* property =
+        static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
+    
+    REQUIRE(property->type() == ponder::userType);
+    REQUIRE((property->getClass() == ponder::classByType<UserPropertyTest::MyType>()));
+    
+    SECTION("properties can be got")
+    {
+        REQUIRE(property->get(UserPropertyTest::MyClass(-1)).to<UserPropertyTest::MyType>().x == -1);
+        REQUIRE(property->get(UserPropertyTest::MyClass(20)).to<UserPropertyTest::MyType>().x == 20);
+    }
+    
+    SECTION("properies can be set")
+    {
+        UserPropertyTest::MyClass object1(1);
+        UserPropertyTest::MyClass object2(10);
+        property->set(object1, UserPropertyTest::MyType(2));
+        property->set(object2, UserPropertyTest::MyType(20));
+        
+        // reverse order on purpose (to exhibit memory corruptions)
+        REQUIRE(property->get(object2).to<UserPropertyTest::MyType>().x == 20);
+        REQUIRE(property->get(object1).to<UserPropertyTest::MyType>().x ==  2);
+    }
 }
 
-BOOST_AUTO_TEST_CASE(getClass)
-{
-    BOOST_CHECK(property->getClass() == ponder::classByType<MyType>());
-}
 
-BOOST_AUTO_TEST_CASE(get)
-{
-    BOOST_CHECK_EQUAL(property->get(MyClass(-1)).to<MyType>().x, -1);
-    BOOST_CHECK_EQUAL(property->get(MyClass(20)).to<MyType>().x, 20);
-}
 
-BOOST_AUTO_TEST_CASE(set)
-{
-    MyClass object1(1);
-    MyClass object2(10);
-    property->set(object1, MyType(2));
-    property->set(object2, MyType(20));
-
-    // reverse order on purpose (to exhibit memory corruptions)
-    BOOST_CHECK_EQUAL(property->get(object2).to<MyType>().x, 20);
-    BOOST_CHECK_EQUAL(property->get(object1).to<MyType>().x, 2);
-}
-
-BOOST_AUTO_TEST_SUITE_END()

@@ -58,6 +58,7 @@ set(PONDER_TEST_SRCS
     tagholder.cpp
     traits.cpp
     userobject.cpp
+    userproperty.cpp
     value.cpp
 )
 
