@@ -45,20 +45,20 @@ namespace detail
 template <typename KEY, typename VALUE, class CMP>
 class Dictionary
 {
-    typedef std::pair<KEY,VALUE> pair;
+    typedef std::pair<KEY,VALUE> pair_t;
 
-    typedef std::vector<pair> Container;
-    Container m_contents;
+    typedef std::vector<pair_t> container_t;
+    container_t m_contents;
     
     struct KeyCmp {
-        bool operator () (const pair& a, const KEY &b) const {
+        bool operator () (const pair_t& a, const KEY &b) const {
             return CMP() (a.first, b);
         }
     };
 
 public:
     
-    typedef typename Container::const_iterator const_iterator;
+    typedef typename container_t::const_iterator const_iterator;
     
     const_iterator begin() const    { return m_contents.begin(); }
     const_iterator end() const      { return m_contents.end(); }
@@ -109,7 +109,7 @@ public:
     void insert(const KEY &key, const VALUE &value)
     {
         erase(key);
-        m_contents.push_back(pair(key,value));
+        m_contents.push_back(pair_t(key,value));
     }
     
     void insert(const_iterator it)

@@ -29,6 +29,7 @@
 
 #include <ponder/detail/dictionary.hpp>
 #include "catch.hpp"
+#include <string.h>
 
 
 //-----------------------------------------------------------------------------
@@ -38,6 +39,17 @@
 // Sanity check: make sure compiler supports features we need.
 TEST_CASE("Ponder has a dictionary")
 {
+    struct Cmp {
+        bool operator () (const std::string& a, const std::string& b) const {
+            return a < b;
+        }
+    };
+    
+    typedef ponder::detail::Dictionary<std::string, int, Cmp> Dict;
+    std::unique_ptr<Dict> dict(new Dict());
+    
+    REQUIRE(dict != nullptr);
+    
     SECTION("functions")
     {
     }
