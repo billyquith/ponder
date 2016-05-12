@@ -1989,11 +1989,11 @@ namespace Catch{
         #if defined(__ppc64__) || defined(__ppc__)
             #define CATCH_BREAK_INTO_DEBUGGER() \
                 if( Catch::isDebuggerActive() ) { \
-                    __asm__("li r0, 20nscnnopnli r0, 37nli r4, 2nscnnopn" \
+                    __asm__("li r0, 20\nsc\nnop\nli r0, 37\nli r4, 2\nsc\nnop\n" \
                     : : : "memory","r0","r3","r4" ); \
                 }
         #else
-            #define CATCH_BREAK_INTO_DEBUGGER() if( Catch::isDebuggerActive() ) {__asm__("int $3n" : : );}
+            #define CATCH_BREAK_INTO_DEBUGGER() if( Catch::isDebuggerActive() ) {__asm__("int $3\n" : : );}
         #endif
     #endif
 
@@ -3670,14 +3670,14 @@ namespace Tbc {
                 }
                 std::size_t tabPos = std::string::npos;
                 std::size_t width = (std::min)( remainder.size(), _attr.width - indent );
-                std::size_t pos = remainder.find_first_of( 'n' );
+                std::size_t pos = remainder.find_first_of( '\n' );
                 if( pos <= width ) {
                     width = pos;
                 }
                 pos = remainder.find_last_of( _attr.tabChar, width );
                 if( pos != std::string::npos ) {
                     tabPos = pos;
-                    if( remainder[width] == 'n' )
+                    if( remainder[width] == '\n' )
                         width--;
                     remainder = remainder.substr( 0, tabPos ) + remainder.substr( tabPos+1 );
                 }
@@ -3685,7 +3685,7 @@ namespace Tbc {
                 if( width == remainder.size() ) {
                     spliceLine( indent, remainder, width );
                 }
-                else if( remainder[width] == 'n' ) {
+                else if( remainder[width] == '\n' ) {
                     spliceLine( indent, remainder, width );
                     if( width <= 1 || remainder.size() != 1 )
                         remainder = remainder.substr( 1 );
@@ -3732,7 +3732,7 @@ namespace Tbc {
             for( Text::const_iterator it = _text.begin(), itEnd = _text.end();
                 it != itEnd; ++it ) {
                 if( it != _text.begin() )
-                    _stream << "n";
+                    _stream << "\n";
                 _stream << *it;
             }
             return _stream;
@@ -3967,7 +3967,7 @@ namespace Clara {
             else if( sourceLC == "n" || sourceLC == "0" || sourceLC == "false" || sourceLC == "no" || sourceLC == "off" )
                 _dest = false;
             else
-                throw std::runtime_error( "Expected a boolean value but did not recognise:n  '" + _source + "'" );
+                throw std::runtime_error( "Expected a boolean value but did not recognise:\n  '" + _source + "'" );
         }
         inline void convertInto( bool _source, bool& _dest ) {
             _dest = _source;
@@ -4405,7 +4405,7 @@ namespace Clara {
                     if( i < desc.size() && !desc[i].empty() )
                         os  << std::string( indent + 2 + maxWidth - usageCol.size(), ' ' )
                             << desc[i];
-                    os << "n";
+                    os << "\n";
                 }
             }
         }
@@ -4442,13 +4442,13 @@ namespace Clara {
 
         void usage( std::ostream& os, std::string const& procName ) const {
             validate();
-            os << "usage:n  " << procName << " ";
+            os << "usage:\n  " << procName << " ";
             argSynopsis( os );
             if( !m_options.empty() ) {
-                os << " [options]nnwhere options are: n";
+                os << " [options]\n\nwhere options are: \n";
                 optUsage( os, 2 );
             }
-            os << "n";
+            os << "\n";
         }
         std::string usage( std::string const& procName ) const {
             std::ostringstream oss;
@@ -4507,7 +4507,7 @@ namespace Clara {
                         }
                     }
                     catch( std::exception& ex ) {
-                        errors.push_back( std::string( ex.what() ) + "n- while parsing: (" + arg.commands() + ")" );
+                        errors.push_back( std::string( ex.what() ) + "\n- while parsing: (" + arg.commands() + ")" );
                     }
                 }
                 if( it == itEnd ) {
@@ -4523,7 +4523,7 @@ namespace Clara {
                         it != itEnd;
                         ++it ) {
                     if( it != errors.begin() )
-                        oss << "n";
+                        oss << "\n";
                     oss << *it;
                 }
                 throw std::runtime_error( oss.str() );
@@ -4860,14 +4860,14 @@ namespace Tbc {
                 }
                 std::size_t tabPos = std::string::npos;
                 std::size_t width = (std::min)( remainder.size(), _attr.width - indent );
-                std::size_t pos = remainder.find_first_of( 'n' );
+                std::size_t pos = remainder.find_first_of( '\n' );
                 if( pos <= width ) {
                     width = pos;
                 }
                 pos = remainder.find_last_of( _attr.tabChar, width );
                 if( pos != std::string::npos ) {
                     tabPos = pos;
-                    if( remainder[width] == 'n' )
+                    if( remainder[width] == '\n' )
                         width--;
                     remainder = remainder.substr( 0, tabPos ) + remainder.substr( tabPos+1 );
                 }
@@ -4875,7 +4875,7 @@ namespace Tbc {
                 if( width == remainder.size() ) {
                     spliceLine( indent, remainder, width );
                 }
-                else if( remainder[width] == 'n' ) {
+                else if( remainder[width] == '\n' ) {
                     spliceLine( indent, remainder, width );
                     if( width <= 1 || remainder.size() != 1 )
                         remainder = remainder.substr( 1 );
@@ -4922,7 +4922,7 @@ namespace Tbc {
             for( Text::const_iterator it = _text.begin(), itEnd = _text.end();
                 it != itEnd; ++it ) {
                 if( it != _text.begin() )
-                    _stream << "n";
+                    _stream << "\n";
                 _stream << *it;
             }
             return _stream;
@@ -5267,9 +5267,9 @@ namespace Catch {
 
         TestSpec testSpec = config.testSpec();
         if( config.testSpec().hasFilters() )
-            Catch::cout() << "Matching test cases:n";
+            Catch::cout() << "Matching test cases:\n";
         else {
-            Catch::cout() << "All available test cases:n";
+            Catch::cout() << "All available test cases:\n";
             testSpec = TestSpecParser( ITagAliasRegistry::get() ).parse( "*" ).testSpec();
         }
 
@@ -5295,9 +5295,9 @@ namespace Catch {
         }
 
         if( !config.testSpec().hasFilters() )
-            Catch::cout() << pluralise( matchedTests, "test case" ) << "n" << std::endl;
+            Catch::cout() << pluralise( matchedTests, "test case" ) << "\n" << std::endl;
         else
-            Catch::cout() << pluralise( matchedTests, "matching test case" ) << "n" << std::endl;
+            Catch::cout() << pluralise( matchedTests, "matching test case" ) << "\n" << std::endl;
         return matchedTests;
     }
 
@@ -5338,9 +5338,9 @@ namespace Catch {
     inline std::size_t listTags( Config const& config ) {
         TestSpec testSpec = config.testSpec();
         if( config.testSpec().hasFilters() )
-            Catch::cout() << "Tags for matching test cases:n";
+            Catch::cout() << "Tags for matching test cases:\n";
         else {
-            Catch::cout() << "All available tags:n";
+            Catch::cout() << "All available tags:\n";
             testSpec = TestSpecParser( ITagAliasRegistry::get() ).parse( "*" ).testSpec();
         }
 
@@ -5373,14 +5373,14 @@ namespace Catch {
                                                     .setInitialIndent( 0 )
                                                     .setIndent( oss.str().size() )
                                                     .setWidth( CATCH_CONFIG_CONSOLE_WIDTH-10 ) );
-            Catch::cout() << oss.str() << wrapper << "n";
+            Catch::cout() << oss.str() << wrapper << "\n";
         }
-        Catch::cout() << pluralise( tagCounts.size(), "tag" ) << "n" << std::endl;
+        Catch::cout() << pluralise( tagCounts.size(), "tag" ) << "\n" << std::endl;
         return tagCounts.size();
     }
 
     inline std::size_t listReporters( Config const& /*config*/ ) {
-        Catch::cout() << "Available reporters:n";
+        Catch::cout() << "Available reporters:\n";
         IReporterRegistry::FactoryMap const& factories = getRegistryHub().getReporterRegistry().getFactories();
         IReporterRegistry::FactoryMap::const_iterator itBegin = factories.begin(), itEnd = factories.end(), it;
         std::size_t maxNameLen = 0;
@@ -5396,7 +5396,7 @@ namespace Catch {
                     << it->first
                     << ":"
                     << std::string( maxNameLen - it->first.size() + 2, ' ' )
-                    << wrapper << "n";
+                    << wrapper << "\n";
         }
         Catch::cout() << std::endl;
         return factories.size();
@@ -6269,10 +6269,10 @@ namespace Catch {
         }
 
         void showHelp( std::string const& processName ) {
-            Catch::cout() << "nCatch v" << libraryVersion << "n";
+            Catch::cout() << "\nCatch v" << libraryVersion << "\n";
 
             m_cli.usage( Catch::cout(), processName );
-            Catch::cout() << "For more detail usage please see the project docsn" << std::endl;
+            Catch::cout() << "For more detail usage please see the project docs\n" << std::endl;
         }
 
         int applyCommandLine( int argc, char const* argv[], OnUnusedOptions::DoWhat unusedOptionBehaviour = OnUnusedOptions::Fail ) {
@@ -6287,9 +6287,9 @@ namespace Catch {
                 {
                     Colour colourGuard( Colour::Red );
                     Catch::cerr()
-                        << "nError(s) in input:n"
+                        << "\nError(s) in input:\n"
                         << Text( ex.what(), TextAttributes().setIndent(2) )
-                        << "nn";
+                        << "\n\n";
                 }
                 m_cli.usage( Catch::cout(), m_configData.processName );
                 return (std::numeric_limits<int>::max)();
@@ -6419,8 +6419,8 @@ namespace Catch {
             if( !prev.second ){
                 Catch::cerr()
                 << Colour( Colour::Red )
-                << "error: TEST_CASE( \"" << it->name << "\" ) already defined.n"
-                << "\tFirst seen at " << prev.first->getTestCaseInfo().lineInfo << "n"
+                << "error: TEST_CASE( \"" << it->name << "\" ) already defined.\n"
+                << "\tFirst seen at " << prev.first->getTestCaseInfo().lineInfo << "\n"
                 << "\tRedefined at " << it->getTestCaseInfo().lineInfo << std::endl;
                 exit(1);
             }
@@ -7291,8 +7291,8 @@ namespace Catch {
             {
                 Colour colourGuard( Colour::Red );
                 Catch::cerr()
-                    << "Tag name [" << tag << "] not allowed.n"
-                    << "Tag names starting with non alpha-numeric characters are reservedn";
+                    << "Tag name [" << tag << "] not allowed.\n"
+                    << "Tag names starting with non alpha-numeric characters are reserved\n";
             }
             {
                 Colour colourGuard( Colour::FileName );
@@ -7721,7 +7721,7 @@ namespace Catch {
         return lc;
     }
     std::string trim( std::string const& str ) {
-        static char const* whitespaceChars = "n\r\t ";
+        static char const* whitespaceChars = "\n\r\t ";
         std::string::size_type start = str.find_first_not_of( whitespaceChars );
         std::string::size_type end = str.find_last_not_of( whitespaceChars );
 
@@ -7879,7 +7879,7 @@ namespace Catch {
 
             size = sizeof(info);
             if( sysctl(mib, sizeof(mib) / sizeof(*mib), &info, &size, CATCH_NULL, 0) != 0 ) {
-                Catch::cerr() << "n** Call to sysctl failed - unable to determine if debugger is active **n" << std::endl;
+                Catch::cerr() << "\n** Call to sysctl failed - unable to determine if debugger is active **\n" << std::endl;
                 return false;
             }
 
@@ -7976,7 +7976,7 @@ std::string toString( std::string const& value ) {
         for(size_t i = 0; i < s.size(); ++i ) {
             std::string subs;
             switch( s[i] ) {
-            case 'n': subs = "\n"; break;
+            case '\n': subs = "\\n"; break;
             case '\t': subs = "\\t"; break;
             default: break;
             }
@@ -8250,11 +8250,11 @@ namespace Catch {
             return m_exprComponents.lhs + " " + m_exprComponents.rhs;
         else if( m_exprComponents.op != "!" ) {
             if( m_exprComponents.lhs.size() + m_exprComponents.rhs.size() < 40 &&
-                m_exprComponents.lhs.find("n") == std::string::npos &&
-                m_exprComponents.rhs.find("n") == std::string::npos )
+                m_exprComponents.lhs.find("\n") == std::string::npos &&
+                m_exprComponents.rhs.find("\n") == std::string::npos )
                 return m_exprComponents.lhs + " " + m_exprComponents.op + " " + m_exprComponents.rhs;
             else
-                return m_exprComponents.lhs + "n" + m_exprComponents.op + "n" + m_exprComponents.rhs;
+                return m_exprComponents.lhs + "\n" + m_exprComponents.op + "\n" + m_exprComponents.rhs;
         }
         else
             return "{can't expand - use " + m_assertionInfo.macroName + "_FALSE( " + m_assertionInfo.capturedExpression.substr(1) + " ) instead of " + m_assertionInfo.macroName + "( " + m_assertionInfo.capturedExpression + " ) for better diagnostics}";
@@ -8320,13 +8320,13 @@ namespace Catch {
 
         if( !startsWith( alias, "[@" ) || !endsWith( alias, "]" ) ) {
             std::ostringstream oss;
-            oss << "error: tag alias, \"" << alias << "\" is not of the form [@alias name].n" << lineInfo;
+            oss << "error: tag alias, \"" << alias << "\" is not of the form [@alias name].\n" << lineInfo;
             throw std::domain_error( oss.str().c_str() );
         }
         if( !m_registry.insert( std::make_pair( alias, TagAlias( tag, lineInfo ) ) ).second ) {
             std::ostringstream oss;
-            oss << "error: tag alias, \"" << alias << "\" already registered.n"
-                << "\tFirst seen at " << find(alias)->lineInfo << "n"
+            oss << "error: tag alias, \"" << alias << "\" already registered.\n"
+                << "\tFirst seen at " << find(alias)->lineInfo << "\n"
                 << "\tRedefined at " << lineInfo;
             throw std::domain_error( oss.str().c_str() );
         }
@@ -8946,11 +8946,11 @@ namespace Catch {
             newlineIfNecessary();
             m_indent = m_indent.substr( 0, m_indent.size()-2 );
             if( m_tagIsOpen ) {
-                stream() << "/>n";
+                stream() << "/>\n";
                 m_tagIsOpen = false;
             }
             else {
-                stream() << m_indent << "</" << m_tags.back() << ">n";
+                stream() << m_indent << "</" << m_tags.back() << ">\n";
             }
             m_tags.pop_back();
             return *this;
@@ -8995,7 +8995,7 @@ namespace Catch {
 
         XmlWriter& writeBlankLine() {
             ensureTagClosed();
-            stream() << "n";
+            stream() << "\n";
             return *this;
         }
 
@@ -9013,14 +9013,14 @@ namespace Catch {
 
         void ensureTagClosed() {
             if( m_tagIsOpen ) {
-                stream() << ">n";
+                stream() << ">\n";
                 m_tagIsOpen = false;
             }
         }
 
         void newlineIfNecessary() {
             if( m_needsNewline ) {
-                stream() << "n";
+                stream() << "\n";
                 m_needsNewline = false;
             }
         }
@@ -9413,14 +9413,14 @@ namespace Catch {
 
                 std::ostringstream oss;
                 if( !result.getMessage().empty() )
-                    oss << result.getMessage() << "n";
+                    oss << result.getMessage() << "\n";
                 for( std::vector<MessageInfo>::const_iterator
                         it = stats.infoMessages.begin(),
                         itEnd = stats.infoMessages.end();
                             it != itEnd;
                             ++it )
                     if( it->type == ResultWas::Info )
-                        oss << it->message << "n";
+                        oss << it->message << "\n";
 
                 oss << "at " << result.getSourceInfo();
                 xml.writeText( oss.str(), false );
@@ -9490,10 +9490,10 @@ namespace Catch {
                 lazyPrint();
                 Colour colour( Colour::ResultError );
                 if( m_sectionStack.size() > 1 )
-                    stream << "nNo assertions in section";
+                    stream << "\nNo assertions in section";
                 else
-                    stream << "nNo assertions in test case";
-                stream << " '" << _sectionStats.sectionInfo.name << "'n" << std::endl;
+                    stream << "\nNo assertions in test case";
+                stream << " '" << _sectionStats.sectionInfo.name << "'\n" << std::endl;
             }
             if( m_headerPrinted ) {
                 if( m_config->showDurations() == ShowDurations::Always )
@@ -9514,9 +9514,9 @@ namespace Catch {
         virtual void testGroupEnded( TestGroupStats const& _testGroupStats ) CATCH_OVERRIDE {
             if( currentGroupInfo.used ) {
                 printSummaryDivider();
-                stream << "Summary for group '" << _testGroupStats.groupInfo.name << "':n";
+                stream << "Summary for group '" << _testGroupStats.groupInfo.name << "':\n";
                 printTotals( _testGroupStats.totals );
-                stream << "n" << std::endl;
+                stream << "\n" << std::endl;
             }
             StreamingReporterBase::testGroupEnded( _testGroupStats );
         }
@@ -9608,13 +9608,13 @@ namespace Catch {
                 printSourceInfo();
                 if( stats.totals.assertions.total() > 0 ) {
                     if( result.isOk() )
-                        stream << "n";
+                        stream << "\n";
                     printResultType();
                     printOriginalExpression();
                     printReconstructedExpression();
                 }
                 else {
-                    stream << "n";
+                    stream << "\n";
                 }
                 printMessage();
             }
@@ -9623,7 +9623,7 @@ namespace Catch {
             void printResultType() const {
                 if( !passOrFail.empty() ) {
                     Colour colourGuard( colour );
-                    stream << passOrFail << ":n";
+                    stream << passOrFail << ":\n";
                 }
             }
             void printOriginalExpression() const {
@@ -9631,25 +9631,25 @@ namespace Catch {
                     Colour colourGuard( Colour::OriginalExpression );
                     stream  << "  ";
                     stream << result.getExpressionInMacro();
-                    stream << "n";
+                    stream << "\n";
                 }
             }
             void printReconstructedExpression() const {
                 if( result.hasExpandedExpression() ) {
-                    stream << "with expansion:n";
+                    stream << "with expansion:\n";
                     Colour colourGuard( Colour::ReconstructedExpression );
-                    stream << Text( result.getExpandedExpression(), TextAttributes().setIndent(2) ) << "n";
+                    stream << Text( result.getExpandedExpression(), TextAttributes().setIndent(2) ) << "\n";
                 }
             }
             void printMessage() const {
                 if( !messageLabel.empty() )
-                    stream << messageLabel << ":" << "n";
+                    stream << messageLabel << ":" << "\n";
                 for( std::vector<MessageInfo>::const_iterator it = messages.begin(), itEnd = messages.end();
                         it != itEnd;
                         ++it ) {
                     // If this assertion is a warning ignore any INFO messages
                     if( printInfoMessages || it->type != ResultWas::Info )
-                        stream << Text( it->message, TextAttributes().setIndent(2) ) << "n";
+                        stream << Text( it->message, TextAttributes().setIndent(2) ) << "\n";
                 }
             }
             void printSourceInfo() const {
@@ -9681,14 +9681,14 @@ namespace Catch {
             }
         }
         void lazyPrintRunInfo() {
-            stream  << "n" << getLineOfChars<'~'>() << "n";
+            stream  << "\n" << getLineOfChars<'~'>() << "\n";
             Colour colour( Colour::SecondaryText );
             stream  << currentTestRunInfo->name
-                    << " is a Catch v"  << libraryVersion << " host application.n"
-                    << "Run with -? for optionsnn";
+                    << " is a Catch v"  << libraryVersion << " host application.\n"
+                    << "Run with -? for options\n\n";
 
             if( m_config->rngSeed() != 0 )
-                stream << "Randomness seeded to: " << m_config->rngSeed() << "nn";
+                stream << "Randomness seeded to: " << m_config->rngSeed() << "\n\n";
 
             currentTestRunInfo.used = true;
         }
@@ -9715,19 +9715,19 @@ namespace Catch {
             SourceLineInfo lineInfo = m_sectionStack.front().lineInfo;
 
             if( !lineInfo.empty() ){
-                stream << getLineOfChars<'-'>() << "n";
+                stream << getLineOfChars<'-'>() << "\n";
                 Colour colourGuard( Colour::FileName );
-                stream << lineInfo << "n";
+                stream << lineInfo << "\n";
             }
-            stream << getLineOfChars<'.'>() << "n" << std::endl;
+            stream << getLineOfChars<'.'>() << "\n" << std::endl;
         }
 
         void printClosedHeader( std::string const& _name ) {
             printOpenHeader( _name );
-            stream << getLineOfChars<'.'>() << "n";
+            stream << getLineOfChars<'.'>() << "\n";
         }
         void printOpenHeader( std::string const& _name ) {
-            stream  << getLineOfChars<'-'>() << "n";
+            stream  << getLineOfChars<'-'>() << "\n";
             {
                 Colour colourGuard( Colour::Headers );
                 printHeaderString( _name );
@@ -9744,7 +9744,7 @@ namespace Catch {
                 i = 0;
             stream << Text( _string, TextAttributes()
                                         .setIndent( indent+i)
-                                        .setInitialIndent( indent ) ) << "n";
+                                        .setInitialIndent( indent ) ) << "\n";
         }
 
         struct SummaryColumn {
@@ -9775,14 +9775,14 @@ namespace Catch {
 
         void printTotals( Totals const& totals ) {
             if( totals.testCases.total() == 0 ) {
-                stream << Colour( Colour::Warning ) << "No tests rann";
+                stream << Colour( Colour::Warning ) << "No tests ran\n";
             }
             else if( totals.assertions.total() > 0 && totals.assertions.allPassed() ) {
                 stream << Colour( Colour::ResultSuccess ) << "All tests passed";
                 stream << " ("
                         << pluralise( totals.assertions.passed, "assertion" ) << " in "
                         << pluralise( totals.testCases.passed, "test case" ) << ")"
-                        << "n";
+                        << "\n";
             }
             else {
 
@@ -9820,7 +9820,7 @@ namespace Catch {
                             << value << " " << it->label;
                 }
             }
-            stream << "n";
+            stream << "\n";
         }
 
         static std::size_t makeRatio( std::size_t number, std::size_t total ) {
@@ -9856,10 +9856,10 @@ namespace Catch {
             else {
                 stream << Colour( Colour::Warning ) << std::string( CATCH_CONFIG_CONSOLE_WIDTH-1, '=' );
             }
-            stream << "n";
+            stream << "\n";
         }
         void printSummaryDivider() {
-            stream << getLineOfChars<'-'>() << "n";
+            stream << getLineOfChars<'-'>() << "\n";
         }
 
     private:
@@ -9921,7 +9921,7 @@ namespace Catch {
 
         virtual void testRunEnded( TestRunStats const& _testRunStats ) {
             printTotals( _testRunStats.totals );
-            stream << "n" << std::endl;
+            stream << "\n" << std::endl;
             StreamingReporterBase::testRunEnded( _testRunStats );
         }
 
