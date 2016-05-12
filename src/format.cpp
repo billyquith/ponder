@@ -244,7 +244,7 @@ void report_error(FormatFunc func,
   // Use Writer::data instead of Writer::c_str to avoid potential memory
   // allocation.
   std::fwrite(full_message.data(), full_message.size(), 1, stderr);
-  std::fputc('\n', stderr);
+  std::fputc('n', stderr);
 }
 
 // IsZeroInt::visit(arg) returns true iff arg is a zero integer.

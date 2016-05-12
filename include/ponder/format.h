@@ -2010,7 +2010,7 @@ class BasicWriter {
     **Example**::
 
        MemoryWriter out;
-       out.write("Current point:\n");
+       out.write("Current point:n");
        out.write("({:+f}, {:+f})", -3.14, 3.14);
 
     This will write the following output to the ``out`` object:
@@ -2478,7 +2478,7 @@ void BasicWriter<Char>::write_double(
   **Example**::
 
      MemoryWriter out;
-     out << "The answer is " << 42 << "\n";
+     out << "The answer is " << 42 << "n";
      out.write("({:+f}, {:+f})", -3.14, 3.14);
 
   This will write the following output to the ``out`` object:
