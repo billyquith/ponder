@@ -42,6 +42,9 @@ namespace ponder
 namespace detail
 {
 
+// Key-value pair dictionary.
+// - Sorted on keys. Once only insertion cost gives better access times.
+//
 template <typename KEY, typename VALUE, class CMP>
 class Dictionary
 {
@@ -65,12 +68,11 @@ public:
 
     const_iterator findKey(const KEY &key) const
     {
-        for (auto it = m_contents.begin(); it != m_contents.end(); ++it)
-        {
-            if (it->first == key)
-                return it;
-        }
-        return m_contents.end();
+        // binary search for key
+        const_iterator it(std::lower_bound(m_contents.begin(), m_contents.end(), key, KeyCmp()));
+        if (it != m_contents.end() && CMP()(key, it->first)) // it > it-1, check ==
+            it = m_contents.end();
+        return it;
     }
 
     const_iterator findValue(const VALUE &value) const
@@ -109,7 +111,9 @@ public:
     void insert(const KEY &key, const VALUE &value)
     {
         erase(key);
-        m_contents.push_back(pair_t(key,value));
+        const pair_t p(key, value);
+        auto it = std::lower_bound(m_contents.begin(), m_contents.end(), p);
+        m_contents.insert(it, p);
     }
     
     void insert(const_iterator it)
@@ -124,9 +128,11 @@ public:
         {
             // Avoid std::vector.erase here due to bug in libstdc++ < v4.9
 #if PONDER_WORKAROUND_GCC_N2350
-            const std::size_t pos = it - m_contents.begin();
-            m_contents[pos] = m_contents[m_contents.size()-1];
-            m_contents.resize(m_contents.size() - 1);
+            std::size_t pos = it - m_contents.begin();
+            const std::size_t sz = m_contents.size() - 1;
+            while (pos < sz)
+                m_contents[pos] = m_contents[pos + 1], ++pos;
+            m_contents.resize(sz);
 #else
             m_contents.erase(it);
 #endif

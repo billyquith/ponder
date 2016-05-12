@@ -5,7 +5,7 @@
  ** The MIT License (MIT)
  **
  ** Copyright (C) 2009-2010 TECHNOGERMA Systems France and/or its subsidiary(-ies).
- ** Contact: Technogerma Systems France Information (contact@technogerma.fr)
+ ** Copyright (C) 2015-2016 Billy Quith.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -36,22 +36,57 @@
 //                         Tests for Ponder detail::dictionary
 //-----------------------------------------------------------------------------
 
-// Sanity check: make sure compiler supports features we need.
 TEST_CASE("Ponder has a dictionary")
 {
-    struct Cmp {
+    struct KeyCmp {
         bool operator () (const std::string& a, const std::string& b) const {
             return a < b;
         }
     };
     
-    typedef ponder::detail::Dictionary<std::string, int, Cmp> Dict;
+    typedef ponder::detail::Dictionary<std::string, int, KeyCmp> Dict;
     std::unique_ptr<Dict> dict(new Dict());
     
     REQUIRE(dict != nullptr);
+    REQUIRE(dict->size() == 0);
+
+    dict->insert("bravo", 1);
+    dict->insert("alpha", 2);
+    dict->insert("zebra", 3);
+    dict->insert("foxtrot", 4);
+    dict->insert("echo", 5);
     
-    SECTION("functions")
+    SECTION("contains items")
     {
+        REQUIRE(dict->size() == 5);
+        
+        REQUIRE(dict->containsKey("bravo") == true);
+        REQUIRE(dict->containsKey("zebra") == true);
+        REQUIRE(dict->containsKey("foxtrot") == true);
+        REQUIRE(dict->containsKey("bravo") == true);
+        REQUIRE(dict->containsKey("echo") == true);
+
+        REQUIRE(dict->containsKey("monkey") == false);
+    }
+
+    SECTION("have values")
+    {
+        REQUIRE(dict->containsValue(1) == true);
+        REQUIRE(dict->containsValue(2) == true);
+        REQUIRE(dict->containsValue(3) == true);
+        REQUIRE(dict->containsValue(4) == true);
+        REQUIRE(dict->containsValue(5) == true);
+        
+        REQUIRE(dict->containsValue(9) == false);
+    }
+    
+    SECTION("keys are sorted")
+    {
+        REQUIRE(dict->at(0)->first == std::string("alpha"));
+        REQUIRE(dict->at(1)->first == std::string("bravo"));
+        REQUIRE(dict->at(2)->first == std::string("echo"));
+        REQUIRE(dict->at(3)->first == std::string("foxtrot"));
+        REQUIRE(dict->at(4)->first == std::string("zebra"));
     }
 }
 

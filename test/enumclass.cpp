@@ -158,12 +158,12 @@ TEST_CASE("Enum class values can be read")
 
     SECTION("as pairs")
     {
-        REQUIRE(metaenum->pair(0).name == "Zero");
-        REQUIRE(metaenum->pair(0).valueAs<MyEnum>() == MyEnum::Zero);
-        REQUIRE(metaenum->pair(1).name == "One");
-        REQUIRE(metaenum->pair(1).valueAs<MyEnum>() == MyEnum::One);
-        REQUIRE(metaenum->pair(2).name == "Two");
-        REQUIRE(metaenum->pair(2).valueAs<MyEnum>() == MyEnum::Two);
+        REQUIRE(metaenum->pair(0).name == "One");
+        REQUIRE(metaenum->pair(0).valueAs<MyEnum>() == MyEnum::One);
+        REQUIRE(metaenum->pair(1).name == "Two");
+        REQUIRE(metaenum->pair(1).valueAs<MyEnum>() == MyEnum::Two);
+        REQUIRE(metaenum->pair(2).name == "Zero");
+        REQUIRE(metaenum->pair(2).valueAs<MyEnum>() == MyEnum::Zero);
         
         REQUIRE_THROWS_AS(metaenum->pair(3), ponder::OutOfRange);
     }
