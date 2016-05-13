@@ -128,8 +128,6 @@ public:
     template <typename T>
     static ClassBuilder<T> declare(const std::string& name = std::string());
 
-public:
-
     /**
      * \brief Return the name of the metaclass
      *
@@ -292,7 +290,7 @@ public:
      *
      * \return True if both metaclasses are the same, false otherwise
      */
-    bool operator==(const Class& other) const;
+    bool operator == (const Class& other) const;
 
     /**
      * \brief Operator != to check inequality between two metaclasses
@@ -301,7 +299,7 @@ public:
      *
      * \return True if metaclasses are different, false if they are equal
      */
-     bool operator!=(const Class& other) const;
+     bool operator != (const Class& other) const;
 
 private:
 
@@ -324,8 +322,6 @@ private:
      */
     int baseOffset(const Class& base) const;
 
-private:
-
     /**
      * \brief Structure holding informations about a base metaclass
      */
@@ -339,13 +335,7 @@ private:
     typedef std::shared_ptr<Function> FunctionPtr;
     typedef std::shared_ptr<Constructor> ConstructorPtr;
 
-    struct PropertyCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
-            return a < b;
-        }
-    };
-
-    struct FunctionCmp {
+    struct NameCmp {
         bool operator () (const std::string& a, const std::string& b) const {
             return a < b;
         }
@@ -353,8 +343,8 @@ private:
 
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<std::string, PropertyPtr, PropertyCmp> PropertyTable;
-    typedef detail::Dictionary<std::string, FunctionPtr, FunctionCmp> FunctionTable;
+    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
+    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&);
 
     std::string m_id;           ///< Name of the metaclass

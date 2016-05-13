@@ -185,12 +185,12 @@ void* Class::applyOffset(void* pointer, const Class& target) const
     PONDER_ERROR(ClassUnrelated(name(), target.name()));
 }
 
-bool Class::operator==(const Class& other) const
+bool Class::operator == (const Class& other) const
 {
     return m_id == other.m_id;
 }
 
-bool Class::operator!=(const Class& other) const
+bool Class::operator != (const Class& other) const
 {
     return m_id != other.m_id;
 }
