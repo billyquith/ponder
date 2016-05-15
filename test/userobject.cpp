@@ -370,6 +370,24 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE_THROWS_AS(userObject.set(1, 27), ponder::OutOfRange);
     }
 
+    SECTION("we can iterate over properties")
+    {
+        MyClass object(3);
+        ponder::UserObject userObject(object);
+        
+        int index = 0;
+        for (auto prop : ponder::classByType<MyClass>().propertyIterator())
+        {
+            switch (index) {
+            case 0:
+                REQUIRE(prop.name() == std::string("p"));
+                REQUIRE(prop.value()->name() == std::string("p"));
+                break;
+            default: ;
+            }
+        }
+    }
+
     SECTION("object methods can have one argument")
     {
         Call object;

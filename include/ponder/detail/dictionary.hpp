@@ -50,7 +50,13 @@ namespace detail
 template <typename KEY, typename VALUE, class CMP>
 class Dictionary
 {
-    typedef std::pair<KEY,VALUE> pair_t;
+    struct pair_t : public std::pair<KEY,VALUE> {
+        pair_t() : std::pair<KEY,VALUE>() {}
+        pair_t(const KEY& k, const VALUE& v) : std::pair<KEY,VALUE>(k, v) {}
+        pair_t(const pair_t& p) = default;
+        const KEY& name() const { return std::pair<KEY,VALUE>::first; }
+        const VALUE& value() const { return std::pair<KEY,VALUE>::second; }
+    };
 
     typedef std::vector<pair_t> container_t;
     container_t m_contents;
@@ -67,6 +73,16 @@ public:
     
     const_iterator begin() const    { return m_contents.begin(); }
     const_iterator end() const      { return m_contents.end(); }
+    
+    class Iterator {
+        const_iterator m_begin, m_end;
+    public:
+        Iterator(const_iterator b, const_iterator e) : m_begin(b), m_end(e) {}
+        const_iterator begin() const    { return m_begin; }
+        const_iterator end() const      { return m_end; }
+    };
+    
+    Iterator getIterator() const { return Iterator(begin(), end()); }
 
     const_iterator findKey(const KEY& key) const
     {

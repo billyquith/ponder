@@ -49,7 +49,7 @@ template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
 class ClassVisitor;
-
+    
 /**
  * \brief ponder::Class represents a metaclass composed of properties and functions
  *
@@ -107,6 +107,38 @@ class ClassVisitor;
  */
 class PONDER_API Class : public TagHolder, detail::noncopyable
 {
+    /**
+     * \brief Structure holding informations about a base metaclass
+     */
+    struct BaseInfo
+    {
+        const Class* base;
+        int offset;
+    };
+    
+    typedef std::shared_ptr<Property> PropertyPtr;
+    typedef std::shared_ptr<Function> FunctionPtr;
+    typedef std::shared_ptr<Constructor> ConstructorPtr;
+    
+    struct NameCmp {
+        bool operator () (const std::string& a, const std::string& b) const {
+            return a < b;
+        }
+    };
+
+    typedef std::vector<ConstructorPtr> ConstructorList;
+    typedef std::vector<BaseInfo> BaseList;
+    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
+    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
+    typedef void (*Destructor)(const UserObject&);
+    
+    std::string m_id;           ///< Name of the metaclass
+    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
+    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
+    BaseList m_bases; ///< List of base metaclasses
+    ConstructorList m_constructors; ///< List of metaconstructors
+    Destructor m_destructor; ///< Destructor (function that is able to delete an abstract object)
+
 public:
 
     /**
@@ -227,6 +259,13 @@ public:
      * \throw PropertyNotFound \a name is not a property of the metaclass
      */
     const Property& property(const std::string& name) const;
+    
+    /**
+     * \brief Get a property iterator
+     *
+     * \return An iterator that can be used to iterator over all properties
+     */
+    PropertyTable::Iterator propertyIterator() const;
 
     /**
     * \brief Return the total number of constructors of this metaclass
@@ -289,7 +328,7 @@ public:
      *
      * \return True if both metaclasses are the same, false otherwise
      */
-    bool operator==(const Class& other) const;
+    bool operator == (const Class& other) const;
 
     /**
      * \brief Operator != to check inequality between two metaclasses
@@ -298,7 +337,7 @@ public:
      *
      * \return True if metaclasses are different, false if they are equal
      */
-     bool operator!=(const Class& other) const;
+     bool operator != (const Class& other) const;
 
 private:
 
@@ -320,40 +359,7 @@ private:
      * \return offset between this and base, or -1 if both classes are unrelated
      */
     int baseOffset(const Class& base) const;
-
-private:
-
-    /**
-     * \brief Structure holding informations about a base metaclass
-     */
-    struct BaseInfo
-    {
-        const Class* base;
-        int offset;
-    };
-
-    typedef std::shared_ptr<Property> PropertyPtr;
-    typedef std::shared_ptr<Function> FunctionPtr;
-    typedef std::shared_ptr<Constructor> ConstructorPtr;
-
-    struct NameCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
-            return a < b;
-        }
-    };
-
-    typedef std::vector<ConstructorPtr> ConstructorList;
-    typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
-    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
-    typedef void (*Destructor)(const UserObject&);
-
-    std::string m_id;           ///< Name of the metaclass
-    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
-    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
-    BaseList m_bases; ///< List of base metaclasses
-    ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor; ///< Destructor (function that is able to delete an abstract object)
+    
 };
 
 } // namespace ponder
