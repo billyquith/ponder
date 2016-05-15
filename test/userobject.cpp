@@ -313,7 +313,7 @@ TEST_CASE("Ponder supports user objects")
         ponder::UserObject userObject = ponder::UserObject::ref(object);
 
         REQUIRE(userObject.get<MyClass>() == object);  // same value
-        REQUIRE(userObject.get<MyClass*>() ==&object); // same address
+        REQUIRE(userObject.get<MyClass*>() == &object); // same address
     }
 
     SECTION("object type information can be inspected")
@@ -327,22 +327,47 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE((ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>()));
     }
 
-    SECTION("we can get object values")
+    SECTION("we can get property values by name")
     {
         MyClass object(7);
         ponder::UserObject userObject(object);
-
         REQUIRE(userObject.get("p") == ponder::Value(7));
+        
+        REQUIRE_THROWS_AS(userObject.get("unfound"), ponder::PropertyNotFound);
     }
 
-    SECTION("we can set object values")
+    SECTION("we can get property values by index")
+    {
+        MyClass object(3);
+        ponder::UserObject userObject(object);
+        REQUIRE(userObject.get(0) == ponder::Value(3));
+        
+        REQUIRE_THROWS_AS(userObject.get(-1), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(userObject.get(1), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(userObject.get(100), ponder::OutOfRange);
+    }
+
+    SECTION("we can set property values by name")
     {
         MyClass object(0);
         ponder::UserObject userObject(object);
-        REQUIRE(userObject.get("p") == ponder::Value(0));
-        
+        REQUIRE(userObject.get("p") == ponder::Value(0));        
         userObject.set("p", 8);
         REQUIRE(object.x == 8);
+        
+        REQUIRE_THROWS_AS(userObject.set("unfound", 7), ponder::PropertyNotFound);
+    }
+
+    SECTION("we can set property values by index")
+    {
+        MyClass object(4);
+        ponder::UserObject userObject(object);
+        REQUIRE(userObject.get(0) == ponder::Value(4));
+        userObject.set(0, 8);
+        REQUIRE(object.x == 8);
+        
+        REQUIRE_THROWS_AS(userObject.set(-1, 11), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(userObject.set(1, 27), ponder::OutOfRange);
     }
 
     SECTION("object methods can have one argument")
