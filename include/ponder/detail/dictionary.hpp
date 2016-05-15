@@ -37,6 +37,7 @@
 #include <ponder/config.hpp>
 #include <utility>
 #include <vector>
+#include <algorithm> // std::lower_bound
 
 namespace ponder
 {
