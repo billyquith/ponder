@@ -34,14 +34,12 @@
 #ifndef PONDER_USEROBJECT_HPP
 #define PONDER_USEROBJECT_HPP
 
-
 #include <ponder/args.hpp>
 #include <ponder/classcast.hpp>
 #include <ponder/errors.hpp>
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/objectholder.hpp>
 #include <ponder/detail/util.hpp>
-#include <string>
 
 
 namespace ponder
