@@ -86,6 +86,18 @@ void use()
 }
 ```
 
+### Build
+
+Ponder uses CMake to generate project files. E.g. Use Ninja to build Ponder:
+
+```bash
+git clone https://github.com/billyquith/ponder.git
+cd ponder
+mkdir build && cd build
+cmake -G Ninja ..
+ninja
+```
+
 ### History
 
 Ponder is a fork of [CAMP][2], which has been retired by the original authors. CAMP relies
