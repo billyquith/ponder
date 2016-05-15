@@ -34,6 +34,7 @@
 #ifndef PONDER_DICTIONARY_HPP
 #define PONDER_DICTIONARY_HPP
 
+#include <ponder/config.hpp>
 #include <utility>
 #include <vector>
 
