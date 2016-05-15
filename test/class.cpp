@@ -198,6 +198,34 @@ TEST_CASE("Class members can be inspected")
         REQUIRE(metaclass.hasFunction("func") == true);
         REQUIRE(metaclass.hasFunction("xxxx") == false);
     }
+    
+    SECTION("can iterate over properties")
+    {
+        int index = 0;
+        for (auto prop : metaclass.propertyIterator())
+        {
+            switch (index) {
+                case 0:
+                    REQUIRE(prop.name() == std::string("prop"));
+                    break;
+                default: ;
+            }
+        }
+    }
+
+    SECTION("can iterate over functions")
+    {
+        int index = 0;
+        for (auto func : metaclass.functionIterator())
+        {
+            switch (index) {
+                case 0:
+                    REQUIRE(func.name() == std::string("func"));
+                    break;
+                default: ;
+            }
+        }
+    }
 }
 
 

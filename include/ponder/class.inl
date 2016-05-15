@@ -48,6 +48,11 @@ inline ClassBuilder<T> Class::declare(const std::string& name)
     return ClassBuilder<T>(newClass);
 }
 
+inline Class::FunctionTable::Iterator Class::functionIterator() const
+{
+    return m_functions.getIterator();
+}
+
 inline Class::PropertyTable::Iterator Class::propertyIterator() const
 {
     return m_properties.getIterator();

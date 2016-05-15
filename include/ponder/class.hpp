@@ -223,6 +223,13 @@ public:
     const Function& function(const std::string& name) const;
 
     /**
+     * \brief Get a function iterator
+     *
+     * \return An iterator that can be used to iterator over all functions
+     */
+    FunctionTable::Iterator functionIterator() const;
+
+    /**
      * \brief Return the total number of properties of this metaclass
      *
      * \return Number of properties
