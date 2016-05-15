@@ -336,13 +336,7 @@ private:
     typedef std::shared_ptr<Function> FunctionPtr;
     typedef std::shared_ptr<Constructor> ConstructorPtr;
 
-    struct PropertyCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
-            return a < b;
-        }
-    };
-
-    struct FunctionCmp {
+    struct NameCmp {
         bool operator () (const std::string& a, const std::string& b) const {
             return a < b;
         }
@@ -350,8 +344,8 @@ private:
 
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<std::string, PropertyPtr, PropertyCmp> PropertyTable;
-    typedef detail::Dictionary<std::string, FunctionPtr, FunctionCmp> FunctionTable;
+    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
+    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&);
 
     std::string m_id;           ///< Name of the metaclass
