@@ -50,6 +50,8 @@ namespace detail
 template <typename KEY, typename VALUE, class CMP>
 class Dictionary
 {
+public:
+
     struct pair_t : public std::pair<KEY,VALUE> {
         pair_t() : std::pair<KEY,VALUE>() {}
         pair_t(const KEY& k, const VALUE& v) : std::pair<KEY,VALUE>(k, v) {}
@@ -58,8 +60,7 @@ class Dictionary
         const VALUE& value() const { return std::pair<KEY,VALUE>::second; }
     };
 
-    typedef std::vector<pair_t> container_t;
-    container_t m_contents;
+private:
     
     struct KeyCmp {
         bool operator () (const pair_t& a, const KEY& b) const {
@@ -67,6 +68,9 @@ class Dictionary
         }
     };
 
+    typedef std::vector<pair_t> container_t;
+    container_t m_contents;
+    
 public:
     
     typedef typename container_t::const_iterator const_iterator;

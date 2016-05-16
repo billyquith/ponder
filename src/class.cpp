@@ -43,12 +43,9 @@ const std::string& Class::name() const
 UserObject Class::construct(const Args& args) const
 {
     // Search an arguments match among the list of available constructors
-    ConstructorList::const_iterator end = m_constructors.end();
-    for (ConstructorList::const_iterator it = m_constructors.begin();
-         it != end;
-         ++it)
+    for (ConstructorPtr cp : m_constructors)
     {
-        Constructor& constructor = **it;
+        Constructor& constructor = *cp;
         if (constructor.matches(args))
         {
             // Match found: use the constructor to create the new instance
@@ -56,8 +53,7 @@ UserObject Class::construct(const Args& args) const
         }
     }
     
-    // No match found
-    return UserObject::nothing;
+    return UserObject::nothing;  // no match found
 }
 
 std::size_t Class::constructorCount() const
@@ -153,15 +149,15 @@ const Property& Class::property(const std::string& id) const
 void Class::visit(ClassVisitor& visitor) const
 {
     // First visit properties
-    for (PropertyTable::const_iterator it = m_properties.begin(); it != m_properties.end(); ++it)
+    for (PropertyTable::pair_t prop : m_properties)
     {
-        it->second->accept(visitor);
+        prop.value()->accept(visitor);
     }
 
     // Then visit functions
-    for (FunctionTable::const_iterator it = m_functions.begin(); it != m_functions.end(); ++it)
+    for (FunctionTable::pair_t func : m_functions)
     {
-        it->second->accept(visitor);
+        func.value()->accept(visitor);
     }
 }
 
