@@ -430,6 +430,13 @@ TEST_CASE("Check Ponder utilities work correctly")
         REQUIRE(ponder::detail::allTrue(true, true, false, true, true, true, true) == false);
         REQUIRE(ponder::detail::allTrue(true, false, true, true, true, false, true, true) == false);
     }
+    
+    SECTION("type to string")
+    {
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::realType), "real")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::userType), "user")==0);
+    }
 }
 
 #ifdef TEST_BOOST

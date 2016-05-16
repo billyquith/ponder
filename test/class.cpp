@@ -288,10 +288,3 @@ TEST_CASE("Classes can have hierarchies")
 }
 
 
-//TEST_CASE(typeNames)
-//{
-//    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);
-//    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::realType), "real")==0);
-//    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::userType), "user")==0);
-//}
-
