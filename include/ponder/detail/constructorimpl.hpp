@@ -83,7 +83,7 @@ template <typename T>
 bool checkArg(const Value& value);
 
 /**
- * \brief Implementation of metaconstructors with 1 parameter
+ * \brief Implementation of metaconstructors with variable parameters
  */
 template <typename T, typename... A>
 class ConstructorImpl : public Constructor
@@ -97,7 +97,7 @@ class ConstructorImpl : public Constructor
     template <typename... As, std::size_t... Is>
     static inline UserObject createWithArgs(const Args& args, index_sequence<Is...>)
     {
-        return new T(convertArg<As>(args, Is)...);
+        return UserObject(new T(convertArg<As>(args, Is)...));
     }
 
 public:
