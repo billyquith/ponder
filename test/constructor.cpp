@@ -276,7 +276,7 @@ TEST_CASE("Constructors can use placement new")
     
     SECTION("with no arguments")
     {
-        char buff[sz + 8];
+        char buff[256];
         const char c_guard = 0xcd;
         memset(buff, c_guard, sizeof(buff));
         char *p = buff + 4;
