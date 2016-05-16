@@ -74,6 +74,8 @@ public:
      */
     Class& addClass(const std::string& id);
 
+    void removeClass(const Class& cls);
+
     /**
      * \brief Get the total number of metaclasses
      *

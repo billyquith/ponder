@@ -42,7 +42,6 @@ set(PONDER_TEST_SRCS
     class.cpp
     classvisitor.cpp
     constructor.cpp
-    create.cpp
     dictionary.cpp
     enum.cpp
     enumclass.cpp

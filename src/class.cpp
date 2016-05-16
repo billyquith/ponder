@@ -34,7 +34,12 @@
 
 namespace ponder
 {
-    
+
+void Class::undeclare(const Class& cls)
+{
+    detail::ClassManager::instance().removeClass(cls);
+}
+
 const std::string& Class::name() const
 {
     return m_id;

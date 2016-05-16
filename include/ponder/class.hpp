@@ -158,6 +158,19 @@ public:
     template <typename T>
     static ClassBuilder<T> declare(const std::string& name = std::string());
 
+    /**
+     * \brief Undeclare an existing metaclass
+     *
+     * Use this to undeclare a metaclass that you no longer require. E.g. from a dynamically
+     * loaded library that is being unloaded.
+     *
+     * \note Do *not* use automatic metaclass declaration (PONDER_AUTO_TYPE) for the class 
+     *       or it will keep being recreated by Ponder.
+     *
+     * \param cls An intance of a metaclass that has been declared.
+     */
+    static void undeclare(const Class& cls);
+
 public:
 
     /**

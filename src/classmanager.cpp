@@ -46,7 +46,7 @@ ClassManager& ClassManager::instance()
 Class& ClassManager::addClass(const std::string& id)
 {
     // First make sure that the class doesn't already exist
-    if (m_classes.find(id) != m_classes.end())
+    if (classExists(id))
     {
         PONDER_ERROR(ClassAlreadyCreated(id));
     }
@@ -64,6 +64,23 @@ Class& ClassManager::addClass(const std::string& id)
     return *newClass;
 }
 
+void ClassManager::removeClass(const Class& cls)
+{
+    if (!classExists(cls.name()))
+    {
+        PONDER_ERROR(ClassNotFound(cls.name()));
+    }
+
+    ClassTable::const_iterator it = m_classes.find(cls.name());
+    Class* classPtr = it->second;
+
+    // Notify observers
+    notifyClassRemoved(*classPtr);
+        
+    delete classPtr;
+    m_classes.erase(it);
+}
+    
 std::size_t ClassManager::count() const
 {
     return m_classes.size();
@@ -98,7 +115,7 @@ const Class* ClassManager::getByIdSafe(const std::string& id) const
 
 bool ClassManager::classExists(const std::string& id) const
 {
-    return (m_classes.find(id) != m_classes.end());
+    return m_classes.find(id) != m_classes.end();
 }
 
 ClassManager::ClassManager()
