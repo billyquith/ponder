@@ -4,10 +4,6 @@ Building Ponder
 
 The build system used for Ponder is CMake (http://cmake.org/).
 
-Boost (http://www.boost.org/) is required to run the unit tests. CMake will find Boost
-automatically if it is properly installed. If not, the BOOST_ROOT CMake variable can
-be defined to locate it.
-
 Once you have generated the project files / makefiles for your favorite compiler
 (please refer to http://cmake.org/ if you do not know how to do it),
 you can use them to compile the Ponder binaries.
