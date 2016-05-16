@@ -33,6 +33,7 @@
 #include <ponder/arraymapper.hpp>
 #include "catch.hpp"
 #include <array>
+#include <string.h> // strcmp()
 
 #ifdef TEST_BOOST
 #include <boost/function_types/function_type.hpp>
