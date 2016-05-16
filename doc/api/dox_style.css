@@ -354,7 +354,7 @@ img.footer {
 /* @group Code Colorization */
 
 span.keyword {
-	color: #0e84b5;
+	color: #b53b49;
     font-weight: bold;
 }
 
@@ -368,8 +368,9 @@ span.keywordflow {
 }
 
 span.comment {
-    color: #60a0b0;
+    color: #9a7f60;
     font-style: italic;
+    background-color: #F8F9FF;
 }
 
 span.preprocessor {
@@ -377,11 +378,11 @@ span.preprocessor {
 }
 
 span.stringliteral {
-    color: #4070a0
+    color: #4165aa
 }
 
 span.charliteral {
-    color: #4070a0
+    color: #cb39b7
 }
 
 span.vhdldigit {
@@ -401,7 +402,8 @@ span.vhdllogic {
 }
 
 div.line .code {
-	color: #474747;
+	color: #227f24;
+    font-weight: bold;
 }
 
 blockquote {
