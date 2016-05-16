@@ -44,7 +44,8 @@ public:
     void setAge(unsigned int age) {m_age = age;}
 
     void speak() {
-        std::cout << "Hi! My name is " << m_name << " and I'm " << m_age << " years old." << std::endl;
+        std::cout << "Hi! My name is " << m_name << " and I'm " << m_age << " years old."
+                  << std::endl;
     }
     
 private:
@@ -98,12 +99,18 @@ cmake -G Ninja ..
 ninja
 ```
 
+### Links
+
+ - [Ponder website](http://billyquith.github.io/ponder/).
+ - [GitHub project](https://github.com/billyquith/ponder).
+ - [Project blog](http://billyquith.github.io/ponder/blog/).
+ - [Online documentation](http://billyquith.github.io/ponder/docs/).
+
 ### History
 
 Ponder is a fork of [CAMP][2], which has been retired by the original authors. CAMP relies
 on Boost, and is pre-C++11. In Ponder, the Boost dependency has been removed, and instead, 
-C++11 features are used. CAMP was developed by Technogerma Systems France and then by 
-[Tegesoft][1] (where the dev team has moved).
+C++11 features are used. CAMP was developed by Technogerma Systems France and then by [Tegesoft][1].
 
 
 [1]: http://www.tegesoft.com
