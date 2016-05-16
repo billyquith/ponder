@@ -27,52 +27,53 @@
 **
 ****************************************************************************/
 
+#include <ponder/classbuilder.hpp>
+#include "catch.hpp"
 
-#ifndef PONDER_CONSTRUCTOR_HPP
-#define PONDER_CONSTRUCTOR_HPP
-
-
-namespace ponder
-{
-class Args;
-class UserObject;
-
-/**
- * \brief Represents a metaconstructor which is used to create objects instances from metaclasses
- *
- * This class is an interface which has to be derived to implement typed constructors.
- *
- * \sa Property, Function
- */
-class Constructor
-{
+class MyClass {
+    int a, b;
+    float f;
+    std::string s;
 public:
+    MyClass() : a(-1), b(-1), f(0.f) {}
+    MyClass(int a_) : a(a_), b(-1), f(0.f) {}
 
-    /**
-     * \brief Destructor
-     */
-    virtual ~Constructor() {}
-
-    /**
-     * \brief Check if the constructor matches the given set of arguments
-     *
-     * \param args Set of arguments to check
-     *
-     * \return True if the constructor is compatible with the given arguments
-     */
-    virtual bool matches(const Args& args) const = 0;
-
-    /**
-     * \brief Use the constructor to create a new object
-     *
-     * \param args Set of arguments to pass to the constructor
-     *
-     * \return Pointer to the new object wrapped in a UserObject, or UserObject::nothing on failure
-     */
-    virtual UserObject create(const Args& args) const = 0;
+    static void declare();
 };
 
-} // namespace ponder
+void MyClass::declare()
+{
+    ponder::Class::declare<MyClass>()
+        .constructor()
+        .constructor<int>()
+        .property("a", &MyClass::a)
+        .property("b", &MyClass::b)
+        ;
+}
 
+PONDER_AUTO_TYPE(MyClass, &MyClass::declare)
 
-#endif // PONDER_CONSTRUCTOR_HPP
+//-----------------------------------------------------------------------------
+//                         Tests for ponder object creation
+//-----------------------------------------------------------------------------
+
+TEST_CASE("Ponder can create user objects")
+{
+    SECTION("constructor with no args")
+    {
+        ponder::UserObject obj(ponder::classByType<MyClass>().construct());
+        REQUIRE((obj != ponder::UserObject::nothing));
+        REQUIRE(obj.get("a") == ponder::Value(-1));
+    }
+}
+
+TEST_CASE("Ponder can be used as a factory")
+{
+    SECTION("constructor with no args")
+    {
+//        MyClass* c = ponder::classByType<MyClass>().create();
+//        REQUIRE(c != nullptr);
+//        REQUIRE(get("a") == ponder::Value(-1));
+    }
+}
+

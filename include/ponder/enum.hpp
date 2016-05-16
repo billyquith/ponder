@@ -35,6 +35,7 @@
 #include <ponder/config.hpp>
 #include <ponder/enumbuilder.hpp>
 #include <ponder/enumget.hpp>
+#include <ponder/pondertype.hpp>
 #include <ponder/detail/typeid.hpp>
 #include <ponder/detail/dictionary.hpp>
 #include <string>
