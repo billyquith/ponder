@@ -40,6 +40,36 @@ const std::string& Class::name() const
     return m_id;
 }
 
+UserObject Class::construct(const Args& args) const
+{
+    // Search an arguments match among the list of available constructors
+    ConstructorList::const_iterator end = m_constructors.end();
+    for (ConstructorList::const_iterator it = m_constructors.begin();
+         it != end;
+         ++it)
+    {
+        Constructor& constructor = **it;
+        if (constructor.matches(args))
+        {
+            // Match found: use the constructor to create the new instance
+            return constructor.create(args);
+        }
+    }
+    
+    // No match found
+    return UserObject::nothing;
+}
+
+std::size_t Class::constructorCount() const
+{
+    return m_constructors.size();
+}
+
+void Class::destroy(const UserObject& object) const
+{
+    m_destructor(object);
+}
+
 std::size_t Class::baseCount() const
 {
     return m_bases.size();
@@ -118,36 +148,6 @@ const Property& Class::property(const std::string& id) const
     }
 
     return *it->second;
-}
-
-std::size_t Class::constructorCount() const
-{
-    return m_constructors.size();
-}
-
-UserObject Class::construct(const Args& args) const
-{
-    // Search an arguments match among the list of available constructors
-    ConstructorList::const_iterator end = m_constructors.end();
-    for (ConstructorList::const_iterator it = m_constructors.begin();
-         it != end;
-         ++it)
-    {
-        Constructor& constructor = **it;
-        if (constructor.matches(args))
-        {
-            // Match found: use the constructor to create the new instance
-            return constructor.create(args);
-        }
-    }
-
-    // No match found
-    return UserObject::nothing;
-}
-
-void Class::destroy(const UserObject& object) const
-{
-    m_destructor(object);
 }
 
 void Class::visit(ClassVisitor& visitor) const

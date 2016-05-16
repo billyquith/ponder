@@ -165,6 +165,37 @@ public:
      * \return String containing the name of the metaclass
      */
     const std::string& name() const;
+    
+    /**
+     * \brief Construct a new instance of the C++ class bound to the metaclass
+     *
+     * If no constructor can match the provided arguments, UserObject::nothing
+     * is returned.
+     * The new instance is wrapped into a UserObject. It must be destroyed
+     * with the Class::destroy function.
+     *
+     * \param args Arguments to pass to the constructor (empty by default)
+     *
+     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
+     */
+    UserObject construct(const Args& args = Args::empty) const;
+
+    /**
+     * \brief Return the total number of constructors of this metaclass
+     *
+     * \return Number of constructors
+     */
+    std::size_t constructorCount() const;
+    
+    /**
+     * \brief Destroy an instance of the C++ class bound to the metaclass
+     *
+     * This function must be called to destroy every instance created with
+     * Class::construct.
+     *
+     * \param object Object to be destroyed
+     */
+    void destroy(const UserObject& object) const;    
 
     /**
      * \brief Return the total number of base metaclasses of this metaclass
@@ -283,37 +314,6 @@ public:
      * \endcode
      */
     PropertyTable::Iterator propertyIterator() const;
-
-    /**
-    * \brief Return the total number of constructors of this metaclass
-    *
-    * \return Number of constructors
-    */
-    std::size_t constructorCount() const;
-
-    /**
-     * \brief Construct a new instance of the C++ class bound to the metaclass
-     *
-     * If no constructor can match the provided arguments, UserObject::nothing
-     * is returned.
-     * The new instance is wrapped into a UserObject. It must be destroyed
-     * with the Class::destroy function.
-     *
-     * \param args Arguments to pass to the constructor (empty by default)
-     *
-     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
-     */
-    UserObject construct(const Args& args = Args::empty) const;
-
-    /**
-     * \brief Destroy an instance of the C++ class bound to the metaclass
-     *
-     * This function must be called to destroy every instance created with
-     * Class::construct.
-     *
-     * \param object Object to be destroyed
-     */
-    void destroy(const UserObject& object) const;
 
     /**
      * \brief Start visitation of a class
