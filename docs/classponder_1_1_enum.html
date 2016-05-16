@@ -32,7 +32,7 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
   </td>
   <td><a href="../" class="title_link">blog</a></td>
@@ -130,9 +130,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae8880bc7baac0581a74e4022a31e293a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_enum.html#ae8880bc7baac0581a74e4022a31e293a">hasValue</a> (<a class="el" href="classponder_1_1_enum.html#aa8a1b99d12268564a54b94fc64881c82">EnumValue</a> <a class="el" href="classponder_1_1_enum.html#a7f652b2e7c8ce666e608523b7b531276">value</a>) const </td></tr>
 <tr class="memdesc:ae8880bc7baac0581a74e4022a31e293a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the enum contains a value.  <a href="#ae8880bc7baac0581a74e4022a31e293a">More...</a><br /></td></tr>
 <tr class="separator:ae8880bc7baac0581a74e4022a31e293a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2097a09b8911b255fe2467255f2ba79d"><td class="memTemplParams" colspan="2"><a class="anchor" id="a2097a09b8911b255fe2467255f2ba79d"></a>
-template&lt;typename E &gt; </td></tr>
-<tr class="memitem:a2097a09b8911b255fe2467255f2ba79d"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hasValue</b> (E <a class="el" href="classponder_1_1_enum.html#a7f652b2e7c8ce666e608523b7b531276">value</a>) const </td></tr>
+<tr class="memitem:a2097a09b8911b255fe2467255f2ba79d"><td class="memTemplParams" colspan="2">template&lt;typename E &gt; </td></tr>
+<tr class="memitem:a2097a09b8911b255fe2467255f2ba79d"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classponder_1_1_enum.html#a2097a09b8911b255fe2467255f2ba79d">hasValue</a> (E <a class="el" href="classponder_1_1_enum.html#a7f652b2e7c8ce666e608523b7b531276">value</a>) const </td></tr>
+<tr class="memdesc:a2097a09b8911b255fe2467255f2ba79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the enum contains a value.  <a href="#a2097a09b8911b255fe2467255f2ba79d">More...</a><br /></td></tr>
 <tr class="separator:a2097a09b8911b255fe2467255f2ba79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a0849c63bc791c3e1d111de5d6fe550"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_enum.html#a3a0849c63bc791c3e1d111de5d6fe550">name</a> (<a class="el" href="classponder_1_1_enum.html#aa8a1b99d12268564a54b94fc64881c82">EnumValue</a> <a class="el" href="classponder_1_1_enum.html#a7f652b2e7c8ce666e608523b7b531276">value</a>) const </td></tr>
 <tr class="memdesc:a3a0849c63bc791c3e1d111de5d6fe550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name corresponding to given a value.  <a href="#a3a0849c63bc791c3e1d111de5d6fe550">More...</a><br /></td></tr>
@@ -161,6 +161,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae89e21bca1077439fea616cb608dcf4c"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classponder_1_1_enum_builder.html">EnumBuilder</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classponder_1_1_enum.html#ae89e21bca1077439fea616cb608dcf4c">declare</a> (const std::string &amp;<a class="el" href="classponder_1_1_enum.html#ae4b981ec455f8e51574a5d6a3c9996b9">name</a>=std::string())</td></tr>
 <tr class="memdesc:ae89e21bca1077439fea616cb608dcf4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare a new metaenum.  <a href="#ae89e21bca1077439fea616cb608dcf4c">More...</a><br /></td></tr>
 <tr class="separator:ae89e21bca1077439fea616cb608dcf4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36ca9c5d06ffdbeb66e95e240d214156"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_enum.html#a36ca9c5d06ffdbeb66e95e240d214156">undeclare</a> (const <a class="el" href="classponder_1_1_enum.html">Enum</a> &amp;enumCls)</td></tr>
+<tr class="memdesc:a36ca9c5d06ffdbeb66e95e240d214156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undeclare an existing metaenum.  <a href="#a36ca9c5d06ffdbeb66e95e240d214156">More...</a><br /></td></tr>
+<tr class="separator:a36ca9c5d06ffdbeb66e95e240d214156"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -277,6 +280,42 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Check if the enum contains a value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td><a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">Value</a> to check</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the metaenum contains a pair whose value is <em>value</em> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2097a09b8911b255fe2467255f2ba79d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename E &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ponder::Enum::hasValue </td>
+          <td>(</td>
+          <td class="paramtype">E&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the enum contains a value. </p>
+<p>This generic version of <a class="el" href="classponder_1_1_enum.html#ae8880bc7baac0581a74e4022a31e293a" title="Check if the enum contains a value. ">hasValue()</a> allows enum classes to be queried.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td><a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">Value</a> to check</td></tr>
@@ -474,6 +513,41 @@ template&lt;typename E &gt; </div>
 
 <p>Return the size of the metaenum. </p>
 <dl class="section return"><dt>Returns</dt><dd>Total number of values contained in the metaenum </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a36ca9c5d06ffdbeb66e95e240d214156"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void ponder::Enum::undeclare </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classponder_1_1_enum.html">Enum</a> &amp;&#160;</td>
+          <td class="paramname"><em>enumCls</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Undeclare an existing metaenum. </p>
+<p>Call this to undeclare an <a class="el" href="classponder_1_1_enum.html" title="ponder::Enum represents a metaenum composed of &lt;name, value&gt; pairs ">Enum</a> that you no longer require.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the existing metaenum in Ponder.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>See notes for <a class="el" href="classponder_1_1_class.html#a38087dc8f3af4f5b5b384d6c9f15feb0" title="Undeclare an existing metaclass. ">Class::undeclare</a> about registration.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classponder_1_1_class.html#a38087dc8f3af4f5b5b384d6c9f15feb0" title="Undeclare an existing metaclass. ">Class::undeclare</a> </dd></dl>
 
 </div>
 </div>

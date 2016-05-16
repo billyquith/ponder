@@ -7,6 +7,7 @@ var classponder_1_1_user_object =
     [ "call", "classponder_1_1_user_object.html#a9e3ee44435d46731ccf3e35b544d6609", null ],
     [ "get", "classponder_1_1_user_object.html#a3f658cda9800465eb93f0eaf835a6dc2", null ],
     [ "get", "classponder_1_1_user_object.html#ac9c12feddf393ff6e396097473cad445", null ],
+    [ "get", "classponder_1_1_user_object.html#aa67887077f45b0bb377a707fce99c7ca", null ],
     [ "getClass", "classponder_1_1_user_object.html#a496beb3863290769feee4fa94b6fe057", null ],
     [ "operator!=", "classponder_1_1_user_object.html#aaaa07fcdd4bd3246904634a80a5d9fd3", null ],
     [ "operator<", "classponder_1_1_user_object.html#a8caa5b7a051dac29cfeb6a1f4b427aad", null ],
@@ -14,5 +15,6 @@ var classponder_1_1_user_object =
     [ "operator==", "classponder_1_1_user_object.html#a3e865e8ccb78e340ee6fef08e41a6d7e", null ],
     [ "pointer", "classponder_1_1_user_object.html#a6c369aca6b2e45bee57fdae2d80d690f", null ],
     [ "set", "classponder_1_1_user_object.html#a4145ff6189c939ef8bc25894556c469a", null ],
+    [ "set", "classponder_1_1_user_object.html#a8d51238b8bccc2bb888509a3426949ab", null ],
     [ "Property", "classponder_1_1_user_object.html#a386f5a9cf65610cb62143865e5637272", null ]
 ];

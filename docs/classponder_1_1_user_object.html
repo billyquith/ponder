@@ -32,7 +32,7 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
   </td>
   <td><a href="../" class="title_link">blog</a></td>
@@ -114,11 +114,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a496beb3863290769feee4fa94b6fe057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the metaclass of the stored instance.  <a href="#a496beb3863290769feee4fa94b6fe057">More...</a><br /></td></tr>
 <tr class="separator:a496beb3863290769feee4fa94b6fe057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9c12feddf393ff6e396097473cad445"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_value.html">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_object.html#ac9c12feddf393ff6e396097473cad445">get</a> (const std::string &amp;property) const </td></tr>
-<tr class="memdesc:ac9c12feddf393ff6e396097473cad445"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of an object's property.  <a href="#ac9c12feddf393ff6e396097473cad445">More...</a><br /></td></tr>
+<tr class="memdesc:ac9c12feddf393ff6e396097473cad445"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of an object's property by name.  <a href="#ac9c12feddf393ff6e396097473cad445">More...</a><br /></td></tr>
 <tr class="separator:ac9c12feddf393ff6e396097473cad445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa67887077f45b0bb377a707fce99c7ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_value.html">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_object.html#aa67887077f45b0bb377a707fce99c7ca">get</a> (std::size_t index) const </td></tr>
+<tr class="memdesc:aa67887077f45b0bb377a707fce99c7ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of an object's property by index.  <a href="#aa67887077f45b0bb377a707fce99c7ca">More...</a><br /></td></tr>
+<tr class="separator:aa67887077f45b0bb377a707fce99c7ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4145ff6189c939ef8bc25894556c469a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_object.html#a4145ff6189c939ef8bc25894556c469a">set</a> (const std::string &amp;property, const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;value) const </td></tr>
-<tr class="memdesc:a4145ff6189c939ef8bc25894556c469a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value of an object's property.  <a href="#a4145ff6189c939ef8bc25894556c469a">More...</a><br /></td></tr>
+<tr class="memdesc:a4145ff6189c939ef8bc25894556c469a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value of an object's property by name.  <a href="#a4145ff6189c939ef8bc25894556c469a">More...</a><br /></td></tr>
 <tr class="separator:a4145ff6189c939ef8bc25894556c469a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d51238b8bccc2bb888509a3426949ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_object.html#a8d51238b8bccc2bb888509a3426949ab">set</a> (std::size_t index, const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;value) const </td></tr>
+<tr class="memdesc:a8d51238b8bccc2bb888509a3426949ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value of an object's property by index.  <a href="#a8d51238b8bccc2bb888509a3426949ab">More...</a><br /></td></tr>
+<tr class="separator:a8d51238b8bccc2bb888509a3426949ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e3ee44435d46731ccf3e35b544d6609"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_value.html">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_object.html#a9e3ee44435d46731ccf3e35b544d6609">call</a> (const std::string &amp;function, const <a class="el" href="classponder_1_1_args.html">Args</a> &amp;args=<a class="el" href="classponder_1_1_args.html#a5c4f0353087866c07c006e248cea43dd">Args::empty</a>) const </td></tr>
 <tr class="memdesc:a9e3ee44435d46731ccf3e35b544d6609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call an object's function.  <a href="#a9e3ee44435d46731ccf3e35b544d6609">More...</a><br /></td></tr>
 <tr class="separator:a9e3ee44435d46731ccf3e35b544d6609"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -399,7 +405,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Get the value of an object's property. </p>
+<p>Get the value of an object's property by name. </p>
 <p>This function is defined for convenience, it is a shortcut for <code>object.getClass().property(name).get(object);</code></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -411,6 +417,39 @@ template&lt;typename T &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classponder_1_1_property_not_found.html" title="Error thrown when a property can&#39;t be found in a metaclass (by its name) ">PropertyNotFound</a></td><td><em>property</em> is not a property of the object </td></tr>
+    <tr><td class="paramname"><a class="el" href="classponder_1_1_forbidden_read.html" title="Error thrown when trying to read a property that is not readable. ">ForbiddenRead</a></td><td><em>property</em> is not readable </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aa67887077f45b0bb377a707fce99c7ca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classponder_1_1_value.html">Value</a> ponder::UserObject::get </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the value of an object's property by index. </p>
+<p>This function is defined for convenience, it is a shortcut for <code>object.getClass().property(index).get(object);</code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of the property to get</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Current value of the property</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classponder_1_1_out_of_range.html" title="Error thrown when using an index which is out of bounds. ">OutOfRange</a></td><td>index is invalid </td></tr>
     <tr><td class="paramname"><a class="el" href="classponder_1_1_forbidden_read.html" title="Error thrown when trying to read a property that is not readable. ">ForbiddenRead</a></td><td><em>property</em> is not readable </td></tr>
   </table>
   </dd>
@@ -660,7 +699,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Set the value of an object's property. </p>
+<p>Set the value of an object's property by name. </p>
 <p>This function is defined for convenience, it is a shortcut for <code>object.getClass().property(name).set(object, value);</code></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -672,6 +711,50 @@ template&lt;typename T &gt; </div>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classponder_1_1_property_not_found.html" title="Error thrown when a property can&#39;t be found in a metaclass (by its name) ">PropertyNotFound</a></td><td><em>property</em> is not a property of the object </td></tr>
+    <tr><td class="paramname"><a class="el" href="classponder_1_1_forbidden_write.html" title="Error thrown when trying to write a function that is not writable. ">ForbiddenWrite</a></td><td><em>property</em> is not writable </td></tr>
+    <tr><td class="paramname"><a class="el" href="classponder_1_1_bad_type.html" title="Error thrown when providing a metavalue whose type is incompatible with what&#39;s expected. ">BadType</a></td><td><em>value</em> can't be converted to the property's type </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a8d51238b8bccc2bb888509a3426949ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ponder::UserObject::set </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the value of an object's property by index. </p>
+<p>This function is defined for convenience, it is a shortcut for <code>object.getClass().property(index).set(object, value);</code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of the property to set </td></tr>
+    <tr><td class="paramname">value</td><td><a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">Value</a> to set</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classponder_1_1_out_of_range.html" title="Error thrown when using an index which is out of bounds. ">OutOfRange</a></td><td>index is invalid </td></tr>
     <tr><td class="paramname"><a class="el" href="classponder_1_1_forbidden_write.html" title="Error thrown when trying to write a function that is not writable. ">ForbiddenWrite</a></td><td><em>property</em> is not writable </td></tr>
     <tr><td class="paramname"><a class="el" href="classponder_1_1_bad_type.html" title="Error thrown when providing a metavalue whose type is incompatible with what&#39;s expected. ">BadType</a></td><td><em>value</em> can't be converted to the property's type </td></tr>
   </table>

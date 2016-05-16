@@ -32,7 +32,7 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
   </td>
   <td><a href="../" class="title_link">blog</a></td>
@@ -80,7 +80,7 @@ $(document).ready(function(){initNavTree('classponder_1_1_constructor.html','');
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classponder_1_1_constructor.html" title="ponder::Constructor represents a metaconstructor which is used to create objects instances from metac...">ponder::Constructor</a> represents a metaconstructor which is used to create objects instances from metaclasses  
+<p>Represents a metaconstructor which is used to create objects instances from metaclasses.  
  <a href="classponder_1_1_constructor.html#details">More...</a></p>
 
 <p><code>#include &lt;constructor.hpp&gt;</code></p>
@@ -96,16 +96,16 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:a22a3a86f95bec2ca5717aae6a1c41992"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_constructor.html#a22a3a86f95bec2ca5717aae6a1c41992">matches</a> (const <a class="el" href="classponder_1_1_args.html">Args</a> &amp;args) const  =0</td></tr>
 <tr class="memdesc:a22a3a86f95bec2ca5717aae6a1c41992"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the constructor matches the given set of arguments.  <a href="#a22a3a86f95bec2ca5717aae6a1c41992">More...</a><br /></td></tr>
 <tr class="separator:a22a3a86f95bec2ca5717aae6a1c41992"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfbcc78227ac413cc38df48ee54f6c99"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classponder_1_1_user_object.html">UserObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_constructor.html#acfbcc78227ac413cc38df48ee54f6c99">create</a> (const <a class="el" href="classponder_1_1_args.html">Args</a> &amp;args) const  =0</td></tr>
-<tr class="memdesc:acfbcc78227ac413cc38df48ee54f6c99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use the constructor to create a new object.  <a href="#acfbcc78227ac413cc38df48ee54f6c99">More...</a><br /></td></tr>
-<tr class="separator:acfbcc78227ac413cc38df48ee54f6c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8beb4b66bad342b1e83a7dadac6d16f7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classponder_1_1_user_object.html">UserObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_constructor.html#a8beb4b66bad342b1e83a7dadac6d16f7">create</a> (void *ptr, const <a class="el" href="classponder_1_1_args.html">Args</a> &amp;args) const  =0</td></tr>
+<tr class="memdesc:a8beb4b66bad342b1e83a7dadac6d16f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use the constructor to create a new object.  <a href="#a8beb4b66bad342b1e83a7dadac6d16f7">More...</a><br /></td></tr>
+<tr class="separator:a8beb4b66bad342b1e83a7dadac6d16f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classponder_1_1_constructor.html" title="ponder::Constructor represents a metaconstructor which is used to create objects instances from metac...">ponder::Constructor</a> represents a metaconstructor which is used to create objects instances from metaclasses </p>
+<div class="textblock"><p>Represents a metaconstructor which is used to create objects instances from metaclasses. </p>
 <p>This class is an interface which has to be derived to implement typed constructors.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classponder_1_1_property.html" title="Abstract representation of a property. ">Property</a>, <a class="el" href="classponder_1_1_function.html" title="Abstract representation of a function. ">Function</a> </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="acfbcc78227ac413cc38df48ee54f6c99"></a>
+<a class="anchor" id="a8beb4b66bad342b1e83a7dadac6d16f7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -115,9 +115,19 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
         <tr>
           <td class="memname">virtual <a class="el" href="classponder_1_1_user_object.html">UserObject</a> ponder::Constructor::create </td>
           <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="classponder_1_1_args.html">Args</a> &amp;&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -130,6 +140,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <p>Use the constructor to create a new object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">ptr</td><td>If not null, use for placement new, otherwise heap allocate using new </td></tr>
     <tr><td class="paramname">args</td><td>Set of arguments to pass to the constructor</td></tr>
   </table>
   </dd>
