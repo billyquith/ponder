@@ -33,6 +33,7 @@
 #include <ponder/classbuilder.hpp>
 #include "catch.hpp"
 #include <string>
+#include <string.h> // memset
 
 namespace ConstructorTest
 {
