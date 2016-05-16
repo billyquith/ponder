@@ -276,7 +276,7 @@ TEST_CASE("Constructors can use placement new")
     
     SECTION("with no arguments")
     {
-        char buff[256];
+        char buff[sizeof(MyClass) + 20];
         const char c_guard = 0xcd;
         memset(buff, c_guard, sizeof(buff));
         char *p = buff + 4;
@@ -294,6 +294,8 @@ TEST_CASE("Constructors can use placement new")
         REQUIRE(p[sz] == c_guard);
 
         MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance == reinterpret_cast<MyClass*>(p));
         
         REQUIRE(instance->l == 0);
         REQUIRE(instance->r == Approx(0.).epsilon(1E-5));
