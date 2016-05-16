@@ -168,6 +168,8 @@ public:
      *       or it will keep being recreated by Ponder.
      *
      * \param cls An intance of a metaclass that has been declared.
+     *
+     * \see Enum::undeclare
      */
     static void undeclare(const Class& cls);
 

@@ -47,7 +47,7 @@ EnumManager& EnumManager::instance()
 Enum& EnumManager::addClass(const std::string& id)
 {
     // First make sure that the enum doesn't already exist
-    if (m_enums.find(id) != m_enums.end())
+    if (enumExists(id))
     {
         PONDER_ERROR(EnumAlreadyCreated(id));
     }
@@ -63,6 +63,20 @@ Enum& EnumManager::addClass(const std::string& id)
 
     // Done
     return *newEnum;
+}
+    
+void EnumManager::removeClass(const Enum& me)
+{
+    auto it = m_enums.find(me.name());
+    
+    if (it == m_enums.end())
+        PONDER_ERROR(EnumNotFound(me.name()));
+    
+    // Notify observers
+    notifyEnumRemoved(me);
+
+    delete it->second;
+    m_enums.erase(it);
 }
 
 std::size_t EnumManager::count() const

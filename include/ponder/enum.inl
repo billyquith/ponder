@@ -30,10 +30,14 @@
 
 namespace ponder
 {
+    
 template <typename T>
 EnumBuilder Enum::declare(const std::string& name)
 {
-    Enum& newEnum = detail::EnumManager::instance().addClass(name.empty() ? detail::StaticTypeId<T>::get(false) : name);
+    Enum& newEnum =
+        detail::EnumManager::instance().addClass(name.empty()
+                                                 ? detail::StaticTypeId<T>::get(false)
+                                                 : name);
     return EnumBuilder(newEnum);
 }
 

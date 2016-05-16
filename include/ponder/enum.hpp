@@ -124,6 +124,19 @@ public:
     template <typename T>
     static EnumBuilder declare(const std::string& name = std::string());
 
+    /**
+     * \brief Undeclare an existing metaenum
+     *
+     * Call this to undeclare an Enum that you no longer require.
+     *
+     * \param name Name of the existing metaenum in Ponder.
+     *
+     * \note See notes for Class::undeclare about registration.
+     *
+     * \see Class::undeclare
+     */
+    static void undeclare(const Enum& enumCls);
+    
 public:
 
     /**

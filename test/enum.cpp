@@ -53,6 +53,11 @@ namespace EnumTest
     {
     };
     
+    enum TempEnum
+    {
+        Apple, Banana, Durian, Strawberry
+    };
+    
     void declare()
     {
         ponder::Enum::declare<MyEnum>("EnumTest::MyEnum")
@@ -62,12 +67,27 @@ namespace EnumTest
         
         ponder::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
     }
+    
+    void declare_temp()
+    {
+        ponder::Enum::declare<TempEnum>()
+            .value("Apple", Apple)
+            .value("Banana", Banana)
+            .value("Durian", Durian)
+            .value("Strawberry", Strawberry);
+    }
+
+    void undeclare_temp()
+    {
+        ponder::Enum::undeclare(ponder::enumByType<TempEnum>());
+    }
 }
 
 PONDER_TYPE(EnumTest::MyUndeclaredEnum /* never declared */)
 PONDER_TYPE(EnumTest::MyExplicitylyDeclaredEnum /* declared during tests */)
 PONDER_AUTO_TYPE(EnumTest::MyEnum, &EnumTest::declare)
 PONDER_AUTO_TYPE(EnumTest::MyEnum2, &EnumTest::declare)
+PONDER_TYPE(EnumTest::TempEnum)
 
 using namespace EnumTest;
 
@@ -182,6 +202,29 @@ TEST_CASE("Enum values can be read")
         REQUIRE(metaenum->value("Two") == Two);
         
         REQUIRE_THROWS_AS(metaenum->value("xxx"), ponder::EnumNameNotFound);
+    }
+}
+
+
+TEST_CASE("Enum can be undeclared")
+{
+    SECTION("before declaration")
+    {
+        REQUIRE_THROWS_AS(ponder::enumByType<TempEnum>(), ponder::EnumNotFound);
+    }
+
+    SECTION("before declaration")
+    {
+        declare_temp();
+        
+        REQUIRE(ponder::enumByType<TempEnum>().hasName("Durian") == true);
+    }
+
+    SECTION("before declaration")
+    {
+        undeclare_temp();
+        
+        REQUIRE_THROWS_AS(ponder::enumByType<TempEnum>(), ponder::EnumNotFound);
     }
 }
 

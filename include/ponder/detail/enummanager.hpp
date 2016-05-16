@@ -73,6 +73,8 @@ public:
      * \return Reference to the new metaenum
      */
     Enum& addClass(const std::string& id);
+    
+    void removeClass(const Enum& me);
 
     /**
      * \brief Get the total number of metaenums
