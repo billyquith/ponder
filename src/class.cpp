@@ -40,6 +40,11 @@ const std::string& Class::name() const
     return m_id;
 }
 
+std::size_t Class::sizeOf() const
+{
+    return m_sizeof;
+}
+
 UserObject Class::construct(const Args& args) const
 {
     // Search an arguments match among the list of available constructors
@@ -192,7 +197,8 @@ bool Class::operator!=(const Class& other) const
 }
 
 Class::Class(const std::string& name)
-    : m_id(name)
+    : m_sizeof(0)
+    , m_id(name)
 {
 }
 

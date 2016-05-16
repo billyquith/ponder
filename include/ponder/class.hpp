@@ -132,12 +132,13 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&);
     
+    std::size_t m_sizeof;       ///< Size of the class in bytes.
     std::string m_id;           ///< Name of the metaclass
     FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
     PropertyTable m_properties; ///< Table of metaproperties indexed by ID
-    BaseList m_bases; ///< List of base metaclasses
+    BaseList m_bases;           ///< List of base metaclasses
     ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor; ///< Destructor (function that is able to delete an abstract object)
+    Destructor m_destructor;    ///< Destructor (function that is able to delete an abstract object)
 
 public:
 
@@ -165,7 +166,14 @@ public:
      * \return String containing the name of the metaclass
      */
     const std::string& name() const;
-    
+
+    /**
+     * \brief Return the memory size of a class instance
+     *
+     * \return Size in bytes
+     */
+    std::size_t sizeOf() const;
+
     /**
      * \brief Construct a new instance of the C++ class bound to the metaclass
      *

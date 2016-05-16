@@ -176,7 +176,7 @@ TEST_CASE("Class metadata can be retrieved")
         
         REQUIRE_THROWS_AS(ponder::classByObject(object2), ponder::ClassNotFound);
         REQUIRE_THROWS_AS(ponder::classByObject(&object2), ponder::ClassNotFound);
-    }    
+    }
 }
 
 

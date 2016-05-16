@@ -30,6 +30,7 @@
 
 namespace ponder
 {
+    
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)

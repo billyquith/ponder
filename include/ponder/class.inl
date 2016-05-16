@@ -43,7 +43,11 @@ namespace detail
 template <typename T>
 inline ClassBuilder<T> Class::declare(const std::string& name)
 {
-    Class& newClass = detail::ClassManager::instance().addClass(name.empty() ? detail::StaticTypeId<T>::get(false) : name);
+    Class& newClass =
+        detail::ClassManager::instance().addClass(name.empty()
+                                                  ? detail::StaticTypeId<T>::get(false)
+                                                  : name);
+    newClass.m_sizeof = sizeof(T);
     newClass.m_destructor = &detail::destroy<T>;
     return ClassBuilder<T>(newClass);
 }

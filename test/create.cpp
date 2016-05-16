@@ -59,6 +59,12 @@ PONDER_AUTO_TYPE(MyClass, &MyClass::declare)
 
 TEST_CASE("Ponder can create user objects")
 {
+    SECTION("can retrieve memory size")
+    {
+        REQUIRE(ponder::classByType<MyClass>().sizeOf() == sizeof(MyClass));
+        REQUIRE(ponder::classByName("MyClass").sizeOf() == sizeof(MyClass));
+    }
+
     SECTION("constructor with no args")
     {
         ponder::UserObject obj(ponder::classByType<MyClass>().construct());
