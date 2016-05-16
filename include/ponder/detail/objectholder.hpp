@@ -115,7 +115,9 @@ public:
 private:
 
     const T* m_object; ///< Pointer to the object
-    void* m_alignedPtr; ///< Pointer to the actual derived part of the object (may be different than m_object in case of multiple inheritance with offset)
+    /// Pointer to the actual derived part of the object (may be different than
+    /// m_object in case of multiple inheritance with offset).
+    void* m_alignedPtr;
 };
 
 /**
@@ -153,7 +155,9 @@ public:
 private:
 
     T* m_object; ///< Pointer to the object
-    void* m_alignedPtr; ///< Pointer to the actual derived part of the object (may be different than m_object in case of multiple inheritance with offset)
+    /// Pointer to the actual derived part of the object (may be different than m_object
+    /// in case of multiple inheritance with offset)
+    void* m_alignedPtr;
 };
 
 /**
