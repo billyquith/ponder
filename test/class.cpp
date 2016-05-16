@@ -204,7 +204,7 @@ TEST_CASE("Class members can be inspected")
         int index = 0;
         for (auto prop : metaclass.propertyIterator())
         {
-            switch (index) {
+            switch (index++) {
                 case 0:
                     REQUIRE(prop.name() == std::string("prop"));
                     break;
@@ -218,7 +218,7 @@ TEST_CASE("Class members can be inspected")
         int index = 0;
         for (auto func : metaclass.functionIterator())
         {
-            switch (index) {
+            switch (index++) {
                 case 0:
                     REQUIRE(func.name() == std::string("func"));
                     break;
