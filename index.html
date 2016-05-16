@@ -20,7 +20,7 @@ layout: default
 						<i class="icon major fa-bolt"></i>
 						<h3>What?</h3>
 						<p>C++ type <a href="https://en.wikipedia.org/wiki/Reflection_(computer_programming)">reflection</a> library. 
-Runtime interrogation of types, or export as XML.</p>
+Runtime registration, interrogation, and manipulation of types.</p>
 					</div>
 				</section>
 				<section class="4u">
@@ -28,6 +28,7 @@ Runtime interrogation of types, or export as XML.</p>
 						<i class="icon major fa-wrench"></i>
 						<h3>Usage</h3>
 						<ul><li>C++ 11, no Boost dependency.</li>
+              <li>Cross platform: Linux, OSX, Windows.</li>
 							<li>Liberal MIT licence.</li>
 							<li><a href="{{ site.baseurl }}/docs/">Documentation.</a></li>
 						</ul>
@@ -77,14 +78,28 @@ data-driven programs: we might create classes from descriptions in data read at 
 					<div class="box post">
 						<a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic01.jpg" alt="" /></a>
 						<div class="inner">
+  <h3>Features</h3>
+  <ul>
+    <li>- Inspect members of a class.</li>
+    <li>- Create class instances from data.</li>
+    <li>- Get/set properties on instances at runtime.</li>
+    <li>- Export type data as XML.</li>    
+  </ul>
+						</div>
+					</div>
+				</section>
+        <!-- <section class="6u">
+          <div class="box post">
+            <a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic01.jpg" alt="" /></a>
+            <div class="inner">
 <h3>Fork of CAMP</h3>
 <p>Ponder continues the from <a href="https://github.com/tegesoft/camp" target="_blank">CAMP</a>, removing the
 Boost dependency, instead, using C++11 features. The aim here is to
 <a href="https://youtu.be/nesCaocNjtQ" target="_blank">allow simplification</a> using C++11, and improve
 build times.</p>
-						</div>
-					</div>
-				</section>
+            </div>
+          </div>
+        </section> -->
 			</div>
 <h3>Simple Example</h3>
 			<div class="row">
@@ -127,6 +142,21 @@ an "add" function, and a "total" property.
 					</div>
 				</section>
 			</div>
+      <!-- <div class="row">
+        <section class="7u">
+          <div class="box post">
+{% highlight cpp %}
+for (auto prop : ponder::classByType<Adder>().propertyIterator())
+    cout << prop.name() << " = " << prop.value()->get() << endl();
+{% endhighlight %}
+          </div>
+        </section>
+        <section class="5u">
+          <div class="box post">
+Iterate over objects in a metaclass, e.g. to print out values.
+          </div>
+        </section>
+      </div> -->
 			<div class="row">
 				<section class="7u">
 					<div class="box post">
@@ -138,7 +168,7 @@ auto adder = metaclass.construct(); // create an instance
 adder.call("add", 7); // call a function
 adder.call("add", 5);
 
-int total = adder.get("total"); // get a property -> 12 
+int total = adder.get("total"); // get a property
 {% endhighlight %}
 					</div>
 				</section>
