@@ -3,7 +3,6 @@
 body, table, div, p, dl {
 	font: 200 14px/1.75em 'Arial',sans-serif;
 	color: #444;
-	/*background-color: #fefefe;*/
 }
 
 /* @group Heading Levels */
@@ -41,7 +40,7 @@ h1, h2, h3, h4, h5, h6 {
 	-o-transition: text-shadow 0.5s linear;
 	transition: text-shadow 0.5s linear;
 	margin-right: 15px;
-	/*font-family: monospace;*/
+    font-weight: normal;
 }
 
 h1.glow, h2.glow, h3.glow, h4.glow, h5.glow, h6.glow {
