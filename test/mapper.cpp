@@ -28,7 +28,6 @@
 ****************************************************************************/
 
 #include <ponder/classget.hpp>
-#include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/simpleproperty.hpp>
 #include <ponder/function.hpp>

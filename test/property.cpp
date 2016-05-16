@@ -30,7 +30,6 @@
 #include <ponder/classget.hpp>
 #include <ponder/enumget.hpp>
 #include <ponder/property.hpp>
-#include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/enum.hpp>
 #include <ponder/classbuilder.hpp>

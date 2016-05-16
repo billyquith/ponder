@@ -29,7 +29,6 @@
 
 #include <ponder/classget.hpp>
 #include <ponder/property.hpp>
-#include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
 #include "catch.hpp"

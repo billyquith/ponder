@@ -39,6 +39,7 @@
 #include <ponder/detail/functiontraits.hpp>
 #include <ponder/detail/constructorimpl.hpp>
 #include <ponder/detail/propertyfactory.hpp>
+#include <ponder/pondertype.hpp>
 #include <cassert>
 #include <string>
 
