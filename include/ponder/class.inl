@@ -34,9 +34,12 @@ namespace ponder
 namespace detail
 {
     template <typename T>
-    void destroy(const UserObject& object)
+    void destroy(const UserObject& object, bool destruct)
     {
-        delete object.get<T*>();
+        if (destruct)
+            object.get<T*>() -> ~T();
+        else
+            delete object.get<T*>();
     }
 }
 

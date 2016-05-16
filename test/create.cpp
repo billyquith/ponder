@@ -73,13 +73,3 @@ TEST_CASE("Ponder can create user objects")
     }
 }
 
-TEST_CASE("Ponder can be used as a factory")
-{
-    SECTION("constructor with no args")
-    {
-//        MyClass* c = ponder::classByType<MyClass>().create();
-//        REQUIRE(c != nullptr);
-//        REQUIRE(get("a") == ponder::Value(-1));
-    }
-}
-

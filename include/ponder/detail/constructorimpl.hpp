@@ -95,9 +95,12 @@ class ConstructorImpl : public Constructor
     }
 
     template <typename... As, std::size_t... Is>
-    static inline UserObject createWithArgs(const Args& args, index_sequence<Is...>)
+    static inline UserObject createWithArgs(void* ptr, const Args& args, index_sequence<Is...>)
     {
-        return UserObject(new T(convertArg<As>(args, Is)...));
+        if (ptr)
+            return UserObject(new(ptr) T(convertArg<As>(args, Is)...)); // placement new
+        else
+            return UserObject(new T(convertArg<As>(args, Is)...));
     }
 
 public:
@@ -113,9 +116,9 @@ public:
     /**
      * \see Constructor::create
      */
-    UserObject create(const Args& args) const override
+    UserObject create(void* ptr, const Args& args) const override
     {
-        return createWithArgs<A...>(args, make_index_sequence<sizeof...(A)>());
+        return createWithArgs<A...>(ptr, args, make_index_sequence<sizeof...(A)>());
     }
 };
 

@@ -130,7 +130,7 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef std::vector<BaseInfo> BaseList;
     typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
     typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
-    typedef void (*Destructor)(const UserObject&);
+    typedef void (*Destructor)(const UserObject&, bool);
     
     std::size_t m_sizeof;       ///< Size of the class in bytes.
     std::string m_id;           ///< Name of the metaclass
@@ -178,15 +178,19 @@ public:
      * \brief Construct a new instance of the C++ class bound to the metaclass
      *
      * If no constructor can match the provided arguments, UserObject::nothing
-     * is returned.
-     * The new instance is wrapped into a UserObject. It must be destroyed
-     * with the Class::destroy function.
+     * is returned. If a pointer is provided then placement new is used instead of
+     * the new instance being dynamically allocated using new.
+     * The new instance is wrapped into a UserObject.
+     *
+     * \note It must be destroyed with the appropriate destruction function: 
+     * Class::destroy for new and Class::destruct for placement new.
      *
      * \param args Arguments to pass to the constructor (empty by default)
+     * \param ptr Optional pointer to the location to construct the object (placement new)
      *
      * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
      */
-    UserObject construct(const Args& args = Args::empty) const;
+    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const;
 
     /**
      * \brief Return the total number of constructors of this metaclass
@@ -202,8 +206,22 @@ public:
      * Class::construct.
      *
      * \param object Object to be destroyed
+     *
+     * \see construct
      */
     void destroy(const UserObject& object) const;    
+
+    /**
+     * \brief Destruct an object created using placement new
+     *
+     * This function must be called to destroy every instance created with
+     * Class::construct.
+     *
+     * \param object Object to be destroyed
+     *
+     * \see construct
+     */
+    void destruct(const UserObject& object) const;
 
     /**
      * \brief Return the total number of base metaclasses of this metaclass

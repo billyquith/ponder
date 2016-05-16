@@ -65,11 +65,12 @@ public:
     /**
      * \brief Use the constructor to create a new object
      *
+     * \param ptr If not null, use for placement new, otherwise heap allocate using new
      * \param args Set of arguments to pass to the constructor
      *
      * \return Pointer to the new object wrapped in a UserObject, or UserObject::nothing on failure
      */
-    virtual UserObject create(const Args& args) const = 0;
+    virtual UserObject create(void* ptr, const Args& args) const = 0;
 };
 
 } // namespace ponder

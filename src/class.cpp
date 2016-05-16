@@ -45,7 +45,7 @@ std::size_t Class::sizeOf() const
     return m_sizeof;
 }
 
-UserObject Class::construct(const Args& args) const
+UserObject Class::construct(const Args& args, void* ptr) const
 {
     // Search an arguments match among the list of available constructors
     for (ConstructorPtr cp : m_constructors)
@@ -54,7 +54,7 @@ UserObject Class::construct(const Args& args) const
         if (constructor.matches(args))
         {
             // Match found: use the constructor to create the new instance
-            return constructor.create(args);
+            return constructor.create(ptr, args);
         }
     }
     
@@ -68,7 +68,12 @@ std::size_t Class::constructorCount() const
 
 void Class::destroy(const UserObject& object) const
 {
-    m_destructor(object);
+    m_destructor(object, false);
+}
+
+void Class::destruct(const UserObject& object) const
+{
+    m_destructor(object, true);
 }
 
 std::size_t Class::baseCount() const

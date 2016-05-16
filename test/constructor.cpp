@@ -145,7 +145,7 @@ struct ConstructorFixture
 //                         Tests for ponder::Constructor
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Classes can have constructors")
+TEST_CASE("Classes can have constructors") // and allocate dynamically
 {
     const ponder::Class* metaclass = &ponder::classByType<MyClass>();
     
@@ -261,5 +261,46 @@ TEST_CASE("Classes can have constructors")
         REQUIRE(( metaclass->construct(ponder::Args(two, MyType(10))) == ponder::UserObject::nothing ));
         REQUIRE(( metaclass->construct(ponder::Args(5., "hello")) == ponder::UserObject::nothing ));
     }    
+}
+
+
+TEST_CASE("Constructors can use placement new")
+{
+    const ponder::Class* metaclass = &ponder::classByType<MyClass>();
+    const std::size_t sz = metaclass->sizeOf();
+    
+    REQUIRE(metaclass != nullptr);
+    REQUIRE(sz > 0);
+    REQUIRE(sz == sizeof(MyClass));
+    
+    SECTION("with no arguments")
+    {
+        char buff[sz + 8];
+        const char c_guard = 0xcd;
+        memset(buff, c_guard, sizeof(buff));
+        char *p = buff + 4;
+        
+        REQUIRE(buff[0] == c_guard);
+        REQUIRE(*p == c_guard);
+        REQUIRE(p[sz] == c_guard);
+        
+        ponder::UserObject object = metaclass->construct(ponder::Args(), p); // placement new
+        
+        REQUIRE(( object != ponder::UserObject::nothing ));
+
+        REQUIRE(buff[0] == c_guard);
+        REQUIRE(*p != c_guard);
+        REQUIRE(p[sz] == c_guard);
+
+        MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 0);
+        REQUIRE(instance->r == Approx(0.).epsilon(1E-5));
+        REQUIRE(instance->s == "0");
+        REQUIRE(instance->e == zero);
+        REQUIRE(instance->u.x == 0);
+        
+        metaclass->destruct(object); // not destroy()
+    }
 }
 
