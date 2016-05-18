@@ -58,7 +58,9 @@ UserObject::UserObject(const UserObject& parent, const UserProperty& member)
 UserObject::UserObject(const UserObject& copy)
     : m_class(copy.m_class)
     , m_holder(copy.m_holder)
-    , m_parent(copy.m_parent ? new ParentObject(copy.m_parent->object, copy.m_parent->member) : nullptr)
+    , m_parent(copy.m_parent
+               ? new ParentObject(copy.m_parent->object, copy.m_parent->member)
+               : nullptr)
 {
     if (m_parent)
         m_parent->object.m_child = this;
@@ -122,9 +124,10 @@ Value UserObject::call(const std::string& function, const Args& args) const
 
 UserObject& UserObject::operator=(const UserObject& other)
 {
-    std::unique_ptr<ParentObject> parent(other.m_parent
-                                         ? new ParentObject(other.m_parent->object, other.m_parent->member)
-                                         : nullptr);
+    std::unique_ptr<ParentObject>
+        parent(other.m_parent
+               ? new ParentObject(other.m_parent->object, other.m_parent->member)
+               : nullptr);
 
     m_class = other.m_class;
     m_holder = other.m_holder;
@@ -137,7 +140,7 @@ UserObject& UserObject::operator=(const UserObject& other)
     return *this;
 }
 
-bool UserObject::operator==(const UserObject& other) const
+bool UserObject::operator == (const UserObject& other) const
 {
     if (m_holder && other.m_holder)
     {
@@ -145,20 +148,18 @@ bool UserObject::operator==(const UserObject& other) const
     }
     else if (m_parent && other.m_parent)
     {
-        return (&m_parent->member == &other.m_parent->member) && (m_parent->object == other.m_parent->object);
+        return (&m_parent->member == &other.m_parent->member)
+            && (m_parent->object == other.m_parent->object);
     }
     else if (!m_class && !other.m_class)
     {
-        // Both are UserObject::nothing
-        return true;
+        return true; // both are UserObject::nothing
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
-bool UserObject::operator<(const UserObject& other) const
+bool UserObject::operator < (const UserObject& other) const
 {
     if (m_holder)
     {
@@ -215,7 +216,9 @@ void UserObject::set(const Property& property, const Value& value) const
     }
 }
 
-void UserObject::cascadeSet(const UserObject& object, const Property& property, const Value& value) const
+void UserObject::cascadeSet(const UserObject& object,
+                            const Property& property,
+                            const Value& value) const
 {
     // @todo Manually check the access (read / write) to the properties,
     // as we bypass the standard path?
