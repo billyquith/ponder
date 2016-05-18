@@ -203,6 +203,14 @@ using namespace UserObjectTest;
 
 TEST_CASE("Ponder supports user objects")
 {
+    SECTION("empty objects are nothing")
+    {
+        ponder::UserObject obj;
+        REQUIRE((obj == ponder::UserObject::nothing));
+
+        REQUIRE((ponder::UserObject::nothing == ponder::UserObject::nothing));
+    }
+
     SECTION("user objects reference other objects")
     {
         MyClass object(1);
