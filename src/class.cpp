@@ -74,11 +74,17 @@ std::size_t Class::constructorCount() const
 void Class::destroy(const UserObject& object) const
 {
     m_destructor(object, false);
+    
+    // TODO - look for better solution to this that const_cast.
+    const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
 void Class::destruct(const UserObject& object) const
 {
     m_destructor(object, true);
+    
+    // TODO - see above
+    const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
 std::size_t Class::baseCount() const

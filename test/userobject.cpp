@@ -159,6 +159,7 @@ namespace UserObjectTest
         ponder::Class::declare<MyBase>("UserObjectTest::MyBase");
         ponder::Class::declare<MyClass>("UserObjectTest::MyClass")
             .base<MyBase>()
+            .constructor<int>()
             .property("p", &MyClass::x)
             .function("f", &MyClass::f);
         
@@ -209,6 +210,19 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE((obj == ponder::UserObject::nothing));
 
         REQUIRE((ponder::UserObject::nothing == ponder::UserObject::nothing));
+    }
+
+    SECTION("destroyed objects are nothing")
+    {
+        ponder::UserObject obj;
+        REQUIRE((obj == ponder::UserObject::nothing));
+
+        auto const& metaclass = ponder::classByType<MyClass>();
+        obj = metaclass.construct(ponder::Args(1));
+        REQUIRE((obj != ponder::UserObject::nothing));
+        
+        metaclass.destroy(obj);
+        REQUIRE((obj == ponder::UserObject::nothing));
     }
 
     SECTION("user objects reference other objects")
