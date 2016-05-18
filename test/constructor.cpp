@@ -154,8 +154,12 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 
     SECTION("with no arguments")
     {
-        ponder::UserObject object = metaclass->construct();
-
+        ponder::UserObject object;
+        
+        REQUIRE(( object == ponder::UserObject::nothing ));
+        
+        object = metaclass->construct();
+        
         REQUIRE(( object != ponder::UserObject::nothing ));
 
         MyClass* instance = object.get<MyClass*>();
