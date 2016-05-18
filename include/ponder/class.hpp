@@ -300,7 +300,7 @@ public:
      * \return An iterator that can be used to iterator over all functions
      *
      * \code
-     * for (auto func : ponder::classByType<MyClass>().functionIterator())
+     * for (auto&& func : ponder::classByType<MyClass>().functionIterator())
      *     foo(func.name(), func.value());
      * \endcode
      */
@@ -350,7 +350,7 @@ public:
      * \return An iterator that can be used to iterator over all properties
      *
      * \code
-     * for (auto prop : ponder::classByType<MyClass>().propertyIterator())
+     * for (auto&& prop : ponder::classByType<MyClass>().propertyIterator())
      *     foo(prop.name(), prop.value());
      * \endcode
      */

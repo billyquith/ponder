@@ -53,7 +53,7 @@ std::size_t Class::sizeOf() const
 UserObject Class::construct(const Args& args, void* ptr) const
 {
     // Search an arguments match among the list of available constructors
-    for (ConstructorPtr cp : m_constructors)
+    for (ConstructorPtr const& cp : m_constructors)
     {
         Constructor& constructor = *cp;
         if (constructor.matches(args))
@@ -164,13 +164,13 @@ const Property& Class::property(const std::string& id) const
 void Class::visit(ClassVisitor& visitor) const
 {
     // First visit properties
-    for (PropertyTable::pair_t prop : m_properties)
+    for (PropertyTable::pair_t const& prop : m_properties)
     {
         prop.value()->accept(visitor);
     }
 
     // Then visit functions
-    for (FunctionTable::pair_t func : m_functions)
+    for (FunctionTable::pair_t const& func : m_functions)
     {
         func.value()->accept(visitor);
     }
@@ -196,12 +196,12 @@ void* Class::applyOffset(void* pointer, const Class& target) const
     PONDER_ERROR(ClassUnrelated(name(), target.name()));
 }
 
-bool Class::operator==(const Class& other) const
+bool Class::operator == (const Class& other) const
 {
     return m_id == other.m_id;
 }
 
-bool Class::operator!=(const Class& other) const
+bool Class::operator != (const Class& other) const
 {
     return m_id != other.m_id;
 }

@@ -227,7 +227,7 @@ TEST_CASE("Class members can be inspected")
     SECTION("can iterate over properties")
     {
         int index = 0;
-        for (auto prop : metaclass.propertyIterator())
+        for (auto&& prop : metaclass.propertyIterator())
         {
             switch (index++) {
                 case 0:
@@ -241,7 +241,7 @@ TEST_CASE("Class members can be inspected")
     SECTION("can iterate over functions")
     {
         int index = 0;
-        for (auto func : metaclass.functionIterator())
+        for (auto&& func : metaclass.functionIterator())
         {
             switch (index++) {
                 case 0:

@@ -99,7 +99,7 @@ public:
 
     const_iterator findValue(const VALUE& value) const
     {
-        for (auto it = m_contents.begin(); it != m_contents.end(); ++it)
+        for (auto&& it = m_contents.begin(); it != m_contents.end(); ++it)
         {
             if (it->second == value)
                 return it;

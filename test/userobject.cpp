@@ -383,7 +383,7 @@ TEST_CASE("Ponder supports user objects")
         ponder::UserObject userObject(object);
         
         int index = 0;
-        for (auto prop : ponder::classByType<MyClass>().propertyIterator())
+        for (auto&& prop : ponder::classByType<MyClass>().propertyIterator())
         {
             switch (index) {
             case 0:
