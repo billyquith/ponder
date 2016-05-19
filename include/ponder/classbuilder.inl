@@ -243,7 +243,7 @@ template <typename T>
 template <typename... A>
 ClassBuilder<T>& ClassBuilder<T>::constructor()
 {
-    Constructor* constructor = new detail::ConstructorImpl<T, A...>;
+    Constructor* constructor = new detail::ConstructorImpl<T, A...>();
     m_target->m_constructors.push_back(Class::ConstructorPtr(constructor));
 
     return *this;

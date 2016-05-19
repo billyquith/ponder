@@ -98,9 +98,9 @@ class ConstructorImpl : public Constructor
     static inline UserObject createWithArgs(void* ptr, const Args& args, index_sequence<Is...>)
     {
         if (ptr)
-            return UserObject(new(ptr) T(convertArg<As>(args, Is)...)); // placement new
+            return UserObject(*new(ptr) T(convertArg<As>(args, Is)...)); // placement new
         else
-            return UserObject(new T(convertArg<As>(args, Is)...));
+            return UserObject(*new T(convertArg<As>(args, Is)...));
     }
 
 public:

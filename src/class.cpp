@@ -55,7 +55,7 @@ UserObject Class::construct(const Args& args, void* ptr) const
     // Search an arguments match among the list of available constructors
     for (ConstructorPtr const& cp : m_constructors)
     {
-        Constructor& constructor = *cp;
+        const Constructor& constructor = *cp;
         if (constructor.matches(args))
         {
             // Match found: use the constructor to create the new instance
