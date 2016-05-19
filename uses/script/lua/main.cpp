@@ -37,6 +37,12 @@ extern "C" {
 #include <lualib.h>
 }
 
+#define LUDB_DECL int db_top(0),zz_ltop=lua_gettop(L),db_d_top(0),db_typei(-1),db_idx(0); \
+                const char *db_type(0), *db_valstr(0);
+#define LUDB(I) db_top=lua_gettop(L); db_d_top=db_top-zz_ltop; zz_ltop=db_top; \
+                db_typei=lua_type(L,I); db_type=lua_typename(L,db_typei); \
+                db_valstr=lua_tostring(L,I); db_idx= I>=0 ? I : db_top+I+1
+
 namespace ponder {
 namespace lua {
 
@@ -44,39 +50,144 @@ namespace lua {
 
     static int l_class_create(lua_State *L)
     {
-        lua_pushvalue(L, lua_upvalueindex(1));
-        const ponder::Class *cls = (const ponder::Class*) lua_touserdata(L, -1);
+        // get Class* from class object
+        const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
         
-        void *ud = lua_newuserdata(L, cls->sizeOf());
+        ponder::Args args;
+        const int nargs = lua_gettop(L) - 1;    // 1st arg is userdata object
+        for (int i = 2; i < 2 + nargs; ++i)
+        {
+            const int argtype = lua_type(L, i);
+            switch (argtype)
+            {
+                case LUA_TNIL:
+                    args += 0;
+                    break;
+                    
+                case LUA_TNUMBER:
+                    args += lua_tonumber(L, i);
+                    break;
+                    
+                case LUA_TBOOLEAN:
+                    args += lua_toboolean(L, i);
+                    break;
+                
+                // LUA_TTABLE, LUA_TFUNCTION, LUA_TUSERDATA, LUA_TTHREAD, and LUA_TLIGHTUSERDATA.
+                    
+                default:
+                    lua_pushstring(L, fmt::format("Argument {0} is bad type {1}",
+                                                  i, lua_typename(L, i)).c_str());
+                    lua_error(L);
+            }
+        }
         
-        ponder::UserObject obj(cls->construct(ponder::Args(), ud));
+        ponder::UserObject obj(cls->construct(args));
         if (obj == ponder::UserObject::nothing)
         {
             lua_pop(L, 1);  // pop new user data
             lua_pushliteral(L, "Matching constructor not found");
             lua_error(L);
         }
-        
+
+        void *ud = lua_newuserdata(L, sizeof(ponder::UserObject));   // +1
+        new(ud) UserObject(obj);
+
+        // set instance metatable
+        lua_getmetatable(L, 1);             // +1
+        lua_pushliteral(L, "_inst_");       // +1
+        lua_rawget(L, -2);                  // -1+1 -> mt
+        lua_setmetatable(L, -3);            // -1
+        lua_pop(L, 1);
+
         return 1;
+    }
+    
+    static int pushValue(lua_State *L, const ponder::Value& val)
+    {
+        switch (val.type())
+        {
+            case boolType:
+                lua_pushboolean(L, val.to<bool>());
+                return 1;
+            case intType:
+                lua_pushinteger(L, val.to<int>());
+                return 1;
+            case realType:
+                lua_pushnumber(L, val.to<lua_Number>());
+                return 1;
+            case stringType:
+                lua_pushstring(L, val.to<std::string>().c_str());
+                return 1;
+//            case enumType:
+//                lua_pushinteger(L, val.to<int>());
+//                return 1;
+//            case arrayType:
+//                lua_pushinteger(L, val.to<int>());
+//                return 1;
+//            case userType:
+//                lua_pushinteger(L, val.to<int>());
+//                return 1;
+            default:
+                lua_pushliteral(L, "Unknown type in Ponder value");
+                lua_error(L);
+        }
+        return 0;
+    }
+    
+    static int l_inst_index(lua_State *L)   // (obj, key)
+    {
+        lua_pushvalue(L, lua_upvalueindex(1));
+        const Class *cls = (const Class *) lua_touserdata(L, -1);
+
+        void *ud = lua_touserdata(L, 1);                // userobj
+        const std::string key(lua_tostring(L, 2));
+        
+        for (auto&& prop : cls->propertyIterator())
+        {
+            if (prop.name() == key)
+            {
+                ponder::UserObject *uobj = (ponder::UserObject*) ud;
+                ponder::Value val = uobj->get(key);
+                return pushValue(L, val);
+            }
+        }
+        
+        return 0;
+    }
+    
+    static void createInstanceMetatable(lua_State *L, const Class& cls)
+    {
+        lua_createtable(L, 0, 0);
+        
+        lua_pushliteral(L, "__index");
+        lua_pushlightuserdata(L, (void*) &cls);
+        lua_pushcclosure(L, l_inst_index, 1);
+        lua_rawset(L, -3);
     }
     
     void expose(lua_State *L, const Class& cls, const std::string& name)
     {
         // class metatable
         lua_createtable(L, 0, 0);                   // +1 metatable
-        const int mtidx = lua_gettop(L);
+        const int clsmt = lua_gettop(L);
+
         lua_pushliteral(L, "__call");               // +1 k
-        lua_pushlightuserdata(L, (void*) &cls);     // +1
-        lua_pushcclosure(L, l_class_create, 1);     //  0 = +1-1 v
-        lua_rawset(L, -3);                          // -2 meta.__call = fn
+        lua_pushcfunction(L, l_class_create);       // +1 v
+        lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
+        
+        // create instance metatable
+        lua_pushliteral(L, "_inst_");               // +1 k
+        createInstanceMetatable(L, cls);            // +1
+        lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
 
         // Want in Lua: ClassName(args) -> new instance
         lua_pushglobaltable(L);                     // +1 global table
         lua_pushstring(L, name.c_str());            // +1 k
         
+        // class proxy
         void *ud = lua_newuserdata(L, sizeof(ponder::Class*)); // +1 v
         *(const ponder::Class**)ud = &cls;
-        lua_pushvalue(L, mtidx);                    // +1 metatable
+        lua_pushvalue(L, clsmt);                    // +1 metatable
         lua_setmetatable(L, -2);                    // -1
         
         lua_rawset(L, -3);                          // -2 _G[CLASSNAME] = class_obj
@@ -207,8 +318,9 @@ int main()
     
     const char *tstr = QUOTED(
         print(Vec2)
-        v = Vec2()
+        v = Vec2(7,8)
         print(v)
+        print(v.x, v.y)
     );
     
     ponder::lua::runString(L, tstr);
