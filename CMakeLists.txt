@@ -93,6 +93,7 @@ set(SRC_HEADERS
     include/ponder/detail/enummanager.hpp
     include/ponder/detail/enumpropertyimpl.hpp
     include/ponder/detail/enumpropertyimpl.inl
+    include/ponder/detail/format.hpp
     include/ponder/detail/functionimpl.hpp
     include/ponder/detail/functiontraits.hpp
     include/ponder/detail/getter.hpp

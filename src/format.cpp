@@ -25,7 +25,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ponder/format.h>
+#include <ponder/detail/format.hpp>
 
 #include <string.h>
 
@@ -50,7 +50,7 @@
 #endif
 
 namespace ponder {
-namespace util {
+namespace detail {
 
 using fmt::internal::Arg;
 

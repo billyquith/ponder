@@ -32,7 +32,7 @@
 #define PONDER_UTIL_HPP
 
 #include <ponder/config.hpp>
-#include <ponder/format.h>
+#include <ponder/detail/format.hpp>
 #include <ponder/type.hpp>
 
 namespace ponder
@@ -48,7 +48,7 @@ namespace detail
         
     private:
         noncopyable( const noncopyable& ) = delete;
-        noncopyable& operator=( const noncopyable& ) = delete;
+        noncopyable& operator = ( const noncopyable& ) = delete;
     };
     
     
@@ -79,7 +79,7 @@ namespace detail
     template <typename F>
     std::string to_str(F from)
     {
-        return util::fmt::format("{}", from);
+        return detail::fmt::format("{}", from);
     }
     
     template <typename S>

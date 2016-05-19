@@ -51,7 +51,8 @@
 # include <intrin.h>  // _BitScanReverse, _BitScanReverse64
 
 namespace ponder {
-namespace util {
+namespace detail {
+    
 namespace fmt {
 namespace internal {
 # pragma intrinsic(_BitScanReverse)
@@ -83,8 +84,7 @@ inline uint32_t clzll(uint64_t x) {
 # define FMT_BUILTIN_CLZLL(n) fmt::internal::clzll(n)
 }
 }
-}
-}
+}} // pomder::detail
 #endif
 
 #ifdef __GNUC__
@@ -197,8 +197,7 @@ inline uint32_t clzll(uint64_t x) {
 # define FMT_ASSERT(condition, message) assert((condition) && message)
 #endif
 
-namespace ponder {
-namespace util {
+namespace ponder { namespace detail {
 namespace fmt {
 
 // Fix the warning about long long on older versions of GCC
@@ -3064,8 +3063,7 @@ operator"" _a(const wchar_t *s, std::size_t) { return {s}; }
 
 } // inline namespace literals
 } // namespace fmt
-} // namespace util
-} // namespace ponder
+}} // namespace ponder::detail
 #endif // FMT_USE_USER_DEFINED_LITERALS
 
 // Restore warnings.
