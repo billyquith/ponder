@@ -44,7 +44,7 @@ namespace lua {
 
     static int l_class_create(lua_State *L)
     {
-        lua_getupvalue(L, 0, 1);
+        lua_pushvalue(L, lua_upvalueindex(1));
         const ponder::Class *cls = (const ponder::Class*) lua_touserdata(L, -1);
         
         void *ud = lua_newuserdata(L, cls->sizeOf());
@@ -62,13 +62,25 @@ namespace lua {
     
     void expose(lua_State *L, const Class& cls, const std::string& name)
     {
+        // class metatable
+        lua_createtable(L, 0, 0);                   // +1 metatable
+        const int mtidx = lua_gettop(L);
+        lua_pushliteral(L, "__call");               // +1 k
+        lua_pushlightuserdata(L, (void*) &cls);     // +1
+        lua_pushcclosure(L, l_class_create, 1);     //  0 = +1-1 v
+        lua_rawset(L, -3);                          // -2 meta.__call = fn
+
         // Want in Lua: ClassName(args) -> new instance
-        lua_pushglobaltable(L);                     // + global table
-        lua_pushstring(L, name.c_str());            // + k
-        lua_pushlightuserdata(L, (void*) &cls);
-        lua_pushcclosure(L, l_class_create, 1);     // + v
-        lua_rawset(L, -3);                          // _G[CLASSNAME] = class_create
-        lua_pop(L, 1);                              // - global table
+        lua_pushglobaltable(L);                     // +1 global table
+        lua_pushstring(L, name.c_str());            // +1 k
+        
+        void *ud = lua_newuserdata(L, sizeof(ponder::Class*)); // +1 v
+        *(const ponder::Class**)ud = &cls;
+        lua_pushvalue(L, mtidx);                    // +1 metatable
+        lua_setmetatable(L, -2);                    // -1
+        
+        lua_rawset(L, -3);                          // -2 _G[CLASSNAME] = class_obj
+        lua_pop(L, 2);                              // -2 global,meta
     }
 
     bool runString(lua_State *L, const char *luaCode)
