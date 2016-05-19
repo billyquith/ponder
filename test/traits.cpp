@@ -66,6 +66,14 @@ namespace TraitsTest
     };
 
     int intArray[10];
+    
+    template <class T>
+    class TemplateClass
+    {
+    public:
+        T x;
+    };
+
 }
 
 using namespace TraitsTest;
@@ -222,6 +230,32 @@ TEST_CASE("Ponder has object traits")
         static_assert(
             std::is_same<const int*, ponder::detail::ObjectTraits<const int*>::PointerType>::value,
             "ObjectTraits<>::PointerType failed");
+    }
+
+    SECTION("is a smart pointer")
+    {
+        using ponder::detail::IsSmartPointer;
+        
+        static_assert(IsSmartPointer<int, int>::value == false,
+                      "IsSmartPointer<> failed");
+
+        static_assert(IsSmartPointer<int*, int>::value == false,
+                      "IsSmartPointer<> failed");
+
+        static_assert(IsSmartPointer<const int*, int>::value == false,
+                      "IsSmartPointer<> failed");
+
+        static_assert(IsSmartPointer<TraitsTest::TemplateClass<int>, int>::value == false,
+                      "IsSmartPointer<> failed");
+
+        static_assert(IsSmartPointer<std::auto_ptr<int>, int>::value == true,
+                      "IsSmartPointer<> failed");
+
+        static_assert(IsSmartPointer<std::unique_ptr<int>, int>::value == true,
+                      "IsSmartPointer<> failed");
+
+        static_assert(IsSmartPointer<std::shared_ptr<int>, int>::value == true,
+                      "IsSmartPointer<> failed");
     }
 
     SECTION("types have a raw data type")

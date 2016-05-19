@@ -76,6 +76,13 @@ namespace ClassTest
         int a, b;
     };
     
+    template <class T>
+    class TemplateClass
+    {
+    public:
+        T testMember_;
+    };
+    
     void declare()
     {
         ponder::Class::declare<MyClass>("ClassTest::MyClass")
@@ -94,6 +101,10 @@ namespace ClassTest
         
         ponder::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
             .base<Derived>();
+        
+        ponder::Class::declare< TemplateClass<int> >()
+            .constructor()
+            .property("TestMember", &TemplateClass<int>::testMember_);
     }
     
     void declare_temp()
@@ -124,6 +135,7 @@ PONDER_AUTO_TYPE(ClassTest::Base, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::TemplateClass<int>, &ClassTest::declare)
 
 PONDER_TYPE(ClassTest::TemporaryRegistration);
 
@@ -336,6 +348,17 @@ TEST_CASE("Classes can by undeclared")
 
         REQUIRE(ponder::classByTypeSafe<TemporaryRegistration>() == nullptr);
     }
+}
+
+
+TEST_CASE("Classes can be templated")
+{
+    auto const& metaclass = ponder::classByType< TemplateClass<int> >();
+
+    REQUIRE(metaclass.constructorCount() > 0);
+    REQUIRE(metaclass.propertyCount() > 0);
+    
+    auto const& obj = metaclass.construct();
 }
 
 
