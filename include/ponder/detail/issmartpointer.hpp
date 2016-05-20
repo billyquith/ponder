@@ -32,7 +32,6 @@
 #define PONDER_DETAIL_ISSMARTPOINTER_HPP
 
 
-#include <ponder/detail/yesnotype.hpp>
 #include <type_traits>
 #include <memory>
 
@@ -73,12 +72,31 @@ namespace detail
  */
 template <typename T, typename U>
 struct IsSmartPointer
-{
-    enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
+{    
+    // enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
+    enum {value = false};
 };
 
-} // namespace detail
+template <typename T, typename U>
+struct IsSmartPointer<std::auto_ptr<T>, U>
+{
+    enum {value = true};
+};
 
+template <typename T, typename U>
+struct IsSmartPointer<std::unique_ptr<T>, U>
+{
+    enum {value = true};
+};
+
+template <typename T, typename U>
+struct IsSmartPointer<std::shared_ptr<T>, U>
+{
+    enum {value = true};
+};
+
+    
+} // namespace detail
 } // namespace ponder
 
 #endif // PONDER_DETAIL_ISSMARTPOINTER_HPP
