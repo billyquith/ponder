@@ -37,16 +37,26 @@ extern "C" {
 #include <lualib.h>
 }
 
-#define LUDB_DECL int db_top(0),zz_ltop=lua_gettop(L),db_d_top(0),db_typei(-1),db_idx(0); \
-                const char *db_type(0), *db_valstr(0);
-#define LUDB(I) db_top=lua_gettop(L); db_d_top=db_top-zz_ltop; zz_ltop=db_top; \
-                db_typei=lua_type(L,I); db_type=lua_typename(L,db_typei); \
-                db_valstr=lua_tostring(L,I); db_idx= I>=0 ? I : db_top+I+1
+#define LUDB_DECL \
+    int db_top(0),zz_ltop=lua_gettop(L),db_d_top(0),db_idx(0); \
+    std::string zz_stk; \
+    const char *db_stack(0);
+
+#define LUDB(I) \
+    db_top=lua_gettop(L); db_d_top=db_top-zz_ltop; zz_ltop=db_top; \
+    db_idx= I>=0 ? I : db_top+I+1; \
+    do { zz_stk=""; int i=db_top; while(i > 0){ \
+    zz_stk += "  " + std::to_string(i) + ":" + lua_typename(L,lua_type(L,i)); \
+    const char *vs = lua_tostring(L,i); \
+    if (vs) zz_stk += " <" + std::string(vs) + ">"; \
+    --i; }} while(false); db_stack=zz_stk.c_str();
 
 namespace ponder {
 namespace lua {
 
     namespace fmt = ponder::detail::fmt;
+    
+    #define c_ponder_metatables "_ponder_meta"
     
     static int pushValue(lua_State *L, const ponder::Value& val)
     {
@@ -70,9 +80,22 @@ namespace lua {
 //            case arrayType:
 //                lua_pushinteger(L, val.to<int>());
 //                return 1;
-//            case userType:
-//                lua_pushinteger(L, val.to<int>());
-//                return 1;
+            case userType:
+                {
+                    void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
+                    auto uobj = new(ud) UserObject(val.to<UserObject>());
+                    auto clsName = uobj->getClass().name().c_str();
+
+                    // set instance metatable
+                    lua_pushglobaltable(L);                     // +1   _G
+                    lua_pushliteral(L, c_ponder_metatables);    // +1
+                    lua_rawget(L, -2);                          // 0 -+ _G.META
+                    lua_pushstring(L, clsName);                 // +1
+                    lua_rawget(L, -2);                          // 0 -+ _G_META.MT
+                    lua_setmetatable(L, -4);                    // -1
+                    lua_pop(L, 2);
+                }
+                return 1;
             default:
                 lua_pushliteral(L, "Unknown type in Ponder value");
                 lua_error(L);
@@ -85,7 +108,7 @@ namespace lua {
         void *ud = lua_touserdata(L, 1);                // userobj
         if (!ud)
         {
-            lua_pushliteral(L, "Method call this is null. (Use Class:method() ?)");
+            lua_pushliteral(L, "Method call 'this' is null. (Use Class:method() ?)");
             lua_error(L);
         }
         ponder::UserObject *uobj = (ponder::UserObject*) ud;
@@ -94,7 +117,7 @@ namespace lua {
         const Function *func = (const Function *) lua_touserdata(L, -1);
         
         Args args;
-        const auto c_argOffset = 2u;
+        constexpr auto c_argOffset = 2u;
         for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
         {
             const Type at = func->argType(i);
@@ -169,21 +192,29 @@ namespace lua {
     
     static void createInstanceMetatable(lua_State *L, const Class& cls)
     {
-        lua_createtable(L, 0, 0);
+        lua_createtable(L, 0, 3);                   // +1 mt
         
-        lua_pushliteral(L, "__index");
-        lua_pushlightuserdata(L, (void*) &cls);
-        lua_pushcclosure(L, l_inst_index, 1);
-        lua_rawset(L, -3);
+        lua_pushliteral(L, "__index");              // +1
+        lua_pushlightuserdata(L, (void*) &cls);     // +1
+        lua_pushcclosure(L, l_inst_index, 1);       // 0 +-
+        lua_rawset(L, -3);                          // -2
+     
+        lua_pushglobaltable(L);                     // +1
+        lua_pushliteral(L, c_ponder_metatables);    // +1
+        lua_rawget(L, -2);                          // 0 -+
+        lua_pushstring(L, cls.name().c_str());      // +1 k
+        lua_pushvalue(L, -4);                       // +1 v
+        lua_rawset(L, -3);                          // -2 _G.METAS.CLSNAME = META
+        lua_pop(L, 2);                              // -1 _G, _G.METAS
     }
     
-    static int l_class_create(lua_State *L)
+    static int l_instance_create(lua_State *L)
     {
         // get Class* from class object
         const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
         
         ponder::Args args;
-        const auto c_argOffset = 2u;
+        constexpr auto c_argOffset = 2u;
         const int nargs = lua_gettop(L) - 1;    // 1st arg is userdata object
         for (int i = c_argOffset; i < c_argOffset + nargs; ++i)
         {
@@ -219,7 +250,7 @@ namespace lua {
             lua_error(L);
         }
         
-        void *ud = lua_newuserdata(L, sizeof(ponder::UserObject));   // +1
+        void *ud = lua_newuserdata(L, sizeof(UserObject));   // +1
         new(ud) UserObject(obj);
         
         // set instance metatable
@@ -234,12 +265,26 @@ namespace lua {
     
     void expose(lua_State *L, const Class& cls, const std::string& name)
     {
+        // ensure _G.META
+        lua_pushglobaltable(L);                     // +1
+        lua_pushliteral(L, c_ponder_metatables);    // +1
+        lua_rawget(L, -2);                          // 0 -+
+        if (lua_isnil(L, -1))
+        {
+            // first time
+            lua_pop(L, 1);                              // -1 pop nil
+            lua_pushliteral(L, c_ponder_metatables);    // +1
+            lua_createtable(L, 0, 20);                  // +1
+            lua_rawset(L, -3);                          // -2 _G[META] = {}
+        }
+        lua_pop(L, 1);                              // -1 _G
+
         // class metatable
-        lua_createtable(L, 0, 0);                   // +1 metatable
+        lua_createtable(L, 0, 20);                  // +1 metatable
         const int clsmt = lua_gettop(L);
 
         lua_pushliteral(L, "__call");               // +1 k
-        lua_pushcfunction(L, l_class_create);       // +1 v
+        lua_pushcfunction(L, l_instance_create);    // +1 v
         lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
         
         // create instance metatable
@@ -341,14 +386,13 @@ namespace lib
             .function("length", &Vec2f::length)
             .function("dot", &Vec2f::dot)
             .function("normalise", &Vec2f::normalise)
+            .function("add", &Vec2f::operator+)
             ;
     }
     
 } // namespace lib
 
 PONDER_TYPE(lib::Vec2f)
-
-#define QUOTED(T) #T
 
 int main()
 {
@@ -360,17 +404,19 @@ int main()
     lib::declare();
     ponder::lua::expose(L, ponder::classByType<lib::Vec2f>(), "Vec2");
     
-    const char *tstr =
-    QUOTED(
-        print(Vec2)
-        a = Vec2(7,8)
-        print(a)
-        print(a.x, a.y)
-        a:set(2,3)
-        print(a.x, a.y, a:length())
-        b = Vec2(1, 1)
-        print(a:dot(b))
-    );
+    const char *tstr = "\
+        print(Vec2)         \n\
+        a = Vec2(7,8)       \n\
+        print(a)            \n\
+        print(a.x, a.y)     \n\
+        a:set(2,3)          \n\
+        print(a.x, a.y, a:length()) \n\
+        b = Vec2(1, 1)      \n\
+        print(a:dot(b))     \n\
+        print(_ponder_meta, _ponder_meta['lib::Vec2f'], _ponder_meta['lib::Vec2f'].__index)  \n\
+        c = a:add(b)        \n\
+        print(c.x, c.y)     \n\
+    ";
     
     ponder::lua::runString(L, tstr);
     
