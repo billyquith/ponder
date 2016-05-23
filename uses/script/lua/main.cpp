@@ -47,60 +47,6 @@ namespace ponder {
 namespace lua {
 
     namespace fmt = ponder::detail::fmt;
-
-    static int l_class_create(lua_State *L)
-    {
-        // get Class* from class object
-        const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
-        
-        ponder::Args args;
-        const int nargs = lua_gettop(L) - 1;    // 1st arg is userdata object
-        for (int i = 2; i < 2 + nargs; ++i)
-        {
-            const int argtype = lua_type(L, i);
-            switch (argtype)
-            {
-                case LUA_TNIL:
-                    args += 0;
-                    break;
-                    
-                case LUA_TNUMBER:
-                    args += lua_tonumber(L, i);
-                    break;
-                    
-                case LUA_TBOOLEAN:
-                    args += lua_toboolean(L, i);
-                    break;
-                
-                // LUA_TTABLE, LUA_TFUNCTION, LUA_TUSERDATA, LUA_TTHREAD, and LUA_TLIGHTUSERDATA.
-                    
-                default:
-                    lua_pushstring(L, fmt::format("Argument {0} is bad type {1}",
-                                                  i, lua_typename(L, i)).c_str());
-                    lua_error(L);
-            }
-        }
-        
-        ponder::UserObject obj(cls->construct(args));
-        if (obj == ponder::UserObject::nothing)
-        {
-            lua_pop(L, 1);  // pop new user data
-            lua_pushliteral(L, "Matching constructor not found");
-            lua_error(L);
-        }
-
-        void *ud = lua_newuserdata(L, sizeof(ponder::UserObject));   // +1
-        new(ud) UserObject(obj);
-
-        // set instance metatable
-        lua_getmetatable(L, 1);             // +1
-        lua_pushliteral(L, "_inst_");       // +1
-        lua_rawget(L, -2);                  // -1+1 -> mt
-        lua_setmetatable(L, -3);            // -1
-        lua_pop(L, 1);
-
-        return 1;
-    }
     
     static int pushValue(lua_State *L, const ponder::Value& val)
     {
@@ -134,11 +80,60 @@ namespace lua {
         return 0;
     }
     
+    static int l_method_call(lua_State *L)
+    {
+        void *ud = lua_touserdata(L, 1);                // userobj
+        if (!ud)
+        {
+            lua_pushliteral(L, "Method call this is null. (Use Class:method() ?)");
+            lua_error(L);
+        }
+        ponder::UserObject *uobj = (ponder::UserObject*) ud;
+
+        lua_pushvalue(L, lua_upvalueindex(1));
+        const Function *func = (const Function *) lua_touserdata(L, -1);
+        
+        Args args;
+        const auto c_argOffset = 2u;
+        for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
+        {
+            const Type at = func->argType(i);
+            switch (at)
+            {
+                case boolType:
+                    args += lua_toboolean(L, i + c_argOffset);
+                    break;
+                case intType:
+                    args += lua_tointeger(L, i + c_argOffset);
+                    break;
+                case realType:
+                    args += lua_tonumber(L, i + c_argOffset);
+                    break;
+                case stringType:
+                    args += lua_tostring(L, i + c_argOffset);
+                    break;
+                    //            case enumType:
+                    //                return 1;
+                    //            case arrayType:
+                    //                return 1;
+                    //            case userType:
+                    //                return 1;
+                default:
+                    lua_pushliteral(L, "Unknown type in method call");
+                    lua_error(L);
+            }
+        }
+        
+        func->call(*uobj, args);
+        
+        return 0;
+    }
+
     static int l_inst_index(lua_State *L)   // (obj, key)
     {
         lua_pushvalue(L, lua_upvalueindex(1));
         const Class *cls = (const Class *) lua_touserdata(L, -1);
-
+        
         void *ud = lua_touserdata(L, 1);                // userobj
         const std::string key(lua_tostring(L, 2));
         
@@ -149,6 +144,16 @@ namespace lua {
                 ponder::UserObject *uobj = (ponder::UserObject*) ud;
                 ponder::Value val = uobj->get(key);
                 return pushValue(L, val);
+            }
+        }
+        
+        for (auto&& func : cls->functionIterator())
+        {
+            if (func.name() == key)
+            {
+                lua_pushlightuserdata(L, (void*) func.value().get());
+                lua_pushcclosure(L, l_method_call, 1);
+                return 1;
             }
         }
         
@@ -163,6 +168,61 @@ namespace lua {
         lua_pushlightuserdata(L, (void*) &cls);
         lua_pushcclosure(L, l_inst_index, 1);
         lua_rawset(L, -3);
+    }
+    
+    static int l_class_create(lua_State *L)
+    {
+        // get Class* from class object
+        const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
+        
+        ponder::Args args;
+        const auto c_argOffset = 2u;
+        const int nargs = lua_gettop(L) - 1;    // 1st arg is userdata object
+        for (int i = c_argOffset; i < c_argOffset + nargs; ++i)
+        {
+            const int argtype = lua_type(L, i);
+            switch (argtype)
+            {
+                case LUA_TNIL:
+                    args += 0;
+                    break;
+                    
+                case LUA_TNUMBER:
+                    args += lua_tonumber(L, i);
+                    break;
+                    
+                case LUA_TBOOLEAN:
+                    args += lua_toboolean(L, i);
+                    break;
+                    
+                    // LUA_TTABLE, LUA_TFUNCTION, LUA_TUSERDATA, LUA_TTHREAD, and LUA_TLIGHTUSERDATA.
+                    
+                default:
+                    lua_pushstring(L, fmt::format("Argument {0} is bad type {1}",
+                                                  i, lua_typename(L, i)).c_str());
+                    lua_error(L);
+            }
+        }
+        
+        ponder::UserObject obj(cls->construct(args));
+        if (obj == ponder::UserObject::nothing)
+        {
+            lua_pop(L, 1);  // pop new user data
+            lua_pushliteral(L, "Matching constructor not found");
+            lua_error(L);
+        }
+        
+        void *ud = lua_newuserdata(L, sizeof(ponder::UserObject));   // +1
+        new(ud) UserObject(obj);
+        
+        // set instance metatable
+        lua_getmetatable(L, 1);             // +1
+        lua_pushliteral(L, "_inst_");       // +1
+        lua_rawget(L, -2);                  // -1+1 -> mt
+        lua_setmetatable(L, -3);            // -1
+        lua_pop(L, 1);
+        
+        return 1;
     }
     
     void expose(lua_State *L, const Class& cls, const std::string& name)
@@ -295,7 +355,8 @@ namespace lib
             .constructor<float, float>()
             .property("x", &Vec2f::x)
             .property("y", &Vec2f::y)
-            .function("add", &Vec2f::operator +)
+            .function("set", &Vec2f::set)
+//            .function("add", &Vec2f::operator +)
 //            .function("subtract", (Vec2f::*(const Vec2f&)) &Vec2f::operator -)
             ;
     }
@@ -316,10 +377,13 @@ int main()
     lib::declare();
     ponder::lua::expose(L, ponder::classByType<lib::Vec2f>(), "Vec2");
     
-    const char *tstr = QUOTED(
+    const char *tstr =
+    QUOTED(
         print(Vec2)
         v = Vec2(7,8)
         print(v)
+        print(v.x, v.y)
+        v:set(2,3)
         print(v.x, v.y)
     );
     
