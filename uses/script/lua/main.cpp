@@ -116,15 +116,22 @@ namespace lua {
                     //                return 1;
                     //            case arrayType:
                     //                return 1;
-                    //            case userType:
-                    //                return 1;
+                case userType:
+                    {
+                        void *aud = lua_touserdata(L, i + c_argOffset);
+                        ponder::UserObject *auobj = (ponder::UserObject*) aud;
+                        args += *auobj;
+                        break;
+                    }
                 default:
                     lua_pushliteral(L, "Unknown type in method call");
                     lua_error(L);
             }
         }
         
-        func->call(*uobj, args);
+        Value ret = func->call(*uobj, args);
+        if (ret.type() != noType)
+            return pushValue(L, ret);
         
         return 0;
     }
@@ -291,10 +298,6 @@ namespace lib
         
         void set(float x_, float y_) { x = x_, y = y_; }
         
-        static const Vec2f c_zero;
-        static const Vec2f c_x;
-        static const Vec2f c_y;
-        
         Vec2f operator + (const Vec2f& o) const { return Vec2f(x + o.x, y + o.y); }
         void operator += (const Vec2f& o) { x += o.x, y += o.y; }
         
@@ -310,10 +313,7 @@ namespace lib
         Vec2f operator / (float s) const { return Vec2f(x/s, y/s); }
         void operator /= (float s) { x /= s, y /= s; }
         
-        bool isNull() const { return *this == c_zero; }
-        
         float length() const        { return std::sqrt(x*x + y*y); }
-        float lengthSquared() const { return x*x + y*y; }
         
         float dot(const Vec2f &o) const {
             return x*o.x + y*o.y;
@@ -327,24 +327,6 @@ namespace lib
             y *= invlen;
             return vlen;    // Old length.
         }
-        
-        float setLength(float newLen)
-        {
-            const float vlen = length();
-            const float scale = newLen / vlen;
-            x *= scale;
-            y *= scale;
-            return vlen;    // Old length.
-        }
-        
-//        static Vec2f polar(float rad);               // anti-clkws from x-axis.
-//        static Vec2f compass(float degrees);         // clkws from north.
-//        
-//        // Rotate vector origin anti-clkws by rad.
-//        void rotate(float aclkRad);
-//        
-//        // Rotate around centre point anti-clkws by rad.
-//        void rotateAround(const Vec2f &centre, float aclkRad);
     };
 
     
@@ -356,8 +338,9 @@ namespace lib
             .property("x", &Vec2f::x)
             .property("y", &Vec2f::y)
             .function("set", &Vec2f::set)
-//            .function("add", &Vec2f::operator +)
-//            .function("subtract", (Vec2f::*(const Vec2f&)) &Vec2f::operator -)
+            .function("length", &Vec2f::length)
+            .function("dot", &Vec2f::dot)
+            .function("normalise", &Vec2f::normalise)
             ;
     }
     
@@ -380,11 +363,13 @@ int main()
     const char *tstr =
     QUOTED(
         print(Vec2)
-        v = Vec2(7,8)
-        print(v)
-        print(v.x, v.y)
-        v:set(2,3)
-        print(v.x, v.y)
+        a = Vec2(7,8)
+        print(a)
+        print(a.x, a.y)
+        a:set(2,3)
+        print(a.x, a.y, a:length())
+        b = Vec2(1, 1)
+        print(a:dot(b))
     );
     
     ponder::lua::runString(L, tstr);
