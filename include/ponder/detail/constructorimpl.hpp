@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -86,7 +83,7 @@ template <typename T>
 bool checkArg(const Value& value);
 
 /**
- * \brief Implementation of metaconstructors with 1 parameter
+ * \brief Implementation of metaconstructors with variable parameters
  */
 template <typename T, typename... A>
 class ConstructorImpl : public Constructor
@@ -98,9 +95,12 @@ class ConstructorImpl : public Constructor
     }
 
     template <typename... As, std::size_t... Is>
-    static inline UserObject createWithArgs(const Args& args, index_sequence<Is...>)
+    static inline UserObject createWithArgs(void* ptr, const Args& args, index_sequence<Is...>)
     {
-        return new T(convertArg<As>(args, Is)...);
+        if (ptr)
+            return UserObject(new(ptr) T(convertArg<As>(args, Is)...)); // placement new
+        else
+            return UserObject(new T(convertArg<As>(args, Is)...));
     }
 
 public:
@@ -116,9 +116,9 @@ public:
     /**
      * \see Constructor::create
      */
-    UserObject create(const Args& args) const override
+    UserObject create(void* ptr, const Args& args) const override
     {
-        return createWithArgs<A...>(args, make_index_sequence<sizeof...(A)>());
+        return createWithArgs<A...>(ptr, args, make_index_sequence<sizeof...(A)>());
     }
 };
 

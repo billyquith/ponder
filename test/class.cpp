@@ -28,7 +28,6 @@
 ****************************************************************************/
 
 #include <ponder/classget.hpp>
-#include <ponder/pondertype.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
 #include "catch.hpp"
@@ -72,6 +71,11 @@ namespace ClassTest
     {
     };
     
+    struct TemporaryRegistration : Base
+    {
+        int a, b;
+    };
+    
     void declare()
     {
         ponder::Class::declare<MyClass>("ClassTest::MyClass")
@@ -91,6 +95,19 @@ namespace ClassTest
         ponder::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
             .base<Derived>();
     }
+    
+    void declare_temp()
+    {
+        ponder::Class::declare<TemporaryRegistration>()
+            .base<Base>()
+            .property("a", &TemporaryRegistration::a)
+            .property("b", &TemporaryRegistration::b);
+    }
+
+    void undeclare_temp()
+    {
+        ponder::Class::undeclare(ponder::classByType<TemporaryRegistration>());
+    }
 }
 
 PONDER_TYPE(ClassTest::MyExplicityDeclaredClass /* never declared */)
@@ -107,6 +124,8 @@ PONDER_AUTO_TYPE(ClassTest::Base, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
+
+PONDER_TYPE(ClassTest::TemporaryRegistration);
 
 using namespace ClassTest;
 
@@ -143,7 +162,13 @@ TEST_CASE("Classes need to be declared")
         REQUIRE( (class1 == class1) );
         REQUIRE( (class1 != class2) );
         REQUIRE( (class2 != class1) );
-    }    
+    }
+    
+    SECTION("can retrieve memory size")
+    {
+        REQUIRE(ponder::classByType<MyClass>().sizeOf() == sizeof(MyClass));
+        REQUIRE(ponder::classByName("ClassTest::MyClass").sizeOf() == sizeof(MyClass));
+    }
 }
 
 
@@ -177,7 +202,7 @@ TEST_CASE("Class metadata can be retrieved")
         
         REQUIRE_THROWS_AS(ponder::classByObject(object2), ponder::ClassNotFound);
         REQUIRE_THROWS_AS(ponder::classByObject(&object2), ponder::ClassNotFound);
-    }    
+    }
 }
 
 
@@ -197,6 +222,34 @@ TEST_CASE("Class members can be inspected")
         REQUIRE(metaclass.functionCount() == 1U);
         REQUIRE(metaclass.hasFunction("func") == true);
         REQUIRE(metaclass.hasFunction("xxxx") == false);
+    }
+    
+    SECTION("can iterate over properties")
+    {
+        int index = 0;
+        for (auto prop : metaclass.propertyIterator())
+        {
+            switch (index++) {
+                case 0:
+                    REQUIRE(prop.name() == std::string("prop"));
+                    break;
+                default: ;
+            }
+        }
+    }
+
+    SECTION("can iterate over functions")
+    {
+        int index = 0;
+        for (auto func : metaclass.functionIterator())
+        {
+            switch (index++) {
+                case 0:
+                    REQUIRE(func.name() == std::string("func"));
+                    break;
+                default: ;
+            }
+        }
     }
 }
 
@@ -260,10 +313,29 @@ TEST_CASE("Classes can have hierarchies")
 }
 
 
-//TEST_CASE(typeNames)
-//{
-//    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);
-//    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::realType), "real")==0);
-//    BOOST_CHECK(strcmp(ponder::detail::typeAsString(ponder::userType), "user")==0);
-//}
+TEST_CASE("Classes can by undeclared")
+{
+    SECTION("check before declaration")
+    {
+        REQUIRE_THROWS_AS(ponder::classByType<TemporaryRegistration>(), ponder::ClassNotFound);
+    }
+
+    SECTION("declare")
+    {
+        declare_temp();
+
+        const ponder::Class& tempClass = ponder::classByType<TemporaryRegistration>();
+    
+        REQUIRE(tempClass.baseCount() == 1u);
+        REQUIRE(tempClass.base(0).name() == "ClassTest::Base");
+    }
+    
+    SECTION("do undeclare")
+    {
+        undeclare_temp();
+
+        REQUIRE(ponder::classByTypeSafe<TemporaryRegistration>() == nullptr);
+    }
+}
+
 

@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -52,7 +49,7 @@ template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
 class ClassVisitor;
-
+    
 /**
  * \brief ponder::Class represents a metaclass composed of properties and functions
  *
@@ -110,6 +107,39 @@ class ClassVisitor;
  */
 class PONDER_API Class : public TagHolder, detail::noncopyable
 {
+    /**
+     * \brief Structure holding informations about a base metaclass
+     */
+    struct BaseInfo
+    {
+        const Class* base;
+        int offset;
+    };
+    
+    typedef std::shared_ptr<Property> PropertyPtr;
+    typedef std::shared_ptr<Function> FunctionPtr;
+    typedef std::shared_ptr<Constructor> ConstructorPtr;
+    
+    struct NameCmp {
+        bool operator () (const std::string& a, const std::string& b) const {
+            return a < b;
+        }
+    };
+
+    typedef std::vector<ConstructorPtr> ConstructorList;
+    typedef std::vector<BaseInfo> BaseList;
+    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
+    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
+    typedef void (*Destructor)(const UserObject&, bool);
+    
+    std::size_t m_sizeof;       ///< Size of the class in bytes.
+    std::string m_id;           ///< Name of the metaclass
+    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
+    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
+    BaseList m_bases;           ///< List of base metaclasses
+    ConstructorList m_constructors; ///< List of metaconstructors
+    Destructor m_destructor;    ///< Destructor (function that is able to delete an abstract object)
+
 public:
 
     /**
@@ -129,11 +159,84 @@ public:
     static ClassBuilder<T> declare(const std::string& name = std::string());
 
     /**
+     * \brief Undeclare an existing metaclass
+     *
+     * Use this to undeclare a metaclass that you no longer require. E.g. from a dynamically
+     * loaded library that is being unloaded.
+     *
+     * \note Do *not* use automatic metaclass declaration (PONDER_AUTO_TYPE) for the class 
+     *       or it will keep being recreated by Ponder.
+     *
+     * \param cls An intance of a metaclass that has been declared.
+     *
+     * \see Enum::undeclare
+     */
+    static void undeclare(const Class& cls);
+
+public:
+
+    /**
      * \brief Return the name of the metaclass
      *
      * \return String containing the name of the metaclass
      */
     const std::string& name() const;
+
+    /**
+     * \brief Return the memory size of a class instance
+     *
+     * \return Size in bytes
+     */
+    std::size_t sizeOf() const;
+
+    /**
+     * \brief Construct a new instance of the C++ class bound to the metaclass
+     *
+     * If no constructor can match the provided arguments, UserObject::nothing
+     * is returned. If a pointer is provided then placement new is used instead of
+     * the new instance being dynamically allocated using new.
+     * The new instance is wrapped into a UserObject.
+     *
+     * \note It must be destroyed with the appropriate destruction function: 
+     * Class::destroy for new and Class::destruct for placement new.
+     *
+     * \param args Arguments to pass to the constructor (empty by default)
+     * \param ptr Optional pointer to the location to construct the object (placement new)
+     *
+     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
+     */
+    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const;
+
+    /**
+     * \brief Return the total number of constructors of this metaclass
+     *
+     * \return Number of constructors
+     */
+    std::size_t constructorCount() const;
+    
+    /**
+     * \brief Destroy an instance of the C++ class bound to the metaclass
+     *
+     * This function must be called to destroy every instance created with
+     * Class::construct.
+     *
+     * \param object Object to be destroyed
+     *
+     * \see construct
+     */
+    void destroy(const UserObject& object) const;    
+
+    /**
+     * \brief Destruct an object created using placement new
+     *
+     * This function must be called to destroy every instance created with
+     * Class::construct.
+     *
+     * \param object Object to be destroyed
+     *
+     * \see construct
+     */
+    void destruct(const UserObject& object) const;
 
     /**
      * \brief Return the total number of base metaclasses of this metaclass
@@ -192,6 +295,18 @@ public:
     const Function& function(const std::string& name) const;
 
     /**
+     * \brief Get a function iterator
+     *
+     * \return An iterator that can be used to iterator over all functions
+     *
+     * \code
+     * for (auto func : ponder::classByType<MyClass>().functionIterator())
+     *     foo(func.name(), func.value());
+     * \endcode
+     */
+    FunctionTable::Iterator functionIterator() const;
+
+    /**
      * \brief Return the total number of properties of this metaclass
      *
      * \return Number of properties
@@ -228,37 +343,18 @@ public:
      * \throw PropertyNotFound \a name is not a property of the metaclass
      */
     const Property& property(const std::string& name) const;
-
+    
     /**
-    * \brief Return the total number of constructors of this metaclass
-    *
-    * \return Number of constructors
-    */
-    std::size_t constructorCount() const;
-
-    /**
-     * \brief Construct a new instance of the C++ class bound to the metaclass
+     * \brief Get a property iterator
      *
-     * If no constructor can match the provided arguments, UserObject::nothing
-     * is returned.
-     * The new instance is wrapped into a UserObject. It must be destroyed
-     * with the Class::destroy function.
+     * \return An iterator that can be used to iterator over all properties
      *
-     * \param args Arguments to pass to the constructor (empty by default)
-     *
-     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
+     * \code
+     * for (auto prop : ponder::classByType<MyClass>().propertyIterator())
+     *     foo(prop.name(), prop.value());
+     * \endcode
      */
-    UserObject construct(const Args& args = Args::empty) const;
-
-    /**
-     * \brief Destroy an instance of the C++ class bound to the metaclass
-     *
-     * This function must be called to destroy every instance created with
-     * Class::construct.
-     *
-     * \param object Object to be destroyed
-     */
-    void destroy(const UserObject& object) const;
+    PropertyTable::Iterator propertyIterator() const;
 
     /**
      * \brief Start visitation of a class
@@ -321,38 +417,7 @@ private:
      * \return offset between this and base, or -1 if both classes are unrelated
      */
     int baseOffset(const Class& base) const;
-
-    /**
-     * \brief Structure holding informations about a base metaclass
-     */
-    struct BaseInfo
-    {
-        const Class* base;
-        int offset;
-    };
-
-    typedef std::shared_ptr<Property> PropertyPtr;
-    typedef std::shared_ptr<Function> FunctionPtr;
-    typedef std::shared_ptr<Constructor> ConstructorPtr;
-
-    struct NameCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
-            return a < b;
-        }
-    };
-
-    typedef std::vector<ConstructorPtr> ConstructorList;
-    typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
-    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
-    typedef void (*Destructor)(const UserObject&);
-
-    std::string m_id;           ///< Name of the metaclass
-    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
-    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
-    BaseList m_bases; ///< List of base metaclasses
-    ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor; ///< Destructor (function that is able to delete an abstract object)
+    
 };
 
 } // namespace ponder

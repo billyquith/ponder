@@ -34,10 +34,51 @@
 
 namespace ponder
 {
-    
+
+void Class::undeclare(const Class& cls)
+{
+    detail::ClassManager::instance().removeClass(cls);
+}
+
 const std::string& Class::name() const
 {
     return m_id;
+}
+
+std::size_t Class::sizeOf() const
+{
+    return m_sizeof;
+}
+
+UserObject Class::construct(const Args& args, void* ptr) const
+{
+    // Search an arguments match among the list of available constructors
+    for (ConstructorPtr cp : m_constructors)
+    {
+        Constructor& constructor = *cp;
+        if (constructor.matches(args))
+        {
+            // Match found: use the constructor to create the new instance
+            return constructor.create(ptr, args);
+        }
+    }
+    
+    return UserObject::nothing;  // no match found
+}
+
+std::size_t Class::constructorCount() const
+{
+    return m_constructors.size();
+}
+
+void Class::destroy(const UserObject& object) const
+{
+    m_destructor(object, false);
+}
+
+void Class::destruct(const UserObject& object) const
+{
+    m_destructor(object, true);
 }
 
 std::size_t Class::baseCount() const
@@ -120,48 +161,18 @@ const Property& Class::property(const std::string& id) const
     return *it->second;
 }
 
-std::size_t Class::constructorCount() const
-{
-    return m_constructors.size();
-}
-
-UserObject Class::construct(const Args& args) const
-{
-    // Search an arguments match among the list of available constructors
-    ConstructorList::const_iterator end = m_constructors.end();
-    for (ConstructorList::const_iterator it = m_constructors.begin();
-         it != end;
-         ++it)
-    {
-        Constructor& constructor = **it;
-        if (constructor.matches(args))
-        {
-            // Match found: use the constructor to create the new instance
-            return constructor.create(args);
-        }
-    }
-
-    // No match found
-    return UserObject::nothing;
-}
-
-void Class::destroy(const UserObject& object) const
-{
-    m_destructor(object);
-}
-
 void Class::visit(ClassVisitor& visitor) const
 {
     // First visit properties
-    for (PropertyTable::const_iterator it = m_properties.begin(); it != m_properties.end(); ++it)
+    for (PropertyTable::pair_t prop : m_properties)
     {
-        it->second->accept(visitor);
+        prop.value()->accept(visitor);
     }
 
     // Then visit functions
-    for (FunctionTable::const_iterator it = m_functions.begin(); it != m_functions.end(); ++it)
+    for (FunctionTable::pair_t func : m_functions)
     {
-        it->second->accept(visitor);
+        func.value()->accept(visitor);
     }
 }
 
@@ -196,7 +207,8 @@ bool Class::operator != (const Class& other) const
 }
 
 Class::Class(const std::string& name)
-    : m_id(name)
+    : m_sizeof(0)
+    , m_id(name)
 {
 }
 

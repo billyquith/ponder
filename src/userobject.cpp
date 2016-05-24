@@ -100,9 +100,19 @@ Value UserObject::get(const std::string& property) const
     return getClass().property(property).get(*this);
 }
 
+Value UserObject::get(std::size_t index) const
+{
+    return getClass().property(index).get(*this);
+}
+
 void UserObject::set(const std::string& property, const Value& value) const
 {
     getClass().property(property).set(*this, value);
+}
+
+void UserObject::set(std::size_t index, const Value& value) const
+{
+    getClass().property(index).set(*this, value);
 }
 
 Value UserObject::call(const std::string& function, const Args& args) const

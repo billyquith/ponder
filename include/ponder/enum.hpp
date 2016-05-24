@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -38,6 +35,7 @@
 #include <ponder/config.hpp>
 #include <ponder/enumbuilder.hpp>
 #include <ponder/enumget.hpp>
+#include <ponder/pondertype.hpp>
 #include <ponder/detail/typeid.hpp>
 #include <ponder/detail/dictionary.hpp>
 #include <string>
@@ -126,6 +124,19 @@ public:
     template <typename T>
     static EnumBuilder declare(const std::string& name = std::string());
 
+    /**
+     * \brief Undeclare an existing metaenum
+     *
+     * Call this to undeclare an Enum that you no longer require.
+     *
+     * \param name Name of the existing metaenum in Ponder.
+     *
+     * \note See notes for Class::undeclare about registration.
+     *
+     * \see Class::undeclare
+     */
+    static void undeclare(const Enum& enumCls);
+    
 public:
 
     /**

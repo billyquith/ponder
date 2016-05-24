@@ -33,6 +33,7 @@
 #include <ponder/arraymapper.hpp>
 #include "catch.hpp"
 #include <array>
+#include <string.h> // strcmp()
 
 #ifdef TEST_BOOST
 #include <boost/function_types/function_type.hpp>
@@ -429,6 +430,13 @@ TEST_CASE("Check Ponder utilities work correctly")
         REQUIRE(ponder::detail::allTrue(true, false, true, true, true, true) == false);
         REQUIRE(ponder::detail::allTrue(true, true, false, true, true, true, true) == false);
         REQUIRE(ponder::detail::allTrue(true, false, true, true, true, false, true, true) == false);
+    }
+    
+    SECTION("type to string")
+    {
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::realType), "real")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::userType), "user")==0);
     }
 }
 

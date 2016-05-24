@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -33,21 +30,39 @@
 
 namespace ponder
 {
+    
 namespace detail
 {
     template <typename T>
-    void destroy(const UserObject& object)
+    void destroy(const UserObject& object, bool destruct)
     {
-        delete object.get<T*>();
+        if (destruct)
+            object.get<T*>() -> ~T();
+        else
+            delete object.get<T*>();
     }
 }
 
 template <typename T>
-ClassBuilder<T> Class::declare(const std::string& name)
+inline ClassBuilder<T> Class::declare(const std::string& name)
 {
-    Class& newClass = detail::ClassManager::instance().addClass(name.empty() ? detail::StaticTypeId<T>::get(false) : name);
+    Class& newClass =
+        detail::ClassManager::instance().addClass(name.empty()
+                                                  ? detail::StaticTypeId<T>::get(false)
+                                                  : name);
+    newClass.m_sizeof = sizeof(T);
     newClass.m_destructor = &detail::destroy<T>;
     return ClassBuilder<T>(newClass);
+}
+
+inline Class::FunctionTable::Iterator Class::functionIterator() const
+{
+    return m_functions.getIterator();
+}
+
+inline Class::PropertyTable::Iterator Class::propertyIterator() const
+{
+    return m_properties.getIterator();
 }
 
 } // namespace ponder

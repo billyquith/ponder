@@ -34,8 +34,10 @@
 #ifndef PONDER_DICTIONARY_HPP
 #define PONDER_DICTIONARY_HPP
 
+#include <ponder/config.hpp>
 #include <utility>
 #include <vector>
+#include <algorithm> // std::lower_bound
 
 namespace ponder
 {
@@ -48,25 +50,45 @@ namespace detail
 template <typename KEY, typename VALUE, class CMP>
 class Dictionary
 {
-    typedef std::pair<KEY,VALUE> pair_t;
+public:
 
-    typedef std::vector<pair_t> container_t;
-    container_t m_contents;
+    struct pair_t : public std::pair<KEY,VALUE> {
+        pair_t() : std::pair<KEY,VALUE>() {}
+        pair_t(const KEY& k, const VALUE& v) : std::pair<KEY,VALUE>(k, v) {}
+        pair_t(const pair_t& p) = default;
+        const KEY& name() const { return std::pair<KEY,VALUE>::first; }
+        const VALUE& value() const { return std::pair<KEY,VALUE>::second; }
+    };
+
+private:
     
     struct KeyCmp {
-        bool operator () (const pair_t& a, const KEY &b) const {
+        bool operator () (const pair_t& a, const KEY& b) const {
             return CMP() (a.first, b);
         }
     };
 
+    typedef std::vector<pair_t> container_t;
+    container_t m_contents;
+    
 public:
     
     typedef typename container_t::const_iterator const_iterator;
     
     const_iterator begin() const    { return m_contents.begin(); }
     const_iterator end() const      { return m_contents.end(); }
+    
+    class Iterator {
+        const_iterator m_begin, m_end;
+    public:
+        Iterator(const_iterator b, const_iterator e) : m_begin(b), m_end(e) {}
+        const_iterator begin() const    { return m_begin; }
+        const_iterator end() const      { return m_end; }
+    };
+    
+    Iterator getIterator() const { return Iterator(begin(), end()); }
 
-    const_iterator findKey(const KEY &key) const
+    const_iterator findKey(const KEY& key) const
     {
         // binary search for key
         const_iterator it(std::lower_bound(m_contents.begin(), m_contents.end(), key, KeyCmp()));
@@ -75,7 +97,7 @@ public:
         return it;
     }
 
-    const_iterator findValue(const VALUE &value) const
+    const_iterator findValue(const VALUE& value) const
     {
         for (auto it = m_contents.begin(); it != m_contents.end(); ++it)
         {
@@ -85,7 +107,7 @@ public:
         return m_contents.end();
     }
 
-    bool tryFind(const KEY &key, const_iterator &returnValue) const
+    bool tryFind(const KEY& key, const_iterator& returnValue) const
     {
         const_iterator it = findKey(key);
         if (it != m_contents.end())
@@ -96,12 +118,12 @@ public:
         return false; // not found
     }
     
-    bool containsKey(const KEY &key) const
+    bool containsKey(const KEY& key) const
     {
         return findKey(key) != m_contents.end();
     }
     
-    bool containsValue(const VALUE &value) const
+    bool containsValue(const VALUE& value) const
     {
         return findValue(value) != m_contents.end();
     }
@@ -121,7 +143,7 @@ public:
         insert(it->first, it->second);
     }
     
-    void erase(const KEY &key)
+    void erase(const KEY& key)
     {
         const_iterator it = findKey(key);
         if (it != m_contents.end())

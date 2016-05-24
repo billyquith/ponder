@@ -22,15 +22,15 @@ endif()
 
 # Set the default test build option to false
 if(NOT BUILD_TEST)
-    set(BUILD_TEST FALSE
-        CACHE BOOL "TRUE to build the unit tests (requires the Boost Test Library), FALSE otherwise."
+    set(BUILD_TEST TRUE
+        CACHE BOOL "TRUE to build the unit tests, FALSE otherwise."
     )
 endif()
 
 # Set the default test build option to false
 if(NOT BUILD_TEST_QT)
     set(BUILD_TEST_QT FALSE
-        CACHE BOOL "TRUE to build the Qt-specific unit tests (requires the Boost Test Library and Qt 4.5), FALSE otherwise."
+        CACHE BOOL "TRUE to build the Qt-specific unit tests (requires Qt 4.5), FALSE otherwise."
     )
 endif()
 

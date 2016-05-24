@@ -30,7 +30,6 @@
 #include <ponder/classget.hpp>
 #include <ponder/userproperty.hpp>
 #include <ponder/classbuilder.hpp>
-#include <ponder/pondertype.hpp>
 #include "catch.hpp"
 
 

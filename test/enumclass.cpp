@@ -29,7 +29,6 @@
 
 #include <ponder/enumget.hpp>
 #include <ponder/errors.hpp>
-#include <ponder/pondertype.hpp>
 #include <ponder/enum.hpp>
 #include "catch.hpp"
 

@@ -88,5 +88,18 @@ TEST_CASE("Ponder has a dictionary")
         REQUIRE(dict->at(3)->first == std::string("foxtrot"));
         REQUIRE(dict->at(4)->first == std::string("zebra"));
     }
+    
+    SECTION("can iterate over key,values")
+    {
+        int count = 0;
+        for (auto it : dict->getIterator())
+        {
+            REQUIRE(dict->at(count)->name() == it.name());
+            REQUIRE(dict->at(count)->value() == it.value());
+            ++count;
+        }
+        REQUIRE(count == 5);
+    }
+
 }
 

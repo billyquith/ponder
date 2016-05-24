@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -41,7 +38,7 @@ class Args;
 class UserObject;
 
 /**
- * \brief ponder::Constructor represents a metaconstructor which is used to create objects instances from metaclasses
+ * \brief Represents a metaconstructor which is used to create objects instances from metaclasses
  *
  * This class is an interface which has to be derived to implement typed constructors.
  *
@@ -68,11 +65,12 @@ public:
     /**
      * \brief Use the constructor to create a new object
      *
+     * \param ptr If not null, use for placement new, otherwise heap allocate using new
      * \param args Set of arguments to pass to the constructor
      *
      * \return Pointer to the new object wrapped in a UserObject, or UserObject::nothing on failure
      */
-    virtual UserObject create(const Args& args) const = 0;
+    virtual UserObject create(void* ptr, const Args& args) const = 0;
 };
 
 } // namespace ponder

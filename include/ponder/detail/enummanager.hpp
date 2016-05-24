@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -76,6 +73,8 @@ public:
      * \return Reference to the new metaenum
      */
     Enum& addClass(const std::string& id);
+    
+    void removeClass(const Enum& me);
 
     /**
      * \brief Get the total number of metaenums

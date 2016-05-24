@@ -28,7 +28,6 @@
  ****************************************************************************/
 
 #include "catch.hpp"
-#include <ponder/pondertype.hpp>
 #include <ponder/classbuilder.hpp>
 #include <string>
 #include <iostream>

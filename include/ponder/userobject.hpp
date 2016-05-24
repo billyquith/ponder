@@ -1,8 +1,5 @@
 /****************************************************************************
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
-**
 ** This file is part of the Ponder library, formerly CAMP.
 **
 ** The MIT License (MIT)
@@ -34,14 +31,12 @@
 #ifndef PONDER_USEROBJECT_HPP
 #define PONDER_USEROBJECT_HPP
 
-
 #include <ponder/args.hpp>
 #include <ponder/classcast.hpp>
 #include <ponder/errors.hpp>
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/objectholder.hpp>
 #include <ponder/detail/util.hpp>
-#include <string>
 
 
 namespace ponder
@@ -135,7 +130,7 @@ public:
     const Class& getClass() const;
 
     /**
-     * \brief Get the value of an object's property
+     * \brief Get the value of an object's property by name
      *
      * This function is defined for convenience, it is a shortcut
      * for `object.getClass().property(name).get(object);`
@@ -150,7 +145,22 @@ public:
     Value get(const std::string& property) const;
 
     /**
-     * \brief Set the value of an object's property
+     * \brief Get the value of an object's property by index
+     *
+     * This function is defined for convenience, it is a shortcut
+     * for `object.getClass().property(index).get(object);`
+     *
+     * \param index Index of the property to get
+     *
+     * \return Current value of the property
+     *
+     * \throw OutOfRange index is invalid
+     * \throw ForbiddenRead \a property is not readable
+     */
+    Value get(std::size_t index) const;
+
+    /**
+     * \brief Set the value of an object's property by name
      *
      * This function is defined for convenience, it is a shortcut
      * for `object.getClass().property(name).set(object, value);`
@@ -163,6 +173,21 @@ public:
      * \throw BadType \a value can't be converted to the property's type
      */
     void set(const std::string& property, const Value& value) const;
+
+    /**
+     * \brief Set the value of an object's property by index
+     *
+     * This function is defined for convenience, it is a shortcut
+     * for `object.getClass().property(index).set(object, value);`
+     *
+     * \param index Index of the property to set
+     * \param value Value to set
+     *
+     * \throw OutOfRange index is invalid
+     * \throw ForbiddenWrite \a property is not writable
+     * \throw BadType \a value can't be converted to the property's type
+     */
+    void set(std::size_t index, const Value& value) const;
 
     /**
      * \brief Call an object's function

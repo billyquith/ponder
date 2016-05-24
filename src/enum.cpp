@@ -35,6 +35,11 @@
 namespace ponder
 {
     
+void Enum::undeclare(const Enum& me)
+{
+    detail::EnumManager::instance().removeClass(me);
+}
+    
 const std::string& Enum::name() const
 {
     return m_name;
