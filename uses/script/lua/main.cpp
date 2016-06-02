@@ -37,6 +37,8 @@ extern "C" {
 #include <lualib.h>
 }
 
+static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
+
 #define LUDB_DECL \
     int db_top(0),zz_ltop=lua_gettop(L),db_d_top(0),db_idx(0); \
     std::string zz_stk; \
@@ -82,15 +84,16 @@ namespace lua {
 //                return 1;
             case userType:
                 {
+                    UserObject vuobj = val.to<UserObject>();
+                    Class const& cls = vuobj.getClass();
                     void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
-                    auto uobj = new(ud) UserObject(val.to<UserObject>());
-                    auto clsName = uobj->getClass().name().c_str();
+                    new(ud) UserObject(cls.construct(Args(val)));
 
                     // set instance metatable
                     lua_pushglobaltable(L);                     // +1   _G
                     lua_pushliteral(L, c_ponder_metatables);    // +1
                     lua_rawget(L, -2);                          // 0 -+ _G.META
-                    lua_pushstring(L, clsName);                 // +1
+                    lua_pushstring(L, cls.name().c_str());      // +1
                     lua_rawget(L, -2);                          // 0 -+ _G_META.MT
                     lua_setmetatable(L, -4);                    // -1
                     lua_pop(L, 2);
@@ -105,7 +108,7 @@ namespace lua {
     
     static int l_method_call(lua_State *L)
     {
-        void *ud = lua_touserdata(L, 1);                // userobj
+        void *ud = lua_touserdata(L, 1);  // userobj
         if (!ud)
         {
             lua_pushliteral(L, "Method call 'this' is null. (Use Class:method() ?)");
@@ -214,8 +217,8 @@ namespace lua {
         const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
         
         ponder::Args args;
-        constexpr auto c_argOffset = 2u;
-        const int nargs = lua_gettop(L) - 1;    // 1st arg is userdata object
+        constexpr auto c_argOffset = 2u;  // 1st arg is userdata object
+        const int nargs = lua_gettop(L) - (c_argOffset-1);
         for (int i = c_argOffset; i < c_argOffset + nargs; ++i)
         {
             const int argtype = lua_type(L, i);
@@ -230,10 +233,18 @@ namespace lua {
                     break;
                     
                 case LUA_TBOOLEAN:
-                    args += lua_toboolean(L, i);
+                    args += (lua_toboolean(L, i) != 0);
                     break;
-                    
-                    // LUA_TTABLE, LUA_TFUNCTION, LUA_TUSERDATA, LUA_TTHREAD, and LUA_TLIGHTUSERDATA.
+
+                case LUA_TUSERDATA:
+                    {
+                        void *ud = lua_touserdata(L, i);
+                        UserObject uobj(*(UserObject**)ud);
+                        args += uobj;
+                        break;
+                    }
+
+                    // LUA_TTABLE, LUA_TFUNCTION, LUA_TTHREAD, and LUA_TLIGHTUSERDATA.
                     
                 default:
                     lua_pushstring(L, fmt::format("Argument {0} is bad type {1}",
@@ -335,6 +346,7 @@ namespace lib
         
         Vec2f()                         : x(0), y(0) {}
         Vec2f(float x_, float y_)       : x(x_), y(y_) {}
+        Vec2f(const Vec2f& o)           : x(o.x), y(o.y) {}
         
         bool operator == (const Vec2f& o) const {
             const float dx = x - o.x, dy = y - o.y;
@@ -377,9 +389,13 @@ namespace lib
     
     void declare()
     {
+        ponder::Class::declare<ponder::UserObject>()
+            ;
+        
         ponder::Class::declare<Vec2f>()
             .constructor()
             .constructor<float, float>()
+            .constructor<const Vec2f&>()
             .property("x", &Vec2f::x)
             .property("y", &Vec2f::y)
             .function("set", &Vec2f::set)
@@ -392,6 +408,7 @@ namespace lib
     
 } // namespace lib
 
+PONDER_TYPE(ponder::UserObject)
 PONDER_TYPE(lib::Vec2f)
 
 int main()
