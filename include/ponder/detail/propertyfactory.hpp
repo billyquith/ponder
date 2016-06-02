@@ -393,10 +393,13 @@ struct PropertyFactory2
  * Specialization of PropertyFactory2 with 2 getters (which will produce 1 composed getter)
  */
 template <typename C, typename F1, typename F2>
-struct PropertyFactory2<C, F1, F2, typename std::enable_if< !std::is_void<typename FunctionTraits<F2>::ReturnType>::value>::type >
+struct PropertyFactory2<C, F1, F2,
+    typename std::enable_if< !std::is_void<typename FunctionTraits<F2>::ReturnType>::value
+                            >::type >
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
-    typedef typename std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
+    typedef typename \
+        std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
 
     static Property* get(const std::string& name, F1 accessor1, F2 accessor2)
     {
@@ -425,8 +428,9 @@ struct PropertyFactory3
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
         typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
 
-        return new PropertyType(name, AccessorType(std::bind(accessor1, std::bind(accessor3, _1)),
-                                                   std::bind(accessor2, std::bind(accessor3, _1), _2)));
+        return new PropertyType(name,
+            AccessorType(std::bind(accessor1, std::bind(accessor3, _1)),
+                         std::bind(accessor2, std::bind(accessor3, _1), _2)));
     }
 };
 
