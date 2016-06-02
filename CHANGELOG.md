@@ -2,10 +2,6 @@
 Ponder Changelog
 ----------------
 
-### 1.2
-
-- Properties now support method chaining (#28) or named parameter idiom.
-
 ### 1.1
 
 - Placement new creation of objects added.
