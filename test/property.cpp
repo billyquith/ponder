@@ -121,6 +121,10 @@ namespace PropertyTest
         MyEnum p22; MyEnum* getP22() {return &p22;}
         std::string getP23(const std::string& str) const {return str + "23";}
         MyType p24; const MyType& getP24() const {return p24;} void setP24(MyType t) {p24 = t;}
+        
+        // ***** poperties that support method chaining *****
+        int getP2() const { return p2; }
+        MyClass& setWithChain(int i) { p2 = i; return *this; }
     };
     
     bool getP1(const MyClass& object) {return object.p1;}
@@ -185,6 +189,9 @@ namespace PropertyTest
             .property("p23", std::bind(&MyClass::getP23, _1, "str")) // read-only getter + extra parameter
             .property("p24", std::bind(&MyClass::getP24, _1),
                       std::bind(&MyClass::setP24, _1, _2))    // read-only getter + write-only setter
+        
+            // ***** with method chaining *****
+            .property("p25", &MyClass::getP2, &MyClass::setWithChain) // member, method chaining
             ;
     }
 }

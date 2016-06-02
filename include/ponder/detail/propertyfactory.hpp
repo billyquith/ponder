@@ -391,11 +391,18 @@ struct PropertyFactory2
 
 /*
  * Specialization of PropertyFactory2 with 2 getters (which will produce 1 composed getter)
+ *
+ *      class Container { Object o; };
+ *
+ *  Here we assume that for all composed getters type <Container> != type <Object>.
  */
 template <typename C, typename F1, typename F2>
 struct PropertyFactory2<C, F1, F2,
-    typename std::enable_if< !std::is_void<typename FunctionTraits<F2>::ReturnType>::value
-                            >::type >
+    typename std::enable_if<
+            !std::is_void<typename FunctionTraits<F2>::ReturnType>::value &&
+            !std::is_same<C, typename std::remove_reference<
+                                typename FunctionTraits<F2>::ReturnType>::type >::value
+                             >::type >
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
     typedef typename \
