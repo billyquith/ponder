@@ -22,8 +22,8 @@ install:
 before_script:
   - cmake --version
   - mkdir build && cd build
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; cmake .. -G Xcode -DBUILD_TEST=TRUE; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; cmake .. -G "Unix Makefiles" -DBUILD_TEST=TRUE; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake .. -G Xcode -DBUILD_TEST=TRUE; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake .. -G "Unix Makefiles" -DBUILD_TEST=TRUE; fi
 script:
   - cmake --build . --target pondertest --config Release && ./test/Release/pondertest 
 
