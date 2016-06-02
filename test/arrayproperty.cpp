@@ -42,7 +42,7 @@ namespace ArrayPropertyTest
     {
         MyType(int x_) : x(x_) {}
         
-        bool operator ==(const MyType& other) const
+        bool operator == (const MyType& other) const
         {
             return x == other.x;
         }
