@@ -189,8 +189,8 @@ static const char* c_typeNames[] =
 
 const char* typeAsString(Type t)
 {
-    
-    return c_typeNames[static_cast<int>(t)];
+    const unsigned int i = static_cast<unsigned int>(t);
+    return i <= static_cast<unsigned int>(Type::User) ? c_typeNames[i] : "unknown";
 }
 
 } // namespace detail
