@@ -4,7 +4,8 @@ Ponder Changelog
 
 ### 1.2
 
-- Properties now support method chaining (#28) or named parameter idiom.
+- Properties now support method chaining or named parameter idiom (issue #28).
+- Change ponder::Type to enum class (issue #26).
 
 ### 1.1
 
