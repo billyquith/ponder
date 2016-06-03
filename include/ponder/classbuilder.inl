@@ -57,7 +57,8 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     // Compute the offset to apply for pointer conversions
     T* asDerived = reinterpret_cast<T*>(1);
     U* asBase = static_cast<U*>(asDerived);
-    int offset = static_cast<int>(reinterpret_cast<char*>(asBase) - reinterpret_cast<char*>(asDerived));
+    int offset = static_cast<int>(reinterpret_cast<char*>(asBase) -
+                                  reinterpret_cast<char*>(asDerived));
 
     // Add the base metaclass to the bases of the current class
     Class::BaseInfo baseInfos;
@@ -88,7 +89,7 @@ template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F accessor)
 {
-    // Find the factory which will be able to construct a ponder::Property from an accessor of type F
+    // Find factory able to construct a Property from an accessor of type F
     typedef detail::PropertyFactory1<T, F> Factory;
 
     // Construct and add the metaproperty
@@ -99,7 +100,7 @@ template <typename T>
 template <typename F1, typename F2>
 ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1, F2 accessor2)
 {
-    // Find the factory which will be able to construct a ponder::Property from accessors of type F1 and F2
+    // Find factory able to construct a Property from accessors of type F1 and F2
     typedef detail::PropertyFactory2<T, F1, F2> Factory;
 
     // Construct and add the metaproperty
@@ -110,7 +111,7 @@ template <typename T>
 template <typename F1, typename F2, typename F3>
 ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1, F2 accessor2, F3 accessor3)
 {
-    // Find the factory which will be able to construct a ponder::Property from accessors of type F1, F2 and F3
+    // Find factory able to construct a Property from accessors of type F1, F2 and F3
     typedef detail::PropertyFactory3<T, F1, F2, F3> Factory;
 
     // Construct and add the metaproperty
@@ -144,7 +145,8 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F1 function1
     typedef typename detail::FunctionTraits<F2>::type Signature2;
 
     // Construct and add the metafunction
-    return addFunction(new detail::FunctionImpl<Signature1, Signature2>(name, function1, function2));
+    return addFunction(
+        new detail::FunctionImpl<Signature1, Signature2>(name, function1, function2) );
 }
 
 template <typename T>
@@ -162,7 +164,8 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 
     // For the special case of Getter<Value>, the ambiguity between both constructors
     // cannot be automatically solved, so let's do it manually
-    typedef typename detail::if_c<detail::FunctionTraits<U>::isFunction, std::function<Value (T&)>, Value>::type Type;
+    typedef typename detail::if_c<detail::FunctionTraits<U>::isFunction,
+                                  std::function<Value (T&)>, Value>::type Type;
 
     // Add the new tag (override if already exists)
     m_currentTagHolder->m_tags[id] = detail::Getter<Value>(Type(value));

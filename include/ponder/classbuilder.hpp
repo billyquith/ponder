@@ -125,8 +125,9 @@ public:
      * two getters which must be composed to form a single getter.
      * If F1 is a direct pointer-to-member, it is considered both a getter and a setter.
      *
-     * Having two getters allows to expose a property which requires an extra level of indirection to be accessed
-     * (for example, a property of a member of the class instead of a property of the class itself).
+     * Having two getters allows to expose a property which requires an extra level of 
+     * indirection to be accessed (for example, a property of a member of the class instead of 
+     * a property of the class itself).
      *
      * Example:
      *
@@ -147,7 +148,8 @@ public:
      *
      * \param name Name of the property (must be unique within the metaclass)
      * \param accessor1 First accessor to the C++ implementation of the property (getter)
-     * \param accessor2 Second accessor to the C++ implementation of the property (setter or getter to compose)
+     * \param accessor2 Second accessor to the C++ implementation of the property (setter or 
+     *        getter to compose)
      *
      * \return Reference to this, in order to chain other calls
      */
@@ -160,8 +162,9 @@ public:
      * The accessor1 and accessor2 arguments are a pair of getter/setter, accessor3 is
      * an accessor to compose to accessor1 and accessor2 to get the final accessors.
      *
-     * This allows to expose a property which requires an extra level of indirection to be accessed
-     * (for example, a property of a member of the class instead of a property of the class itself).
+     * This allows to expose a property which requires an extra level of indirection to 
+     * be accessed (for example, a property of a member of the class instead of a property of 
+     * the class itself).
      *
      * Example:
      *
@@ -183,8 +186,10 @@ public:
      * };
      *
      * ponder::Class::declare<Entity>("Entity")
-     *     .property("x", &Point::getX, &Point::setX, &Entity::p)  // will internally resolve to e.p.get/setX()
-     *     .property("y", &Point::getY, &Point::setY, &Entity::p); // will internally resolve to e.p.get/setY()
+     *     // will internally resolve to e.p.get/setX()
+     *     .property("x", &Point::getX, &Point::setX, &Entity::p)
+     *     // will internally resolve to e.p.get/setY()
+     *     .property("y", &Point::getY, &Point::setY, &Entity::p);
      * \endcode
      *
      * \param name Name of the property (must be unique within the metaclass)
@@ -227,8 +232,9 @@ public:
     /**
      * \brief Declare a new function from two functions to compose
      *
-     * This allows to expose a function which requires an extra level of indirection to be accessed
-     * (for example, a function of a member of the class instead of a function of the class itself).
+     * This allows to expose a function which requires an extra level of indirection to be 
+     * accessed (for example, a function of a member of the class instead of a function of the 
+     * class itself).
      *
      * Example:
      *
