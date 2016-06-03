@@ -49,13 +49,13 @@ namespace ponder
  * To handle one of the possible types of the value, just write the corresponding \c operator() function.
  * Here is the list of the mapping between Ponder types and their corresponding C++ types:
  *
- * \li ponder::noType --> ponder::NoType
- * \li ponder::boolType --> bool
- * \li ponder::intType --> long
- * \li ponder::realType --> double
- * \li ponder::stringType --> std::string
- * \li ponder::enumType --> ponder::EnumObject
- * \li ponder::userType --> ponder::UserObject
+ * \li ponder::Type::None --> ponder::NoType
+ * \li ponder::Type::Boolean --> bool
+ * \li ponder::Type::Integer --> long
+ * \li ponder::Type::Real --> double
+ * \li ponder::Type::String --> std::string
+ * \li ponder::Type::Enum --> ponder::EnumObject
+ * \li ponder::Type::User --> ponder::UserObject
  *
  * Here an example of a unary visitor which creates an editor for the value based on its type
  * \code

@@ -36,7 +36,7 @@ namespace ponder
 {
     
 EnumProperty::EnumProperty(const std::string& name, const Enum& propEnum)
-    : Property(name, enumType)
+    : Property(name, Type::Enum)
     , m_enum(&propEnum)
 {
 }

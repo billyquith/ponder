@@ -39,7 +39,7 @@ const Value Value::nothing;
 
 Value::Value()
     : m_value(NoType())
-    , m_type(noType)
+    , m_type(Type::None)
 {
 }
 

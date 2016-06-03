@@ -70,7 +70,7 @@ TEST_CASE("Ponder has user properties")
     const ponder::UserProperty* property =
         static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
     
-    REQUIRE(property->type() == ponder::userType);
+    REQUIRE((property->type() == ponder::Type::User));
     REQUIRE((property->getClass() == ponder::classByType<UserPropertyTest::MyType>()));
     
     SECTION("properties can be got")

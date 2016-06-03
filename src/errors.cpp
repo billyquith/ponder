@@ -30,6 +30,7 @@
 
 #include <ponder/errors.hpp>
 #include <ponder/class.hpp>
+#include <ponder/detail/util.hpp>
 
 
 namespace ponder
@@ -48,18 +49,7 @@ BadType::BadType(const std::string& message)
 
 std::string BadType::typeName(Type type)
 {
-    switch (type)
-    {
-        case noType:     return "none";
-        case boolType:   return "boolean";
-        case intType:    return "integer";
-        case realType:   return "real";
-        case stringType: return "string";
-        case enumType:   return "enum";
-        case arrayType:  return "array";
-        case userType:   return "user";
-        default:         return "unknown";
-    }
+    return detail::typeAsString(type);
 }
 
 BadArgument::BadArgument(Type provided, Type expected, std::size_t index, const std::string& functionName)

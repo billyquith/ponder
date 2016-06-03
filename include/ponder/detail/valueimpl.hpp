@@ -62,7 +62,7 @@ struct ConvertVisitor
     T operator()(NoType) const
     {
         // Error: trying to convert an empty value
-        PONDER_ERROR(BadType(noType, mapType<T>()));
+        PONDER_ERROR(BadType(Type::None, mapType<T>()));
     }
 };
 
