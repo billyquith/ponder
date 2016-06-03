@@ -24,5 +24,5 @@ build_script:
   - cmd: cmake --build . --config "%CFG%"
 
 test_script:
-  - cmd: cd test && ctest --output-on-failure -C "%CFG%" -V
+  - cmd: cd test && ctest -C "%CFG%" -V
   
