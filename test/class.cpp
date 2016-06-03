@@ -83,6 +83,30 @@ namespace ClassTest
         T testMember_;
     };
     
+    
+    class VirtualBase
+    {
+    public:
+        int a;
+    };
+    
+    class VirtualX : public virtual VirtualBase
+    {
+    };
+
+    class VirtualY : public virtual VirtualBase
+    {
+    };
+
+    class VirtualZ : public VirtualBase
+    {
+    };
+    
+    class VirtualUser : public VirtualX, public VirtualY, public VirtualZ
+    {
+    };
+    
+    
     void declare()
     {
         ponder::Class::declare<MyClass>("ClassTest::MyClass")
@@ -105,6 +129,29 @@ namespace ClassTest
         ponder::Class::declare< TemplateClass<int> >()
             .constructor()
             .property("TestMember", &TemplateClass<int>::testMember_);
+
+#if 1
+        ponder::Class::declare< VirtualBase >()
+            ;
+
+        ponder::Class::declare< VirtualX >()
+            .base< VirtualBase >()
+            ;
+
+        ponder::Class::declare< VirtualY >()
+            .base< VirtualBase >()
+            ;
+
+        ponder::Class::declare< VirtualZ >()
+            .base< VirtualBase >()
+            ;
+        
+        ponder::Class::declare< VirtualUser >()
+            .base< VirtualX >()
+            .base< VirtualY >()
+            .base< VirtualZ >()
+            ;
+#endif
     }
     
     void declare_temp()
@@ -136,6 +183,12 @@ PONDER_AUTO_TYPE(ClassTest::Derived, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::DerivedNoRtti, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::Derived2NoRtti, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::TemplateClass<int>, &ClassTest::declare)
+
+PONDER_AUTO_TYPE(ClassTest::VirtualBase, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::VirtualX, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::VirtualY, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::VirtualZ, &ClassTest::declare)
+PONDER_AUTO_TYPE(ClassTest::VirtualUser, &ClassTest::declare)
 
 PONDER_TYPE(ClassTest::TemporaryRegistration);
 
@@ -351,7 +404,7 @@ TEST_CASE("Classes can by undeclared")
 }
 
 
-TEST_CASE("Classes can be templated")
+TEST_CASE("Classes can be templates")
 {
     auto const& metaclass = ponder::classByType< TemplateClass<int> >();
 
@@ -360,5 +413,18 @@ TEST_CASE("Classes can be templated")
     
     auto const& obj = metaclass.construct();
 }
+
+
+TEST_CASE("Classes can have virtual inhertitance")
+{
+    auto const& metaclass = ponder::classByType< VirtualUser >();
+    
+    auto const& baseX = metaclass.base(0);
+
+    auto vuobj = metaclass.construct();
+    
+    auto vx = ponder::classCast(vuobj.pointer(), metaclass, baseX);
+}
+
 
 

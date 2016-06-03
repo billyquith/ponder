@@ -40,8 +40,8 @@ ClassBuilder<T>::ClassBuilder(Class& target)
 {
 }
 
-template <typename T>
-template <typename U>
+template <typename T>   // class
+template <typename U>   // base
 ClassBuilder<T>& ClassBuilder<T>::base()
 {
     // Retrieve the base metaclass and its name
@@ -55,7 +55,10 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     }
 
     // Compute the offset to apply for pointer conversions
-    T* asDerived = reinterpret_cast<T*>(1);
+    // - Use pointer dummy buffer here as some platforms seem to trap bad memory access even
+    //   though not dereferencing the pointer.
+    char buff[16];
+    T* asDerived = reinterpret_cast<T*>(buff);
     U* asBase = static_cast<U*>(asDerived);
     int offset = static_cast<int>(reinterpret_cast<char*>(asBase) -
                                   reinterpret_cast<char*>(asDerived));
