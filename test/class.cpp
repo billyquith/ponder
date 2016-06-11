@@ -32,6 +32,8 @@
 #include <ponder/classbuilder.hpp>
 #include "catch.hpp"
 
+#define TEST_VIRTUAL 0
+
 namespace ClassTest
 {
     struct MyExplicityDeclaredClass
@@ -130,7 +132,7 @@ namespace ClassTest
             .constructor()
             .property("TestMember", &TemplateClass<int>::testMember_);
 
-#if 1
+#if TEST_VIRTUAL
         ponder::Class::declare< VirtualBase >()
             ;
 
@@ -414,7 +416,7 @@ TEST_CASE("Classes can be templates")
     auto const& obj = metaclass.construct();
 }
 
-
+#if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")
 {
     auto const& metaclass = ponder::classByType< VirtualUser >();
@@ -425,6 +427,6 @@ TEST_CASE("Classes can have virtual inhertitance")
     
     auto vx = ponder::classCast(vuobj.pointer(), metaclass, baseX);
 }
-
+#endif
 
 
