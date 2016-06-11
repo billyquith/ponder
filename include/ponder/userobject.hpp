@@ -315,10 +315,17 @@ private:
 
 private:
 
-    const Class* m_class; ///< Metaclass of the stored object
-    std::shared_ptr<detail::AbstractObjectHolder> m_holder; ///< Optional abstract holder storing the object
-    std::unique_ptr<ParentObject> m_parent; ///< Optional parent object
-    const UserObject* m_child; ///< Optional pointer to the child object (m_parent.object.m_child == this)
+    /// Metaclass of the stored object
+    const Class* m_class;
+    
+    /// Optional abstract holder storing the object
+    std::shared_ptr<detail::AbstractObjectHolder> m_holder;
+    
+    /// Optional parent object
+    std::unique_ptr<ParentObject> m_parent;
+    
+    /// Optional pointer to the child object (m_parent.object.m_child == this)
+    const UserObject* m_child;
 };
 
 
