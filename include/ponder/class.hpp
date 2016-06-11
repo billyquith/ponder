@@ -140,7 +140,7 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     ConstructorList m_constructors; ///< List of metaconstructors
     Destructor m_destructor;    ///< Destructor (function that is able to delete an abstract object)
 
-public:
+public:     // declaration
 
     /**
      * \brief Declare a new metaclass
@@ -173,7 +173,7 @@ public:
      */
     static void undeclare(const Class& cls);
 
-public:
+public:     // reflection
 
     /**
      * \brief Return the name of the metaclass
@@ -213,6 +213,8 @@ public:
      * \return Number of constructors
      */
     std::size_t constructorCount() const;
+    
+    
     
     /**
      * \brief Destroy an instance of the C++ class bound to the metaclass
