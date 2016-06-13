@@ -50,12 +50,12 @@ std::size_t Function::argCount() const
     return m_argTypes.size();
 }
 
-Type Function::returnType() const
+ValueType Function::returnType() const
 {
     return m_returnType;
 }
 
-Type Function::argType(std::size_t index) const
+ValueType Function::argType(std::size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_argTypes.size())
@@ -88,7 +88,9 @@ void Function::accept(ClassVisitor& visitor) const
     visitor.visit(*this);
 }
 
-Function::Function(const std::string& name, Type returnType, const std::vector<Type>& argTypes)
+Function::Function(const std::string& name,
+                   ValueType returnType,
+                   const std::vector<ValueType>& argTypes)
     : m_name(name)
     , m_returnType(returnType)
     , m_argTypes(argTypes)

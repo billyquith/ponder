@@ -168,7 +168,7 @@ private:
      *
      * \return Return type of the meta method
      */
-    static ponder::Type returnType(const QMetaMethod& metaMethod)
+    static ponder::ValueType returnType(const QMetaMethod& metaMethod)
     {
         return QtHelper::type(metaMethod.typeName());
     }
@@ -180,9 +180,9 @@ private:
      *
      * \return Arguments types of the meta method
      */
-    static std::vector<ponder::Type> argTypes(const QMetaMethod& metaMethod)
+    static std::vector<ponder::ValueType> argTypes(const QMetaMethod& metaMethod)
     {
-        std::vector<ponder::Type> types;
+        std::vector<ponder::ValueType> types;
 
         QList<QByteArray> args = metaMethod.parameterTypes();
         Q_FOREACH(QByteArray arg, args)

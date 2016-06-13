@@ -52,7 +52,7 @@ public:
      * \param elementType Type of the property
      * \param dynamic Tells if the array is dynamic or not
      */
-    ArrayProperty(const std::string& name, Type elementType, bool dynamic);
+    ArrayProperty(const std::string& name, ValueType elementType, bool dynamic);
 
     /**
      * \brief Destructor
@@ -64,7 +64,7 @@ public:
      *
      * \return Type of elements
      */
-    Type elementType() const;
+    ValueType elementType() const;
 
     /**
      * \brief Check if the array is dynamic
@@ -251,7 +251,7 @@ protected:
 
 private:
 
-    Type m_elementType; ///< Type of the individual elements of the array
+    ValueType m_elementType; ///< Type of the individual elements of the array
     bool m_dynamic; ///< Is the array dynamic?
 };
 

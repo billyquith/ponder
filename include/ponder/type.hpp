@@ -44,11 +44,11 @@ struct NoType
 };
 
 /**
- * \brief Enumeration of abstract types supported by Ponder
+ * \brief Enumeration of abstract value types supported by Ponder
  *
  * \sa ValueMapper
  */
-enum class Type
+enum class ValueType
 {
     None,       ///< No type has been defined yet
     Boolean,    ///< Boolean type (bool)

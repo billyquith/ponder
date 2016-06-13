@@ -54,7 +54,7 @@ public:
      * \param provided Provided type
      * \param expected Expected type
      */
-    BadType(Type provided, Type expected);
+    BadType(ValueType provided, ValueType expected);
 
 protected:
 
@@ -72,7 +72,7 @@ protected:
      *
      * \return Name of the provided type
      */
-    static std::string typeName(Type type);
+    static std::string typeName(ValueType type);
 };
 
 /**
@@ -91,7 +91,8 @@ public:
      * \param index Index of the argument in the function prototype
      * \param functionName Name of the function
      */
-    BadArgument(Type provided, Type expected, std::size_t index, const std::string& functionName);
+    BadArgument(ValueType provided, ValueType expected,
+                std::size_t index, const std::string& functionName);
 };
 
 /**

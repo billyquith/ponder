@@ -66,41 +66,41 @@ namespace ValueTest
         Two = 2
     };
     
-    struct Visitor : public ponder::ValueVisitor<ponder::Type>
+    struct Visitor : public ponder::ValueVisitor<ponder::ValueType>
     {
-        ponder::Type operator()(ponder::NoType)
+        ponder::ValueType operator()(ponder::NoType)
         {
-            return ponder::Type::None;
+            return ponder::ValueType::None;
         }
         
-        ponder::Type operator()(bool)
+        ponder::ValueType operator()(bool)
         {
-            return ponder::Type::Boolean;
+            return ponder::ValueType::Boolean;
         }
         
-        ponder::Type operator()(long)
+        ponder::ValueType operator()(long)
         {
-            return ponder::Type::Integer;
+            return ponder::ValueType::Integer;
         }
         
-        ponder::Type operator()(double)
+        ponder::ValueType operator()(double)
         {
-            return ponder::Type::Real;
+            return ponder::ValueType::Real;
         }
         
-        ponder::Type operator()(const std::string&)
+        ponder::ValueType operator()(const std::string&)
         {
-            return ponder::Type::String;
+            return ponder::ValueType::String;
         }
         
-        ponder::Type operator()(const ponder::EnumObject&)
+        ponder::ValueType operator()(const ponder::EnumObject&)
         {
-            return ponder::Type::Enum;
+            return ponder::ValueType::Enum;
         }
         
-        ponder::Type operator()(const ponder::UserObject&)
+        ponder::ValueType operator()(const ponder::UserObject&)
         {
-            return ponder::Type::User;
+            return ponder::ValueType::User;
         }
     };
     
@@ -145,22 +145,22 @@ TEST_CASE("Ponder has variant values")
     
     SECTION("values have type")
     {
-        REQUIRE((noValue.type() ==      ponder::Type::None));
-        REQUIRE((boolValue.type() ==    ponder::Type::Boolean));
-        REQUIRE((charValue.type() ==    ponder::Type::Integer));
-        REQUIRE((shortValue.type() ==   ponder::Type::Integer));
-        REQUIRE((intValue.type() ==     ponder::Type::Integer));
-        REQUIRE((longValue.type() ==    ponder::Type::Integer));
-        REQUIRE((ucharValue.type() ==   ponder::Type::Integer));
-        REQUIRE((ushortValue.type() ==  ponder::Type::Integer));
-        REQUIRE((uintValue.type() ==    ponder::Type::Integer));
-        REQUIRE((ulongValue.type() ==   ponder::Type::Integer));
-        REQUIRE((floatValue.type() ==   ponder::Type::Real));
-        REQUIRE((doubleValue.type() ==  ponder::Type::Real));
-        REQUIRE((cstringValue.type() == ponder::Type::String));
-        REQUIRE((stringValue.type() ==  ponder::Type::String));
-        REQUIRE((enumValue.type() ==    ponder::Type::Enum));
-        REQUIRE((objectValue.type() ==  ponder::Type::User));
+        REQUIRE((noValue.type() ==      ponder::ValueType::None));
+        REQUIRE((boolValue.type() ==    ponder::ValueType::Boolean));
+        REQUIRE((charValue.type() ==    ponder::ValueType::Integer));
+        REQUIRE((shortValue.type() ==   ponder::ValueType::Integer));
+        REQUIRE((intValue.type() ==     ponder::ValueType::Integer));
+        REQUIRE((longValue.type() ==    ponder::ValueType::Integer));
+        REQUIRE((ucharValue.type() ==   ponder::ValueType::Integer));
+        REQUIRE((ushortValue.type() ==  ponder::ValueType::Integer));
+        REQUIRE((uintValue.type() ==    ponder::ValueType::Integer));
+        REQUIRE((ulongValue.type() ==   ponder::ValueType::Integer));
+        REQUIRE((floatValue.type() ==   ponder::ValueType::Real));
+        REQUIRE((doubleValue.type() ==  ponder::ValueType::Real));
+        REQUIRE((cstringValue.type() == ponder::ValueType::String));
+        REQUIRE((stringValue.type() ==  ponder::ValueType::String));
+        REQUIRE((enumValue.type() ==    ponder::ValueType::Enum));
+        REQUIRE((objectValue.type() ==  ponder::ValueType::User));
     }
 
     SECTION("boolean values can be converted to other types")
@@ -413,22 +413,22 @@ TEST_CASE("Ponder has variant values")
     {
         Visitor visitor;
 
-        REQUIRE((noValue.visit(visitor) ==      ponder::Type::None));
-        REQUIRE((boolValue.visit(visitor) ==    ponder::Type::Boolean));
-        REQUIRE((charValue.visit(visitor) ==    ponder::Type::Integer));
-        REQUIRE((shortValue.visit(visitor) ==   ponder::Type::Integer));
-        REQUIRE((intValue.visit(visitor) ==     ponder::Type::Integer));
-        REQUIRE((longValue.visit(visitor) ==    ponder::Type::Integer));
-        REQUIRE((ucharValue.visit(visitor) ==   ponder::Type::Integer));
-        REQUIRE((ushortValue.visit(visitor) ==  ponder::Type::Integer));
-        REQUIRE((uintValue.visit(visitor) ==    ponder::Type::Integer));
-        REQUIRE((ulongValue.visit(visitor) ==   ponder::Type::Integer));
-        REQUIRE((floatValue.visit(visitor) ==   ponder::Type::Real));
-        REQUIRE((doubleValue.visit(visitor) ==  ponder::Type::Real));
-        REQUIRE((cstringValue.visit(visitor) == ponder::Type::String));
-        REQUIRE((stringValue.visit(visitor) ==  ponder::Type::String));
-        REQUIRE((enumValue.visit(visitor) ==    ponder::Type::Enum));
-        REQUIRE((objectValue.visit(visitor) ==  ponder::Type::User));
+        REQUIRE((noValue.visit(visitor) ==      ponder::ValueType::None));
+        REQUIRE((boolValue.visit(visitor) ==    ponder::ValueType::Boolean));
+        REQUIRE((charValue.visit(visitor) ==    ponder::ValueType::Integer));
+        REQUIRE((shortValue.visit(visitor) ==   ponder::ValueType::Integer));
+        REQUIRE((intValue.visit(visitor) ==     ponder::ValueType::Integer));
+        REQUIRE((longValue.visit(visitor) ==    ponder::ValueType::Integer));
+        REQUIRE((ucharValue.visit(visitor) ==   ponder::ValueType::Integer));
+        REQUIRE((ushortValue.visit(visitor) ==  ponder::ValueType::Integer));
+        REQUIRE((uintValue.visit(visitor) ==    ponder::ValueType::Integer));
+        REQUIRE((ulongValue.visit(visitor) ==   ponder::ValueType::Integer));
+        REQUIRE((floatValue.visit(visitor) ==   ponder::ValueType::Real));
+        REQUIRE((doubleValue.visit(visitor) ==  ponder::ValueType::Real));
+        REQUIRE((cstringValue.visit(visitor) == ponder::ValueType::String));
+        REQUIRE((stringValue.visit(visitor) ==  ponder::ValueType::String));
+        REQUIRE((enumValue.visit(visitor) ==    ponder::ValueType::Enum));
+        REQUIRE((objectValue.visit(visitor) ==  ponder::ValueType::User));
     }
 
     SECTION("values can be compared for equality")

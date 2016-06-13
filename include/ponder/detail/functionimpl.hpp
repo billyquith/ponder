@@ -130,7 +130,7 @@ public:
      * \brief Constructor
      */
     FunctionImpl(const std::string& name, std::function<R (C, A...)> function)
-        :   Function(name, mapType<R>(), std::vector<Type> { mapType<A>()... })
+        :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
         ,   m_function(function)
     {
     }
@@ -163,7 +163,7 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>()})
+        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2))
     {
     }
@@ -198,7 +198,7 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>()})
+        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3))
     {
     }
@@ -234,7 +234,7 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
+        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4))
     {
     }
@@ -271,7 +271,7 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
+        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5))
     {
     }
@@ -309,7 +309,7 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
+        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5, _6))
     {
     }

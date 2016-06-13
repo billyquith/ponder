@@ -177,20 +177,20 @@ bool conv(const std::string& from, double& to)
 
 static const char* c_typeNames[] =
 {
-    "none",     // Type::None
-    "bool",     // Type::Boolean
-    "int",      // Type::Integer,
-    "real",     // Type::Real,
-    "string",   // Type::String,
-    "enum",     // Type::Enum,
-    "array",    // Type::Array,
-    "user",     // Type::User
+    "none",     // ValueType::None
+    "bool",     // ValueType::Boolean
+    "int",      // ValueType::Integer,
+    "real",     // ValueType::Real,
+    "string",   // ValueType::String,
+    "enum",     // ValueType::Enum,
+    "array",    // ValueType::Array,
+    "user",     // ValueType::User
 };
 
-const char* typeAsString(Type t)
+const char* typeAsString(ValueType t)
 {
     const unsigned int i = static_cast<unsigned int>(t);
-    return i <= static_cast<unsigned int>(Type::User) ? c_typeNames[i] : "unknown";
+    return i <= static_cast<unsigned int>(ValueType::User) ? c_typeNames[i] : "unknown";
 }
 
 } // namespace detail

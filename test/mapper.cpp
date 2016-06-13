@@ -108,7 +108,7 @@ namespace MapperTest
         public:
             
             MyProperty(const std::string& name)
-            : ponder::SimpleProperty(name, ponder::Type::Integer)
+            : ponder::SimpleProperty(name, ponder::ValueType::Integer)
             {
             }
             
@@ -131,7 +131,7 @@ namespace MapperTest
         public:
             
             MyFunction(const std::string& name)
-            : ponder::Function(name, ponder::Type::String)
+            : ponder::Function(name, ponder::ValueType::String)
             {
             }
             
@@ -172,8 +172,8 @@ TEST_CASE("Mapper test data checks")
 
     SECTION("check types")
     {
-        REQUIRE((metaclass->property(0).type() == ponder::Type::Integer));
-        REQUIRE((metaclass->function(0).returnType() == ponder::Type::String));
+        REQUIRE((metaclass->property(0).type() == ponder::ValueType::Integer));
+        REQUIRE((metaclass->function(0).returnType() == ponder::ValueType::String));
     }
 
     SECTION("argCount")

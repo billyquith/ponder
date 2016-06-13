@@ -98,7 +98,7 @@ public:
      *
      * \return Type of the value
      */
-    Type type() const;
+    ValueType type() const;
 
     /**
      * \brief Convert the value to the type T
@@ -199,7 +199,7 @@ private:
                                   std::string, EnumObject, UserObject> Variant;
 
     Variant m_value; ///< Stored value
-    Type m_type; ///< Ponder type of the value
+    ValueType m_type; ///< Ponder type of the value
 };
 
 /**

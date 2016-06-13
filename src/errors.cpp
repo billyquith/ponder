@@ -36,7 +36,7 @@
 namespace ponder
 {
     
-BadType::BadType(Type provided, Type expected)
+BadType::BadType(ValueType provided, ValueType expected)
     : Error("value of type " + typeName(provided) + 
             " couldn't be converted to type " + typeName(expected))
 {
@@ -47,13 +47,13 @@ BadType::BadType(const std::string& message)
 {
 }
 
-std::string BadType::typeName(Type type)
+std::string BadType::typeName(ValueType type)
 {
     return detail::typeAsString(type);
 }
 
-BadArgument::BadArgument(Type provided,
-                         Type expected,
+BadArgument::BadArgument(ValueType provided,
+                         ValueType expected,
                          std::size_t index,
                          const std::string& functionName)
     : BadType("the argument #" + str(index) + " of function " + functionName +

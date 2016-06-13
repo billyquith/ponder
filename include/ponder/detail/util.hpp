@@ -165,17 +165,25 @@ namespace detail
     template<> struct make_index_sequence<1> : index_sequence<0> { };
     
     // Return true if all args true. Useful for variadic template expansions.
-    static inline bool allTrue() {return true;}
-    static inline bool allTrue(bool a0) {return a0;}
-    static inline bool allTrue(bool a0,bool a1) {return a0 & a1;}
-    static inline bool allTrue(bool a0,bool a1,bool a2) {return a0 & a1 & a2;}
-    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3) {return a0 & a1 & a2 & a3;}
-    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4) {return a0 & a1 & a2 & a3 & a4;}
-    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5) {return a0 & a1 & a2 & a3 & a4 & a5;}
-    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6) {return a0 & a1 & a2 & a3 & a4 & a5 & a6;}
+    static inline bool allTrue()
+        {return true;}
+    static inline bool allTrue(bool a0)
+        {return a0;}
+    static inline bool allTrue(bool a0,bool a1)
+        {return a0 & a1;}
+    static inline bool allTrue(bool a0,bool a1,bool a2)
+        {return a0 & a1 & a2;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3)
+        {return a0 & a1 & a2 & a3;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4)
+        {return a0 & a1 & a2 & a3 & a4;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5)
+        {return a0 & a1 & a2 & a3 & a4 & a5;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6)
+        {return a0 & a1 & a2 & a3 & a4 & a5 & a6;}
     static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7) {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}
 
-    const char* typeAsString(Type t);
+    const char* typeAsString(ValueType t);
 
 } // detail
 } // Ponder

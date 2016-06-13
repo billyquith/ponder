@@ -48,7 +48,7 @@ using namespace std::placeholders;
 /*
  * Instanciate simple properties
  */
-template <typename A, Type T>
+template <typename A, ValueType T>
 struct PropertyMapper
 {
     typedef SimplePropertyImpl<A> Type;
@@ -58,7 +58,7 @@ struct PropertyMapper
  * Instanciate array properties
  */
 template <typename A>
-struct PropertyMapper<A, ponder::Type::Array>
+struct PropertyMapper<A, ponder::ValueType::Array>
 {
     typedef ArrayPropertyImpl<A> Type;
 };
@@ -67,7 +67,7 @@ struct PropertyMapper<A, ponder::Type::Array>
  * Instanciate enum properties
  */
 template <typename A>
-struct PropertyMapper<A, ponder::Type::Enum>
+struct PropertyMapper<A, ponder::ValueType::Enum>
 {
     typedef EnumPropertyImpl<A> Type;
 };
@@ -76,7 +76,7 @@ struct PropertyMapper<A, ponder::Type::Enum>
  * Instanciate user properties
  */
 template <typename A>
-struct PropertyMapper<A, ponder::Type::User>
+struct PropertyMapper<A, ponder::ValueType::User>
 {
     typedef UserPropertyImpl<A> Type;
 };

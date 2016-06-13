@@ -36,7 +36,7 @@ namespace ponder
 {
     
 UserProperty::UserProperty(const std::string& name, const Class& propClass)
-    : Property(name, Type::User)
+    : Property(name, ValueType::User)
     , m_class(&propClass)
 {
 }

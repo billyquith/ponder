@@ -50,13 +50,13 @@ namespace ponder
  * \c operator() function. Here is the list of the mapping between Ponder types and their 
  * corresponding C++ types:
  *
- * \li ponder::Type::None --> ponder::NoType
- * \li ponder::Type::Boolean --> bool
- * \li ponder::Type::Integer --> long
- * \li ponder::Type::Real --> double
- * \li ponder::Type::String --> std::string
- * \li ponder::Type::Enum --> ponder::EnumObject
- * \li ponder::Type::User --> ponder::UserObject
+ * \li ponder::ValueType::None --> ponder::NoType
+ * \li ponder::ValueType::Boolean --> bool
+ * \li ponder::ValueType::Integer --> long
+ * \li ponder::ValueType::Real --> double
+ * \li ponder::ValueType::String --> std::string
+ * \li ponder::ValueType::Enum --> ponder::EnumObject
+ * \li ponder::ValueType::User --> ponder::UserObject
  *
  * Here an example of a unary visitor which creates an editor for the value based on its type
  * \code
