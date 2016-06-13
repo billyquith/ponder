@@ -49,11 +49,6 @@ namespace detail
     }
 }
 
-inline UserObject ObjectRef::getUserObject()
-{
-    return m_metacls.getUserObjectFromPointer(m_objectPtr);
-}
-
 template <typename T>
 inline ClassBuilder<T> Class::declare(const std::string& name)
 {
@@ -75,6 +70,11 @@ inline Class::FunctionTable::Iterator Class::functionIterator() const
 inline Class::PropertyTable::Iterator Class::propertyIterator() const
 {
     return m_properties.getIterator();
+}
+
+inline UserObject Class::getUserObjectFromPointer(void* ptr) const
+{
+    return m_userObjectCreator(ptr);
 }
 
 } // namespace ponder

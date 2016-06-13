@@ -370,7 +370,8 @@ TEST_CASE("Classes can have hierarchies")
         REQUIRE(ponder::classByObject(*nonGenericBase).name() == "ClassTest::Base");
     }
 
-    // REQUIRE(ponder::classByObject(nortti2).name(),  "ClassTest::Derived"); // Ponder finds the closest derived type which has PONDER_RTTI
+    // Ponder finds the closest derived type which has PONDER_RTTI
+    // REQUIRE(ponder::classByObject(nortti2).name(),  "ClassTest::Derived");
     // REQUIRE(ponder::classByObject(*nortti2).name(), "ClassTest::Derived");
 
     delete nortti2;

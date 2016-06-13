@@ -45,27 +45,12 @@
 
 namespace ponder
 {
+
 template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
 class ClassVisitor;
   
-
-class ObjectRef
-{
-public:
-    ObjectRef(const Class& metacls, void* p) : m_metacls(metacls), m_objectPtr(p) {}
-    
-    const Class& metaclass() const { return m_metacls; }
-    void* pointer() { return m_objectPtr; }
-    
-    UserObject getUserObject();
-    
-private:
-    const Class& m_metacls;
-    void* m_objectPtr;
-};
-    
 /**
  * \brief ponder::Class represents a metaclass composed of properties and functions
  *
@@ -374,11 +359,21 @@ public:     // reflection
      */
     PropertyTable::Iterator propertyIterator() const;
     
-    
-    UserObject getUserObjectFromPointer(void* ptr) const
-    {
-        return m_userObjectCreator(ptr);
-    }
+    /**
+     * \brief Create a UserObject from an opaque user pointer
+     *
+     * \return A UserObject with this class's type
+     *
+     * \note This relies on the user choosing the correct metaclass. There are no
+     *       checks (as the data is opaque).
+     *
+     * \code
+     * auto const& metacls = ponder::classByType<MyClass>();
+     * void *ptr = &object;
+     * ponder::UserObject uo( metacls.getUserObjectFromPointer(ptr) );
+     * \endcode
+     */
+    UserObject getUserObjectFromPointer(void* ptr) const;
 
     /**
      * \brief Start visitation of a class
