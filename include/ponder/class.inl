@@ -41,12 +41,17 @@ namespace detail
         else
             delete object.get<T*>();
     }
+    
+    template <typename T>
+    UserObject userObjectCreator(void* ptr)
+    {
+        return UserObject(static_cast<T*>(ptr));
+    }
 }
 
 inline UserObject ObjectRef::getUserObject()
 {
-    UserObject obj;
-    return obj;
+    return m_metacls.getUserObjectFromPointer(m_objectPtr);
 }
 
 template <typename T>
@@ -58,6 +63,7 @@ inline ClassBuilder<T> Class::declare(const std::string& name)
                                                   : name);
     newClass.m_sizeof = sizeof(T);
     newClass.m_destructor = &detail::destroy<T>;
+    newClass.m_userObjectCreator = &detail::userObjectCreator<T>;
     return ClassBuilder<T>(newClass);
 }
 

@@ -147,7 +147,7 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
     typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
-    typedef UserObject (*ObjectCaster)(void*);
+    typedef UserObject (*UserObjectCreator)(void*);
     
     std::size_t m_sizeof;       ///< Size of the class in bytes.
     std::string m_id;           ///< Name of the metaclass
@@ -155,7 +155,8 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     PropertyTable m_properties; ///< Table of metaproperties indexed by ID
     BaseList m_bases;           ///< List of base metaclasses
     ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor;    ///< Destructor (function that is able to delete an abstract object)
+    Destructor m_destructor;    ///< Destructor (function able to delete an abstract object)
+    UserObjectCreator m_userObjectCreator; ///< Convert pointer of class instance to UserObject
 
 public:     // declaration
 
@@ -372,6 +373,12 @@ public:     // reflection
      * \endcode
      */
     PropertyTable::Iterator propertyIterator() const;
+    
+    
+    UserObject getUserObjectFromPointer(void* ptr) const
+    {
+        return m_userObjectCreator(ptr);
+    }
 
     /**
      * \brief Start visitation of a class

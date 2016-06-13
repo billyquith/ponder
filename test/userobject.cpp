@@ -512,6 +512,21 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE(composed1.get().get().x ==2);
         REQUIRE(composed2.get<Composed2>().get().x ==2);
         REQUIRE(composed3.get<Composed3>().x ==2);
-    }    
+    }
+    
+    SECTION("objects can created from existing user data")
+    {
+        MyClass object(77);
+        
+        auto const& metacls = ponder::classByType<MyClass>();
+        void* ptr = &object;
+        
+        ponder::UserObject uo( metacls.getUserObjectFromPointer(ptr) );
+        REQUIRE(uo.get("p") == ponder::Value(77));
+        
+        uo.set("p", 21);
+        REQUIRE(object.x == 21);
+        REQUIRE(ponder::Value(object.x) == uo.get("p"));
+    }
 }
 
