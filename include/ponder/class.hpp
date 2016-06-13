@@ -49,6 +49,22 @@ template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
 class ClassVisitor;
+  
+
+class ObjectRef
+{
+public:
+    ObjectRef(const Class& metacls, void* p) : m_metacls(metacls), m_objectPtr(p) {}
+    
+    const Class& metaclass() const { return m_metacls; }
+    void* pointer() { return m_objectPtr; }
+    
+    UserObject getUserObject();
+    
+private:
+    const Class& m_metacls;
+    void* m_objectPtr;
+};
     
 /**
  * \brief ponder::Class represents a metaclass composed of properties and functions
@@ -131,6 +147,7 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
     typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
+    typedef UserObject (*ObjectCaster)(void*);
     
     std::size_t m_sizeof;       ///< Size of the class in bytes.
     std::string m_id;           ///< Name of the metaclass
@@ -213,8 +230,6 @@ public:     // reflection
      * \return Number of constructors
      */
     std::size_t constructorCount() const;
-    
-    
     
     /**
      * \brief Destroy an instance of the C++ class bound to the metaclass

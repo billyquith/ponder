@@ -43,6 +43,12 @@ namespace detail
     }
 }
 
+inline UserObject ObjectRef::getUserObject()
+{
+    UserObject obj;
+    return obj;
+}
+
 template <typename T>
 inline ClassBuilder<T> Class::declare(const std::string& name)
 {
