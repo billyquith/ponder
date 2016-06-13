@@ -39,16 +39,17 @@
 
 namespace ponder
 {
+
 class Value;
 
 /**
  * \brief Wrapper for packing an arbitrary number of arguments into a single object
  *
- * ponder::Args is defined as a list of arguments of any type (wrapped in ponder::Value instances),
- * which can conveniently be passed to all the Ponder entities which may need an arbitrary number of arguments
- * in a uniform way.
+ * ponder::Args is defined as a list of arguments of any type (wrapped in ponder::Value
+ * instances), which can conveniently be passed to all the Ponder entities which may need
+ * an arbitrary number of arguments in a uniform way.
  *
- * Arguments lists can be constructed on the fly using one of the constructors (accept up to 5 arguments):
+ * Arguments lists can be constructed on the fly:
  *
  * \code
  * ponder::Args args(1, true, "hello", 5.24, myObject);

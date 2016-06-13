@@ -112,7 +112,8 @@ public:
      * \param id Identifier of the tag to get
      * \param object User object for which to get the tag value 
      *
-     * \return Value associated to the tag for \a object, or Value::nothing if the tag doesn't exist
+     * \return Value associated to the tag for \a object, or Value::nothing if the tag 
+     *         doesn't exist
      */
     Value tag(const Value& id, const UserObject& object) const;
 

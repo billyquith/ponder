@@ -65,7 +65,6 @@ class ClassVisitor;
  * class MyClass
  * {
  * public:
- *
  *     MyClass();
  *     int getProp() const;
  *     void setProp(int);

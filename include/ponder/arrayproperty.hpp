@@ -222,7 +222,9 @@ protected:
      * \param index Index of the element to get
      * \param value New value to assign to the element
      */
-    virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const = 0;
+    virtual void setElement(const UserObject& object,
+                            std::size_t index,
+                            const Value& value) const = 0;
 
     /**
      * \brief Do the actual insertion of an element
@@ -233,7 +235,9 @@ protected:
      * \param before Index before which the new element will be inserted
      * \param value Value of the element to insert
      */
-    virtual void insertElement(const UserObject& object, std::size_t before, const Value& value) const = 0;
+    virtual void insertElement(const UserObject& object,
+                               std::size_t before,
+                               const Value& value) const = 0;
 
     /**
      * \brief Do the actual removal of an element

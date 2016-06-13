@@ -30,6 +30,7 @@
 
 namespace ponder
 {
+
 template <typename T>
 T Error::prepare(T error, const std::string& file, int line, const std::string& function)
 {

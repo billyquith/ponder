@@ -46,8 +46,9 @@ namespace ponder
  *
  * The template parameter T is the type returned by the visitor.
  *
- * To handle one of the possible types of the value, just write the corresponding \c operator() function.
- * Here is the list of the mapping between Ponder types and their corresponding C++ types:
+ * To handle one of the possible types of the value, just write the corresponding 
+ * \c operator() function. Here is the list of the mapping between Ponder types and their 
+ * corresponding C++ types:
  *
  * \li ponder::Type::None --> ponder::NoType
  * \li ponder::Type::Boolean --> bool

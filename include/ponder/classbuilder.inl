@@ -90,7 +90,8 @@ ClassBuilder<T>& ClassBuilder<T>::base()
 
 template <typename T>
 template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F accessor)
+ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
+                                           F accessor)
 {
     // Find factory able to construct a Property from an accessor of type F
     typedef detail::PropertyFactory1<T, F> Factory;
@@ -101,7 +102,8 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F accessor)
 
 template <typename T>
 template <typename F1, typename F2>
-ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1, F2 accessor2)
+ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
+                                           F1 accessor1, F2 accessor2)
 {
     // Find factory able to construct a Property from accessors of type F1 and F2
     typedef detail::PropertyFactory2<T, F1, F2> Factory;
@@ -112,7 +114,8 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1
 
 template <typename T>
 template <typename F1, typename F2, typename F3>
-ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name, F1 accessor1, F2 accessor2, F3 accessor3)
+ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
+                                           F1 accessor1, F2 accessor2, F3 accessor3)
 {
     // Find factory able to construct a Property from accessors of type F1, F2 and F3
     typedef detail::PropertyFactory3<T, F1, F2, F3> Factory;

@@ -38,6 +38,7 @@
 
 namespace ponder
 {
+    
 class Class;
 
 /**
@@ -75,7 +76,8 @@ protected:
 };
 
 /**
- * \brief Error thrown when providing a function argument which is incompatible with what the function expects
+ * \brief Error thrown when providing a function argument which is incompatible with 
+ *        what the function expects
  */
 class PONDER_API BadArgument : public BadType
 {
@@ -123,7 +125,8 @@ public:
 };
 
 /**
- * \brief Error thrown when trying to convert an object to a class that is not a base nor a derived
+ * \brief Error thrown when trying to convert an object to a class that is not a 
+ *        base nor a derived
  */
 class PONDER_API ClassUnrelated : public Error
 {
@@ -275,7 +278,9 @@ public:
      * \param provided Number of arguments provided
      * \param expected Number of arguments expected
      */
-    NotEnoughArguments(const std::string& functionName, std::size_t provided, std::size_t expected);
+    NotEnoughArguments(const std::string& functionName,
+                       std::size_t provided,
+                       std::size_t expected);
 };
 
 /**

@@ -31,12 +31,11 @@
 #ifndef PONDER_CLASSVISITOR_HPP
 #define PONDER_CLASSVISITOR_HPP
 
-
 #include <ponder/config.hpp>
-
 
 namespace ponder
 {
+    
 class Property;
 class SimpleProperty;
 class ArrayProperty;
@@ -47,16 +46,16 @@ class Function;
 /**
  * \brief Base class for writing custom Class visitors
  *
- * A ClassVisitor, when applied to a Class, will be notified for each member property and function of
- * the target class. To receive this notification for a specific type T of property or function,
- * you have to override the \c visit(T) function.
+ * A ClassVisitor, when applied to a Class, will be notified for each member property 
+ * and function of the target class. To receive this notification for a specific type T 
+ * of property or function, you have to override the \c visit(T) function.
  *
  * The benefit of such visitation is that you directly get the actual type of the
  * property or function, and can handle it safely without having to use dangerous downcasts.
  *
  * Another benefit of this method is that you can easily filter the properties and functions
- * according to their C++ type: if you don't want to handle a specific type of property or function,
- * just don't override the corresponding \c visit function.
+ * according to their C++ type: if you don't want to handle a specific type of property or 
+ * function, just don't override the corresponding \c visit function.
  *
  * Here an example of a visitor which prints the contents of a class:
  * \code

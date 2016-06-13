@@ -45,7 +45,8 @@ namespace ponder_ext
  *
  * \brief Template providing a mapping between C++ arrays and Ponder ArrayProperty
  *
- * ArrayMapper<T> must define the following members in order to make T fully compliant with the system:
+ * ArrayMapper<T> must define the following members in order to make T fully compliant 
+ * with the system:
  *
  * \li \c ElementType: type of the elements stored in the array
  * \li \c dynamic(): tells if the array is dynamic (i.e. supports insert and remove)
