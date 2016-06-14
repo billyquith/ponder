@@ -27,194 +27,386 @@
 **
 ****************************************************************************/
 
-#include "function.hpp"
-#include <ponder/classget.hpp>
-#include <ponder/enumget.hpp>
-#include <ponder/function.hpp>
-#include <ponder/errors.hpp>
+#include <ponder/classbuilder.hpp>
 #include "catch.hpp"
 
-using namespace FunctionTest;
+#if 1
 
-struct FunctionFixture
+namespace FunctionTest
 {
-    FunctionFixture()
+    using namespace std::placeholders;
+    
+    enum MyEnum
     {
-        const ponder::Class& metaclass = ponder::classByType<MyClass>();
-        for (int i = 1; i < 23; ++i)
-        {
-            if (i != 14 && i != 17) // remove when fixed
-                functions[i] = &metaclass.function("f" + boost::lexical_cast<std::string>(i));
-        }
+        Zero = 0,
+        One  = 1,
+        Two  = 2
+    };
+    
+    struct MyType
+    {
+        MyType(int x_) : x(x_) {}
+        int x;
+    };
+    
+    static bool operator == (const MyType& left, const MyType& right)
+    {
+        return left.x == right.x;
     }
+    
+    static bool operator < (const MyType& left, const MyType& right)
+    {
+        return left.x < right.x;
+    }
+    
+    static std::ostream& operator << (std::ostream& stream, const MyType& object)
+    {
+        return stream << object.x;
+    }
+    
+    struct MyBase
+    {
+        void f6() {}
+        char padding[10];
+    };
+    
+    struct MyClass : MyBase
+    {
+        MyClass()
+        : p1(true)
+        , p2(2)
+        , p3("3")
+        , p4(MyType(4))
+        , p5(MyType(5))
+        , innerPtr(&inner)
+        , innerSmartPtr(new Inner)
+        {
+        }
+        
+        bool p1;
+        int p2;
+        std::string p3;
+        
+        MyType p4;
+        const MyType& f4() {return p4;}
+        
+        MyType p5;
+        const MyType& f5() const {return p5;}
+        
+        // f6 is inherited
+        ponder::Value f7(ponder::Value v) {return v;}
+        
+        void f8() {}
+        void f9(bool) {}
+        void f10(float, double) {}
+        void f11(short, int, long) {}
+        void f12(const std::string&, std::string, const std::string&, std::string) {}
+        void f13(MyEnum, MyEnum, MyEnum, MyEnum, MyEnum) {}
+        
+        struct Inner
+        {
+            void f14() {}
+            void f15() const {}
+            int f16() {return 16;}
+            void f17(int) {}
+            void f18() {}
+            void f19() {}
+        };
+        
+        Inner inner;
+        const Inner& getInner() const {return inner;}
+        
+        Inner* innerPtr;
+        const Inner* getInnerPtr() const {return innerPtr;}
+        
+        std::shared_ptr<Inner> innerSmartPtr;
+        const std::shared_ptr<Inner> getInnerSmartPtr() {return innerSmartPtr;}
+        
+        int f20(int x) {return x;}
+        int f21(int x, int y) {return x + y;}
+        int f22(int x, int y, int z) {return x + y + z;}
+    };
+    
+    void f1(MyClass& object)
+    {
+        object.p1 = true;
+    }
+    
+    int f2(MyClass object, int x)
+    {
+        return object.p2 + x;
+    }
+    
+    const std::string& f3(const MyClass* object)
+    {
+        return object->p3;
+    }
+    
+    void declare()
+    {
+        ponder::Enum::declare<MyEnum>("FunctionTest::MyEnum")
+            .value("Zero", Zero)
+            .value("One",  One)
+            .value("Two",  Two);
+        
+        ponder::Class::declare<MyType>("FunctionTest::MyType");
+        
+        ponder::Class::declare<MyBase>("FunctionTest::MyBase");
+        
+        ponder::Class::declare<MyClass>("FunctionTest::MyClass")
+            .base<MyBase>()
+            
+            // ***** non-member functions *****
+            .function("f1", &f1) // object by reference
+            .function("f2", &f2) // object by value + parameter
+            .function("f3", &f3) // object by pointer
+            
+            // ***** member functions *****
+            .function("f4", &MyClass::f4) // non-const
+            .function("f5", &MyClass::f5) // const
+            .function("f6", &MyClass::f6) // inherited
+            .function("f7", &MyClass::f7) // ponder::Value as return and argument types
+            
+            // ***** arguments count ******
+            .function("f8",  &MyClass::f8)  // 0 argument
+            .function("f9",  &MyClass::f9)  // 1 argument
+            .function("f10", &MyClass::f10) // 2 arguments
+            .function("f11", &MyClass::f11) // 3 arguments
+            .function("f12", &MyClass::f12) // 4 arguments
+            .function("f13", &MyClass::f13) // 5 arguments
+            
+            // ***** nested functions *****
+//            .function("f14", &MyClass::Inner::f14, &MyClass::inner)   // object
+//            .function("f15", &MyClass::Inner::f15, &MyClass::getInner) // getter returning an object
+//            .function("f16", &MyClass::Inner::f16, &MyClass::innerPtr) // raw pointer
+            //TOFIX .function("f17", &MyClass::Inner::f17, &MyClass::getInnerPtr) // getter returning a raw pointer
+//            .function("f18", &MyClass::Inner::f18, &MyClass::innerSmartPtr)    // smart pointer
+//            .function("f19", &MyClass::Inner::f19, &MyClass::getInnerSmartPtr) // getter returning a smart pointer
+        
+            // ***** std::function *****
+            .function("f20",
+                      std::function<int (MyClass&, int)>(std::bind(&MyClass::f20, _1, _2)))
+            .function("f21",
+                      std::function<int (MyClass&, int)>(std::bind(&MyClass::f21, _1, _2, 20)))
+            .function("f22",
+                      std::function<int (MyClass&, int)>(
+                          std::bind(std::bind(&MyClass::f22, _1, _2, _3, 30), _1, _2, 20)))
+            ;
+    }
+}
 
-    const ponder::Function* functions[23];
-};
+PONDER_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
+
+using namespace FunctionTest;
 
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::Function
 //-----------------------------------------------------------------------------
-BOOST_FIXTURE_TEST_SUITE(FUNCTION, FunctionFixture)
 
-BOOST_AUTO_TEST_CASE(returnType)
+TEST_CASE("Ponder supports functions")
 {
-    BOOST_CHECK_EQUAL(functions[1]->returnType(),  ponder::noType);
-    BOOST_CHECK_EQUAL(functions[2]->returnType(),  ponder::intType);
-    BOOST_CHECK_EQUAL(functions[3]->returnType(),  ponder::stringType);
-    BOOST_CHECK_EQUAL(functions[4]->returnType(),  ponder::userType);
-    BOOST_CHECK_EQUAL(functions[5]->returnType(),  ponder::userType);
-    BOOST_CHECK_EQUAL(functions[6]->returnType(),  ponder::noType);
-    BOOST_CHECK_EQUAL(functions[7]->returnType(),  ponder::userType);
-    BOOST_CHECK_EQUAL(functions[8]->returnType(),  ponder::noType);
-    BOOST_CHECK_EQUAL(functions[9]->returnType(),  ponder::noType);
-    BOOST_CHECK_EQUAL(functions[10]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[11]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[12]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[13]->returnType(), ponder::noType);
-    //BOOST_CHECK_EQUAL(functions[14]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[15]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[16]->returnType(), ponder::intType);
-    //BOOST_CHECK_EQUAL(functions[17]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[18]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[19]->returnType(), ponder::noType);
-    BOOST_CHECK_EQUAL(functions[20]->returnType(), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[21]->returnType(), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[22]->returnType(), ponder::intType);
+    const ponder::Function* functions[23];
+    
+    const ponder::Class& metaclass = ponder::classByType<MyClass>();
+    for (int i = 1; i <= 22; ++i)
+    {
+        if (i <= 13 || i >= 20)
+            functions[i] = &metaclass.function("f" + std::to_string(i));
+    }
+
+    SECTION("functions have a return type")
+    {
+        REQUIRE((functions[1]->returnType() ==  ponder::ValueType::None));
+        REQUIRE((functions[2]->returnType() ==  ponder::ValueType::Integer));
+        REQUIRE((functions[3]->returnType() ==  ponder::ValueType::String));
+        REQUIRE((functions[4]->returnType() ==  ponder::ValueType::User));
+        REQUIRE((functions[5]->returnType() ==  ponder::ValueType::User));
+        REQUIRE((functions[6]->returnType() ==  ponder::ValueType::None));
+        REQUIRE((functions[7]->returnType() ==  ponder::ValueType::User));
+        REQUIRE((functions[8]->returnType() ==  ponder::ValueType::None));
+        REQUIRE((functions[9]->returnType() ==  ponder::ValueType::None));
+        REQUIRE((functions[10]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[11]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[12]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[13]->returnType() == ponder::ValueType::None));
+        //REQUIRE((functions[14]->returnType() == ponder::ValueType::None));
+//        REQUIRE((functions[15]->returnType() == ponder::ValueType::None));
+//        REQUIRE((functions[16]->returnType() == ponder::ValueType::Integer));
+        //REQUIRE((functions[17]->returnType() == ponder::ValueType::None));
+//        REQUIRE((functions[18]->returnType() == ponder::ValueType::None));
+//        REQUIRE((functions[19]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[20]->returnType() == ponder::ValueType::Integer));
+        REQUIRE((functions[21]->returnType() == ponder::ValueType::Integer));
+        REQUIRE((functions[22]->returnType() == ponder::ValueType::Integer));
+    }
+
+    SECTION("functions have a number of arguments")
+    {
+        REQUIRE(functions[1]->argCount() ==  0);
+        REQUIRE(functions[2]->argCount() ==  1);
+        REQUIRE(functions[3]->argCount() ==  0);
+        REQUIRE(functions[4]->argCount() ==  0);
+        REQUIRE(functions[5]->argCount() ==  0);
+        REQUIRE(functions[6]->argCount() ==  0);
+        REQUIRE(functions[7]->argCount() ==  1);
+        REQUIRE(functions[8]->argCount() ==  0);
+        REQUIRE(functions[9]->argCount() ==  1);
+        REQUIRE(functions[10]->argCount() == 2);
+        REQUIRE(functions[11]->argCount() == 3);
+        REQUIRE(functions[12]->argCount() == 4);
+        REQUIRE(functions[13]->argCount() == 5);
+        //REQUIRE(functions[14]->argCount() == 0);
+//        REQUIRE(functions[15]->argCount() == 0);
+//        REQUIRE(functions[16]->argCount() == 0);
+        //REQUIRE(functions[17]->argCount() == 0);
+//        REQUIRE(functions[18]->argCount() == 0);
+//        REQUIRE(functions[19]->argCount() == 0);
+        REQUIRE(functions[20]->argCount() == 1);
+        REQUIRE(functions[21]->argCount() == 1);
+        REQUIRE(functions[22]->argCount() == 1);
+    }
+    
+    SECTION("function arguments have a type")
+    {
+        REQUIRE_THROWS_AS(functions[1]->argType(0),  ponder::OutOfRange);
+        REQUIRE(functions[2]->argType(0) ==  ponder::ValueType::Integer);
+        REQUIRE_THROWS_AS(functions[3]->argType(0),  ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[4]->argType(0),  ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[5]->argType(0),  ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[6]->argType(0),  ponder::OutOfRange);
+        REQUIRE(functions[7]->argType(0) ==  ponder::ValueType::User);
+        REQUIRE_THROWS_AS(functions[8]->argType(0),  ponder::OutOfRange);
+        REQUIRE(functions[9]->argType(0) ==  ponder::ValueType::Boolean);
+        REQUIRE(functions[10]->argType(0) == ponder::ValueType::Real);
+        REQUIRE(functions[10]->argType(1) == ponder::ValueType::Real);
+        REQUIRE(functions[11]->argType(0) == ponder::ValueType::Integer);
+        REQUIRE(functions[11]->argType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[11]->argType(2) == ponder::ValueType::Integer);
+        REQUIRE(functions[12]->argType(0) == ponder::ValueType::String);
+        REQUIRE(functions[12]->argType(1) == ponder::ValueType::String);
+        REQUIRE(functions[12]->argType(2) == ponder::ValueType::String);
+        REQUIRE(functions[12]->argType(3) == ponder::ValueType::String);
+        REQUIRE(functions[13]->argType(0) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->argType(1) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->argType(2) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->argType(3) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->argType(4) == ponder::ValueType::Enum);
+        //REQUIRE_THROWS_AS(functions[14]->argType(0), ponder::OutOfRange);
+//        REQUIRE_THROWS_AS(functions[15]->argType(0), ponder::OutOfRange);
+//        REQUIRE_THROWS_AS(functions[16]->argType(0), ponder::OutOfRange);
+        //REQUIRE_THROWS_AS(functions[17]->argType(0), ponder::OutOfRange);
+//        REQUIRE_THROWS_AS(functions[18]->argType(0), ponder::OutOfRange);
+//        REQUIRE_THROWS_AS(functions[19]->argType(0), ponder::OutOfRange);
+        REQUIRE(functions[20]->argType(0) == ponder::ValueType::Integer);
+        REQUIRE(functions[21]->argType(0) == ponder::ValueType::Integer);
+        REQUIRE(functions[22]->argType(0) == ponder::ValueType::Integer);
+    }
+    
+    SECTION("Functions can be called")
+    {
+        MyClass object;
+        
+        REQUIRE((functions[1]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE(functions[2]->call(object, ponder::Args(10)) == ponder::Value(12));
+        REQUIRE(functions[3]->call(object, ponder::Args()) == ponder::Value("3"));
+        REQUIRE(functions[4]->call(object, ponder::Args()).to<MyType>() == MyType(4));
+        REQUIRE(functions[5]->call(object, ponder::Args()).to<MyType>() == MyType(5));
+        REQUIRE((functions[6]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE(functions[7]->call(object, ponder::Args("hi")) == ponder::Value("hi"));
+        REQUIRE((functions[8]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE((functions[9]->call(object, ponder::Args(true)) == ponder::Value::nothing));
+        REQUIRE((functions[10]->call(object, ponder::Args(1., 2.f)) == ponder::Value::nothing));
+        REQUIRE((functions[11]->call(object, ponder::Args(1, 2, 3)) == ponder::Value::nothing));
+        REQUIRE((functions[12]->call(object, ponder::Args("1", "2", "3", "4"))
+                 == ponder::Value::nothing));
+        REQUIRE((functions[13]->call(object, ponder::Args(Zero, One, Two, Zero, One))
+                 == ponder::Value::nothing));
+        //REQUIRE(functions[14]->call(object, ponder::Args()) == ponder::Value::nothing);
+//        REQUIRE(functions[15]->call(object, ponder::Args()) == ponder::Value::nothing);
+//        REQUIRE(functions[16]->call(object, ponder::Args()) == ponder::Value(16));
+        //REQUIRE(functions[17]->call(object, ponder::Args(20)) == ponder::Value::nothing);
+//        REQUIRE(functions[18]->call(object, ponder::Args()) == ponder::Value::nothing);
+//        REQUIRE(functions[19]->call(object, ponder::Args()) == ponder::Value::nothing);
+        REQUIRE(functions[20]->call(object, ponder::Args(10)) == ponder::Value(10));
+        REQUIRE(functions[21]->call(object, ponder::Args(10)) == ponder::Value(30));
+        REQUIRE(functions[22]->call(object, ponder::Args(10)) == ponder::Value(60));
+    }
+    
+    SECTION("calling null functions is an error")
+    {
+        REQUIRE_THROWS_AS(functions[1]->call(ponder::UserObject(),  ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[3]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[4]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[5]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[6]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[8]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+//        REQUIRE_THROWS_AS(functions[15]->call(ponder::UserObject(), ponder::Args()),
+//                          ponder::NullObject);
+//        REQUIRE_THROWS_AS(functions[16]->call(ponder::UserObject(), ponder::Args()),
+//                          ponder::NullObject);
+//        REQUIRE_THROWS_AS(functions[18]->call(ponder::UserObject(), ponder::Args()),
+//                          ponder::NullObject);
+//        REQUIRE_THROWS_AS(functions[19]->call(ponder::UserObject(), ponder::Args()),
+//                          ponder::NullObject);
+    }
+    
+    SECTION("calling a function without enough arguments is an error")
+    {
+        MyClass object;
+        
+        REQUIRE_THROWS_AS(functions[2]->call(object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[7]->call(object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[9]->call(object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[10]->call(object, ponder::Args(1.)),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[11]->call(object, ponder::Args(1, 2)),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[12]->call(object, ponder::Args("1", "2", "3")),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero)),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[20]->call(object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[21]->call(object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(functions[22]->call(object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+    }
+
+    SECTION("functions must be called with the correct arguments")
+    {
+        MyClass object;
+        MyType arg(0);
+        
+        REQUIRE_THROWS_AS(functions[2]->call(object, ponder::Args(arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[10]->call(object, ponder::Args(arg, arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[11]->call(object, ponder::Args(arg, arg, arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[12]->call(object, ponder::Args(arg, arg, arg, arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[13]->call(object, ponder::Args(arg, arg, arg, arg, arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[20]->call(object, ponder::Args(arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[21]->call(object, ponder::Args(arg)),
+                          ponder::BadArgument);
+        REQUIRE_THROWS_AS(functions[22]->call(object, ponder::Args(arg)),
+                          ponder::BadArgument);
+    }
 }
 
-BOOST_AUTO_TEST_CASE(argCount)
-{
-    BOOST_CHECK_EQUAL(functions[1]->argCount(),  0);
-    BOOST_CHECK_EQUAL(functions[2]->argCount(),  1);
-    BOOST_CHECK_EQUAL(functions[3]->argCount(),  0);
-    BOOST_CHECK_EQUAL(functions[4]->argCount(),  0);
-    BOOST_CHECK_EQUAL(functions[5]->argCount(),  0);
-    BOOST_CHECK_EQUAL(functions[6]->argCount(),  0);
-    BOOST_CHECK_EQUAL(functions[7]->argCount(),  1);
-    BOOST_CHECK_EQUAL(functions[8]->argCount(),  0);
-    BOOST_CHECK_EQUAL(functions[9]->argCount(),  1);
-    BOOST_CHECK_EQUAL(functions[10]->argCount(), 2);
-    BOOST_CHECK_EQUAL(functions[11]->argCount(), 3);
-    BOOST_CHECK_EQUAL(functions[12]->argCount(), 4);
-    BOOST_CHECK_EQUAL(functions[13]->argCount(), 5);
-    //BOOST_CHECK_EQUAL(functions[14]->argCount(), 0);
-    BOOST_CHECK_EQUAL(functions[15]->argCount(), 0);
-    BOOST_CHECK_EQUAL(functions[16]->argCount(), 0);
-    //BOOST_CHECK_EQUAL(functions[17]->argCount(), 0);
-    BOOST_CHECK_EQUAL(functions[18]->argCount(), 0);
-    BOOST_CHECK_EQUAL(functions[19]->argCount(), 0);
-    BOOST_CHECK_EQUAL(functions[20]->argCount(), 1);
-    BOOST_CHECK_EQUAL(functions[21]->argCount(), 1);
-    BOOST_CHECK_EQUAL(functions[22]->argCount(), 1);
-}
-
-BOOST_AUTO_TEST_CASE(argType)
-{
-    BOOST_CHECK_THROW(functions[1]->argType(0),  ponder::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[2]->argType(0),  ponder::intType);
-    BOOST_CHECK_THROW(functions[3]->argType(0),  ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[4]->argType(0),  ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[5]->argType(0),  ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[6]->argType(0),  ponder::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[7]->argType(0),  ponder::userType);
-    BOOST_CHECK_THROW(functions[8]->argType(0),  ponder::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[9]->argType(0),  ponder::boolType);
-    BOOST_CHECK_EQUAL(functions[10]->argType(0), ponder::realType);
-    BOOST_CHECK_EQUAL(functions[10]->argType(1), ponder::realType);
-    BOOST_CHECK_EQUAL(functions[11]->argType(0), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[11]->argType(1), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[11]->argType(2), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(0), ponder::stringType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(1), ponder::stringType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(2), ponder::stringType);
-    BOOST_CHECK_EQUAL(functions[12]->argType(3), ponder::stringType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(0), ponder::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(1), ponder::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(2), ponder::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(3), ponder::enumType);
-    BOOST_CHECK_EQUAL(functions[13]->argType(4), ponder::enumType);
-    //BOOST_CHECK_THROW(functions[14]->argType(0), ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[15]->argType(0), ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[16]->argType(0), ponder::OutOfRange);
-    //BOOST_CHECK_THROW(functions[17]->argType(0), ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[18]->argType(0), ponder::OutOfRange);
-    BOOST_CHECK_THROW(functions[19]->argType(0), ponder::OutOfRange);
-    BOOST_CHECK_EQUAL(functions[20]->argType(0), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[21]->argType(0), ponder::intType);
-    BOOST_CHECK_EQUAL(functions[22]->argType(0), ponder::intType);
-}
-
-BOOST_AUTO_TEST_CASE(call)
-{
-    MyClass object;
-
-    BOOST_CHECK_EQUAL(functions[1]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[2]->call(object, ponder::Args(10)), ponder::Value(12));
-    BOOST_CHECK_EQUAL(functions[3]->call(object, ponder::Args()), ponder::Value("3"));
-    BOOST_CHECK_EQUAL(functions[4]->call(object, ponder::Args()).to<MyType>(), MyType(4));
-    BOOST_CHECK_EQUAL(functions[5]->call(object, ponder::Args()).to<MyType>(), MyType(5));
-    BOOST_CHECK_EQUAL(functions[6]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[7]->call(object, ponder::Args("hi")), ponder::Value("hi"));
-    BOOST_CHECK_EQUAL(functions[8]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[9]->call(object, ponder::Args(true)), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[10]->call(object, ponder::Args(1., 2.f)), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[11]->call(object, ponder::Args(1, 2, 3)), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[12]->call(object, ponder::Args("1", "2", "3", "4")), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero, One)), ponder::Value::nothing);
-    //BOOST_CHECK_EQUAL(functions[14]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[15]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[16]->call(object, ponder::Args()), ponder::Value(16));
-    //BOOST_CHECK_EQUAL(functions[17]->call(object, ponder::Args(20)), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[18]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[19]->call(object, ponder::Args()), ponder::Value::nothing);
-    BOOST_CHECK_EQUAL(functions[20]->call(object, ponder::Args(10)), ponder::Value(10));
-    BOOST_CHECK_EQUAL(functions[21]->call(object, ponder::Args(10)), ponder::Value(30));
-    BOOST_CHECK_EQUAL(functions[22]->call(object, ponder::Args(10)), ponder::Value(60));
-}
-
-BOOST_AUTO_TEST_CASE(callNullObject)
-{
-    BOOST_CHECK_THROW(functions[1]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
-    BOOST_CHECK_THROW(functions[3]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
-    BOOST_CHECK_THROW(functions[4]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
-    BOOST_CHECK_THROW(functions[5]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
-    BOOST_CHECK_THROW(functions[6]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
-    BOOST_CHECK_THROW(functions[8]->call(ponder::UserObject(), ponder::Args()),  ponder::NullObject);
-    BOOST_CHECK_THROW(functions[15]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
-    BOOST_CHECK_THROW(functions[16]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
-    BOOST_CHECK_THROW(functions[18]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
-    BOOST_CHECK_THROW(functions[19]->call(ponder::UserObject(), ponder::Args()), ponder::NullObject);
-}
-
-BOOST_AUTO_TEST_CASE(callNotEnoughArguments)
-{
-    MyClass object;
-
-    BOOST_CHECK_THROW(functions[2]->call(object, ponder::Args()),                      ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[7]->call(object, ponder::Args()),                      ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[9]->call(object, ponder::Args()),                      ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[10]->call(object, ponder::Args(1.)),                   ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[11]->call(object, ponder::Args(1, 2)),                 ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[12]->call(object, ponder::Args("1", "2", "3")),        ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero)), ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[20]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[21]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
-    BOOST_CHECK_THROW(functions[22]->call(object, ponder::Args()),                     ponder::NotEnoughArguments);
-}
-
-BOOST_AUTO_TEST_CASE(callBadArgument)
-{
-    MyClass object;
-    MyType arg(0);
-
-    BOOST_CHECK_THROW(functions[2]->call(object, ponder::Args(arg)),                      ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[10]->call(object, ponder::Args(arg, arg)),                ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[11]->call(object, ponder::Args(arg, arg, arg)),           ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[12]->call(object, ponder::Args(arg, arg, arg, arg)),      ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[13]->call(object, ponder::Args(arg, arg, arg, arg, arg)), ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[20]->call(object, ponder::Args(arg)),                     ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[21]->call(object, ponder::Args(arg)),                     ponder::BadArgument);
-    BOOST_CHECK_THROW(functions[22]->call(object, ponder::Args(arg)),                     ponder::BadArgument);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
+#endif 

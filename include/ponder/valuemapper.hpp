@@ -166,9 +166,9 @@ struct ValueMapper<bool>
 template <typename T>
 struct ValueMapper<T,
     typename std::enable_if<
-                std::is_integral<T>::value
-                   && !std::is_const<T>::value     // to avoid conflict with ValueMapper<const T>
-                   && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+                 std::is_integral<T>::value
+                 && !std::is_const<T>::value     // to avoid conflict with ValueMapper<const T>
+                 && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
              >::type >
 {
     static const ponder::ValueType type = ponder::ValueType::Integer;
@@ -190,10 +190,10 @@ struct ValueMapper<T,
 template <typename T>
 struct ValueMapper<T,
     typename std::enable_if<
-                    std::is_floating_point<T>::value
-                       && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
-                       && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
-                >::type >
+                 std::is_floating_point<T>::value
+                 && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
+                 && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
+             >::type >
 {
     static const ponder::ValueType type = ponder::ValueType::Real;
     static double to(T source) {return static_cast<double>(source);}
@@ -239,7 +239,7 @@ struct ValueMapper<std::string>
 template <typename T>
 struct ValueMapper<T,
     typename std::enable_if<
-        ponder_ext::ArrayMapper<T>::isArray
+            ponder_ext::ArrayMapper<T>::isArray
             && !std::is_same<typename ponder_ext::ArrayMapper<T>::ElementType, char>::value
             && !std::is_same<typename ponder_ext::ArrayMapper<T>::ElementType, const char>::value
         >::type >
@@ -270,7 +270,7 @@ struct ValueMapper<const char[N]>
 template <typename T>
 struct ValueMapper<T,
     typename std::enable_if<
-            std::is_enum<T>::value
+                std::is_enum<T>::value
                 && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
                 && !std::is_reference<T>::value // to avoid conflict with ValueMapper<T&>
             >::type>
@@ -318,15 +318,26 @@ struct ValueMapper<ponder::EnumObject>
     static const ponder::EnumObject& from(const ponder::EnumObject& source) {return source;}
 
     static ponder::UserObject from(bool)
-        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Boolean,   ponder::ValueType::Enum));}
+        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Boolean, ponder::ValueType::Enum));}
     static ponder::UserObject from(long)
-        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer,    ponder::ValueType::Enum));}
+        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer, ponder::ValueType::Enum));}
     static ponder::UserObject from(double)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Real,   ponder::ValueType::Enum));}
     static ponder::UserObject from(const std::string&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::String, ponder::ValueType::Enum));}
     static ponder::UserObject from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::ValueType::Enum));}
+};
+
+/*
+ * Specialization of ValueMapper for ponder::ValueType.
+ */
+template <>
+struct ValueMapper<ponder::ValueType>
+{
+    static const ponder::ValueType type = ponder::ValueType::String;
+    static std::string to(ponder::ValueType source)
+        {return std::string(ponder::detail::typeAsString(source));}
 };
 
 /*
@@ -340,9 +351,9 @@ struct ValueMapper<ponder::UserObject>
     static const ponder::UserObject& from(const ponder::UserObject& source) {return source;}
 
     static ponder::UserObject from(bool)
-        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Boolean,   ponder::ValueType::User));}
+        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Boolean, ponder::ValueType::User));}
     static ponder::UserObject from(long)
-        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer,    ponder::ValueType::User));}
+        {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer, ponder::ValueType::User));}
     static ponder::UserObject from(double)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Real,   ponder::ValueType::User));}
     static ponder::UserObject from(const std::string&)

@@ -42,6 +42,7 @@ namespace ponder
 {
 namespace detail
 {
+
 /**
  * \brief Helper structure to check at compile time if a type is a functor
  *
@@ -161,7 +162,8 @@ struct FunctionTraits
  * Specialization for native callable types (function and function pointer types)
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type >
+struct FunctionTraits<T,
+    typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
     enum {isFunction = true};
     typedef typename std::remove_pointer<T>::type type;
@@ -172,7 +174,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_function<typename std::
  * Specialization for native callable types (method pointer types)
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type >
+struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>
 {
     enum {isFunction = true};
     typedef typename MethodDetails<T>::FunctionType type;
@@ -183,7 +185,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
  * Specialization for native callable types (member pointer types)
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type >
+struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
     enum {isFunction = true};    
     typedef typename RefDetails<T>::RefType ReturnType;
@@ -200,7 +202,6 @@ struct FunctionTraits<T, typename std::enable_if<HasResultType<T>::value >::type
 };
 
 } // namespace detail
-
 } // namespace ponder
 
 

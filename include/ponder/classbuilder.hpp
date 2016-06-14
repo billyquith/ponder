@@ -247,7 +247,6 @@ public:
      * class Entity
      * {
      * public:
-     *
      *     Point p;
      * };
      *
@@ -261,8 +260,8 @@ public:
      *
      * \return Reference to this, in order to chain other calls
      */
-    template <typename F1, typename F2>
-    ClassBuilder<T>& function(const std::string& name, F1 function1, F2 function2);
+//    template <typename F1, typename F2>
+//    ClassBuilder<T>& function(const std::string& name, F1 function1, F2 function2);
 
     /**
      * \brief Declare a new static tag

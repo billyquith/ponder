@@ -306,7 +306,8 @@ TEST_CASE("Types supporting array interface are supported")
     SECTION("C arrays")
     {
         static_assert(ponder_ext::ArrayMapper<int[10]>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert(std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value,
+                      "ponder_ext::ArrayMapper failed");
     }
 
     SECTION("std::array")
