@@ -85,7 +85,7 @@ using namespace TraitsTest;
 // Sanity check: make sure compiler supports features we need.
 TEST_CASE("C++11 features and syntax")
 {
-    SECTION("functions")
+    SECTION("function test")
     {
         foo(); bar(0.f); // to stop unused warning
     
@@ -93,8 +93,12 @@ TEST_CASE("C++11 features and syntax")
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
         static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
-        static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");
+        static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");    
+        static_assert(std::is_function< std::function<void()>() >::value, "std::is_function failed");
+    }
     
+    SECTION("function result")
+    {
         typedef void (*foo_t)();
         static_assert(std::is_void< std::result_of<decltype(foo)& ()>::type >::value,
                       "std::result_of failed");
