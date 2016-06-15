@@ -181,7 +181,9 @@ namespace FunctionTest
                       std::function<void(MyClass&)>([](MyClass& self){ self.getInner().f15(); }))
             // raw pointer
             .function("f16",
-                      std::function<void(MyClass&)>([](MyClass& self){ self.innerPtr->f16(); }))
+                      std::function<int(MyClass&)>([](MyClass& self){
+                          return self.innerPtr->f16();
+                      }))
             // getter returning a raw pointer
             .function("f17",
                       std::function<void(MyClass const&)>([](MyClass const& self){
@@ -226,8 +228,7 @@ TEST_CASE("Ponder supports functions")
     const ponder::Class& metaclass = ponder::classByType<MyClass>();
     for (int i = 1; i <= 22; ++i)
     {
-        if (i <= 13 || i >= 20)
-            functions[i] = &metaclass.function("f" + std::to_string(i));
+        functions[i] = &metaclass.function("f" + std::to_string(i));
     }
 
     SECTION("functions have a return type")
@@ -245,12 +246,12 @@ TEST_CASE("Ponder supports functions")
         REQUIRE((functions[11]->returnType() == ponder::ValueType::None));
         REQUIRE((functions[12]->returnType() == ponder::ValueType::None));
         REQUIRE((functions[13]->returnType() == ponder::ValueType::None));
-        //REQUIRE((functions[14]->returnType() == ponder::ValueType::None));
-//        REQUIRE((functions[15]->returnType() == ponder::ValueType::None));
-//        REQUIRE((functions[16]->returnType() == ponder::ValueType::Integer));
-        //REQUIRE((functions[17]->returnType() == ponder::ValueType::None));
-//        REQUIRE((functions[18]->returnType() == ponder::ValueType::None));
-//        REQUIRE((functions[19]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[14]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[15]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[16]->returnType() == ponder::ValueType::Integer));
+        REQUIRE((functions[17]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[18]->returnType() == ponder::ValueType::None));
+        REQUIRE((functions[19]->returnType() == ponder::ValueType::None));
         REQUIRE((functions[20]->returnType() == ponder::ValueType::Integer));
         REQUIRE((functions[21]->returnType() == ponder::ValueType::Integer));
         REQUIRE((functions[22]->returnType() == ponder::ValueType::Integer));
@@ -271,12 +272,12 @@ TEST_CASE("Ponder supports functions")
         REQUIRE(functions[11]->argCount() == 3);
         REQUIRE(functions[12]->argCount() == 4);
         REQUIRE(functions[13]->argCount() == 5);
-        //REQUIRE(functions[14]->argCount() == 0);
-//        REQUIRE(functions[15]->argCount() == 0);
-//        REQUIRE(functions[16]->argCount() == 0);
-        //REQUIRE(functions[17]->argCount() == 0);
-//        REQUIRE(functions[18]->argCount() == 0);
-//        REQUIRE(functions[19]->argCount() == 0);
+        REQUIRE(functions[14]->argCount() == 0);
+        REQUIRE(functions[15]->argCount() == 0);
+        REQUIRE(functions[16]->argCount() == 0);
+        REQUIRE(functions[17]->argCount() == 0);
+        REQUIRE(functions[18]->argCount() == 0);
+        REQUIRE(functions[19]->argCount() == 0);
         REQUIRE(functions[20]->argCount() == 1);
         REQUIRE(functions[21]->argCount() == 1);
         REQUIRE(functions[22]->argCount() == 1);
@@ -307,12 +308,12 @@ TEST_CASE("Ponder supports functions")
         REQUIRE(functions[13]->argType(2) == ponder::ValueType::Enum);
         REQUIRE(functions[13]->argType(3) == ponder::ValueType::Enum);
         REQUIRE(functions[13]->argType(4) == ponder::ValueType::Enum);
-        //REQUIRE_THROWS_AS(functions[14]->argType(0), ponder::OutOfRange);
-//        REQUIRE_THROWS_AS(functions[15]->argType(0), ponder::OutOfRange);
-//        REQUIRE_THROWS_AS(functions[16]->argType(0), ponder::OutOfRange);
-        //REQUIRE_THROWS_AS(functions[17]->argType(0), ponder::OutOfRange);
-//        REQUIRE_THROWS_AS(functions[18]->argType(0), ponder::OutOfRange);
-//        REQUIRE_THROWS_AS(functions[19]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[14]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[15]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[16]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[17]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[18]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[19]->argType(0), ponder::OutOfRange);
         REQUIRE(functions[20]->argType(0) == ponder::ValueType::Integer);
         REQUIRE(functions[21]->argType(0) == ponder::ValueType::Integer);
         REQUIRE(functions[22]->argType(0) == ponder::ValueType::Integer);
@@ -337,15 +338,15 @@ TEST_CASE("Ponder supports functions")
                  == ponder::Value::nothing));
         REQUIRE((functions[13]->call(object, ponder::Args(Zero, One, Two, Zero, One))
                  == ponder::Value::nothing));
-        //REQUIRE(functions[14]->call(object, ponder::Args()) == ponder::Value::nothing);
-//        REQUIRE(functions[15]->call(object, ponder::Args()) == ponder::Value::nothing);
-//        REQUIRE(functions[16]->call(object, ponder::Args()) == ponder::Value(16));
-        //REQUIRE(functions[17]->call(object, ponder::Args(20)) == ponder::Value::nothing);
-//        REQUIRE(functions[18]->call(object, ponder::Args()) == ponder::Value::nothing);
-//        REQUIRE(functions[19]->call(object, ponder::Args()) == ponder::Value::nothing);
-        REQUIRE(functions[20]->call(object, ponder::Args(10)) == ponder::Value(10));
-        REQUIRE(functions[21]->call(object, ponder::Args(10)) == ponder::Value(30));
-        REQUIRE(functions[22]->call(object, ponder::Args(10)) == ponder::Value(60));
+        REQUIRE((functions[14]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE((functions[15]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE((functions[16]->call(object, ponder::Args()) == ponder::Value(16)));
+        REQUIRE((functions[17]->call(object, ponder::Args(20)) == ponder::Value::nothing));
+        REQUIRE((functions[18]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE((functions[19]->call(object, ponder::Args()) == ponder::Value::nothing));
+        REQUIRE((functions[20]->call(object, ponder::Args(10)) == ponder::Value(10)));
+        REQUIRE((functions[21]->call(object, ponder::Args(10)) == ponder::Value(30)));
+        REQUIRE((functions[22]->call(object, ponder::Args(10)) == ponder::Value(60)));
     }
     
     SECTION("calling null functions is an error")
@@ -362,14 +363,14 @@ TEST_CASE("Ponder supports functions")
                           ponder::NullObject);
         REQUIRE_THROWS_AS(functions[8]->call(ponder::UserObject(), ponder::Args()),
                           ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[15]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[16]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[18]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[19]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[15]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[16]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[18]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(functions[19]->call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
     }
     
     SECTION("calling a function without enough arguments is an error")
