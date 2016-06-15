@@ -57,7 +57,9 @@ using namespace std::placeholders;
  * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
-inline typename std::remove_reference<T>::type convertArg(const Args& args, std::size_t index, const std::string& function)
+inline typename std::remove_reference<T>::type convertArg(const Args& args,
+                                                          std::size_t index,
+                                                          const std::string& function)
 {
     try
     {
@@ -74,7 +76,11 @@ template <typename R, typename C>
 struct CallHelper
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, C obj, const Args& args, const std::string& name, index_sequence<Is...>)
+    static Value call(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
         return func(obj, convertArg<A>(args,Is,name)...);
     }
@@ -93,7 +99,11 @@ template <typename C>
 struct CallHelper<void, C>
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, C obj, const Args& args, const std::string& name, index_sequence<Is...>)
+    static Value call(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
         return func(obj, convertArg<A>(args,Is,name)...), Value::nothing;
     }
@@ -142,7 +152,10 @@ protected:
      */
     Value execute(const UserObject& object, const Args& args) const override
     {
-        return CallHelper<R, C>::template call<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
+        return CallHelper<R, C>::template call<decltype(m_function), A...>(m_function,
+                                                                           object.get<C>(),
+                                                                           args,
+                                                                           name());
     }
 
 private:
@@ -234,7 +247,9 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
+        :   Function(name,
+                     mapType<R>(),
+                     std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4))
     {
     }
@@ -255,13 +270,15 @@ protected:
 
 private:
 
-    std::function<R (C, A0, A1, A2)> m_function; ///< Object containing the actual function to call
+    /// Object containing the actual function to call
+    std::function<R (C, A0, A1, A2)> m_function;
 };
 
 /*
  * Specialization of FunctionImpl for composed functions taking 4 arguments
  */
-template <typename C, typename N, typename M, typename R, typename A0, typename A1, typename A2, typename A3>
+template <typename C, typename N, typename M, typename R,
+          typename A0, typename A1, typename A2, typename A3>
 class FunctionImpl<R (N, A0, A1, A2, A3), M (C)> : public Function
 {
 public:
@@ -271,7 +288,10 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
+        :   Function(name,
+                     mapType<R>(),
+                     std::vector<ValueType> {mapType<A0>(), mapType<A1>(),
+                                             mapType<A2>(), mapType<A3>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5))
     {
     }
@@ -293,13 +313,15 @@ protected:
 
 private:
 
-    std::function<R (C, A0, A1, A2, A3)> m_function; ///< Object containing the actual function to call
+    /// Object containing the actual function to call
+    std::function<R (C, A0, A1, A2, A3)> m_function;
 };
 
 /*
  * Specialization of FunctionImpl for composed functions taking 5 arguments
  */
-template <typename C, typename N, typename M, typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
+template <typename C, typename N, typename M, typename R,
+          typename A0, typename A1, typename A2, typename A3, typename A4>
 class FunctionImpl<R (N, A0, A1, A2, A3, A4), M (C)> : public Function
 {
 public:
@@ -309,7 +331,10 @@ public:
      */
     template <typename F1, typename F2>
     FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
+        :   Function(name,
+                     mapType<R>(),
+                     std::vector<ValueType> {mapType<A0>(), mapType<A1>(), mapType<A2>(),
+                                             mapType<A3>(), mapType<A4>()})
         ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5, _6))
     {
     }
@@ -332,7 +357,8 @@ protected:
 
 private:
 
-    std::function<R (C, A0, A1, A2, A3, A4)> m_function; ///< Object containing the actual function to call
+    /// Object containing the actual function to call
+    std::function<R (C, A0, A1, A2, A3, A4)> m_function;
 };
 
 } // namespace detail
