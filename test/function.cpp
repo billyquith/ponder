@@ -54,11 +54,6 @@ namespace FunctionTest
         return left.x == right.x;
     }
     
-    static bool operator < (const MyType& left, const MyType& right)
-    {
-        return left.x < right.x;
-    }
-    
     static std::ostream& operator << (std::ostream& stream, const MyType& object)
     {
         return stream << object.x;
@@ -108,7 +103,7 @@ namespace FunctionTest
             void f14() {}
             void f15() const {}
             int f16() {return 16;}
-            void f17(int) {}
+            void f17(int) const {}
             void f18() {}
             void f19() {}
         };
@@ -176,12 +171,30 @@ namespace FunctionTest
             .function("f13", &MyClass::f13) // 5 arguments
             
             // ***** nested functions *****
-//            .function("f14", &MyClass::Inner::f14, &MyClass::inner)   // object
-//            .function("f15", &MyClass::Inner::f15, &MyClass::getInner) // getter returning an object
-//            .function("f16", &MyClass::Inner::f16, &MyClass::innerPtr) // raw pointer
-            //TOFIX .function("f17", &MyClass::Inner::f17, &MyClass::getInnerPtr) // getter returning a raw pointer
-//            .function("f18", &MyClass::Inner::f18, &MyClass::innerSmartPtr)    // smart pointer
-//            .function("f19", &MyClass::Inner::f19, &MyClass::getInnerSmartPtr) // getter returning a smart pointer
+            //
+            // These were previously indirected
+            //
+            .function("f14",
+                      std::function<void(MyClass&)>([](MyClass& self){ self.inner.f14(); }))
+            // getter returning an object
+            .function("f15",
+                      std::function<void(MyClass&)>([](MyClass& self){ self.getInner().f15(); }))
+            // raw pointer
+            .function("f16",
+                      std::function<void(MyClass&)>([](MyClass& self){ self.innerPtr->f16(); }))
+            // getter returning a raw pointer
+            .function("f17",
+                      std::function<void(MyClass const&)>([](MyClass const& self){
+                          self.getInnerPtr()->f17(99);
+                      }))
+            // smart pointer
+            .function("f18", std::function<void(MyClass&)>([](MyClass& self){
+                          self.innerSmartPtr.get()->f18();
+                      }))
+            // getter returning a smart pointer
+            .function("f19", std::function<void(MyClass&)>([](MyClass& self){
+                          self.getInnerSmartPtr().get()->f19();
+                      }))
         
             // ***** std::function *****
             .function("f20",

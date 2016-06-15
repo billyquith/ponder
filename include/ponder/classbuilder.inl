@@ -135,13 +135,6 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
     return addFunction(new detail::FunctionImpl<Signature>(name, function));
 }
 
-template <typename T>
-template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, std::function<F> function)
-{
-    return addFunction(new detail::FunctionImpl<F>(name, function));
-}
-
 //template <typename T>
 //template <typename F1, typename F2>
 //ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F1 function1, F2 function2)

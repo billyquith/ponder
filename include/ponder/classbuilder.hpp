@@ -217,19 +217,6 @@ public:
     ClassBuilder<T>& function(const std::string& name, F function);
 
     /**
-     * \brief Declare a new function from a std::function
-     *
-     * Overload handling functions of type std::function.
-     *
-     * \param name Name of the function (must be unique within the metaclass)
-     * \param function Instance of std::function to bind to the function
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F>
-    ClassBuilder<T>& function(const std::string& name, std::function<F> function);
-
-    /**
      * \brief Declare a new function from two functions to compose
      *
      * This allows to expose a function which requires an extra level of indirection to be 
