@@ -183,6 +183,15 @@ TEST_CASE("Ponder has function traits")
                       "FunctionTraits<>::isFunction failed");
         static_assert(ponder::detail::FunctionTraits<decltype(&Members::a)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+
+        // std::function<>
+        static_assert(ponder::detail::FunctionTraits<std::function<void()>>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<std::function<int(float,int)>>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<std::function<char*(char[])>>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        
     }
 }
 
