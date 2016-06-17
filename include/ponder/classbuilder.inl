@@ -135,19 +135,6 @@ ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
     return addFunction(new detail::FunctionImpl<Signature>(name, function));
 }
 
-//template <typename T>
-//template <typename F1, typename F2>
-//ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F1 function1, F2 function2)
-//{
-//    // Get uniform function types from F1 and F2, whatever they really are
-//    typedef typename detail::FunctionTraits<F1>::type Signature1;
-//    typedef typename detail::FunctionTraits<F2>::type Signature2;
-//
-//    // Construct and add the metafunction
-//    return addFunction(
-//        new detail::FunctionImpl<Signature1, Signature2>(name, function1, function2) );
-//}
-
 template <typename T>
 ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id)
 {

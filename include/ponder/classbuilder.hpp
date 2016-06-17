@@ -217,40 +217,6 @@ public:
     ClassBuilder<T>& function(const std::string& name, F function);
 
     /**
-     * \brief Declare a new function from two functions to compose
-     *
-     * This allows to expose a function which requires an extra level of indirection to be 
-     * accessed (for example, a function of a member of the class instead of a function of the 
-     * class itself).
-     *
-     * Example:
-     *
-     * \code
-     * struct Point
-     * {
-     *     void move(float x, float y);
-     * };
-     * 
-     * class Entity
-     * {
-     * public:
-     *     Point p;
-     * };
-     *
-     * ponder::Class::declare<Entity>("Entity")
-     *     .function("move", &Point::move, &Entity::p); // will internally resolve to e.p.move()
-     * \endcode
-     *
-     * \param name Name of the function (must be unique within the metaclass)
-     * \param function1 C++ callable entity to bind to the function
-     * \param function2 Accessor returning the member to apply to function1
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-//    template <typename F1, typename F2>
-//    ClassBuilder<T>& function(const std::string& name, F1 function1, F2 function2);
-
-    /**
      * \brief Declare a new static tag
      *
      * \param id Identifier of the new tag (must be unique within the metaclass)

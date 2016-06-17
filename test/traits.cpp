@@ -73,7 +73,6 @@ namespace TraitsTest
     public:
         T x;
     };
-
 }
 
 using namespace TraitsTest;
@@ -88,7 +87,7 @@ TEST_CASE("C++11 features and syntax")
     SECTION("function test")
     {
         foo(); bar(0.f); // to stop unused warning
-    
+        
         static_assert(std::is_function<decltype(foo)>::value, "std::is_function failed");
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
@@ -128,6 +127,7 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder has function traits")
 {
+    
     SECTION("what is not a function")
     {
         static_assert( ! ponder::detail::FunctionTraits<int>::isFunction,
@@ -191,7 +191,6 @@ TEST_CASE("Ponder has function traits")
                       "FunctionTraits<>::isFunction failed");
         static_assert(ponder::detail::FunctionTraits<std::function<char*(char[])>>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        
     }
 }
 
