@@ -37,7 +37,7 @@ project(PONDER_TEST)
 
 # all source files
 set(PONDER_TEST_SRCS
-    catch.hpp
+    test.hpp
     arrayproperty.cpp
     class.cpp
     classvisitor.cpp

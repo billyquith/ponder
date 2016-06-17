@@ -30,7 +30,7 @@
 #include <ponder/classget.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <string>
 
 namespace TagHolderTest

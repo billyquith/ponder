@@ -206,7 +206,7 @@ public:
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
     Value call(const std::string& function, const Args& args = Args::empty) const;
-
+    
     /**
      * \brief Assignment operator
      *

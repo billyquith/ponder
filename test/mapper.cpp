@@ -32,7 +32,7 @@
 #include <ponder/simpleproperty.hpp>
 #include <ponder/function.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <map>
 #include <string>
 

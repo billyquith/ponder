@@ -33,7 +33,7 @@
 #include <ponder/class.hpp>
 #include <ponder/enum.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <string>
 
 namespace PropertyTest

@@ -31,7 +31,7 @@
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/util.hpp>
 #include <ponder/arraymapper.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <array>
 #include <string.h> // strcmp()
 

@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 #if 1
 

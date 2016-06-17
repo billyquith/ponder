@@ -35,7 +35,7 @@
 #include <ponder/enumobject.hpp>
 #include <ponder/userobject.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace ValueTest
 {

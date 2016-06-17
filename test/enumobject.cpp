@@ -31,7 +31,7 @@
 #include <ponder/enumget.hpp>
 #include <ponder/enumobject.hpp>
 #include <ponder/enum.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace EnumObjectTest
 {

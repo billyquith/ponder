@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-#include "catch.hpp"
+#include "test.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/enumget.hpp>
 #include <ponder/enumproperty.hpp>

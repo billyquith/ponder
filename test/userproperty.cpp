@@ -30,7 +30,7 @@
 #include <ponder/classget.hpp>
 #include <ponder/userproperty.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 
 namespace UserPropertyTest
