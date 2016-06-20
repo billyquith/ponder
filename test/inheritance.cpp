@@ -121,23 +121,6 @@ PONDER_AUTO_TYPE(InheritanceTest::MyClass4, &InheritanceTest::declare)
 
 using namespace InheritanceTest;
 
-
-// struct InheritanceFixture
-// {
-//     InheritanceFixture()
-//     {
-//         class1 = &ponder::classByType<MyClass1>();
-//         class2 = &ponder::classByType<MyClass2>();
-//         class3 = &ponder::classByType<MyClass3>();
-//         class4 = &ponder::classByType<MyClass4>();
-//     }
-//
-//     const ponder::Class* class1;
-//     const ponder::Class* class2;
-//     const ponder::Class* class3;
-//     const ponder::Class* class4;
-// };
-
 //-----------------------------------------------------------------------------
 //                         Tests for inherited metaclasses
 //-----------------------------------------------------------------------------
