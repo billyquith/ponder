@@ -30,8 +30,6 @@
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 
-#if 1
-
 namespace FunctionTest
 {
     using namespace std::placeholders;
@@ -137,6 +135,20 @@ namespace FunctionTest
         return object->p3;
     }
     
+    
+    class ClassA
+    {
+    public:
+        ClassA() : TestMember(0) {}
+        int TestMember;
+    };
+    
+    class ClassB
+    {
+    public:
+        void ModifyA(ClassA* obj) { obj->TestMember = 5; }
+    };
+    
     void declare()
     {
         ponder::Enum::declare<MyEnum>("FunctionTest::MyEnum")
@@ -207,6 +219,14 @@ namespace FunctionTest
                       std::function<int (MyClass&, int)>(
                           std::bind(std::bind(&MyClass::f22, _1, _2, _3, 30), _1, _2, 20)))
             ;
+        
+        ponder::Class::declare<ClassA>()
+            .constructor()
+            .property("TestMember", &ClassA::TestMember);
+        
+        ponder::Class::declare<ClassB>()
+            .constructor()
+            .function("ModifyA", &ClassB::ModifyA);
     }
 }
 
@@ -214,6 +234,8 @@ PONDER_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::ClassA,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::ClassB,  &FunctionTest::declare)
 
 using namespace FunctionTest;
 
@@ -403,7 +425,7 @@ TEST_CASE("Ponder supports functions")
     {
         MyClass object;
         MyType arg(0);
-        
+
         REQUIRE_THROWS_AS(functions[2]->call(object, ponder::Args(arg)),
                           ponder::BadArgument);
         REQUIRE_THROWS_AS(functions[10]->call(object, ponder::Args(arg, arg)),
@@ -423,4 +445,19 @@ TEST_CASE("Ponder supports functions")
     }
 }
 
-#endif 
+TEST_CASE("Functions can modify objects")
+{
+    // ModifyA() is called on an object of class A with the intend to modify that object:
+    ClassA objectA;
+    
+    const ponder::Class& metaClassB = ponder::classByType<FunctionTest::ClassB>();
+    ponder::UserObject wrapperB = metaClassB.construct();
+    const ponder::Function& functionB = metaClassB.function("ModifyA");
+    
+    REQUIRE(objectA.TestMember == 0);
+    functionB.call(wrapperB, ponder::UserObject(&objectA));
+    REQUIRE(objectA.TestMember == 5);
+    
+    metaClassB.destroy(wrapperB);
+}
+
