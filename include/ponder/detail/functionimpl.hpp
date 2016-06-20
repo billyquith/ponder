@@ -73,10 +73,10 @@ inline typename std::remove_reference<T>::type convertArg(const Args& args,
 
 
 template <typename R, typename C>
-struct CallHelper
+class CallHelper
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func,
+    static Value callCoerce(F func,
                       C obj,
                       const Args& args,
                       const std::string& name,
@@ -85,10 +85,27 @@ struct CallHelper
         return func(obj, convertArg<A>(args, Is, name)...);
     }
 
-    template <typename F, typename... A>
-    static Value call(F func, C obj, const Args& args, const std::string& name)
+    template<typename F, typename... A, std::size_t... Is>
+    static Value callDirect(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
-        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        return func(obj, args[Is]...);
+    }
+
+public:
+    template <typename F, typename... A>
+    static Value callCoerce(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+    }
+
+    template <typename F, typename... A>
+    static Value callDirect(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
@@ -96,22 +113,41 @@ struct CallHelper
  * Specialization of CallHelper for functions returning void
  */
 template <typename C>
-struct CallHelper<void, C>
+class CallHelper<void, C>
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func,
+    static Value callCoerce(F func,
                       C obj,
                       const Args& args,
                       const std::string& name,
                       index_sequence<Is...>)
     {
-        return func(obj, convertArg<A>(args,Is,name)...), Value::nothing;
+        func(obj, convertArg<A>(args,Is,name)...);
+        return Value::nothing;
     }
-    
-    template <typename F, typename... A>
-    static Value call(F func, C obj, const Args& args, const std::string& name)
+
+    template<typename F, typename... A, std::size_t... Is>
+    static Value callDirect(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
-        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        func(obj, args[Is]...);
+        return Value::nothing;
+    }
+
+public:
+    template <typename F, typename... A>
+    static Value callCoerce(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+    }
+
+    template <typename F, typename... A>
+    static Value callDirect(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
@@ -124,9 +160,7 @@ struct CallHelper<void, C>
  * The FunctionImpl class is a template which is specialized
  * according to the underlying function prototype.
  */
-
 template <typename F1, typename F2 = void> class FunctionImpl;
-
     
 /*
  * Specialization of FunctionImpl for all functions.
@@ -152,10 +186,8 @@ protected:
      */
     Value execute(const UserObject& object, const Args& args) const override
     {
-        return CallHelper<R, C>::template call<decltype(m_function), A...>(m_function,
-                                                                           object.get<C>(),
-                                                                           args,
-                                                                           name());
+        return CallHelper<R, C>::template
+            callCoerce<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
     }
 
 private:
