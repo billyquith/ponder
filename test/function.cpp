@@ -255,28 +255,28 @@ TEST_CASE("Ponder supports functions")
 
     SECTION("functions have a return type")
     {
-        REQUIRE((functions[1]->returnType() ==  ponder::ValueType::None));
-        REQUIRE((functions[2]->returnType() ==  ponder::ValueType::Integer));
-        REQUIRE((functions[3]->returnType() ==  ponder::ValueType::String));
-        REQUIRE((functions[4]->returnType() ==  ponder::ValueType::User));
-        REQUIRE((functions[5]->returnType() ==  ponder::ValueType::User));
-        REQUIRE((functions[6]->returnType() ==  ponder::ValueType::None));
-        REQUIRE((functions[7]->returnType() ==  ponder::ValueType::User));
-        REQUIRE((functions[8]->returnType() ==  ponder::ValueType::None));
-        REQUIRE((functions[9]->returnType() ==  ponder::ValueType::None));
-        REQUIRE((functions[10]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[11]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[12]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[13]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[14]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[15]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[16]->returnType() == ponder::ValueType::Integer));
-        REQUIRE((functions[17]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[18]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[19]->returnType() == ponder::ValueType::None));
-        REQUIRE((functions[20]->returnType() == ponder::ValueType::Integer));
-        REQUIRE((functions[21]->returnType() == ponder::ValueType::Integer));
-        REQUIRE((functions[22]->returnType() == ponder::ValueType::Integer));
+        REQUIRE(functions[1]->returnType() ==  ponder::ValueType::None);
+        REQUIRE(functions[2]->returnType() ==  ponder::ValueType::Integer);
+        REQUIRE(functions[3]->returnType() ==  ponder::ValueType::String);
+        REQUIRE(functions[4]->returnType() ==  ponder::ValueType::User);
+        REQUIRE(functions[5]->returnType() ==  ponder::ValueType::User);
+        REQUIRE(functions[6]->returnType() ==  ponder::ValueType::None);
+        REQUIRE(functions[7]->returnType() ==  ponder::ValueType::User);
+        REQUIRE(functions[8]->returnType() ==  ponder::ValueType::None);
+        REQUIRE(functions[9]->returnType() ==  ponder::ValueType::None);
+        REQUIRE(functions[10]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[11]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[12]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[13]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[14]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[15]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[16]->returnType() == ponder::ValueType::Integer);
+        REQUIRE(functions[17]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[18]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[19]->returnType() == ponder::ValueType::None);
+        REQUIRE(functions[20]->returnType() == ponder::ValueType::Integer);
+        REQUIRE(functions[21]->returnType() == ponder::ValueType::Integer);
+        REQUIRE(functions[22]->returnType() == ponder::ValueType::Integer);
     }
 
     SECTION("functions have a number of arguments")
