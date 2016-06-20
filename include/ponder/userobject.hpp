@@ -53,6 +53,10 @@ class ParentObject;
  * ponder::UserObject is an abstract representation of object instances, which can safely
  * be passed to and manipulated by all the entities in Ponder.
  *
+ * \note UserObjects are stored interally as objects (a copy) or references (an existing 
+ *       object). To be sure which you are constructing use UserObject::ref() or
+ *       UserObject::copy().
+ *
  * \sa EnumObject
  */
 class PONDER_API UserObject
@@ -69,13 +73,48 @@ public:
     /**
      * \brief Construct the user object from an instance
      *
-     * This constructor is equivalent to calling UserObject::ref(object),
-     * i.e. the object is stored by reference.
+     * User objects. Also see UserObject::ref() and UserObject::copy().
      *
      * \param object Instance to store in the user object
      */
     template <typename T>
     UserObject(const T& object);
+
+    /**
+     * \brief Construct a user object from a reference to an object
+     *
+     * This functions is equivalent to calling UserObject(object).
+     *
+     * \param object Instance to store in the user object
+     *
+     * \return UserObject containing a reference to \a  object
+     */
+    template <typename T>
+    static UserObject ref(T& object);
+    
+    /**
+     * \brief Construct a user object from a const reference to an object
+     *
+     * This functions is *not* equivalent to calling UserObject(object).
+     *
+     * \param object Instance to store in the user object
+     *
+     * \return UserObject containing a const reference to \a object
+     */
+    template <typename T>
+    static UserObject ref(const T& object);
+    
+    /**
+     * \brief Construct a user object with a copy of an object
+     *
+     * This functions is *not* equivalent to calling UserObject(object).
+     *
+     * \param object Instance to store in the user object
+     *
+     * \return UserObject containing a copy of \a object
+     */
+    template <typename T>
+    static UserObject copy(const T& object);
 
     /**
      * \brief Construct the user object from a parent object and a member property
@@ -243,48 +282,10 @@ public:
      */
     bool operator < (const UserObject& other) const;
 
-public:
-
     /**
      * \brief Special UserObject instance representing an empty object
      */
     static const UserObject nothing;
-
-    /**
-     * \brief Construct a user object from a reference to an object
-     *
-     * This functions is equivalent to calling UserObject(object).
-     *
-     * \param object Instance to store in the user object
-     *
-     * \return UserObject containing a reference to \a  object
-     */
-    template <typename T>
-    static UserObject ref(T& object);
-
-    /**
-     * \brief Construct a user object from a const reference to an object
-     *
-     * This functions is NOT equivalent to calling UserObject(object).
-     *
-     * \param object Instance to store in the user object
-     *
-     * \return UserObject containing a const reference to \a object
-     */
-    template <typename T>
-    static UserObject ref(const T& object);
-
-    /**
-     * \brief Construct a user object with a copy of an object
-     *
-     * This functions is NOT equivalent to calling UserObject(object).
-     *
-     * \param object Instance to store in the user object
-     *
-     * \return UserObject containing a copy of \a object
-     */
-    template <typename T>
-    static UserObject copy(const T& object);
 
 private:
 
