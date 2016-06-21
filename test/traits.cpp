@@ -177,6 +177,7 @@ TEST_CASE("Ponder has function traits")
             float a[5];
         };
 
+        // member pointers
         static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(ponder::detail::FunctionTraits<float (Members::*)[]>::isFunction,

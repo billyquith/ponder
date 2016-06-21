@@ -455,7 +455,7 @@ TEST_CASE("Functions can modify objects")
     const ponder::Function& functionB = metaClassB.function("ModifyA");
     
     REQUIRE(objectA.TestMember == 0);
-    functionB.call(wrapperB, ponder::UserObject(&objectA));
+    functionB.call(wrapperB, &objectA);
     REQUIRE(objectA.TestMember == 5);
     
     metaClassB.destroy(wrapperB);
