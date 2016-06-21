@@ -118,7 +118,7 @@ namespace PropertyTest
         
         // ***** properties used with std::bind *****
         int p21;
-        MyEnum p22; MyEnum* getP22() {return &p22;}
+        MyEnum p22; MyEnum getP22() {return p22;}
         std::string getP23(const std::string& str) const {return str + "23";}
         MyType p24; const MyType& getP24() const {return p24;} void setP24(MyType t) {p24 = t;}
         
@@ -196,8 +196,8 @@ namespace PropertyTest
             // ***** std::bind *****
              // non-member read-write getter
             .property("p21", std::bind(&getP21, _1))
-             // read-write getter to pointer
-            // TOFIX .property("p22", std::bind(&MyClass::getP22, _1))
+             // read-only getter
+            .property("p22", std::bind(&MyClass::getP22, _1))
              // read-only getter + extra parameter
             .property("p23", std::bind(&MyClass::getP23, _1, "str"))
              // read-only getter + write-only setter
@@ -208,6 +208,8 @@ namespace PropertyTest
             .property("p25", &MyClass::getP2, &MyClass::setWithChain)
             ;
     }
+    
+    static constexpr int c_NumTests = 25;
 }
 
 PONDER_AUTO_TYPE(PropertyTest::MyEnum,  &PropertyTest::declare)
@@ -222,10 +224,9 @@ struct PropertyFixture
     PropertyFixture()
     {
         const ponder::Class& metaclass = ponder::classByType<MyClass>();
-        for (int i = 1; i < 25; ++i)
+        for (int i = 1; i <= c_NumTests; ++i)
         {
-            if (i != 22) // remove when fixed
-                properties[i] = &metaclass.property("p" + std::to_string(i));
+            properties[i] = &metaclass.property("p" + std::to_string(i));
         }
     }
 
@@ -238,15 +239,12 @@ struct PropertyFixture
 
 TEST_CASE("Classes can have properties")
 {
-    const size_t c_propCount = 25;
-    
     const ponder::Class& metaclass = ponder::classByType<MyClass>();
-    const ponder::Property* properties[c_propCount];
+    const ponder::Property* properties[c_NumTests+1];
     
-    for (int i = 1; i < c_propCount; ++i)
+    for (int i = 1; i <= c_NumTests; ++i)
     {
-        if (i != 22) // remove when fixed
-            properties[i] = &metaclass.property("p" + std::to_string(i));
+        properties[i] = &metaclass.property("p" + std::to_string(i));
     }
 
     SECTION("type")
@@ -272,7 +270,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[19]->type() == ponder::ValueType::Integer);
         REQUIRE(properties[20]->type() == ponder::ValueType::Real);
         REQUIRE(properties[21]->type() == ponder::ValueType::Integer);
-        //REQUIRE(properties[22]->type() == ponder::ValueType::Enum);
+        REQUIRE(properties[22]->type() == ponder::ValueType::Enum);
         REQUIRE(properties[23]->type() == ponder::ValueType::String);
         REQUIRE(properties[24]->type() == ponder::ValueType::User);
     }
@@ -300,7 +298,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[19]->name() == "p19");
         REQUIRE(properties[20]->name() == "p20");
         REQUIRE(properties[21]->name() == "p21");
-        //REQUIRE(properties[22]->name() == "p22");
+        REQUIRE(properties[22]->name() == "p22");
         REQUIRE(properties[23]->name() == "p23");
         REQUIRE(properties[24]->name() == "p24");
     }
@@ -330,7 +328,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[19]->readable(object) == true);
         REQUIRE(properties[20]->readable(object) == true);
         REQUIRE(properties[21]->readable(object) == true);
-        //REQUIRE(properties[22]->readable(object) == true);
+        REQUIRE(properties[22]->readable(object) == true);
         REQUIRE(properties[23]->readable(object) == true);
         REQUIRE(properties[24]->readable(object) == true);
     }
@@ -360,7 +358,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[19]->writable(object) == true);
         REQUIRE(properties[20]->writable(object) == true);
         REQUIRE(properties[21]->writable(object) == true);
-        //REQUIRE(properties[22]->writable(object) == true);
+        REQUIRE(properties[22]->writable(object) == false);
         REQUIRE(properties[23]->writable(object) == false);
         REQUIRE(properties[24]->writable(object) == true);
     }
@@ -391,7 +389,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[19]->get(object) == ponder::Value(object.p19));
         REQUIRE(properties[20]->get(object) == ponder::Value(object.p20));
         REQUIRE(properties[21]->get(object) == ponder::Value(object.p21));
-        //REQUIRE(properties[22]->get(object) == ponder::Value(object.p22));
+        REQUIRE((properties[22]->get(object) == ponder::Value(object.p22)));
         REQUIRE(( properties[23]->get(object) == ponder::Value(object.getP23("str")) ));
         REQUIRE(( properties[24]->get(object) == ponder::Value(object.p24) ));
     }
@@ -424,7 +422,6 @@ TEST_CASE("Classes can have properties")
         properties[19]->set(object, -19);
         properties[20]->set(object, -20.);
         properties[21]->set(object, -21);
-        //properties[22]->set(object, One);
         properties[24]->set(object, MyType(-24));
 
         REQUIRE(object.p3 ==        "-3");
@@ -439,7 +436,6 @@ TEST_CASE("Classes can have properties")
         REQUIRE(object.p19 ==       -19);
         REQUIRE(object.p20 ==       -20.);
         REQUIRE(object.p21 ==       -21);
-        //REQUIRE(object.p22 ==     One);
         REQUIRE(object.p24 ==       MyType(-24));
     }
 }
