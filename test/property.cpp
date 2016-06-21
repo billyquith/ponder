@@ -65,8 +65,8 @@ namespace PropertyTest
         , p4(MyType(4))
         , p5(false)
         , p6(6)
-        , p7_impl("7"), p7(&p7_impl)
-        , p8_impl(One), p8(&p8_impl)
+        , p7("7")
+        , p8(One)
         , p9(new MyType(9))
         , p10(true)
         , p11(11)
@@ -89,8 +89,8 @@ namespace PropertyTest
         // ***** properties used as direct pointer to members *****
         bool p5;
         const int p6;
-        std::string p7_impl; std::string* p7;
-        MyEnum p8_impl; const MyEnum* p8;
+        std::string p7;
+        const MyEnum p8;
         std::shared_ptr<MyType> p9;
         
         // ***** member functions *****
@@ -160,8 +160,8 @@ namespace PropertyTest
             // ***** pointer to members *****
             .property("p5", &MyClass::p5) // pointer to read-write member
             .property("p6", &MyClass::p6) // pointer to const member
-            // TOFIX .property("p7", &MyClass::p7) // pointer to read-write pointer member
-            // TOFIX .property("p8", &MyClass::p8) // pointer to const pointer member
+            .property("p7", &MyClass::p7) // pointer to read-write pointer member
+            .property("p8", &MyClass::p8) // pointer to const pointer member
             .property("p9", &MyClass::p9) // pointer to read-write smart pointer member
         
             // ***** members functions *****
@@ -210,7 +210,7 @@ struct PropertyFixture
         const ponder::Class& metaclass = ponder::classByType<MyClass>();
         for (int i = 1; i < 25; ++i)
         {
-            if (i != 7 && i != 8 && i != 22) // remove when fixed
+            if (i != 22) // remove when fixed
                 properties[i] = &metaclass.property("p" + std::to_string(i));
         }
     }
@@ -231,7 +231,7 @@ TEST_CASE("Classes can have properties")
     
     for (int i = 1; i < c_propCount; ++i)
     {
-        if (i != 7 && i != 8 && i != 22) // remove when fixed
+        if (i != 22) // remove when fixed
             properties[i] = &metaclass.property("p" + std::to_string(i));
     }
 
@@ -243,8 +243,8 @@ TEST_CASE("Classes can have properties")
         REQUIRE((properties[4]->type() ==  ponder::ValueType::User));
         REQUIRE((properties[5]->type() ==  ponder::ValueType::Boolean));
         REQUIRE((properties[6]->type() ==  ponder::ValueType::Integer));
-        //REQUIRE(properties[7]->type() ==  ponder::ValueType::String));
-        //REQUIR(E(properties[8]->type() ==  ponder::ValueType::Enum));
+        REQUIRE(properties[7]->type() ==  ponder::ValueType::String);
+        REQUIRE(properties[8]->type() ==  ponder::ValueType::Enum);
         REQUIRE((properties[9]->type() ==  ponder::ValueType::User));
         REQUIRE((properties[10]->type() == ponder::ValueType::Boolean));
         REQUIRE((properties[11]->type() == ponder::ValueType::Integer));
@@ -271,8 +271,8 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[4]->name() == "p4");
         REQUIRE(properties[5]->name() == "p5");
         REQUIRE(properties[6]->name() == "p6");
-        //REQUIRE(properties[7]->name() == "p7");
-        //REQUIRE(properties[8]->name() == "p8");
+        REQUIRE(properties[7]->name() == "p7");
+        REQUIRE(properties[8]->name() == "p8");
         REQUIRE(properties[9]->name() == "p9");
         REQUIRE(properties[10]->name() == "p10");
         REQUIRE(properties[11]->name() == "p11");
@@ -301,8 +301,8 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[4]->readable(object) == true);
         REQUIRE(properties[5]->readable(object) == true);
         REQUIRE(properties[6]->readable(object) == true);
-        //REQUIRE(properties[7]->readable(object) == true);
-        //REQUIRE(properties[8]->readable(object) == true);
+        REQUIRE(properties[7]->readable(object) == true);
+        REQUIRE(properties[8]->readable(object) == true);
         REQUIRE(properties[9]->readable(object) == true);
         REQUIRE(properties[10]->readable(object) == true);
         REQUIRE(properties[11]->readable(object) == true);
@@ -331,8 +331,8 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[4]->writable(object) == true);
         REQUIRE(properties[5]->writable(object) == true);
         REQUIRE(properties[6]->writable(object) == false);
-        //REQUIRE(properties[7]->writable(object) == true);
-        //REQUIRE(properties[8]->writable(object) == false);
+        REQUIRE(properties[7]->writable(object) == true);
+        REQUIRE(properties[8]->writable(object) == false);
         REQUIRE(properties[9]->writable(object) ==  true);
         REQUIRE(properties[10]->writable(object) == false);
         REQUIRE(properties[11]->writable(object) == false);
@@ -362,8 +362,8 @@ TEST_CASE("Classes can have properties")
         REQUIRE(( properties[4]->get(object) == ponder::Value(object.p4) ));
         REQUIRE(properties[5]->get(object) == ponder::Value(object.p5));
         REQUIRE(properties[6]->get(object) == ponder::Value(object.p6));
-        //REQUIRE(properties[7]->get(object) == ponder::Value(object.p7_impl));
-        //REQUIRE(properties[8]->get(object) == ponder::Value(object.p8_impl));
+        REQUIRE(properties[7]->get(object) == ponder::Value(object.p7));
+        REQUIRE(properties[8]->get(object) == ponder::Value(object.p8));
         REQUIRE(( properties[9]->get(object) == ponder::Value(*object.p9) ));
         REQUIRE(properties[10]->get(object) == ponder::Value(object.p10));
         REQUIRE(properties[11]->get(object) == ponder::Value(object.p11));
@@ -390,7 +390,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE_THROWS_AS(properties[1]->set(object, false), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[2]->set(object, -2), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[6]->set(object, -6), ponder::ForbiddenWrite);
-        //REQUIRE_THROWS_AS(properties[8]->set(object, Two),  ponder::ForbiddenWrite);
+        REQUIRE_THROWS_AS(properties[8]->set(object, Two),  ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[10]->set(object, false), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[11]->set(object, -11), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[15]->set(object, -15), ponder::ForbiddenWrite);
@@ -401,7 +401,7 @@ TEST_CASE("Classes can have properties")
         properties[3]->set(object,  "-3");
         properties[4]->set(object,  MyType(-4));
         properties[5]->set(object,  true);
-        //properties[7]->set(object,  "-7");
+        properties[7]->set(object,  "-7");
         properties[9]->set(object,  MyType(-9));
         properties[12]->set(object, "-12");
         properties[13]->set(object, Zero);
@@ -416,7 +416,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(object.p3 ==        "-3");
         REQUIRE(object.p4 ==        MyType(-4));
         REQUIRE(object.p5 ==        true);
-        //REQUIRE(object.p7 ==      "-7");
+        REQUIRE(object.p7 ==      "-7");
         REQUIRE(*object.p9 ==       MyType(-9));
         REQUIRE(object.p12 ==       "-12");
         REQUIRE(object.p13 ==       Zero);
