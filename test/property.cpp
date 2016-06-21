@@ -165,33 +165,47 @@ namespace PropertyTest
             .property("p9", &MyClass::p9) // pointer to read-write smart pointer member
         
             // ***** members functions *****
-            .property("p10", &MyClass::getP10)                   // read-only getter (return by value)
-            .property("p11", &MyClass::getP11)                   // read-only getter (const)
-            .property("p12", &MyClass::getP12)                   // read-write getter
-            .property("p13", &MyClass::getP13, &MyClass::setP13) // read-only getter + write-only setter
+             // read-only getter (return by value)
+            .property("p10", &MyClass::getP10)
+             // read-only getter (const)
+            .property("p11", &MyClass::getP11)
+             // read-write getter
+            .property("p12", &MyClass::getP12)
+             // read-only getter + write-only setter
+            .property("p13", &MyClass::getP13, &MyClass::setP13)
         
             // ***** nested functions *****
-            .property("p14", &MyClass::Inner::p14, &MyClass::getInner)    // pointer to read-write member
-            .property("p15", &MyClass::Inner::p15, &MyClass::inner)       // Pointer to read-only member
-            .property("p16", &MyClass::Inner::getP16, &MyClass::getInner) // read-only getter
-            .property("p17", &MyClass::Inner::getP17,
-                      &MyClass::Inner::setP17, &MyClass::inner)    // read-only getter + write-only setter
+             // pointer to read-write member
+            .property("p14", &MyClass::Inner::p14, &MyClass::getInner)
+             // Pointer to read-only member
+            .property("p15", &MyClass::Inner::p15, &MyClass::inner)
+             // read-only getter
+            .property("p16", &MyClass::Inner::getP16, &MyClass::getInner)
+             // read-only getter + write-only setter
+            .property("p17", &MyClass::Inner::getP17, &MyClass::Inner::setP17, &MyClass::inner)
         
             // ***** std::function *****
-            .property("p18", std::function<bool (MyClass&)>(&MyClass::p18))    // pointer to read-write member
-            .property("p19", std::function<int& (MyClass&)>(&MyClass::getP19)) // read-write getter
+             // pointer to read-write member
+            .property("p18", std::function<bool (MyClass&)>(&MyClass::p18))
+              // read-write getter
+            .property("p19", std::function<int& (MyClass&)>(&MyClass::getP19))
+              // read-only getter + write-only setter
             .property("p20", std::function<double (MyClass&)>(&MyClass::getP20),
-                      std::function<void (MyClass&, double)>(&MyClass::setP20)) // read-only getter + write-only setter
+                             std::function<void (MyClass&, double)>(&MyClass::setP20))
         
             // ***** std::bind *****
-            .property("p21", std::bind(&getP21, _1))                 // non-member read-write getter
-            // TOFIX .property("p22", std::bind(&MyClass::getP22, _1))        // read-write getter to pointer
-            .property("p23", std::bind(&MyClass::getP23, _1, "str")) // read-only getter + extra parameter
-            .property("p24", std::bind(&MyClass::getP24, _1),
-                      std::bind(&MyClass::setP24, _1, _2))    // read-only getter + write-only setter
+             // non-member read-write getter
+            .property("p21", std::bind(&getP21, _1))
+             // read-write getter to pointer
+            // TOFIX .property("p22", std::bind(&MyClass::getP22, _1))
+             // read-only getter + extra parameter
+            .property("p23", std::bind(&MyClass::getP23, _1, "str"))
+             // read-only getter + write-only setter
+            .property("p24", std::bind(&MyClass::getP24, _1), std::bind(&MyClass::setP24, _1, _2))
         
             // ***** with method chaining *****
-            .property("p25", &MyClass::getP2, &MyClass::setWithChain) // member, method chaining
+             // member, method chaining
+            .property("p25", &MyClass::getP2, &MyClass::setWithChain)
             ;
     }
 }
@@ -237,30 +251,30 @@ TEST_CASE("Classes can have properties")
 
     SECTION("type")
     {
-        REQUIRE((properties[1]->type() ==  ponder::ValueType::Boolean));
-        REQUIRE((properties[2]->type() ==  ponder::ValueType::Integer));
-        REQUIRE((properties[3]->type() ==  ponder::ValueType::String));
+        REQUIRE(properties[1]->type() ==  ponder::ValueType::Boolean);
+        REQUIRE(properties[2]->type() ==  ponder::ValueType::Integer);
+        REQUIRE(properties[3]->type() ==  ponder::ValueType::String);
         REQUIRE((properties[4]->type() ==  ponder::ValueType::User));
-        REQUIRE((properties[5]->type() ==  ponder::ValueType::Boolean));
-        REQUIRE((properties[6]->type() ==  ponder::ValueType::Integer));
+        REQUIRE(properties[5]->type() ==  ponder::ValueType::Boolean);
+        REQUIRE(properties[6]->type() ==  ponder::ValueType::Integer);
         REQUIRE(properties[7]->type() ==  ponder::ValueType::String);
         REQUIRE(properties[8]->type() ==  ponder::ValueType::Enum);
-        REQUIRE((properties[9]->type() ==  ponder::ValueType::User));
-        REQUIRE((properties[10]->type() == ponder::ValueType::Boolean));
-        REQUIRE((properties[11]->type() == ponder::ValueType::Integer));
-        REQUIRE((properties[12]->type() == ponder::ValueType::String));
-        REQUIRE((properties[13]->type() == ponder::ValueType::Enum));
-        REQUIRE((properties[14]->type() == ponder::ValueType::Boolean));
-        REQUIRE((properties[15]->type() == ponder::ValueType::Integer));
-        REQUIRE((properties[16]->type() == ponder::ValueType::String));
-        REQUIRE((properties[17]->type() == ponder::ValueType::User));
-        REQUIRE((properties[18]->type() == ponder::ValueType::Boolean));
-        REQUIRE((properties[19]->type() == ponder::ValueType::Integer));
-        REQUIRE((properties[20]->type() == ponder::ValueType::Real));
-        REQUIRE((properties[21]->type() == ponder::ValueType::Integer));
-        //REQUIRE(properties[22]->type() == ponder::ValueType::Enum));
-        REQUIRE((properties[23]->type() == ponder::ValueType::String));
-        REQUIRE((properties[24]->type() == ponder::ValueType::User));
+        REQUIRE(properties[9]->type() ==  ponder::ValueType::User);
+        REQUIRE(properties[10]->type() == ponder::ValueType::Boolean);
+        REQUIRE(properties[11]->type() == ponder::ValueType::Integer);
+        REQUIRE(properties[12]->type() == ponder::ValueType::String);
+        REQUIRE(properties[13]->type() == ponder::ValueType::Enum);
+        REQUIRE(properties[14]->type() == ponder::ValueType::Boolean);
+        REQUIRE(properties[15]->type() == ponder::ValueType::Integer);
+        REQUIRE(properties[16]->type() == ponder::ValueType::String);
+        REQUIRE(properties[17]->type() == ponder::ValueType::User);
+        REQUIRE(properties[18]->type() == ponder::ValueType::Boolean);
+        REQUIRE(properties[19]->type() == ponder::ValueType::Integer);
+        REQUIRE(properties[20]->type() == ponder::ValueType::Real);
+        REQUIRE(properties[21]->type() == ponder::ValueType::Integer);
+        //REQUIRE(properties[22]->type() == ponder::ValueType::Enum);
+        REQUIRE(properties[23]->type() == ponder::ValueType::String);
+        REQUIRE(properties[24]->type() == ponder::ValueType::User);
     }
 
     SECTION("name")
@@ -359,7 +373,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[1]->get(object) == ponder::Value(object.p1));
         REQUIRE(properties[2]->get(object) == ponder::Value(object.p2));
         REQUIRE(properties[3]->get(object) == ponder::Value(object.p3));
-        REQUIRE(( properties[4]->get(object) == ponder::Value(object.p4) ));
+        REQUIRE((properties[4]->get(object) == ponder::Value(object.p4)));
         REQUIRE(properties[5]->get(object) == ponder::Value(object.p5));
         REQUIRE(properties[6]->get(object) == ponder::Value(object.p6));
         REQUIRE(properties[7]->get(object) == ponder::Value(object.p7));
