@@ -252,7 +252,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[1]->type() ==  ponder::ValueType::Boolean);
         REQUIRE(properties[2]->type() ==  ponder::ValueType::Integer);
         REQUIRE(properties[3]->type() ==  ponder::ValueType::String);
-        REQUIRE((properties[4]->type() ==  ponder::ValueType::User));
+        IS_TRUE(properties[4]->type() ==  ponder::ValueType::User);
         REQUIRE(properties[5]->type() ==  ponder::ValueType::Boolean);
         REQUIRE(properties[6]->type() ==  ponder::ValueType::Integer);
         REQUIRE(properties[7]->type() ==  ponder::ValueType::String);
@@ -371,12 +371,12 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[1]->get(object) == ponder::Value(object.p1));
         REQUIRE(properties[2]->get(object) == ponder::Value(object.p2));
         REQUIRE(properties[3]->get(object) == ponder::Value(object.p3));
-        REQUIRE((properties[4]->get(object) == ponder::Value(object.p4)));
+        IS_TRUE(properties[4]->get(object) == ponder::Value(object.p4));
         REQUIRE(properties[5]->get(object) == ponder::Value(object.p5));
         REQUIRE(properties[6]->get(object) == ponder::Value(object.p6));
         REQUIRE(properties[7]->get(object) == ponder::Value(object.p7));
         REQUIRE(properties[8]->get(object) == ponder::Value(object.p8));
-        REQUIRE(( properties[9]->get(object) == ponder::Value(*object.p9) ));
+        IS_TRUE( properties[9]->get(object) == ponder::Value(*object.p9) );
         REQUIRE(properties[10]->get(object) == ponder::Value(object.p10));
         REQUIRE(properties[11]->get(object) == ponder::Value(object.p11));
         REQUIRE(properties[12]->get(object) == ponder::Value(object.p12));
@@ -384,14 +384,14 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[14]->get(object) == ponder::Value(object.inner.p14));
         REQUIRE(properties[15]->get(object) == ponder::Value(object.inner.p15));
         REQUIRE(properties[16]->get(object) == ponder::Value(object.inner.p16));
-        REQUIRE(( properties[17]->get(object) == ponder::Value(object.inner.p17) ));
+        IS_TRUE( properties[17]->get(object) == ponder::Value(object.inner.p17) );
         REQUIRE(properties[18]->get(object) == ponder::Value(object.p18));
         REQUIRE(properties[19]->get(object) == ponder::Value(object.p19));
         REQUIRE(properties[20]->get(object) == ponder::Value(object.p20));
         REQUIRE(properties[21]->get(object) == ponder::Value(object.p21));
-        REQUIRE((properties[22]->get(object) == ponder::Value(object.p22)));
-        REQUIRE(( properties[23]->get(object) == ponder::Value(object.getP23("str")) ));
-        REQUIRE(( properties[24]->get(object) == ponder::Value(object.p24) ));
+        IS_TRUE(properties[22]->get(object) == ponder::Value(object.p22));
+        IS_TRUE( properties[23]->get(object) == ponder::Value(object.getP23("str")) );
+        IS_TRUE( properties[24]->get(object) == ponder::Value(object.p24) );
     }
 
 

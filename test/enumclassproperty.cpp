@@ -82,18 +82,18 @@ TEST_CASE("Enum class properties")
     
     SECTION("have enum type")
     {
-        REQUIRE((property->type() == ponder::ValueType::Enum));
+        IS_TRUE(property->type() == ponder::ValueType::Enum);
     }
 
     SECTION("wrap an Enum")
     {
-        REQUIRE(( property->getEnum() == ponder::enumByType<MyEnum>() ));
+        IS_TRUE( property->getEnum() == ponder::enumByType<MyEnum>() );
     }
 
     SECTION("have values")
     {
-        REQUIRE(( property->get(MyClass(MyEnum::Zero)) == ponder::Value(MyEnum::Zero) ));
-        REQUIRE(( property->get(MyClass(MyEnum::One)) == ponder::Value(MyEnum::One) ));
+        IS_TRUE( property->get(MyClass(MyEnum::Zero)) == ponder::Value(MyEnum::Zero) );
+        IS_TRUE( property->get(MyClass(MyEnum::One)) == ponder::Value(MyEnum::One) );
     }
 
     SECTION("allow setting of values")
@@ -101,7 +101,7 @@ TEST_CASE("Enum class properties")
         MyClass object(MyEnum::Zero);
         property->set(object, MyEnum::One);
 
-        REQUIRE(( property->get(object) == ponder::Value(MyEnum::One) ));
+        IS_TRUE( property->get(object) == ponder::Value(MyEnum::One) );
     }    
 }
 

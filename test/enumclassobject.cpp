@@ -101,9 +101,9 @@ TEST_CASE("Enum class objects")
     
     SECTION("wraps an Enum class type")
     {
-        REQUIRE(zero.getEnum() == ponder::enumByType<MyEnum>());
-        REQUIRE(one.getEnum()  == ponder::enumByType<MyEnum>());
-        REQUIRE(two.getEnum()  == ponder::enumByType<MyEnum>());
+        IS_TRUE(zero.getEnum() == ponder::enumByType<MyEnum>());
+        IS_TRUE(one.getEnum()  == ponder::enumByType<MyEnum>());
+        IS_TRUE(two.getEnum()  == ponder::enumByType<MyEnum>());
     }
     
     SECTION("can be compared ==")

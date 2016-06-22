@@ -109,9 +109,9 @@ TEST_CASE("Enums classes need to be declared")
     
     SECTION("can be compared")
     {
-        REQUIRE(ponder::enumByType<MyEnum>()  == ponder::enumByType<MyEnum>());
-        REQUIRE(ponder::enumByType<MyEnum>()  != ponder::enumByType<MyEnum2>());
-        REQUIRE(ponder::enumByType<MyEnum2>() != ponder::enumByType<MyEnum>());
+        IS_TRUE(ponder::enumByType<MyEnum>()  == ponder::enumByType<MyEnum>());
+        IS_TRUE(ponder::enumByType<MyEnum>()  != ponder::enumByType<MyEnum2>());
+        IS_TRUE(ponder::enumByType<MyEnum2>() != ponder::enumByType<MyEnum>());
     }
 }
 

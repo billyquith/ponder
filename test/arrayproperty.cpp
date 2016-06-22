@@ -191,11 +191,11 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be read")
     REQUIRE_THROWS_AS(strings->get(object, 4), ponder::OutOfRange);
     
     std::list<MyType>::const_iterator it = object.objects.begin();
-    REQUIRE(( objects->get(object, 0) == ponder::Value(*std::next(it, 0)) ));
-    REQUIRE(( objects->get(object, 1) == ponder::Value(*std::next(it, 1)) ));
-    REQUIRE(( objects->get(object, 2) == ponder::Value(*std::next(it, 2)) ));
-    REQUIRE(( objects->get(object, 3) == ponder::Value(*std::next(it, 3)) ));
-    REQUIRE(( objects->get(object, 4) == ponder::Value(*std::next(it, 4)) ));
+    IS_TRUE( objects->get(object, 0) == ponder::Value(*std::next(it, 0)) );
+    IS_TRUE( objects->get(object, 1) == ponder::Value(*std::next(it, 1)) );
+    IS_TRUE( objects->get(object, 2) == ponder::Value(*std::next(it, 2)) );
+    IS_TRUE( objects->get(object, 3) == ponder::Value(*std::next(it, 3)) );
+    IS_TRUE( objects->get(object, 4) == ponder::Value(*std::next(it, 4)) );
     REQUIRE_THROWS_AS(objects->get(object, 5), ponder::OutOfRange);
 }
 

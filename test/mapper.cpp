@@ -172,8 +172,8 @@ TEST_CASE("Mapper test data checks")
 
     SECTION("check types")
     {
-        REQUIRE((metaclass->property(0).type() == ponder::ValueType::Integer));
-        REQUIRE((metaclass->function(0).returnType() == ponder::ValueType::String));
+        IS_TRUE(metaclass->property(0).type() == ponder::ValueType::Integer);
+        IS_TRUE(metaclass->function(0).returnType() == ponder::ValueType::String);
     }
 
     SECTION("argCount")

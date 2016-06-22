@@ -345,30 +345,30 @@ TEST_CASE("Ponder supports functions")
     {
         MyClass object;
         
-        REQUIRE((functions[1]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE(functions[2]->call(object, ponder::Args(10)) == ponder::Value(12));
-        REQUIRE(functions[3]->call(object, ponder::Args()) == ponder::Value("3"));
-        REQUIRE(functions[4]->call(object, ponder::Args()).to<MyType>() == MyType(4));
-        REQUIRE(functions[5]->call(object, ponder::Args()).to<MyType>() == MyType(5));
-        REQUIRE((functions[6]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE(functions[7]->call(object, ponder::Args("hi")) == ponder::Value("hi"));
-        REQUIRE((functions[8]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE((functions[9]->call(object, ponder::Args(true)) == ponder::Value::nothing));
-        REQUIRE((functions[10]->call(object, ponder::Args(1., 2.f)) == ponder::Value::nothing));
-        REQUIRE((functions[11]->call(object, ponder::Args(1, 2, 3)) == ponder::Value::nothing));
-        REQUIRE((functions[12]->call(object, ponder::Args("1", "2", "3", "4"))
-                 == ponder::Value::nothing));
-        REQUIRE((functions[13]->call(object, ponder::Args(Zero, One, Two, Zero, One))
-                 == ponder::Value::nothing));
-        REQUIRE((functions[14]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE((functions[15]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE((functions[16]->call(object, ponder::Args()) == ponder::Value(16)));
-        REQUIRE((functions[17]->call(object, ponder::Args(20)) == ponder::Value::nothing));
-        REQUIRE((functions[18]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE((functions[19]->call(object, ponder::Args()) == ponder::Value::nothing));
-        REQUIRE((functions[20]->call(object, ponder::Args(10)) == ponder::Value(10)));
-        REQUIRE((functions[21]->call(object, ponder::Args(10)) == ponder::Value(30)));
-        REQUIRE((functions[22]->call(object, ponder::Args(10)) == ponder::Value(60)));
+        IS_TRUE(functions[1]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[2]->call(object, ponder::Args(10)) == ponder::Value(12));
+        IS_TRUE(functions[3]->call(object, ponder::Args()) == ponder::Value("3"));
+        IS_TRUE(functions[4]->call(object, ponder::Args()).to<MyType>() == MyType(4));
+        IS_TRUE(functions[5]->call(object, ponder::Args()).to<MyType>() == MyType(5));
+        IS_TRUE(functions[6]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[7]->call(object, ponder::Args("hi")) == ponder::Value("hi"));
+        IS_TRUE(functions[8]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[9]->call(object, ponder::Args(true)) == ponder::Value::nothing);
+        IS_TRUE(functions[10]->call(object, ponder::Args(1., 2.f)) == ponder::Value::nothing);
+        IS_TRUE(functions[11]->call(object, ponder::Args(1, 2, 3)) == ponder::Value::nothing);
+        IS_TRUE(functions[12]->call(object, ponder::Args("1", "2", "3", "4"))
+                 == ponder::Value::nothing);
+        IS_TRUE(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero, One))
+                 == ponder::Value::nothing);
+        IS_TRUE(functions[14]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[15]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[16]->call(object, ponder::Args()) == ponder::Value(16));
+        IS_TRUE(functions[17]->call(object, ponder::Args(20)) == ponder::Value::nothing);
+        IS_TRUE(functions[18]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[19]->call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(functions[20]->call(object, ponder::Args(10)) == ponder::Value(10));
+        IS_TRUE(functions[21]->call(object, ponder::Args(10)) == ponder::Value(30));
+        IS_TRUE(functions[22]->call(object, ponder::Args(10)) == ponder::Value(60));
     }
     
     SECTION("calling null functions is an error")
