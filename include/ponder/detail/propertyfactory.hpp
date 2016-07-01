@@ -119,27 +119,27 @@ struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type 
  * it converts smart pointer types to the corresponding raw pointer types.
  */
 template <typename T, typename E = void>
-struct ReturnHelper
+struct AccessorReturn
 {
     typedef T Type;
     static Type get(T value) {return value;}
 };
 
 /**
- * Specialization of ReturnHelper for smart pointer types
+ * Specialization of AccessorReturn for smart pointer types
  */
 template <template <typename> class T, typename U>
-struct ReturnHelper<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
+struct AccessorReturn<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
 {
     typedef U* Type;
     static Type get(T<U> value) {return get_pointer(value);}
 };
 
 /**
- * Specialization of ReturnHelper for built-in array types
+ * Specialization of AccessorReturn for built-in array types
  */
 template <typename T, int N>
-struct ReturnHelper<T[N]>
+struct AccessorReturn<T[N]>
 {
     typedef T (&Type)[N];
     static Type get(T (&value)[N]) {return value;}
@@ -169,9 +169,9 @@ public:
     {
     }
 
-    typename ReturnHelper<R>::Type get(C& object) const
+    typename AccessorReturn<R>::Type get(C& object) const
     {
-        return ReturnHelper<R>::get(m_getter(object));
+        return AccessorReturn<R>::get(m_getter(object));
     }
 
     bool set(C&, const Value&) const
@@ -209,9 +209,9 @@ public:
     {
     }
 
-    typename ReturnHelper<R>::Type get(C& object) const
+    typename AccessorReturn<R>::Type get(C& object) const
     {
-        return ReturnHelper<R>::get(m_getter(object));
+        return AccessorReturn<R>::get(m_getter(object));
     }
 
     bool set(C& object, const Value& value) const
@@ -250,9 +250,9 @@ public:
     {
     }
 
-    typename ReturnHelper<R>::Type get(C& object) const
+    typename AccessorReturn<R>::Type get(C& object) const
     {
-        return ReturnHelper<R>::get(m_getter(object));
+        return AccessorReturn<R>::get(m_getter(object));
     }
 
     bool set(C& object, const Value& value) const
@@ -292,9 +292,9 @@ public:
     {
     }
 
-    typename ReturnHelper<R>::Type get(C& object) const
+    typename AccessorReturn<R>::Type get(C& object) const
     {
-        return ReturnHelper<R>::get(m_getter1(m_getter2(object)));
+        return AccessorReturn<R>::get(m_getter1(m_getter2(object)));
     }
 
     bool set(C&, const Value&) const
@@ -334,9 +334,9 @@ public:
     {
     }
 
-    typename ReturnHelper<R>::Type get(C& object) const
+    typename AccessorReturn<R>::Type get(C& object) const
     {
-        return ReturnHelper<R>::get(m_getter1(m_getter2(object)));
+        return AccessorReturn<R>::get(m_getter1(m_getter2(object)));
     }
 
     bool set(C& object, const Value& value) const
