@@ -21,6 +21,18 @@ date:   $DATE
 categories: news
 ---
 
+## Title
+
+### Heading
+
+Some code:
+
+{% highlight cpp %}
+struct Entry {
+    const ponder::Class& metaClass;
+    void* p;
+}
+{% endhighlight %}
 
 EOM
 
