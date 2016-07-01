@@ -32,15 +32,12 @@
 #define PONDER_DETAIL_FUNCTIONIMPL_HPP
 
 
-#include <ponder/function.hpp>
 #include <vector>
 #include <string>
 #include <utility>
 
 namespace ponder {
 namespace detail {
-
-using namespace std::placeholders;
 
 /**
  * \brief Helper function which converts an argument to a C++ type

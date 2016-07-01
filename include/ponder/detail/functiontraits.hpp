@@ -44,6 +44,9 @@ namespace ponder
 namespace detail
 {
 
+/*
+ *  Provide details on function types.
+ */
 template <typename T>
 struct FunctionDetails
 {
@@ -57,6 +60,9 @@ struct FunctionDetails<R(*)(A...)>
 };
     
     
+/*
+ *  Provide details on class methods.
+ */
 template <typename T>
 struct MethodDetails {};
 
@@ -77,6 +83,9 @@ struct MethodDetails<R(C::*)(A...) const>
 };
     
 
+/*
+ *  Provide details on objects that reference other things.
+ */
 template <typename T>
 struct RefDetails
 {

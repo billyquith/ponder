@@ -32,6 +32,7 @@ namespace ponder
 {
 namespace detail
 {
+    
 inline AbstractObjectHolder::~AbstractObjectHolder()
 {
 }
