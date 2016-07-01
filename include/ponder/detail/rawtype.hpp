@@ -32,13 +32,41 @@
 #define PONDER_DETAIL_RAWTYPE_HPP
 
 
-#include <ponder/detail/issmartpointer.hpp>
-
-
 namespace ponder
 {
 namespace detail
 {
+    
+/**
+ * \brief Utility class which tells at compile-time if a type T is a smart pointer to a type U
+ *
+ * To detect a smart pointer type, we check using SFINAE if T implements an operator -> returning a U*
+ */
+template <typename T, typename U>
+struct IsSmartPointer
+{
+    // enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
+    enum {value = false};
+};
+
+template <typename T, typename U>
+struct IsSmartPointer<std::auto_ptr<T>, U>
+{
+    enum {value = true};
+};
+
+template <typename T, typename U>
+struct IsSmartPointer<std::unique_ptr<T>, U>
+{
+    enum {value = true};
+};
+
+template <typename T, typename U>
+struct IsSmartPointer<std::shared_ptr<T>, U>
+{
+    enum {value = true};
+};
+        
 /**
  * \class RawType
  *
@@ -101,6 +129,31 @@ struct RawType<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value >::t
 };
 
 } // namespace detail
+
+    
+template<class T>
+T* get_pointer(T *p)
+{
+    return p;
+}
+
+template<class T>
+T* get_pointer(std::auto_ptr<T> const& p)
+{
+    return p.get();
+}
+
+template<class T>
+T* get_pointer(std::unique_ptr<T> const& p)
+{
+    return p.get();
+}
+
+template<class T>
+T* get_pointer(std::shared_ptr<T> const& p)
+{
+    return p.get();
+}
 
 } // namespace ponder
 

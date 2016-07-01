@@ -33,7 +33,6 @@
 
 
 #include <ponder/detail/rawtype.hpp>
-#include <ponder/detail/issmartpointer.hpp>
 
 
 namespace ponder

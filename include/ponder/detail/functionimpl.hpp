@@ -31,7 +31,7 @@
 #ifndef PONDER_DETAIL_FUNCTIONIMPL_HPP
 #define PONDER_DETAIL_FUNCTIONIMPL_HPP
 
-
+#include <ponder/detail/objecttraits.hpp>
 #include <vector>
 #include <string>
 #include <utility>
