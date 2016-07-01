@@ -197,7 +197,7 @@ TEST_CASE("Ponder has function traits")
 
 TEST_CASE("Ponder has object traits")
 {
-    SECTION("objects can be tested for being writable")
+    SECTION("types can be tested for being writable")
     {
         // is writable
         static_assert(ponder::detail::ObjectTraits<int*>::isWritable,
@@ -218,14 +218,21 @@ TEST_CASE("Ponder has object traits")
                       "ObjectTraits<>::isWriteable failed");
     }
 
-    SECTION("objects can be references")
+    SECTION("types can be references")
     {
         // is ref
         static_assert(ponder::detail::ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
         static_assert(ponder::detail::ObjectTraits<char**>::isRef, "ObjectTraits<>::isRef failed");
         static_assert(ponder::detail::ObjectTraits<decltype(intArray)>::isRef,
                       "ObjectTraits<>::isRef failed");
-    
+
+        static_assert(ponder::detail::ObjectTraits<int&>::isRef,
+                      "ObjectTraits<>::isRef failed");
+        static_assert(ponder::detail::ObjectTraits<int&>::which == 4,
+                      "ObjectTraits<>::isRef failed");
+        static_assert(ponder::detail::ObjectTraits<int*&>::isRef,
+                      "ObjectTraits<>::isRef failed");
+
         // is not ref
         static_assert( ! ponder::detail::ObjectTraits<int>::isRef,
                       "ObjectTraits<>::isRef failed");
@@ -233,9 +240,15 @@ TEST_CASE("Ponder has object traits")
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<void(...)>::isRef,
                       "ObjectTraits<>::isRef failed");
+        static_assert( ! ponder::detail::ObjectTraits<Callable>::isRef,
+                      "ObjectTraits<>::isRef failed");
+        static_assert(ponder::detail::ObjectTraits<Callable>::which == 0,
+                      "ObjectTraits<>::isRef failed");
+        static_assert( ! ponder::detail::ObjectTraits<NonCallable>::isRef,
+                      "ObjectTraits<>::isRef failed");
     }
 
-    SECTION("test if an object as a reference return type")
+    SECTION("types can be converted to reference types")
     {
         static_assert(
             std::is_same<int&, ponder::detail::ObjectTraits<int>::RefReturnType>::value,
@@ -254,7 +267,7 @@ TEST_CASE("Ponder has object traits")
             "ObjectTraits<>::RefReturnType failed");
     }
 
-    SECTION("is a pointer")
+    SECTION("types can be pointers")
     {
         // pointer type
         static_assert(std::is_same<int*, ponder::detail::ObjectTraits<int*>::PointerType>::value,

@@ -43,7 +43,10 @@ namespace detail
 /**
  * \class ObjectTraits
  *
- * \brief Utility class which gives compile-time informations about the semantics of a type
+ * \brief Utility class which gives compile-time information about the semantics of a type
+ *
+ * It is called ObjectTraits as the type is expected to be related to an object, e.g. an
+ * instance, or reference to, or pointer to.
  *
  * It provides the following constants:
  *
