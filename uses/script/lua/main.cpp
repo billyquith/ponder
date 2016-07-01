@@ -435,27 +435,27 @@ int main()
     lib::declare();
     ponder::lua::expose(L, ponder::classByType<lib::Vec2f>(), "Vec2");
 
-//    // class defined
-//    luaTest(L, "print(Vec2); assert(Vec2 ~= nil)");
-//
-//    // instance
-//    luaTest(L, "v = Vec2(); assert(v ~= nil)");
-//    
-//    // property read
-//    luaTest(L, "assert(v.x == 0)");
-//    luaTest(L, "assert(v.y == 0)");
-//
-//    // property write
-////    luaTest(L, "v.x = 7; assert(v.x == 7)");
-////    luaTest(L, "v.y = -3; assert(v.y == -3)");
-//
-//    // method call with args
-//    luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
-//
-//    // method call return args
-//    luaTest(L, "l = Vec2(3,0); assert(l:length() == 3)");
-//
-//    // method call with object arg
+    // class defined
+    luaTest(L, "print(Vec2); assert(Vec2 ~= nil)");
+
+    // instance
+    luaTest(L, "v = Vec2(); assert(v ~= nil)");
+    
+    // property read
+    luaTest(L, "assert(v.x == 0)");
+    luaTest(L, "assert(v.y == 0)");
+
+    // property write
+//    luaTest(L, "v.x = 7; assert(v.x == 7)");
+//    luaTest(L, "v.y = -3; assert(v.y == -3)");
+
+    // method call with args
+    luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
+
+    // method call return args
+    luaTest(L, "l = Vec2(3,0); assert(l:length() == 3)");
+
+    // method call with object arg
     luaTest(L, "a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c ~= nil)");
     
     // method call with return object
