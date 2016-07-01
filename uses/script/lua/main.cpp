@@ -105,7 +105,32 @@ namespace lua {
         }
         return 0;
     }
-    
+
+    static Value getValue(lua_State *L, int index)
+    {
+        const int typei = lua_type(L, index);
+        
+        switch (typei)
+        {
+            case LUA_TNIL:
+                return Value();
+                
+            case LUA_TBOOLEAN:
+                return Value(lua_toboolean(L, index));
+
+            case LUA_TNUMBER:
+                return Value(lua_tonumber(L, index));
+
+            case LUA_TSTRING:
+                return Value(lua_tostring(L, index));
+
+            default:
+                lua_pushliteral(L, "Unknown type in Ponder value");
+                lua_error(L);
+        }
+        return Value();
+    }
+
     static int l_method_call(lua_State *L)
     {
         void *ud = lua_touserdata(L, 1);  // userobj
@@ -162,7 +187,7 @@ namespace lua {
         return 0;
     }
 
-    static int l_inst_index(lua_State *L)   // (obj, key)
+    static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
     {
         lua_pushvalue(L, lua_upvalueindex(1));
         const Class *cls = (const Class *) lua_touserdata(L, -1);
@@ -192,7 +217,27 @@ namespace lua {
         
         return 0;
     }
-    
+
+    static int l_inst_newindex(lua_State *L)   // (obj, key, value) obj[key] = value
+    {
+        lua_pushvalue(L, lua_upvalueindex(1));
+        const Class *cls = (const Class *) lua_touserdata(L, -1);
+        
+        void *ud = lua_touserdata(L, 1);                // userobj
+        const std::string key(lua_tostring(L, 2));
+        
+        for (auto&& prop : cls->propertyIterator())
+        {
+            if (prop.name() == key)
+            {
+                ponder::UserObject *uobj = (ponder::UserObject*) ud;
+                prop.value().get()->set(*uobj, getValue(L, 3));
+            }
+        }
+        
+        return 0;
+    }
+
     static void createInstanceMetatable(lua_State *L, const Class& cls)
     {
         lua_createtable(L, 0, 3);                   // +1 mt
@@ -201,7 +246,12 @@ namespace lua {
         lua_pushlightuserdata(L, (void*) &cls);     // +1
         lua_pushcclosure(L, l_inst_index, 1);       // 0 +-
         lua_rawset(L, -3);                          // -2
-     
+
+        lua_pushliteral(L, "__newindex");           // +1
+        lua_pushlightuserdata(L, (void*) &cls);     // +1
+        lua_pushcclosure(L, l_inst_newindex, 1);    // 0 +-
+        lua_rawset(L, -3);                          // -2
+
         lua_pushglobaltable(L);                     // +1
         lua_pushliteral(L, c_ponder_metatables);    // +1
         lua_rawget(L, -2);                          // 0 -+
@@ -363,9 +413,7 @@ namespace lib
         void operator -= (const Vec2f& o) { x -= o.x, y -= o.y; }
         
         Vec2f operator * (float s) const { return Vec2f(x*s, y*s); }
-        void operator *= (float s) { x *= s, y *= s; }
         Vec2f operator * (const Vec2f& o) const { return Vec2f(x * o.x, y * o.y); }
-        void operator *= (const Vec2f& o) { x *= o.x, y *= o.y; }
         
         Vec2f operator / (float s) const { return Vec2f(x/s, y/s); }
         void operator /= (float s) { x /= s, y /= s; }
@@ -374,15 +422,6 @@ namespace lib
         
         float dot(const Vec2f &o) const {
             return x*o.x + y*o.y;
-        }
-        
-        float normalise()
-        {
-            const float vlen = length();
-            const float invlen = 1.f / vlen;
-            x *= invlen;
-            y *= invlen;
-            return vlen;    // Old length.
         }
     };
 
@@ -401,7 +440,6 @@ namespace lib
             .function("set", &Vec2f::set)
             .function("length", &Vec2f::length)
             .function("dot", &Vec2f::dot)
-            .function("normalise", &Vec2f::normalise)
             .function("add", &Vec2f::operator+)
             ;
     }
@@ -446,8 +484,8 @@ int main()
     luaTest(L, "assert(v.y == 0)");
 
     // property write
-//    luaTest(L, "v.x = 7; assert(v.x == 7)");
-//    luaTest(L, "v.y = -3; assert(v.y == -3)");
+    luaTest(L, "v.x = 7; assert(v.x == 7)");
+    luaTest(L, "v.y = -3; assert(v.y == -3)");
 
     // method call with args
     luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
