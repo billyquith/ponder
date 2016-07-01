@@ -51,7 +51,7 @@
 				<ul>
 					{% assign current = page.url | downcase | split: '/' %}
 					<li {% if current[1] == nil %}class="current"{% endif %}><a href="{{ site.baseurl }}/index.html"><i class="icon fa-home"></i> Home</a></li>
-					<li {% if current[1] == 'blog' %}class="current"{% endif %}><a href="{{ site.baseurl }}/blog"><i class="icon fa-pencil-square-o"></i> Blog</a></li>
+					<li {% if current[1] != nil %}class="current"{% endif %}><a href="{{ site.baseurl }}/blog"><i class="icon fa-pencil-square-o"></i> Blog</a></li>
 					<li {% if current[1] == 'docs' %}class="current"{% endif %}><a href="{{ site.baseurl }}/docs/index.html" target="_blank"><i class="icon fa-book"></i> Docs</a></li>
 				</ul>        
     		</nav>
