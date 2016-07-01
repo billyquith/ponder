@@ -406,7 +406,7 @@ namespace lib
         void set(float x_, float y_) { x = x_, y = y_; }
         
         Vec2f operator + (const Vec2f& o) const { return Vec2f(x + o.x, y + o.y); }
-        void operator += (const Vec2f& o) { x += o.x, y += o.y; }
+        const Vec2f& operator += (const Vec2f& o) { x += o.x, y += o.y; return *this; }
         
         Vec2f operator - () const { return Vec2f(-x, -y); }
         Vec2f operator - (const Vec2f& o) const { return Vec2f(x - o.x, y - o.y); }
@@ -440,7 +440,8 @@ namespace lib
             .function("set", &Vec2f::set)
             .function("length", &Vec2f::length)
             .function("dot", &Vec2f::dot)
-            .function("add", &Vec2f::operator+)
+            .function("add", &Vec2f::operator+=)
+            .function("add2", &Vec2f::operator+).tag("+")
             ;
     }
     
