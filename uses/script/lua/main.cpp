@@ -64,16 +64,16 @@ namespace lua {
     {
         switch (val.type())
         {
-            case boolType:
+            case ValueType::Boolean:
                 lua_pushboolean(L, val.to<bool>());
                 return 1;
-            case intType:
+            case ValueType::Integer:
                 lua_pushinteger(L, val.to<int>());
                 return 1;
-            case realType:
+            case ValueType::Real:
                 lua_pushnumber(L, val.to<lua_Number>());
                 return 1;
-            case stringType:
+            case ValueType::String:
                 lua_pushstring(L, val.to<std::string>().c_str());
                 return 1;
 //            case enumType:
@@ -82,7 +82,7 @@ namespace lua {
 //            case arrayType:
 //                lua_pushinteger(L, val.to<int>());
 //                return 1;
-            case userType:
+            case ValueType::User:
                 {
                     UserObject vuobj = val.to<UserObject>();
                     Class const& cls = vuobj.getClass();
@@ -123,26 +123,26 @@ namespace lua {
         constexpr auto c_argOffset = 2u;
         for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
         {
-            const Type at = func->argType(i);
+            const ValueType at = func->argType(i);
             switch (at)
             {
-                case boolType:
+                case ValueType::Boolean:
                     args += lua_toboolean(L, i + c_argOffset);
                     break;
-                case intType:
+                case ValueType::Integer:
                     args += lua_tointeger(L, i + c_argOffset);
                     break;
-                case realType:
+                case ValueType::Real:
                     args += lua_tonumber(L, i + c_argOffset);
                     break;
-                case stringType:
+                case ValueType::String:
                     args += lua_tostring(L, i + c_argOffset);
                     break;
                     //            case enumType:
                     //                return 1;
                     //            case arrayType:
                     //                return 1;
-                case userType:
+                case ValueType::User:
                     {
                         void *aud = lua_touserdata(L, i + c_argOffset);
                         ponder::UserObject *auobj = (ponder::UserObject*) aud;
@@ -156,7 +156,7 @@ namespace lua {
         }
         
         Value ret = func->call(*uobj, args);
-        if (ret.type() != noType)
+        if (ret.type() != ValueType::None)
             return pushValue(L, ret);
         
         return 0;
