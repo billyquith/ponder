@@ -32,10 +32,10 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.1</span>
+   &#160;<span id="projectnumber">1.2</span>
    </div>
   </td>
-  <td><a href="../" class="title_link">blog</a></td>
+  <td><a href="../" class="title_link">home</a></td>
  </tr>
  </tbody>
 </table>
@@ -119,7 +119,7 @@ static const <a class="el" href="classponder_1_1_args.html">Args</a>&#160;</td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wrapper for packing an arbitrary number of arguments into a single object. </p>
 <p><a class="el" href="classponder_1_1_args.html" title="Wrapper for packing an arbitrary number of arguments into a single object. ">ponder::Args</a> is defined as a list of arguments of any type (wrapped in <a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">ponder::Value</a> instances), which can conveniently be passed to all the Ponder entities which may need an arbitrary number of arguments in a uniform way.</p>
-<p>Arguments lists can be constructed on the fly using one of the constructors (accept up to 5 arguments):</p>
+<p>Arguments lists can be constructed on the fly:</p>
 <div class="fragment"><div class="line"><a class="code" href="classponder_1_1_args.html">ponder::Args</a> args(1, <span class="keyword">true</span>, <span class="stringliteral">&quot;hello&quot;</span>, 5.24, myObject);</div></div><!-- fragment --><p>... or appended one by one using the + and += operators:</p>
 <div class="fragment"><div class="line"><a class="code" href="classponder_1_1_args.html">ponder::Args</a> args;</div><div class="line">args += 1;</div><div class="line">args += <span class="keyword">true</span>;</div><div class="line">args += <span class="stringliteral">&quot;hello&quot;</span>;</div><div class="line">args += 5.24;</div><div class="line">args = args + myObject;</div></div><!-- fragment --> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae5c319f0f54d1ce3a4f90c873cb6db1b"></a>

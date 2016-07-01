@@ -32,10 +32,10 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.1</span>
+   &#160;<span id="projectnumber">1.2</span>
    </div>
   </td>
-  <td><a href="../" class="title_link">blog</a></td>
+  <td><a href="../" class="title_link">home</a></td>
  </tr>
  </tbody>
 </table>
@@ -110,14 +110,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd84e81a82dce6a3364ef08946b81c11"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_class_builder.html">ClassBuilder</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classponder_1_1_class_builder.html#abd84e81a82dce6a3364ef08946b81c11">function</a> (const std::string &amp;name, F function)</td></tr>
 <tr class="memdesc:abd84e81a82dce6a3364ef08946b81c11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare a new function from any bindable type.  <a href="#abd84e81a82dce6a3364ef08946b81c11">More...</a><br /></td></tr>
 <tr class="separator:abd84e81a82dce6a3364ef08946b81c11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32c31537ec46db321a488dc71b6a12bc"><td class="memTemplParams" colspan="2">template&lt;typename F &gt; </td></tr>
-<tr class="memitem:a32c31537ec46db321a488dc71b6a12bc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_class_builder.html">ClassBuilder</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classponder_1_1_class_builder.html#a32c31537ec46db321a488dc71b6a12bc">function</a> (const std::string &amp;name, std::function&lt; F &gt; function)</td></tr>
-<tr class="memdesc:a32c31537ec46db321a488dc71b6a12bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare a new function from a std::function.  <a href="#a32c31537ec46db321a488dc71b6a12bc">More...</a><br /></td></tr>
-<tr class="separator:a32c31537ec46db321a488dc71b6a12bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66371616a58c095bbe75a4ad8919e260"><td class="memTemplParams" colspan="2">template&lt;typename F1 , typename F2 &gt; </td></tr>
-<tr class="memitem:a66371616a58c095bbe75a4ad8919e260"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_class_builder.html">ClassBuilder</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classponder_1_1_class_builder.html#a66371616a58c095bbe75a4ad8919e260">function</a> (const std::string &amp;name, F1 function1, F2 function2)</td></tr>
-<tr class="memdesc:a66371616a58c095bbe75a4ad8919e260"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare a new function from two functions to compose.  <a href="#a66371616a58c095bbe75a4ad8919e260">More...</a><br /></td></tr>
-<tr class="separator:a66371616a58c095bbe75a4ad8919e260"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0ddb031497444197aadc6666314e93b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classponder_1_1_class_builder.html">ClassBuilder</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_class_builder.html#ab0ddb031497444197aadc6666314e93b">tag</a> (const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;id)</td></tr>
 <tr class="memdesc:ab0ddb031497444197aadc6666314e93b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare a new static tag.  <a href="#ab0ddb031497444197aadc6666314e93b">More...</a><br /></td></tr>
 <tr class="separator:ab0ddb031497444197aadc6666314e93b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -368,96 +360,6 @@ template&lt;typename F &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a32c31537ec46db321a488dc71b6a12bc"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<div class="memtemplate">
-template&lt;typename F &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classponder_1_1_class_builder.html">ClassBuilder</a>&lt; T &gt; &amp; <a class="el" href="classponder_1_1_class_builder.html">ponder::ClassBuilder</a>&lt; T &gt;::function </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::function&lt; F &gt;&#160;</td>
-          <td class="paramname"><em>function</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Declare a new function from a std::function. </p>
-<p>Overload handling functions of type std::function.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>Name of the function (must be unique within the metaclass) </td></tr>
-    <tr><td class="paramname">function</td><td>Instance of std::function to bind to the function</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Reference to this, in order to chain other calls </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a66371616a58c095bbe75a4ad8919e260"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<div class="memtemplate">
-template&lt;typename F1 , typename F2 &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classponder_1_1_class_builder.html">ClassBuilder</a>&lt; T &gt; &amp; <a class="el" href="classponder_1_1_class_builder.html">ponder::ClassBuilder</a>&lt; T &gt;::function </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">F1&#160;</td>
-          <td class="paramname"><em>function1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">F2&#160;</td>
-          <td class="paramname"><em>function2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Declare a new function from two functions to compose. </p>
-<p>This allows to expose a function which requires an extra level of indirection to be accessed (for example, a function of a member of the class instead of a function of the class itself).</p>
-<p>Example:</p>
-<div class="fragment"><div class="line"><span class="keyword">struct </span>Point</div><div class="line">{</div><div class="line">    <span class="keywordtype">void</span> move(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y);</div><div class="line">};</div><div class="line"></div><div class="line"><span class="keyword">class </span>Entity</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line"></div><div class="line">    Point p;</div><div class="line">};</div><div class="line"></div><div class="line">ponder::Class::declare&lt;Entity&gt;(<span class="stringliteral">&quot;Entity&quot;</span>)</div><div class="line">    .<span class="keyword">function</span>(<span class="stringliteral">&quot;move&quot;</span>, &amp;Point::move, &amp;Entity::p); <span class="comment">// will internally resolve to e.p.move()</span></div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>Name of the function (must be unique within the metaclass) </td></tr>
-    <tr><td class="paramname">function1</td><td>C++ callable entity to bind to the function </td></tr>
-    <tr><td class="paramname">function2</td><td>Accessor returning the member to apply to function1</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Reference to this, in order to chain other calls </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a83c6151277132fe94199c988db3cbcc0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -594,7 +496,7 @@ template&lt;typename F1 , typename F2 , typename F3 &gt; </div>
 <p>The accessor1 and accessor2 arguments are a pair of getter/setter, accessor3 is an accessor to compose to accessor1 and accessor2 to get the final accessors.</p>
 <p>This allows to expose a property which requires an extra level of indirection to be accessed (for example, a property of a member of the class instead of a property of the class itself).</p>
 <p>Example:</p>
-<div class="fragment"><div class="line"><span class="keyword">struct </span>Point</div><div class="line">{</div><div class="line">    <span class="keywordtype">float</span> getX() <span class="keyword">const</span>;</div><div class="line">    <span class="keywordtype">void</span> setX(<span class="keywordtype">float</span>);</div><div class="line"></div><div class="line">    <span class="keywordtype">float</span> getY() <span class="keyword">const</span>;</div><div class="line">    <span class="keywordtype">void</span> setY(<span class="keywordtype">float</span>);</div><div class="line">};</div><div class="line"></div><div class="line"><span class="keyword">class </span>Entity</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line"></div><div class="line">    Point p;</div><div class="line">};</div><div class="line"></div><div class="line">ponder::Class::declare&lt;Entity&gt;(<span class="stringliteral">&quot;Entity&quot;</span>)</div><div class="line">    .<a class="code" href="classponder_1_1_class_builder.html#a83c6151277132fe94199c988db3cbcc0">property</a>(<span class="stringliteral">&quot;x&quot;</span>, &amp;Point::getX, &amp;Point::setX, &amp;Entity::p)  <span class="comment">// will internally resolve to e.p.get/setX()</span></div><div class="line">    .property(<span class="stringliteral">&quot;y&quot;</span>, &amp;Point::getY, &amp;Point::setY, &amp;Entity::p); <span class="comment">// will internally resolve to e.p.get/setY()</span></div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>Point</div><div class="line">{</div><div class="line">    <span class="keywordtype">float</span> getX() <span class="keyword">const</span>;</div><div class="line">    <span class="keywordtype">void</span> setX(<span class="keywordtype">float</span>);</div><div class="line"></div><div class="line">    <span class="keywordtype">float</span> getY() <span class="keyword">const</span>;</div><div class="line">    <span class="keywordtype">void</span> setY(<span class="keywordtype">float</span>);</div><div class="line">};</div><div class="line"></div><div class="line"><span class="keyword">class </span>Entity</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line"></div><div class="line">    Point p;</div><div class="line">};</div><div class="line"></div><div class="line">ponder::Class::declare&lt;Entity&gt;(<span class="stringliteral">&quot;Entity&quot;</span>)</div><div class="line">    <span class="comment">// will internally resolve to e.p.get/setX()</span></div><div class="line">    .<a class="code" href="classponder_1_1_class_builder.html#a83c6151277132fe94199c988db3cbcc0">property</a>(<span class="stringliteral">&quot;x&quot;</span>, &amp;Point::getX, &amp;Point::setX, &amp;Entity::p)</div><div class="line">    <span class="comment">// will internally resolve to e.p.get/setY()</span></div><div class="line">    .property(<span class="stringliteral">&quot;y&quot;</span>, &amp;Point::getY, &amp;Point::setY, &amp;Entity::p);</div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the property (must be unique within the metaclass) </td></tr>
     <tr><td class="paramname">accessor1</td><td>First accessor (getter) </td></tr>

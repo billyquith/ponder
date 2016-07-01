@@ -7,8 +7,6 @@ var classponder_1_1_class_builder =
     [ "constructor", "classponder_1_1_class_builder.html#a48951e06f6b685fe51d5a81be80ac426", null ],
     [ "external", "classponder_1_1_class_builder.html#ae841e76fc18e9539b4b8c1805c11dcf1", null ],
     [ "function", "classponder_1_1_class_builder.html#abd84e81a82dce6a3364ef08946b81c11", null ],
-    [ "function", "classponder_1_1_class_builder.html#a32c31537ec46db321a488dc71b6a12bc", null ],
-    [ "function", "classponder_1_1_class_builder.html#a66371616a58c095bbe75a4ad8919e260", null ],
     [ "property", "classponder_1_1_class_builder.html#a83c6151277132fe94199c988db3cbcc0", null ],
     [ "property", "classponder_1_1_class_builder.html#a3bfb0e3b5337d189f0adb614218be357", null ],
     [ "property", "classponder_1_1_class_builder.html#a283e3a83d38f2829f66ef49d63c71587", null ],

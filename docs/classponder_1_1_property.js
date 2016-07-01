@@ -1,7 +1,7 @@
 var classponder_1_1_property =
 [
     [ "~Property", "classponder_1_1_property.html#a8b6b6321a6af967b4198023ccb0dfef7", null ],
-    [ "Property", "classponder_1_1_property.html#a0f8aceef4b761ec0b33129193af9b72a", null ],
+    [ "Property", "classponder_1_1_property.html#a7cb25fc8abc1a2d4a8c93d7abd966cba", null ],
     [ "accept", "classponder_1_1_property.html#a3d2d27dc75291cd78db4890d18fb9561", null ],
     [ "get", "classponder_1_1_property.html#a62d3046a89a94972c124796b06cf8c07", null ],
     [ "getValue", "classponder_1_1_property.html#ab7a6a81f43697729220f6f5d858cad78", null ],
@@ -11,7 +11,7 @@ var classponder_1_1_property =
     [ "readable", "classponder_1_1_property.html#a38d37b007263d04c117e74c07deb4c31", null ],
     [ "set", "classponder_1_1_property.html#a2d61c5044e909fc4d88c3d0366e98516", null ],
     [ "setValue", "classponder_1_1_property.html#af9de6f0926bcb6e25781acc9fd8ee2df", null ],
-    [ "type", "classponder_1_1_property.html#af9338eef4ad02b5b98748910ec87814a", null ],
+    [ "type", "classponder_1_1_property.html#ad51b9663892e64c751bfff05d1d081ad", null ],
     [ "writable", "classponder_1_1_property.html#a15b947189b6c320e93509af6fe4762f8", null ],
     [ "ClassBuilder", "classponder_1_1_property.html#a5aafcfbb163661718b1e403f84d2b38d", null ],
     [ "UserObject", "classponder_1_1_property.html#a3877ce361195c6eaf2c89c0c16fcb056", null ]

@@ -32,10 +32,10 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.1</span>
+   &#160;<span id="projectnumber">1.2</span>
    </div>
   </td>
-  <td><a href="../" class="title_link">blog</a></td>
+  <td><a href="../" class="title_link">home</a></td>
  </tr>
  </tbody>
 </table>
@@ -87,12 +87,12 @@ $(document).ready(function(){initNavTree('classponder__ext_1_1_qt_helper.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1001754db5bc48878be01b347a6871dd"><td class="memItemLeft" align="right" valign="top">static ponder::Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder__ext_1_1_qt_helper.html#a1001754db5bc48878be01b347a6871dd">type</a> (const char *typeName)</td></tr>
-<tr class="memdesc:a1001754db5bc48878be01b347a6871dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the Ponder type of a Qt type in string form.  <a href="#a1001754db5bc48878be01b347a6871dd">More...</a><br /></td></tr>
-<tr class="separator:a1001754db5bc48878be01b347a6871dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a9a3f04f72a9fa33528934758316f8f"><td class="memItemLeft" align="right" valign="top">static ponder::Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder__ext_1_1_qt_helper.html#a0a9a3f04f72a9fa33528934758316f8f">type</a> (QVariant::Type theType)</td></tr>
-<tr class="memdesc:a0a9a3f04f72a9fa33528934758316f8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a QVariant type to a Ponder type.  <a href="#a0a9a3f04f72a9fa33528934758316f8f">More...</a><br /></td></tr>
-<tr class="separator:a0a9a3f04f72a9fa33528934758316f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8998260fab0316ebad1679e3792546e"><td class="memItemLeft" align="right" valign="top">static ponder::ValueType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder__ext_1_1_qt_helper.html#af8998260fab0316ebad1679e3792546e">type</a> (const char *typeName)</td></tr>
+<tr class="memdesc:af8998260fab0316ebad1679e3792546e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the Ponder type of a Qt type in string form.  <a href="#af8998260fab0316ebad1679e3792546e">More...</a><br /></td></tr>
+<tr class="separator:af8998260fab0316ebad1679e3792546e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af69635daf65045b5fd29ec48358768df"><td class="memItemLeft" align="right" valign="top">static ponder::ValueType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder__ext_1_1_qt_helper.html#af69635daf65045b5fd29ec48358768df">type</a> (QVariant::Type theType)</td></tr>
+<tr class="memdesc:af69635daf65045b5fd29ec48358768df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a QVariant type to a Ponder type.  <a href="#af69635daf65045b5fd29ec48358768df">More...</a><br /></td></tr>
+<tr class="separator:af69635daf65045b5fd29ec48358768df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a944e7a6adb4ceb0230870aa83ab1ef17"><td class="memItemLeft" align="right" valign="top">static QVariant::Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder__ext_1_1_qt_helper.html#a944e7a6adb4ceb0230870aa83ab1ef17">variantType</a> (int metaType)</td></tr>
 <tr class="memdesc:a944e7a6adb4ceb0230870aa83ab1ef17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map a Qt metatype to a QVariant type.  <a href="#a944e7a6adb4ceb0230870aa83ab1ef17">More...</a><br /></td></tr>
 <tr class="separator:a944e7a6adb4ceb0230870aa83ab1ef17"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,7 +106,7 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utility class to perform various conversions between Ponder and Qt. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a1001754db5bc48878be01b347a6871dd"></a>
+<a class="anchor" id="af8998260fab0316ebad1679e3792546e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -114,7 +114,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ponder::Type ponder_ext::QtHelper::type </td>
+          <td class="memname">static ponder::ValueType ponder_ext::QtHelper::type </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>typeName</em></td><td>)</td>
@@ -139,7 +139,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0a9a3f04f72a9fa33528934758316f8f"></a>
+<a class="anchor" id="af69635daf65045b5fd29ec48358768df"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -147,7 +147,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ponder::Type ponder_ext::QtHelper::type </td>
+          <td class="memname">static ponder::ValueType ponder_ext::QtHelper::type </td>
           <td>(</td>
           <td class="paramtype">QVariant::Type&#160;</td>
           <td class="paramname"><em>theType</em></td><td>)</td>
@@ -168,7 +168,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><em>theType</em> converted to a ponder::Type </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><em>theType</em> converted to a ponder::ValueType </dd></dl>
 
 </div>
 </div>

@@ -32,10 +32,10 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">1.1</span>
+   &#160;<span id="projectnumber">1.2</span>
    </div>
   </td>
-  <td><a href="../" class="title_link">blog</a></td>
+  <td><a href="../" class="title_link">home</a></td>
  </tr>
  </tbody>
 </table>
@@ -172,6 +172,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Property</b></td></t
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wrapper to manipulate user objects in the Ponder system. </p>
 <p><a class="el" href="classponder_1_1_user_object.html" title="Wrapper to manipulate user objects in the Ponder system. ">ponder::UserObject</a> is an abstract representation of object instances, which can safely be passed to and manipulated by all the entities in Ponder.</p>
+<dl class="section note"><dt>Note</dt><dd>UserObjects are stored interally as objects (a copy) or references (an existing object). To be sure which you are constructing use <a class="el" href="classponder_1_1_user_object.html#a249a28f687decdc36f970477a762485a" title="Construct a user object from a reference to an object. ">UserObject::ref()</a> or <a class="el" href="classponder_1_1_user_object.html#ab206ad3298c783aa76aee7313cf3bb0d" title="Construct a user object with a copy of an object. ">UserObject::copy()</a>.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classponder_1_1_enum_object.html" title="Wrapper to manipulate enumerated values in the Ponder system. ">EnumObject</a> </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6dee11a4b91dc4a9017f5fcd28b52999"></a>
@@ -209,7 +210,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Construct the user object from an instance. </p>
-<p>This constructor is equivalent to calling UserObject::ref(object), i.e. the object is stored by reference.</p>
+<p>User objects. Also see <a class="el" href="classponder_1_1_user_object.html#a249a28f687decdc36f970477a762485a" title="Construct a user object from a reference to an object. ">UserObject::ref()</a> and <a class="el" href="classponder_1_1_user_object.html#ab206ad3298c783aa76aee7313cf3bb0d" title="Construct a user object with a copy of an object. ">UserObject::copy()</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">object</td><td>Instance to store in the user object </td></tr>
@@ -351,7 +352,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Construct a user object with a copy of an object. </p>
-<p>This functions is NOT equivalent to calling UserObject(object).</p>
+<p>This functions is <em>not</em> equivalent to calling UserObject(object).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">object</td><td>Instance to store in the user object</td></tr>
@@ -664,7 +665,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Construct a user object from a const reference to an object. </p>
-<p>This functions is NOT equivalent to calling UserObject(object).</p>
+<p>This functions is <em>not</em> equivalent to calling UserObject(object).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">object</td><td>Instance to store in the user object</td></tr>
