@@ -111,7 +111,7 @@ public:
     T to() const;
 
     /**
-     * \brief Cast operator to implicitely convert the value to a type T
+     * \brief Cast operator to implicitly convert the value to a type T
      *
      * \return Value converted to T
      *
@@ -166,7 +166,7 @@ public:
      *
      * \return True if both values are the same, false otherwise
      */
-    bool operator==(const Value& other) const;
+    bool operator == (const Value& other) const;
 
     /**
      * \brief Operator != to compare equality between two values
@@ -175,7 +175,7 @@ public:
      *
      * \return True if both values are not the same, false otherwise
      */
-    bool operator!=(const Value& other) const {return !(*this == other);}
+    bool operator != (const Value& other) const {return !(*this == other);}
 
     /**
      * \brief Operator < to compare two values
@@ -184,7 +184,7 @@ public:
      *
      * \return True if this < other
      */
-    bool operator<(const Value& other) const;
+    bool operator < (const Value& other) const;
 
 public:
 

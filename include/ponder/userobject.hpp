@@ -258,7 +258,8 @@ public:
     /**
      * \brief Operator == to compare equality between two user objects
      *
-     * Two user objects are equal if their metaclasses and pointers are both equal
+     * Two user objects are equal if their metaclasses and pointers are both equal, 
+     * i.e. they point to the same object, not if the object *values* are the same.
      *
      * \param other User object to compare with this
      *
