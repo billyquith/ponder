@@ -59,7 +59,7 @@
 /* Wrapper */
 
 	.wrapper {
-		padding: 1.5em 0 0em 0;
+		padding: 1em 0 0em 0;
 	}
 	
 /* CTA */
@@ -77,3 +77,11 @@
 			margin-bottom: 1em;
 		}
 	}
+  
+  
+	.box {
+		&.highlight {
+      margin-top: 1em;
+		}	
+  }
+  
