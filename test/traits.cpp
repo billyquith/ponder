@@ -127,7 +127,6 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder has function traits")
 {
-    
     SECTION("what is not a function")
     {
         static_assert( ! ponder::detail::FunctionTraits<int>::isFunction,
@@ -305,20 +304,44 @@ TEST_CASE("Ponder has object traits")
 
     SECTION("types have a raw data type")
     {
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<int>::DataType>::value,
+        using ponder::detail::ObjectTraits;
+        
+        static_assert(std::is_same<int, ObjectTraits<int>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<int*>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<int*>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<const int>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<const int>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<const int*>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<const int*>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<int **>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<int **>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
         static_assert(
-            std::is_same<int, ponder::detail::ObjectTraits<decltype(intArray)>::DataType>::value,
+            std::is_same<int, ObjectTraits<decltype(intArray)>::DataType>::value,
             "ObjectTraits<>::DataType failed");
     }    
+}
+
+TEST_CASE("Type testing")
+{
+    SECTION("find raw type of any type")
+    {
+        using ponder::detail::RawType;
+
+        static_assert(std::is_same<int, RawType<int>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, RawType<int*>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, RawType<int**>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, RawType<int***>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, RawType<int&>::Type>::value, "RawType<> fail");
+
+        static_assert(std::is_same<char, RawType<char>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<float, RawType<float*>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<std::string, RawType<std::string>::Type>::value, "RawType<> fail");
+
+        static_assert(std::is_same<Callable, RawType<Callable>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<Callable, RawType<Callable*>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<Callable, RawType<Callable&>::Type>::value, "RawType<> fail");
+    }
 }
 
 TEST_CASE("Types supporting array interface are supported")
