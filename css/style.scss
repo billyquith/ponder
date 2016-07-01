@@ -282,7 +282,7 @@
 			cursor: default;
 			background-color: $color-accent-bg;
 			@include vendor-value('background-image', 'linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.15)), url("{{ site.baseurl }}/images/bg01.png")');
-			color: $color-accent-fg;
+			color: black;
 			border-radius: 100%;
 			display: inline-block;
 			width: 3em;
@@ -294,6 +294,11 @@
 			&:before {
 				font-size: 36px;
 			}
+      
+  		&:hover {
+        color: gold;
+        border-radius: 40%;
+  		}                          
 		}
 	}
   
@@ -499,7 +504,7 @@
 
 	.box {
 		&.highlight {
-			text-align: center;
+			text-align: center;      
 		}	
 
 		&.post {
@@ -768,26 +773,38 @@
 /* blog */
 	
 	.tag-box {
-		background-color: #fbfafa;
 		padding: 1em;
 		border-radius: 9px;
 		margin-bottom: 0.8em;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #f8f8f8;
 	
 		.tag-item {
 			border-style: solid;
 			border-color: #e3e3e3;
+      border-width: 1px;
 			padding: 0.3em;
 			background-color: white;
 			border-radius: 5px;
 			margin: 0.25em;
 			line-height: 2.5;
+      white-space: nowrap;      
 		}
+    
+		&:hover {
+  		border-style: double;
+  		border-color: #e8e8e8;
+		}              
 				
 		h3 {
 			background-color: white;
 			padding-left: 1em;
 			margin-bottom: 0.2em;
       font-weight: normal;
+      border-width: 1px;
+      border-color:#f8f8f8;
+      border-style: solid;
 		}
 		
 		.post-list {
@@ -812,14 +829,15 @@
 	.blog-summary {
 		padding-left: 1em;
 		border-radius: 7px;
-		border-color: #e0e0e0;
-		border-width: 2px;
-		border-style: dotted;
+		border-color: #f8f8f8;
+		border-width: 3px;
+		border-style: solid;
 		margin-bottom: 1.2em;
     font-size: 80%;
     
 		&:hover {
-  		border-style: solid;
+  		border-style: double;
+  		border-color: #e8e8e8;
 		}    
 	}
 	  
