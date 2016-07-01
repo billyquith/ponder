@@ -105,7 +105,6 @@ set(SRC_HEADERS
     include/ponder/detail/observernotifier.hpp
     include/ponder/detail/propertyfactory.hpp
     include/ponder/detail/rawtype.hpp
-    include/ponder/detail/returntype.hpp
     include/ponder/detail/simplepropertyimpl.hpp
     include/ponder/detail/simplepropertyimpl.inl
     include/ponder/detail/typeid.hpp
