@@ -78,8 +78,11 @@ struct HasStaticTypeId
 /**
  * \brief Return the static type identifier of a C++ type T
  */
-template <typename T> const char* staticTypeId()         {return StaticTypeId<typename RawType<T>::Type>::get();}
-template <typename T> const char* staticTypeId(const T&) {return StaticTypeId<typename RawType<T>::Type>::get();}
+template <typename T>
+const char* staticTypeId() {return StaticTypeId<typename RawType<T>::Type>::get();}
+
+template <typename T>
+const char* staticTypeId(const T&) {return StaticTypeId<typename RawType<T>::Type>::get();}
 
 /**
  * \brief Utility class used to check at compile-time if a type T implements the Ponder RTTI

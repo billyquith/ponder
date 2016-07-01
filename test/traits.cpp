@@ -336,7 +336,8 @@ TEST_CASE("Type testing")
 
         static_assert(std::is_same<char, RawType<char>::Type>::value, "RawType<> fail");
         static_assert(std::is_same<float, RawType<float*>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<std::string, RawType<std::string>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<std::string, RawType<std::string>::Type>::value,
+                      "RawType<> fail");
 
         static_assert(std::is_same<Callable, RawType<Callable>::Type>::value, "RawType<> fail");
         static_assert(std::is_same<Callable, RawType<Callable*>::Type>::value, "RawType<> fail");

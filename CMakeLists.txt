@@ -98,7 +98,6 @@ set(SRC_HEADERS
     include/ponder/detail/functiontraits.hpp
     include/ponder/detail/getter.hpp
     include/ponder/detail/getter.inl
-    include/ponder/detail/issmartpointer.hpp
     include/ponder/detail/objectholder.hpp
     include/ponder/detail/objectholder.inl
     include/ponder/detail/objecttraits.hpp
