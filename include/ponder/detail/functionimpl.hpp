@@ -39,6 +39,47 @@
 namespace ponder {
 namespace detail {
 
+    
+// Is T a user type.
+template <typename T> struct IsUserType {
+    static constexpr bool value = std::is_class<T>::value
+                && !std::is_same<typename RawType<T>::Type, Value>::value
+                && !std::is_same<typename RawType<T>::Type, std::string>::value;
+};
+
+// Decide whether the UserObject holder should be ref (true) or copy (false).
+template <typename T> struct IsUserObjRef {
+    static constexpr bool value = std::is_pointer<T>::value || std::is_reference<T>::value;
+};
+
+
+/*
+ *  The ValueMapper assumes all user objects converted to UserObjects are references,
+ *  however, this is not correct if we return by value, i.e. Obj foo(); as opposed
+ *  to: const Obj& foo();
+ *  This template ensures that we return the correct UserObject holder type.
+ */
+template <typename T, typename U = void>
+struct CallReturner
+{
+    static inline Value value(const T& o) {return Value(o);}
+};
+
+template <typename T>
+struct CallReturner<T,
+    typename std::enable_if< IsUserType<T>::value && !IsUserObjRef<T>::value >::type>
+{
+    static inline UserObject value(const T& o) {return UserObject::copy(o);}
+};
+
+template <typename T>
+struct CallReturner<T,
+    typename std::enable_if< IsUserType<T>::value && IsUserObjRef<T>::value >::type>
+{
+    static inline UserObject value(const T& o) {return UserObject::ref(o);}
+};
+
+    
 /**
  * \brief Helper function which converts an argument to a C++ type
  *
@@ -79,7 +120,7 @@ class CallHelper
                       const std::string& name,
                       index_sequence<Is...>)
     {
-        return func(obj, convertArg<A>(args, Is, name)...);
+        return CallReturner<R>::value(func(obj, convertArg<A>(args, Is, name)...));
     }
 
     template<typename F, typename... A, std::size_t... Is>

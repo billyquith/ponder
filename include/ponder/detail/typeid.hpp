@@ -61,6 +61,8 @@ struct StaticTypeId
         defined = false,
         copyable = true
     };
+    
+    typedef T type;
 };
 
 /**

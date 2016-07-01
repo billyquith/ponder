@@ -34,6 +34,15 @@
 #include "test.hpp"
 #include <ostream>
 
+#if 1
+static bool g_log = false;
+#   define DATA_LOG(FMT, ...) if (g_log) printf(FMT, ##__VA_ARGS__)
+#   define DATA_ON(B) g_log = B
+#else
+#   define DATA_LOG(FMT, ...)
+#   define DATA_ON(B)
+#endif
+
 namespace UserObjectTest
 {
     struct MyBaseWithPadding
@@ -154,6 +163,32 @@ namespace UserObjectTest
         }
     };
     
+    struct Data
+    {
+        int x;
+        
+        Data() : x(0) { DATA_LOG("Data:construct\n"); }
+        Data(int i) : x(i) { DATA_LOG("Data:construct(%d)\n", x); }
+        Data(const Data& d) : x(d.x) {}
+        int value() const { return x; }
+        
+        Data addCopy(const Data& o)
+        {
+            DATA_LOG("add %d + %d", x, o.x);
+            x += o.x;
+            DATA_LOG(" = %d\n", x);
+            return *this;
+        }
+        
+        const Data& addRef(const Data& o)
+        {
+            DATA_LOG("add %d + %d", x, o.x);
+            x += o.x;
+            DATA_LOG(" = %d\n", x);
+            return *this;
+        }
+    };
+    
     void declare()
     {
         ponder::Class::declare<MyBase>("UserObjectTest::MyBase");
@@ -183,6 +218,14 @@ namespace UserObjectTest
             .function("cos", &Call::cos)
             .function("concat", &Call::concat)
             .function("meth8", &Call::meth8);
+        
+        ponder::Class::declare<Data>("UserObjectTest::Data")
+            .constructor()
+            .constructor<int>()
+            .property("value", &Data::x)
+            .function("getValue", &Data::value)
+            .function("addCopy", &Data::addCopy)
+            .function("addRef", &Data::addRef);
     }
 }
 
@@ -195,6 +238,7 @@ PONDER_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::Data, &UserObjectTest::declare)
 
 using namespace UserObjectTest;
 
@@ -284,7 +328,9 @@ TEST_CASE("Ponder supports user objects")
 
     SECTION("objects can be tested for equality")
     {
-        MyClass object1(11);
+        // Note: UserObject equality is related to the object referenced.
+        
+        MyClass object1(11);    // note, same values here
         MyClass object2(11);
 
         IS_TRUE(ponder::UserObject(object1)  == ponder::UserObject(object1));
@@ -322,10 +368,23 @@ TEST_CASE("Ponder supports user objects")
     SECTION("objects can be cloned/deep copied")
     {
         MyClass object(4);
-        ponder::UserObject userObject = ponder::UserObject::copy(object);
+        ponder::UserObject uobj1(object);
+        ponder::UserObject uobj2(ponder::UserObject::copy(object));
+        
+        IS_TRUE(uobj1 != uobj2);
 
-        REQUIRE(userObject.get<MyClass>() == object);  // same value
-        REQUIRE(userObject.get<MyClass*>() != &object); // different address
+        REQUIRE(uobj1.get<MyClass>() == object);   // same value
+        REQUIRE(uobj1.get<MyClass*>() == &object); // same address as ref
+        REQUIRE(uobj2.get<MyClass*>() != &object); // same address as copy
+        
+        REQUIRE(object.x == 4);
+        REQUIRE(uobj1.get<MyClass*>()->x == 4);
+        REQUIRE(uobj2.get<MyClass*>()->x == 4);
+        
+        object.x = 7;
+        REQUIRE(object.x == 7);
+        REQUIRE(uobj1.get<MyClass*>()->x == 7);
+        REQUIRE(uobj2.get<MyClass*>()->x == 4); // copy hasn't changed
     }
 
     SECTION("objects can referenced/shallow copied")
@@ -335,6 +394,13 @@ TEST_CASE("Ponder supports user objects")
 
         REQUIRE(userObject.get<MyClass>() == object);  // same value
         REQUIRE(userObject.get<MyClass*>() == &object); // same address
+        
+        REQUIRE(object.x == 5);
+        REQUIRE(userObject.get<MyClass*>()->x == 5);
+        
+        object.x = 7;
+        REQUIRE(object.x == 7);
+        REQUIRE(userObject.get<MyClass*>()->x == 7); // points to same object
     }
 
     SECTION("object type information can be inspected")
@@ -475,10 +541,11 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE_THROWS_AS(userObject.call("cos"), std::exception);
     
         REQUIRE(userObject.call("cos", ponder::Args(0.0)) == ponder::Value(std::cos(0.0)));
-    //    REQUIRE(userObject.call("cos", 0.0), ponder::Value(std::cos(0.0))); 
+        REQUIRE(userObject.call("cos", ponder::Args(1.0)) == ponder::Value(std::cos(1.0)));
+    //    REQUIRE(userObject.call("cos", 0.0), ponder::Value(std::cos(0.0)));
     }
 
-    SECTION("objects methods with 2 args can return values")
+    SECTION("objects methods can return user objects")
     {
         Call object;
         ponder::UserObject userObject(object);
@@ -529,4 +596,59 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE(ponder::Value(object.x) == uo.get("p"));
     }
 }
+
+
+TEST_CASE("User objects wrap C++ objects")
+{
+    auto const& metacls = ponder::classByType<Data>();
+    
+    SECTION("constructors")
+    {
+        ponder::UserObject uo = metacls.construct();
+        IS_TRUE(uo != ponder::UserObject::nothing);
+        REQUIRE(uo.get<Data>().x == 0);
+    }
+
+    SECTION("constructors with args")
+    {
+        ponder::UserObject uo = metacls.construct(77);
+        IS_TRUE(uo != ponder::UserObject::nothing);
+        REQUIRE(uo.get<Data>().x == 77);
+    }
+
+    SECTION("return user object by copy")
+    {
+        //DATA_ON(true);
+        
+        ponder::UserObject uo1 = metacls.construct(3);
+        ponder::UserObject uo2 = metacls.construct(6);
+        IS_TRUE(uo1 != ponder::UserObject::nothing);
+        IS_TRUE(uo2 != ponder::UserObject::nothing);
+        IS_TRUE(uo1 != uo2);
+        REQUIRE(uo1.get<Data>().x == 3);
+        REQUIRE(uo2.get<Data>().x == 6);
+        
+        ponder::Value uoa = uo1.call("addCopy", ponder::Args(uo2));
+        REQUIRE(uoa.type() == ponder::ValueType::User);
+        REQUIRE(uoa.to<Data*>()->x == 9);
+    }
+
+    SECTION("return user object by ref")
+    {
+        //DATA_ON(true);
+        
+        ponder::UserObject uo1 = metacls.construct(3);
+        ponder::UserObject uo2 = metacls.construct(6);
+        IS_TRUE(uo1 != ponder::UserObject::nothing);
+        IS_TRUE(uo2 != ponder::UserObject::nothing);
+        IS_TRUE(uo1 != uo2);
+        REQUIRE(uo1.get<Data>().x == 3);
+        REQUIRE(uo2.get<Data>().x == 6);
+        
+        ponder::Value uoa = uo1.call("addRef", ponder::Args(uo2));
+        REQUIRE(uoa.type() == ponder::ValueType::User);
+        REQUIRE(uoa.to<Data*>()->x == 9);
+    }
+}
+
 

@@ -45,12 +45,12 @@ namespace ValueTest
         int x;
     };
     
-    bool operator==(const MyClass& left, const MyClass& right)
+    bool operator == (const MyClass& left, const MyClass& right)
     {
         return left.x == right.x;
     }
     
-    bool operator<(const MyClass& left, const MyClass& right)
+    bool operator < (const MyClass& left, const MyClass& right)
     {
         return left.x < right.x;
     }

@@ -87,7 +87,7 @@ namespace lua {
                     UserObject vuobj = val.to<UserObject>();
                     Class const& cls = vuobj.getClass();
                     void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
-                    new(ud) UserObject(cls.construct(Args(val)));
+                    new(ud) UserObject(vuobj);
 
                     // set instance metatable
                     lua_pushglobaltable(L);                     // +1   _G
@@ -411,6 +411,20 @@ namespace lib
 PONDER_TYPE(ponder::UserObject)
 PONDER_TYPE(lib::Vec2f)
 
+static bool luaTest(lua_State *L, const char *source)
+{
+    fmt::print("Test: {}\n", source);
+    const bool ok = ponder::lua::runString(L, source);
+    if (!ok)
+    {
+        fmt::print("FAILED");
+        exit(1);
+        return false;
+    }
+    fmt::print("\n");
+    return true;
+}
+
 int main()
 {
     fmt::print("Lua version {}\n", LUA_VERSION);
@@ -420,23 +434,34 @@ int main()
     
     lib::declare();
     ponder::lua::expose(L, ponder::classByType<lib::Vec2f>(), "Vec2");
+
+//    // class defined
+//    luaTest(L, "print(Vec2); assert(Vec2 ~= nil)");
+//
+//    // instance
+//    luaTest(L, "v = Vec2(); assert(v ~= nil)");
+//    
+//    // property read
+//    luaTest(L, "assert(v.x == 0)");
+//    luaTest(L, "assert(v.y == 0)");
+//
+//    // property write
+////    luaTest(L, "v.x = 7; assert(v.x == 7)");
+////    luaTest(L, "v.y = -3; assert(v.y == -3)");
+//
+//    // method call with args
+//    luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
+//
+//    // method call return args
+//    luaTest(L, "l = Vec2(3,0); assert(l:length() == 3)");
+//
+//    // method call with object arg
+    luaTest(L, "a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c ~= nil)");
     
-    const char *tstr = "\
-        print(Vec2)         \n\
-        a = Vec2(7,8)       \n\
-        print(a)            \n\
-        print(a.x, a.y)     \n\
-        a:set(2,3)          \n\
-        print(a.x, a.y, a:length()) \n\
-        b = Vec2(1, 1)      \n\
-        print(a:dot(b))     \n\
-        print(_ponder_meta, _ponder_meta['lib::Vec2f'], _ponder_meta['lib::Vec2f'].__index)  \n\
-        c = a:add(b)        \n\
-        print(c.x, c.y)     \n\
-    ";
-    
-    ponder::lua::runString(L, tstr);
+    // method call with return object
+    luaTest(L, "c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
     
     return EXIT_SUCCESS;
 }
+
 

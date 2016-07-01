@@ -31,6 +31,8 @@
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/util.hpp>
 #include <ponder/arraymapper.hpp>
+#include <ponder/function.hpp>
+#include <ponder/detail/functionimpl.hpp>
 #include "test.hpp"
 #include <array>
 #include <string.h> // strcmp()
@@ -73,6 +75,9 @@ namespace TraitsTest
     public:
         T x;
     };
+    
+    enum Enum { RED, GREEN, BLUE };
+    enum class EnumCls { TALL, SHORT };
 }
 
 using namespace TraitsTest;
@@ -342,6 +347,34 @@ TEST_CASE("Type testing")
         static_assert(std::is_same<Callable, RawType<Callable>::Type>::value, "RawType<> fail");
         static_assert(std::is_same<Callable, RawType<Callable*>::Type>::value, "RawType<> fail");
         static_assert(std::is_same<Callable, RawType<Callable&>::Type>::value, "RawType<> fail");
+    }
+
+    SECTION("which are user types")
+    {
+        using ponder::detail::IsUserType;
+        
+        static_assert( ! IsUserType<int>::value, "IsUserType<> fail");
+        static_assert( ! IsUserType<char*>::value, "IsUserType<> fail");
+        static_assert( ! IsUserType<std::string>::value, "IsUserType<> fail");
+        static_assert( ! IsUserType<ponder::Value>::value, "IsUserType<> fail");
+        static_assert( ! IsUserType<Enum>::value, "IsUserType<> fail");
+        static_assert( ! IsUserType<EnumCls>::value, "IsUserType<> fail");
+        
+        static_assert(IsUserType<Callable>::value, "IsUserType<> fail");
+        static_assert(IsUserType<NonCallable>::value, "IsUserType<> fail");
+    }
+
+    SECTION("which are user types")
+    {
+        using ponder::detail::IsUserObjRef;
+        
+        static_assert( ! IsUserObjRef<int>::value, "IsUserObjRef<> fail");
+        static_assert( ! IsUserObjRef<Callable>::value, "IsUserObjRef<> fail");
+        static_assert( ! IsUserObjRef<NonCallable>::value, "IsUserObjRef<> fail");
+
+        static_assert(IsUserObjRef<NonCallable*>::value, "IsUserObjRef<> fail");
+        static_assert(IsUserObjRef<NonCallable&>::value, "IsUserObjRef<> fail");
+        static_assert(IsUserObjRef<const NonCallable&>::value, "IsUserObjRef<> fail");
     }
 }
 
