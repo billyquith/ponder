@@ -30,12 +30,13 @@
 
 #include <ponder/errors.hpp>
 #include <ponder/class.hpp>
+#include <ponder/detail/util.hpp>
 
 
 namespace ponder
 {
     
-BadType::BadType(Type provided, Type expected)
+BadType::BadType(ValueType provided, ValueType expected)
     : Error("value of type " + typeName(provided) + 
             " couldn't be converted to type " + typeName(expected))
 {
@@ -46,25 +47,18 @@ BadType::BadType(const std::string& message)
 {
 }
 
-std::string BadType::typeName(Type type)
+std::string BadType::typeName(ValueType type)
 {
-    switch (type)
-    {
-        case noType:     return "none";
-        case boolType:   return "boolean";
-        case intType:    return "integer";
-        case realType:   return "real";
-        case stringType: return "string";
-        case enumType:   return "enum";
-        case arrayType:  return "array";
-        case userType:   return "user";
-        default:         return "unknown";
-    }
+    return detail::typeAsString(type);
 }
 
-BadArgument::BadArgument(Type provided, Type expected, std::size_t index, const std::string& functionName)
+BadArgument::BadArgument(ValueType provided,
+                         ValueType expected,
+                         std::size_t index,
+                         const std::string& functionName)
     : BadType("the argument #" + str(index) + " of function " + functionName +
-              " couldn't be converted from type " + typeName(provided) + " to type " + typeName(expected))
+              " couldn't be converted from type " + typeName(provided) + " to type "
+              + typeName(expected))
 {
 }
 
@@ -124,7 +118,9 @@ FunctionNotFound::FunctionNotFound(const std::string& name, const std::string& c
 {
 }
 
-NotEnoughArguments::NotEnoughArguments(const std::string& functionName, std::size_t provided, std::size_t expected)
+NotEnoughArguments::NotEnoughArguments(const std::string& functionName,
+                                       std::size_t provided,
+                                       std::size_t expected)
     : Error("not enough arguments for calling " + functionName + " - provided " + 
             str(provided) + ", expected " + str(expected))
 {
@@ -137,7 +133,8 @@ NullObject::NullObject(const Class* objectClass)
 }
 
 OutOfRange::OutOfRange(std::size_t index, std::size_t size)
-    : Error("the index (" + str(index) + ") is out of the allowed range [0, " + str(size - 1) + "]")
+    : Error("the index (" + str(index) + ") is out of the allowed range [0, "
+            + str(size - 1) + "]")
 {
 }
 

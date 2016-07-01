@@ -35,7 +35,7 @@
 #include <ponder/enumobject.hpp>
 #include <ponder/userobject.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace ValueTest
 {
@@ -66,41 +66,41 @@ namespace ValueTest
         Two = 2
     };
     
-    struct Visitor : public ponder::ValueVisitor<ponder::Type>
+    struct Visitor : public ponder::ValueVisitor<ponder::ValueType>
     {
-        ponder::Type operator()(ponder::NoType)
+        ponder::ValueType operator()(ponder::NoType)
         {
-            return ponder::noType;
+            return ponder::ValueType::None;
         }
         
-        ponder::Type operator()(bool)
+        ponder::ValueType operator()(bool)
         {
-            return ponder::boolType;
+            return ponder::ValueType::Boolean;
         }
         
-        ponder::Type operator()(long)
+        ponder::ValueType operator()(long)
         {
-            return ponder::intType;
+            return ponder::ValueType::Integer;
         }
         
-        ponder::Type operator()(double)
+        ponder::ValueType operator()(double)
         {
-            return ponder::realType;
+            return ponder::ValueType::Real;
         }
         
-        ponder::Type operator()(const std::string&)
+        ponder::ValueType operator()(const std::string&)
         {
-            return ponder::stringType;
+            return ponder::ValueType::String;
         }
         
-        ponder::Type operator()(const ponder::EnumObject&)
+        ponder::ValueType operator()(const ponder::EnumObject&)
         {
-            return ponder::enumType;
+            return ponder::ValueType::Enum;
         }
         
-        ponder::Type operator()(const ponder::UserObject&)
+        ponder::ValueType operator()(const ponder::UserObject&)
         {
-            return ponder::userType;
+            return ponder::ValueType::User;
         }
     };
     
@@ -145,22 +145,22 @@ TEST_CASE("Ponder has variant values")
     
     SECTION("values have type")
     {
-        REQUIRE(noValue.type() ==      ponder::noType);
-        REQUIRE(boolValue.type() ==    ponder::boolType);
-        REQUIRE(charValue.type() ==    ponder::intType);
-        REQUIRE(shortValue.type() ==   ponder::intType);
-        REQUIRE(intValue.type() ==     ponder::intType);
-        REQUIRE(longValue.type() ==    ponder::intType);
-        REQUIRE(ucharValue.type() ==   ponder::intType);
-        REQUIRE(ushortValue.type() ==  ponder::intType);
-        REQUIRE(uintValue.type() ==    ponder::intType);
-        REQUIRE(ulongValue.type() ==   ponder::intType);
-        REQUIRE(floatValue.type() ==   ponder::realType);
-        REQUIRE(doubleValue.type() ==  ponder::realType);
-        REQUIRE(cstringValue.type() == ponder::stringType);
-        REQUIRE(stringValue.type() ==  ponder::stringType);
-        REQUIRE(enumValue.type() ==    ponder::enumType);
-        REQUIRE(objectValue.type() ==  ponder::userType);
+        IS_TRUE(noValue.type() ==      ponder::ValueType::None);
+        IS_TRUE(boolValue.type() ==    ponder::ValueType::Boolean);
+        IS_TRUE(charValue.type() ==    ponder::ValueType::Integer);
+        IS_TRUE(shortValue.type() ==   ponder::ValueType::Integer);
+        IS_TRUE(intValue.type() ==     ponder::ValueType::Integer);
+        IS_TRUE(longValue.type() ==    ponder::ValueType::Integer);
+        IS_TRUE(ucharValue.type() ==   ponder::ValueType::Integer);
+        IS_TRUE(ushortValue.type() ==  ponder::ValueType::Integer);
+        IS_TRUE(uintValue.type() ==    ponder::ValueType::Integer);
+        IS_TRUE(ulongValue.type() ==   ponder::ValueType::Integer);
+        IS_TRUE(floatValue.type() ==   ponder::ValueType::Real);
+        IS_TRUE(doubleValue.type() ==  ponder::ValueType::Real);
+        IS_TRUE(cstringValue.type() == ponder::ValueType::String);
+        IS_TRUE(stringValue.type() ==  ponder::ValueType::String);
+        IS_TRUE(enumValue.type() ==    ponder::ValueType::Enum);
+        IS_TRUE(objectValue.type() ==  ponder::ValueType::User);
     }
 
     SECTION("boolean values can be converted to other types")
@@ -391,7 +391,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE_THROWS_AS(objectValue.to<std::string>(),       ponder::BadType);
         REQUIRE_THROWS_AS(objectValue.to<MyEnum>(),            ponder::BadType);
         REQUIRE(objectValue.to<MyClass>() == object1);
-        REQUIRE((objectValue.to<ponder::UserObject>() == ponder::UserObject(object1)));
+        IS_TRUE(objectValue.to<ponder::UserObject>() == ponder::UserObject(object1));
 
         REQUIRE(objectValue.isCompatible<bool>() ==           true);
         REQUIRE(objectValue.isCompatible<char>() ==           false);
@@ -413,22 +413,22 @@ TEST_CASE("Ponder has variant values")
     {
         Visitor visitor;
 
-        REQUIRE(noValue.visit(visitor) ==      ponder::noType);
-        REQUIRE(boolValue.visit(visitor) ==    ponder::boolType);
-        REQUIRE(charValue.visit(visitor) ==    ponder::intType);
-        REQUIRE(shortValue.visit(visitor) ==   ponder::intType);
-        REQUIRE(intValue.visit(visitor) ==     ponder::intType);
-        REQUIRE(longValue.visit(visitor) ==    ponder::intType);
-        REQUIRE(ucharValue.visit(visitor) ==   ponder::intType);
-        REQUIRE(ushortValue.visit(visitor) ==  ponder::intType);
-        REQUIRE(uintValue.visit(visitor) ==    ponder::intType);
-        REQUIRE(ulongValue.visit(visitor) ==   ponder::intType);
-        REQUIRE(floatValue.visit(visitor) ==   ponder::realType);
-        REQUIRE(doubleValue.visit(visitor) ==  ponder::realType);
-        REQUIRE(cstringValue.visit(visitor) == ponder::stringType);
-        REQUIRE(stringValue.visit(visitor) ==  ponder::stringType);
-        REQUIRE(enumValue.visit(visitor) ==    ponder::enumType);
-        REQUIRE(objectValue.visit(visitor) ==  ponder::userType);
+        IS_TRUE(noValue.visit(visitor) ==      ponder::ValueType::None);
+        IS_TRUE(boolValue.visit(visitor) ==    ponder::ValueType::Boolean);
+        IS_TRUE(charValue.visit(visitor) ==    ponder::ValueType::Integer);
+        IS_TRUE(shortValue.visit(visitor) ==   ponder::ValueType::Integer);
+        IS_TRUE(intValue.visit(visitor) ==     ponder::ValueType::Integer);
+        IS_TRUE(longValue.visit(visitor) ==    ponder::ValueType::Integer);
+        IS_TRUE(ucharValue.visit(visitor) ==   ponder::ValueType::Integer);
+        IS_TRUE(ushortValue.visit(visitor) ==  ponder::ValueType::Integer);
+        IS_TRUE(uintValue.visit(visitor) ==    ponder::ValueType::Integer);
+        IS_TRUE(ulongValue.visit(visitor) ==   ponder::ValueType::Integer);
+        IS_TRUE(floatValue.visit(visitor) ==   ponder::ValueType::Real);
+        IS_TRUE(doubleValue.visit(visitor) ==  ponder::ValueType::Real);
+        IS_TRUE(cstringValue.visit(visitor) == ponder::ValueType::String);
+        IS_TRUE(stringValue.visit(visitor) ==  ponder::ValueType::String);
+        IS_TRUE(enumValue.visit(visitor) ==    ponder::ValueType::Enum);
+        IS_TRUE(objectValue.visit(visitor) ==  ponder::ValueType::User);
     }
 
     SECTION("values can be compared for equality")
@@ -494,14 +494,14 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(ponder::Value(1.)      == ponder::Value(1.));
         REQUIRE(ponder::Value("1")     == ponder::Value("1"));
         REQUIRE(ponder::Value(One)     == ponder::Value(One));
-        REQUIRE((ponder::Value(object1) == ponder::Value(object1)));
+        IS_TRUE(ponder::Value(object1) == ponder::Value(object1));
 
         REQUIRE(ponder::Value(true)    != ponder::Value(false));
         REQUIRE(ponder::Value(1)       != ponder::Value(2));
         REQUIRE(ponder::Value(1.)      != ponder::Value(2.));
         REQUIRE(ponder::Value("1")     != ponder::Value("2"));
         REQUIRE(ponder::Value(One)     != ponder::Value(Two));
-        REQUIRE((ponder::Value(object1) != ponder::Value(object2)));
+        IS_TRUE(ponder::Value(object1) != ponder::Value(object2));
     }
 
     SECTION("values can be compared using less than")

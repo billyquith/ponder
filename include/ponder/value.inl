@@ -32,6 +32,7 @@ namespace ponder
 {
 namespace detail
 {
+
 /**
  * \brief Helper structure allowing a shortcut when converting a ponder::Value to ponder::Value
  */
@@ -40,6 +41,7 @@ struct ValueTo
 {
     static T convert(const Value& value) {return value.visit(ConvertVisitor<T>());}
 };
+
 template <>
 struct ValueTo<Value>
 {

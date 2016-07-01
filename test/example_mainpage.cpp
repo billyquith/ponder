@@ -27,7 +27,7 @@
  **
  ****************************************************************************/
 
-#include "catch.hpp"
+#include "test.hpp"
 #include <ponder/classbuilder.hpp>
 #include <string>
 #include <iostream>

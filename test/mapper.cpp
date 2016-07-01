@@ -32,7 +32,7 @@
 #include <ponder/simpleproperty.hpp>
 #include <ponder/function.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <map>
 #include <string>
 
@@ -108,7 +108,7 @@ namespace MapperTest
         public:
             
             MyProperty(const std::string& name)
-            : ponder::SimpleProperty(name, ponder::intType)
+            : ponder::SimpleProperty(name, ponder::ValueType::Integer)
             {
             }
             
@@ -131,7 +131,7 @@ namespace MapperTest
         public:
             
             MyFunction(const std::string& name)
-            : ponder::Function(name, ponder::stringType)
+            : ponder::Function(name, ponder::ValueType::String)
             {
             }
             
@@ -172,8 +172,8 @@ TEST_CASE("Mapper test data checks")
 
     SECTION("check types")
     {
-        REQUIRE(metaclass->property(0).type() == ponder::intType);
-        REQUIRE(metaclass->function(0).returnType() == ponder::stringType);
+        IS_TRUE(metaclass->property(0).type() == ponder::ValueType::Integer);
+        IS_TRUE(metaclass->function(0).returnType() == ponder::ValueType::String);
     }
 
     SECTION("argCount")

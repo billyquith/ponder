@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-#include "catch.hpp"
+#include "test.hpp"
 #include <ponder/classget.hpp>
 #include <ponder/enumget.hpp>
 #include <ponder/enumproperty.hpp>
@@ -82,18 +82,18 @@ TEST_CASE("Enum properties")
     
     SECTION("have enum type")
     {
-        REQUIRE(property->type() == ponder::enumType);
+        IS_TRUE(property->type() == ponder::ValueType::Enum);
     }
 
     SECTION("wrap an Enum")
     {
-        REQUIRE(( property->getEnum() == ponder::enumByType<MyEnum>() ));
+        IS_TRUE( property->getEnum() == ponder::enumByType<MyEnum>() );
     }
 
     SECTION("have values")
     {
-        REQUIRE(( property->get(MyClass(Zero)) == ponder::Value(Zero) ));
-        REQUIRE(( property->get(MyClass(One)) == ponder::Value(One) ));
+        IS_TRUE( property->get(MyClass(Zero)) == ponder::Value(Zero) );
+        IS_TRUE( property->get(MyClass(One)) == ponder::Value(One) );
     }
 
     SECTION("allow setting of values")
@@ -101,7 +101,7 @@ TEST_CASE("Enum properties")
         MyClass object(Zero);
         property->set(object, One);
 
-        REQUIRE(( property->get(object) == ponder::Value(One) ));
+        IS_TRUE( property->get(object) == ponder::Value(One) );
     }    
 }
 

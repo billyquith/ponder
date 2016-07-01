@@ -31,7 +31,7 @@
 #include <ponder/class.hpp>
 #include <ponder/enum.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <string>
 #include <string.h> // memset
 
@@ -156,11 +156,11 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     {
         ponder::UserObject object;
         
-        REQUIRE(( object == ponder::UserObject::nothing ));
+        IS_TRUE( object == ponder::UserObject::nothing );
         
         object = metaclass->construct();
         
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         MyClass* instance = object.get<MyClass*>();
 
@@ -177,7 +177,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     {
         ponder::UserObject object = metaclass->construct(ponder::Args(1L)).get<MyClass*>();
 
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         MyClass* instance = object.get<MyClass*>();
 
@@ -194,7 +194,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     {
         ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
 
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         MyClass* instance = object.get<MyClass*>();
 
@@ -212,7 +212,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     {
         ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
 
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         MyClass* instance = object.get<MyClass*>();
 
@@ -229,7 +229,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     {
         ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
 
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         MyClass* instance = object.get<MyClass*>();
 
@@ -246,7 +246,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     {
         ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
 
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         MyClass* instance = object.get<MyClass*>();
 
@@ -261,10 +261,10 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 
     SECTION("with invalid arguments")
     {
-        REQUIRE(( metaclass->construct(ponder::Args("hello")) == ponder::UserObject::nothing ));
-        REQUIRE(( metaclass->construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing ));
-        REQUIRE(( metaclass->construct(ponder::Args(two, MyType(10))) == ponder::UserObject::nothing ));
-        REQUIRE(( metaclass->construct(ponder::Args(5., "hello")) == ponder::UserObject::nothing ));
+        IS_TRUE( metaclass->construct(ponder::Args("hello")) == ponder::UserObject::nothing );
+        IS_TRUE( metaclass->construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing );
+        IS_TRUE( metaclass->construct(ponder::Args(two, MyType(10))) == ponder::UserObject::nothing );
+        IS_TRUE( metaclass->construct(ponder::Args(5., "hello")) == ponder::UserObject::nothing );
     }    
 }
 
@@ -291,7 +291,7 @@ TEST_CASE("Constructors can use placement new")
         
         ponder::UserObject object = metaclass->construct(ponder::Args(), p); // placement new
         
-        REQUIRE(( object != ponder::UserObject::nothing ));
+        IS_TRUE( object != ponder::UserObject::nothing );
 
         REQUIRE(buff[0] == c_guard);
         REQUIRE(*p != c_guard);

@@ -125,8 +125,9 @@ public:
      * two getters which must be composed to form a single getter.
      * If F1 is a direct pointer-to-member, it is considered both a getter and a setter.
      *
-     * Having two getters allows to expose a property which requires an extra level of indirection to be accessed
-     * (for example, a property of a member of the class instead of a property of the class itself).
+     * Having two getters allows to expose a property which requires an extra level of 
+     * indirection to be accessed (for example, a property of a member of the class instead of 
+     * a property of the class itself).
      *
      * Example:
      *
@@ -147,7 +148,8 @@ public:
      *
      * \param name Name of the property (must be unique within the metaclass)
      * \param accessor1 First accessor to the C++ implementation of the property (getter)
-     * \param accessor2 Second accessor to the C++ implementation of the property (setter or getter to compose)
+     * \param accessor2 Second accessor to the C++ implementation of the property (setter or 
+     *        getter to compose)
      *
      * \return Reference to this, in order to chain other calls
      */
@@ -160,8 +162,9 @@ public:
      * The accessor1 and accessor2 arguments are a pair of getter/setter, accessor3 is
      * an accessor to compose to accessor1 and accessor2 to get the final accessors.
      *
-     * This allows to expose a property which requires an extra level of indirection to be accessed
-     * (for example, a property of a member of the class instead of a property of the class itself).
+     * This allows to expose a property which requires an extra level of indirection to 
+     * be accessed (for example, a property of a member of the class instead of a property of 
+     * the class itself).
      *
      * Example:
      *
@@ -183,8 +186,10 @@ public:
      * };
      *
      * ponder::Class::declare<Entity>("Entity")
-     *     .property("x", &Point::getX, &Point::setX, &Entity::p)  // will internally resolve to e.p.get/setX()
-     *     .property("y", &Point::getY, &Point::setY, &Entity::p); // will internally resolve to e.p.get/setY()
+     *     // will internally resolve to e.p.get/setX()
+     *     .property("x", &Point::getX, &Point::setX, &Entity::p)
+     *     // will internally resolve to e.p.get/setY()
+     *     .property("y", &Point::getY, &Point::setY, &Entity::p);
      * \endcode
      *
      * \param name Name of the property (must be unique within the metaclass)
@@ -210,53 +215,6 @@ public:
      */
     template <typename F>
     ClassBuilder<T>& function(const std::string& name, F function);
-
-    /**
-     * \brief Declare a new function from a std::function
-     *
-     * Overload handling functions of type std::function.
-     *
-     * \param name Name of the function (must be unique within the metaclass)
-     * \param function Instance of std::function to bind to the function
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F>
-    ClassBuilder<T>& function(const std::string& name, std::function<F> function);
-
-    /**
-     * \brief Declare a new function from two functions to compose
-     *
-     * This allows to expose a function which requires an extra level of indirection to be accessed
-     * (for example, a function of a member of the class instead of a function of the class itself).
-     *
-     * Example:
-     *
-     * \code
-     * struct Point
-     * {
-     *     void move(float x, float y);
-     * };
-     * 
-     * class Entity
-     * {
-     * public:
-     *
-     *     Point p;
-     * };
-     *
-     * ponder::Class::declare<Entity>("Entity")
-     *     .function("move", &Point::move, &Entity::p); // will internally resolve to e.p.move()
-     * \endcode
-     *
-     * \param name Name of the function (must be unique within the metaclass)
-     * \param function1 C++ callable entity to bind to the function
-     * \param function2 Accessor returning the member to apply to function1
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F1, typename F2>
-    ClassBuilder<T>& function(const std::string& name, F1 function1, F2 function2);
 
     /**
      * \brief Declare a new static tag

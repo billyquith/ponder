@@ -68,7 +68,7 @@ public:
      *
      * \return Type of the property
      */
-    Type type() const;
+    ValueType type() const;
 
     /**
      * \brief Check if the property is currently readable for a given object
@@ -134,7 +134,7 @@ protected:
      * \param name Name of the property
      * \param type Type of the property
      */
-    Property(const std::string& name, Type type);
+    Property(const std::string& name, ValueType type);
 
     /**
      * \brief Do the actual reading of the value
@@ -174,7 +174,7 @@ protected:
 private:
 
     std::string m_name; ///< Name of the property
-    Type m_type; ///< Type of the property
+    ValueType m_type; ///< Type of the property
     detail::Getter<bool> m_readable; ///< Accessor to get the readable state of the property
     detail::Getter<bool> m_writable; ///< Accessor to get the writable state of the property
 };

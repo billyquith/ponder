@@ -28,7 +28,7 @@
  ****************************************************************************/
 
 #include <ponder/detail/dictionary.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <string.h>
 
 

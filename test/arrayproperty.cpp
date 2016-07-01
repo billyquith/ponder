@@ -32,7 +32,7 @@
 #include <ponder/arrayproperty.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <list>
 #include <vector>
 
@@ -42,7 +42,7 @@ namespace ArrayPropertyTest
     {
         MyType(int x_) : x(x_) {}
         
-        bool operator ==(const MyType& other) const
+        bool operator == (const MyType& other) const
         {
             return x == other.x;
         }
@@ -139,18 +139,18 @@ TEST_CASE("Array property can be inspected")
 
     SECTION("should be array type")
     {
-        REQUIRE(bools->type() == ponder::arrayType);
-        REQUIRE(ints->type() == ponder::arrayType);
-        REQUIRE(strings->type() == ponder::arrayType);
-        REQUIRE(objects->type() == ponder::arrayType);
+        REQUIRE(bools->type() == ponder::ValueType::Array);
+        REQUIRE(ints->type() == ponder::ValueType::Array);
+        REQUIRE(strings->type() == ponder::ValueType::Array);
+        REQUIRE(objects->type() == ponder::ValueType::Array);
     }
     
      SECTION("arrays have a type")
      {
-         REQUIRE(bools->elementType() == ponder::boolType);
-         REQUIRE(ints->elementType() == ponder::intType);
-         REQUIRE(strings->elementType() == ponder::stringType);
-         REQUIRE(objects->elementType() == ponder::userType);
+         REQUIRE(bools->elementType() == ponder::ValueType::Boolean);
+         REQUIRE(ints->elementType() == ponder::ValueType::Integer);
+         REQUIRE(strings->elementType() == ponder::ValueType::String);
+         REQUIRE(objects->elementType() == ponder::ValueType::User);
      }
      
      SECTION("can be dynamic")
@@ -191,11 +191,11 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be read")
     REQUIRE_THROWS_AS(strings->get(object, 4), ponder::OutOfRange);
     
     std::list<MyType>::const_iterator it = object.objects.begin();
-    REQUIRE(( objects->get(object, 0) == ponder::Value(*std::next(it, 0)) ));
-    REQUIRE(( objects->get(object, 1) == ponder::Value(*std::next(it, 1)) ));
-    REQUIRE(( objects->get(object, 2) == ponder::Value(*std::next(it, 2)) ));
-    REQUIRE(( objects->get(object, 3) == ponder::Value(*std::next(it, 3)) ));
-    REQUIRE(( objects->get(object, 4) == ponder::Value(*std::next(it, 4)) ));
+    IS_TRUE( objects->get(object, 0) == ponder::Value(*std::next(it, 0)) );
+    IS_TRUE( objects->get(object, 1) == ponder::Value(*std::next(it, 1)) );
+    IS_TRUE( objects->get(object, 2) == ponder::Value(*std::next(it, 2)) );
+    IS_TRUE( objects->get(object, 3) == ponder::Value(*std::next(it, 3)) );
+    IS_TRUE( objects->get(object, 4) == ponder::Value(*std::next(it, 4)) );
     REQUIRE_THROWS_AS(objects->get(object, 5), ponder::OutOfRange);
 }
 

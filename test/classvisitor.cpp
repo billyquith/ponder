@@ -37,7 +37,7 @@
 #include <ponder/userproperty.hpp>
 #include <ponder/function.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace ClassVisitorTest
 {

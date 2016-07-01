@@ -31,7 +31,7 @@
 #include <ponder/userobject.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <ostream>
 
 namespace UserObjectTest
@@ -207,22 +207,22 @@ TEST_CASE("Ponder supports user objects")
     SECTION("empty objects are nothing")
     {
         ponder::UserObject obj;
-        REQUIRE((obj == ponder::UserObject::nothing));
+        IS_TRUE(obj == ponder::UserObject::nothing);
 
-        REQUIRE((ponder::UserObject::nothing == ponder::UserObject::nothing));
+        IS_TRUE(ponder::UserObject::nothing == ponder::UserObject::nothing);
     }
 
     SECTION("destroyed objects are nothing")
     {
         ponder::UserObject obj;
-        REQUIRE((obj == ponder::UserObject::nothing));
+        IS_TRUE(obj == ponder::UserObject::nothing);
 
         auto const& metaclass = ponder::classByType<MyClass>();
         obj = metaclass.construct(ponder::Args(1));
-        REQUIRE((obj != ponder::UserObject::nothing));
+        IS_TRUE(obj != ponder::UserObject::nothing);
         
         metaclass.destroy(obj);
-        REQUIRE((obj == ponder::UserObject::nothing));
+        IS_TRUE(obj == ponder::UserObject::nothing);
     }
 
     SECTION("user objects reference other objects")
@@ -287,15 +287,15 @@ TEST_CASE("Ponder supports user objects")
         MyClass object1(11);
         MyClass object2(11);
 
-        REQUIRE((ponder::UserObject(object1)  == ponder::UserObject(object1)));
-        REQUIRE((ponder::UserObject(object1)  == ponder::UserObject(&object1)));
-        REQUIRE((ponder::UserObject(&object1) == ponder::UserObject(&object1)));
-        REQUIRE((ponder::UserObject(object1)  != ponder::UserObject(object2)));
+        IS_TRUE(ponder::UserObject(object1)  == ponder::UserObject(object1));
+        IS_TRUE(ponder::UserObject(object1)  == ponder::UserObject(&object1));
+        IS_TRUE(ponder::UserObject(&object1) == ponder::UserObject(&object1));
+        IS_TRUE(ponder::UserObject(object1)  != ponder::UserObject(object2));
 
-        REQUIRE((ponder::UserObject(object1) == ponder::UserObject::ref(object1)));
-        REQUIRE((ponder::UserObject(object1) == ponder::UserObject::ref(&object1)));
-        REQUIRE((ponder::UserObject(object1) != ponder::UserObject::copy(object1)));
-        REQUIRE((ponder::UserObject(object1) != ponder::UserObject::copy(&object1)));
+        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::ref(object1));
+        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::ref(&object1));
+        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::copy(object1));
+        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::copy(&object1));
     }
 
     SECTION("check we can reference non-copyable objects")
@@ -343,9 +343,9 @@ TEST_CASE("Ponder supports user objects")
         MyBase base(6);
         MyBase& objectAsBase = object;
 
-        REQUIRE((ponder::UserObject(base).getClass() == ponder::classByType<MyBase>()));
-        REQUIRE((ponder::UserObject(object).getClass() == ponder::classByType<MyClass>()));
-        REQUIRE((ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>()));
+        IS_TRUE(ponder::UserObject(base).getClass() == ponder::classByType<MyBase>());
+        IS_TRUE(ponder::UserObject(object).getClass() == ponder::classByType<MyClass>());
+        IS_TRUE(ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>());
     }
 
     SECTION("we can get property values by name")
@@ -512,6 +512,21 @@ TEST_CASE("Ponder supports user objects")
         REQUIRE(composed1.get().get().x ==2);
         REQUIRE(composed2.get<Composed2>().get().x ==2);
         REQUIRE(composed3.get<Composed3>().x ==2);
-    }    
+    }
+    
+    SECTION("objects can created from existing user data")
+    {
+        MyClass object(77);
+        
+        auto const& metacls = ponder::classByType<MyClass>();
+        void* ptr = &object;
+        
+        ponder::UserObject uo( metacls.getUserObjectFromPointer(ptr) );
+        REQUIRE(uo.get("p") == ponder::Value(77));
+        
+        uo.set("p", 21);
+        REQUIRE(object.x == 21);
+        REQUIRE(ponder::Value(object.x) == uo.get("p"));
+    }
 }
 

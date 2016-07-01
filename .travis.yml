@@ -5,12 +5,16 @@ os:
 compiler:
   - clang
   - gcc
+env:
+  - BUILD_CONFIG=Debug
+  - BUILD_CONFIG=Release
+osx_image: xcode7.3
 
 sudo: required
 dist: trusty
       
-before_install:
-  - echo "Lang:$LANG OS:$TRAVIS_OS_NAME"
+install:
+  - echo Lang:$LANG. OS:$TRAVIS_OS_NAME. CC:$CC.
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && -z `brew list | grep doxygen` ]]; then brew install doxygen; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && -z `brew list | grep cmake` ]]; then brew install cmake; fi
@@ -20,13 +24,15 @@ before_install:
   
 before_script:
   - cmake --version
-  - cmake -G "Unix Makefiles" -DBUILD_TEST=TRUE
+  - mkdir build && cd build
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake .. -G Xcode -DBUILD_TEST=ON; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake .. -G "Unix Makefiles" -DBUILD_TEST=ON; fi
 script:
-  - make pondertest && make doc && ./test/pondertest
+  - cmake --build . --target pondertest --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
 
 notifications:
   email:
-    on_failure: always
+    on_failure: change
     on_success: change
 
 

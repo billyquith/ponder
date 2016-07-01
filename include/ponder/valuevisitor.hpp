@@ -46,16 +46,17 @@ namespace ponder
  *
  * The template parameter T is the type returned by the visitor.
  *
- * To handle one of the possible types of the value, just write the corresponding \c operator() function.
- * Here is the list of the mapping between Ponder types and their corresponding C++ types:
+ * To handle one of the possible types of the value, just write the corresponding 
+ * \c operator() function. Here is the list of the mapping between Ponder types and their 
+ * corresponding C++ types:
  *
- * \li ponder::noType --> ponder::NoType
- * \li ponder::boolType --> bool
- * \li ponder::intType --> long
- * \li ponder::realType --> double
- * \li ponder::stringType --> std::string
- * \li ponder::enumType --> ponder::EnumObject
- * \li ponder::userType --> ponder::UserObject
+ * \li ponder::ValueType::None --> ponder::NoType
+ * \li ponder::ValueType::Boolean --> bool
+ * \li ponder::ValueType::Integer --> long
+ * \li ponder::ValueType::Real --> double
+ * \li ponder::ValueType::String --> std::string
+ * \li ponder::ValueType::Enum --> ponder::EnumObject
+ * \li ponder::ValueType::User --> ponder::UserObject
  *
  * Here an example of a unary visitor which creates an editor for the value based on its type
  * \code

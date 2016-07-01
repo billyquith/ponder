@@ -44,7 +44,7 @@ const std::string& Property::name() const
     return m_name;
 }
 
-Type Property::type() const
+ValueType Property::type() const
 {
     return m_type;
 }
@@ -94,7 +94,7 @@ bool Property::isWritable() const
     return true;
 }
 
-Property::Property(const std::string& name, Type type)
+Property::Property(const std::string& name, ValueType type)
     : m_name(name)
     , m_type(type)
     , m_readable(true)

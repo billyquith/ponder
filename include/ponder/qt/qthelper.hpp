@@ -52,7 +52,7 @@ public:
      *
      * \return Corresponding Ponder type
      */
-    static ponder::Type type(const char* typeName)
+    static ponder::ValueType type(const char* typeName)
     {
         return type(variantType(QMetaType::type(typeName)));
     }
@@ -62,24 +62,24 @@ public:
      *
      * \param theType Source QVariant type to convert
      *
-     * \return \a theType converted to a ponder::Type
+     * \return \a theType converted to a ponder::ValueType
      */
-    static ponder::Type type(QVariant::Type theType)
+    static ponder::ValueType type(QVariant::Type theType)
     {
         // We add an extra conversion to QVariant::Type because variant.type() may return metatypes
         // that do not exist in QVariant (such as QMetaType::Long which is considered a user type)
         switch (variantType(theType))
         {
-            case QVariant::Invalid:   return ponder::noType;
-            case QVariant::Bool:      return ponder::boolType;
-            case QVariant::Char:      return ponder::intType;
-            case QVariant::Int:       return ponder::intType;
-            case QVariant::LongLong:  return ponder::intType;
-            case QVariant::UInt:      return ponder::intType;
-            case QVariant::ULongLong: return ponder::intType;
-            case QVariant::Double:    return ponder::realType;
-            case QVariant::String:    return ponder::stringType;
-            default:                  return ponder::noType;
+            case QVariant::Invalid:   return ponder::ValueType::None;
+            case QVariant::Bool:      return ponder::ValueType::Boolean;
+            case QVariant::Char:      return ponder::ValueType::Integer;
+            case QVariant::Int:       return ponder::ValueType::Integer;
+            case QVariant::LongLong:  return ponder::ValueType::Integer;
+            case QVariant::UInt:      return ponder::ValueType::Integer;
+            case QVariant::ULongLong: return ponder::ValueType::Integer;
+            case QVariant::Double:    return ponder::ValueType::Real;
+            case QVariant::String:    return ponder::ValueType::String;
+            default:                  return ponder::ValueType::None;
         }
     }
 
@@ -168,13 +168,13 @@ public:
         switch (value.type())
         {
             default:
-            case ponder::noType:     return QVariant();
-            case ponder::boolType:   return QVariant(value.to<bool>());
-            case ponder::intType:    return QVariant(value.to<int>());
-            case ponder::realType:   return QVariant(value.to<double>());
-            case ponder::stringType: return QVariant(value.to<QString>());
-            case ponder::enumType:   return QVariant(value.to<int>());
-            case ponder::userType:   return QVariant();
+            case ponder::ValueType::None:     return QVariant();
+            case ponder::ValueType::Boolean:   return QVariant(value.to<bool>());
+            case ponder::ValueType::Integer:    return QVariant(value.to<int>());
+            case ponder::ValueType::Real:   return QVariant(value.to<double>());
+            case ponder::ValueType::String: return QVariant(value.to<QString>());
+            case ponder::ValueType::Enum:   return QVariant(value.to<int>());
+            case ponder::ValueType::User:   return QVariant();
         }
     }
 

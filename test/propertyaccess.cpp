@@ -31,7 +31,7 @@
 #include <ponder/property.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace PropertyAccessTest
 {

@@ -39,7 +39,7 @@ const Value Value::nothing;
 
 Value::Value()
     : m_value(NoType())
-    , m_type(noType)
+    , m_type(ValueType::None)
 {
 }
 
@@ -49,22 +49,22 @@ Value::Value(const Value& other)
 {
 }
 
-Type Value::type() const
+ValueType Value::type() const
 {
     return m_type;
 }
 
-bool Value::operator==(const Value& other) const
+bool Value::operator == (const Value& other) const
 {
     return visit(detail::EqualVisitor(), other);
 }
 
-bool Value::operator<(const Value& other) const
+bool Value::operator < (const Value& other) const
 {
     return visit(detail::LessThanVisitor(), other);
 }
 
-std::istream& operator>>(std::istream& stream, Value& value)
+std::istream& operator >> (std::istream& stream, Value& value)
 {
     // Use the string conversion
     std::string str;
@@ -74,7 +74,7 @@ std::istream& operator>>(std::istream& stream, Value& value)
     return stream;
 }
 
-std::ostream& operator<<(std::ostream& stream, const Value& value)
+std::ostream& operator << (std::ostream& stream, const Value& value)
 {
     // Use the string conversion
     return stream << value.to<std::string>();

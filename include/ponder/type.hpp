@@ -44,20 +44,20 @@ struct NoType
 };
 
 /**
- * \brief Enumeration of abstract types supported by Ponder
+ * \brief Enumeration of abstract value types supported by Ponder
  *
  * \sa ValueMapper
  */
-enum Type
+enum class ValueType
 {
-    noType,     ///< No type has been defined yet
-    boolType,   ///< Boolean type (bool)
-    intType,    ///< Integer types (unsigned/signed char short int long)
-    realType,   ///< Real types (float, double)
-    stringType, ///< String types (char*, std::string)
-    enumType,   ///< Enumerated types
-    arrayType,  ///< Array types (std::vector, std::list, T[])
-    userType    ///< User-defined classes
+    None,       ///< No type has been defined yet
+    Boolean,    ///< Boolean type (bool)
+    Integer,    ///< Integer types (unsigned/signed char short int long)
+    Real,       ///< Real types (float, double)
+    String,     ///< String types (char*, std::string)
+    Enum,       ///< Enumerated types
+    Array,      ///< Array types (std::vector, std::list, T[])
+    User        ///< User-defined classes
 };
 
 } // namespace ponder

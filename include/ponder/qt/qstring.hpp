@@ -50,7 +50,7 @@ struct ValueMapper<QString>
     /**
      * \brief Ponder type associated to QString
      */
-    static const int type = ponder::stringType;
+    static const int type = ponder::ValueType::String;
 
     /**
      * \brief Convert from QString to std::string

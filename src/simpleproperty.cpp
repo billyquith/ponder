@@ -35,7 +35,7 @@
 namespace ponder
 {
     
-SimpleProperty::SimpleProperty(const std::string& name, Type type)
+SimpleProperty::SimpleProperty(const std::string& name, ValueType type)
     : Property(name, type)
 {
 }

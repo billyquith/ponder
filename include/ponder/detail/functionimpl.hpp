@@ -57,7 +57,9 @@ using namespace std::placeholders;
  * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
-inline typename std::remove_reference<T>::type convertArg(const Args& args, std::size_t index, const std::string& function)
+inline typename std::remove_reference<T>::type convertArg(const Args& args,
+                                                          std::size_t index,
+                                                          const std::string& function)
 {
     try
     {
@@ -71,18 +73,39 @@ inline typename std::remove_reference<T>::type convertArg(const Args& args, std:
 
 
 template <typename R, typename C>
-struct CallHelper
+class CallHelper
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, C obj, const Args& args, const std::string& name, index_sequence<Is...>)
+    static Value callCoerce(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
-        return func(obj, convertArg<A>(args,Is,name)...);
+        return func(obj, convertArg<A>(args, Is, name)...);
+    }
+
+    template<typename F, typename... A, std::size_t... Is>
+    static Value callDirect(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
+    {
+        return func(obj, args[Is]...);
+    }
+
+public:
+    template <typename F, typename... A>
+    static Value callCoerce(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 
     template <typename F, typename... A>
-    static Value call(F func, C obj, const Args& args, const std::string& name)
+    static Value callDirect(F func, C obj, const Args& args, const std::string& name)
     {
-        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
@@ -90,18 +113,41 @@ struct CallHelper
  * Specialization of CallHelper for functions returning void
  */
 template <typename C>
-struct CallHelper<void, C>
+class CallHelper<void, C>
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, C obj, const Args& args, const std::string& name, index_sequence<Is...>)
+    static Value callCoerce(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
-        return func(obj, convertArg<A>(args,Is,name)...), Value::nothing;
+        func(obj, convertArg<A>(args,Is,name)...);
+        return Value::nothing;
     }
-    
-    template <typename F, typename... A>
-    static Value call(F func, C obj, const Args& args, const std::string& name)
+
+    template<typename F, typename... A, std::size_t... Is>
+    static Value callDirect(F func,
+                      C obj,
+                      const Args& args,
+                      const std::string& name,
+                      index_sequence<Is...>)
     {
-        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        func(obj, args[Is]...);
+        return Value::nothing;
+    }
+
+public:
+    template <typename F, typename... A>
+    static Value callCoerce(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+    }
+
+    template <typename F, typename... A>
+    static Value callDirect(F func, C obj, const Args& args, const std::string& name)
+    {
+        return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
@@ -114,9 +160,7 @@ struct CallHelper<void, C>
  * The FunctionImpl class is a template which is specialized
  * according to the underlying function prototype.
  */
-
 template <typename F1, typename F2 = void> class FunctionImpl;
-
     
 /*
  * Specialization of FunctionImpl for all functions.
@@ -130,7 +174,7 @@ public:
      * \brief Constructor
      */
     FunctionImpl(const std::string& name, std::function<R (C, A...)> function)
-        :   Function(name, mapType<R>(), std::vector<Type> { mapType<A>()... })
+        :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
         ,   m_function(function)
     {
     }
@@ -142,7 +186,8 @@ protected:
      */
     Value execute(const UserObject& object, const Args& args) const override
     {
-        return CallHelper<R, C>::template call<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
+        return CallHelper<R, C>::template
+            callCoerce<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
     }
 
 private:
@@ -150,194 +195,7 @@ private:
     std::function<R (C, A...)> m_function; ///< Object containing the actual function to call
 };
 
-/*
- * Specialization of FunctionImpl for composed functions.
- */
-template <typename C, typename N, typename M, typename R, typename A0>
-class FunctionImpl<R (N, A0), M (C)> : public Function
-{
-public:
-
-    /**
-     * \brief Constructor
-     */
-    template <typename F1, typename F2>
-    FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>()})
-        ,   m_function(std::bind(function, std::bind(accessor, _1), _2))
-    {
-    }
-
-protected:
-
-    /**
-     * \see Function::execute
-     */
-    Value execute(const UserObject& object, const Args& args) const override
-    {
-        return CallHelper<R, C>::call(m_function, object.get<C>()
-                                      , convertArg<A0>(args, 0, name()));
-
-    }
-
-private:
-
-    std::function<R (C, A0)> m_function; ///< Object containing the actual function to call
-};
-
-/*
- * Specialization of FunctionImpl for composed functions taking 2 arguments
- */
-template <typename C, typename N, typename M, typename R, typename A0, typename A1>
-class FunctionImpl<R (N, A0, A1), M (C)> : public Function
-{
-public:
-
-    /**
-     * \brief Constructor
-     */
-    template <typename F1, typename F2>
-    FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>()})
-        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3))
-    {
-    }
-
-protected:
-
-    /**
-     * \see Function::execute
-     */
-    Value execute(const UserObject& object, const Args& args) const override
-    {
-        return CallHelper<R, C>::call(m_function, object.get<C>()
-                                      , convertArg<A0>(args, 0, name())
-                                      , convertArg<A1>(args, 1, name()));
-
-    }
-
-private:
-
-    std::function<R (C, A0, A1)> m_function; ///< Object containing the actual function to call
-};
-
-/*
- * Specialization of FunctionImpl for composed functions taking 3 arguments
- */
-template <typename C, typename N, typename M, typename R, typename A0, typename A1, typename A2>
-class FunctionImpl<R (N, A0, A1, A2), M (C)> : public Function
-{
-public:
-
-    /**
-     * \brief Constructor
-     */
-    template <typename F1, typename F2>
-    FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>()})
-        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4))
-    {
-    }
-
-protected:
-
-    /**
-     * \see Function::execute
-     */
-    Value execute(const UserObject& object, const Args& args) const override
-    {
-        return CallHelper<R, C>::call(m_function, object.get<C>()
-                                      , convertArg<A0>(args, 0, name())
-                                      , convertArg<A1>(args, 1, name())
-                                      , convertArg<A2>(args, 2, name()));
-
-    }
-
-private:
-
-    std::function<R (C, A0, A1, A2)> m_function; ///< Object containing the actual function to call
-};
-
-/*
- * Specialization of FunctionImpl for composed functions taking 4 arguments
- */
-template <typename C, typename N, typename M, typename R, typename A0, typename A1, typename A2, typename A3>
-class FunctionImpl<R (N, A0, A1, A2, A3), M (C)> : public Function
-{
-public:
-
-    /**
-     * \brief Constructor
-     */
-    template <typename F1, typename F2>
-    FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>()})
-        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5))
-    {
-    }
-
-protected:
-
-    /**
-     * \see Function::execute
-     */
-    Value execute(const UserObject& object, const Args& args) const override
-    {
-        return CallHelper<R, C>::call(m_function, object.get<C>()
-                                      , convertArg<A0>(args, 0, name())
-                                      , convertArg<A1>(args, 1, name())
-                                      , convertArg<A2>(args, 2, name())
-                                      , convertArg<A3>(args, 3, name()));
-
-    }
-
-private:
-
-    std::function<R (C, A0, A1, A2, A3)> m_function; ///< Object containing the actual function to call
-};
-
-/*
- * Specialization of FunctionImpl for composed functions taking 5 arguments
- */
-template <typename C, typename N, typename M, typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
-class FunctionImpl<R (N, A0, A1, A2, A3, A4), M (C)> : public Function
-{
-public:
-
-    /**
-     * \brief Constructor
-     */
-    template <typename F1, typename F2>
-    FunctionImpl(const std::string& name, F1 function, F2 accessor)
-        :   Function(name, mapType<R>(), std::vector<Type> {mapType<A0>(), mapType<A1>(), mapType<A2>(), mapType<A3>(), mapType<A4>()})
-        ,   m_function(std::bind(function, std::bind(accessor, _1), _2, _3, _4, _5, _6))
-    {
-    }
-
-protected:
-
-    /**
-     * \see Function::execute
-     */
-    Value execute(const UserObject& object, const Args& args) const override
-    {
-        return CallHelper<R, C>::call(m_function, object.get<C>()
-                                      , convertArg<A0>(args, 0, name())
-                                      , convertArg<A1>(args, 1, name())
-                                      , convertArg<A2>(args, 2, name())
-                                      , convertArg<A3>(args, 3, name())
-                                      , convertArg<A4>(args, 4, name()));
-
-    }
-
-private:
-
-    std::function<R (C, A0, A1, A2, A3, A4)> m_function; ///< Object containing the actual function to call
-};
-
 } // namespace detail
-
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_FUNCTIONIMPL_HPP

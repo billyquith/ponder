@@ -31,7 +31,7 @@
 #include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/util.hpp>
 #include <ponder/arraymapper.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <array>
 #include <string.h> // strcmp()
 
@@ -73,7 +73,6 @@ namespace TraitsTest
     public:
         T x;
     };
-
 }
 
 using namespace TraitsTest;
@@ -85,16 +84,20 @@ using namespace TraitsTest;
 // Sanity check: make sure compiler supports features we need.
 TEST_CASE("C++11 features and syntax")
 {
-    SECTION("functions")
+    SECTION("function test")
     {
         foo(); bar(0.f); // to stop unused warning
-    
+        
         static_assert(std::is_function<decltype(foo)>::value, "std::is_function failed");
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
         static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
-        static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");
+        static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");    
+        static_assert(std::is_function< std::function<void()>() >::value, "std::is_function failed");
+    }
     
+    SECTION("function result")
+    {
         typedef void (*foo_t)();
         static_assert(std::is_void< std::result_of<decltype(foo)& ()>::type >::value,
                       "std::result_of failed");
@@ -124,42 +127,71 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder has function traits")
 {
+    
     SECTION("what is not a function")
     {
-        static_assert( ! ponder::detail::FunctionTraits<int>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<int*>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<std::string>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<int>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<float>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<int*>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<char*>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<int**>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<std::string>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
     }
     
     SECTION("what is a function")
     {
-        static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<int(char*)>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<int(char*)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
 
-        static_assert(ponder::detail::FunctionTraits<decltype(foo)>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<decltype(bar)>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<decltype(foo)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<decltype(bar)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
 
-        static_assert( ! ponder::detail::FunctionTraits<NonCallable>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<NonCallable>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
         // Only reports: function and pointer-to-member types & functors
-        static_assert( ! ponder::detail::FunctionTraits<Callable>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! ponder::detail::FunctionTraits<Callable>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
 
-        static_assert(ponder::detail::FunctionTraits<void(Methods::*)()>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<void(Methods::*)()>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
         void (Methods::*meth_t)() = &Methods::foo;
-        static_assert(ponder::detail::FunctionTraits<decltype(meth_t)>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<decltype(meth_t)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
 
         struct Members {
             int m;
             float a[5];
         };
 
-        static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<float (Members::*)[]>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<decltype(&Members::a)>::isFunction, "FunctionTraits<>::isFunction failed");
+        // member pointers
+        static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<float (Members::*)[]>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<decltype(&Members::a)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+
+        // std::function<>
+        static_assert(ponder::detail::FunctionTraits<std::function<void()>>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<std::function<int(float,int)>>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(ponder::detail::FunctionTraits<std::function<char*(char[])>>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
     }
 }
 
@@ -287,25 +319,35 @@ TEST_CASE("Types supporting array interface are supported")
     SECTION("C arrays")
     {
         static_assert(ponder_ext::ArrayMapper<int[10]>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert(std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value,
+                      "ponder_ext::ArrayMapper failed");
     }
 
     SECTION("std::array")
     {
-        static_assert(ponder_ext::ArrayMapper<std::array<int, 10>>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::array<int, 10>>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+        static_assert(ponder_ext::ArrayMapper<std::array<int, 10>>::isArray,
+                      "ponder_ext::ArrayMapper failed");
+        static_assert(
+            std::is_same<int, ponder_ext::ArrayMapper<std::array<int, 10>>::ElementType>::value,
+            "ponder_ext::ArrayMapper failed");
     }
 
     SECTION("std::vector")
     {
-        static_assert(ponder_ext::ArrayMapper<std::vector<int>>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::vector<int>>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+        static_assert(ponder_ext::ArrayMapper<std::vector<int>>::isArray,
+                      "ponder_ext::ArrayMapper failed");
+        static_assert(
+            std::is_same<int, ponder_ext::ArrayMapper<std::vector<int>>::ElementType>::value,
+            "ponder_ext::ArrayMapper failed");
     }
 
     SECTION("std::list")
     {
-        static_assert(ponder_ext::ArrayMapper<std::list<int>>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::list<int>>::ElementType>::value, "ponder_ext::ArrayMapper failed");
+        static_assert(ponder_ext::ArrayMapper<std::list<int>>::isArray,
+                      "ponder_ext::ArrayMapper failed");
+        static_assert(
+            std::is_same<int, ponder_ext::ArrayMapper<std::list<int>>::ElementType>::value,
+            "ponder_ext::ArrayMapper failed");
     }
 }
 
@@ -370,7 +412,8 @@ TEST_CASE("Lexical cast is used")
     
         REQUIRE(ponder::detail::convert<unsigned short>(std::string("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned short>(std::string("2600")) == 2600u);
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("-27")) == static_cast<unsigned short>(-27));
+        REQUIRE(ponder::detail::convert<unsigned short>(std::string("-27"))
+                == static_cast<unsigned short>(-27));
     }
 
     SECTION("lexical_cast_to_int")
@@ -381,7 +424,8 @@ TEST_CASE("Lexical cast is used")
 
         REQUIRE(ponder::detail::convert<unsigned int>(std::string("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned int>(std::string("123456789")) == 123456789u);
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("-27")) == static_cast<unsigned int>(-27));
+        REQUIRE(ponder::detail::convert<unsigned int>(std::string("-27"))
+                == static_cast<unsigned int>(-27));
     
         REQUIRE_THROWS_AS(ponder::detail::convert<int>(std::string("bad number")),
                           ponder::detail::bad_conversion);
@@ -390,14 +434,15 @@ TEST_CASE("Lexical cast is used")
     SECTION("lexical_cast_to_long")
     {
         REQUIRE(ponder::detail::convert<long long>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<long long>(std::string("1125899906842624")) ==
-                1125899906842624ll);
+        REQUIRE(ponder::detail::convert<long long>(std::string("1125899906842624"))
+                == 1125899906842624ll);
         REQUIRE(ponder::detail::convert<long long>(std::string("-27")) == -27);
     
         REQUIRE(ponder::detail::convert<unsigned long long>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("1125899906842624")) ==
-                1125899906842624ull);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("-27")) == static_cast<unsigned long long>(-27));
+        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("1125899906842624"))
+                == 1125899906842624ull);
+        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("-27"))
+                == static_cast<unsigned long long>(-27));
     }
 
     SECTION("lexical_cast_to_float")
@@ -424,7 +469,10 @@ R a2t_impl(const Array& a, ponder::detail::index_sequence<I...>)
     return std::make_tuple(a[I]...);
 }
 
-template<typename R, typename T, std::size_t N, typename Indices = ponder::detail::make_index_sequence<N>>
+template< typename R,
+          typename T,
+          std::size_t N,
+          typename Indices = ponder::detail::make_index_sequence<N> >
 R a2t(const std::array<T, N>& a)
 {
     return a2t_impl<R>(a, Indices());
@@ -468,9 +516,9 @@ TEST_CASE("Check Ponder utilities work correctly")
     
     SECTION("type to string")
     {
-        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::noType), "none")==0);
-        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::realType), "real")==0);
-        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::userType), "user")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::ValueType::None), "none")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::ValueType::Real), "real")==0);
+        REQUIRE(strcmp(ponder::detail::typeAsString(ponder::ValueType::User), "user")==0);
     }
 }
 
@@ -542,20 +590,27 @@ TEST_CASE("Check functionality same as Boost")
 
     SECTION("boost_callable")
     {
-        static_assert( ! boost::function_types::is_callable_builtin<void>::value, "boost::callable problem");
-        static_assert( ! boost::function_types::is_callable_builtin<int>::value, "boost::callable problem");
-        static_assert( ! boost::function_types::is_callable_builtin<char*>::value, "boost::callable problem");
+        static_assert( ! boost::function_types::is_callable_builtin<void>::value,
+                      "boost::callable problem");
+        static_assert( ! boost::function_types::is_callable_builtin<int>::value,
+                      "boost::callable problem");
+        static_assert( ! boost::function_types::is_callable_builtin<char*>::value,
+                      "boost::callable problem");
     
         struct TestClass {
             int foo(float) {return 0;}
             int i;
             int arr[5];
         };
-        static_assert(boost::function_types::is_callable_builtin<void()>::value, "boost::callable problem");
-        static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)(float)>::value, "boost::callable problem");
+        static_assert(boost::function_types::is_callable_builtin<void()>::value,
+                      "boost::callable problem");
+        static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)(float)>::value,
+                      "boost::callable problem");
     
-        static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)>::value, "boost::callable problem");
-        static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)[5]>::value, "boost::callable problem");
+        static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)>::value,
+                      "boost::callable problem");
+        static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)[5]>::value,
+                      "boost::callable problem");
     }
 
     SECTION("boost_result_type")
@@ -563,9 +618,19 @@ TEST_CASE("Check functionality same as Boost")
         struct TestClass {
             int foo(float) {return 0;}
         };
-        static_assert(std::is_same<int, boost::function_types::result_type<int()>::type>::value, "boost::ret result_type");
-        static_assert(std::is_same<int, boost::function_types::result_type<int(TestClass::*)(void)>::type>::value, "boost::ret result_type");
-        static_assert(std::is_same<float, boost::function_types::result_type<float(TestClass::*)(void)>::type>::value, "boost::ret result_type");
+        static_assert(
+                  std::is_same<int, boost::function_types::result_type<int()>::type>::value,
+                  "boost::ret result_type");
+        
+        static_assert(
+            std::is_same<int,
+                         boost::function_types::result_type<int(TestClass::*)(void)>::type>::value,
+                      "boost::ret result_type");
+        
+        static_assert(
+            std::is_same<float,
+                    boost::function_types::result_type<float(TestClass::*)(void)>::type>::value,
+                    "boost::ret result_type");
     }    
 }
 

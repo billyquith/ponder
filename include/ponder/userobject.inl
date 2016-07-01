@@ -30,6 +30,7 @@
 
 namespace ponder
 {
+    
 template <typename T>
 UserObject::UserObject(const T& object)
     : m_class(&classByObject(object))

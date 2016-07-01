@@ -45,11 +45,12 @@
 
 namespace ponder
 {
+
 template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
 class ClassVisitor;
-    
+  
 /**
  * \brief ponder::Class represents a metaclass composed of properties and functions
  *
@@ -64,7 +65,6 @@ class ClassVisitor;
  * class MyClass
  * {
  * public:
- *
  *     MyClass();
  *     int getProp() const;
  *     void setProp(int);
@@ -131,6 +131,7 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
     typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
+    typedef UserObject (*UserObjectCreator)(void*);
     
     std::size_t m_sizeof;       ///< Size of the class in bytes.
     std::string m_id;           ///< Name of the metaclass
@@ -138,9 +139,10 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     PropertyTable m_properties; ///< Table of metaproperties indexed by ID
     BaseList m_bases;           ///< List of base metaclasses
     ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor;    ///< Destructor (function that is able to delete an abstract object)
+    Destructor m_destructor;    ///< Destructor (function able to delete an abstract object)
+    UserObjectCreator m_userObjectCreator; ///< Convert pointer of class instance to UserObject
 
-public:
+public:     // declaration
 
     /**
      * \brief Declare a new metaclass
@@ -173,7 +175,7 @@ public:
      */
     static void undeclare(const Class& cls);
 
-public:
+public:     // reflection
 
     /**
      * \brief Return the name of the metaclass
@@ -355,6 +357,22 @@ public:
      * \endcode
      */
     PropertyTable::Iterator propertyIterator() const;
+    
+    /**
+     * \brief Create a UserObject from an opaque user pointer
+     *
+     * \return A UserObject with this class's type
+     *
+     * \note This relies on the user choosing the correct metaclass. There are no
+     *       checks (as the data is opaque).
+     *
+     * \code
+     * auto const& metacls = ponder::classByType<MyClass>();
+     * void *ptr = &object;
+     * ponder::UserObject uo( metacls.getUserObjectFromPointer(ptr) );
+     * \endcode
+     */
+    UserObject getUserObjectFromPointer(void* ptr) const;
 
     /**
      * \brief Start visitation of a class

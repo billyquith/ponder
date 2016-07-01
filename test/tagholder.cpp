@@ -30,7 +30,7 @@
 #include <ponder/classget.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 #include <string>
 
 namespace TagHolderTest
@@ -137,9 +137,9 @@ TEST_CASE("Objects can be assigned tags")
         REQUIRE(metaclass->tag("static2") == ponder::Value(10));
         REQUIRE(metaclass->tag("static3") == ponder::Value(5.25));
         REQUIRE(metaclass->tag("static4") == ponder::Value("hello"));
-        REQUIRE(( metaclass->tag("static5") == ponder::Value(Ten) ));
-        REQUIRE(( metaclass->tag("static6") == ponder::Value(object1) ));
-        REQUIRE(( metaclass->tag("xxxxxxx") == ponder::Value::nothing ));
+        IS_TRUE( metaclass->tag("static5") == ponder::Value(Ten) );
+        IS_TRUE( metaclass->tag("static6") == ponder::Value(object1) );
+        IS_TRUE( metaclass->tag("xxxxxxx") == ponder::Value::nothing );
     }
 
     SECTION("can have dynamic values")

@@ -3,7 +3,7 @@ Ponder
 ------
 
 Linux & OSX: [![Build Status](https://travis-ci.org/billyquith/ponder.svg?branch=master)](https://travis-ci.org/billyquith/ponder) - 
-Windows: [![Build status](https://ci.appveyor.com/api/projects/status/spskn9y93e8osve2?svg=true)](https://ci.appveyor.com/project/billyquith/ponder)
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/spskn9y93e8osve2/branch/master?svg=true)](https://ci.appveyor.com/project/billyquith/ponder/branch/master)
 
 ### About
 

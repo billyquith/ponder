@@ -82,7 +82,7 @@ public:
      *
      * \return Type of the result of the function
      */
-    Type returnType() const;
+    ValueType returnType() const;
 
     /**
      * \brief Get the type of an argument given by its index
@@ -93,7 +93,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    Type argType(std::size_t index) const;
+    ValueType argType(std::size_t index) const;
 
     /**
      * \brief Check if the function is currently callable for a given object
@@ -148,7 +148,9 @@ protected:
      *
      * \return Value returned by the function call
      */
-    Function(const std::string& name, Type returnType, const std::vector<Type>& argTypes = std::vector<Type>());
+    Function(const std::string& name,
+             ValueType returnType,
+             const std::vector<ValueType>& argTypes = std::vector<ValueType>());
 
     /**
      * \brief Do the actual call
@@ -168,8 +170,8 @@ protected:
 private:
 
     std::string m_name; ///< Name of the function
-    Type m_returnType; ///< Return type
-    std::vector<Type> m_argTypes; ///< Type of all the function arguments
+    ValueType m_returnType; ///< Return type
+    std::vector<ValueType> m_argTypes; ///< Type of all the function arguments
     detail::Getter<bool> m_callable; ///< Accessor to get the callable state of the function
 };
 

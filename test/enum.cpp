@@ -30,7 +30,7 @@
 #include <ponder/enumget.hpp>
 #include <ponder/errors.hpp>
 #include <ponder/enum.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace EnumTest
 {
@@ -119,9 +119,9 @@ TEST_CASE("Enums need to be declared")
     
     SECTION("can be compared")
     {
-        REQUIRE(ponder::enumByType<MyEnum>()  == ponder::enumByType<MyEnum>());
-        REQUIRE(ponder::enumByType<MyEnum>()  != ponder::enumByType<MyEnum2>());
-        REQUIRE(ponder::enumByType<MyEnum2>() != ponder::enumByType<MyEnum>());
+        IS_TRUE(ponder::enumByType<MyEnum>()  == ponder::enumByType<MyEnum>());
+        IS_TRUE(ponder::enumByType<MyEnum>()  != ponder::enumByType<MyEnum2>());
+        IS_TRUE(ponder::enumByType<MyEnum2>() != ponder::enumByType<MyEnum>());
     }
 }
 

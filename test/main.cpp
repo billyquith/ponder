@@ -31,5 +31,5 @@
 
 // This must be defined once in the entire project
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "test.hpp"
 

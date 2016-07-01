@@ -52,7 +52,7 @@ public:
      * \param elementType Type of the property
      * \param dynamic Tells if the array is dynamic or not
      */
-    ArrayProperty(const std::string& name, Type elementType, bool dynamic);
+    ArrayProperty(const std::string& name, ValueType elementType, bool dynamic);
 
     /**
      * \brief Destructor
@@ -64,7 +64,7 @@ public:
      *
      * \return Type of elements
      */
-    Type elementType() const;
+    ValueType elementType() const;
 
     /**
      * \brief Check if the array is dynamic
@@ -222,7 +222,9 @@ protected:
      * \param index Index of the element to get
      * \param value New value to assign to the element
      */
-    virtual void setElement(const UserObject& object, std::size_t index, const Value& value) const = 0;
+    virtual void setElement(const UserObject& object,
+                            std::size_t index,
+                            const Value& value) const = 0;
 
     /**
      * \brief Do the actual insertion of an element
@@ -233,7 +235,9 @@ protected:
      * \param before Index before which the new element will be inserted
      * \param value Value of the element to insert
      */
-    virtual void insertElement(const UserObject& object, std::size_t before, const Value& value) const = 0;
+    virtual void insertElement(const UserObject& object,
+                               std::size_t before,
+                               const Value& value) const = 0;
 
     /**
      * \brief Do the actual removal of an element
@@ -247,7 +251,7 @@ protected:
 
 private:
 
-    Type m_elementType; ///< Type of the individual elements of the array
+    ValueType m_elementType; ///< Type of the individual elements of the array
     bool m_dynamic; ///< Is the array dynamic?
 };
 

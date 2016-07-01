@@ -52,14 +52,19 @@ namespace detail
  *
  * ... the following types:
  *
- * \li RefReturnType: the reference type closest to T which allows to have direct access to the object (T& for raw types and references, T* for pointer types)
- * \li PointerType: the pointer type closest to T which allows to have direct access to the object (T*)
- * \li DataType: the actual raw type of the object (removes all indirections, as well const and reference modifiers)
+ * \li RefReturnType: the reference type closest to T which allows to have direct access 
+ *     to the object (T& for raw types and references, T* for pointer types)
+ * \li PointerType: the pointer type closest to T which allows to have direct access to 
+ *     the object (T*)
+ * \li DataType: the actual raw type of the object (removes all indirections, as well const 
+ *     and reference modifiers)
  *
  * ... and the following functions:
  *
- * \li get(void*): get a direct access to an object given by a typeless pointer (in other words, converts from void* to RefReturnType)
- * \li getPointer(T): get a direct pointer to an object, regardless its original storage / modifiers (in other words, convert from T to PointerType)
+ * \li get(void*): get a direct access to an object given by a typeless pointer (in other 
+ *     words, converts from void* to RefReturnType)
+ * \li getPointer(T): get a direct pointer to an object, regardless its original 
+       storage / modifiers (in other words, convert from T to PointerType)
  */
 
 /*
@@ -144,7 +149,9 @@ struct ObjectTraits<T[N]>
  * Specialized version for references to non-ref types
  */
 template <typename T>
-struct ObjectTraits<T&, typename std::enable_if< !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
+struct ObjectTraits<T&,
+            typename std::enable_if<
+                !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
     enum
     {
@@ -165,7 +172,9 @@ struct ObjectTraits<T&, typename std::enable_if< !std::is_pointer<typename Objec
  * Specialized version for references to ref types -- just remove the reference modifier
  */
 template <typename T>
-struct ObjectTraits<T&, typename std::enable_if<std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
+struct ObjectTraits<T&,
+            typename std::enable_if<
+                std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
     enum

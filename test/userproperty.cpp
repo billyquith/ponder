@@ -30,7 +30,7 @@
 #include <ponder/classget.hpp>
 #include <ponder/userproperty.hpp>
 #include <ponder/classbuilder.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 
 namespace UserPropertyTest
@@ -70,8 +70,8 @@ TEST_CASE("Ponder has user properties")
     const ponder::UserProperty* property =
         static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
     
-    REQUIRE(property->type() == ponder::userType);
-    REQUIRE((property->getClass() == ponder::classByType<UserPropertyTest::MyType>()));
+    IS_TRUE(property->type() == ponder::ValueType::User);
+    IS_TRUE(property->getClass() == ponder::classByType<UserPropertyTest::MyType>());
     
     SECTION("properties can be got")
     {

@@ -31,7 +31,7 @@
 #include <ponder/enumget.hpp>
 #include <ponder/enumobject.hpp>
 #include <ponder/enum.hpp>
-#include "catch.hpp"
+#include "test.hpp"
 
 namespace EnumObjectTest
 {
@@ -100,9 +100,9 @@ TEST_CASE("Enum objects")
     
     SECTION("wrap an Enum type")
     {
-        REQUIRE(zero.getEnum() == ponder::enumByType<MyEnum>());
-        REQUIRE(one.getEnum()  == ponder::enumByType<MyEnum>());
-        REQUIRE(two.getEnum()  == ponder::enumByType<MyEnum>());
+        IS_TRUE(zero.getEnum() == ponder::enumByType<MyEnum>());
+        IS_TRUE(one.getEnum()  == ponder::enumByType<MyEnum>());
+        IS_TRUE(two.getEnum()  == ponder::enumByType<MyEnum>());
     }
     
     SECTION("can be compared ==")
@@ -115,9 +115,9 @@ TEST_CASE("Enum objects")
         REQUIRE(one  == ponder::EnumObject(One));
         REQUIRE(two  == ponder::EnumObject(Two));
 
-        REQUIRE((zero == one) == false);
-        REQUIRE((one  == two) == false);
-        REQUIRE((two  == zero) == false);
+        REQUIRE_FALSE(zero == one);
+        REQUIRE_FALSE(one  == two);
+        REQUIRE_FALSE(two  == zero);
 
         REQUIRE((zero == zero2) == false); // same value and name, different metaenum
         REQUIRE((one  == one2) == false);
