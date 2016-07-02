@@ -96,7 +96,7 @@ namespace ClassVisitorTest
     struct MyClass
     {
         int simpleProp;
-        std::string arrayProp[5];
+        ponder::String arrayProp[5];
         MyEnum enumProp;
         MyType userProp;
         void function() {}

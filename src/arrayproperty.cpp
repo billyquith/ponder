@@ -35,7 +35,7 @@
 namespace ponder
 {
     
-ArrayProperty::ArrayProperty(const std::string& name, ValueType elementType, bool dynamic)
+ArrayProperty::ArrayProperty(IdRef name, ValueType elementType, bool dynamic)
     : Property(name, ValueType::Array)
     , m_elementType(elementType)
     , m_dynamic(dynamic)

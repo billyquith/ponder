@@ -298,7 +298,7 @@ TEST_CASE("Class members can be inspected")
         {
             switch (index++) {
                 case 0:
-                    REQUIRE(prop.name() == std::string("prop"));
+                    REQUIRE(prop.name() == ponder::String("prop"));
                     break;
                 default: ;
             }
@@ -312,7 +312,7 @@ TEST_CASE("Class members can be inspected")
         {
             switch (index++) {
                 case 0:
-                    REQUIRE(func.name() == std::string("func"));
+                    REQUIRE(func.name() == ponder::String("func"));
                     break;
                 default: ;
             }

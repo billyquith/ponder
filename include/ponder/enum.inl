@@ -32,7 +32,7 @@ namespace ponder
 {
     
 template <typename T>
-EnumBuilder Enum::declare(const std::string& name)
+EnumBuilder Enum::declare(IdRef name)
 {
     Enum& newEnum =
         detail::EnumManager::instance().addClass(name.empty()

@@ -66,7 +66,7 @@ namespace ponder
  * bool b1 = metaenum.hasName("one");     // b1 == true
  * bool b2 = metaenum.hasValue(5);        // b2 == false
  *
- * std::string s = metaenum.name(10);     // s == "ten"
+ * Id s = metaenum.name(10);     // s == "ten"
  * EnumValue l = metaenum.value("two");   // l == 2
  *
  * ponder::Enum::Pair p = metaenum.pair(0); // p == {"one", one}
@@ -85,7 +85,7 @@ public:
      * \brief Structure defining the <name, value> pairs stored in metaenums
      */
     struct Pair {
-        const std::string& name;    //!< Enum name
+        IdRef name;    //!< Enum name
         EnumValue value;            //!< Enum value
         
         /**
@@ -94,7 +94,7 @@ public:
          * \param name_ Name of the enum item.
          * \param value_ Value of the enum item.
          */
-        Pair(const std::string &name_, EnumValue value_) : name(name_), value(value_) {}
+        Pair(const Id &name_, EnumValue value_) : name(name_), value(value_) {}
         
         /**
          * \brief Helper to return value as require enum class type.
@@ -122,7 +122,7 @@ public:
      *         to fill the new metaenum with values.
      */
     template <typename T>
-    static EnumBuilder declare(const std::string& name = std::string());
+    static EnumBuilder declare(IdRef name = std::string());
 
     /**
      * \brief Undeclare an existing metaenum
@@ -144,7 +144,7 @@ public:
      *
      * \return String containing the name of the metaenum
      */
-    const std::string& name() const;
+    IdRef name() const;
         
     /**
      * \brief Return the size of the metaenum
@@ -171,7 +171,7 @@ public:
      *
      * \return True if the metaenum contains a pair whose name is \a name
      */
-    bool hasName(const std::string& name) const;
+    bool hasName(IdRef name) const;
 
     /**
      * \brief Check if the enum contains a value
@@ -206,7 +206,7 @@ public:
      *
      * \throw InvalidEnumValue value doesn't exist in the metaenum
      */
-    const std::string& name(EnumValue value) const;
+    IdRef name(EnumValue value) const;
 
     /**
      * \brief Return the name corresponding to given a value for enum class
@@ -218,7 +218,7 @@ public:
      * \throw InvalidEnumValue value doesn't exist in the metaenum
      */
     template <typename E>
-    const std::string& name(E value) const {return name(static_cast<EnumValue>(value));}
+    IdRef name(E value) const {return name(static_cast<EnumValue>(value));}
 
     /**
      * \brief Return the value corresponding to given a name
@@ -229,7 +229,7 @@ public:
      *
      * \throw InvalidEnumName name doesn't exist in the metaenum
      */
-    EnumValue value(const std::string& name) const;
+    EnumValue value(IdRef name) const;
 
     /**
      * \brief Return the value corresponding to given a name for enum class
@@ -244,7 +244,7 @@ public:
      * \throw InvalidEnumName name doesn't exist in the metaenum
      */
     template <typename E>
-    E value(const std::string& name) const {return static_cast<E>(value(name));}
+    E value(IdRef name) const {return static_cast<E>(value(name));}
 
     /**
      * \brief Operator == to check equality between two metaenums
@@ -276,15 +276,15 @@ private:
      *
      * \param name Name of the metaenum
      */
-    Enum(const std::string& name);
+    Enum(IdRef name);
     
     struct EnumCmp {
-        bool operator () (const std::string& a, const std::string& b) const {return a < b;}
+        bool operator () (IdRef a, IdRef b) const {return a < b;}
     };
     
-    typedef detail::Dictionary<std::string, EnumValue, EnumCmp> EnumTable;
+    typedef detail::Dictionary<Id, IdRef, EnumValue, EnumCmp> EnumTable;
     
-    std::string m_name;     ///< Name of the metaenum
+    Id m_name;     ///< Name of the metaenum
     EnumTable m_enums;      ///< Table of enums
 };
 

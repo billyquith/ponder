@@ -68,6 +68,8 @@ ValueType mapType()
 namespace ponder_ext
 {
 
+using ponder::IdRef;
+    
 /**
  * \class ValueMapper
  *
@@ -93,18 +95,18 @@ namespace ponder_ext
  *         // The corresponding Ponder type is "string"
  *         static const int type = ponder::string;
  *  
- *         // Convert from MyStringClass to std::string
- *         static std::string to(const MyStringClass& source)
+ *         // Convert from MyStringClass to ponder::String
+ *         static ponder::String to(const MyStringClass& source)
  *         {
  *             return source.to_std_string();
  *         }
  * 
  *         // Convert from any type to MyStringClass
- *         // Be smart, just reuse ValueMapper<std::string> :)
+ *         // Be smart, just reuse ValueMapper<ponder::String> :)
  *         template <typename T>
  *         static MyStringClass from(const T& source)
  *         {
- *             return MyStringClass(ValueMapper<std::string>::from(source));
+ *             return MyStringClass(ValueMapper<ponder::String>::from(source));
  *         }
  *     };
  * }
@@ -125,7 +127,7 @@ struct ValueMapper
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer,ponder::mapType<T>()));}
     static T from(double)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Real,   ponder::mapType<T>()));}
-    static T from(const std::string&)
+    static T from(IdRef)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::String, ponder::mapType<T>()));}
     static T from(const ponder::EnumObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::mapType<T>()));}
@@ -155,7 +157,7 @@ struct ValueMapper<bool>
     static bool from(bool source)                    {return source;}
     static bool from(long source)                    {return source != 0;}
     static bool from(double source)                  {return source != 0.;}
-    static bool from(const std::string& source)      {return ponder::detail::convert<bool>(source);}
+    static bool from(const ponder::String& source)      {return ponder::detail::convert<bool>(source);}
     static bool from(const ponder::EnumObject& source) {return source.value() != 0;}
     static bool from(const ponder::UserObject& source) {return source.pointer() != nullptr;}
 };
@@ -177,7 +179,7 @@ struct ValueMapper<T,
     static T from(bool source)                    {return static_cast<T>(source);}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
-    static T from(const std::string& source)      {return ponder::detail::convert<T>(source);}
+    static T from(IdRef source)      {return ponder::detail::convert<T>(source);}
     static T from(const ponder::EnumObject& source)
         {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)
@@ -201,32 +203,32 @@ struct ValueMapper<T,
     static T from(bool source)                    {return static_cast<T>(source);}
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
-    static T from(const std::string& source)      {return ponder::detail::convert<T>(source);}
+    static T from(IdRef source)      {return ponder::detail::convert<T>(source);}
     static T from(const ponder::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::User, ponder::ValueType::Real));}
 };
 
 /*
- * Specialization of ValueMapper for std::string
+ * Specialization of ValueMapper for ponder::String
  */
 template <>
-struct ValueMapper<std::string>
+struct ValueMapper<ponder::String>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
-    static const std::string& to(const std::string& source) {return source;}
+    static IdRef to(IdRef source) {return source;}
 
-    static std::string from(bool source)
-        {return ponder::detail::convert<std::string>(source);}
-    static std::string from(long source)
-        {return ponder::detail::convert<std::string>(source);}
-    static std::string from(double source)
-        {return ponder::detail::convert<std::string>(source);}
-    static std::string from(const std::string& source)
+    static ponder::String from(bool source)
+        {return ponder::detail::convert<ponder::String>(source);}
+    static ponder::String from(long source)
+        {return ponder::detail::convert<ponder::String>(source);}
+    static ponder::String from(double source)
+        {return ponder::detail::convert<ponder::String>(source);}
+    static ponder::String from(const ponder::String& source)
         {return source;}
-    static std::string from(const ponder::EnumObject& source)
-        {return source.name();}
-    static std::string from(const ponder::UserObject&)
+    static ponder::String from(const ponder::EnumObject& source)
+        {return ponder::String(source.name());}
+    static ponder::String from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::User, ponder::ValueType::String));}
 };
 
@@ -255,13 +257,13 @@ template <int N>
 struct ValueMapper<char[N]>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
-    static std::string to(const char source[N]) {return std::string(source);}
+    static ponder::String to(const char source[N]) {return ponder::String(source);}
 };
 template <int N>
 struct ValueMapper<const char[N]>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
-    static std::string to(const char source[N]) {return std::string(source);}
+    static ponder::String to(const char source[N]) {return ponder::String(source);}
 };
 
 /*
@@ -288,7 +290,7 @@ struct ValueMapper<T,
 
     // The string -> enum conversion involves a little more work:
     // we try two different conversions (as a name and as a value)
-    static T from(const std::string& source)
+    static T from(IdRef source)
     {
         // Get the metaenum of T, if any
         const ponder::Enum* metaenum = ponder::enumByTypeSafe<T>();
@@ -323,7 +325,7 @@ struct ValueMapper<ponder::EnumObject>
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer, ponder::ValueType::Enum));}
     static ponder::UserObject from(double)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Real,   ponder::ValueType::Enum));}
-    static ponder::UserObject from(const std::string&)
+    static ponder::UserObject from(IdRef)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::String, ponder::ValueType::Enum));}
     static ponder::UserObject from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::ValueType::Enum));}
@@ -336,8 +338,8 @@ template <>
 struct ValueMapper<ponder::ValueType>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
-    static std::string to(ponder::ValueType source)
-        {return std::string(ponder::detail::typeAsString(source));}
+    static ponder::String to(ponder::ValueType source)
+        {return ponder::String(ponder::detail::typeAsString(source));}
 };
 
 /*
@@ -356,7 +358,7 @@ struct ValueMapper<ponder::UserObject>
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Integer, ponder::ValueType::User));}
     static ponder::UserObject from(double)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Real,   ponder::ValueType::User));}
-    static ponder::UserObject from(const std::string&)
+    static ponder::UserObject from(IdRef)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::String, ponder::ValueType::User));}
     static ponder::UserObject from(const ponder::EnumObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::ValueType::User));}
@@ -424,7 +426,7 @@ template <>
 struct ValueMapper<const char*>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
-    static std::string to(const char* source) {return std::string(source);}
+    static ponder::String to(const char* source) {return ponder::String(source);}
 
     template <typename T>
     static const char* from(const T&)

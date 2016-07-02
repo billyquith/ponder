@@ -43,7 +43,7 @@ ClassManager& ClassManager::instance()
     return cm;
 }
 
-Class& ClassManager::addClass(const std::string& id)
+Class& ClassManager::addClass(IdRef id)
 {
     // First make sure that the class doesn't already exist
     if (classExists(id))
@@ -55,7 +55,7 @@ Class& ClassManager::addClass(const std::string& id)
     Class *newClass = new Class(id);
 
     // Insert it into the table
-    m_classes.insert(std::make_pair(id, newClass));
+    m_classes.insert(std::make_pair(Id(id), newClass));
 
     // Notify observers
     notifyClassAdded(*newClass);
@@ -98,7 +98,7 @@ const Class& ClassManager::getByIndex(std::size_t index) const
     return *it->second;
 }
 
-const Class& ClassManager::getById(const std::string& id) const
+const Class& ClassManager::getById(IdRef id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
     if (it == m_classes.end())
@@ -107,13 +107,13 @@ const Class& ClassManager::getById(const std::string& id) const
     return *it->second;
 }
 
-const Class* ClassManager::getByIdSafe(const std::string& id) const
+const Class* ClassManager::getByIdSafe(IdRef id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
     return (it == m_classes.end()) ? nullptr : it->second;
 }
 
-bool ClassManager::classExists(const std::string& id) const
+bool ClassManager::classExists(IdRef id) const
 {
     return m_classes.find(id) != m_classes.end();
 }

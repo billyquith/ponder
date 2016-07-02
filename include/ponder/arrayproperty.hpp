@@ -52,7 +52,7 @@ public:
      * \param elementType Type of the property
      * \param dynamic Tells if the array is dynamic or not
      */
-    ArrayProperty(const std::string& name, ValueType elementType, bool dynamic);
+    ArrayProperty(IdRef name, ValueType elementType, bool dynamic);
 
     /**
      * \brief Destructor

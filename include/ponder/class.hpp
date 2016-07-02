@@ -121,20 +121,20 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef std::shared_ptr<Constructor> ConstructorPtr;
     
     struct NameCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
+        bool operator () (IdRef a, IdRef b) const {
             return a < b;
         }
     };
 
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
-    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
+    typedef detail::Dictionary<Id, IdRef, PropertyPtr, NameCmp> PropertyTable;
+    typedef detail::Dictionary<Id, IdRef, FunctionPtr, NameCmp> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
     typedef UserObject (*UserObjectCreator)(void*);
     
     std::size_t m_sizeof;       ///< Size of the class in bytes.
-    std::string m_id;           ///< Name of the metaclass
+    Id m_id;                    ///< Name of the metaclass
     FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
     PropertyTable m_properties; ///< Table of metaproperties indexed by ID
     BaseList m_bases;           ///< List of base metaclasses
@@ -158,7 +158,7 @@ public:     // declaration
      *         to fill the new metaclass with properties, functions, etc.
      */
     template <typename T>
-    static ClassBuilder<T> declare(const std::string& name = std::string());
+    static ClassBuilder<T> declare(IdRef name = ponder::Id());
 
     /**
      * \brief Undeclare an existing metaclass
@@ -182,7 +182,7 @@ public:     // reflection
      *
      * \return String containing the name of the metaclass
      */
-    const std::string& name() const;
+    IdRef name() const;
 
     /**
      * \brief Return the memory size of a class instance
@@ -272,7 +272,7 @@ public:     // reflection
      *
      * \return True if the function is in the metaclass, false otherwise
      */
-    bool hasFunction(const std::string& name) const;
+    bool hasFunction(IdRef name) const;
 
     /**
      * \brief Get a function from its index in this metaclass
@@ -294,7 +294,7 @@ public:     // reflection
      *
      * \throw FunctionNotFound \a name is not a function of the metaclass
      */
-    const Function& function(const std::string& name) const;
+    const Function& function(IdRef name) const;
 
     /**
      * \brief Get a function iterator
@@ -322,7 +322,7 @@ public:     // reflection
      *
      * \return True if the property is in the metaclass, false otherwise
      */
-    bool hasProperty(const std::string& name) const;
+    bool hasProperty(IdRef name) const;
 
     /**
      * \brief Get a property from its index in this metaclass
@@ -344,7 +344,7 @@ public:     // reflection
      *
      * \throw PropertyNotFound \a name is not a property of the metaclass
      */
-    const Property& property(const std::string& name) const;
+    const Property& property(IdRef name) const;
     
     /**
      * \brief Get a property iterator
@@ -425,7 +425,7 @@ private:
      *
      * \param name Name of the metaclass
      */
-    Class(const std::string& name);
+    Class(IdRef name);
 
     /**
      * \brief Get the offset of a base metaclass

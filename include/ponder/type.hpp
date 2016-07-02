@@ -54,7 +54,7 @@ enum class ValueType
     Boolean,    ///< Boolean type (bool)
     Integer,    ///< Integer types (unsigned/signed char short int long)
     Real,       ///< Real types (float, double)
-    String,     ///< String types (char*, std::string)
+    String,     ///< String types (char*, ponder::String)
     Enum,       ///< Enumerated types
     Array,      ///< Array types (std::vector, std::list, T[])
     User        ///< User-defined classes

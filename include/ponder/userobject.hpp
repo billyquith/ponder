@@ -181,7 +181,7 @@ public:
      * \throw PropertyNotFound \a property is not a property of the object
      * \throw ForbiddenRead \a property is not readable
      */
-    Value get(const std::string& property) const;
+    Value get(IdRef property) const;
 
     /**
      * \brief Get the value of an object's property by index
@@ -211,7 +211,7 @@ public:
      * \throw ForbiddenWrite \a property is not writable
      * \throw BadType \a value can't be converted to the property's type
      */
-    void set(const std::string& property, const Value& value) const;
+    void set(IdRef property, const Value& value) const;
 
     /**
      * \brief Set the value of an object's property by index
@@ -244,7 +244,7 @@ public:
      * \throw NotEnoughArguments too few arguments are provided
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
-    Value call(const std::string& function, const Args& args = Args::empty) const;
+    Value call(IdRef function, const Args& args = Args::empty) const;
     
     /**
      * \brief Assignment operator

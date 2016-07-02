@@ -46,7 +46,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
 {
     // Retrieve the base metaclass and its name
     const Class& baseClass = classByType<U>();
-    std::string baseName = baseClass.name();
+    Id baseName = baseClass.name();
 
     // First make sure that the base class is not already a base of the current class
     for (Class::BaseInfo& bi : m_target->m_bases)
@@ -90,7 +90,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
 
 template <typename T>
 template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
+ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
                                            F accessor)
 {
     // Find factory able to construct a Property from an accessor of type F
@@ -102,7 +102,7 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
 
 template <typename T>
 template <typename F1, typename F2>
-ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
+ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
                                            F1 accessor1, F2 accessor2)
 {
     // Find factory able to construct a Property from accessors of type F1 and F2
@@ -114,7 +114,7 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
 
 template <typename T>
 template <typename F1, typename F2, typename F3>
-ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
+ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
                                            F1 accessor1, F2 accessor2, F3 accessor3)
 {
     // Find factory able to construct a Property from accessors of type F1, F2 and F3
@@ -126,7 +126,7 @@ ClassBuilder<T>& ClassBuilder<T>::property(const std::string& name,
 
 template <typename T>
 template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::function(const std::string& name, F function)
+ClassBuilder<T>& ClassBuilder<T>::function(IdRef name, F function)
 {
     // Get a uniform function type from F, whatever it really is
     typedef typename detail::FunctionTraits<F>::type Signature;

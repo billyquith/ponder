@@ -44,26 +44,31 @@ namespace ponder
 namespace detail
 {
 
+template <typename T>
+struct DictKeyCmp {
+    bool operator () (T a, T b) const {return a < b;}
+};
+    
 // Key-value pair dictionary.
 // - Sorted on keys. Once only insertion cost gives better access times.
 //
-template <typename KEY, typename VALUE, class CMP>
+template <typename KEY, typename KEY_REF, typename VALUE, class CMP = DictKeyCmp<KEY_REF>>
 class Dictionary
 {
 public:
 
     struct pair_t : public std::pair<KEY,VALUE> {
         pair_t() : std::pair<KEY,VALUE>() {}
-        pair_t(const KEY& k, const VALUE& v) : std::pair<KEY,VALUE>(k, v) {}
+        pair_t(KEY_REF k, const VALUE& v) : std::pair<KEY,VALUE>(KEY(k), v) {}
         pair_t(const pair_t& p) = default;
-        const KEY& name() const { return std::pair<KEY,VALUE>::first; }
+        KEY_REF name() const { return std::pair<KEY,VALUE>::first; }
         const VALUE& value() const { return std::pair<KEY,VALUE>::second; }
     };
 
 private:
     
     struct KeyCmp {
-        bool operator () (const pair_t& a, const KEY& b) const {
+        bool operator () (const pair_t& a, KEY_REF b) const {
             return CMP() (a.first, b);
         }
     };
@@ -88,7 +93,7 @@ public:
     
     Iterator getIterator() const { return Iterator(begin(), end()); }
 
-    const_iterator findKey(const KEY& key) const
+    const_iterator findKey(KEY_REF key) const
     {
         // binary search for key
         const_iterator it(std::lower_bound(m_contents.begin(), m_contents.end(), key, KeyCmp()));
@@ -107,7 +112,7 @@ public:
         return m_contents.end();
     }
 
-    bool tryFind(const KEY& key, const_iterator& returnValue) const
+    bool tryFind(KEY_REF key, const_iterator& returnValue) const
     {
         const_iterator it = findKey(key);
         if (it != m_contents.end())
@@ -118,7 +123,7 @@ public:
         return false; // not found
     }
     
-    bool containsKey(const KEY& key) const
+    bool containsKey(KEY_REF key) const
     {
         return findKey(key) != m_contents.end();
     }
@@ -130,7 +135,7 @@ public:
     
     std::size_t size() const { return m_contents.size(); }
 
-    void insert(const KEY &key, const VALUE &value)
+    void insert(KEY_REF key, const VALUE &value)
     {
         erase(key);
         const pair_t p(key, value);
@@ -143,7 +148,7 @@ public:
         insert(it->first, it->second);
     }
     
-    void erase(const KEY& key)
+    void erase(KEY_REF key)
     {
         const_iterator it = findKey(key);
         if (it != m_contents.end())

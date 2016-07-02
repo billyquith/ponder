@@ -53,13 +53,13 @@ struct ValueMapper<QString>
     static const int type = ponder::ValueType::String;
 
     /**
-     * \brief Convert from QString to std::string
+     * \brief Convert from QString to ponder::String
      *
      * \param source Source QString instance to convert
      *
-     * \return \a source converted to a std::string
+     * \return \a source converted to a ponder::String
      */
-    static std::string to(const QString& source)
+    static ponder::String to(const QString& source)
     {
         return source.toStdString();
     }
@@ -67,7 +67,7 @@ struct ValueMapper<QString>
     /**
      * \brief Convert from any type to QString
      *
-     * We simply reuse ValueMapper<std::string>.
+     * We simply reuse ValueMapper<ponder::String>.
      *
      * \param source Source value to convert
      *
@@ -76,7 +76,7 @@ struct ValueMapper<QString>
     template <typename T>
     static QString from(const T& source)
     {
-        return QString::fromStdString(ValueMapper<std::string>::from(source));
+        return QString::fromStdString(ValueMapper<ponder::String>::from(source));
     }
 };
 

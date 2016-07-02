@@ -78,7 +78,7 @@ public:
      *
      * \return String containing the name of the enum object
      */
-    const std::string& name() const;
+    IdRef name() const;
 
     /**
      * \brief Retrieve the metaenum of the stored enum object

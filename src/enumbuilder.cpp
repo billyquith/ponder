@@ -40,7 +40,7 @@ EnumBuilder::EnumBuilder(Enum& target)
 {
 }
 
-EnumBuilder& EnumBuilder::value(const std::string& name, Enum::EnumValue value)
+EnumBuilder& EnumBuilder::value(IdRef name, Enum::EnumValue value)
 {
     assert(!m_target->hasName(name));
     assert(!m_target->hasValue(value));

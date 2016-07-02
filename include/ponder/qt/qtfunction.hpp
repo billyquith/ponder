@@ -155,7 +155,7 @@ private:
      *
      * \return Name of the meta method
      */
-    static std::string functionName(const QMetaMethod& metaMethod)
+    static ponder::String functionName(const QMetaMethod& metaMethod)
     {
         QString signature = metaMethod.signature();
         return signature.left(signature.indexOf('(')).toStdString();

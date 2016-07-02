@@ -34,8 +34,8 @@
 
 #include <ponder/detail/observernotifier.hpp>
 #include <ponder/detail/util.hpp>
+#include <ponder/detail/dictionary.hpp>
 #include <string>
-#include <map>
 
 namespace ponder
 {
@@ -72,7 +72,7 @@ public:
      *
      * \return Reference to the new metaenum
      */
-    Enum& addClass(const std::string& id);
+    Enum& addClass(IdRef id);
     
     void removeClass(const Enum& me);
 
@@ -106,7 +106,7 @@ public:
      *
      * \throw EnumNotFound id is not the name of an existing metaenum
      */
-    const Enum& getById(const std::string& id) const;
+    const Enum& getById(IdRef id) const;
 
     /**
      * \brief Get a metaenum from a C++ type
@@ -118,7 +118,7 @@ public:
      *
      * \return Pointer to the requested metaenum, or null pointer if not found
      */
-    const Enum* getByIdSafe(const std::string& id) const;
+    const Enum* getByIdSafe(IdRef id) const;
 
     /**
      * \brief Check if a given type has a metaenum
@@ -127,7 +127,7 @@ public:
      *
      * \return True if the enum exists, false otherwise
      */
-    bool enumExists(const std::string& id) const;
+    bool enumExists(IdRef id) const;
 
 private:
 
@@ -143,7 +143,7 @@ private:
      */
     ~EnumManager();
 
-    typedef std::map<std::string, Enum*> EnumTable;
+    typedef detail::Dictionary<Id, IdRef, Enum*> EnumTable;
     EnumTable m_enums; ///< Table storing enums indexed by their ID
 };
 

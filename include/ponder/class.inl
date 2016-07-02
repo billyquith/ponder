@@ -50,7 +50,7 @@ namespace detail
 }
 
 template <typename T>
-inline ClassBuilder<T> Class::declare(const std::string& name)
+inline ClassBuilder<T> Class::declare(IdRef name)
 {
     Class& newClass =
         detail::ClassManager::instance().addClass(name.empty()

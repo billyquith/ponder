@@ -57,7 +57,7 @@ namespace TraitsTest
     struct Methods
     {
         void foo() {}
-        std::string arr[10];
+        ponder::String arr[10];
         int arri[7];
         std::array<int, 6> arrv;
     
@@ -140,7 +140,7 @@ TEST_CASE("Ponder has function traits")
                       "FunctionTraits<>::isFunction failed");
         static_assert( ! ponder::detail::FunctionTraits<int**>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<std::string>::isFunction,
+        static_assert( ! ponder::detail::FunctionTraits<ponder::String>::isFunction,
                       "FunctionTraits<>::isFunction failed");
     }
     
@@ -356,107 +356,107 @@ TEST_CASE("Lexical cast is used")
     SECTION("lexical_cast_to_string")
     {
         const unsigned int ui = 234;
-        REQUIRE(ponder::detail::convert<std::string>(ui) == std::to_string(ui));
+        REQUIRE(ponder::detail::convert<ponder::String>(ui) == std::to_string(ui));
     
         const int i = -17;
-        REQUIRE(ponder::detail::convert<std::string>(i) == std::to_string(i));
+        REQUIRE(ponder::detail::convert<ponder::String>(i) == std::to_string(i));
     
         const float f = 108.75f;
-        REQUIRE(ponder::detail::convert<std::string>(f) == "108.75");
+        REQUIRE(ponder::detail::convert<ponder::String>(f) == "108.75");
 
         const double d = 108.125;
-        REQUIRE(ponder::detail::convert<std::string>(d) == "108.125");
+        REQUIRE(ponder::detail::convert<ponder::String>(d) == "108.125");
 
         const bool bt = true, bf = false;
-        REQUIRE(ponder::detail::convert<std::string>(bt) == "1");
-        REQUIRE(ponder::detail::convert<std::string>(bf) == "0");
+        REQUIRE(ponder::detail::convert<ponder::String>(bt) == "1");
+        REQUIRE(ponder::detail::convert<ponder::String>(bf) == "0");
     }
 
     SECTION("lexical_cast_to_bool")
     {
-        const std::string b1("1");
+        const ponder::String b1("1");
         REQUIRE(ponder::detail::convert<bool>(b1) == true);
 
-        const std::string b2("0");
+        const ponder::String b2("0");
         REQUIRE(ponder::detail::convert<bool>(b2) == false);
 
-        const std::string bt("true");
+        const ponder::String bt("true");
         REQUIRE(ponder::detail::convert<bool>(bt) == true);
 
-        const std::string bf("false");
+        const ponder::String bf("false");
         REQUIRE(ponder::detail::convert<bool>(bf) == false);
     }
 
     SECTION("lexical_cast_to_char")
     {
-        REQUIRE(ponder::detail::convert<char>(std::string("0")) == '0');
-        REQUIRE(ponder::detail::convert<char>(std::string("g")) == 'g');
-        REQUIRE_THROWS_AS(ponder::detail::convert<char>(std::string()),
+        REQUIRE(ponder::detail::convert<char>(ponder::String("0")) == '0');
+        REQUIRE(ponder::detail::convert<char>(ponder::String("g")) == 'g');
+        REQUIRE_THROWS_AS(ponder::detail::convert<char>(ponder::String()),
                           ponder::detail::bad_conversion);
-        REQUIRE_THROWS_AS(ponder::detail::convert<char>(std::string("27")),
+        REQUIRE_THROWS_AS(ponder::detail::convert<char>(ponder::String("27")),
                           ponder::detail::bad_conversion);
     
-        REQUIRE(ponder::detail::convert<unsigned char>(std::string("0")) == '0');
-        REQUIRE(ponder::detail::convert<unsigned char>(std::string("g")) == 'g');
-        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(std::string()),
+        REQUIRE(ponder::detail::convert<unsigned char>(ponder::String("0")) == '0');
+        REQUIRE(ponder::detail::convert<unsigned char>(ponder::String("g")) == 'g');
+        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(ponder::String()),
                           ponder::detail::bad_conversion);
-        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(std::string("27")),
+        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(ponder::String("27")),
                           ponder::detail::bad_conversion);
     }
 
     SECTION("lexical_cast_to_short")
     {
-        REQUIRE(ponder::detail::convert<short>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<short>(std::string("2600")) == 2600);
-        REQUIRE(ponder::detail::convert<short>(std::string("-27")) == -27);
+        REQUIRE(ponder::detail::convert<short>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<short>(ponder::String("2600")) == 2600);
+        REQUIRE(ponder::detail::convert<short>(ponder::String("-27")) == -27);
     
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("2600")) == 2600u);
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("-27"))
+        REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("2600")) == 2600u);
+        REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("-27"))
                 == static_cast<unsigned short>(-27));
     }
 
     SECTION("lexical_cast_to_int")
     {
-        REQUIRE(ponder::detail::convert<int>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<int>(std::string("123456789")) == 123456789);
-        REQUIRE(ponder::detail::convert<int>(std::string("-27")) == -27);
+        REQUIRE(ponder::detail::convert<int>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<int>(ponder::String("123456789")) == 123456789);
+        REQUIRE(ponder::detail::convert<int>(ponder::String("-27")) == -27);
 
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("123456789")) == 123456789u);
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("-27"))
+        REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("123456789")) == 123456789u);
+        REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("-27"))
                 == static_cast<unsigned int>(-27));
     
-        REQUIRE_THROWS_AS(ponder::detail::convert<int>(std::string("bad number")),
+        REQUIRE_THROWS_AS(ponder::detail::convert<int>(ponder::String("bad number")),
                           ponder::detail::bad_conversion);
     }
 
     SECTION("lexical_cast_to_long")
     {
-        REQUIRE(ponder::detail::convert<long long>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<long long>(std::string("1125899906842624"))
+        REQUIRE(ponder::detail::convert<long long>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<long long>(ponder::String("1125899906842624"))
                 == 1125899906842624ll);
-        REQUIRE(ponder::detail::convert<long long>(std::string("-27")) == -27);
+        REQUIRE(ponder::detail::convert<long long>(ponder::String("-27")) == -27);
     
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("1125899906842624"))
+        REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("1125899906842624"))
                 == 1125899906842624ull);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("-27"))
+        REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("-27"))
                 == static_cast<unsigned long long>(-27));
     }
 
     SECTION("lexical_cast_to_float")
     {
-        REQUIRE(ponder::detail::convert<float>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<float>(std::string("100.25")) == 100.25f);
-        REQUIRE(ponder::detail::convert<float>(std::string("-27.75")) == -27.75f);
+        REQUIRE(ponder::detail::convert<float>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<float>(ponder::String("100.25")) == 100.25f);
+        REQUIRE(ponder::detail::convert<float>(ponder::String("-27.75")) == -27.75f);
     }
 
     SECTION("lexical_cast_to_double")
     {
-        REQUIRE(ponder::detail::convert<double>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<double>(std::string("100.25")) == 100.25);
-        REQUIRE(ponder::detail::convert<double>(std::string("-27.75")) == -27.75);
+        REQUIRE(ponder::detail::convert<double>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<double>(ponder::String("100.25")) == 100.25);
+        REQUIRE(ponder::detail::convert<double>(ponder::String("-27.75")) == -27.75);
     }
 }
 

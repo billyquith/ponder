@@ -38,7 +38,7 @@ namespace TagHolderTest
     struct MyClass
     {
         MyClass(int x) : prop(x) {}
-        std::string func() {return "func";}
+        ponder::String func() {return "func";}
         int prop;
     };
     

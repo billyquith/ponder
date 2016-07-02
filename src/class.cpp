@@ -40,7 +40,7 @@ void Class::undeclare(const Class& cls)
     detail::ClassManager::instance().removeClass(cls);
 }
 
-const std::string& Class::name() const
+IdRef Class::name() const
 {
     return m_id;
 }
@@ -106,7 +106,7 @@ std::size_t Class::functionCount() const
     return m_functions.size();
 }
 
-bool Class::hasFunction(const std::string& id) const
+bool Class::hasFunction(IdRef id) const
 {
     return m_functions.containsKey(id);
 }
@@ -123,7 +123,7 @@ const Function& Class::function(std::size_t index) const
     return *it->second;
 }
 
-const Function& Class::function(const std::string& id) const
+const Function& Class::function(IdRef id) const
 {
     FunctionTable::const_iterator it;
     if (!m_functions.tryFind(id, it))
@@ -139,7 +139,7 @@ std::size_t Class::propertyCount() const
     return m_properties.size();
 }
 
-bool Class::hasProperty(const std::string& id) const
+bool Class::hasProperty(IdRef id) const
 {
     return m_properties.containsKey(id);
 }
@@ -156,7 +156,7 @@ const Property& Class::property(std::size_t index) const
     return *it->second;
 }
 
-const Property& Class::property(const std::string& id) const
+const Property& Class::property(IdRef id) const
 {
     PropertyTable::const_iterator it;
     if (!m_properties.tryFind(id, it))
@@ -212,7 +212,7 @@ bool Class::operator != (const Class& other) const
     return m_id != other.m_id;
 }
 
-Class::Class(const std::string& name)
+Class::Class(IdRef name)
     : m_sizeof(0)
     , m_id(name)
 {

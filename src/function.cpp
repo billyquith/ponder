@@ -40,7 +40,7 @@ Function::~Function()
 {
 }
 
-const std::string& Function::name() const
+IdRef Function::name() const
 {
     return m_name;
 }
@@ -88,7 +88,7 @@ void Function::accept(ClassVisitor& visitor) const
     visitor.visit(*this);
 }
 
-Function::Function(const std::string& name,
+Function::Function(IdRef name,
                    ValueType returnType,
                    const std::vector<ValueType>& argTypes)
     : m_name(name)

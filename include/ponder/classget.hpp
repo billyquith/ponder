@@ -78,7 +78,7 @@ const Class& classByIndex(std::size_t index);
  *
  * \throw ClassNotFound name is not a valid metaclass name
  */
-const Class& classByName(const std::string& name);
+const Class& classByName(IdRef name);
 
 /**
  * \relates Class

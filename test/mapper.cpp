@@ -46,13 +46,13 @@ namespace MapperTest
             functionCount = 3
         };
         
-        static std::string property(std::size_t index)
+        static ponder::String property(std::size_t index)
         {
             const char* names[] = {"prop0", "prop1", "prop2", "prop3", "prop4"};
             return names[index];
         }
         
-        static std::string function(std::size_t index)
+        static ponder::String function(std::size_t index)
         {
             const char* names[] = {"func0", "func1", "func2"};
             return names[index];
@@ -67,17 +67,17 @@ namespace MapperTest
             m_props[property(4)] = 40;
         }
         
-        int& prop(const std::string& name)
+        int& prop(const ponder::String& name)
         {
             return m_props[name];
         }
         
-        std::string func(const std::string& name)
+        ponder::String func(const ponder::String& name)
         {
             return name + "_called";
         }
         
-        std::map<std::string, int> m_props;
+        std::map<ponder::String, int> m_props;
     };
     
     template <typename T>
@@ -107,7 +107,7 @@ namespace MapperTest
         {
         public:
             
-            MyProperty(const std::string& name)
+            MyProperty(const ponder::String& name)
             : ponder::SimpleProperty(name, ponder::ValueType::Integer)
             {
             }
@@ -130,7 +130,7 @@ namespace MapperTest
         {
         public:
             
-            MyFunction(const std::string& name)
+            MyFunction(const ponder::String& name)
             : ponder::Function(name, ponder::ValueType::String)
             {
             }

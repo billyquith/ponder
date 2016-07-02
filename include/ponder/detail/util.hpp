@@ -77,51 +77,51 @@ namespace detail
     };
     
     template <typename F>
-    std::string to_str(F from)
+    Id to_str(F from)
     {
         return util::fmt::format("{}", from);
     }
     
     template <typename S>
-    struct convert_impl <std::string, S>
+    struct convert_impl <Id, S>
     {
-        std::string operator () (const S& from)
+        Id operator () (const S& from)
         {
             return detail::to_str(from);
         }
     };
 
     template <>
-    struct convert_impl <std::string, bool>
+    struct convert_impl <Id, bool>
     {
-        std::string operator () (const bool& from)
+        Id operator () (const bool& from)
         {
-            static const std::string t("1"), f("0");
+            static const Id t("1"), f("0");
             return from ? t : f;
         }
     };
 
-    PONDER_API bool conv(const std::string& from, bool& to);
-    PONDER_API bool conv(const std::string& from, char& to);
-    PONDER_API bool conv(const std::string& from, unsigned char& to);
-    PONDER_API bool conv(const std::string& from, short& to);
-    PONDER_API bool conv(const std::string& from, unsigned short& to);
-    PONDER_API bool conv(const std::string& from, int& to);
-    PONDER_API bool conv(const std::string& from, unsigned int& to);
-    PONDER_API bool conv(const std::string& from, long& to);
-    PONDER_API bool conv(const std::string& from, unsigned long& to);
-    PONDER_API bool conv(const std::string& from, long long& to);
-    PONDER_API bool conv(const std::string& from, unsigned long long& to);
-    PONDER_API bool conv(const std::string& from, float& to);
-    PONDER_API bool conv(const std::string& from, double& to);
+    PONDER_API bool conv(IdRef from, bool& to);
+    PONDER_API bool conv(IdRef from, char& to);
+    PONDER_API bool conv(IdRef from, unsigned char& to);
+    PONDER_API bool conv(IdRef from, short& to);
+    PONDER_API bool conv(IdRef from, unsigned short& to);
+    PONDER_API bool conv(IdRef from, int& to);
+    PONDER_API bool conv(IdRef from, unsigned int& to);
+    PONDER_API bool conv(IdRef from, long& to);
+    PONDER_API bool conv(IdRef from, unsigned long& to);
+    PONDER_API bool conv(IdRef from, long long& to);
+    PONDER_API bool conv(IdRef from, unsigned long long& to);
+    PONDER_API bool conv(IdRef from, float& to);
+    PONDER_API bool conv(IdRef from, double& to);
     
     template <typename T>
-    struct convert_impl <T, std::string,
+    struct convert_impl <T, Id,
         typename std::enable_if< (std::is_integral<T>::value || std::is_floating_point<T>::value)
                                   && !std::is_const<T>::value
                                   && !std::is_reference<T>::value >::type >
     {
-        T operator () (const std::string& from)
+        T operator () (IdRef from)
         {
             T result;
             if (!conv(from, result))

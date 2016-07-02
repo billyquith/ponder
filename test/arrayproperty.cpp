@@ -75,7 +75,7 @@ namespace ArrayPropertyTest
         
         bool bools[2];
         std::array<int, 3> ints;
-        std::vector<std::string> strings;
+        std::vector<ponder::String> strings;
         std::list<MyType> objects;
     };
     
@@ -241,7 +241,7 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be removed from")
     REQUIRE_THROWS_AS(bools->remove(object, 0), ponder::ForbiddenWrite);
     REQUIRE_THROWS_AS(ints->remove(object, 0),  ponder::ForbiddenWrite);
     
-    const std::string string1 = object.strings[1];
+    const ponder::String string1 = object.strings[1];
     const MyType      object1 = *std::next(object.objects.begin(), 1);
     
     const std::size_t stringsSize = object.strings.size();

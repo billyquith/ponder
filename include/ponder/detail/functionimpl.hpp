@@ -59,7 +59,7 @@ using namespace std::placeholders;
 template <typename T>
 inline typename std::remove_reference<T>::type convertArg(const Args& args,
                                                           std::size_t index,
-                                                          const std::string& function)
+                                                          IdRef function)
 {
     try
     {
@@ -79,7 +79,7 @@ class CallHelper
     static Value callCoerce(F func,
                       C obj,
                       const Args& args,
-                      const std::string& name,
+                      IdRef name,
                       index_sequence<Is...>)
     {
         return func(obj, convertArg<A>(args, Is, name)...);
@@ -89,7 +89,7 @@ class CallHelper
     static Value callDirect(F func,
                       C obj,
                       const Args& args,
-                      const std::string& name,
+                      IdRef name,
                       index_sequence<Is...>)
     {
         return func(obj, args[Is]...);
@@ -97,13 +97,13 @@ class CallHelper
 
 public:
     template <typename F, typename... A>
-    static Value callCoerce(F func, C obj, const Args& args, const std::string& name)
+    static Value callCoerce(F func, C obj, const Args& args, IdRef name)
     {
         return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 
     template <typename F, typename... A>
-    static Value callDirect(F func, C obj, const Args& args, const std::string& name)
+    static Value callDirect(F func, C obj, const Args& args, IdRef name)
     {
         return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
@@ -119,7 +119,7 @@ class CallHelper<void, C>
     static Value callCoerce(F func,
                       C obj,
                       const Args& args,
-                      const std::string& name,
+                      IdRef name,
                       index_sequence<Is...>)
     {
         func(obj, convertArg<A>(args,Is,name)...);
@@ -130,7 +130,7 @@ class CallHelper<void, C>
     static Value callDirect(F func,
                       C obj,
                       const Args& args,
-                      const std::string& name,
+                      IdRef name,
                       index_sequence<Is...>)
     {
         func(obj, args[Is]...);
@@ -139,13 +139,13 @@ class CallHelper<void, C>
 
 public:
     template <typename F, typename... A>
-    static Value callCoerce(F func, C obj, const Args& args, const std::string& name)
+    static Value callCoerce(F func, C obj, const Args& args, IdRef name)
     {
         return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 
     template <typename F, typename... A>
-    static Value callDirect(F func, C obj, const Args& args, const std::string& name)
+    static Value callDirect(F func, C obj, const Args& args, IdRef name)
     {
         return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
@@ -173,7 +173,7 @@ public:
     /**
      * \brief Constructor
      */
-    FunctionImpl(const std::string& name, std::function<R (C, A...)> function)
+    FunctionImpl(IdRef name, std::function<R (C, A...)> function)
         :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
         ,   m_function(function)
     {

@@ -117,7 +117,7 @@ namespace UserObjectTest
     
     struct Call
     {
-        std::string lastCalled;
+        ponder::String lastCalled;
         int sum;
         
         Call() : lastCalled("unset"), sum(0) {}
@@ -148,7 +148,7 @@ namespace UserObjectTest
             return std::cos(rad);
         }
         
-        std::string concat(const std::string &a, const std::string &b)
+        ponder::String concat(const ponder::String &a, const ponder::String &b)
         {
             return a+b;
         }
@@ -401,8 +401,8 @@ TEST_CASE("Ponder supports user objects")
         {
             switch (index) {
             case 0:
-                REQUIRE(prop.name() == std::string("p"));
-                REQUIRE(prop.value()->name() == std::string("p"));
+                REQUIRE(prop.name() == ponder::String("p"));
+                REQUIRE(prop.value()->name() == ponder::String("p"));
                 break;
             default: ;
             }

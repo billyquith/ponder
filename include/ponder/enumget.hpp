@@ -76,7 +76,7 @@ const Enum& enumByIndex(std::size_t index);
  *
  * \throw EnumNotFound name is not a valid metaenum name
  */
-const Enum& enumByName(const std::string& name);
+const Enum& enumByName(IdRef name);
 
 /**
  * \relates Enum

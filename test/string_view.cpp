@@ -6,6 +6,11 @@
 
 using ponder::string_view;
 
+// About string types here:
+//
+// ponder::String can be redefined to a user type. For now we'll pair ponder::string_view
+// with std::string. It may be the case that the user string type has its own string_view.
+
 TEST_CASE("String views make std::string more efficient")
 {
     SECTION("comparison")

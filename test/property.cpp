@@ -83,20 +83,20 @@ namespace PropertyTest
         // ***** properties used in non-member functions *****
         bool p1;
         int p2;
-        std::string p3;
+        ponder::String p3;
         MyType p4;
         
         // ***** properties used as direct pointer to members *****
         bool p5;
         const int p6;
-        std::string p7;
+        ponder::String p7;
         const MyEnum p8;
         std::shared_ptr<MyType> p9;
         
         // ***** member functions *****
         bool p10; bool getP10() {return p10;}
         int p11; int getP11() const {return p11;}
-        std::string p12; std::string& getP12() {return p12;}
+        ponder::String p12; ponder::String& getP12() {return p12;}
         MyEnum p13; MyEnum getP13() const {return p13;} void setP13(MyEnum e) {p13 = e;}
         
         // ***** nested properties *****
@@ -105,7 +105,7 @@ namespace PropertyTest
             Inner() : p14(false), p15(15), p16("16"), p17(MyType(17)) {}
             bool p14;
             const int p15;
-            std::string p16; std::string getP16() const {return p16;}
+            ponder::String p16; ponder::String getP16() const {return p16;}
             MyType p17; const MyType& getP17() const {return p17;} void setP17(MyType t) {p17 = t;}
         };
         Inner inner;
@@ -119,7 +119,7 @@ namespace PropertyTest
         // ***** properties used with std::bind *****
         int p21;
         MyEnum p22; MyEnum getP22() {return p22;}
-        std::string getP23(const std::string& str) const {return str + "23";}
+        ponder::String getP23(const ponder::String& str) const {return str + "23";}
         MyType p24; const MyType& getP24() const {return p24;} void setP24(MyType t) {p24 = t;}
         
         // ***** poperties that support method chaining *****
@@ -131,7 +131,7 @@ namespace PropertyTest
     
     const int& getP2(MyClass& object) {return object.p2;}
     
-    std::string& getP3(MyClass& object) {return object.p3;}
+    ponder::String& getP3(MyClass& object) {return object.p3;}
     
     const MyType& getP4(const MyClass& object) {return object.p4;}
     void setP4(MyClass& object, MyType value) {object.p4 = value;}

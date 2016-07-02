@@ -27,10 +27,12 @@
  **
  ****************************************************************************/
 
+#include <ponder/config.hpp>
 #include <ponder/detail/dictionary.hpp>
 #include "test.hpp"
 #include <string.h>
 
+using namespace ponder;
 
 //-----------------------------------------------------------------------------
 //                         Tests for Ponder detail::dictionary
@@ -39,12 +41,12 @@
 TEST_CASE("Ponder has a dictionary")
 {
     struct KeyCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
+        bool operator () (IdRef a, IdRef b) const {
             return a < b;
         }
     };
     
-    typedef ponder::detail::Dictionary<std::string, int, KeyCmp> Dict;
+    typedef ponder::detail::Dictionary<Id, IdRef, int, KeyCmp> Dict;
     std::unique_ptr<Dict> dict(new Dict());
     
     REQUIRE(dict != nullptr);
@@ -82,11 +84,11 @@ TEST_CASE("Ponder has a dictionary")
     
     SECTION("keys are sorted")
     {
-        REQUIRE(dict->at(0)->first == std::string("alpha"));
-        REQUIRE(dict->at(1)->first == std::string("bravo"));
-        REQUIRE(dict->at(2)->first == std::string("echo"));
-        REQUIRE(dict->at(3)->first == std::string("foxtrot"));
-        REQUIRE(dict->at(4)->first == std::string("zebra"));
+        REQUIRE(dict->at(0)->first == Id("alpha"));
+        REQUIRE(dict->at(1)->first == Id("bravo"));
+        REQUIRE(dict->at(2)->first == Id("echo"));
+        REQUIRE(dict->at(3)->first == Id("foxtrot"));
+        REQUIRE(dict->at(4)->first == Id("zebra"));
     }
     
     SECTION("can iterate over key,values")

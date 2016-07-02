@@ -54,7 +54,7 @@ namespace ponder
  * \li ponder::ValueType::Boolean --> bool
  * \li ponder::ValueType::Integer --> long
  * \li ponder::ValueType::Real --> double
- * \li ponder::ValueType::String --> std::string
+ * \li ponder::ValueType::String --> ponder::String
  * \li ponder::ValueType::Enum --> ponder::EnumObject
  * \li ponder::ValueType::User --> ponder::UserObject
  *
@@ -77,7 +77,7 @@ namespace ponder
  *         return new RealEditor(value);
  *     }
  * 
- *     PropertyEditor* operator()(const std::string& value)
+ *     PropertyEditor* operator()(IdRef value)
  *     {
  *         return new StringEditor(value);
  *     }
