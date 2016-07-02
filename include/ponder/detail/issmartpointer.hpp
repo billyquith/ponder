@@ -31,7 +31,7 @@
 #ifndef PONDER_DETAIL_ISSMARTPOINTER_HPP
 #define PONDER_DETAIL_ISSMARTPOINTER_HPP
 
-
+#include <ponder/config.hpp>
 #include <type_traits>
 #include <memory>
 
@@ -45,12 +45,6 @@ T* get_pointer(T *p)
     return p;
 }
     
-template<class T>
-T* get_pointer(std::auto_ptr<T> const& p)
-{
-    return p.get();
-}
-
 template<class T>
 T* get_pointer(std::unique_ptr<T> const& p)
 {
@@ -75,12 +69,6 @@ struct IsSmartPointer
 {    
     // enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
     enum {value = false};
-};
-
-template <typename T, typename U>
-struct IsSmartPointer<std::auto_ptr<T>, U>
-{
-    enum {value = true};
 };
 
 template <typename T, typename U>

@@ -280,9 +280,6 @@ TEST_CASE("Ponder has object traits")
         static_assert(IsSmartPointer<TraitsTest::TemplateClass<int>, int>::value == false,
                       "IsSmartPointer<> failed");
 
-        static_assert(IsSmartPointer<std::auto_ptr<int>, int>::value == true,
-                      "IsSmartPointer<> failed");
-
         static_assert(IsSmartPointer<std::unique_ptr<int>, int>::value == true,
                       "IsSmartPointer<> failed");
 
