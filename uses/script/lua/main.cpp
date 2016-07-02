@@ -60,6 +60,7 @@ namespace lua {
     
     #define c_ponder_metatables "_ponder_meta"
     
+    // push a Ponder value onto the Lua state stack
     static int pushValue(lua_State *L, const ponder::Value& val)
     {
         switch (val.type())
@@ -111,6 +112,7 @@ namespace lua {
         return 0;
     }
     
+    // get a Lua stack value as a Ponder value
     static Value getValue(lua_State *L, int index, ValueType typeExpected = ValueType::None)
     {
         if (index > lua_gettop(L))
@@ -219,6 +221,7 @@ namespace lua {
         void *ud = lua_touserdata(L, 1);                // userobj
         const std::string key(lua_tostring(L, 2));
         
+        // check if getting property value
         for (auto&& prop : cls->propertyIterator())
         {
             if (prop.name() == key)
@@ -229,6 +232,7 @@ namespace lua {
             }
         }
         
+        // check if calling function object
         for (auto&& func : cls->functionIterator())
         {
             if (func.name() == key)
@@ -250,12 +254,14 @@ namespace lua {
         void *ud = lua_touserdata(L, 1);                // userobj
         const std::string key(lua_tostring(L, 2));
         
+        // check if assigning to a property
         for (auto&& prop : cls->propertyIterator())
         {
             if (prop.name() == key)
             {
                 ponder::UserObject *uobj = (ponder::UserObject*) ud;
-                prop.value().get()->set(*uobj, getValue(L, 3));
+                const Property *pprop = prop.value().get();
+                pprop->set(*uobj, getValue(L, 3, pprop->type()));
             }
         }
         
@@ -448,7 +454,7 @@ PONDER_TYPE(lib::Vec2f)
 
 static bool luaTest(lua_State *L, const char *source, bool success = true)
 {
-    fmt::print("Test: {}\n", source);
+    fmt::print("Test{}: {}\n", success ? "" : "(fail)", source);
     const bool ok = ponder::lua::runString(L, source);
     if (ok != success)
     {
@@ -483,6 +489,9 @@ int main()
     // property write
     luaTest(L, "v.x = 7; assert(v.x == 7)");
     luaTest(L, "v.y = -3; assert(v.y == -3)");
+    luaTest(L, "v.x = 1.25");
+    luaTest(L, "v.x = 1.76e6");
+    luaTest(L, "v.x = 'fail'", false);
 
     // method call with args
     luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
