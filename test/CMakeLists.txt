@@ -30,8 +30,6 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 3.0)
-
 # set project's name
 project(PONDER_TEST)
 

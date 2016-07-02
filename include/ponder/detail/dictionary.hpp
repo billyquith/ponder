@@ -138,9 +138,8 @@ public:
     void insert(KEY_REF key, const VALUE &value)
     {
         erase(key);
-        const pair_t p(key, value);
-        auto it = std::lower_bound(m_contents.begin(), m_contents.end(), p);
-        m_contents.insert(it, p);
+        auto it = std::lower_bound(m_contents.begin(), m_contents.end(), key, KeyCmp());
+        m_contents.insert(it, pair_t(key, value));
     }
     
     void insert(const_iterator it)
