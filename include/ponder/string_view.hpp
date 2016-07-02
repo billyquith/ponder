@@ -32,7 +32,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-namespace std_backport
+namespace ponder
 {
     
 #define CONSTEXPR_BACKUP CONSTEXPR
@@ -321,4 +321,9 @@ private:
 typedef basic_string_view<char> string_view;
 typedef basic_string_view<wchar_t> wstring_view;
 
-} // namespace std_backport
+std::ostream& operator << (std::ostream& os, string_view const& value) {
+    os << value.to_string();
+    return os;
+}
+    
+} // namespace ponder

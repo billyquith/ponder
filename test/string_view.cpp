@@ -1,23 +1,37 @@
 
+
 #include "test.hpp"
 #include <iostream>
 #include <ponder/string_view.hpp>
 
+using ponder::string_view;
+
 TEST_CASE("String views make std::string more efficient")
 {
-//    SECTION("substring")
-//    {
-//        std::string str("test2");
-//        std_backport::string_view view(str);
-//
-//        REQUIRE(view == string_view(str));
-//    }
+    SECTION("comparison")
+    {
+        std::string str("test2");
+        string_view view(str);
+        REQUIRE(view.compare(string_view(str)) == 0);
+        REQUIRE(view == string_view(str));
+        REQUIRE(view == str);
+        
+        str = "changed";  // view now out of date
+        REQUIRE(view.compare(string_view(str)) != 0);
+        REQUIRE(view != str);
+        REQUIRE(str == "changed");
+        
+        view = str;  // updated
+        REQUIRE(str == "changed");
+        REQUIRE(view == "changed");
+        REQUIRE(view == str);
+    }
 
     SECTION("substring")
     {
-        const std_backport::string_view view("test");
+        const string_view view("test");
         std::string str("test2");
-        const std_backport::string_view view2(str);
+        const string_view view2(str);
         
         REQUIRE(view.substr(1) == "est");
         REQUIRE(view.substr(1, 1) == "e");
@@ -33,7 +47,7 @@ TEST_CASE("String views make std::string more efficient")
     SECTION("find")
     {
         std::string s("This is a string");
-        std_backport::string_view v(s);
+        string_view v(s);
         
         REQUIRE(s.find("is") == v.find("is"));
         REQUIRE(s.find("is", 4) == v.find("is", 4));
@@ -42,13 +56,13 @@ TEST_CASE("String views make std::string more efficient")
         REQUIRE(s.find('q') == v.find('q'));
         REQUIRE(s.find('q') == v.find('q'));
         
-        IS_TRUE(v.find('q') == std_backport::string_view::npos);
+        IS_TRUE(v.find('q') == string_view::npos);
     }
     
     SECTION("reverse find")
     {
         std::string s("This is a string");
-        std_backport::string_view v(s);
+        string_view v(s);
         
         
         REQUIRE(s.rfind("is") == v.rfind("is"));
@@ -64,13 +78,13 @@ TEST_CASE("String views make std::string more efficient")
         
         REQUIRE(s.rfind("s") == 10);
         
-        IS_TRUE(s.rfind('q') == std_backport::string_view::npos);
+        IS_TRUE(s.rfind('q') == string_view::npos);
     }
     
     SECTION("first of")
     {
         std::string s("This is a string");
-        std_backport::string_view v(s);
+        string_view v(s);
         
         REQUIRE(s.find_first_of("is") == v.find_first_of("is"));
         REQUIRE(s.find_first_of("is", 4) == v.find_first_of("is", 4));
@@ -79,13 +93,13 @@ TEST_CASE("String views make std::string more efficient")
         REQUIRE(s.find_first_of('q') == v.find_first_of('q'));
         REQUIRE(s.find_first_of('q') == v.find_first_of('q'));
         
-        IS_TRUE(v.find_first_of('q') == std_backport::string_view::npos);
+        IS_TRUE(v.find_first_of('q') == string_view::npos);
     }
     
     SECTION("last of")
     {
         std::string s("This is a string");
-        std_backport::string_view v(s);
+        string_view v(s);
         
         REQUIRE(s.find_last_of("is") == v.find_last_of("is"));
         REQUIRE(s.find_last_of("is", 4) == v.find_last_of("is", 4));
@@ -94,13 +108,13 @@ TEST_CASE("String views make std::string more efficient")
         REQUIRE(s.find_last_of('q') == v.find_last_of('q'));
         REQUIRE(s.find_last_of('q') == v.find_last_of('q'));
         
-        IS_TRUE(v.find_last_of('q') == std_backport::string_view::npos);
+        IS_TRUE(v.find_last_of('q') == string_view::npos);
     }
     
     SECTION("first not of")
     {
         std::string s("This is a string");
-        std_backport::string_view v(s);
+        string_view v(s);
         
         REQUIRE(s.find_first_not_of("is") == v.find_first_not_of("is"));
         REQUIRE(s.find_first_not_of("is", 4) == v.find_first_not_of("is", 4));
@@ -115,7 +129,7 @@ TEST_CASE("String views make std::string more efficient")
     SECTION("last not of")
     {
         std::string s("This is a string");
-        std_backport::string_view v(s);
+        string_view v(s);
         REQUIRE(s.find_last_not_of("is") == v.find_last_not_of("is"));
         REQUIRE(s.find_last_not_of("is", 4) == v.find_last_not_of("is", 4));
         REQUIRE(s.find_last_not_of("s", 4) == v.find_last_not_of("s", 4));
