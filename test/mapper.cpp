@@ -168,7 +168,8 @@ TEST_CASE("Mapper test data checks")
     SECTION("count")
     {
         REQUIRE(metaclass->propertyCount() == static_cast<std::size_t>(MyClass::propertyCount));
-        REQUIRE(metaclass->functionCount() == static_cast<std::size_t>(MyClass::functionCount));        }
+        REQUIRE(metaclass->functionCount() == static_cast<std::size_t>(MyClass::functionCount));
+    }
 
     SECTION("check types")
     {

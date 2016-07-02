@@ -52,11 +52,6 @@ namespace FunctionTest
         return left.x == right.x;
     }
     
-    static std::ostream& operator << (std::ostream& stream, const MyType& object)
-    {
-        return stream << object.x;
-    }
-    
     struct MyBase
     {
         void f6() {}
