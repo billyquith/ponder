@@ -34,7 +34,12 @@
 
 namespace ponder
 {
-    
+
+Enum::Enum(IdRef name)
+    :   m_name(name)
+{
+}
+
 void Enum::undeclare(const Enum& me)
 {
     detail::EnumManager::instance().removeClass(me);
@@ -90,19 +95,14 @@ Enum::EnumValue Enum::value(IdRef name) const
     return it->second;
 }
 
-bool Enum::operator==(const Enum& other) const
+bool Enum::operator == (const Enum& other) const
 {
     return name() == other.name();
 }
 
-bool Enum::operator!=(const Enum& other) const
+bool Enum::operator != (const Enum& other) const
 {
     return name() != other.name();
-}
-
-Enum::Enum(IdRef name)
-    : m_name(name)
-{
 }
 
 } // namespace ponder

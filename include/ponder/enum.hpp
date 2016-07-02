@@ -85,7 +85,7 @@ public:
      * \brief Structure defining the <name, value> pairs stored in metaenums
      */
     struct Pair {
-        IdRef name;    //!< Enum name
+        Id name;    //!< Enum name
         EnumValue value;            //!< Enum value
         
         /**
@@ -94,7 +94,7 @@ public:
          * \param name_ Name of the enum item.
          * \param value_ Value of the enum item.
          */
-        Pair(const Id &name_, EnumValue value_) : name(name_), value(value_) {}
+        Pair(IdRef name_, EnumValue value_) : name(name_), value(value_) {}
         
         /**
          * \brief Helper to return value as require enum class type.
