@@ -61,8 +61,6 @@ struct IdTraits
     typedef std::string string_t;
     typedef string_t    id_value_t;
     typedef string_view id_ref_t;
-    
-    static inline id_value_t to_value(id_ref_t r) { return r.to_string(); }
 };
 
 } // namespace detail
