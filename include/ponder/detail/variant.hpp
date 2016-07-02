@@ -95,16 +95,6 @@ class bad_variant_access : public std::runtime_error
 
 }; // class bad_variant_access
 
-template <typename R = void>
-struct MAPBOX_VARIANT_DEPRECATED static_visitor
-{
-    using result_type = R;
-
-  protected:
-    static_visitor() {}
-    ~static_visitor() {}
-};
-
 namespace detail {
 
 static constexpr std::size_t invalid_value = std::size_t(-1);
