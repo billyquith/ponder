@@ -268,6 +268,9 @@ namespace lua {
         return 0;
     }
 
+    //
+    // Create instance metatable. This is shared between all instances of the class type
+    //
     static void createInstanceMetatable(lua_State *L, const Class& cls)
     {
         lua_createtable(L, 0, 3);                   // +1 mt
@@ -342,7 +345,7 @@ namespace lua {
         }
         lua_pop(L, 1);                              // -1 _G
 
-        // class metatable
+        // class metatable, used to customise the typename
         lua_createtable(L, 0, 20);                  // +1 metatable
         const int clsmt = lua_gettop(L);
 
@@ -350,7 +353,7 @@ namespace lua {
         lua_pushcfunction(L, l_instance_create);    // +1 v
         lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
         
-        // create instance metatable
+        // create instance metatable. store ref in the class metatable
         lua_pushliteral(L, "_inst_");               // +1 k
         createInstanceMetatable(L, cls);            // +1
         lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
