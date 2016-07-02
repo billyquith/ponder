@@ -2,6 +2,13 @@
 Ponder Changelog
 ----------------
 
+### 1.3
+
+- Ids/Names now configurable using IdTraits.
+- Default IdTrait uses string_view so is more efficient (issue #11).
+- std::auto_ptr removed as deprecated in C++11 and causes warning spam in GCC.
+- Internal string_view class added as std one still experimental.
+
 ### 1.2
 
 - Properties now support method chaining or named parameter idiom (issue #28).
