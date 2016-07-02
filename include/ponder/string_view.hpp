@@ -178,8 +178,9 @@ public:
     {
         return std::basic_string<CharT, Traits, Allocator>(begin(),end());
     }
+    // Explicit conversion disallows assignment conversion.
     template<class Allocator>
-    explicit operator std::basic_string<CharT, Traits, Allocator>() const
+    /*explicit*/ operator std::basic_string<CharT, Traits, Allocator>() const
     {
         return std::basic_string<CharT, Traits, Allocator>(begin(), end());
     }
@@ -348,7 +349,7 @@ private:
 typedef basic_string_view<char> string_view;
 typedef basic_string_view<wchar_t> wstring_view;
 
-std::ostream& operator << (std::ostream& os, string_view const& value) {
+static inline std::ostream& operator << (std::ostream& os, string_view const& value) {
     os << value.to_string();
     return os;
 }

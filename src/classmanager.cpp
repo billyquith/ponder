@@ -71,7 +71,7 @@ void ClassManager::removeClass(const Class& cls)
         PONDER_ERROR(ClassNotFound(cls.name()));
     }
 
-    ClassTable::const_iterator it = m_classes.find(cls.name());
+    ClassTable::const_iterator it = m_classes.find(Id(cls.name()));
     Class* classPtr = it->second;
 
     // Notify observers
@@ -100,7 +100,7 @@ const Class& ClassManager::getByIndex(std::size_t index) const
 
 const Class& ClassManager::getById(IdRef id) const
 {
-    ClassTable::const_iterator it = m_classes.find(id);
+    ClassTable::const_iterator it = m_classes.find(Id(id));
     if (it == m_classes.end())
         PONDER_ERROR(ClassNotFound(id));
 
@@ -109,13 +109,13 @@ const Class& ClassManager::getById(IdRef id) const
 
 const Class* ClassManager::getByIdSafe(IdRef id) const
 {
-    ClassTable::const_iterator it = m_classes.find(id);
+    ClassTable::const_iterator it = m_classes.find(Id(id));
     return (it == m_classes.end()) ? nullptr : it->second;
 }
 
 bool ClassManager::classExists(IdRef id) const
 {
-    return m_classes.find(id) != m_classes.end();
+    return m_classes.find(Id(id)) != m_classes.end();
 }
 
 ClassManager::ClassManager()

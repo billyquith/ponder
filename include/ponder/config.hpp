@@ -74,8 +74,8 @@
     #define PONDER_WORKAROUND_GCC_N2350 0
 #endif
 
-#define PONDER_ID_TRAITS_STD_STRING       // Use std::string and const std::string&
-//#define PONDER_ID_TRAITS_STRING_VIEW      // Use std::string and ponder::string_view
+//#define PONDER_ID_TRAITS_STD_STRING       // Use std::string and const std::string&
+#define PONDER_ID_TRAITS_STRING_VIEW      // Use std::string and ponder::string_view
 
 #include "detail/id_traits.hpp"
 

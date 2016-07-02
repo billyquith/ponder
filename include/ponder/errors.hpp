@@ -63,7 +63,7 @@ protected:
      *
      * \param message Description of the error
      */
-    BadType(IdRef message);
+    BadType(const String& message);
 
     /**
      * \brief Get the string name of a Ponder type

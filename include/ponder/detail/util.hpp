@@ -101,19 +101,19 @@ namespace detail
         }
     };
 
-    PONDER_API bool conv(IdRef from, bool& to);
-    PONDER_API bool conv(IdRef from, char& to);
-    PONDER_API bool conv(IdRef from, unsigned char& to);
-    PONDER_API bool conv(IdRef from, short& to);
-    PONDER_API bool conv(IdRef from, unsigned short& to);
-    PONDER_API bool conv(IdRef from, int& to);
-    PONDER_API bool conv(IdRef from, unsigned int& to);
-    PONDER_API bool conv(IdRef from, long& to);
-    PONDER_API bool conv(IdRef from, unsigned long& to);
-    PONDER_API bool conv(IdRef from, long long& to);
-    PONDER_API bool conv(IdRef from, unsigned long long& to);
-    PONDER_API bool conv(IdRef from, float& to);
-    PONDER_API bool conv(IdRef from, double& to);
+    PONDER_API bool conv(const String& from, bool& to);
+    PONDER_API bool conv(const String& from, char& to);
+    PONDER_API bool conv(const String& from, unsigned char& to);
+    PONDER_API bool conv(const String& from, short& to);
+    PONDER_API bool conv(const String& from, unsigned short& to);
+    PONDER_API bool conv(const String& from, int& to);
+    PONDER_API bool conv(const String& from, unsigned int& to);
+    PONDER_API bool conv(const String& from, long& to);
+    PONDER_API bool conv(const String& from, unsigned long& to);
+    PONDER_API bool conv(const String& from, long long& to);
+    PONDER_API bool conv(const String& from, unsigned long long& to);
+    PONDER_API bool conv(const String& from, float& to);
+    PONDER_API bool conv(const String& from, double& to);
     
     template <typename T>
     struct convert_impl <T, Id,
@@ -121,7 +121,7 @@ namespace detail
                                   && !std::is_const<T>::value
                                   && !std::is_reference<T>::value >::type >
     {
-        T operator () (IdRef from)
+        T operator () (const String& from)
         {
             T result;
             if (!conv(from, result))
@@ -181,7 +181,8 @@ namespace detail
         {return a0 & a1 & a2 & a3 & a4 & a5;}
     static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6)
         {return a0 & a1 & a2 & a3 & a4 & a5 & a6;}
-    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7) {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}
+    static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, bool a6, bool a7)
+        {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}
 
     const char* typeAsString(ValueType t);
 

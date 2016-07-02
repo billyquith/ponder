@@ -31,18 +31,21 @@
 #include <ponder/errors.hpp>
 #include <ponder/class.hpp>
 #include <ponder/detail/util.hpp>
+#include <ponder/format.h>
 
 
 namespace ponder
 {
+
+using ponder::util::fmt::format;
     
 BadType::BadType(ValueType provided, ValueType expected)
-    : Error("value of type " + typeName(provided) + 
-            " couldn't be converted to type " + typeName(expected))
+: Error("value of type " + typeName(provided)
+        + " couldn't be converted to type " + typeName(expected))
 {
 }
 
-BadType::BadType(IdRef message)
+BadType::BadType(const String& message)
     : Error(message)
 {
 }
@@ -56,79 +59,78 @@ BadArgument::BadArgument(ValueType provided,
                          ValueType expected,
                          std::size_t index,
                          IdRef functionName)
-    : BadType("the argument #" + str(index) + " of function " + functionName +
-              " couldn't be converted from type " + typeName(provided) + " to type "
-              + typeName(expected))
+: BadType(format("argument #{} of function {} couldn't be converted from type {} to type {}",
+                 str(index), String(functionName), typeName(provided), typeName(expected)))
 {
 }
 
 ClassAlreadyCreated::ClassAlreadyCreated(IdRef type)
-    : Error("class named " + type + " already exists")
+    : Error("class named " + String(type) + " already exists")
 {
 }
 
 ClassNotFound::ClassNotFound(IdRef name)
-    : Error("the metaclass " + name + " couldn't be found")
+    : Error("the metaclass " + String(name) + " couldn't be found")
 {
 }
 
 ClassUnrelated::ClassUnrelated(IdRef sourceClass, IdRef requestedClass)
-    : Error("failed to convert from " + sourceClass + " to " + requestedClass + 
+    : Error("failed to convert from " + String(sourceClass) + " to " + String(requestedClass) +
             ": it is not a base nor a derived")
 {
 }
 
 EnumAlreadyCreated::EnumAlreadyCreated(IdRef typeId)
-    : Error("enum named " + typeId + " already exists")
+    : Error("enum named " + String(typeId) + " already exists")
 {
 }
 
 EnumNameNotFound::EnumNameNotFound(IdRef name, IdRef enumName)
-    : Error("the value " + name + " couldn't be found in metaenum " + enumName)
+    : Error("the value " + String(name) + " couldn't be found in metaenum " + String(enumName))
 {
 }
 
 EnumNotFound::EnumNotFound(IdRef name)
-    : Error("the metaenum " + name + " couldn't be found")
+    : Error("the metaenum " + String(name) + " couldn't be found")
 {
 }
 
 EnumValueNotFound::EnumValueNotFound(long value, IdRef enumName)
-    : Error("the value " + str(value) + " couldn't be found in metaenum " + enumName)
+    : Error("the value " + str(value) + " couldn't be found in metaenum " + String(enumName))
 {
 }
 
 ForbiddenCall::ForbiddenCall(IdRef functionName)
-    : Error("the function " + functionName + " is not callable")
+    : Error("the function " + String(functionName) + " is not callable")
 {
 }
 
 ForbiddenRead::ForbiddenRead(IdRef propertyName)
-    : Error("the property " + propertyName + " is not readable")
+    : Error("the property " + String(propertyName) + " is not readable")
 {
 }
 
 ForbiddenWrite::ForbiddenWrite(IdRef propertyName)
-    : Error("the property " + propertyName + " is not writable")
+    : Error("the property " + String(propertyName) + " is not writable")
 {
 }
 
 FunctionNotFound::FunctionNotFound(IdRef name, IdRef className)
-    : Error("the function " + name + " couldn't be found in metaclass " + className)
+    : Error("the function " + String(name) + " couldn't be found in metaclass " + String(className))
 {
 }
 
 NotEnoughArguments::NotEnoughArguments(IdRef functionName,
                                        std::size_t provided,
                                        std::size_t expected)
-    : Error("not enough arguments for calling " + functionName + " - provided " + 
+    : Error("not enough arguments for calling " + String(functionName) + " - provided " +
             str(provided) + ", expected " + str(expected))
 {
 }
 
 NullObject::NullObject(const Class* objectClass)
     : Error("trying to use a null metaobject of class " + 
-            (objectClass ? objectClass->name() : "unknown"))
+            (objectClass ? String(objectClass->name()) : String("unknown")))
 {
 }
 
@@ -139,7 +141,7 @@ OutOfRange::OutOfRange(std::size_t index, std::size_t size)
 }
 
 PropertyNotFound::PropertyNotFound(IdRef name, IdRef className)
-    : Error("the property " + name + " couldn't be found in metaclass " + className)
+    : Error("the property " + String(name) + " couldn't be found in metaclass " + String(className))
 {
 }
 

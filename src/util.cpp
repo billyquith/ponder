@@ -58,7 +58,7 @@ static inline int stricmp(const char* a, const char* b)
 // parse string
     
 template <typename T>
-static bool parse_integer(IdRef from, T& to)
+static bool parse_integer(const String& from, T& to)
 {
     try {
         const long p = std::stol(from.c_str());
@@ -69,7 +69,7 @@ static bool parse_integer(IdRef from, T& to)
     return true;
 }
 
-bool conv(IdRef from, char& to)
+bool conv(const String& from, char& to)
 {
     if (from.length() == 1)
     {
@@ -79,7 +79,7 @@ bool conv(IdRef from, char& to)
     return false;
 }
 
-bool conv(IdRef from, unsigned char& to)
+bool conv(const String& from, unsigned char& to)
 {
     char r;
     if (!conv(from,r))
@@ -88,37 +88,37 @@ bool conv(IdRef from, unsigned char& to)
     return true;
 }
 
-bool conv(IdRef from, short& to)
+bool conv(const String& from, short& to)
 {
     return parse_integer(from, to);
 }
 
-bool conv(IdRef from, unsigned short& to)
+bool conv(const String& from, unsigned short& to)
 {
     return parse_integer(from, to);
 }
 
-bool conv(IdRef from, int& to)
+bool conv(const String& from, int& to)
 {
     return parse_integer(from, to);
 }
 
-bool conv(IdRef from, unsigned int& to)
+bool conv(const String& from, unsigned int& to)
 {
     return parse_integer(from, to);
 }
 
-bool conv(IdRef from, long& to)
+bool conv(const String& from, long& to)
 {
     return parse_integer(from, to);
 }
 
-bool conv(IdRef from, unsigned long& to)
+bool conv(const String& from, unsigned long& to)
 {
     return parse_integer(from, to);
 }
 
-bool conv(IdRef from, long long& to)
+bool conv(const String& from, long long& to)
 {
     try {
         to = std::stoll(from.c_str());
@@ -128,7 +128,7 @@ bool conv(IdRef from, long long& to)
     return true;
 }
 
-bool conv(IdRef from, unsigned long long& to)
+bool conv(const String& from, unsigned long long& to)
 {
     try {
         to = std::stoull(from.c_str());
@@ -138,7 +138,7 @@ bool conv(IdRef from, unsigned long long& to)
     return true;
 }
     
-bool conv(IdRef from, bool& to)
+bool conv(const String& from, bool& to)
 {
     const char *s = from.c_str();
     if (stricmp(s, "1")==0 || stricmp(s, "true")==0)
@@ -154,7 +154,7 @@ bool conv(IdRef from, bool& to)
     return false;
 }
 
-bool conv(IdRef from, float& to)
+bool conv(const String& from, float& to)
 {
     try {
         to = std::stof(from.c_str());
@@ -164,7 +164,7 @@ bool conv(IdRef from, float& to)
     return true;
 }
 
-bool conv(IdRef from, double& to)
+bool conv(const String& from, double& to)
 {
     try {
         to = std::stod(from.c_str());
