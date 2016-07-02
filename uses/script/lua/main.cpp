@@ -67,21 +67,26 @@ namespace lua {
             case ValueType::Boolean:
                 lua_pushboolean(L, val.to<bool>());
                 return 1;
+                
             case ValueType::Integer:
-                lua_pushinteger(L, val.to<int>());
+                lua_pushinteger(L, val.to<lua_Integer>());
                 return 1;
+                
             case ValueType::Real:
                 lua_pushnumber(L, val.to<lua_Number>());
                 return 1;
+                
             case ValueType::String:
                 lua_pushstring(L, val.to<std::string>().c_str());
                 return 1;
+                
 //            case enumType:
 //                lua_pushinteger(L, val.to<int>());
 //                return 1;
 //            case arrayType:
 //                lua_pushinteger(L, val.to<int>());
 //                return 1;
+                
             case ValueType::User:
                 {
                     UserObject vuobj = val.to<UserObject>();
@@ -105,10 +110,48 @@ namespace lua {
         }
         return 0;
     }
-
-    static Value getValue(lua_State *L, int index)
+    
+    static Value getValue(lua_State *L, int index, ValueType typeExpected = ValueType::None)
     {
+        if (index > lua_gettop(L))
+        {
+            lua_pushliteral(L, "Trying to get arg off stack end");
+            lua_error(L);
+        }
+        
         const int typei = lua_type(L, index);
+
+        // if we expect a type then override Lua type to force an error if incorrect
+        if (typeExpected != ValueType::None)
+        {
+            int vtype = LUA_TNIL;
+            switch (typeExpected) {
+                case ValueType::Boolean:
+                    vtype = LUA_TBOOLEAN;
+                    break;
+                    
+                case ValueType::String:
+                    vtype = LUA_TSTRING;
+                    break;
+                    
+                case ValueType::Real:
+                case ValueType::Integer:
+                    vtype = LUA_TNUMBER;
+                    break;
+                    
+                case ValueType::User:
+                    vtype = LUA_TUSERDATA;
+                    break;
+                    
+                default: ;
+            }
+            if (vtype != typei)
+            {
+                lua_pushfstring(L, "Expecting %s but got %s",
+                                lua_typename(L, vtype), lua_typename(L, typei));
+                lua_error(L);
+            }
+        }
         
         switch (typei)
         {
@@ -124,11 +167,19 @@ namespace lua {
             case LUA_TSTRING:
                 return Value(lua_tostring(L, index));
 
+            case LUA_TUSERDATA:
+                {
+                    void *ud = lua_touserdata(L, index);
+                    ponder::UserObject *uobj = (ponder::UserObject*) ud;
+                    return *uobj;
+                }
+
             default:
-                lua_pushliteral(L, "Unknown type in Ponder value");
+                lua_pushfstring(L, "Cannot convert %s to Ponder value", lua_typename(L, typei));
                 lua_error(L);
         }
-        return Value();
+        
+        return Value(); // no value
     }
 
     static int l_method_call(lua_State *L)
@@ -148,36 +199,9 @@ namespace lua {
         constexpr auto c_argOffset = 2u;
         for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
         {
+            // we know the arg type so check it
             const ValueType at = func->argType(i);
-            switch (at)
-            {
-                case ValueType::Boolean:
-                    args += lua_toboolean(L, i + c_argOffset);
-                    break;
-                case ValueType::Integer:
-                    args += lua_tointeger(L, i + c_argOffset);
-                    break;
-                case ValueType::Real:
-                    args += lua_tonumber(L, i + c_argOffset);
-                    break;
-                case ValueType::String:
-                    args += lua_tostring(L, i + c_argOffset);
-                    break;
-                    //            case enumType:
-                    //                return 1;
-                    //            case arrayType:
-                    //                return 1;
-                case ValueType::User:
-                    {
-                        void *aud = lua_touserdata(L, i + c_argOffset);
-                        ponder::UserObject *auobj = (ponder::UserObject*) aud;
-                        args += *auobj;
-                        break;
-                    }
-                default:
-                    lua_pushliteral(L, "Unknown type in method call");
-                    lua_error(L);
-            }
+            args += getValue(L, i + c_argOffset, at);
         }
         
         Value ret = func->call(*uobj, args);
@@ -271,36 +295,8 @@ namespace lua {
         const int nargs = lua_gettop(L) - (c_argOffset-1);
         for (int i = c_argOffset; i < c_argOffset + nargs; ++i)
         {
-            const int argtype = lua_type(L, i);
-            switch (argtype)
-            {
-                case LUA_TNIL:
-                    args += 0;
-                    break;
-                    
-                case LUA_TNUMBER:
-                    args += lua_tonumber(L, i);
-                    break;
-                    
-                case LUA_TBOOLEAN:
-                    args += (lua_toboolean(L, i) != 0);
-                    break;
-
-                case LUA_TUSERDATA:
-                    {
-                        void *ud = lua_touserdata(L, i);
-                        UserObject uobj(*(UserObject**)ud);
-                        args += uobj;
-                        break;
-                    }
-
-                    // LUA_TTABLE, LUA_TFUNCTION, LUA_TTHREAD, and LUA_TLIGHTUSERDATA.
-                    
-                default:
-                    lua_pushstring(L, fmt::format("Argument {0} is bad type {1}",
-                                                  i, lua_typename(L, i)).c_str());
-                    lua_error(L);
-            }
+            // there may be multiple constructors so don't check types
+            args += getValue(L, i);
         }
         
         ponder::UserObject obj(cls->construct(args));
@@ -450,11 +446,11 @@ namespace lib
 PONDER_TYPE(ponder::UserObject)
 PONDER_TYPE(lib::Vec2f)
 
-static bool luaTest(lua_State *L, const char *source)
+static bool luaTest(lua_State *L, const char *source, bool success = true)
 {
     fmt::print("Test: {}\n", source);
     const bool ok = ponder::lua::runString(L, source);
-    if (!ok)
+    if (ok != success)
     {
         fmt::print("FAILED");
         exit(1);
@@ -490,6 +486,8 @@ int main()
 
     // method call with args
     luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
+    luaTest(L, "v:set('fail'); print(v.x, v.y)", false);
+    luaTest(L, "v:set(); print(v.x, v.y)", false);
 
     // method call return args
     luaTest(L, "l = Vec2(3,0); assert(l:length() == 3)");
