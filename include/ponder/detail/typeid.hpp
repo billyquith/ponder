@@ -69,17 +69,17 @@ struct StaticTypeId
 template <typename T>
 struct HasStaticTypeId
 {
-    enum
-    {
-        value = StaticTypeId<typename RawType<T>::Type>::defined
-    };
+    enum { value = StaticTypeId<typename RawType<T>::Type>::defined };
 };
 
 /**
  * \brief Return the static type identifier of a C++ type T
  */
-template <typename T> const char* staticTypeId()         {return StaticTypeId<typename RawType<T>::Type>::get();}
-template <typename T> const char* staticTypeId(const T&) {return StaticTypeId<typename RawType<T>::Type>::get();}
+template <typename T>
+const char* staticTypeId() {return StaticTypeId<typename RawType<T>::Type>::get();}
+
+template <typename T>
+const char* staticTypeId(const T&) {return StaticTypeId<typename RawType<T>::Type>::get();}
 
 /**
  * \brief Utility class used to check at compile-time if a type T implements the Ponder RTTI
@@ -176,10 +176,14 @@ struct SafeTypeId<void>
 };
 
 /**
- * \brief Return the dynamic type identifier of a C++ object even if it doesn't exist (i.e. it can't fail)
+ * \brief Return the dynamic type identifier of a C++ object even if it doesn't exist
+ *        (i.e. it can't fail)
  */
-template <typename T> const char* safeTypeId()                {return SafeTypeId<typename RawType<T>::Type>::get();}
-template <typename T> const char* safeTypeId(const T& object) {return SafeTypeId<T>::get(object);}
+template <typename T>
+const char* safeTypeId() {return SafeTypeId<typename RawType<T>::Type>::get();}
+    
+template <typename T>
+const char* safeTypeId(const T& object) {return SafeTypeId<T>::get(object);}
 
 } // namespace detail
 
