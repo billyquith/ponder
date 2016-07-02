@@ -57,7 +57,8 @@ class Dictionary
 {
 public:
 
-    struct pair_t : public std::pair<KEY,VALUE> {
+    struct pair_t : public std::pair<KEY,VALUE>
+    {
         pair_t() : std::pair<KEY,VALUE>() {}
         pair_t(KEY_REF k, const VALUE& v) : std::pair<KEY,VALUE>(KEY(k), v) {}
         pair_t(const pair_t& p) = default;

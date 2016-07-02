@@ -74,6 +74,13 @@ public:
      */
     Enum& addClass(IdRef id);
     
+    /**
+     * \brief Unregister a metaenum
+     *
+     * This unregisters the metaenum so that it may not be used again.
+     *
+     * \param id Identifier of the C++ enum bound to the metaenum (unique).
+     */
     void removeClass(const Enum& me);
 
     /**

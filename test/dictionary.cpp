@@ -61,21 +61,36 @@ TEST_CASE("Ponder has a dictionary")
         REQUIRE(dict->containsKey("foxtrot") == true);
         REQUIRE(dict->containsKey("bravo") == true);
         REQUIRE(dict->containsKey("echo") == true);
-
-        REQUIRE(dict->containsKey("monkey") == false);
     }
 
-    SECTION("have values")
+    SECTION("test for missing keys")
+    {
+        REQUIRE(dict->containsKey("") == false);
+        REQUIRE(dict->containsKey("monkey") == false);
+    }
+    
+    SECTION("can find keys")
+    {
+        REQUIRE(dict->findKey("echo") != dict->end());
+        REQUIRE(dict->findKey("xyz") == dict->end());
+        REQUIRE(dict->findKey("") == dict->end());
+    }
+
+    SECTION("has values")
     {
         REQUIRE(dict->containsValue(1) == true);
         REQUIRE(dict->containsValue(2) == true);
         REQUIRE(dict->containsValue(3) == true);
         REQUIRE(dict->containsValue(4) == true);
         REQUIRE(dict->containsValue(5) == true);
-        
+    }
+
+    SECTION("test for missing values")
+    {
+        REQUIRE(dict->containsValue(71237) == false);
         REQUIRE(dict->containsValue(9) == false);
     }
-    
+
     SECTION("keys are sorted")
     {
         REQUIRE(dict->at(0)->first == Id("alpha"));
@@ -97,6 +112,37 @@ TEST_CASE("Ponder has a dictionary")
         REQUIRE(count == 5);
     }
 
+    SECTION("keys can be removed")
+    {
+        REQUIRE(dict->size() == 5);
+        REQUIRE(dict->at(0)->first == Id("alpha"));
+        REQUIRE(dict->at(1)->first == Id("bravo"));
+        REQUIRE(dict->at(2)->first == Id("echo"));
+        REQUIRE(dict->at(3)->first == Id("foxtrot"));
+        REQUIRE(dict->at(4)->first == Id("zebra"));
+        
+        dict->erase("alpha");
+        REQUIRE(dict->size() == 4);
+        REQUIRE(dict->at(0)->first == Id("bravo"));
+        REQUIRE(dict->at(1)->first == Id("echo"));
+        REQUIRE(dict->at(2)->first == Id("foxtrot"));
+        REQUIRE(dict->at(3)->first == Id("zebra"));
+
+        dict->erase("zebra");
+        REQUIRE(dict->size() == 3);
+        REQUIRE(dict->at(0)->first == Id("bravo"));
+        REQUIRE(dict->at(1)->first == Id("echo"));
+        REQUIRE(dict->at(2)->first == Id("foxtrot"));
+        
+        dict->erase("echo");
+        REQUIRE(dict->size() == 2);
+        REQUIRE(dict->at(0)->first == Id("bravo"));
+        REQUIRE(dict->at(1)->first == Id("foxtrot"));
+        
+        dict->erase("bravo");
+        dict->erase("foxtrot");
+        REQUIRE(dict->size() == 0);
+    }
 }
 
 TEST_CASE("Dictionary can have customised sorter")
@@ -151,18 +197,5 @@ TEST_CASE("Dictionary can have customised sorter")
         REQUIRE(dict->at(3)->first == Id("bravo"));
         REQUIRE(dict->at(4)->first == Id("alpha"));
     }
-    
-    SECTION("can iterate over key,values")
-    {
-        int count = 0;
-        for (auto&& it : dict->getIterator())
-        {
-            REQUIRE(dict->at(count)->name() == it.name());
-            REQUIRE(dict->at(count)->value() == it.value());
-            ++count;
-        }
-        REQUIRE(count == 5);
-    }
-    
 }
 

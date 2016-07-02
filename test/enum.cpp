@@ -213,14 +213,14 @@ TEST_CASE("Enum can be undeclared")
         REQUIRE_THROWS_AS(ponder::enumByType<TempEnum>(), ponder::EnumNotFound);
     }
 
-    SECTION("before declaration")
+    SECTION("declaration")
     {
         declare_temp();
         
         REQUIRE(ponder::enumByType<TempEnum>().hasName("Durian") == true);
     }
 
-    SECTION("before declaration")
+    SECTION("after declaration")
     {
         undeclare_temp();
         
