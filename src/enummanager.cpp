@@ -65,17 +65,19 @@ Enum& EnumManager::addClass(IdRef id)
     return *newEnum;
 }
     
-void EnumManager::removeClass(const Enum& me)
+void EnumManager::removeClass(IdRef id)
 {
-    auto it = m_enums.findKey(me.name());
+    auto it = m_enums.findKey(id);
     if (it == m_enums.end())
-        PONDER_ERROR(EnumNotFound(me.name()));
+        PONDER_ERROR(EnumNotFound(id));
+    
+    Enum *en = (*it).value();
     
     // Notify observers
-    notifyEnumRemoved(me);
+    notifyEnumRemoved(*en);
 
-    delete (*it).value();
-    m_enums.erase(me.name());
+    delete en;
+    m_enums.erase(id);
 }
 
 std::size_t EnumManager::count() const

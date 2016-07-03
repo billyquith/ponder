@@ -41,4 +41,12 @@ EnumBuilder Enum::declare(IdRef name)
     return EnumBuilder(newEnum);
 }
 
+template <typename T>
+void Enum::undeclare(IdRef name)
+{
+    detail::EnumManager::instance().removeClass(name.empty()
+                                            ? detail::StaticTypeId<T>::get(false)
+                                            : name);
+}
+
 } // namespace ponder

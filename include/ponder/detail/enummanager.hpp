@@ -81,7 +81,7 @@ public:
      *
      * \param id Identifier of the C++ enum bound to the metaenum (unique).
      */
-    void removeClass(const Enum& me);
+    void removeClass(IdRef id);
 
     /**
      * \brief Get the total number of metaenums

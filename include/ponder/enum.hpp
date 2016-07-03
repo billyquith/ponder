@@ -122,7 +122,7 @@ public:
      *         to fill the new metaenum with values.
      */
     template <typename T>
-    static EnumBuilder declare(IdRef name = std::string());
+    static EnumBuilder declare(IdRef name = Id());
 
     /**
      * \brief Undeclare an existing metaenum
@@ -135,7 +135,8 @@ public:
      *
      * \see Class::undeclare
      */
-    static void undeclare(const Enum& enumCls);
+    template <typename T>
+    static void undeclare(IdRef name = Id());
     
 public:
 
@@ -278,7 +279,7 @@ private:
      */
     Enum(IdRef name);
     
-    struct EnumCmp {
+    struct EnumCmp {    // TOOD - optional
         bool operator () (IdRef a, IdRef b) const {return a < b;}
     };
     

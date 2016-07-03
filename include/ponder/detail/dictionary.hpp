@@ -48,9 +48,11 @@ template <typename T>
 struct DictKeyCmp {
     bool operator () (T a, T b) const {return a < b;}
 };
-    
+
+//
 // Key-value pair dictionary.
-// - Sorted on keys. Once only insertion cost gives better access times.
+//  - Stored as vector of pairs, more cache friendly.
+//  - Sorted on keys. Once only insertion cost gives better access times.
 //
 template <typename KEY, typename KEY_REF, typename VALUE, class CMP = DictKeyCmp<KEY_REF>>
 class Dictionary
