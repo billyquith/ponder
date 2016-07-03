@@ -75,7 +75,6 @@ void Class::destroy(const UserObject& object) const
 {
     m_destructor(object, false);
     
-    // TODO - look for better solution to this that const_cast.
     const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
@@ -83,7 +82,6 @@ void Class::destruct(const UserObject& object) const
 {
     m_destructor(object, true);
     
-    // TODO - see above
     const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
@@ -225,12 +223,11 @@ int Class::baseOffset(const Class& base) const
         return 0;
 
     // Search base in the base classes
-    BaseList::const_iterator end = m_bases.end();
-    for (BaseList::const_iterator it = m_bases.begin(); it != end; ++it)
+    for (auto const& b : m_bases)
     {
-        const int offset = it->base->baseOffset(base);
+        const int offset = b.base->baseOffset(base);
         if (offset != -1)
-            return offset + it->offset;
+            return offset + b.offset;
     }
 
     return -1;

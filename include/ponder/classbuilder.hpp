@@ -80,6 +80,9 @@ public:
      * This function makes the target metaclass inherit of all the metaproperties and
      * metafunctions of the given base metaclass.
      *
+     * \note We *do not* support virtual inheritance fully here due to the associated problems
+     *       with compiler specific class layouts. e.g. see Class::applyOffset.
+     *
      * \return Reference to this, in order to chain other calls
      *
      * \throw ClassNotFound no metaclass is bound to U

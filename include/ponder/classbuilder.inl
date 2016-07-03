@@ -27,7 +27,6 @@
 **
 ****************************************************************************/
 
-
 namespace ponder
 {
     
@@ -55,14 +54,17 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     }
 
     // Compute the offset to apply for pointer conversions
+    // - Note we do NOT support virtual inheritance here due to the associated problems
+    //   with compiler specific class layouts.
     // - Use pointer dummy buffer here as some platforms seem to trap bad memory access even
     //   though not dereferencing the pointer.
-    char buff[16];
-    T* asDerived = reinterpret_cast<T*>(buff);
+    // - U : Base, T : Derived.
+    char dummy[16];
+    T* asDerived = reinterpret_cast<T*>(dummy);
     U* asBase = static_cast<U*>(asDerived);
-    int offset = static_cast<int>(reinterpret_cast<char*>(asBase) -
-                                  reinterpret_cast<char*>(asDerived));
-
+    const int offset = static_cast<int>(reinterpret_cast<char*>(asBase) -
+                                        reinterpret_cast<char*>(asDerived));
+    
     // Add the base metaclass to the bases of the current class
     Class::BaseInfo baseInfos;
     baseInfos.base = &baseClass;

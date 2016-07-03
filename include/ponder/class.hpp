@@ -386,6 +386,9 @@ public:     // reflection
      *
      * The target metaclass may be a base or a derived of this, both cases are properly handled.
      *
+     * \note Because virtual inheritance implementation is compiler specific this method is 
+     *       unreliable where virtual inheritance is used.
+     *
      * \param pointer Pointer to convert
      * \param target Target metaclass to convert to
      *
