@@ -223,7 +223,8 @@ public:
     CONSTEXPR_CPP14 int compare(size_type pos1, size_type count1, basic_string_view v,
                                 size_type pos2, size_type count2) const
     {return substr(pos1, count1).compare(v.substr(pos2, count2));}
-    CONSTEXPR_CPP14 int compare(const CharT* s) const { return compare(basic_string_view(s)); }
+    CONSTEXPR_CPP14 int compare(const CharT* s) const
+    { return compare(basic_string_view(s)); }
     CONSTEXPR_CPP14 int compare(size_type pos1, size_type count1,const CharT* s) const
     {
         return substr(pos1, count1).compare(basic_string_view(s));
@@ -286,10 +287,8 @@ public:
     
     CONSTEXPR size_type  find_first_not_of(basic_string_view v, size_type pos = 0) const
     {
-        return pos >= size() ? npos
-                             : v.find(*(start_ + pos)) == npos
-                             ? pos
-                             : find_first_of(v, pos + 1);
+        return pos >=
+            size() ? npos : v.find(*(start_ + pos)) == npos ? pos : find_first_of(v, pos + 1);
     }
     CONSTEXPR size_type  find_first_not_of(CharT c, size_type pos = 0) const
     { return find_first_not_of(basic_string_view(&c, 1), pos); }
@@ -317,11 +316,12 @@ public:
     CONSTEXPR_CPP14 bool operator>(const basic_string_view& rhs) const {return rhs < *this;}
     CONSTEXPR_CPP14 bool operator<=(const basic_string_view& rhs) const {return !(*this > rhs);}
     CONSTEXPR_CPP14 bool operator>=(const basic_string_view& rhs) const {return !(*this < rhs);}
+    
 private:
+    
     CONSTEXPR basic_string_view(const iterator& s, const iterator& e) : start_(s), end_(e) {}
     iterator start_;
     iterator end_;
-    
     
     CONSTEXPR size_type find_to_pos(const_iterator it) const
     {

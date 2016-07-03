@@ -2,7 +2,7 @@
 
 #include "test.hpp"
 #include <iostream>
-#include <ponder/string_view.hpp>
+#include <ponder/detail/string_view.hpp>
 
 using ponder::string_view;
 

@@ -74,7 +74,6 @@ set(SRC_HEADERS
     include/ponder/pondertype.hpp
     include/ponder/property.hpp
     include/ponder/simpleproperty.hpp
-    include/ponder/string_view.hpp
     include/ponder/tagholder.hpp
     include/ponder/type.hpp
     include/ponder/userobject.hpp
@@ -108,6 +107,7 @@ set(SRC_HEADERS
     include/ponder/detail/returntype.hpp
     include/ponder/detail/simplepropertyimpl.hpp
     include/ponder/detail/simplepropertyimpl.inl
+    include/ponder/detail/string_view.hpp
     include/ponder/detail/typeid.hpp
     include/ponder/detail/userpropertyimpl.hpp
     include/ponder/detail/userpropertyimpl.inl
