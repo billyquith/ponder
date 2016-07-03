@@ -196,9 +196,7 @@ public:
         return std::basic_string<CharT, Traits, Allocator>(begin(), end());
     }
 #endif
-    size_type copy(CharT* dest,
-                   size_type count,
-                   size_type pos = 0) const
+    size_type copy(CharT* dest, size_type count, size_type pos = 0) const
     {
         if (pos >= size()) { throw std::out_of_range("basic_string_view::copy out of range"); }
         for (int i = 0; i < size();++i)
@@ -214,8 +212,8 @@ public:
     }
     CONSTEXPR_CPP14 int compare(basic_string_view v) const
     {
-        int r = traits_type::compare(data(), v.data(), std::min(size(), v.size()));
-        return r==0? size() - v.size():r;
+        const int r = traits_type::compare(data(), v.data(), std::min(size(), v.size()));
+        return r==0 ? static_cast<int>(size()-v.size()) : r;
     }
     CONSTEXPR_CPP14 int compare(size_type pos1, size_type count1,
                                 basic_string_view v) const
