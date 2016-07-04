@@ -38,17 +38,18 @@
 #include <list>
 #include <functional>
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
+namespace function {
 
 template <typename T>
 struct FunctionDetails
 {
     typedef void ReturnType;
 };
-    
+
+// Function
 template <typename R, typename ...A>
 struct FunctionDetails<R(*)(A...)>
 {
@@ -56,6 +57,7 @@ struct FunctionDetails<R(*)(A...)>
 };
     
     
+// Class method
 template <typename T>
 struct MethodDetails {};
 
@@ -123,6 +125,19 @@ struct RefDetails<std::list<T>(C::*)>
     typedef std::list<T>(&RefType);
 };
 
+} // namespace function
+    
+// Type of function recognised.
+enum class FunctionType
+{
+    None,               // not a function
+    Function,           // a function
+    MemberFunction,     // reference to function in a class or struct
+    MemberObject,       // reference to an object in a class or struct
+    FunctionWrapper,    // std::function<>
+    BindExpression      // std::bind()
+};
+    
 /**
  * \class FunctionTraits
  *
@@ -139,7 +154,8 @@ struct RefDetails<std::list<T>(C::*)>
 template <typename T, typename E = void>
 struct FunctionTraits
 {
-    enum {isFunction = false};
+    static constexpr bool isFunction = false;
+    static constexpr FunctionType which = FunctionType::None;
 };
 
 /**
@@ -149,9 +165,10 @@ template <typename T>
 struct FunctionTraits<T,
     typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
-    enum {isFunction = true};
+    static constexpr bool isFunction = true;
+    static constexpr FunctionType which = FunctionType::Function;
     typedef typename std::remove_pointer<T>::type type;
-    typedef typename FunctionDetails<T>::ReturnType ReturnType;
+    typedef typename function::FunctionDetails<T>::ReturnType ReturnType;
 };
 
 /**
@@ -160,9 +177,10 @@ struct FunctionTraits<T,
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>
 {
-    enum {isFunction = true};
-    typedef typename MethodDetails<T>::FunctionType type;
-    typedef typename MethodDetails<T>::ReturnType ReturnType;
+    static constexpr bool isFunction = true;
+    static constexpr FunctionType which = FunctionType::MemberFunction;
+    typedef typename function::MethodDetails<T>::FunctionType type;
+    typedef typename function::MethodDetails<T>::ReturnType ReturnType;
 };
 
 /**
@@ -171,8 +189,9 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
-    enum {isFunction = true};    
-    typedef typename RefDetails<T>::RefType ReturnType;
+    static constexpr bool isFunction = true;
+    static constexpr FunctionType which = FunctionType::MemberObject;
+    typedef typename function::RefDetails<T>::RefType ReturnType;
 };
 
 /**
@@ -181,7 +200,8 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::value>::type>
 {
-    enum {isFunction = true};
+    static constexpr bool isFunction = true;
+    static constexpr FunctionType which = FunctionType::BindExpression;
     typedef typename T::result_type ReturnType;
 };
 
@@ -191,7 +211,8 @@ struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::val
 template <typename R, typename ...Args>
 struct FunctionTraits<std::function<R(Args...)>>
 {
-    enum {isFunction = true};
+    static constexpr bool isFunction = true;
+    static constexpr FunctionType which = FunctionType::FunctionWrapper;
     typedef R(type)(Args...);
     typedef R ReturnType;
 };

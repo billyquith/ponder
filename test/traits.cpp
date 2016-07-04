@@ -42,12 +42,12 @@
 
 namespace TraitsTest
 {
-    static void foo() {}
+    static void func() {}
 
-    static int bar(float) {return 0;}
+    static int funcArgReturn(float) {return 0;}
 
     struct Callable {
-        void operator () () {}
+        void operator () (void) {}
     };
 
     struct NonCallable {
@@ -86,32 +86,33 @@ TEST_CASE("C++11 features and syntax")
 {
     SECTION("function test")
     {
-        foo(); bar(0.f); // to stop unused warning
+        func(); funcArgReturn(0.f); // to stop unused warning
         
-        static_assert(std::is_function<decltype(foo)>::value, "std::is_function failed");
+        static_assert(std::is_function<decltype(func)>::value, "std::is_function failed");
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
         static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
         static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");    
-        static_assert(std::is_function< std::function<void()>() >::value, "std::is_function failed");
+        static_assert(std::is_function< std::function<void()>() >::value,
+                      "std::is_function failed");
     }
     
     SECTION("function result")
     {
+        static_assert(std::is_void< std::result_of<decltype(func)& ()>::type >::value,
+                      "std::result_of failed");
+        static_assert(std::is_void< std::result_of<decltype(&func) ()>::type >::value,
+                      "std::result_of failed");
         typedef void (*foo_t)();
-        static_assert(std::is_void< std::result_of<decltype(foo)& ()>::type >::value,
-                      "std::result_of failed");
-        static_assert(std::is_void< std::result_of<decltype(&foo) ()>::type >::value,
-                      "std::result_of failed");
         static_assert(std::is_void< std::result_of<foo_t ()>::type >::value,
                       "std::result_of failed");
         static_assert(std::is_pointer<foo_t>::value, "std::is_pointer failed");
 
         typedef int (*bar_t)(float);
-        static_assert(std::is_same< std::result_of<decltype(bar)& (float)>::type, int >::value,
-                      "std::result_of failed");
-        static_assert(std::is_same< std::result_of<decltype(&bar) (float)>::type, int >::value,
-                      "std::result_of failed");
+        static_assert(std::is_same< std::result_of<decltype(funcArgReturn)& (float)>::type,
+                                    int >::value, "std::result_of failed");
+        static_assert(std::is_same< std::result_of<decltype(&funcArgReturn) (float)>::type,
+                                    int >::value, "std::result_of failed");
         static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value,
                       "std::result_of failed");
     }
@@ -127,71 +128,143 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder has function traits")
 {
-    
     SECTION("what is not a function")
     {
-        static_assert( ! ponder::detail::FunctionTraits<int>::isFunction,
+        using ponder::detail::FunctionTraits;
+        
+        static_assert( ! FunctionTraits<int>::isFunction,   "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<int*>::isFunction,  "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<ponder::String>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<float>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<int*>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<char*>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<int**>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<ponder::String>::isFunction,
+        static_assert( ! FunctionTraits<NonCallable>::isFunction,
                       "FunctionTraits<>::isFunction failed");
     }
     
-    SECTION("what is a function")
+    SECTION("what is not a function types")
     {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        static_assert(FunctionTraits<int>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<float>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int*>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<char*>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int**>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<ponder::String>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<Callable>::which == FunctionType::None,
+                      "FunctionTraits<>::isFunction failed");
+    }
+    
+    SECTION("type function")
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
         static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<void(void)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
         static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<void(int)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
         static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<int(void)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
         static_assert(ponder::detail::FunctionTraits<int(char*)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-
-        static_assert(ponder::detail::FunctionTraits<decltype(foo)>::isFunction,
+        static_assert(FunctionTraits<int(char*)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(func)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<decltype(bar)>::isFunction,
+        static_assert(FunctionTraits<decltype(func)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(funcArgReturn)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-
-        static_assert( ! ponder::detail::FunctionTraits<NonCallable>::isFunction,
+        static_assert(FunctionTraits<decltype(funcArgReturn)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+    }
+    
+    SECTION("type member function")  // T(C::*)()
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        static_assert(FunctionTraits<void(Methods::*)()>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        // Only reports: function and pointer-to-member types & functors
-        static_assert( ! ponder::detail::FunctionTraits<Callable>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-
-        static_assert(ponder::detail::FunctionTraits<void(Methods::*)()>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<void(Methods::*)()>::which == FunctionType::MemberFunction,
+                      "FunctionTraits<>::which failed");
+        
         void (Methods::*meth_t)() = &Methods::foo;
-        static_assert(ponder::detail::FunctionTraits<decltype(meth_t)>::isFunction,
+        static_assert(FunctionTraits<decltype(meth_t)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(meth_t)>::which == FunctionType::MemberFunction,
+                      "FunctionTraits<>::which failed");
+    }
 
+    SECTION("type member object")   // T(C::*)
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
         struct Members {
             int m;
             float a[5];
         };
 
-        // member pointers
-        static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction,
+        static_assert(FunctionTraits<int Members::*>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<float (Members::*)[]>::isFunction,
+        static_assert(FunctionTraits<int Members::*>::which == FunctionType::MemberObject,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<float (Members::*)[]>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<decltype(&Members::a)>::isFunction,
+        static_assert(FunctionTraits<float (Members::*)[]>::which == FunctionType::MemberObject,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(&Members::a)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-
-        // std::function<>
-        static_assert(ponder::detail::FunctionTraits<std::function<void()>>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<std::function<int(float,int)>>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<std::function<char*(char[])>>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(&Members::a)>::which == FunctionType::MemberObject,
+                      "FunctionTraits<>::which failed");
+    }
+    
+    SECTION("type function wrapper")  // std::function<>
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        static_assert(FunctionTraits<std::function<void()>>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+            FunctionTraits<std::function<void()>>::which == FunctionType::FunctionWrapper,
+            "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<std::function<int(float,int)>>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+            FunctionTraits<std::function<int(float,int)>>::which == FunctionType::FunctionWrapper,
+            "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<std::function<char*(char[])>>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+            FunctionTraits<std::function<char*(char[])>>::which == FunctionType::FunctionWrapper,
+            "FunctionTraits<>::which failed");
     }
 }
 
