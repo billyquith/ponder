@@ -272,68 +272,79 @@ TEST_CASE("Ponder has object traits")
 {
     SECTION("objects can be tested for being writable")
     {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
         // is writable
-        static_assert(ponder::detail::ObjectTraits<int*>::isWritable,
+        static_assert(ObjectTraits<int*>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert(ponder::detail::ObjectTraits<char**>::isWritable,
+        static_assert(ObjectTraits<char**>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
 
         // is not writable
-        static_assert( ! ponder::detail::ObjectTraits<int>::isWritable,
+//        static_assert(ObjectTraits<const int>::isWritable,
+//                      "ObjectTraits<>::isWriteable failed");  FIX ?
+        static_assert( ! ObjectTraits<int>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ponder::detail::ObjectTraits<const int*>::isWritable,
+        static_assert( ! ObjectTraits<const int*>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ponder::detail::ObjectTraits<const char * const *>::isWritable,
+        static_assert( ! ObjectTraits<const char * const *>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ponder::detail::ObjectTraits<void(...)>::isRef,
+        static_assert( ! ObjectTraits<void(...)>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<decltype(intArray)>::isWritable,
+        static_assert( ! ObjectTraits<decltype(intArray)>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
     }
 
     SECTION("objects can be references")
     {
+        using ponder::detail::ObjectTraits;
+
         // is ref
-        static_assert(ponder::detail::ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<char**>::isRef, "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<decltype(intArray)>::isRef,
+        static_assert(ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
+        static_assert(ObjectTraits<char**>::isRef, "ObjectTraits<>::isRef failed");
+        static_assert(ObjectTraits<decltype(intArray)>::isRef,
                       "ObjectTraits<>::isRef failed");
     
         // is not ref
-        static_assert( ! ponder::detail::ObjectTraits<int>::isRef,
+        static_assert( ! ObjectTraits<int>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<float>::isRef,
+        static_assert( ! ObjectTraits<float>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<void(...)>::isRef,
+        static_assert( ! ObjectTraits<void(...)>::isRef,
                       "ObjectTraits<>::isRef failed");
     }
 
     SECTION("test if an object as a reference return type")
     {
+        using ponder::detail::ObjectTraits;
+
         static_assert(
-            std::is_same<int&, ponder::detail::ObjectTraits<int>::RefReturnType>::value,
+            std::is_same<int&, ObjectTraits<int>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
         static_assert(
-            std::is_same<float&, ponder::detail::ObjectTraits<const float>::RefReturnType>::value,
+            std::is_same<float&, ObjectTraits<const float>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
     
         // ref return
         static_assert(
-            std::is_same<int*, ponder::detail::ObjectTraits<int*>::RefReturnType>::value,
+            std::is_same<int*, ObjectTraits<int*>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
         static_assert(
             std::is_same<const int*,
-                         ponder::detail::ObjectTraits<const int*>::RefReturnType>::value,
+                         ObjectTraits<const int*>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
     }
 
     SECTION("is a pointer")
     {
+        using ponder::detail::ObjectTraits;
+
         // pointer type
-        static_assert(std::is_same<int*, ponder::detail::ObjectTraits<int*>::PointerType>::value,
+        static_assert(std::is_same<int*, ObjectTraits<int*>::PointerType>::value,
                       "ObjectTraits<>::PointerType failed");
         static_assert(
-            std::is_same<const int*, ponder::detail::ObjectTraits<const int*>::PointerType>::value,
+            std::is_same<const int*, ObjectTraits<const int*>::PointerType>::value,
             "ObjectTraits<>::PointerType failed");
     }
 
@@ -362,20 +373,111 @@ TEST_CASE("Ponder has object traits")
 
     SECTION("types have a raw data type")
     {
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<int>::DataType>::value,
+        using ponder::detail::ObjectTraits;
+
+        static_assert(std::is_same<int, ObjectTraits<int>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<int*>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<int*>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<const int>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<const int>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<const int*>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<const int*>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ponder::detail::ObjectTraits<int **>::DataType>::value,
+        static_assert(std::is_same<int, ObjectTraits<int **>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
         static_assert(
-            std::is_same<int, ponder::detail::ObjectTraits<decltype(intArray)>::DataType>::value,
+            std::is_same<int, ObjectTraits<decltype(intArray)>::DataType>::value,
             "ObjectTraits<>::DataType failed");
-    }    
+    }
+}
+
+
+TEST_CASE("Object traits are classfied")
+{
+    SECTION("type object")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int>::which == ObjectType::Object, "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float>::which == ObjectType::Object, "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods>::which == ObjectType::Object, "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<const int>::which == ObjectType::Object, "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<const float>::which == ObjectType::Object, "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<const Methods>::which == ObjectType::Object, "ObjectTraits<>::which");
+        
+        static_assert(ObjectTraits<int*>::which != ObjectType::Object, "ObjectTraits<>::which");
+    }
+
+    SECTION("type pointer")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int*>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float*>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods*>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+
+        static_assert(ObjectTraits<int**>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float**>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods**>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+    }
+    
+    SECTION("type reference")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        
+        static_assert(ObjectTraits<const int&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<const float&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<const Methods&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+    }
+    
+    SECTION("type smart pointer")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::which == ObjectType::SmartPointer,
+//                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<std::shared_ptr<Methods>>::which == ObjectType::SmartPointer,
+                      "ObjectTraits<>::which");
+    }
+
+    SECTION("type builtin array")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int[1]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[1000]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float[1]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods[10]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[10][10]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[10][20][30]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+    }
 }
 
 TEST_CASE("Types supporting array interface are supported")

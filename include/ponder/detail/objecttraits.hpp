@@ -36,10 +36,20 @@
 #include <ponder/detail/issmartpointer.hpp>
 
 
-namespace ponder
+namespace ponder {
+namespace detail {
+    
+/// Type classification for a type relating to an object.
+enum class ObjectType
 {
-namespace detail
-{
+    None,               // not an object
+    Object,             // a raw object, e.g. int
+    Pointer,            // pointer to an object, e.g. T*
+    Reference,          // reference to an object, e.g. T&
+    SmartPointer,       // smart pointer reference
+    BuiltinArray,       // builtin array, e.g. T[N]
+};
+    
 /**
  * \class ObjectTraits
  *
@@ -77,8 +87,8 @@ struct ObjectTraits
     {
         isWritable = false,
         isRef = false,
-        which = 0
     };
+    static constexpr ObjectType which = ObjectType::Object;
 
     typedef T& RefReturnType;
     typedef typename RawType<T>::Type DataType;
@@ -96,8 +106,8 @@ struct ObjectTraits<T*>
     {
         isWritable = !std::is_const<T>::value,
         isRef = true,
-        which = 1
     };
+    static constexpr ObjectType which = ObjectType::Pointer;
 
     typedef T* RefReturnType;
     typedef T* PointerType;
@@ -117,8 +127,8 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
     {
         isWritable = !std::is_const<U>::value,
         isRef = true,
-        which = 2
     };
+    static constexpr ObjectType which = ObjectType::SmartPointer;
 
     typedef U* RefReturnType;
     typedef U* PointerType;
@@ -138,8 +148,8 @@ struct ObjectTraits<T[N]>
     {
         isWritable = false,
         isRef = true,
-        which = 3
     };
+    static constexpr ObjectType which = ObjectType::BuiltinArray;
 
     typedef T(&RefReturnType)[N];
     typedef typename RawType<T>::Type DataType;
@@ -157,8 +167,8 @@ struct ObjectTraits<T&,
     {
         isWritable = !std::is_const<T>::value,
         isRef = true,
-        which = 4
     };
+    static constexpr ObjectType which = ObjectType::Reference;
 
     typedef T& RefReturnType;
     typedef T* PointerType;
@@ -177,10 +187,8 @@ struct ObjectTraits<T&,
                 std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
-    enum
-    {
-        which = 5
-    };
+    // self referential, no classification necessary
+    static constexpr ObjectType which = ObjectType::None;
 };
 
 /*
@@ -189,10 +197,8 @@ struct ObjectTraits<T&,
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
 {
-    enum
-    {
-        which = 6
-    };
+    // self referential, no classification necessary
+    static constexpr ObjectType which = ObjectType::None;
 };
 
 } // namespace detail

@@ -132,8 +132,8 @@ enum class FunctionType
 {
     None,               // not a function
     Function,           // a function
-    MemberFunction,     // reference to function in a class or struct
-    MemberObject,       // reference to an object in a class or struct
+    MemberFunction,     // function in a class or struct
+    MemberObject,       // object in a class or struct
     FunctionWrapper,    // std::function<>
     BindExpression      // std::bind()
 };
