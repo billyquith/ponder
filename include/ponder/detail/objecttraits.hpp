@@ -83,11 +83,8 @@ enum class ObjectType
 template <typename T, typename E = void>
 struct ObjectTraits
 {
-    enum
-    {
-        isWritable = false,
-        isRef = false,
-    };
+    static constexpr bool isWritable = false;
+    static constexpr bool isRef = false;
     static constexpr ObjectType which = ObjectType::Object;
 
     typedef T& RefReturnType;
@@ -102,11 +99,8 @@ struct ObjectTraits
 template <typename T>
 struct ObjectTraits<T*>
 {
-    enum
-    {
-        isWritable = !std::is_const<T>::value,
-        isRef = true,
-    };
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = true;
     static constexpr ObjectType which = ObjectType::Pointer;
 
     typedef T* RefReturnType;
@@ -123,11 +117,8 @@ struct ObjectTraits<T*>
 template <template <typename> class T, typename U>
 struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
 {
-    enum
-    {
-        isWritable = !std::is_const<U>::value,
-        isRef = true,
-    };
+    static constexpr bool isWritable = !std::is_const<U>::value;
+    static constexpr bool isRef = true;
     static constexpr ObjectType which = ObjectType::SmartPointer;
 
     typedef U* RefReturnType;
@@ -144,11 +135,8 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 template <typename T, int N>
 struct ObjectTraits<T[N]>
 {
-    enum
-    {
-        isWritable = false,
-        isRef = true,
-    };
+    static constexpr bool isWritable = false;
+    static constexpr bool isRef = true;
     static constexpr ObjectType which = ObjectType::BuiltinArray;
 
     typedef T(&RefReturnType)[N];
@@ -163,11 +151,8 @@ struct ObjectTraits<T&,
             typename std::enable_if<
                 !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
-    enum
-    {
-        isWritable = !std::is_const<T>::value,
-        isRef = true,
-    };
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = true;
     static constexpr ObjectType which = ObjectType::Reference;
 
     typedef T& RefReturnType;
@@ -187,7 +172,6 @@ struct ObjectTraits<T&,
                 std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
-    // self referential, no classification necessary
     static constexpr ObjectType which = ObjectType::None;
 };
 
@@ -197,7 +181,6 @@ struct ObjectTraits<T&,
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
 {
-    // self referential, no classification necessary
     static constexpr ObjectType which = ObjectType::None;
 };
 
