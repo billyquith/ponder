@@ -64,14 +64,14 @@ Class& ClassManager::addClass(IdRef id)
     return *newClass;
 }
 
-void ClassManager::removeClass(const Class& cls)
+void ClassManager::removeClass(IdRef id)
 {
-    if (!classExists(cls.name()))
+    if (!classExists(id))
     {
-        PONDER_ERROR(ClassNotFound(cls.name()));
+        PONDER_ERROR(ClassNotFound(id));
     }
 
-    ClassTable::const_iterator it = m_classes.find(Id(cls.name()));
+    ClassTable::const_iterator it = m_classes.find(id);
     Class* classPtr = it->second;
 
     // Notify observers

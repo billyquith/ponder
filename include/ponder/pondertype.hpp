@@ -33,8 +33,7 @@
 
 #include <ponder/config.hpp>
 
-namespace ponder
-{
+namespace ponder {
     
 namespace detail
 {
@@ -197,7 +196,10 @@ namespace detail
  * \brief Macro used to activate the Ponder RTTI system into a hierarchy of classes
  *
  * This macro must be inserted in both base and derived classes if you want Ponder
- * to be able to retrieve the dynamic type of polymorphic objects.
+ * to be able to retrieve the dynamic type of *polymorphic objects*.
+ *
+ * \note This macro does not need to be inserted into all Ponder classes being declared,
+ *       only ones which would like to support features like downcasting via polymorphism.
  *
  * Example:
  *

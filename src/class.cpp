@@ -35,11 +35,12 @@
 namespace ponder
 {
 
-void Class::undeclare(const Class& cls)
+Class::Class(IdRef name)
+: m_sizeof(0)
+, m_id(name)
 {
-    detail::ClassManager::instance().removeClass(cls);
-}
-
+}    
+    
 IdRef Class::name() const
 {
     return m_id;
@@ -208,12 +209,6 @@ bool Class::operator == (const Class& other) const
 bool Class::operator != (const Class& other) const
 {
     return m_id != other.m_id;
-}
-
-Class::Class(IdRef name)
-    : m_sizeof(0)
-    , m_id(name)
-{
 }
 
 int Class::baseOffset(const Class& base) const

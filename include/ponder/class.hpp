@@ -150,15 +150,15 @@ public:     // declaration
      * This is the function to call to create a new metaclass. The template
      * parameter T is the C++ class that will be bound to the metaclass.
      *
-     * \param name Name of the metaclass in Ponder. This name identifies
-     *             the metaclass and thus has to be unique. If not specified, the C++ type
-     *             id is used.
+     * \param id Name of the metaclass in Ponder. This name identifies
+     *           the metaclass and thus has to be unique. If not specified, the C++ type
+     *           id is used.
      *
      * \return A ClassBuilder<T> object that will provide functions
      *         to fill the new metaclass with properties, functions, etc.
      */
     template <typename T>
-    static ClassBuilder<T> declare(IdRef name = ponder::Id());
+    static ClassBuilder<T> declare(IdRef id = ponder::Id());
 
     /**
      * \brief Undeclare an existing metaclass
@@ -173,7 +173,8 @@ public:     // declaration
      *
      * \see Enum::undeclare
      */
-    static void undeclare(const Class& cls);
+    template <typename T>
+    static void undeclare(IdRef id = ponder::Id());
 
 public:     // reflection
 

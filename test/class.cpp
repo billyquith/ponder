@@ -167,7 +167,7 @@ namespace ClassTest
 
     void undeclare_temp()
     {
-        ponder::Class::undeclare(ponder::classByType<TemporaryRegistration>());
+        ponder::Class::undeclare<TemporaryRegistration>();
     }
 }
 

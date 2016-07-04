@@ -74,7 +74,17 @@ public:
      */
     Class& addClass(IdRef id);
 
-    void removeClass(const Class& cls);
+    /**
+     * \brief Unregister an existing metaclass
+     *
+     * Use this to unregister a class that was declared with addClass(). This might be
+     * useful if declaring classes temporarily from a dynamic module.
+     *
+     * \param id Identifier of the C++ class bound to the metaclass
+     *
+     * \throw ClassNotFound \a id not found
+     */
+    void removeClass(IdRef id);
 
     /**
      * \brief Get the total number of metaclasses

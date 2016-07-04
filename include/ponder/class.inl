@@ -50,16 +50,22 @@ namespace detail
 }
 
 template <typename T>
-inline ClassBuilder<T> Class::declare(IdRef name)
+inline ClassBuilder<T> Class::declare(IdRef id)
 {
     Class& newClass =
-        detail::ClassManager::instance().addClass(name.empty()
-                                                  ? detail::StaticTypeId<T>::get(false)
-                                                  : name);
+        detail::ClassManager::instance().addClass(
+            id.empty() ? detail::StaticTypeId<T>::get(false) : id);
     newClass.m_sizeof = sizeof(T);
     newClass.m_destructor = &detail::destroy<T>;
     newClass.m_userObjectCreator = &detail::userObjectCreator<T>;
     return ClassBuilder<T>(newClass);
+}
+
+template <typename T>
+inline void Class::undeclare(IdRef id)
+{
+    detail::ClassManager::instance().removeClass(
+        id.empty() ? detail::StaticTypeId<T>::get(false) : id);
 }
 
 inline Class::FunctionTable::Iterator Class::functionIterator() const
