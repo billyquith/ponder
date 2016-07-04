@@ -32,7 +32,6 @@
 #define PONDER_DETAIL_FUNCTIONTRAITS_HPP
 
 
-#include <ponder/detail/yesnotype.hpp>
 #include <type_traits>
 #include <array>
 #include <vector>

@@ -33,7 +33,6 @@
 
 
 #include <ponder/config.hpp>
-#include <ponder/detail/yesnotype.hpp>
 #include <list>
 #include <vector>
 

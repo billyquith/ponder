@@ -31,15 +31,11 @@
 #ifndef PONDER_DETAIL_TYPEID_HPP
 #define PONDER_DETAIL_TYPEID_HPP
 
-
 #include <ponder/detail/objecttraits.hpp>
-#include <ponder/detail/yesnotype.hpp>
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /**
  * \brief Utility class to get the Ponder identifier associated to a C++ type
  *
@@ -88,10 +84,11 @@ template <typename T>
 struct HasPonderRtti
 {
     template <typename U, const char* (U::*)() const> struct TestForMember {};
-    template <typename U> static TypeYes check(TestForMember<U, &U::ponderClassId>*);
-    template <typename U> static TypeNo  check(...);
+    template <typename U> static std::true_type check(TestForMember<U, &U::ponderClassId>*);
+    template <typename U> static std::false_type check(...);
 
-    enum {value = sizeof(check<typename RawType<T>::Type>(0)) == sizeof(TypeYes)};
+    static constexpr bool
+        value = std::is_same<decltype(check<typename RawType<T>::Type>(0)), std::true_type>::value;
 };
 
 /**
@@ -186,7 +183,6 @@ template <typename T>
 const char* safeTypeId(const T& object) {return SafeTypeId<T>::get(object);}
 
 } // namespace detail
-
 } // namespace ponder
 
 
