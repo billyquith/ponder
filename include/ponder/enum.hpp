@@ -279,11 +279,7 @@ private:
      */
     Enum(IdRef name);
     
-    struct EnumCmp {    // TOOD - optional
-        bool operator () (IdRef a, IdRef b) const {return a < b;}
-    };
-    
-    typedef detail::Dictionary<Id, IdRef, EnumValue, EnumCmp> EnumTable;
+    typedef detail::Dictionary<Id, IdRef, EnumValue> EnumTable;
     
     Id m_name;     ///< Name of the metaenum
     EnumTable m_enums;      ///< Table of enums

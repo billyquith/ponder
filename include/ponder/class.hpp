@@ -120,16 +120,10 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef std::shared_ptr<Function> FunctionPtr;
     typedef std::shared_ptr<Constructor> ConstructorPtr;
     
-    struct NameCmp {
-        bool operator () (IdRef a, IdRef b) const {
-            return a < b;
-        }
-    };
-
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<Id, IdRef, PropertyPtr, NameCmp> PropertyTable;
-    typedef detail::Dictionary<Id, IdRef, FunctionPtr, NameCmp> FunctionTable;
+    typedef detail::Dictionary<Id, IdRef, PropertyPtr> PropertyTable;
+    typedef detail::Dictionary<Id, IdRef, FunctionPtr> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
     typedef UserObject (*UserObjectCreator)(void*);
     
@@ -169,9 +163,9 @@ public:     // declaration
      * \note Do *not* use automatic metaclass declaration (PONDER_AUTO_TYPE) for the class 
      *       or it will keep being recreated by Ponder.
      *
-     * \param cls An intance of a metaclass that has been declared.
+     * \param id Name identifier of a previously declared class
      *
-     * \see Enum::undeclare
+     * \see Class::declare, Enum::undeclare
      */
     template <typename T>
     static void undeclare(IdRef id = ponder::Id());
