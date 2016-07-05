@@ -181,29 +181,17 @@ namespace FunctionTest
             //
             // These were previously indirected
             //
-            .function("f14",
-                      std::function<void(MyClass&)>([](MyClass& self){ self.inner.f14(); }))
+            .function("f14", [](MyClass& self){ self.inner.f14(); })
             // getter returning an object
-            .function("f15",
-                      std::function<void(MyClass&)>([](MyClass& self){ self.getInner().f15(); }))
+            .function("f15", [](MyClass& self){ self.getInner().f15(); })
             // raw pointer
-            .function("f16",
-                      std::function<int(MyClass&)>([](MyClass& self){
-                          return self.innerPtr->f16();
-                      }))
+            .function("f16", [](MyClass& self){ return self.innerPtr->f16(); })
             // getter returning a raw pointer
-            .function("f17",
-                      std::function<void(MyClass const&)>([](MyClass const& self){
-                          self.getInnerPtr()->f17(99);
-                      }))
+            .function("f17", [](MyClass const& self){ self.getInnerPtr()->f17(99); })
             // smart pointer
-            .function("f18", std::function<void(MyClass&)>([](MyClass& self){
-                          self.innerSmartPtr.get()->f18();
-                      }))
+            .function("f18", [](MyClass& self){ self.innerSmartPtr.get()->f18(); })
             // getter returning a smart pointer
-            .function("f19", std::function<void(MyClass&)>([](MyClass& self){
-                          self.getInnerSmartPtr().get()->f19();
-                      }))
+            .function("f19", [](MyClass& self){ self.getInnerSmartPtr().get()->f19(); })
         
             // ***** std::function *****
             .function("f20",
