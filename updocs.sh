@@ -22,4 +22,3 @@ cp $DOCDIR/doc/api/html/* docs/
 
 clean
 
-echo 'bundle exec jekyll serve --baseurl ""'
