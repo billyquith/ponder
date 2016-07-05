@@ -4,7 +4,7 @@
 #include <iostream>
 #include <ponder/detail/string_view.hpp>
 
-using ponder::string_view;
+using ponder::detail::string_view;
 
 // About string types here:
 //

@@ -32,8 +32,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-namespace ponder
-{
+namespace ponder {
+namespace detail {
     
 #define CONSTEXPR_BACKUP CONSTEXPR
 #undef CONSTEXPR
@@ -352,4 +352,5 @@ static inline std::ostream& operator << (std::ostream& os, string_view const& va
     return os;
 }
     
+} // namespace detail
 } // namespace ponder
