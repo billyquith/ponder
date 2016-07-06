@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef PONDER_STRING_VIEW_HPP
+#define PONDER_STRING_VIEW_HPP
+
 /*
  Boost Software License - Version 1.0 - August 17th, 2003
  
@@ -343,7 +347,8 @@ private:
 #undef CONSTEXPR
 #define CONSTEXPR CONSTEXPR_BACKUP
 #undef CONSTEXPR_BACKUP
-
+#undef CONSTEXPR_CPP14
+    
 typedef basic_string_view<char> string_view;
 typedef basic_string_view<wchar_t> wstring_view;
 
@@ -354,3 +359,5 @@ static inline std::ostream& operator << (std::ostream& os, string_view const& va
     
 } // namespace detail
 } // namespace ponder
+
+#endif // PONDER_STRING_VIEW_HPP
