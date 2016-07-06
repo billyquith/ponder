@@ -6,6 +6,7 @@ Ponder Changelog
 
 - Ids/Names now configurable using IdTraits.
 - Default IdTrait uses string_view so is more efficient (issue #11).
+- Lambda functions recognised as class functions.
 - std::auto_ptr removed as deprecated in C++11 and causes warning spam in GCC.
 - Internal string_view class added as std one still experimental.
 - Function and object classifiers.
