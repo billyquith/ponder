@@ -74,10 +74,13 @@
     #define PONDER_WORKAROUND_GCC_N2350 0
 #endif
 
+// If user doesn't define traits use the default:
+#ifndef PONDER_ID_TRAITS_USER
 //#define PONDER_ID_TRAITS_STD_STRING       // Use std::string and const std::string&
 #define PONDER_ID_TRAITS_STRING_VIEW      // Use std::string and ponder::string_view
+#endif // PONDER_ID_TRAITS_USER
 
-#include "detail/id_traits.hpp"
+#include "detail/idtraits.hpp"
 
 #endif // PONDER_CONFIG_HPP
 
