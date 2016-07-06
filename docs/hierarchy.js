@@ -68,10 +68,10 @@ var hierarchy =
     [ "ponder_ext::ValueMapper< const char[N]>", "structponder__ext_1_1_value_mapper_3_01const_01char[_n]_4.html", null ],
     [ "ponder_ext::ValueMapper< ponder::EnumObject >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_enum_object_01_4.html", null ],
     [ "ponder_ext::ValueMapper< ponder::NoType >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_no_type_01_4.html", null ],
+    [ "ponder_ext::ValueMapper< ponder::String >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_string_01_4.html", null ],
     [ "ponder_ext::ValueMapper< ponder::UserObject >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_user_object_01_4.html", null ],
     [ "ponder_ext::ValueMapper< ponder::ValueType >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_value_type_01_4.html", null ],
     [ "ponder_ext::ValueMapper< QString >", "structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< std::string >", "structponder__ext_1_1_value_mapper_3_01std_1_1string_01_4.html", null ],
     [ "ponder_ext::ValueMapper< T >", "structponder__ext_1_1_value_mapper.html", [
       [ "ponder_ext::ValueMapper< const T & >", "structponder__ext_1_1_value_mapper_3_01const_01_t_01_6_01_4.html", null ],
       [ "ponder_ext::ValueMapper< const T >", "structponder__ext_1_1_value_mapper_3_01const_01_t_01_4.html", null ],
