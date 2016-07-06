@@ -160,7 +160,7 @@ TEST_CASE("Ponder has function traits")
                       "FunctionTraits<>::which failed");
         static_assert(FunctionTraits<ponder::String>::which == FunctionType::None,
                       "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<Callable>::which == FunctionType::None,
+        static_assert(FunctionTraits<NonCallable>::which == FunctionType::None,
                       "FunctionTraits<>::isFunction failed");
     }
     
@@ -265,6 +265,34 @@ TEST_CASE("Ponder has function traits")
         static_assert(
             FunctionTraits<std::function<char*(char[])>>::which == FunctionType::FunctionWrapper,
             "FunctionTraits<>::which failed");
+    }
+
+    SECTION("type lambda")  // [] () {}
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        auto l1 = [] () {};
+        auto l2 = [] (int&) { return "hello"; };
+        auto l3 = [] (float, float[]) -> float { return 3.1415927f; };
+        
+        static_assert(FunctionTraits<decltype(l1)>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+                      FunctionTraits<decltype(l1)>::which == FunctionType::Lambda,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(l2)>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+                      FunctionTraits<decltype(l2)>::which == FunctionType::Lambda,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(l3)>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+                      FunctionTraits<decltype(l3)>::which == FunctionType::Lambda,
+                      "FunctionTraits<>::which failed");
     }
 }
 
