@@ -68,7 +68,7 @@ public:
      *
      * \return Name of the function
      */
-    const std::string& name() const;
+    IdRef name() const;
 
     /**
      * \brief Get the number of arguments of the function
@@ -148,7 +148,7 @@ protected:
      *
      * \return Value returned by the function call
      */
-    Function(const std::string& name,
+    Function(IdRef name,
              ValueType returnType,
              const std::vector<ValueType>& argTypes = std::vector<ValueType>());
 
@@ -169,7 +169,7 @@ protected:
 
 private:
 
-    std::string m_name; ///< Name of the function
+    Id m_name; ///< Name of the function
     ValueType m_returnType; ///< Return type
     std::vector<ValueType> m_argTypes; ///< Type of all the function arguments
     detail::Getter<bool> m_callable; ///< Accessor to get the callable state of the function

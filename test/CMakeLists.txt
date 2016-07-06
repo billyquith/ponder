@@ -31,8 +31,6 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 3.0)
-
 # set project's name
 project(PONDER_TEST)
 
@@ -58,6 +56,7 @@ set(PONDER_TEST_SRCS
     mapper.cpp
     property.cpp
     propertyaccess.cpp
+    string_view.cpp
     tagholder.cpp
     traits.cpp
     userobject.cpp

@@ -81,7 +81,7 @@ public:
      * \return Modified error, ready to be thrown
      */
     template <typename T>
-    static T prepare(T error, const std::string& file, int line, const std::string& function);
+    static T prepare(T error, const String& file, int line, const String& function);
 
 protected:
 
@@ -90,7 +90,7 @@ protected:
      *
      * \param message Error message to return in what()
      */
-    Error(const std::string& message);
+    Error(IdRef message);
 
     /**
      * \brief Helper function to convert anything to a string
@@ -103,12 +103,12 @@ protected:
      * \return \a x converted to a string
      */
     template <typename T>
-    static std::string str(T x);
+    static ponder::String str(T x);
 
 private:
 
-    std::string m_message; ///< Error message
-    std::string m_location; ///< Location of the error (file, line and function)
+    ponder::String m_message; ///< Error message
+    ponder::String m_location; ///< Location of the error (file, line and function)
 };
 
 } // namespace ponder

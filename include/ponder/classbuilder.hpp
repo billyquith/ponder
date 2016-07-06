@@ -80,6 +80,9 @@ public:
      * This function makes the target metaclass inherit of all the metaproperties and
      * metafunctions of the given base metaclass.
      *
+     * \note We *do not* support virtual inheritance fully here due to the associated problems
+     *       with compiler specific class layouts. e.g. see Class::applyOffset.
+     *
      * \return Reference to this, in order to chain other calls
      *
      * \throw ClassNotFound no metaclass is bound to U
@@ -116,7 +119,7 @@ public:
      * \return Reference to this, in order to chain other calls
      */
     template <typename F>
-    ClassBuilder<T>& property(const std::string& name, F accessor);
+    ClassBuilder<T>& property(IdRef name, F accessor);
 
     /**
      * \brief Declare a new property from a pair of accessors
@@ -154,7 +157,7 @@ public:
      * \return Reference to this, in order to chain other calls
      */
     template <typename F1, typename F2>
-    ClassBuilder<T>& property(const std::string& name, F1 accessor1, F2 accessor2);
+    ClassBuilder<T>& property(IdRef name, F1 accessor1, F2 accessor2);
 
     /**
      * \brief Declare a new property from three accessors
@@ -200,7 +203,7 @@ public:
      * \return Reference to this, in order to chain other calls
      */
     template <typename F1, typename F2, typename F3>
-    ClassBuilder<T>& property(const std::string& name, F1 accessor1, F2 accessor2, F3 accessor3);
+    ClassBuilder<T>& property(IdRef name, F1 accessor1, F2 accessor2, F3 accessor3);
 
     /**
      * \brief Declare a new function from any bindable type
@@ -214,7 +217,7 @@ public:
      * \return Reference to this, in order to chain other calls
      */
     template <typename F>
-    ClassBuilder<T>& function(const std::string& name, F function);
+    ClassBuilder<T>& function(IdRef name, F function);
 
     /**
      * \brief Declare a new static tag

@@ -359,7 +359,7 @@ struct PropertyFactory1
 {
     typedef typename FunctionTraits<F>::ReturnType ReturnType;
 
-    static Property* get(const std::string& name, F accessor)
+    static Property* get(IdRef name, F accessor)
     {
         typedef Accessor1<C, ReturnType> AccessorType;
 
@@ -378,7 +378,7 @@ struct PropertyFactory2
 {
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
 
-    static Property* get(const std::string& name, F1 accessor1, F2 accessor2)
+    static Property* get(IdRef name, F1 accessor1, F2 accessor2)
     {
         typedef Accessor2<C, ReturnType> AccessorType;
 
@@ -408,7 +408,7 @@ struct PropertyFactory2<C, F1, F2,
     typedef typename \
         std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
 
-    static Property* get(const std::string& name, F1 accessor1, F2 accessor2)
+    static Property* get(IdRef name, F1 accessor1, F2 accessor2)
     {
         typedef Accessor3<C, OtherClassType, ReturnType> AccessorType;
 
@@ -428,7 +428,7 @@ struct PropertyFactory3
     typedef typename FunctionTraits<F1>::ReturnType ReturnType;
     typedef typename FunctionTraits<F3>::ReturnType InnerType;
 
-    static Property* get(const std::string& name, F1 accessor1, F2 accessor2, F3 accessor3)
+    static Property* get(IdRef name, F1 accessor1, F2 accessor2, F3 accessor3)
     {
         typedef Accessor2<C, ReturnType> AccessorType;
 

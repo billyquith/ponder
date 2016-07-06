@@ -40,7 +40,7 @@ long EnumObject::value() const
     return m_value;
 }
 
-const std::string& EnumObject::name() const
+IdRef EnumObject::name() const
 {
     return m_enum->name(m_value);
 }

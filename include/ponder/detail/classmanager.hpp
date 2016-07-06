@@ -72,9 +72,19 @@ public:
      *
      * \throw ClassAlreadyCreated \a name or \a id already exists
      */
-    Class& addClass(const std::string& id);
+    Class& addClass(IdRef id);
 
-    void removeClass(const Class& cls);
+    /**
+     * \brief Unregister an existing metaclass
+     *
+     * Use this to unregister a class that was declared with addClass(). This might be
+     * useful if declaring classes temporarily from a dynamic module.
+     *
+     * \param id Identifier of the C++ class bound to the metaclass
+     *
+     * \throw ClassNotFound \a id not found
+     */
+    void removeClass(IdRef id);
 
     /**
      * \brief Get the total number of metaclasses
@@ -106,7 +116,7 @@ public:
      *
      * \throw ClassNotFound id is not the name of an existing metaclass
      */
-    const Class& getById(const std::string& id) const;
+    const Class& getById(IdRef id) const;
 
     /**
      * \brief Get a metaclass from a C++ type
@@ -118,7 +128,7 @@ public:
      *
      * \return Pointer to the requested metaclass, or null pointer if not found
      */
-    const Class* getByIdSafe(const std::string& id) const;
+    const Class* getByIdSafe(IdRef id) const;
 
     /**
      * \brief Check if a given type has a metaclass
@@ -127,7 +137,7 @@ public:
      *
      * \return True if the class exists, false otherwise
      */
-    bool classExists(const std::string& id) const;
+    bool classExists(IdRef id) const;
 
     /**
      * \brief Default constructor
@@ -143,7 +153,7 @@ public:
 
 private:
 
-    typedef std::map<std::string, Class*> ClassTable; ///< No need for shared pointers in here, we're the one and only instance holder
+    typedef std::map<Id, Class*> ClassTable; ///< No need for shared pointers in here, we're the one and only instance holder
     ClassTable m_classes; ///< Table storing classes indexed by their ID
 };
 

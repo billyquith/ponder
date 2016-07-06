@@ -48,7 +48,7 @@ const char* Error::where() const throw()
     return m_location.c_str();
 }
 
-Error::Error(const std::string& message)
+Error::Error(IdRef message)
     : m_message(message)
     , m_location("")
 {

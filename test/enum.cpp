@@ -58,7 +58,7 @@ namespace EnumTest
         Apple, Banana, Durian, Strawberry
     };
     
-    void declare()
+    static void declare()
     {
         ponder::Enum::declare<MyEnum>("EnumTest::MyEnum")
             .value("Zero", Zero)
@@ -68,7 +68,7 @@ namespace EnumTest
         ponder::Enum::declare<MyEnum2>("EnumTest::MyEnum2");
     }
     
-    void declare_temp()
+    static void declare_temp()
     {
         ponder::Enum::declare<TempEnum>()
             .value("Apple", Apple)
@@ -77,9 +77,9 @@ namespace EnumTest
             .value("Strawberry", Strawberry);
     }
 
-    void undeclare_temp()
+    static void undeclare_temp()
     {
-        ponder::Enum::undeclare(ponder::enumByType<TempEnum>());
+        ponder::Enum::undeclare<TempEnum>();
     }
 }
 
@@ -213,14 +213,14 @@ TEST_CASE("Enum can be undeclared")
         REQUIRE_THROWS_AS(ponder::enumByType<TempEnum>(), ponder::EnumNotFound);
     }
 
-    SECTION("before declaration")
+    SECTION("declaration")
     {
         declare_temp();
         
         REQUIRE(ponder::enumByType<TempEnum>().hasName("Durian") == true);
     }
 
-    SECTION("before declaration")
+    SECTION("after declaration")
     {
         undeclare_temp();
         

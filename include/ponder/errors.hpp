@@ -63,7 +63,7 @@ protected:
      *
      * \param message Description of the error
      */
-    BadType(const std::string& message);
+    BadType(const String& message);
 
     /**
      * \brief Get the string name of a Ponder type
@@ -72,7 +72,7 @@ protected:
      *
      * \return Name of the provided type
      */
-    static std::string typeName(ValueType type);
+    static ponder::String typeName(ValueType type);
 };
 
 /**
@@ -92,7 +92,7 @@ public:
      * \param functionName Name of the function
      */
     BadArgument(ValueType provided, ValueType expected,
-                std::size_t index, const std::string& functionName);
+                std::size_t index, IdRef functionName);
 };
 
 /**
@@ -107,7 +107,7 @@ public:
      *
      * \param idType Name of the class
      */
-    ClassAlreadyCreated(const std::string& idType);
+    ClassAlreadyCreated(IdRef idType);
 };
 
 /**
@@ -122,7 +122,7 @@ public:
      *
      * \param name Name of the requested class
      */
-    ClassNotFound(const std::string& name);
+    ClassNotFound(IdRef name);
 };
 
 /**
@@ -139,7 +139,7 @@ public:
      * \param sourceClass Name of the source class
      * \param requestedClass Name of the requested class
      */
-    ClassUnrelated(const std::string& sourceClass, const std::string& requestedClass);
+    ClassUnrelated(IdRef sourceClass, IdRef requestedClass);
 };
 
 /**
@@ -154,7 +154,7 @@ public:
      *
      * \param typeId Name of the enum
      */
-    EnumAlreadyCreated(const std::string& typeId);
+    EnumAlreadyCreated(IdRef typeId);
 };
 
 /**
@@ -170,7 +170,7 @@ public:
      * \param name Name of the requested metaenum member
      * \param enumName Name of the owner metaenum
      */
-    EnumNameNotFound(const std::string& name, const std::string& enumName);
+    EnumNameNotFound(IdRef name, IdRef enumName);
 };
 
 /**
@@ -185,7 +185,7 @@ public:
      *
      * \param name Name of the requested enum
      */
-    EnumNotFound(const std::string& name);
+    EnumNotFound(IdRef name);
 };
 
 /**
@@ -201,7 +201,7 @@ public:
      * \param value Value of the requested metaenum member
      * \param enumName Name of the owner metaenum
      */
-    EnumValueNotFound(long value, const std::string& enumName);
+    EnumValueNotFound(long value, IdRef enumName);
 };
 
 /**
@@ -216,7 +216,7 @@ public:
      *
      * \param functionName Name of the function
      */
-    ForbiddenCall(const std::string& functionName);
+    ForbiddenCall(IdRef functionName);
 };
 
 /**
@@ -231,7 +231,7 @@ public:
      *
      * \param propertyName Name of the property
      */
-    ForbiddenRead(const std::string& propertyName);
+    ForbiddenRead(IdRef propertyName);
 };
 
 /**
@@ -246,7 +246,7 @@ public:
      *
      * \param propertyName Name of the property
      */
-    ForbiddenWrite(const std::string& propertyName);
+    ForbiddenWrite(IdRef propertyName);
 };
 
 /**
@@ -262,7 +262,7 @@ public:
      * \param name Name of the requested function
      * \param className Name of the owner metaclass
      */
-    FunctionNotFound(const std::string& name, const std::string& className);
+    FunctionNotFound(IdRef name, IdRef className);
 };
 
 /**
@@ -279,7 +279,7 @@ public:
      * \param provided Number of arguments provided
      * \param expected Number of arguments expected
      */
-    NotEnoughArguments(const std::string& functionName,
+    NotEnoughArguments(IdRef functionName,
                        std::size_t provided,
                        std::size_t expected);
 };
@@ -328,7 +328,7 @@ public:
      * \param name Name of the requested property
      * \param className Name of the owner metaclass
      */
-    PropertyNotFound(const std::string& name, const std::string& className);
+    PropertyNotFound(IdRef name, IdRef className);
 };
 
 } // namespace ponder

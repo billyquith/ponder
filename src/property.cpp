@@ -39,7 +39,7 @@ Property::~Property()
 {
 }
 
-const std::string& Property::name() const
+IdRef Property::name() const
 {
     return m_name;
 }
@@ -94,7 +94,7 @@ bool Property::isWritable() const
     return true;
 }
 
-Property::Property(const std::string& name, ValueType type)
+Property::Property(IdRef name, ValueType type)
     : m_name(name)
     , m_type(type)
     , m_readable(true)

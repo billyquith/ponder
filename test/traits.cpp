@@ -44,12 +44,12 @@
 
 namespace TraitsTest
 {
-    static void foo() {}
+    static void func() {}
 
-    static int bar(float) {return 0;}
+    static int funcArgReturn(float) {return 0;}
 
     struct Callable {
-        void operator () () {}
+        void operator () (void) {}
     };
 
     struct NonCallable {
@@ -59,7 +59,7 @@ namespace TraitsTest
     struct Methods
     {
         void foo() {}
-        std::string arr[10];
+        ponder::String arr[10];
         int arri[7];
         std::array<int, 6> arrv;
     
@@ -91,32 +91,33 @@ TEST_CASE("C++11 features and syntax")
 {
     SECTION("function test")
     {
-        foo(); bar(0.f); // to stop unused warning
+        func(); funcArgReturn(0.f); // to stop unused warning
         
-        static_assert(std::is_function<decltype(foo)>::value, "std::is_function failed");
+        static_assert(std::is_function<decltype(func)>::value, "std::is_function failed");
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
         static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
         static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");    
-        static_assert(std::is_function< std::function<void()>() >::value, "std::is_function failed");
+        static_assert(std::is_function< std::function<void()>() >::value,
+                      "std::is_function failed");
     }
     
     SECTION("function result")
     {
+        static_assert(std::is_void< std::result_of<decltype(func)& ()>::type >::value,
+                      "std::result_of failed");
+        static_assert(std::is_void< std::result_of<decltype(&func) ()>::type >::value,
+                      "std::result_of failed");
         typedef void (*foo_t)();
-        static_assert(std::is_void< std::result_of<decltype(foo)& ()>::type >::value,
-                      "std::result_of failed");
-        static_assert(std::is_void< std::result_of<decltype(&foo) ()>::type >::value,
-                      "std::result_of failed");
         static_assert(std::is_void< std::result_of<foo_t ()>::type >::value,
                       "std::result_of failed");
         static_assert(std::is_pointer<foo_t>::value, "std::is_pointer failed");
 
         typedef int (*bar_t)(float);
-        static_assert(std::is_same< std::result_of<decltype(bar)& (float)>::type, int >::value,
-                      "std::result_of failed");
-        static_assert(std::is_same< std::result_of<decltype(&bar) (float)>::type, int >::value,
-                      "std::result_of failed");
+        static_assert(std::is_same< std::result_of<decltype(funcArgReturn)& (float)>::type,
+                                    int >::value, "std::result_of failed");
+        static_assert(std::is_same< std::result_of<decltype(&funcArgReturn) (float)>::type,
+                                    int >::value, "std::result_of failed");
         static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value,
                       "std::result_of failed");
     }
@@ -134,68 +135,169 @@ TEST_CASE("Ponder has function traits")
 {
     SECTION("what is not a function")
     {
-        static_assert( ! ponder::detail::FunctionTraits<int>::isFunction,
+        using ponder::detail::FunctionTraits;
+        
+        static_assert( ! FunctionTraits<int>::isFunction,   "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<int*>::isFunction,  "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
+        static_assert( ! FunctionTraits<ponder::String>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<float>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<int*>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<char*>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<int**>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! ponder::detail::FunctionTraits<std::string>::isFunction,
+        static_assert( ! FunctionTraits<NonCallable>::isFunction,
                       "FunctionTraits<>::isFunction failed");
     }
     
-    SECTION("what is a function")
+    SECTION("what is not a function types")
     {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        static_assert(FunctionTraits<int>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<float>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int*>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<char*>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int**>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<ponder::String>::which == FunctionType::None,
+                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<NonCallable>::which == FunctionType::None,
+                      "FunctionTraits<>::isFunction failed");
+    }
+    
+    SECTION("type function")
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
         static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<void(void)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
         static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<void(int)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
         static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<int(void)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
         static_assert(ponder::detail::FunctionTraits<int(char*)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-
-        static_assert(ponder::detail::FunctionTraits<decltype(foo)>::isFunction,
+        static_assert(FunctionTraits<int(char*)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(func)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<decltype(bar)>::isFunction,
+        static_assert(FunctionTraits<decltype(func)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(funcArgReturn)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-
-        static_assert( ! ponder::detail::FunctionTraits<NonCallable>::isFunction,
+        static_assert(FunctionTraits<decltype(funcArgReturn)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+    }
+    
+    SECTION("type member function")  // T(C::*)()
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        static_assert(FunctionTraits<void(Methods::*)()>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        // Only reports: function and pointer-to-member types & functors
-        static_assert( ! ponder::detail::FunctionTraits<Callable>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-
-        static_assert(ponder::detail::FunctionTraits<void(Methods::*)()>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<void(Methods::*)()>::which == FunctionType::MemberFunction,
+                      "FunctionTraits<>::which failed");
+        
         void (Methods::*meth_t)() = &Methods::foo;
-        static_assert(ponder::detail::FunctionTraits<decltype(meth_t)>::isFunction,
+        static_assert(FunctionTraits<decltype(meth_t)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(meth_t)>::which == FunctionType::MemberFunction,
+                      "FunctionTraits<>::which failed");
+    }
 
+    SECTION("type member object")   // T(C::*)
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
         struct Members {
             int m;
             float a[5];
         };
 
-        // member pointers
-        static_assert(ponder::detail::FunctionTraits<int Members::*>::isFunction,
+        static_assert(FunctionTraits<int Members::*>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<float (Members::*)[]>::isFunction,
+        static_assert(FunctionTraits<int Members::*>::which == FunctionType::MemberObject,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<float (Members::*)[]>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<decltype(&Members::a)>::isFunction,
+        static_assert(FunctionTraits<float (Members::*)[]>::which == FunctionType::MemberObject,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(&Members::a)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(&Members::a)>::which == FunctionType::MemberObject,
+                      "FunctionTraits<>::which failed");
+    }
+    
+    SECTION("type function wrapper")  // std::function<>
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        static_assert(FunctionTraits<std::function<void()>>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+            FunctionTraits<std::function<void()>>::which == FunctionType::FunctionWrapper,
+            "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<std::function<int(float,int)>>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+            FunctionTraits<std::function<int(float,int)>>::which == FunctionType::FunctionWrapper,
+            "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<std::function<char*(char[])>>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+            FunctionTraits<std::function<char*(char[])>>::which == FunctionType::FunctionWrapper,
+            "FunctionTraits<>::which failed");
+    }
 
-        // std::function<>
-        static_assert(ponder::detail::FunctionTraits<std::function<void()>>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<std::function<int(float,int)>>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(ponder::detail::FunctionTraits<std::function<char*(char[])>>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
+    SECTION("type lambda")  // [] () {}
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+        
+        auto l1 = [] () {};
+        auto l2 = [] (int&) { return "hello"; };
+        auto l3 = [] (float, float[]) -> float { return 3.1415927f; };
+        
+        static_assert(FunctionTraits<decltype(l1)>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+                      FunctionTraits<decltype(l1)>::which == FunctionType::Lambda,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(l2)>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+                      FunctionTraits<decltype(l2)>::which == FunctionType::Lambda,
+                      "FunctionTraits<>::which failed");
+        
+        static_assert(FunctionTraits<decltype(l3)>::isFunction,
+                      "FunctionTraits<>::which failed");
+        static_assert(
+                      FunctionTraits<decltype(l3)>::which == FunctionType::Lambda,
+                      "FunctionTraits<>::which failed");
     }
 }
 
@@ -203,50 +305,58 @@ TEST_CASE("Ponder has object traits")
 {
     SECTION("types can be tested for being writable")
     {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
         // is writable
-        static_assert(ponder::detail::ObjectTraits<int*>::isWritable,
+        static_assert(ObjectTraits<int*>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert(ponder::detail::ObjectTraits<char**>::isWritable,
+        static_assert(ObjectTraits<char**>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
 
         // is not writable
-        static_assert( ! ponder::detail::ObjectTraits<int>::isWritable,
+//        static_assert(ObjectTraits<const int>::isWritable,
+//                      "ObjectTraits<>::isWriteable failed");  FIX ?
+        static_assert( ! ObjectTraits<int>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ponder::detail::ObjectTraits<const int*>::isWritable,
+        static_assert( ! ObjectTraits<const int*>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ponder::detail::ObjectTraits<const char * const *>::isWritable,
+        static_assert( ! ObjectTraits<const char * const *>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ponder::detail::ObjectTraits<void(...)>::isRef,
+        static_assert( ! ObjectTraits<void(...)>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<decltype(intArray)>::isWritable,
+        static_assert( ! ObjectTraits<decltype(intArray)>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
     }
 
     SECTION("types can be references")
     {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+
         // is ref
-        static_assert(ponder::detail::ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<char**>::isRef, "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<decltype(intArray)>::isRef,
+        static_assert(ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
+        static_assert(ObjectTraits<char**>::isRef, "ObjectTraits<>::isRef failed");
+        static_assert(ObjectTraits<decltype(intArray)>::isRef,
                       "ObjectTraits<>::isRef failed");
 
         static_assert(ponder::detail::ObjectTraits<int&>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<int&>::which == 4,
+        static_assert(ponder::detail::ObjectTraits<int&>::which == ObjectType::Reference,
                       "ObjectTraits<>::isRef failed");
         static_assert(ponder::detail::ObjectTraits<int*&>::isRef,
                       "ObjectTraits<>::isRef failed");
 
         // is not ref
-        static_assert( ! ponder::detail::ObjectTraits<int>::isRef,
+        static_assert( ! ObjectTraits<int>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<float>::isRef,
+        static_assert( ! ObjectTraits<float>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<void(...)>::isRef,
+        static_assert( ! ObjectTraits<void(...)>::isRef,
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<Callable>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<Callable>::which == 0,
+        static_assert(ponder::detail::ObjectTraits<Callable>::which != ObjectType::Reference,
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<NonCallable>::isRef,
                       "ObjectTraits<>::isRef failed");
@@ -254,30 +364,34 @@ TEST_CASE("Ponder has object traits")
 
     SECTION("types can be converted to reference types")
     {
+        using ponder::detail::ObjectTraits;
+
         static_assert(
-            std::is_same<int&, ponder::detail::ObjectTraits<int>::RefReturnType>::value,
+            std::is_same<int&, ObjectTraits<int>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
         static_assert(
-            std::is_same<float&, ponder::detail::ObjectTraits<const float>::RefReturnType>::value,
+            std::is_same<float&, ObjectTraits<const float>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
     
         // ref return
         static_assert(
-            std::is_same<int*, ponder::detail::ObjectTraits<int*>::RefReturnType>::value,
+            std::is_same<int*, ObjectTraits<int*>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
         static_assert(
             std::is_same<const int*,
-                         ponder::detail::ObjectTraits<const int*>::RefReturnType>::value,
+                         ObjectTraits<const int*>::RefReturnType>::value,
             "ObjectTraits<>::RefReturnType failed");
     }
 
     SECTION("types can be pointers")
     {
+        using ponder::detail::ObjectTraits;
+
         // pointer type
-        static_assert(std::is_same<int*, ponder::detail::ObjectTraits<int*>::PointerType>::value,
+        static_assert(std::is_same<int*, ObjectTraits<int*>::PointerType>::value,
                       "ObjectTraits<>::PointerType failed");
         static_assert(
-            std::is_same<const int*, ponder::detail::ObjectTraits<const int*>::PointerType>::value,
+            std::is_same<const int*, ObjectTraits<const int*>::PointerType>::value,
             "ObjectTraits<>::PointerType failed");
     }
 
@@ -297,9 +411,6 @@ TEST_CASE("Ponder has object traits")
         static_assert(IsSmartPointer<TraitsTest::TemplateClass<int>, int>::value == false,
                       "IsSmartPointer<> failed");
 
-        static_assert(IsSmartPointer<std::auto_ptr<int>, int>::value == true,
-                      "IsSmartPointer<> failed");
-
         static_assert(IsSmartPointer<std::unique_ptr<int>, int>::value == true,
                       "IsSmartPointer<> failed");
 
@@ -310,7 +421,7 @@ TEST_CASE("Ponder has object traits")
     SECTION("types have a raw data type")
     {
         using ponder::detail::ObjectTraits;
-        
+
         static_assert(std::is_same<int, ObjectTraits<int>::DataType>::value,
                       "ObjectTraits<>::DataType failed");
         static_assert(std::is_same<int, ObjectTraits<int*>::DataType>::value,
@@ -324,7 +435,96 @@ TEST_CASE("Ponder has object traits")
         static_assert(
             std::is_same<int, ObjectTraits<decltype(intArray)>::DataType>::value,
             "ObjectTraits<>::DataType failed");
-    }    
+    }
+}
+
+
+TEST_CASE("Object traits are classfied")
+{
+    SECTION("type object")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int>::which == ObjectType::Object, "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float>::which == ObjectType::Object, "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods>::which == ObjectType::Object, "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<const int>::which == ObjectType::Object, "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<const float>::which == ObjectType::Object, "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<const Methods>::which == ObjectType::Object, "ObjectTraits<>::which");
+        
+        static_assert(ObjectTraits<int*>::which != ObjectType::Object, "ObjectTraits<>::which");
+    }
+
+    SECTION("type pointer")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int*>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float*>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods*>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+
+        static_assert(ObjectTraits<int**>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float**>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods**>::which == ObjectType::Pointer,
+                      "ObjectTraits<>::which");
+    }
+    
+    SECTION("type reference")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        
+        static_assert(ObjectTraits<const int&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<const float&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<const Methods&>::which == ObjectType::Reference,
+                      "ObjectTraits<>::which");
+    }
+    
+    SECTION("type smart pointer")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::which == ObjectType::SmartPointer,
+//                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<std::shared_ptr<Methods>>::which == ObjectType::SmartPointer,
+                      "ObjectTraits<>::which");
+    }
+
+    SECTION("type builtin array")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::detail::ObjectType;
+        
+        static_assert(ObjectTraits<int[1]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[1000]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<float[1]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<Methods[10]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[10][10]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[10][20][30]>::which == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::which");
+    }
 }
 
 TEST_CASE("Type testing")
@@ -426,107 +626,107 @@ TEST_CASE("Lexical cast is used")
     SECTION("lexical_cast_to_string")
     {
         const unsigned int ui = 234;
-        REQUIRE(ponder::detail::convert<std::string>(ui) == std::to_string(ui));
+        REQUIRE(ponder::detail::convert<ponder::String>(ui) == std::to_string(ui));
     
         const int i = -17;
-        REQUIRE(ponder::detail::convert<std::string>(i) == std::to_string(i));
+        REQUIRE(ponder::detail::convert<ponder::String>(i) == std::to_string(i));
     
         const float f = 108.75f;
-        REQUIRE(ponder::detail::convert<std::string>(f) == "108.75");
+        REQUIRE(ponder::detail::convert<ponder::String>(f) == "108.75");
 
         const double d = 108.125;
-        REQUIRE(ponder::detail::convert<std::string>(d) == "108.125");
+        REQUIRE(ponder::detail::convert<ponder::String>(d) == "108.125");
 
         const bool bt = true, bf = false;
-        REQUIRE(ponder::detail::convert<std::string>(bt) == "1");
-        REQUIRE(ponder::detail::convert<std::string>(bf) == "0");
+        REQUIRE(ponder::detail::convert<ponder::String>(bt) == "1");
+        REQUIRE(ponder::detail::convert<ponder::String>(bf) == "0");
     }
 
     SECTION("lexical_cast_to_bool")
     {
-        const std::string b1("1");
+        const ponder::String b1("1");
         REQUIRE(ponder::detail::convert<bool>(b1) == true);
 
-        const std::string b2("0");
+        const ponder::String b2("0");
         REQUIRE(ponder::detail::convert<bool>(b2) == false);
 
-        const std::string bt("true");
+        const ponder::String bt("true");
         REQUIRE(ponder::detail::convert<bool>(bt) == true);
 
-        const std::string bf("false");
+        const ponder::String bf("false");
         REQUIRE(ponder::detail::convert<bool>(bf) == false);
     }
 
     SECTION("lexical_cast_to_char")
     {
-        REQUIRE(ponder::detail::convert<char>(std::string("0")) == '0');
-        REQUIRE(ponder::detail::convert<char>(std::string("g")) == 'g');
-        REQUIRE_THROWS_AS(ponder::detail::convert<char>(std::string()),
+        REQUIRE(ponder::detail::convert<char>(ponder::String("0")) == '0');
+        REQUIRE(ponder::detail::convert<char>(ponder::String("g")) == 'g');
+        REQUIRE_THROWS_AS(ponder::detail::convert<char>(ponder::String()),
                           ponder::detail::bad_conversion);
-        REQUIRE_THROWS_AS(ponder::detail::convert<char>(std::string("27")),
+        REQUIRE_THROWS_AS(ponder::detail::convert<char>(ponder::String("27")),
                           ponder::detail::bad_conversion);
     
-        REQUIRE(ponder::detail::convert<unsigned char>(std::string("0")) == '0');
-        REQUIRE(ponder::detail::convert<unsigned char>(std::string("g")) == 'g');
-        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(std::string()),
+        REQUIRE(ponder::detail::convert<unsigned char>(ponder::String("0")) == '0');
+        REQUIRE(ponder::detail::convert<unsigned char>(ponder::String("g")) == 'g');
+        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(ponder::String()),
                           ponder::detail::bad_conversion);
-        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(std::string("27")),
+        REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(ponder::String("27")),
                           ponder::detail::bad_conversion);
     }
 
     SECTION("lexical_cast_to_short")
     {
-        REQUIRE(ponder::detail::convert<short>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<short>(std::string("2600")) == 2600);
-        REQUIRE(ponder::detail::convert<short>(std::string("-27")) == -27);
+        REQUIRE(ponder::detail::convert<short>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<short>(ponder::String("2600")) == 2600);
+        REQUIRE(ponder::detail::convert<short>(ponder::String("-27")) == -27);
     
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("2600")) == 2600u);
-        REQUIRE(ponder::detail::convert<unsigned short>(std::string("-27"))
+        REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("2600")) == 2600u);
+        REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("-27"))
                 == static_cast<unsigned short>(-27));
     }
 
     SECTION("lexical_cast_to_int")
     {
-        REQUIRE(ponder::detail::convert<int>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<int>(std::string("123456789")) == 123456789);
-        REQUIRE(ponder::detail::convert<int>(std::string("-27")) == -27);
+        REQUIRE(ponder::detail::convert<int>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<int>(ponder::String("123456789")) == 123456789);
+        REQUIRE(ponder::detail::convert<int>(ponder::String("-27")) == -27);
 
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("123456789")) == 123456789u);
-        REQUIRE(ponder::detail::convert<unsigned int>(std::string("-27"))
+        REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("123456789")) == 123456789u);
+        REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("-27"))
                 == static_cast<unsigned int>(-27));
     
-        REQUIRE_THROWS_AS(ponder::detail::convert<int>(std::string("bad number")),
+        REQUIRE_THROWS_AS(ponder::detail::convert<int>(ponder::String("bad number")),
                           ponder::detail::bad_conversion);
     }
 
     SECTION("lexical_cast_to_long")
     {
-        REQUIRE(ponder::detail::convert<long long>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<long long>(std::string("1125899906842624"))
+        REQUIRE(ponder::detail::convert<long long>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<long long>(ponder::String("1125899906842624"))
                 == 1125899906842624ll);
-        REQUIRE(ponder::detail::convert<long long>(std::string("-27")) == -27);
+        REQUIRE(ponder::detail::convert<long long>(ponder::String("-27")) == -27);
     
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("1125899906842624"))
+        REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("1125899906842624"))
                 == 1125899906842624ull);
-        REQUIRE(ponder::detail::convert<unsigned long long>(std::string("-27"))
+        REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("-27"))
                 == static_cast<unsigned long long>(-27));
     }
 
     SECTION("lexical_cast_to_float")
     {
-        REQUIRE(ponder::detail::convert<float>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<float>(std::string("100.25")) == 100.25f);
-        REQUIRE(ponder::detail::convert<float>(std::string("-27.75")) == -27.75f);
+        REQUIRE(ponder::detail::convert<float>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<float>(ponder::String("100.25")) == 100.25f);
+        REQUIRE(ponder::detail::convert<float>(ponder::String("-27.75")) == -27.75f);
     }
 
     SECTION("lexical_cast_to_double")
     {
-        REQUIRE(ponder::detail::convert<double>(std::string("0")) == 0);
-        REQUIRE(ponder::detail::convert<double>(std::string("100.25")) == 100.25);
-        REQUIRE(ponder::detail::convert<double>(std::string("-27.75")) == -27.75);
+        REQUIRE(ponder::detail::convert<double>(ponder::String("0")) == 0);
+        REQUIRE(ponder::detail::convert<double>(ponder::String("100.25")) == 100.25);
+        REQUIRE(ponder::detail::convert<double>(ponder::String("-27.75")) == -27.75);
     }
 }
 

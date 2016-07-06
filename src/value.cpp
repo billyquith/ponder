@@ -67,7 +67,7 @@ bool Value::operator < (const Value& other) const
 std::istream& operator >> (std::istream& stream, Value& value)
 {
     // Use the string conversion
-    std::string str;
+    Id str;
     if (stream >> str)
         value = str;
 
@@ -77,7 +77,7 @@ std::istream& operator >> (std::istream& stream, Value& value)
 std::ostream& operator << (std::ostream& stream, const Value& value)
 {
     // Use the string conversion
-    return stream << value.to<std::string>();
+    return stream << value.to<Id>();
 }
 
 } // namespace ponder

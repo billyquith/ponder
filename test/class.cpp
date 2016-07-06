@@ -32,6 +32,7 @@
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 
+// See notes on the tests below.
 #define TEST_VIRTUAL 0
 
 namespace ClassTest
@@ -85,7 +86,7 @@ namespace ClassTest
         T testMember_;
     };
     
-    
+    // See notes on the tests below.
     class VirtualBase
     {
     public:
@@ -166,7 +167,7 @@ namespace ClassTest
 
     void undeclare_temp()
     {
-        ponder::Class::undeclare(ponder::classByType<TemporaryRegistration>());
+        ponder::Class::undeclare<TemporaryRegistration>();
     }
 }
 
@@ -298,7 +299,7 @@ TEST_CASE("Class members can be inspected")
         {
             switch (index++) {
                 case 0:
-                    REQUIRE(prop.name() == std::string("prop"));
+                    REQUIRE(prop.name() == ponder::String("prop"));
                     break;
                 default: ;
             }
@@ -312,7 +313,7 @@ TEST_CASE("Class members can be inspected")
         {
             switch (index++) {
                 case 0:
-                    REQUIRE(func.name() == std::string("func"));
+                    REQUIRE(func.name() == ponder::String("func"));
                     break;
                 default: ;
             }
@@ -417,6 +418,9 @@ TEST_CASE("Classes can be templates")
     auto const& obj = metaclass.construct();
 }
 
+// Classes declared using Ponder *can declare* virtually inherited base classes, but the casting
+// of these is unrealiale due to the compiler specific nature of their implementation. This
+// test is therefore optional as it fails on some platforms, e.g. Windows debug.
 #if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")
 {

@@ -34,13 +34,13 @@
 
 namespace ponder
 {
-    
-void Enum::undeclare(const Enum& me)
+
+Enum::Enum(IdRef name)
+    :   m_name(name)
 {
-    detail::EnumManager::instance().removeClass(me);
 }
-    
-const std::string& Enum::name() const
+
+IdRef Enum::name() const
 {
     return m_name;
 }
@@ -60,7 +60,7 @@ Enum::Pair Enum::pair(std::size_t index) const
     return Pair(it->first, it->second);
 }
 
-bool Enum::hasName(const std::string& name) const
+bool Enum::hasName(IdRef name) const
 {
     return m_enums.containsKey(name);
 }
@@ -70,7 +70,7 @@ bool Enum::hasValue(EnumValue value) const
     return m_enums.containsValue(value);
 }
 
-const std::string& Enum::name(EnumValue value) const
+IdRef Enum::name(EnumValue value) const
 {
     auto it = m_enums.findValue(value);
     
@@ -80,7 +80,7 @@ const std::string& Enum::name(EnumValue value) const
     return it->first;
 }
 
-Enum::EnumValue Enum::value(const std::string& name) const
+Enum::EnumValue Enum::value(IdRef name) const
 {
     auto it = m_enums.findKey(name);
 
@@ -90,19 +90,14 @@ Enum::EnumValue Enum::value(const std::string& name) const
     return it->second;
 }
 
-bool Enum::operator==(const Enum& other) const
+bool Enum::operator == (const Enum& other) const
 {
     return name() == other.name();
 }
 
-bool Enum::operator!=(const Enum& other) const
+bool Enum::operator != (const Enum& other) const
 {
     return name() != other.name();
-}
-
-Enum::Enum(const std::string& name)
-    : m_name(name)
-{
 }
 
 } // namespace ponder

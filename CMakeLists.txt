@@ -98,6 +98,7 @@ set(SRC_HEADERS
     include/ponder/detail/functiontraits.hpp
     include/ponder/detail/getter.hpp
     include/ponder/detail/getter.inl
+    include/ponder/detail/idtraits.hpp
     include/ponder/detail/objectholder.hpp
     include/ponder/detail/objectholder.inl
     include/ponder/detail/objecttraits.hpp
@@ -106,6 +107,7 @@ set(SRC_HEADERS
     include/ponder/detail/rawtype.hpp
     include/ponder/detail/simplepropertyimpl.hpp
     include/ponder/detail/simplepropertyimpl.inl
+    include/ponder/detail/string_view.hpp
     include/ponder/detail/typeid.hpp
     include/ponder/detail/userpropertyimpl.hpp
     include/ponder/detail/userpropertyimpl.inl
@@ -114,7 +116,6 @@ set(SRC_HEADERS
     include/ponder/detail/valueprovider.hpp
     include/ponder/detail/variant.hpp
     include/ponder/detail/variant_recursive_wrapper.hpp
-    include/ponder/detail/yesnotype.hpp
     # Qt
     include/ponder/qt/qlist.hpp
     include/ponder/qt/qstring.hpp

@@ -44,7 +44,7 @@ EnumManager& EnumManager::instance()
     return manager;
 }
 
-Enum& EnumManager::addClass(const std::string& id)
+Enum& EnumManager::addClass(IdRef id)
 {
     // First make sure that the enum doesn't already exist
     if (enumExists(id))
@@ -56,7 +56,7 @@ Enum& EnumManager::addClass(const std::string& id)
     Enum* newEnum = new Enum(id);
 
     // Insert it into the table
-    m_enums.insert(std::make_pair(id, newEnum));
+    m_enums.insert(id, newEnum);
 
     // Notify observers
     notifyEnumAdded(*newEnum);
@@ -65,18 +65,19 @@ Enum& EnumManager::addClass(const std::string& id)
     return *newEnum;
 }
     
-void EnumManager::removeClass(const Enum& me)
+void EnumManager::removeClass(IdRef id)
 {
-    auto it = m_enums.find(me.name());
-    
+    auto it = m_enums.findKey(id);
     if (it == m_enums.end())
-        PONDER_ERROR(EnumNotFound(me.name()));
+        PONDER_ERROR(EnumNotFound(id));
+    
+    Enum *en = (*it).value();
     
     // Notify observers
-    notifyEnumRemoved(me);
+    notifyEnumRemoved(*en);
 
-    delete it->second;
-    m_enums.erase(it);
+    delete en;
+    m_enums.erase(id);
 }
 
 std::size_t EnumManager::count() const
@@ -96,24 +97,24 @@ const Enum& EnumManager::getByIndex(std::size_t index) const
     return *it->second;
 }
 
-const Enum& EnumManager::getById(const std::string& id) const
+const Enum& EnumManager::getById(IdRef id) const
 {
-    EnumTable::const_iterator it = m_enums.find(id);
+    auto it = m_enums.findKey(id);
     if (it == m_enums.end())
         PONDER_ERROR(EnumNotFound(id));
 
     return *it->second;
 }
 
-const Enum* EnumManager::getByIdSafe(const std::string& id) const
+const Enum* EnumManager::getByIdSafe(IdRef id) const
 {
-    EnumTable::const_iterator it = m_enums.find(id);
+    auto it = m_enums.findKey(id);
     return it == m_enums.end() ? nullptr : it->second;
 }
 
-bool EnumManager::enumExists(const std::string& id) const
+bool EnumManager::enumExists(IdRef id) const
 {
-    return m_enums.find(id) != m_enums.end();
+    return m_enums.findKey(id) != m_enums.end();
 }
 
 EnumManager::EnumManager()

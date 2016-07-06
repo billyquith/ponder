@@ -56,7 +56,7 @@ namespace ponder
  * ponder::Value v4 = myObject;
  *
  * bool        b = v1; // b == true
- * std::string s = v2; // s == "10"
+ * String      s = v2; // s == "10"
  * float       f = v3; // f == 24.5
  * MyObject    o = v4; // o == myObject
  * \endcode
@@ -196,7 +196,7 @@ public:
 private:
 
     typedef mapbox::util::variant<NoType, bool, long, double,
-                                  std::string, EnumObject, UserObject> Variant;
+                                  ponder::String, EnumObject, UserObject> Variant;
 
     Variant m_value; ///< Stored value
     ValueType m_type; ///< Ponder type of the value

@@ -32,16 +32,16 @@ namespace ponder
 {
 
 template <typename T>
-T Error::prepare(T error, const std::string& file, int line, const std::string& function)
+T Error::prepare(T error, const String& file, int line, const String& function)
 {
-    error.m_location = file + " (" + str(line) + " ) - " + function;
+    error.m_location = String(file) + " (" + str(line) + " ) - " + function;
     return error;
 }
 
 template <typename T>
-std::string Error::str(T value)
+ponder::String Error::str(T value)
 {
-    return detail::convert<std::string>(value);
+    return detail::convert<ponder::String>(value);
 }
 
 } // namespace ponder

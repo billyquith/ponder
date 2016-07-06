@@ -41,33 +41,22 @@
 // current operating system and build mode
 #if defined(_WIN32) || defined(__WIN32__)
 
-    #ifndef PONDER_STATIC
-
+#   ifndef PONDER_STATIC
         // Windows platforms need specific keywords for import / export
-        #ifdef PONDER_EXPORTS
-
+#       ifdef PONDER_EXPORTS
             // From DLL side, we must export
-            #define PONDER_API __declspec(dllexport)
-
-        #else
-
+#           define PONDER_API __declspec(dllexport)
+#       else
             // From client application side, we must import
-            #define PONDER_API __declspec(dllimport)
-
-        #endif
-
-    #else
-
+#           define PONDER_API __declspec(dllimport)
+#       endif
+#   else
         // No specific directive needed for static build
-        #define PONDER_API
-
-    #endif
-
+#       define PONDER_API
+#   endif
 #else
-
     // Other platforms don't need to define anything
-    #define PONDER_API
-
+#   define PONDER_API
 #endif
 
 
@@ -85,4 +74,13 @@
     #define PONDER_WORKAROUND_GCC_N2350 0
 #endif
 
+// If user doesn't define traits use the default:
+#ifndef PONDER_ID_TRAITS_USER
+//#define PONDER_ID_TRAITS_STD_STRING       // Use std::string and const std::string&
+#define PONDER_ID_TRAITS_STRING_VIEW      // Use std::string and ponder::string_view
+#endif // PONDER_ID_TRAITS_USER
+
+#include "detail/idtraits.hpp"
+
 #endif // PONDER_CONFIG_HPP
+

@@ -53,7 +53,7 @@ public:
      * \param name Name of the property
      * \param propClass Eumeration the property is bound to
      */
-    UserProperty(const std::string& name, const Class& propClass);
+    UserProperty(IdRef name, const Class& propClass);
 
     /**
      * \brief Destructor

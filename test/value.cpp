@@ -88,7 +88,7 @@ namespace ValueTest
             return ponder::ValueType::Real;
         }
         
-        ponder::ValueType operator()(const std::string&)
+        ponder::ValueType operator()(const ponder::String&)
         {
             return ponder::ValueType::String;
         }
@@ -139,7 +139,7 @@ TEST_CASE("Ponder has variant values")
     ponder::Value floatValue   = 1.f;
     ponder::Value doubleValue  = 1.;
     ponder::Value cstringValue = "1";
-    ponder::Value stringValue  = std::string("1");
+    ponder::Value stringValue  = ponder::String("1");
     ponder::Value enumValue    = One;
     ponder::Value objectValue  = object1;
     
@@ -176,7 +176,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(boolValue.to<unsigned long>() ==  1);
         REQUIRE(boolValue.to<float>() == Approx(1.f).epsilon(1E-5f));
         REQUIRE(boolValue.to<double>() == Approx(1.).epsilon(1E-5));
-        REQUIRE(boolValue.to<std::string>() ==    "1");
+        REQUIRE(boolValue.to<ponder::String>() ==    "1");
         REQUIRE(boolValue.to<MyEnum>() ==         One);
         REQUIRE_THROWS_AS(boolValue.to<MyClass>(), ponder::BadType);
 
@@ -191,7 +191,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(boolValue.isCompatible<unsigned long>() ==  true);
         REQUIRE(boolValue.isCompatible<float>() ==          true);
         REQUIRE(boolValue.isCompatible<double>() ==         true);
-        REQUIRE(boolValue.isCompatible<std::string>() ==    true);
+        REQUIRE(boolValue.isCompatible<ponder::String>() ==    true);
         REQUIRE(boolValue.isCompatible<MyEnum>() ==         true);
         REQUIRE(boolValue.isCompatible<MyClass>() ==        false);
     }
@@ -209,7 +209,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(intValue.to<unsigned long>() ==  1);
         REQUIRE(intValue.to<float>() == Approx(1.f).epsilon(1E-5f));
         REQUIRE(intValue.to<double>() == Approx(1.).epsilon(1E-5));
-        REQUIRE(intValue.to<std::string>() ==    "1");
+        REQUIRE(intValue.to<ponder::String>() ==    "1");
         REQUIRE(intValue.to<MyEnum>() ==         One);
         REQUIRE_THROWS_AS(intValue.to<MyClass>(),        ponder::BadType);
 
@@ -224,7 +224,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(intValue.isCompatible<unsigned long>() ==  true);
         REQUIRE(intValue.isCompatible<float>() ==          true);
         REQUIRE(intValue.isCompatible<double>() ==         true);
-        REQUIRE(intValue.isCompatible<std::string>() ==    true);
+        REQUIRE(intValue.isCompatible<ponder::String>() ==    true);
         REQUIRE(intValue.isCompatible<MyEnum>() ==         true);
         REQUIRE(intValue.isCompatible<MyClass>() ==        false);
     }
@@ -242,7 +242,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(doubleValue.to<unsigned long>() ==  1);
         REQUIRE(doubleValue.to<float>() == Approx(1.f).epsilon(1E-5f));
         REQUIRE(doubleValue.to<double>() == Approx(1.).epsilon(1E-5));
-        REQUIRE(doubleValue.to<std::string>() ==    "1");
+        REQUIRE(doubleValue.to<ponder::String>() ==    "1");
         REQUIRE(doubleValue.to<MyEnum>() ==         One);
         REQUIRE_THROWS_AS(doubleValue.to<MyClass>(), ponder::BadType);
 
@@ -257,7 +257,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(doubleValue.isCompatible<unsigned long>() ==  true);
         REQUIRE(doubleValue.isCompatible<float>() ==          true);
         REQUIRE(doubleValue.isCompatible<double>() ==         true);
-        REQUIRE(doubleValue.isCompatible<std::string>() ==    true);
+        REQUIRE(doubleValue.isCompatible<ponder::String>() ==    true);
         REQUIRE(doubleValue.isCompatible<MyEnum>() ==         true);
         REQUIRE(doubleValue.isCompatible<MyClass>() ==        false);
     }
@@ -275,7 +275,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(stringValue.to<unsigned long>() ==  1);
         REQUIRE(stringValue.to<float>() == Approx(1.f).epsilon(1E-5f));
         REQUIRE(stringValue.to<double>() == Approx(1.).epsilon(1E-5));
-        REQUIRE(stringValue.to<std::string>() ==    "1");
+        REQUIRE(stringValue.to<ponder::String>() ==    "1");
         REQUIRE(stringValue.to<MyEnum>() ==         One);
         REQUIRE_THROWS_AS(stringValue.to<MyClass>(), ponder::BadType);
 
@@ -290,7 +290,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(stringValue.isCompatible<unsigned long>() ==  true);
         REQUIRE(stringValue.isCompatible<float>() ==          true);
         REQUIRE(stringValue.isCompatible<double>() ==         true);
-        REQUIRE(stringValue.isCompatible<std::string>() ==    true);
+        REQUIRE(stringValue.isCompatible<ponder::String>() ==    true);
         REQUIRE(stringValue.isCompatible<MyEnum>() ==         true);
         REQUIRE(stringValue.isCompatible<MyClass>() ==        false);
     }
@@ -337,7 +337,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(badStringValue.isCompatible<unsigned long>() ==  false);
         REQUIRE(badStringValue.isCompatible<float>() ==          false);
         REQUIRE(badStringValue.isCompatible<double>() ==         false);
-        REQUIRE(badStringValue.isCompatible<std::string>() ==    true);
+        REQUIRE(badStringValue.isCompatible<ponder::String>() ==    true);
         REQUIRE(badStringValue.isCompatible<MyEnum>() ==         false);
         REQUIRE(badStringValue.isCompatible<MyClass>() ==        false);
     }
@@ -355,7 +355,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(enumValue.to<unsigned long>() ==  1);
         REQUIRE(enumValue.to<float>() == Approx(1.f).epsilon(1E-5f));
         REQUIRE(enumValue.to<double>() == Approx(1.).epsilon(1E-5));
-        REQUIRE(enumValue.to<std::string>() ==    "One");
+        REQUIRE(enumValue.to<ponder::String>() ==    "One");
         REQUIRE(enumValue.to<MyEnum>() ==         One);
         REQUIRE_THROWS_AS(enumValue.to<MyClass>(), ponder::BadType);
 
@@ -370,7 +370,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(enumValue.isCompatible<unsigned long>() ==  true);
         REQUIRE(enumValue.isCompatible<float>() ==          true);
         REQUIRE(enumValue.isCompatible<double>() ==         true);
-        REQUIRE(enumValue.isCompatible<std::string>() ==    true);
+        REQUIRE(enumValue.isCompatible<ponder::String>() ==    true);
         REQUIRE(enumValue.isCompatible<MyEnum>() ==         true);
         REQUIRE(enumValue.isCompatible<MyClass>() ==        false);
     }
@@ -388,7 +388,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE_THROWS_AS(objectValue.to<unsigned long>(),     ponder::BadType);
         REQUIRE_THROWS_AS(objectValue.to<float>(),             ponder::BadType);
         REQUIRE_THROWS_AS(objectValue.to<double>(),            ponder::BadType);
-        REQUIRE_THROWS_AS(objectValue.to<std::string>(),       ponder::BadType);
+        REQUIRE_THROWS_AS(objectValue.to<ponder::String>(),       ponder::BadType);
         REQUIRE_THROWS_AS(objectValue.to<MyEnum>(),            ponder::BadType);
         REQUIRE(objectValue.to<MyClass>() == object1);
         IS_TRUE(objectValue.to<ponder::UserObject>() == ponder::UserObject(object1));
@@ -404,7 +404,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(objectValue.isCompatible<unsigned long>() ==  false);
         REQUIRE(objectValue.isCompatible<float>() ==          false);
         REQUIRE(objectValue.isCompatible<double>() ==         false);
-        REQUIRE(objectValue.isCompatible<std::string>() ==    false);
+        REQUIRE(objectValue.isCompatible<ponder::String>() ==    false);
         REQUIRE(objectValue.isCompatible<MyEnum>() ==         false);
         REQUIRE(objectValue.isCompatible<MyClass>() ==        true);
     }
@@ -588,10 +588,10 @@ TEST_CASE("Values can be held in containers")
 {
     SECTION("a std::map")
     {
-        std::map<std::string, ponder::Value> testmap;
+        std::map<ponder::String, ponder::Value> testmap;
         ponder::Value value = "Hello";
         testmap["1"] = value;
-        REQUIRE(testmap["1"] == std::string("Hello"));
+        REQUIRE(testmap["1"] == ponder::String("Hello"));
     }
 }
 

@@ -33,7 +33,7 @@ namespace ponder
 namespace detail
 {
 template <typename A>
-ArrayPropertyImpl<A>::ArrayPropertyImpl(const std::string& name, const A& accessor)
+ArrayPropertyImpl<A>::ArrayPropertyImpl(IdRef name, const A& accessor)
     : ArrayProperty(name, mapType<ElementType>(), Mapper::dynamic())
     , m_accessor(accessor)
 {

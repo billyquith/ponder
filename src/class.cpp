@@ -35,12 +35,13 @@
 namespace ponder
 {
 
-void Class::undeclare(const Class& cls)
+Class::Class(IdRef name)
+: m_sizeof(0)
+, m_id(name)
 {
-    detail::ClassManager::instance().removeClass(cls);
-}
-
-const std::string& Class::name() const
+}    
+    
+IdRef Class::name() const
 {
     return m_id;
 }
@@ -75,7 +76,6 @@ void Class::destroy(const UserObject& object) const
 {
     m_destructor(object, false);
     
-    // TODO - look for better solution to this that const_cast.
     const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
@@ -83,7 +83,6 @@ void Class::destruct(const UserObject& object) const
 {
     m_destructor(object, true);
     
-    // TODO - see above
     const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
@@ -106,7 +105,7 @@ std::size_t Class::functionCount() const
     return m_functions.size();
 }
 
-bool Class::hasFunction(const std::string& id) const
+bool Class::hasFunction(IdRef id) const
 {
     return m_functions.containsKey(id);
 }
@@ -123,7 +122,7 @@ const Function& Class::function(std::size_t index) const
     return *it->second;
 }
 
-const Function& Class::function(const std::string& id) const
+const Function& Class::function(IdRef id) const
 {
     FunctionTable::const_iterator it;
     if (!m_functions.tryFind(id, it))
@@ -139,7 +138,7 @@ std::size_t Class::propertyCount() const
     return m_properties.size();
 }
 
-bool Class::hasProperty(const std::string& id) const
+bool Class::hasProperty(IdRef id) const
 {
     return m_properties.containsKey(id);
 }
@@ -156,7 +155,7 @@ const Property& Class::property(std::size_t index) const
     return *it->second;
 }
 
-const Property& Class::property(const std::string& id) const
+const Property& Class::property(IdRef id) const
 {
     PropertyTable::const_iterator it;
     if (!m_properties.tryFind(id, it))
@@ -212,12 +211,6 @@ bool Class::operator != (const Class& other) const
     return m_id != other.m_id;
 }
 
-Class::Class(const std::string& name)
-    : m_sizeof(0)
-    , m_id(name)
-{
-}
-
 int Class::baseOffset(const Class& base) const
 {
     // Check self
@@ -225,12 +218,11 @@ int Class::baseOffset(const Class& base) const
         return 0;
 
     // Search base in the base classes
-    BaseList::const_iterator end = m_bases.end();
-    for (BaseList::const_iterator it = m_bases.begin(); it != end; ++it)
+    for (auto const& b : m_bases)
     {
-        const int offset = it->base->baseOffset(base);
+        const int offset = b.base->baseOffset(base);
         if (offset != -1)
-            return offset + it->offset;
+            return offset + b.offset;
     }
 
     return -1;

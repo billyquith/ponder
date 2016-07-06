@@ -53,7 +53,7 @@ public:
      * \param name Name of the property
      * \param propEnum Eumeration the property is bound to
      */
-    EnumProperty(const std::string& name, const Enum& propEnum);
+    EnumProperty(IdRef name, const Enum& propEnum);
 
     /**
      * \brief Destructor

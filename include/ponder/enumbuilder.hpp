@@ -67,7 +67,7 @@ public:
      * \param name Name of the pair
      * \param value Value of the pair
      */
-    EnumBuilder& value(const std::string& name, long value);
+    EnumBuilder& value(IdRef name, long value);
     
     /**
      * \brief Add a new pair to the metaenum using enum class
@@ -78,7 +78,7 @@ public:
      * \param enumValue Value of the pair
      */
     template <typename E>
-    EnumBuilder& value(const std::string& name, E enumValue)
+    EnumBuilder& value(IdRef name, E enumValue)
     {
         return value(name, static_cast<long>(enumValue));
     }

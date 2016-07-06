@@ -35,10 +35,20 @@
 #include <ponder/detail/rawtype.hpp>
 
 
-namespace ponder
+namespace ponder {
+namespace detail {
+    
+/// Type classification for a type relating to an object.
+enum class ObjectType
 {
-namespace detail
-{
+    None,               // not an object
+    Object,             // a raw object, e.g. int
+    Pointer,            // pointer to an object, e.g. T*
+    Reference,          // reference to an object, e.g. T&
+    SmartPointer,       // smart pointer reference
+    BuiltinArray,       // builtin array, e.g. T[N]
+};
+    
 /**
  * \class ObjectTraits
  *
@@ -75,12 +85,9 @@ namespace detail
 template <typename T, typename E = void>
 struct ObjectTraits
 {
-    enum
-    {
-        isWritable = false,
-        isRef = false,
-        which = 0
-    };
+    static constexpr bool isWritable = false;
+    static constexpr bool isRef = false;
+    static constexpr ObjectType which = ObjectType::Object;
 
     typedef T& RefReturnType;
     typedef typename RawType<T>::Type DataType;
@@ -94,12 +101,9 @@ struct ObjectTraits
 template <typename T>
 struct ObjectTraits<T*>
 {
-    enum
-    {
-        isWritable = !std::is_const<T>::value,
-        isRef = true,
-        which = 1
-    };
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = true;
+    static constexpr ObjectType which = ObjectType::Pointer;
 
     typedef T* RefReturnType;
     typedef T* PointerType;
@@ -115,12 +119,9 @@ struct ObjectTraits<T*>
 template <template <typename> class T, typename U>
 struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
 {
-    enum
-    {
-        isWritable = !std::is_const<U>::value,
-        isRef = true,
-        which = 2
-    };
+    static constexpr bool isWritable = !std::is_const<U>::value;
+    static constexpr bool isRef = true;
+    static constexpr ObjectType which = ObjectType::SmartPointer;
 
     typedef U* RefReturnType;
     typedef U* PointerType;
@@ -136,12 +137,9 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 template <typename T, int N>
 struct ObjectTraits<T[N]>
 {
-    enum
-    {
-        isWritable = false,
-        isRef = true,
-        which = 3
-    };
+    static constexpr bool isWritable = false;
+    static constexpr bool isRef = true;
+    static constexpr ObjectType which = ObjectType::BuiltinArray;
 
     typedef T(&RefReturnType)[N];
     typedef typename RawType<T>::Type DataType;
@@ -155,12 +153,9 @@ struct ObjectTraits<T&,
             typename std::enable_if<
                 !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
-    enum
-    {
-        isWritable = !std::is_const<T>::value,
-        isRef = true,
-        which = 4
-    };
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = true;
+    static constexpr ObjectType which = ObjectType::Reference;
 
     typedef T& RefReturnType;
     typedef T* PointerType;
@@ -179,10 +174,7 @@ struct ObjectTraits<T&,
                 std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
-    enum
-    {
-        which = 5
-    };
+    static constexpr ObjectType which = ObjectType::None;
 };
 
 /*
@@ -191,10 +183,7 @@ struct ObjectTraits<T&,
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
 {
-    enum
-    {
-        which = 6
-    };
+    static constexpr ObjectType which = ObjectType::None;
 };
 
 } // namespace detail

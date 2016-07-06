@@ -120,21 +120,15 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     typedef std::shared_ptr<Function> FunctionPtr;
     typedef std::shared_ptr<Constructor> ConstructorPtr;
     
-    struct NameCmp {
-        bool operator () (const std::string& a, const std::string& b) const {
-            return a < b;
-        }
-    };
-
     typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
-    typedef detail::Dictionary<std::string, PropertyPtr, NameCmp> PropertyTable;
-    typedef detail::Dictionary<std::string, FunctionPtr, NameCmp> FunctionTable;
+    typedef detail::Dictionary<Id, IdRef, PropertyPtr> PropertyTable;
+    typedef detail::Dictionary<Id, IdRef, FunctionPtr> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
     typedef UserObject (*UserObjectCreator)(void*);
     
     std::size_t m_sizeof;       ///< Size of the class in bytes.
-    std::string m_id;           ///< Name of the metaclass
+    Id m_id;                    ///< Name of the metaclass
     FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
     PropertyTable m_properties; ///< Table of metaproperties indexed by ID
     BaseList m_bases;           ///< List of base metaclasses
@@ -150,15 +144,15 @@ public:     // declaration
      * This is the function to call to create a new metaclass. The template
      * parameter T is the C++ class that will be bound to the metaclass.
      *
-     * \param name Name of the metaclass in Ponder. This name identifies
-     *             the metaclass and thus has to be unique. If not specified, the C++ type
-     *             id is used.
+     * \param id Name of the metaclass in Ponder. This name identifies
+     *           the metaclass and thus has to be unique. If not specified, the C++ type
+     *           id is used.
      *
      * \return A ClassBuilder<T> object that will provide functions
      *         to fill the new metaclass with properties, functions, etc.
      */
     template <typename T>
-    static ClassBuilder<T> declare(const std::string& name = std::string());
+    static ClassBuilder<T> declare(IdRef id = ponder::Id());
 
     /**
      * \brief Undeclare an existing metaclass
@@ -169,11 +163,12 @@ public:     // declaration
      * \note Do *not* use automatic metaclass declaration (PONDER_AUTO_TYPE) for the class 
      *       or it will keep being recreated by Ponder.
      *
-     * \param cls An intance of a metaclass that has been declared.
+     * \param id Name identifier of a previously declared class
      *
-     * \see Enum::undeclare
+     * \see Class::declare, Enum::undeclare
      */
-    static void undeclare(const Class& cls);
+    template <typename T>
+    static void undeclare(IdRef id = ponder::Id());
 
 public:     // reflection
 
@@ -182,7 +177,7 @@ public:     // reflection
      *
      * \return String containing the name of the metaclass
      */
-    const std::string& name() const;
+    IdRef name() const;
 
     /**
      * \brief Return the memory size of a class instance
@@ -272,7 +267,7 @@ public:     // reflection
      *
      * \return True if the function is in the metaclass, false otherwise
      */
-    bool hasFunction(const std::string& name) const;
+    bool hasFunction(IdRef name) const;
 
     /**
      * \brief Get a function from its index in this metaclass
@@ -294,7 +289,7 @@ public:     // reflection
      *
      * \throw FunctionNotFound \a name is not a function of the metaclass
      */
-    const Function& function(const std::string& name) const;
+    const Function& function(IdRef name) const;
 
     /**
      * \brief Get a function iterator
@@ -322,7 +317,7 @@ public:     // reflection
      *
      * \return True if the property is in the metaclass, false otherwise
      */
-    bool hasProperty(const std::string& name) const;
+    bool hasProperty(IdRef name) const;
 
     /**
      * \brief Get a property from its index in this metaclass
@@ -344,7 +339,7 @@ public:     // reflection
      *
      * \throw PropertyNotFound \a name is not a property of the metaclass
      */
-    const Property& property(const std::string& name) const;
+    const Property& property(IdRef name) const;
     
     /**
      * \brief Get a property iterator
@@ -386,6 +381,9 @@ public:     // reflection
      *
      * The target metaclass may be a base or a derived of this, both cases are properly handled.
      *
+     * \note Because virtual inheritance implementation is compiler specific this method is 
+     *       unreliable where virtual inheritance is used.
+     *
      * \param pointer Pointer to convert
      * \param target Target metaclass to convert to
      *
@@ -425,7 +423,7 @@ private:
      *
      * \param name Name of the metaclass
      */
-    Class(const std::string& name);
+    Class(IdRef name);
 
     /**
      * \brief Get the offset of a base metaclass

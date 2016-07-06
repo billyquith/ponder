@@ -57,14 +57,14 @@ namespace ConstructorTest
     {
         MyBase1() : base1("base1") {}
         virtual ~MyBase1() {}
-        std::string base1;
+        ponder::String base1;
     };
     
     struct MyBase2
     {
         MyBase2() : base2("base2") {}
         virtual ~MyBase2() {}
-        std::string base2;
+        ponder::String base2;
     };
     
     struct MyClass : MyBase1, MyBase2
@@ -78,18 +78,18 @@ namespace ConstructorTest
         MyClass(long l_, double r_)
             : l(l_), r(r_), s("2"), e(two), u(2) {}
         
-        MyClass(long l_, double r_, std::string s_)
+        MyClass(long l_, double r_, ponder::String s_)
             : l(l_), r(r_), s(s_), e(three), u(3) {}
         
-        MyClass(long l_, double r_, std::string s_, MyEnum e_)
+        MyClass(long l_, double r_, ponder::String s_, MyEnum e_)
             : l(l_), r(r_), s(s_), e(e_), u(4) {}
         
-        MyClass(long l_, double r_, std::string s_, MyEnum e_, MyType t_)
+        MyClass(long l_, double r_, ponder::String s_, MyEnum e_, MyType t_)
             : l(l_), r(r_), s(s_), e(e_), u(t_) {}
         
         long l;
         double r;
-        std::string s;
+        ponder::String s;
         MyEnum e;
         MyType u;
     };
@@ -115,10 +115,10 @@ namespace ConstructorTest
             .constructor()
             .constructor<long>()
             .constructor<long, double>()
-            .constructor<long, double, std::string>()
-            .constructor<long, double, std::string, MyEnum>()        
+            .constructor<long, double, ponder::String>()
+            .constructor<long, double, ponder::String, MyEnum>()        
             // trying types that don't exactly match those declared
-            .constructor<unsigned short, float, std::string, MyEnum, int>();
+            .constructor<unsigned short, float, ponder::String, MyEnum, int>();
     }
 }
 
