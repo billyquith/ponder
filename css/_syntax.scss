@@ -3,12 +3,12 @@
  */
 
 pre {
-    font-family: 'Menlo', 'open-sans', monospace;
-    font-size: 0.7em;
-    line-height: 1.7em;
-    background-color: #f5f6f9;
-    padding: 1em 1em 1em 1.5em;
-    border-radius: 7px;
+  font-family: 'Menlo', 'open-sans', monospace;
+  font-size: 0.7em;
+  line-height: 1.7em;
+  background-color: $code-bg;
+  padding: 1em 1em 1em 1.5em;
+  border-radius: 7px;
 	border-color: #e1e2ff;
 	border-width: 2px;
 	border-style: dotted;
@@ -150,4 +150,12 @@ pre {
     .il {
       color: #40a070; }
 }
-	  
+
+// `inline code`
+.highlighter-rouge {
+  font-family: 'Menlo', 'open-sans', monospace;
+  font-size: 80%;
+  background-color: $code-bg;
+  padding: 1px 4px 1px 4px;
+}
+	 
