@@ -99,7 +99,7 @@ namespace lua {
                     lua_pushglobaltable(L);                     // +1   _G
                     lua_pushliteral(L, c_ponder_metatables);    // +1
                     lua_rawget(L, -2);                          // 0 -+ _G.META
-                    lua_pushstring(L, cls.name().c_str());      // +1
+                    lua_pushstring(L, cls.name().data());       // +1
                     lua_rawget(L, -2);                          // 0 -+ _G_META.MT
                     lua_setmetatable(L, -4);                    // -1
                     lua_pop(L, 2);
@@ -288,7 +288,7 @@ namespace lua {
         lua_pushglobaltable(L);                     // +1
         lua_pushliteral(L, c_ponder_metatables);    // +1
         lua_rawget(L, -2);                          // 0 -+
-        lua_pushstring(L, cls.name().c_str());      // +1 k
+        lua_pushstring(L, cls.name().data());       // +1 k
         lua_pushvalue(L, -4);                       // +1 v
         lua_rawset(L, -3);                          // -2 _G.METAS.CLSNAME = META
         lua_pop(L, 2);                              // -1 _G, _G.METAS
