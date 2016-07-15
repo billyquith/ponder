@@ -30,8 +30,8 @@
 
 #include <ponder/detail/util.hpp>
 
-#if !defined(WIN32)
-#   include <strings.h>
+#if !defined(WIN32) || defined(__MINGW32__)
+   #include <strings.h>
 #endif
 
 // Convert to string:
@@ -48,7 +48,7 @@ namespace detail
 
 static inline int stricmp(const char* a, const char* b)
 {
-#ifdef WIN32
+#if defined(WIN32) && !defined(__MINGW32__)
 	return _strcmpi(a, b);
 #else
 	return strcasecmp(a, b);
