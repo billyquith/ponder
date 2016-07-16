@@ -337,7 +337,7 @@ struct ValueMapper<ponder::ValueType>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
     static ponder::String to(ponder::ValueType source)
-        {return ponder::String(ponder::detail::typeAsString(source));}
+        {return ponder::String(ponder::detail::valueTypeAsString(source));}
 };
 
 /*
