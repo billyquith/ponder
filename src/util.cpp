@@ -49,9 +49,9 @@ namespace detail
 static inline int stricmp(const char* a, const char* b)
 {
 #if defined(WIN32) && !defined(__MINGW32__)
-	return _strcmpi(a, b);
+    return _strcmpi(a, b);
 #else
-	return strcasecmp(a, b);
+    return strcasecmp(a, b);
 #endif
 }
 
