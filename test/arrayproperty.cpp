@@ -163,10 +163,7 @@ TEST_CASE("Array property can be inspected")
      
     SECTION("have a size")
     {
-#ifndef _WIN32
-        // TODO - Compilation fails on Windows.
-        REQUIRE(bools->size(object) == std::extent<typeof object.bools>::value);
-#endif
+        REQUIRE(bools->size(object) == std::extent<decltype(object.bools)>::value);
         REQUIRE(ints->size(object) == object.ints.size());
         REQUIRE(strings->size(object) == object.strings.size());
         REQUIRE(objects->size(object) == object.objects.size());
