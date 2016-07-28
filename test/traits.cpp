@@ -722,6 +722,19 @@ TEST_CASE("Check Ponder utilities work correctly")
     }
 }
 
+
+TEST_CASE("Check IdTraits")
+{
+    SECTION("cstr")
+    {
+        const char *t1 = "flibaddydib";
+        ponder::Id id(t1);
+        ponder::IdRef ir(id);
+        
+        REQUIRE(strcmp(ponder::id::c_str(ir), t1) == 0);
+    }
+}
+
 #ifdef TEST_BOOST
 // This library used to use Boost. These checks are too make sure the functionality
 // we rely on is the same as the one replaced.

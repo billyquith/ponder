@@ -43,6 +43,8 @@ struct IdTraits
     typedef std::string         string_t;
     typedef string_t            id_value_t;
     typedef const id_value_t&   id_ref_t;
+
+    static inline const char* cstr(id_ref_t r) {return r.c_str();}
 };
     
 } // namespace detail
@@ -61,6 +63,8 @@ struct IdTraits
     typedef std::string string_t;
     typedef string_t    id_value_t;
     typedef string_view id_ref_t;
+    
+    static inline const char* cstr(id_ref_t r) {return r.data();}
 };
 
 } // namespace detail
@@ -78,6 +82,12 @@ typedef detail::IdTraits::id_value_t    Id;
 
 /// Type used to pass around references to the an identifier type.
 typedef detail::IdTraits::id_ref_t      IdRef;
+
+namespace id {
+
+static inline const char* c_str(IdRef r) {return ponder::detail::IdTraits::cstr(r);}
+
+}
 
 } // namespace ponder
 
