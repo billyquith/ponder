@@ -2,12 +2,14 @@
 Ponder Changelog
 ----------------
 
+- [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
+
 ### 1.3
 
-- Ids/Names now configurable using IdTraits.
-- Default IdTrait uses string_view so is more efficient (issue #11).
+- Ids/Names now configurable using `IdTrait`s.
+- Default `IdTrait` uses `string_view` so is more efficient (issue #11).
 - Lambda functions recognised as class functions.
-- std::auto_ptr removed as deprecated in C++11 and causes warning spam in GCC.
+- `std::auto_ptr` removed as deprecated in C++11 and causes warning spam in GCC.
 - Internal string_view class added as std one still experimental.
 - Function and object classifiers.
 - Bug fixes.
@@ -16,7 +18,7 @@ Ponder Changelog
 
 - Properties now support method chaining or named parameter idiom (issue #28).
 - UserObjects can be created from user pointers (issue #30).
-- Change ponder::Type to enum class ValueType (issue #26).
+- Change `ponder::Type` to enum class `ValueType` (issue #26).
 - Remove composed function bindings. Use lambdas instead.
 - Re-add function unit tests.
 
