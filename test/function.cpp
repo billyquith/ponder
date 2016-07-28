@@ -178,9 +178,6 @@ namespace FunctionTest
             .function("f13", &MyClass::f13) // 5 arguments
             
             // ***** nested functions *****
-            //
-            // These were previously indirected
-            //
             .function("f14", [](MyClass& self){ self.inner.f14(); })
             // getter returning an object
             .function("f15", [](MyClass& self){ self.getInner().f15(); })

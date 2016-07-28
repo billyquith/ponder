@@ -73,6 +73,19 @@ namespace TraitsTest
     public:
         T x;
     };
+    
+    struct FuncReturn
+    {
+        int m_i;
+        Callable m_c;
+        
+        int i() const {return 0;}
+        float f() {return 2.4f;}
+        
+        int* ip() {return &m_i;}
+        
+        std::shared_ptr<Callable> sp() {return std::make_shared<Callable>(m_c);}
+    };
 }
 
 using namespace TraitsTest;
@@ -126,7 +139,9 @@ TEST_CASE("C++11 features and syntax")
     }
 }
 
-TEST_CASE("Ponder has function traits")
+//----------------------------------------------------------------------------------------
+
+TEST_CASE("Ponder supports different function types")
 {
     SECTION("what is not a function")
     {
@@ -294,7 +309,28 @@ TEST_CASE("Ponder has function traits")
                       FunctionTraits<decltype(l3)>::which == FunctionType::Lambda,
                       "FunctionTraits<>::which failed");
     }
+
+    SECTION("functions can return values")
+    {
+        using ponder::detail::FunctionTraits;
+        using ponder::detail::FunctionType;
+
+        typedef decltype(&FuncReturn::i) fn;
+        static_assert(FunctionTraits<fn>::isFunction, "");
+        static_assert(FunctionTraits<fn>::which == FunctionType::MemberFunction, "");
+
+        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::i)>::ReturnType,
+                                                  const int>::value, "");
+        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::f)>::ReturnType,
+                                                  float>::value, "");
+        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::ip)>::ReturnType,
+                                                  int*>::value, "");
+        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::sp)>::ReturnType,
+                                                  std::shared_ptr<Callable>>::value, "");
+    }
 }
+
+//----------------------------------------------------------------------------------------
 
 TEST_CASE("Ponder has object traits")
 {
@@ -419,6 +455,7 @@ TEST_CASE("Ponder has object traits")
     }
 }
 
+//----------------------------------------------------------------------------------------
 
 TEST_CASE("Object traits are classfied")
 {
@@ -508,6 +545,8 @@ TEST_CASE("Object traits are classfied")
     }
 }
 
+//----------------------------------------------------------------------------------------
+
 TEST_CASE("Types supporting array interface are supported")
 {
     SECTION("not arrays")
@@ -550,6 +589,8 @@ TEST_CASE("Types supporting array interface are supported")
             "ponder_ext::ArrayMapper failed");
     }
 }
+
+//----------------------------------------------------------------------------------------
 
 TEST_CASE("Lexical cast is used")
 {
@@ -660,6 +701,7 @@ TEST_CASE("Lexical cast is used")
     }
 }
 
+//----------------------------------------------------------------------------------------
 
 // From: http://en.cppreference.com/w/cpp/utility/integer_sequence
 
@@ -722,6 +764,7 @@ TEST_CASE("Check Ponder utilities work correctly")
     }
 }
 
+//----------------------------------------------------------------------------------------
 
 TEST_CASE("Check IdTraits")
 {
@@ -734,6 +777,8 @@ TEST_CASE("Check IdTraits")
         REQUIRE(strcmp(ponder::id::c_str(ir), t1) == 0);
     }
 }
+
+//----------------------------------------------------------------------------------------
 
 #ifdef TEST_BOOST
 // This library used to use Boost. These checks are too make sure the functionality
@@ -848,5 +893,7 @@ TEST_CASE("Check functionality same as Boost")
 }
 
 #endif // TEST_BOOST
+
+//----------------------------------------------------------------------------------------
 
 
