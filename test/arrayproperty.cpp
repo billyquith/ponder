@@ -119,19 +119,8 @@ struct ArrayPropertyFixture
 //                         Tests for ponder::ArrayProperty
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Array property can be inspected")
+TEST_CASE_METHOD(ArrayPropertyFixture, "Array property can be inspected")
 {
-    const ponder::Class& metaclass = ponder::classByType<MyClass>();
-    const ponder::ArrayProperty* bools =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("bools"));
-    const ponder::ArrayProperty* ints =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("ints"));
-    const ponder::ArrayProperty* strings =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("strings"));
-    const ponder::ArrayProperty* objects =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("objects"));
-    MyClass object;
-
     REQUIRE(bools != nullptr);
     REQUIRE(ints != nullptr);
     REQUIRE(strings != nullptr);
