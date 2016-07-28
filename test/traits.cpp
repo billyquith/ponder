@@ -85,6 +85,13 @@ namespace TraitsTest
         int* ip() {return &m_i;}
         
         std::shared_ptr<Callable> sp() {return std::make_shared<Callable>(m_c);}
+        
+        std::vector<int> ai() {return std::vector<int>{1,2,3};}
+        
+        std::vector<std::shared_ptr<Callable>> as()
+        {
+            return std::vector<std::shared_ptr<Callable>>();
+        }
     };
 }
 
@@ -325,8 +332,14 @@ TEST_CASE("Ponder supports different function types")
                                                   float>::value, "");
         static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::ip)>::ReturnType,
                                                   int*>::value, "");
+        
         static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::sp)>::ReturnType,
                                                   std::shared_ptr<Callable>>::value, "");
+
+        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::ai)>::ReturnType,
+                                              std::vector<int>>::value, "");
+        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::as)>::ReturnType,
+                                              std::vector<std::shared_ptr<Callable>>>::value, "");
     }
 }
 
