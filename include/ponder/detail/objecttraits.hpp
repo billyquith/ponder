@@ -125,7 +125,7 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
     typedef U* PointerType;
     typedef typename RawType<U>::Type DataType;
 
-    static RefReturnType get(void* pointer) {return static_cast<U*>(pointer);}
+    static RefReturnType get(void* pointer)   {return static_cast<U*>(pointer);}
     static PointerType getPointer(T<U> value) {return get_pointer(value);}
 };
 

@@ -36,8 +36,7 @@
 #include <memory>
 
 
-namespace ponder
-{
+namespace ponder {
 
 template<class T>
 T* get_pointer(T *p)
@@ -57,17 +56,14 @@ T* get_pointer(std::shared_ptr<T> const& p)
     return p.get();
 }
 
-namespace detail
-{
+namespace detail {
+    
 /**
  * \brief Utility class which tells at compile-time if a type T is a smart pointer to a type U
- *
- * To detect a smart pointer type, we check using SFINAE if T implements an operator -> returning a U*
  */
 template <typename T, typename U>
 struct IsSmartPointer
 {    
-    // enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
     enum {value = false};
 };
 
