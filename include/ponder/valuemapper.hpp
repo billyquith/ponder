@@ -363,6 +363,16 @@ struct ValueMapper<ponder::UserObject>
 };
 
 /*
+ * Specialization of ValueMapper for smart pointers. Forward the pointer type.
+ */
+template <template <typename> class T, typename U>
+struct ValueMapper<T<U>,
+    typename std::enable_if< ponder::detail::IsSmartPointer<T<U>,U>::value
+        >::type> : public ValueMapper<U>
+{
+};
+
+/*
  * Specialization of ValueMapper for const T& -- just forward to ValueMapper<T>
  */
 template <typename T>

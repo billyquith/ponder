@@ -191,7 +191,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(boolValue.isCompatible<unsigned long>() ==  true);
         REQUIRE(boolValue.isCompatible<float>() ==          true);
         REQUIRE(boolValue.isCompatible<double>() ==         true);
-        REQUIRE(boolValue.isCompatible<ponder::String>() ==    true);
+        REQUIRE(boolValue.isCompatible<ponder::String>() == true);
         REQUIRE(boolValue.isCompatible<MyEnum>() ==         true);
         REQUIRE(boolValue.isCompatible<MyClass>() ==        false);
     }
@@ -592,6 +592,33 @@ TEST_CASE("Values can be held in containers")
         ponder::Value value = "Hello";
         testmap["1"] = value;
         REQUIRE(testmap["1"] == ponder::String("Hello"));
+    }
+}
+
+TEST_CASE("Default values can be created")
+{
+    SECTION("builtin")
+    {
+        ponder::detail::ValueProvider<int> pi;
+        int i(pi());
+    }
+
+    SECTION("string")
+    {
+        ponder::detail::ValueProvider<std::string> vp;
+        std::string v(vp());
+    }
+
+    SECTION("class")
+    {
+        ponder::detail::ValueProvider<MyClass> vp;
+        MyClass v(vp());
+    }
+
+    SECTION("smart ptr")
+    {
+        ponder::detail::ValueProvider<std::shared_ptr<MyClass>> vp;
+        std::shared_ptr<MyClass> v(vp());
     }
 }
 

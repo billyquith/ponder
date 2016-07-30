@@ -69,7 +69,8 @@ struct RawType
 /*
  * Specialized version for const modifier
  */
-template <typename T> struct RawType<const T>
+template <typename T>
+struct RawType<const T>
 {
     typedef typename RawType<T>::Type Type;
 };
@@ -77,7 +78,8 @@ template <typename T> struct RawType<const T>
 /*
  * Specialized version for reference modifier
  */
-template <typename T> struct RawType<T&>
+template <typename T>
+struct RawType<T&>
 {
     typedef typename RawType<T>::Type Type;
 };

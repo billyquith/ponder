@@ -40,6 +40,8 @@ namespace ArrayPropertyTest
 {
     struct MyType
     {
+        MyType() : x(-1) {}
+        
         MyType(int x_) : x(x_) {}
         
         bool operator == (const MyType& other) const
@@ -77,6 +79,7 @@ namespace ArrayPropertyTest
         std::array<int, 3> ints;
         std::vector<ponder::String> strings;
         std::list<MyType> objects;
+        std::vector<std::shared_ptr<MyType>> smartptrs;
     };
     
     void declare()
@@ -87,7 +90,9 @@ namespace ArrayPropertyTest
             .property("bools", &MyClass::bools)
             .property("ints", &MyClass::ints)
             .property("strings", &MyClass::strings)
-            .property("objects", &MyClass::objects);
+            .property("objects", &MyClass::objects)
+            //.property("smartptrs", &MyClass::smartptrs)
+            ;
     }
 }
 
