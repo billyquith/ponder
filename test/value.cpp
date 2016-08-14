@@ -609,11 +609,11 @@ TEST_CASE("Default values can be created")
         std::string v(vp());
     }
 
-    SECTION("class")
-    {
-        ponder::detail::ValueProvider<MyClass> vp;
-        MyClass v(vp());
-    }
+//    SECTION("class")
+//    {
+//        ponder::detail::ValueProvider<MyClass> vp;
+//        MyClass v(vp());
+//    }
 
 //    SECTION("smart ptr") // TODO - fix creation of smart ptr default values
 //    {
