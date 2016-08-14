@@ -201,8 +201,24 @@ public:     // reflection
      * \param ptr Optional pointer to the location to construct the object (placement new)
      *
      * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
+     * \sa create()
      */
     UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const;
+
+    /**
+     * \brief Create a new instance of the class bound to the metaclass
+     *
+     * Create an object without having to create an Args list. See notes for Class::construct().
+     * If you need to create an argument list at runtime and use it to create an object then
+     * see Class::construct().
+     *
+     * \param args An argument list.
+     *
+     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
+     * \sa construct()
+     */
+    template <typename ...A>
+    UserObject create(A... args) const;
 
     /**
      * \brief Return the total number of constructors of this metaclass

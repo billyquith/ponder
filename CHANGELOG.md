@@ -4,6 +4,10 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
+### 1.4
+
+- Class::create() allows object creation without an Args list.
+
 ### 1.3
 
 - Ids/Names now configurable using `IdTrait`s.

@@ -68,6 +68,13 @@ inline void Class::undeclare(IdRef id)
         id.empty() ? detail::StaticTypeId<T>::get(false) : id);
 }
 
+template <typename ...A>
+inline UserObject Class::create(A... args) const
+{
+    Args a(args...);
+    return construct(a);
+}
+
 inline Class::FunctionTable::Iterator Class::functionIterator() const
 {
     return m_functions.getIterator();
