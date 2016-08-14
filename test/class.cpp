@@ -433,7 +433,7 @@ TEST_CASE("Classes can be templates")
 }
 
 // Classes declared using Ponder *can declare* virtually inherited base classes, but the casting
-// of these is unrealiale due to the compiler specific nature of their implementation. This
+// of these is unrealiable due to the compiler specific nature of their implementation. This
 // test is therefore optional as it fails on some platforms, e.g. Windows debug.
 #if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")
