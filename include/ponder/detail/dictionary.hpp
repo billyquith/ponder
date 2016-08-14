@@ -81,6 +81,7 @@ private:
     
 public:
     
+    typedef pair_t value_type;
     typedef typename container_t::const_iterator const_iterator;
     
     const_iterator begin() const    { return m_contents.begin(); }
