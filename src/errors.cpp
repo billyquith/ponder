@@ -31,7 +31,7 @@
 #include <ponder/errors.hpp>
 #include <ponder/class.hpp>
 #include <ponder/detail/util.hpp>
-#include <ponder/format.h>
+#include <ponder/format.hpp>
 
 
 namespace ponder

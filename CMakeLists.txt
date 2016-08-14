@@ -68,7 +68,7 @@ set(SRC_HEADERS
     include/ponder/error.hpp
     include/ponder/error.inl
     include/ponder/errors.hpp
-    include/ponder/format.h
+    include/ponder/format.hpp
     include/ponder/function.hpp
     include/ponder/observer.hpp
     include/ponder/pondertype.hpp

@@ -4,7 +4,7 @@
 
 #include <ponder/value.hpp>
 #include <ponder/enum.hpp>
-#include <ponder/format.h>
+#include <ponder/format.hpp>
 
 // see https://github.com/philsquared/Catch/blob/master/docs/tostring.md
 

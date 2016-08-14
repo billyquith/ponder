@@ -25,7 +25,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ponder/format.h>
+#include <ponder/format.hpp>
 
 #include <string.h>
 

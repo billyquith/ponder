@@ -32,7 +32,7 @@
 #define PONDER_UTIL_HPP
 
 #include <ponder/config.hpp>
-#include <ponder/format.h>
+#include <ponder/format.hpp>
 #include <ponder/type.hpp>
 
 namespace ponder {
