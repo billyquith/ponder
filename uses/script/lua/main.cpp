@@ -59,6 +59,7 @@ namespace lua {
     namespace fmt = ponder::detail::fmt;
     
     #define c_ponder_metatables "_ponder_meta"
+    #define c_inst_metatable "_instmt"
     
     // push a Ponder value onto the Lua state stack
     static int pushValue(lua_State *L, const ponder::Value& val)
@@ -80,11 +81,12 @@ namespace lua {
             case ValueType::String:
                 lua_pushstring(L, val.to<std::string>().c_str());
                 return 1;
+
+            case ValueType::Enum:
+                lua_pushinteger(L, val.to<int>());
+                return 1;
                 
-//            case enumType:
-//                lua_pushinteger(L, val.to<int>());
-//                return 1;
-//            case arrayType:
+//            case ValueType::Array:
 //                lua_pushinteger(L, val.to<int>());
 //                return 1;
                 
@@ -99,7 +101,7 @@ namespace lua {
                     lua_pushglobaltable(L);                     // +1   _G
                     lua_pushliteral(L, c_ponder_metatables);    // +1
                     lua_rawget(L, -2);                          // 0 -+ _G.META
-                    lua_pushstring(L, cls.name().c_str());      // +1
+                    lua_pushstring(L, cls.name().data());       // +1
                     lua_rawget(L, -2);                          // 0 -+ _G_META.MT
                     lua_setmetatable(L, -4);                    // -1
                     lua_pop(L, 2);
@@ -288,7 +290,7 @@ namespace lua {
         lua_pushglobaltable(L);                     // +1
         lua_pushliteral(L, c_ponder_metatables);    // +1
         lua_rawget(L, -2);                          // 0 -+
-        lua_pushstring(L, cls.name().c_str());      // +1 k
+        lua_pushstring(L, cls.name().data());       // +1 k
         lua_pushvalue(L, -4);                       // +1 v
         lua_rawset(L, -3);                          // -2 _G.METAS.CLSNAME = META
         lua_pop(L, 2);                              // -1 _G, _G.METAS
@@ -354,7 +356,7 @@ namespace lua {
         lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
         
         // create instance metatable. store ref in the class metatable
-        lua_pushliteral(L, "_inst_");               // +1 k
+        lua_pushliteral(L, c_inst_metatable);       // +1 k
         createInstanceMetatable(L, cls);            // +1
         lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
 
