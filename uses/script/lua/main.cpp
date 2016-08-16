@@ -53,13 +53,16 @@ static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
     if (vs) zz_stk += " <" + std::string(vs) + ">"; \
     --i; }} while(false); db_stack=zz_stk.c_str();
 
+#define PLDB(X) X
+#define PASSERT(X) if(!(X)) __builtin_trap()
+
 namespace ponder {
 namespace lua {
 
     namespace fmt = ponder::detail::fmt;
     
-    #define c_ponder_metatables "_ponder_meta"
-    #define c_inst_metatable "_instmt"
+    #define PONDER_LUA_METATBLS "_ponder_meta"
+    #define PONDER_LUA_INSTTBLS "_instmt"
     
     // push a Ponder value onto the Lua state stack
     static int pushValue(lua_State *L, const ponder::Value& val)
@@ -99,7 +102,7 @@ namespace lua {
 
                     // set instance metatable
                     lua_pushglobaltable(L);                     // +1   _G
-                    lua_pushliteral(L, c_ponder_metatables);    // +1
+                    lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
                     lua_rawget(L, -2);                          // 0 -+ _G.META
                     lua_pushstring(L, cls.name().data());       // +1
                     lua_rawget(L, -2);                          // 0 -+ _G_META.MT
@@ -288,7 +291,7 @@ namespace lua {
         lua_rawset(L, -3);                          // -2
 
         lua_pushglobaltable(L);                     // +1
-        lua_pushliteral(L, c_ponder_metatables);    // +1
+        lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
         lua_rawget(L, -2);                          // 0 -+
         lua_pushstring(L, cls.name().data());       // +1 k
         lua_pushvalue(L, -4);                       // +1 v
@@ -323,7 +326,7 @@ namespace lua {
         
         // set instance metatable
         lua_getmetatable(L, 1);             // +1
-        lua_pushliteral(L, "_inst_");       // +1
+        lua_pushliteral(L, PONDER_LUA_INSTTBLS);       // +1
         lua_rawget(L, -2);                  // -1+1 -> mt
         lua_setmetatable(L, -3);            // -1
         lua_pop(L, 1);
@@ -335,13 +338,13 @@ namespace lua {
     {
         // ensure _G.META
         lua_pushglobaltable(L);                     // +1
-        lua_pushliteral(L, c_ponder_metatables);    // +1
+        lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
         lua_rawget(L, -2);                          // 0 -+
         if (lua_isnil(L, -1))
         {
             // first time
             lua_pop(L, 1);                              // -1 pop nil
-            lua_pushliteral(L, c_ponder_metatables);    // +1
+            lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
             lua_createtable(L, 0, 20);                  // +1
             lua_rawset(L, -3);                          // -2 _G[META] = {}
         }
@@ -356,7 +359,7 @@ namespace lua {
         lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
         
         // create instance metatable. store ref in the class metatable
-        lua_pushliteral(L, c_inst_metatable);       // +1 k
+        lua_pushliteral(L, PONDER_LUA_INSTTBLS);       // +1 k
         createInstanceMetatable(L, cls);            // +1
         lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
 
@@ -486,6 +489,7 @@ int main()
 
     // instance
     luaTest(L, "v = Vec2(); assert(v ~= nil)");
+    luaTest(L, "assert(type(v) == 'userdata')");
     
     // property read
     luaTest(L, "assert(v.x == 0)");
