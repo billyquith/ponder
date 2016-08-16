@@ -40,6 +40,8 @@ namespace ArrayPropertyTest
 {
     struct MyType
     {
+        MyType() : x(-1) {}
+        
         MyType(int x_) : x(x_) {}
         
         bool operator == (const MyType& other) const
@@ -77,6 +79,7 @@ namespace ArrayPropertyTest
         std::array<int, 3> ints;
         std::vector<ponder::String> strings;
         std::list<MyType> objects;
+        std::vector<std::shared_ptr<MyType>> smartptrs;
     };
     
     void declare()
@@ -87,7 +90,9 @@ namespace ArrayPropertyTest
             .property("bools", &MyClass::bools)
             .property("ints", &MyClass::ints)
             .property("strings", &MyClass::strings)
-            .property("objects", &MyClass::objects);
+            .property("objects", &MyClass::objects)
+            //.property("smartptrs", &MyClass::smartptrs)
+            ;
     }
 }
 
@@ -119,19 +124,8 @@ struct ArrayPropertyFixture
 //                         Tests for ponder::ArrayProperty
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Array property can be inspected")
+TEST_CASE_METHOD(ArrayPropertyFixture, "Array property can be inspected")
 {
-    const ponder::Class& metaclass = ponder::classByType<MyClass>();
-    const ponder::ArrayProperty* bools =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("bools"));
-    const ponder::ArrayProperty* ints =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("ints"));
-    const ponder::ArrayProperty* strings =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("strings"));
-    const ponder::ArrayProperty* objects =
-        &static_cast<const ponder::ArrayProperty&>(metaclass.property("objects"));
-    MyClass object;
-
     REQUIRE(bools != nullptr);
     REQUIRE(ints != nullptr);
     REQUIRE(strings != nullptr);
@@ -163,10 +157,7 @@ TEST_CASE("Array property can be inspected")
      
     SECTION("have a size")
     {
-#ifndef _WIN32
-        // TODO - Compilation fails on Windows.
-        REQUIRE(bools->size(object) == std::extent<typeof object.bools>::value);
-#endif
+        REQUIRE(bools->size(object) == std::extent<decltype(object.bools)>::value);
         REQUIRE(ints->size(object) == object.ints.size());
         REQUIRE(strings->size(object) == object.strings.size());
         REQUIRE(objects->size(object) == object.objects.size());

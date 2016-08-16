@@ -57,16 +57,19 @@ namespace detail
  *     {
  *     };
  * };
+ *
  * PONDER_TYPE(MyClass)
  * PONDER_TYPE(MyClass::MyNestedClass)
  * \endcode
+ *
+ * \note This macro handles types that contain commas, e.g. `Data<float,int,int>`.
  */
-#define PONDER_TYPE(type) \
+#define PONDER_TYPE(...) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<type> \
+            template <> struct StaticTypeId<__VA_ARGS__> \
             { \
-                static const char* get(bool = true) {return #type;} \
+                static const char* get(bool = true) {return #__VA_ARGS__;} \
                 enum {defined = true, copyable = true}; \
             }; \
         } \
@@ -100,6 +103,9 @@ namespace detail
  *         ...;
  * }
  * \endcode
+ *
+ * \note This macro will fail with types that contain commas, e.g. `Data<float,int,int>`. Instead,
+ *       use PONDER_TYPE.
  *
  * \sa PONDER_TYPE
  */

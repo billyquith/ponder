@@ -28,66 +28,59 @@
 ****************************************************************************/
 
 
-namespace ponder
+#ifndef PONDER_DETAIL_ISSMARTPOINTER_HPP
+#define PONDER_DETAIL_ISSMARTPOINTER_HPP
+
+#include <ponder/config.hpp>
+#include <type_traits>
+#include <memory>
+
+
+namespace ponder {
+
+template<class T>
+T* get_pointer(T *p)
 {
+    return p;
+}
     
-namespace detail
+template<class T>
+T* get_pointer(std::unique_ptr<T> const& p)
 {
-    template <typename T>
-    void destroy(const UserObject& object, bool destruct)
-    {
-        if (destruct)
-            object.get<T*>() -> ~T();
-        else
-            delete object.get<T*>();
-    }
+    return p.get();
+}
+
+template<class T>
+T* get_pointer(std::shared_ptr<T> const& p)
+{
+    return p.get();
+}
+
+namespace detail {
     
-    template <typename T>
-    UserObject userObjectCreator(void* ptr)
-    {
-        return UserObject(static_cast<T*>(ptr));
-    }
-}
+/**
+ * \brief Utility class which tells at compile-time if a type T is a smart pointer to a type U
+ */
+template <typename T, typename U>
+struct IsSmartPointer
+{    
+    enum {value = false};
+};
 
-template <typename T>
-inline ClassBuilder<T> Class::declare(IdRef id)
+template <typename T, typename U>
+struct IsSmartPointer<std::unique_ptr<T>, U>
 {
-    Class& newClass =
-        detail::ClassManager::instance().addClass(
-            id.empty() ? detail::StaticTypeId<T>::get(false) : id);
-    newClass.m_sizeof = sizeof(T);
-    newClass.m_destructor = &detail::destroy<T>;
-    newClass.m_userObjectCreator = &detail::userObjectCreator<T>;
-    return ClassBuilder<T>(newClass);
-}
+    enum {value = true};
+};
 
-template <typename T>
-inline void Class::undeclare(IdRef id)
+template <typename T, typename U>
+struct IsSmartPointer<std::shared_ptr<T>, U>
 {
-    detail::ClassManager::instance().removeClass(
-        id.empty() ? detail::StaticTypeId<T>::get(false) : id);
-}
+    enum {value = true};
+};
 
-template <typename ...A>
-inline UserObject Class::create(A... args) const
-{
-    Args a(args...);
-    return construct(a);
-}
-
-inline Class::FunctionTable::Iterator Class::functionIterator() const
-{
-    return m_functions.getIterator();
-}
-
-inline Class::PropertyTable::Iterator Class::propertyIterator() const
-{
-    return m_properties.getIterator();
-}
-
-inline UserObject Class::getUserObjectFromPointer(void* ptr) const
-{
-    return m_userObjectCreator(ptr);
-}
-
+    
+} // namespace detail
 } // namespace ponder
+
+#endif // PONDER_DETAIL_ISSMARTPOINTER_HPP

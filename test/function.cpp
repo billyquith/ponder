@@ -178,9 +178,6 @@ namespace FunctionTest
             .function("f13", &MyClass::f13) // 5 arguments
             
             // ***** nested functions *****
-            //
-            // These were previously indirected
-            //
             .function("f14", [](MyClass& self){ self.inner.f14(); })
             // getter returning an object
             .function("f15", [](MyClass& self){ self.getInner().f15(); })
@@ -430,7 +427,7 @@ TEST_CASE("Ponder supports functions")
 
 TEST_CASE("Functions can modify objects")
 {
-    // ModifyA() is called on an object of class A with the intend to modify that object:
+    // ModifyA() is called on an object of class A with the intent to modify that object:
     ClassA objectA;
     
     const ponder::Class& metaClassB = ponder::classByType<FunctionTest::ClassB>();

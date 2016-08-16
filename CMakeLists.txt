@@ -156,13 +156,15 @@ set(SRC_SOURCE
 )
 
 source_group("Headers"
-             REGULAR_EXPRESSION "include/ponder/[^/]+")
-source_group("Headers\\Detail"
-             REGULAR_EXPRESSION "include/ponder/detail/[^/]+")
-source_group("Headers\\XML"
-             REGULAR_EXPRESSION "include/ponder-xml/[^/]+")
+             REGULAR_EXPRESSION "include/ponder/.+")
 source_group("Source"
              REGULAR_EXPRESSION "src/[^/]+\\.cpp")
+source_group("Headers\\Detail"
+             REGULAR_EXPRESSION "include/ponder/detail/.+")
+source_group("Headers\\Qt"
+             REGULAR_EXPRESSION "include/ponder/qt/.+")
+source_group("Headers\\XML"
+             REGULAR_EXPRESSION "include/ponder-xml/.+")
 
 set(PONDER_SRCS
     ${SRC_HEADERS}

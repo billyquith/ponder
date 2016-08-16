@@ -34,8 +34,7 @@
 #include <ponder/detail/format.hpp>
 
 
-namespace ponder
-{
+namespace ponder {
 
 using ponder::detail::fmt::format;
     
@@ -52,7 +51,7 @@ BadType::BadType(const String& message)
 
 ponder::String BadType::typeName(ValueType type)
 {
-    return detail::typeAsString(type);
+    return detail::valueTypeAsString(type);
 }
 
 BadArgument::BadArgument(ValueType provided,

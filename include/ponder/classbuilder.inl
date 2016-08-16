@@ -72,17 +72,13 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     m_target->m_bases.push_back(baseInfos);
 
     // Copy all properties of the base class into the current class
-    for (Class::PropertyTable::const_iterator it = baseClass.m_properties.begin();
-        it != baseClass.m_properties.end();
-        ++it)
+    for (auto&& it = baseClass.m_properties.begin(); it != baseClass.m_properties.end(); ++it)
     {
         m_target->m_properties.insert(it);
     }
 
     // Copy all functions of the base class into the current class
-    for (Class::FunctionTable::const_iterator it = baseClass.m_functions.begin();
-        it != baseClass.m_functions.end();
-        ++it)
+    for (auto&& it = baseClass.m_functions.begin(); it != baseClass.m_functions.end(); ++it)
     {
         m_target->m_functions.insert(it);
     }

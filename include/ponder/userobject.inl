@@ -48,12 +48,12 @@ template <typename T>
 typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
 {
     // Make sure that we have a valid internal object
-    void* ptr = pointer();
+    void *ptr = pointer();
     if (!ptr)
         PONDER_ERROR(NullObject(m_class));
 
     // Get the metaclass of T (we use classByTypeSafe because it may not exist)
-    const Class* targetClass = classByTypeSafe<T>();
+    const Class *targetClass = classByTypeSafe<T>();
     if (!targetClass)
         PONDER_ERROR(ClassNotFound("unknown"));
 

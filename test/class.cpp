@@ -86,6 +86,16 @@ namespace ClassTest
         T testMember_;
     };
     
+    // multi-argument template
+    template <typename T, int X, int Y>
+    struct DataTemplate
+    {
+        T data[Y][X];
+        
+        T get(int x, int y) const { return data[y][x]; }
+        void set(int x, int y, T value) { data[y][x] = value; }
+    };
+
     // See notes on the tests below.
     class VirtualBase
     {
@@ -109,7 +119,6 @@ namespace ClassTest
     {
     };
     
-    
     void declare()
     {
         ponder::Class::declare<MyClass>("ClassTest::MyClass")
@@ -132,6 +141,10 @@ namespace ClassTest
         ponder::Class::declare< TemplateClass<int> >()
             .constructor()
             .property("TestMember", &TemplateClass<int>::testMember_);
+
+        ponder::Class::declare< DataTemplate<float,5,5> >()
+            .function("get", &DataTemplate<float,5,5>::get)
+            .function("set", &DataTemplate<float,5,5>::set);
 
 #if TEST_VIRTUAL
         ponder::Class::declare< VirtualBase >()
@@ -173,6 +186,7 @@ namespace ClassTest
 
 PONDER_TYPE(ClassTest::MyExplicityDeclaredClass /* never declared */)
 PONDER_TYPE(ClassTest::MyUndeclaredClass /* never declared */)
+PONDER_TYPE(ClassTest::DataTemplate<float,5,5>)
 
 //
 // ClassTest::declare() is called to declared registered classes in it. Note,
@@ -419,7 +433,7 @@ TEST_CASE("Classes can be templates")
 }
 
 // Classes declared using Ponder *can declare* virtually inherited base classes, but the casting
-// of these is unrealiale due to the compiler specific nature of their implementation. This
+// of these is unrealiable due to the compiler specific nature of their implementation. This
 // test is therefore optional as it fails on some platforms, e.g. Windows debug.
 #if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")

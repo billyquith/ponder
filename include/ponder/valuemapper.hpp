@@ -337,7 +337,7 @@ struct ValueMapper<ponder::ValueType>
 {
     static const ponder::ValueType type = ponder::ValueType::String;
     static ponder::String to(ponder::ValueType source)
-        {return ponder::String(ponder::detail::typeAsString(source));}
+        {return ponder::String(ponder::detail::valueTypeAsString(source));}
 };
 
 /*
@@ -360,6 +360,16 @@ struct ValueMapper<ponder::UserObject>
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::String, ponder::ValueType::User));}
     static ponder::UserObject from(const ponder::EnumObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::ValueType::User));}
+};
+
+/*
+ * Specialization of ValueMapper for smart pointers. Forward the pointer type.
+ */
+template <template <typename> class T, typename U>
+struct ValueMapper<T<U>,
+    typename std::enable_if< ponder::detail::IsSmartPointer<T<U>,U>::value
+        >::type> : public ValueMapper<U>
+{
 };
 
 /*

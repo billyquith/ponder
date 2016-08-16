@@ -143,7 +143,7 @@ struct ConstructorFixture
 };
 
 //-----------------------------------------------------------------------------
-//                         Tests for ponder::Constructor
+//                      Tests for ponder::Class::construct
 //-----------------------------------------------------------------------------
 
 TEST_CASE("Classes can have constructors") // and allocate dynamically
@@ -175,7 +175,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 
     SECTION("with one argument")
     {
-        ponder::UserObject object = metaclass->construct(ponder::Args(1L)).get<MyClass*>();
+        ponder::UserObject object = metaclass->construct(ponder::Args(1));
 
         IS_TRUE( object != ponder::UserObject::nothing );
 
@@ -310,4 +310,131 @@ TEST_CASE("Constructors can use placement new")
         metaclass->destruct(object); // not destroy()
     }
 }
+
+//-----------------------------------------------------------------------------
+//                     Tests for ponder::Class::create
+//-----------------------------------------------------------------------------
+
+TEST_CASE("Classes can create object") // no arg list
+{
+    const ponder::Class* metaclass = &ponder::classByType<MyClass>();
+    
+    REQUIRE(metaclass != nullptr);
+    
+    SECTION("with no arguments")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        object = metaclass->create();
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+        
+        MyClass *instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 0);
+        REQUIRE(instance->r == Approx(0.).epsilon(1E-5));
+        REQUIRE(instance->s == "0");
+        REQUIRE(instance->e == zero);
+        REQUIRE(instance->u.x == 0);
+        
+        metaclass->destroy(object);
+    }
+    
+    SECTION("with one argument")
+    {
+        ponder::UserObject object = metaclass->create(1);
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+        
+        MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 1);
+        REQUIRE(instance->r == Approx(1.).epsilon(1E-5));
+        REQUIRE(instance->s == "1");
+        REQUIRE(instance->e == one);
+        REQUIRE(instance->u.x == 1);
+        
+        metaclass->destroy(object);
+    }
+    
+    SECTION("with two arguments")
+    {
+        ponder::UserObject object = metaclass->create(2, 2.);
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+        
+        MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 2);
+        REQUIRE(instance->r == Approx(2.).epsilon(1E-5));
+        REQUIRE(instance->s == "2");
+        REQUIRE(instance->e == two);
+        REQUIRE(instance->u.x == 2);
+        
+        metaclass->destroy(object);
+    }
+    
+    
+    SECTION("with three arguments")
+    {
+        ponder::UserObject object = metaclass->create(3, 3., "3");
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+        
+        MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 3);
+        REQUIRE(instance->r == Approx(3.).epsilon(1E-5));
+        REQUIRE(instance->s == "3");
+        REQUIRE(instance->e == three);
+        REQUIRE(instance->u.x == 3);
+        
+        metaclass->destroy(object);
+    }
+    
+    SECTION("with four arguments")
+    {
+        ponder::UserObject object = metaclass->create(4, 4., "4", four);
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+        
+        MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 4);
+        REQUIRE(instance->r == Approx(4.).epsilon(1E-5));
+        REQUIRE(instance->s == "4");
+        REQUIRE(instance->e == four);
+        REQUIRE(instance->u.x == 4);
+        
+        metaclass->destroy(object);
+    }
+    
+    SECTION("with five arguments")
+    {
+        ponder::UserObject object = metaclass->create(5, 5., "5", five, 5);
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+        
+        MyClass* instance = object.get<MyClass*>();
+        
+        REQUIRE(instance->l == 5);
+        REQUIRE(instance->r == Approx(5.).epsilon(1E-5));
+        REQUIRE(instance->s == "5");
+        REQUIRE(instance->e == five);
+        REQUIRE(instance->u.x == 5);
+        
+        metaclass->destroy(object);
+    }
+    
+    SECTION("with invalid arguments")
+    {
+        IS_TRUE( metaclass->create("hello") == ponder::UserObject::nothing );
+        IS_TRUE( metaclass->create(MyType(10)) == ponder::UserObject::nothing );
+        IS_TRUE( metaclass->create(two, MyType(10)) == ponder::UserObject::nothing );
+        IS_TRUE( metaclass->create(5., "hello") == ponder::UserObject::nothing );
+    }    
+}
+
 

@@ -38,10 +38,9 @@
 #include <ponder/valuemapper.hpp>
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /*
  * Implementation of ValueProvider
  * Generic version, use default constructor
@@ -60,7 +59,9 @@ struct ValueProviderImpl
 template <typename T>
 struct ValueProviderImpl<T, ValueType::User>
 {
-    ValueProviderImpl() : m_value(classByType<T>().construct(Args::empty).template get<T*>()) {}
+    ValueProviderImpl()
+        :   m_value(classByType<T>().construct(Args::empty).template get<T*>())
+    {}
     ~ValueProviderImpl() {classByType<T>().destroy(m_value);}
     T& operator()() {return *m_value;}
     T* m_value;
@@ -95,7 +96,6 @@ struct ValueProvider : ValueProviderImpl<T, ponder_ext::ValueMapper<T>::type>
 };
 
 } // namespace detail
-
 } // namespace ponder
 
 

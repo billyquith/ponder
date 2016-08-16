@@ -54,7 +54,9 @@ namespace PropertyTest
     bool operator == (const MyType& left, const MyType& right) {return left.x == right.x;}
     bool operator < (const MyType& left, const MyType& right) {return left.x < right.x;}
     std::ostream& operator << (std::ostream& stream, const MyType& object)
-        {return stream << object.x;}
+    {
+        return stream << object.x;
+    }
     
     struct MyClass
     {

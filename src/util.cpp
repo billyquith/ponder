@@ -30,8 +30,8 @@
 
 #include <ponder/detail/util.hpp>
 
-#if !defined(WIN32)
-#   include <strings.h>
+#if !defined(WIN32) || defined(__MINGW32__)
+   #include <strings.h>
 #endif
 
 // Convert to string:
@@ -48,10 +48,10 @@ namespace detail
 
 static inline int stricmp(const char* a, const char* b)
 {
-#ifdef WIN32
-	return _strcmpi(a, b);
+#if defined(WIN32) && !defined(__MINGW32__)
+    return _strcmpi(a, b);
 #else
-	return strcasecmp(a, b);
+    return strcasecmp(a, b);
 #endif
 }
 
@@ -187,7 +187,7 @@ static const char* c_typeNames[] =
     "user",     // ValueType::User
 };
 
-const char* typeAsString(ValueType t)
+const char* valueTypeAsString(ValueType t)
 {
     const unsigned int i = static_cast<unsigned int>(t);
     return i <= static_cast<unsigned int>(ValueType::User) ? c_typeNames[i] : "unknown";

@@ -28,7 +28,6 @@
 #include <ponder/detail/format.hpp>
 
 #include <string.h>
-
 #include <cctype>
 #include <cerrno>
 #include <climits>
