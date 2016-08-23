@@ -100,7 +100,7 @@ namespace detail
  * void MyClass::registerMetaClass()
  * {
  *     ponder::Class::declare<MyClass>("MyClass")
- *         ...;
+ *         // ... declarations ... ;
  * }
  * \endcode
  *
@@ -109,19 +109,20 @@ namespace detail
  *
  * \sa PONDER_TYPE
  */
-#define PONDER_AUTO_TYPE(type, registerFunc) \
+#define PONDER_AUTO_TYPE(TYPE, REGISTER_FN) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<type> { \
+            template <> struct StaticTypeId<TYPE> { \
                 static const char* get(bool checkRegister = true) { \
                     if (checkRegister) \
-                        detail::ensureTypeRegistered(#type, registerFunc); \
-                    return #type; \
+                        detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
+                    return #TYPE; \
                 } \
                 enum {defined = true, copyable = true}; \
             }; \
         } \
     }
+    // TODO - ensureTypeRegistered() called every time referenced!
 
 /**
  * \brief Macro used to register a non-copyable C++ type to Ponder
@@ -160,11 +161,11 @@ namespace detail
  *
  * \sa PONDER_TYPE
  */
-#define PONDER_TYPE_NONCOPYABLE(type) \
+#define PONDER_TYPE_NONCOPYABLE(TYPE) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<type> { \
-                static const char* get(bool = true) {return #type;} \
+            template <> struct StaticTypeId<TYPE> { \
+                static const char* get(bool = true) {return #TYPE;} \
                 enum {defined = true, copyable = false}; \
             }; \
         } \
@@ -184,14 +185,14 @@ namespace detail
  *
  * \sa PONDER_AUTO_TYPE, PONDER_TYPE_NONCOPYABLE
  */
-#define PONDER_AUTO_TYPE_NONCOPYABLE(type, registerFunc) \
+#define PONDER_AUTO_TYPE_NONCOPYABLE(TYPE, REGISTER_FN) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<type> { \
+            template <> struct StaticTypeId<TYPE> { \
                 static const char* get(bool checkRegister = true) { \
                     if (checkRegister) \
-                        detail::ensureTypeRegistered(#type, registerFunc); \
-                    return #type; \
+                        detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
+                    return #TYPE; \
                 } \
                 enum {defined = true, copyable = false}; \
             }; \
