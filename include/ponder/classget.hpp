@@ -72,6 +72,9 @@ const Class& classByIndex(std::size_t index);
  *
  * \brief Get a metaclass from its name
  *
+ * \note Automated registration does not occur when using this lookup call (since we don't
+ *       have the object type). Use PONDER_TYPE registration if you use this.
+ *
  * \param name Name of the metaclass to retrieve (case sensitive)
  *
  * \return Reference to the requested metaclass
