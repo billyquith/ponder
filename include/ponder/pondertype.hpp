@@ -49,7 +49,7 @@ namespace detail
  *
  * \brief Macro used to register a C++ type to Ponder
  *
- * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE 
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE(), PONDER_AUTO_TYPE()
  * or their NONCOPYABLE versions.
  *
  * Example:
@@ -68,7 +68,7 @@ namespace detail
  *
  * \note This macro handles types that contain commas, e.g. `Data<float,int,int>`.
  *
- * \sa PONDER_TYPE, PONDER_AUTO_TYPE
+ * \sa PONDER_TYPE(), PONDER_AUTO_TYPE()
  */
 #define PONDER_TYPE(...) \
     namespace ponder { \
@@ -84,13 +84,16 @@ namespace detail
 /**
  * \brief Macro used to register a C++ type to Ponder with automatic metaclass creation
  *
- * Using this macro rather than PONDER_TYPE will make Ponder automatically call
+ * Using this macro rather than PONDER_TYPE() will make Ponder automatically call
  * the provided registration function the first time the metaclass is requested.
  * This is useful when you don't want to have to manually call an "init" function to
  * create your metaclass.
  *
- * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE 
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE(), PONDER_AUTO_TYPE()
  * or their NONCOPYABLE versions.
+ *
+ * \note This macro will fail with types that contain commas, e.g. `Data<float,int,int>`. Instead,
+ *       use PONDER_TYPE().
  *
  * Example:
  *
@@ -110,10 +113,7 @@ namespace detail
  * }
  * \endcode
  *
- * \note This macro will fail with types that contain commas, e.g. `Data<float,int,int>`. Instead,
- *       use PONDER_TYPE.
- *
- * \sa PONDER_TYPE
+ * \sa PONDER_TYPE()
  */
 #define PONDER_AUTO_TYPE(TYPE, REGISTER_FN) \
     namespace ponder { \
@@ -138,7 +138,7 @@ namespace detail
  * class can be modified through their metaproperties, but they can't be written with a 
  * single call to replace to whole object.
  *
- * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE 
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE(), PONDER_AUTO_TYPE() 
  * or their NONCOPYABLE versions.
  *
  * Example:
@@ -165,7 +165,7 @@ namespace detail
  * p2.set(p1.get(c).to<ponder::UserObject>(), 10); // OK
  * \endcode
  *
- * \sa PONDER_TYPE
+ * \sa PONDER_TYPE()
  */
 #define PONDER_TYPE_NONCOPYABLE(TYPE) \
     namespace ponder { \
@@ -186,10 +186,10 @@ namespace detail
  * This is useful when you don't want to have to manually call an "init" function to
  * create your metaclass.
  *
- * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE 
+ * Every type manipulated by Ponder must be registered with PONDER_TYPE(), PONDER_AUTO_TYPE() 
  * or their NONCOPYABLE versions.
  *
- * \sa PONDER_AUTO_TYPE, PONDER_TYPE_NONCOPYABLE
+ * \sa PONDER_AUTO_TYPE(), PONDER_TYPE_NONCOPYABLE()
  */
 #define PONDER_AUTO_TYPE_NONCOPYABLE(TYPE, REGISTER_FN) \
     namespace ponder { \
