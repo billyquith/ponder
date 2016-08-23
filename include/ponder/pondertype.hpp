@@ -43,6 +43,10 @@ namespace detail
 }
 
 /**
+ * \file ponder/pondertype.hpp
+ *
+ * \def PONDER_TYPE(TYPE)
+ *
  * \brief Macro used to register a C++ type to Ponder
  *
  * Every type manipulated by Ponder must be registered with PONDER_TYPE, PONDER_AUTO_TYPE 
@@ -63,6 +67,8 @@ namespace detail
  * \endcode
  *
  * \note This macro handles types that contain commas, e.g. `Data<float,int,int>`.
+ *
+ * \sa PONDER_TYPE, PONDER_AUTO_TYPE
  */
 #define PONDER_TYPE(...) \
     namespace ponder { \
