@@ -5,5 +5,6 @@ var classponder_1_1_args =
     [ "init", "classponder_1_1_args.html#a7c538d9c85c15370ff3c71e9998191f5", null ],
     [ "operator+", "classponder_1_1_args.html#a286a7c1735e31a9c4a61cbe792835adf", null ],
     [ "operator+=", "classponder_1_1_args.html#a611b75ec90afe2ecb9d4ba3364bb4d92", null ],
-    [ "operator[]", "classponder_1_1_args.html#a369b83df5bdb413a573ec72167b80376", null ]
+    [ "operator[]", "classponder_1_1_args.html#a369b83df5bdb413a573ec72167b80376", null ],
+    [ "empty", "classponder_1_1_args.html#a5c4f0353087866c07c006e248cea43dd", null ]
 ];

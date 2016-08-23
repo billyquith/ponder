@@ -18,7 +18,7 @@ ninja doc
 popd
 
 rm docs/*
-cp $DOCDIR/doc/api/html/* docs/
+cp -r $DOCDIR/doc/api/html/* docs/
 
 clean
 

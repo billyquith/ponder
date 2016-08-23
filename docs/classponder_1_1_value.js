@@ -11,5 +11,6 @@ var classponder_1_1_value =
     [ "to", "classponder_1_1_value.html#a1430d529e5bc06fe0ab80331bfdd399a", null ],
     [ "type", "classponder_1_1_value.html#a5963584ab2f7bf51c28093bc9956f0a7", null ],
     [ "visit", "classponder_1_1_value.html#a9acacbf6472edf76fb2cea322db30a28", null ],
-    [ "visit", "classponder_1_1_value.html#adde0b914dc31b90b8e072b28cac37b57", null ]
+    [ "visit", "classponder_1_1_value.html#adde0b914dc31b90b8e072b28cac37b57", null ],
+    [ "nothing", "classponder_1_1_value.html#a3c07dc232d4bb450397fe0ec8a712e61", null ]
 ];
