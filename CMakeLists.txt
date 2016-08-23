@@ -214,12 +214,16 @@ if(BUILD_TEST)
 endif()
 
 ###############################
+# uses
+###############################
+
+add_subdirectory(uses)
+
+###############################
 # doc
 ###############################
 
 add_subdirectory(doc)
-
-add_subdirectory(uses/script/lua)
 
 ###############################
 # support files
