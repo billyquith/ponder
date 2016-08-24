@@ -31,11 +31,10 @@
 #ifndef PONDER_DETAIL_RAWTYPE_HPP
 #define PONDER_DETAIL_RAWTYPE_HPP
 
+#include <memory>
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
     
 /**
  * \brief Utility class which tells at compile-time if a type T is a smart pointer to a type U
@@ -47,12 +46,6 @@ struct IsSmartPointer
 {
     // enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
     enum {value = false};
-};
-
-template <typename T, typename U>
-struct IsSmartPointer<std::auto_ptr<T>, U>
-{
-    enum {value = true};
 };
 
 template <typename T, typename U>
@@ -137,12 +130,6 @@ template<class T>
 T* get_pointer(T *p)
 {
     return p;
-}
-
-template<class T>
-T* get_pointer(std::auto_ptr<T> const& p)
-{
-    return p.get();
 }
 
 template<class T>
