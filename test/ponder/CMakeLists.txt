@@ -3,11 +3,12 @@
 ## Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ## Contact: Tegesoft Information (contact@tegesoft.com)
 ##
-## This file is part of the CAMP library.
+## This file is part of the Ponder library, formerly CAMP.
 ##
 ## The MIT License (MIT)
 ##
 ## Copyright (c) 2009-2014 TEGESO/TEGESOFT
+## Copyright (C) 2015-2016 Billy Quith.
 ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -30,49 +31,70 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 2.6)
-
 # set project's name
-project(PONDER_TEST_QT)
+project(PONDER_TEST)
 
 # all source files
-set(PONDER_TEST_QT_SRCS
+set(PONDER_TEST_SRCS
+    test.hpp
+    arrayproperty.cpp
+    class.cpp
+    classvisitor.cpp
+    constructor.cpp
+    dictionary.cpp
+    enum.cpp
+    enumclass.cpp
+    enumclassobject.cpp
+    enumclassproperty.cpp
+    enumobject.cpp
+    enumproperty.cpp
+    example_mainpage.cpp
+    function.cpp
+    functionaccess.cpp
+    inheritance.cpp
     main.cpp
-    functionmapping.cpp
-    functionmapping.hpp
-    propertymapping.cpp
-    propertymapping.hpp
-    qstringmapping.cpp
+    mapper.cpp
+    property.cpp
+    propertyaccess.cpp
+    string_view.cpp
+    tagholder.cpp
+    traits.cpp
+    userobject.cpp
+    userproperty.cpp
+    value.cpp
 )
 
-# find Boost
-find_package(Boost 1.38.0)  # TODO - add Qt tests? port to Catch.
-
-# find Qt4
-find_package(Qt4 4.5.0 COMPONENTS QtCore REQUIRED)
-
-# add some useful macros and variables
-# (QT_USE_FILE is a variable defined by find_package( Qt4 ) that contains a path to CMake script)
-include(${QT_USE_FILE})
-
-# this will run moc
-QT4_WRAP_CPP(PONDER_TEST_QT_MOC_SRCS functionmapping.hpp propertymapping.hpp)
+# Ponder, which was CAMP, used to rely on Boost. This is here in case we need to
+# test against Boost, which is a useful reference. At some point in the future
+# this may be removed.
+#
+# find Boost, for unit testing
+# find_package(Boost 1.38.0)
 
 # include files search paths
 include_directories(
     ${PONDER_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIRS}
+    # ${Boost_INCLUDE_DIRS}
 )
 
 # no implicit link to boost.test library
-add_definitions(-DBOOST_TEST_NO_LIB)
+# add_definitions(-DBOOST_TEST_NO_LIB)
+
+# linker search paths
+link_directories(
+    ${PONDER_BINARY_DIR}
+)
 
 # instruct CMake to build an executable from all of the source files
-add_executable(pondertest-qt ${PONDER_TEST_QT_SRCS} ${PONDER_TEST_QT_MOC_SRCS})
+add_executable(pondertest ${PONDER_TEST_SRCS})
 
-# last thing we have to do is to tell CMake what libraries our executable needs
-target_link_libraries(pondertest-qt ponder ${QT_LIBRARIES})
+# required standard level (needed to pass -std=c++11 to gcc and clang)
+set_property(TARGET pondertest PROPERTY CXX_STANDARD 11) # fails silently
+target_compile_features(pondertest PRIVATE cxx_range_for cxx_variadic_templates) # required
 
-# Add the CTest
-add_test(pondertest-qt pondertest-qt)
+# last thing we have to do is to tell CMake what libraries our executable needs,
+target_link_libraries(pondertest ponder)
+
+# - Add the executable as a CTest
+add_test(pondertest pondertest)
 

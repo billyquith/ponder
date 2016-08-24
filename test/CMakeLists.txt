@@ -31,75 +31,15 @@
 ###############################################################################
 
 
-# set project's name
-project(PONDER_TEST)
+add_subdirectory(ponder)
 
-# all source files
-set(PONDER_TEST_SRCS
-    test.hpp
-    arrayproperty.cpp
-    class.cpp
-    classvisitor.cpp
-    constructor.cpp
-    dictionary.cpp
-    enum.cpp
-    enumclass.cpp
-    enumclassobject.cpp
-    enumclassproperty.cpp
-    enumobject.cpp
-    enumproperty.cpp
-    example_mainpage.cpp
-    function.cpp
-    functionaccess.cpp
-    inheritance.cpp
-    main.cpp
-    mapper.cpp
-    property.cpp
-    propertyaccess.cpp
-    string_view.cpp
-    tagholder.cpp
-    traits.cpp
-    userobject.cpp
-    userproperty.cpp
-    value.cpp
-)
-
-# Ponder, which was CAMP, used to rely on Boost. This is here in case we need to
-# test against Boost, which is a useful reference. At some point in the future
-# this may be removed.
-#
-# find Boost, for unit testing
-# find_package(Boost 1.38.0)
-
-# include files search paths
-include_directories(
-    ${PONDER_SOURCE_DIR}/include
-    # ${Boost_INCLUDE_DIRS}
-)
-
-# no implicit link to boost.test library
-# add_definitions(-DBOOST_TEST_NO_LIB)
-
-# linker search paths
-link_directories(
-    ${PONDER_BINARY_DIR}
-)
-
-# instruct CMake to build an executable from all of the source files
-add_executable(pondertest ${PONDER_TEST_SRCS})
-
-# required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET pondertest PROPERTY CXX_STANDARD 11) # fails silently
-target_compile_features(pondertest PRIVATE cxx_range_for cxx_variadic_templates) # required
-
-# last thing we have to do is to tell CMake what libraries our executable needs,
-target_link_libraries(pondertest ponder)
-
-# - Add the executable as a CTest
-add_test(pondertest pondertest)
+if(BUILD_TEST_LUA)
+    add_subdirectory(lua)
+endif()
 
 # add the qt subdirectory, but do not build it by default
 if(BUILD_TEST_QT)
     add_subdirectory(qt)
 endif()
+
 

@@ -27,7 +27,12 @@ if(NOT BUILD_TEST)
     )
 endif()
 
-# Set the default test build option to false
+if(NOT BUILD_TEST_LUA)
+    set(BUILD_TEST_LUA FALSE
+        CACHE BOOL "TRUE to build the Lua-specific tests (requires Lua), FALSE otherwise."
+    )
+endif()
+
 if(NOT BUILD_TEST_QT)
     set(BUILD_TEST_QT FALSE
         CACHE BOOL "TRUE to build the Qt-specific unit tests (requires Qt 4.5), FALSE otherwise."

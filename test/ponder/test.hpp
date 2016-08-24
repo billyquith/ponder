@@ -1,6 +1,6 @@
 #pragma once
 
-#include "catch.hpp"
+#include "../catch.hpp"
 
 #include <ponder/value.hpp>
 #include <ponder/enum.hpp>
