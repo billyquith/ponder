@@ -50,6 +50,19 @@ namespace lua {
 void expose(lua_State *L, const Class& cls, const IdRef exposeName);
 
 /**
+ * \brief Expose a single Ponder metaclass to a Lua state
+ *
+ * \param C Metaclass type to expose.
+ * \param L Lua state in which to expose the class.
+ * \param exposeName The name of the class in the Lua state.
+ */
+template <typename C>
+void expose(lua_State *L, const IdRef exposeName)
+{
+    expose(L, classByType<C>(), exposeName);
+}
+
+/**
  * \brief Expose all existing Ponder registered objects to a Lua state
  *
  * \param L Lua state in which to expose the objects.
