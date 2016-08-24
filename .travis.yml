@@ -38,7 +38,7 @@ before_script:
   - echo "Generating project for $PROJGEN, config $BUILD_CONFIG."
   - cmake .. -G "$PROJGEN" -DBUILD_TEST=ON -DBUILD_TEST_LUA=ON
 script:
-  - cmake --build . --target ALL_BUILD --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
+  - cmake --build . --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
 
 notifications:
   email:
