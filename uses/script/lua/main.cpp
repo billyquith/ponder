@@ -26,17 +26,6 @@
  **
  ****************************************************************************/
 
-//----------------------------------------------------------------------------
-
-#include <ponder/class.hpp>
-#include <ponder/detail/format.hpp>
-#define PONDER_LUA_IMPL
-#include <ponder-lua/ponderlua.hpp>
- #include <ponder/classbuilder.hpp>
- #include <list>
-
-static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
-
 #define LUDB_DECL \
     int db_top(0),zz_ltop=lua_gettop(L),db_d_top(0),db_idx(0); \
     std::string zz_stk; \
@@ -53,6 +42,15 @@ static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
 
 #define PLDB(X) X
 #define PASSERT(X) if(!(X)) __builtin_trap()
+
+#include <ponder/class.hpp>
+#include <ponder/detail/format.hpp>
+#include <ponder/classbuilder.hpp>
+#define PONDER_LUA_IMPL
+#include <ponder/uses/lua.hpp>
+#include <list>
+
+static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
 
 namespace fmt = ponder::detail::fmt;
 

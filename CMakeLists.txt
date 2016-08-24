@@ -125,6 +125,8 @@ set(SRC_HEADERS
     include/ponder/qt/qtmapper.hpp
     include/ponder/qt/qtsimpleproperty.hpp
     include/ponder/qt/qvector.hpp        
+    # Uses
+    include/ponder/uses/lua.hpp
 )
 
 set(SRC_SOURCE
@@ -163,6 +165,8 @@ source_group("Headers\\Detail"
              REGULAR_EXPRESSION "include/ponder/detail/.+")
 source_group("Headers\\Qt"
              REGULAR_EXPRESSION "include/ponder/qt/.+")
+source_group("Headers\\Uses"
+             REGULAR_EXPRESSION "include/ponder/uses/.+")
 source_group("Headers\\XML"
              REGULAR_EXPRESSION "include/ponder-xml/.+")
 
