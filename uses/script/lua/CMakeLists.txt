@@ -47,6 +47,8 @@ link_directories(
 
 add_executable(luatest ${TEST_SRCS})
 
+target_compile_features(luatest PUBLIC cxx_range_for cxx_variadic_templates) # required
+
 target_link_libraries(luatest ponder ${LUA_LIBRARIES})
 
 # Add the executable as a CTest

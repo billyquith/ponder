@@ -34,9 +34,6 @@
 cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
-# Need at least a C++11 compiler
-set(CMAKE_CXX_STANDARD 11)
-
 # set project's name
 project(Ponder)
 
@@ -192,7 +189,6 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/version.in
 add_library(ponder ${PONDER_SRCS})
 
 # required standard level (needed to pass -std=c++11 to gcc and clang)
-set_property(TARGET ponder PROPERTY CXX_STANDARD 11) # fails silently
 target_compile_features(ponder PUBLIC cxx_range_for cxx_variadic_templates) # required
 
 # define the export macro
