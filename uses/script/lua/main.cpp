@@ -76,16 +76,6 @@ namespace lib
         Vec2f operator + (const Vec2f& o) const { return Vec2f(x + o.x, y + o.y); }
         const Vec2f& operator += (const Vec2f& o) { x += o.x, y += o.y; return *this; }
         
-        Vec2f operator - () const { return Vec2f(-x, -y); }
-        Vec2f operator - (const Vec2f& o) const { return Vec2f(x - o.x, y - o.y); }
-        void operator -= (const Vec2f& o) { x -= o.x, y -= o.y; }
-        
-        Vec2f operator * (float s) const { return Vec2f(x*s, y*s); }
-        Vec2f operator * (const Vec2f& o) const { return Vec2f(x * o.x, y * o.y); }
-        
-        Vec2f operator / (float s) const { return Vec2f(x/s, y/s); }
-        void operator /= (float s) { x /= s, y /= s; }
-        
         float length() const        { return std::sqrt(x*x + y*y); }
         
         float dot(const Vec2f &o) const {
@@ -96,9 +86,6 @@ namespace lib
     
     void declare()
     {
-        ponder::Class::declare<ponder::UserObject>()
-            ;
-        
         ponder::Class::declare<Vec2f>()
             .constructor()
             .constructor<float, float>()
@@ -106,16 +93,15 @@ namespace lib
             .property("x", &Vec2f::x)
             .property("y", &Vec2f::y)
             .function("set", &Vec2f::set)
-            .function("length", &Vec2f::length)
-            .function("dot", &Vec2f::dot)
             .function("add", &Vec2f::operator+=)
             .function("add2", &Vec2f::operator+).tag("+")
+            .function("length", &Vec2f::length)
+            .function("dot", &Vec2f::dot)
             ;
     }
     
 } // namespace lib
 
-PONDER_TYPE(ponder::UserObject)
 PONDER_TYPE(lib::Vec2f)
 
 static bool luaTest(lua_State *L, const char *source, bool success = true)
@@ -125,7 +111,7 @@ static bool luaTest(lua_State *L, const char *source, bool success = true)
     if (ok != success)
     {
         fmt::print("FAILED");
-        exit(1);
+        abort();
         return false;
     }
     fmt::print("\n");

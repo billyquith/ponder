@@ -112,10 +112,6 @@ static int pushValue(lua_State *L, const ponder::Value& val)
             lua_pushinteger(L, val.to<int>());
             return 1;
             
-//            case ValueType::Array:
-//                lua_pushinteger(L, val.to<int>());
-//                return 1;
-            
         case ValueType::User:
             {
                 UserObject vuobj = val.to<UserObject>();
@@ -247,10 +243,10 @@ static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
     const Class *cls = (const Class *) lua_touserdata(L, -1);
     
     void *ud = lua_touserdata(L, 1);                // userobj
-    const std::string key(lua_tostring(L, 2));
+    const IdRef key(lua_tostring(L, 2));
     
     // check if getting property value
-    for (auto&& prop : cls->propertyIterator())
+    for (auto&& prop : cls->propertyIterator()) // TODO - props.tryFind()
     {
         if (prop.name() == key)
         {
@@ -261,7 +257,7 @@ static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
     }
     
     // check if calling function object
-    for (auto&& func : cls->functionIterator())
+    for (auto&& func : cls->functionIterator()) // TODO - func.tryFind()
     {
         if (func.name() == key)
         {
