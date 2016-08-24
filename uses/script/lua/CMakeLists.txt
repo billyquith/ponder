@@ -29,7 +29,7 @@
 # set project's name
 project(luatest)
 
-find_package(LUA REQUIRED)
+find_package(Lua 5.2 REQUIRED)
 
 # all source files
 set(TEST_SRCS
@@ -47,10 +47,8 @@ link_directories(
 
 add_executable(luatest ${TEST_SRCS})
 
-target_compile_features(pondertest PRIVATE cxx_range_for cxx_variadic_templates) # required
-
 target_link_libraries(luatest ponder ${LUA_LIBRARIES})
 
 # Add the executable as a CTest
-# add_test(pondertest pondertest)
+add_test(luatest luatest)
 
