@@ -1,2 +1,5 @@
 
-add_subdirectory(script/lua)
+if(BUILD_TEST_LUA)
+    add_subdirectory(script/lua)
+endif()
+
