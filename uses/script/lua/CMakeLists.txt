@@ -27,7 +27,7 @@
 ###############################################################################
 
 # set project's name
-project(luatest)
+project(luadev)
 
 find_package(Lua 5.2 REQUIRED)
 
@@ -45,12 +45,10 @@ link_directories(
     ${PONDER_BINARY_DIR}
 )
 
-add_executable(luatest ${TEST_SRCS})
+add_executable(luadev ${TEST_SRCS})
 
-target_compile_features(luatest PUBLIC cxx_range_for cxx_variadic_templates) # required
+target_compile_features(luadev PUBLIC cxx_range_for cxx_variadic_templates) # required
 
-target_link_libraries(luatest ponder ${LUA_LIBRARIES})
+target_link_libraries(luadev ponder ${LUA_LIBRARIES})
 
-# Add the executable as a CTest
-add_test(luatest luatest)
 
