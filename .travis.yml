@@ -27,9 +27,8 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get -qq update
-      sudo apt-get install -y cmake doxygen lua5.2
-      lua -v
-      which lua
+      sudo apt-get install -y cmake doxygen lua5.2 liblua5.2
+      lua -v && which lua
       export PROJGEN="Unix Makefiles"
     fi
   
