@@ -28,15 +28,18 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get -qq update
       sudo apt-get install -y cmake doxygen lua5.2
+      lua -v
+      which lua
       export PROJGEN="Unix Makefiles"
     fi
   
 before_script:
   - cmake --version
   - mkdir build && cd build
+  - echo "Generating project for $PROJGEN, config $BUILD_CONFIG."
   - cmake .. -G "$PROJGEN" -DBUILD_TEST=ON -DBUILD_TEST_LUA=ON
 script:
-  - cmake --build . --target pondertest --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
+  - cmake --build . --target ALL_BUILD --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
 
 notifications:
   email:
