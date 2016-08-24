@@ -34,6 +34,9 @@
 cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
+# Need at least a C++11 compiler
+set(CMAKE_CXX_STANDARD 11)
+
 # set project's name
 project(Ponder)
 
