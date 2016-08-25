@@ -324,7 +324,7 @@ static int l_instance_create(lua_State *L)
     const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
     
     ponder::Args args;
-    constexpr auto c_argOffset = 2u;  // 1st arg is userdata object
+    constexpr int c_argOffset = 2;  // 1st arg is userdata object
     const int nargs = lua_gettop(L) - (c_argOffset-1);
     for (int i = c_argOffset; i < c_argOffset + nargs; ++i)
     {
@@ -378,7 +378,7 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
     
     // create instance metatable. store ref in the class metatable
-    lua_pushliteral(L, PONDER_LUA_INSTTBLS);       // +1 k
+    lua_pushliteral(L, PONDER_LUA_INSTTBLS);    // +1 k
     createInstanceMetatable(L, cls);            // +1
     lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
 
