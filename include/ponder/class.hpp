@@ -116,6 +116,8 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
         int offset;
     };
     
+    // These are shared_ptr as the objects can be inherited. When this happens the
+    // pointers are copied.
     typedef std::shared_ptr<Property> PropertyPtr;
     typedef std::shared_ptr<Function> FunctionPtr;
     typedef std::shared_ptr<Constructor> ConstructorPtr;

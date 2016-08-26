@@ -63,6 +63,7 @@ namespace TraitsTest
     
         int v;
         const int& getV() const {return v;}
+        static int staticFunc() { return 77; }
     };
 
     int intArray[10];
@@ -211,14 +212,23 @@ TEST_CASE("Ponder supports different function types")
         static_assert(FunctionTraits<int(char*)>::which == FunctionType::Function,
                       "FunctionTraits<>::which failed");
         
+        // non-class void(void)
         static_assert(FunctionTraits<decltype(func)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(func)>::which == FunctionType::Function,
                       "FunctionTraits<>::which failed");
         
+        // non-class R(...)
         static_assert(FunctionTraits<decltype(funcArgReturn)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(funcArgReturn)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+
+        // class static R(void)
+        static_assert(FunctionTraits<decltype(&Methods::staticFunc)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(&Methods::staticFunc)>::which
+                                                                     == FunctionType::Function,
                       "FunctionTraits<>::which failed");
     }
     

@@ -432,9 +432,10 @@ TEST_CASE("Classes can be templates")
     auto const& obj = metaclass.construct();
 }
 
-// Classes declared using Ponder *can declare* virtually inherited base classes, but the casting
-// of these is unrealiable due to the compiler specific nature of their implementation. This
-// test is therefore optional as it fails on some platforms, e.g. Windows debug.
+// Classes declared using Ponder *can declare* virtually inherited base classes,
+// but the casting of these is unreliable due to the compiler specific nature of their
+// compiler implementation. This test is therefore optional as it fails on some
+// platforms, even depending on config, e.g. Windows debug.
 #if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")
 {
