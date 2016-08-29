@@ -47,14 +47,17 @@ namespace TraitsTest
     static void func() {}
 
     static int funcArgReturn(float) {return 0;}
-
-    struct Callable {
-        void operator () (void) {}
+    
+    struct Class
+    {
+        float method(float x) const { return x*3; }
+        static int staticFunc() { return 77; }
     };
-
-    struct NonCallable {
-        int x;
-    };
+    
+    static float classStatic(Class& cls, float x)
+    {
+        return Class().method(x);
+    }
 
     struct Methods
     {
@@ -65,6 +68,14 @@ namespace TraitsTest
     
         int v;
         const int& getV() const {return v;}
+    };
+
+    struct Callable {
+        void operator () (void) {}
+    };
+    
+    struct NonCallable {
+        int x;
     };
 
     int intArray[10];
@@ -115,10 +126,19 @@ TEST_CASE("C++11 features and syntax")
         
         static_assert(std::is_function<decltype(func)>::value, "std::is_function failed");
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
+        static_assert(std::is_function<
+                        std::remove_pointer<decltype(&Class::staticFunc)>::type>::value,
+                      "std::is_function failed");
+        static_assert(std::is_function< std::function<void()>() >::value,
+                      "std::is_function failed");
+        
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
         static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
-        static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");    
-        static_assert(std::is_function< std::function<void()>() >::value,
+        static_assert( ! std::is_function<decltype(&Class::method)>::value,
+                      "std::is_function failed");
+        static_assert( ! std::is_function<void(Methods::*)()>::value, "std::is_function failed");
+        static_assert( ! std::is_function<
+                            std::remove_pointer<decltype(&Methods::foo)>::type>::value,
                       "std::is_function failed");
     }
     
@@ -216,14 +236,23 @@ TEST_CASE("Ponder supports different function types")
         static_assert(FunctionTraits<int(char*)>::which == FunctionType::Function,
                       "FunctionTraits<>::which failed");
         
+        // non-class void(void)
         static_assert(FunctionTraits<decltype(func)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(func)>::which == FunctionType::Function,
                       "FunctionTraits<>::which failed");
         
+        // non-class R(...)
         static_assert(FunctionTraits<decltype(funcArgReturn)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(funcArgReturn)>::which == FunctionType::Function,
+                      "FunctionTraits<>::which failed");
+
+        // class static R(void)
+        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::which
+                                                                     == FunctionType::Function,
                       "FunctionTraits<>::which failed");
     }
     

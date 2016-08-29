@@ -127,10 +127,12 @@ template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::function(IdRef name, F function)
 {
     // Get a uniform function type from F, whatever it really is
-    typedef typename detail::FunctionTraits<F>::type Signature;
-
+    typedef detail::FunctionTraits<F> Traits;
+    
+    static constexpr int implType = detail::FuncImplTypeMap<(int)Traits::which>::Type;
+    
     // Construct and add the metafunction
-    return addFunction(new detail::FunctionImpl<Signature>(name, function));
+    return addFunction(new detail::FunctionImpl<implType, typename Traits::type>(name, function));
 }
 
 template <typename T>

@@ -83,6 +83,16 @@ Value Function::call(const UserObject& object, const Args& args) const
     return execute(object, args);
 }
 
+Value Function::callStatic(const Args& args) const
+{
+    // Check the number of arguments
+    if (args.count() < m_argTypes.size())
+        PONDER_ERROR(NotEnoughArguments(name(), args.count(), m_argTypes.size()));
+    
+    // Execute the function
+    return execute(UserObject::nothing, args);
+}
+    
 void Function::accept(ClassVisitor& visitor) const
 {
     visitor.visit(*this);
