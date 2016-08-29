@@ -315,11 +315,27 @@ public:     // reflection
      * \return An iterator that can be used to iterator over all functions
      *
      * \code
-     * for (auto&& func : ponder::classByType<MyClass>().functionIterator())
+     * for (auto&& func : classByType<MyClass>().functionIterator())
      *     foo(func.name(), func.value());
      * \endcode
      */
     FunctionTable::Iterator functionIterator() const;
+
+    /**
+     * \brief Look up a function by name and return success
+     *
+     * \param name Name of the function to get (case sensitive)
+     * \param funcRet Function returned, if return was true
+     *
+     * \return Boolean. True if function found, else if not, false
+     *
+     * \code
+     * const Function *func;
+     * if (classByType<MyClass>().tryFunction("foo", func))
+     *     func.call(...);
+     * \endcode
+     */
+    bool tryFunction(const IdRef name, const Function*& funcRet) const;
 
     /**
      * \brief Return the total number of properties of this metaclass

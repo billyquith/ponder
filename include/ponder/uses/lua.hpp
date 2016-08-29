@@ -277,14 +277,12 @@ static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
     }
     
     // check if calling function object
-    for (auto&& func : cls->functionIterator()) // TODO - func.tryFind()
+    const Function *fp = nullptr;
+    if (cls->tryFunction(key, fp))
     {
-        if (func.name() == key)
-        {
-            lua_pushlightuserdata(L, (void*) func.value().get());
-            lua_pushcclosure(L, l_method_call, 1);
-            return 1;
-        }
+        lua_pushlightuserdata(L, (void*) fp);
+        lua_pushcclosure(L, l_method_call, 1);
+        return 1;
     }
     
     return 0;
@@ -380,14 +378,12 @@ static int l_get_class_static(lua_State *L)
     
     const IdRef key(lua_tostring(L, 2));
     
-    for (auto&& func : cls->functionIterator()) // TODO - func.tryFind()
+    const Function *fp = nullptr;
+    if (cls->tryFunction(key, fp))
     {
-        if (func.name() == key)
-        {
-            lua_pushlightuserdata(L, (void*) func.value().get());
-            lua_pushcclosure(L, l_func_call, 1);
-            return 1;
-        }
+        lua_pushlightuserdata(L, (void*) fp);
+        lua_pushcclosure(L, l_func_call, 1);
+        return 1;
     }
     
     return 0; // not found

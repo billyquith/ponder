@@ -266,7 +266,7 @@ TEST_CASE("Class metadata can be retrieved")
         REQUIRE_THROWS_AS(ponder::classByName("ClassTest::MyUndeclaredClass"), 
                           ponder::ClassNotFound);
     }
-    
+
     SECTION("by type")
     {
         REQUIRE(ponder::classByType<MyClass>().name() == "ClassTest::MyClass");
@@ -304,6 +304,14 @@ TEST_CASE("Class members can be inspected")
         REQUIRE(metaclass.functionCount() == 1U);
         REQUIRE(metaclass.hasFunction("func") == true);
         REQUIRE(metaclass.hasFunction("xxxx") == false);
+    }
+    
+    SECTION("can tryFind functions")
+    {
+        const ponder::Function *fp = nullptr;
+        REQUIRE(metaclass.tryFunction("funcNotFound", fp) == false);
+        REQUIRE(metaclass.tryFunction("func", fp) == true);
+        REQUIRE(fp->name() == "func");
     }
     
     SECTION("can iterate over properties")

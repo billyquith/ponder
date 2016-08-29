@@ -80,6 +80,17 @@ inline Class::FunctionTable::Iterator Class::functionIterator() const
     return m_functions.getIterator();
 }
 
+inline bool Class::tryFunction(const IdRef name, const Function *& funcRet) const
+{
+    FunctionTable::const_iterator it;
+    if (m_functions.tryFind(name, it))
+    {
+        funcRet = it->value().get();
+        return true;
+    }
+    return false;
+}
+
 inline Class::PropertyTable::Iterator Class::propertyIterator() const
 {
     return m_properties.getIterator();
