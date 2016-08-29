@@ -388,6 +388,22 @@ public:     // reflection
     PropertyTable::Iterator propertyIterator() const;
     
     /**
+     * \brief Look up a property by name and return success
+     *
+     * \param name Name of the property to get (case sensitive)
+     * \param propRet Property returned, if return was true
+     *
+     * \return Boolean. True if property found, else if not, false
+     *
+     * \code
+     * const Property *prop;
+     * if (classByType<MyClass>().tryProperty("bar", prop))
+     *     ... ;
+     * \endcode
+     */
+    bool tryProperty(const IdRef name, const Property*& propRet) const;
+
+    /**
      * \brief Create a UserObject from an opaque user pointer
      *
      * \return A UserObject with this class's type

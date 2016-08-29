@@ -266,14 +266,11 @@ static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
     const IdRef key(lua_tostring(L, 2));
     
     // check if getting property value
-    for (auto&& prop : cls->propertyIterator()) // TODO - props.tryFind()
+    const Property *pp = nullptr;
+    if (cls->tryProperty(key, pp))
     {
-        if (prop.name() == key)
-        {
-            ponder::UserObject *uobj = (ponder::UserObject*) ud;
-            ponder::Value val = uobj->get(key);
-            return pushValue(L, val);
-        }
+        ponder::UserObject *uobj = (ponder::UserObject*) ud;
+        return pushValue(L, pp->get(*uobj));
     }
     
     // check if calling function object

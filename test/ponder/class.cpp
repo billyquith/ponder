@@ -298,7 +298,15 @@ TEST_CASE("Class members can be inspected")
         REQUIRE(metaclass.hasProperty("prop") == true);
         REQUIRE(metaclass.hasProperty("xxxx") == false);        
     }
-    
+
+    SECTION("can tryFind properties")
+    {
+        const ponder::Property *pp = nullptr;
+        REQUIRE(metaclass.tryProperty("propNotFound", pp) == false);
+        REQUIRE(metaclass.tryProperty("prop", pp) == true);
+        REQUIRE(pp->name() == "prop");
+    }
+
     SECTION("can have functions")
     {
         REQUIRE(metaclass.functionCount() == 1U);

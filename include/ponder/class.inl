@@ -96,6 +96,17 @@ inline Class::PropertyTable::Iterator Class::propertyIterator() const
     return m_properties.getIterator();
 }
 
+inline bool Class::tryProperty(const IdRef name, const Property *& propRet) const
+{
+    PropertyTable::const_iterator it;
+    if (m_properties.tryFind(name, it))
+    {
+        propRet = it->value().get();
+        return true;
+    }
+    return false;
+}
+
 inline UserObject Class::getUserObjectFromPointer(void* ptr) const
 {
     return m_userObjectCreator(ptr);
