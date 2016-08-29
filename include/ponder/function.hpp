@@ -121,14 +121,17 @@ public:
      */
     Value call(const UserObject& object, const Args& args = Args::empty) const;
 
+    /**
+     * \brief Call the static function
+     *
+     * \param args Arguments to pass to the function, for example "ponder::Args::empty"
+     *
+     * \return Value returned by the function call
+     *
+     * \throw NotEnoughArguments too few arguments are provided
+     * \throw BadArgument one of the arguments can't be converted to the requested type
+     */
     Value callStatic(const Args& args = Args::empty) const;
-
-    // todo: pass args using variadic template:
-    //    template <typename ...A>
-    //    Value call(const UserObject& object, A... a) const
-    //    {
-    //        return call(object, callWithArgs(a...));
-    //    }
 
     /**
      * \brief Accept the visitation of a ClassVisitor
