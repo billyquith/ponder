@@ -96,12 +96,10 @@ template <typename T>
 inline typename std::remove_reference<T>::type
 convertArg(const Args& args, std::size_t index, IdRef function)
 {
-    try
-    {
+    try {
         return args[index].to<typename std::remove_reference<T>::type>();
     }
-    catch (const BadType&)
-    {
+    catch (const BadType&) {
         PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
     }
 }
@@ -110,7 +108,7 @@ convertArg(const Args& args, std::size_t index, IdRef function)
  * Object function call helper to allow specialisation by return type.
  */
 template <typename R, typename C>
-class CallHelper
+class CallObjectHelper
 {
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, C obj, const Args& args, IdRef name, index_sequence<Is...>)
@@ -128,10 +126,10 @@ public:
 };
 
 /*
- * Specialization of CallHelper for functions returning void
+ * Specialization of CallObjectHelper for functions returning void
  */
 template <typename C>
-class CallHelper<void, C>
+class CallObjectHelper<void, C>
 {
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, C obj, const Args& args, IdRef name, index_sequence<Is...>)
@@ -158,7 +156,7 @@ class CallStaticHelper
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, const Args& args, IdRef name, index_sequence<Is...>)
     {
-        return func(convertArg<A>(args, Is, name)...);
+        return CallReturner<R>::value(func(convertArg<A>(args, Is, name)...));
     }
     
 public:
@@ -223,7 +221,7 @@ protected:
     /// \see Function::execute
     Value execute(const UserObject& object, const Args& args) const override
     {
-        return CallHelper<R, C>::template
+        return CallObjectHelper<R, C>::template
             call<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
     }
     
