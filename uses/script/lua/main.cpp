@@ -81,6 +81,8 @@ namespace lib
         float dot(const Vec2f &o) const {
             return x*o.x + y*o.y;
         }
+        
+        static Vec2f up() { return Vec2f(0, 1.f); }
     };
 
     
@@ -97,6 +99,7 @@ namespace lib
             .function("add2", &Vec2f::operator+).tag("+")
             .function("length", &Vec2f::length)
             .function("dot", &Vec2f::dot)
+            .function("up", &Vec2f::up)
             ;
     }
     
@@ -159,7 +162,12 @@ int main()
     
     // method call with return object
     luaTest(L, "c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
-    
+
+    // static func
+    luaTest(L, "assert(type(Vec2.up) == 'function')");
+    luaTest(L, "up = Vec2.up(); assert(type(up) == 'userdata')");
+    luaTest(L, "assert(type(up.x) == 'number')");
+
     return EXIT_SUCCESS;
 }
 

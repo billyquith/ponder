@@ -207,6 +207,26 @@ static Value getValue(lua_State *L, int index, ValueType typeExpected = ValueTyp
     
     return Value(); // no value
 }
+    
+static int l_func_call(lua_State *L)
+{
+    lua_pushvalue(L, lua_upvalueindex(1));
+    const Function *func = (const Function *) lua_touserdata(L, -1);
+    
+    Args args;
+    for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
+    {
+        // we know the arg type so check it
+        const ValueType at = func->argType(i);
+        args += getValue(L, i, at);
+    }
+    
+    Value ret = func->callStatic(args);
+    if (ret.type() != ValueType::None)
+        return pushValue(L, ret);
+    
+    return 0;
+}
 
 static int l_method_call(lua_State *L)
 {
@@ -353,6 +373,26 @@ static int l_instance_create(lua_State *L)
     return 1;
 }
 
+static int l_get_class_static(lua_State *L)
+{
+    // get Class* from class object
+    const ponder::Class *cls = *(const ponder::Class**) lua_touserdata(L, 1);
+    
+    const IdRef key(lua_tostring(L, 2));
+    
+    for (auto&& func : cls->functionIterator()) // TODO - func.tryFind()
+    {
+        if (func.name() == key)
+        {
+            lua_pushlightuserdata(L, (void*) func.value().get());
+            lua_pushcclosure(L, l_func_call, 1);
+            return 1;
+        }
+    }
+    
+    return 0; // not found
+}
+    
 void expose(lua_State *L, const Class& cls, const IdRef name)
 {
     // ensure _G.META
@@ -376,7 +416,11 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     lua_pushliteral(L, "__call");               // +1 k
     lua_pushcfunction(L, l_instance_create);    // +1 v
     lua_rawset(L, -3);                          // -2 meta.__call = constructor_fn
-    
+
+    lua_pushliteral(L, "__index");              // +1 k
+    lua_pushcfunction(L, l_get_class_static);   // +1 v
+    lua_rawset(L, -3);                          // -2 meta.__index = get_class_statics
+
     // create instance metatable. store ref in the class metatable
     lua_pushliteral(L, PONDER_LUA_INSTTBLS);    // +1 k
     createInstanceMetatable(L, cls);            // +1

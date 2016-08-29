@@ -42,7 +42,7 @@ namespace fmt = ponder::detail::fmt;
 
 namespace lib
 {
-    static const float FLOAT_EPSILON = 1e-5f;
+    static constexpr float FLOAT_EPSILON = 1e-5f;
     
     struct Vec
     {
@@ -70,6 +70,8 @@ namespace lib
         float dot(const Vec &o) const {
             return x*o.x + y*o.y;
         }
+        
+        static Vec up() { return Vec(0, 1.f); }
     };
 
     
@@ -86,6 +88,7 @@ namespace lib
             .function("add2", &Vec::operator+).tag("+")
             .function("length", &Vec::length)
             .function("dot", &Vec::dot)
+            .function("up", &Vec::up)
             ;
     }
     
@@ -132,6 +135,7 @@ int main()
     // property write
     luaTest(L, "v.x = 7; assert(v.x == 7)");
     luaTest(L, "v.y = -3; assert(v.y == -3)");
+    luaTest(L, "assert(type(v.x) == 'number'); assert(type(v.y) == 'number')");
     luaTest(L, "v.x = 1.25");
     luaTest(L, "v.x = 1.76e6");
     luaTest(L, "v.x = 'fail'", false);
@@ -150,6 +154,11 @@ int main()
     // method call with return object
     luaTest(L, "c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
     
+    // static func
+    luaTest(L, "assert(type(Vec2.up) == 'function')");
+    luaTest(L, "up = Vec2.up(); assert(type(up) == 'userdata')");
+    luaTest(L, "assert(type(up.x) == 'number')");
+
     return EXIT_SUCCESS;
 }
 
