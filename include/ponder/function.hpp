@@ -121,6 +121,8 @@ public:
      */
     Value call(const UserObject& object, const Args& args = Args::empty) const;
 
+    Value callStatic(const Args& args = Args::empty) const;
+
     // todo: pass args using variadic template:
     //    template <typename ...A>
     //    Value call(const UserObject& object, A... a) const

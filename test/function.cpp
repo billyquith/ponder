@@ -113,11 +113,21 @@ namespace FunctionTest
         int f20(int x) {return x;}
         int f21(int x, int y) {return x + y;}
         int f22(int x, int y, int z) {return x + y + z;}
+        
+        static int staticFunc()
+        {
+            return 77;
+        }
+        
+        static float staticFunc2(float a, float b)
+        {
+            return a * b;
+        }
     };
     
-    void f1(MyClass& object)
+    void f1(MyClass* object)  // TODO - allow non-const refs
     {
-        object.p1 = true;
+        object->p1 = true;
     }
     
     int f2(MyClass object, int x)
@@ -155,7 +165,7 @@ namespace FunctionTest
         
         ponder::Class::declare<MyBase>("FunctionTest::MyBase");
         
-        ponder::Class::declare<MyClass>("FunctionTest::MyClass")
+        ponder::Class::declare<MyClass>()
             .base<MyBase>()
             
             // ***** non-member functions *****
@@ -198,7 +208,9 @@ namespace FunctionTest
             .function("f22",
                       std::function<int (MyClass&, int)>(
                           std::bind(std::bind(&MyClass::f22, _1, _2, _3, 30), _1, _2, 20)))
-            ;
+            .function("statFunc", &MyClass::staticFunc)
+            .function("statFunc2", &MyClass::staticFunc2)
+           ;
         
         ponder::Class::declare<ClassA>()
             .constructor()
@@ -261,9 +273,9 @@ TEST_CASE("Ponder supports functions")
 
     SECTION("functions have a number of arguments")
     {
-        REQUIRE(functions[1]->argCount() ==  0);
-        REQUIRE(functions[2]->argCount() ==  1);
-        REQUIRE(functions[3]->argCount() ==  0);
+        REQUIRE(functions[1]->argCount() ==  1);
+        REQUIRE(functions[2]->argCount() ==  2);
+        REQUIRE(functions[3]->argCount() ==  1);
         REQUIRE(functions[4]->argCount() ==  0);
         REQUIRE(functions[5]->argCount() ==  0);
         REQUIRE(functions[6]->argCount() ==  0);
@@ -287,14 +299,15 @@ TEST_CASE("Ponder supports functions")
     
     SECTION("function arguments have a type")
     {
-        REQUIRE_THROWS_AS(functions[1]->argType(0),  ponder::OutOfRange);
-        REQUIRE(functions[2]->argType(0) ==  ponder::ValueType::Integer);
-        REQUIRE_THROWS_AS(functions[3]->argType(0),  ponder::OutOfRange);
-        REQUIRE_THROWS_AS(functions[4]->argType(0),  ponder::OutOfRange);
-        REQUIRE_THROWS_AS(functions[5]->argType(0),  ponder::OutOfRange);
-        REQUIRE_THROWS_AS(functions[6]->argType(0),  ponder::OutOfRange);
+        REQUIRE(functions[1]->argType(0) == ponder::ValueType::User);
+        REQUIRE(functions[2]->argType(0) == ponder::ValueType::User);
+        REQUIRE(functions[2]->argType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[3]->argType(0) == ponder::ValueType::User);
+        REQUIRE_THROWS_AS(functions[4]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[5]->argType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[6]->argType(0), ponder::OutOfRange);
         REQUIRE(functions[7]->argType(0) ==  ponder::ValueType::User);
-        REQUIRE_THROWS_AS(functions[8]->argType(0),  ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[8]->argType(0), ponder::OutOfRange);
         REQUIRE(functions[9]->argType(0) ==  ponder::ValueType::Boolean);
         REQUIRE(functions[10]->argType(0) == ponder::ValueType::Real);
         REQUIRE(functions[10]->argType(1) == ponder::ValueType::Real);
@@ -325,9 +338,9 @@ TEST_CASE("Ponder supports functions")
     {
         MyClass object;
         
-        IS_TRUE(functions[1]->call(object, ponder::Args()) == ponder::Value::nothing);
-        IS_TRUE(functions[2]->call(object, ponder::Args(10)) == ponder::Value(12));
-        IS_TRUE(functions[3]->call(object, ponder::Args()) == ponder::Value("3"));
+        IS_TRUE(functions[1]->callStatic(ponder::Args(&object)) == ponder::Value::nothing);
+        IS_TRUE(functions[2]->callStatic(ponder::Args(&object, 10)) == ponder::Value(12));
+        IS_TRUE(functions[3]->callStatic(ponder::Args(&object)) == ponder::Value("3"));
         IS_TRUE(functions[4]->call(object, ponder::Args()).to<MyType>() == MyType(4));
         IS_TRUE(functions[5]->call(object, ponder::Args()).to<MyType>() == MyType(5));
         IS_TRUE(functions[6]->call(object, ponder::Args()) == ponder::Value::nothing);
@@ -349,13 +362,20 @@ TEST_CASE("Ponder supports functions")
         IS_TRUE(functions[20]->call(object, ponder::Args(10)) == ponder::Value(10));
         IS_TRUE(functions[21]->call(object, ponder::Args(10)) == ponder::Value(30));
         IS_TRUE(functions[22]->call(object, ponder::Args(10)) == ponder::Value(60));
+        
+        auto const& mc = ponder::classByType<MyClass>();
+        ponder::Value r = mc.function("statFunc").callStatic();
+        IS_TRUE(r.to<int>() == 77);
+        
+        ponder::Value r2 = mc.function("statFunc2").callStatic(ponder::Args(2.5f, 3.0f));
+        REQUIRE(r2.to<float>() == 7.5f);
     }
     
     SECTION("calling null functions is an error")
     {
-        REQUIRE_THROWS_AS(functions[1]->call(ponder::UserObject(),  ponder::Args()),
+        REQUIRE_THROWS_AS(functions[1]->callStatic(ponder::Args(ponder::UserObject())),
                           ponder::NullObject);
-        REQUIRE_THROWS_AS(functions[3]->call(ponder::UserObject(), ponder::Args()),
+        REQUIRE_THROWS_AS(functions[3]->callStatic(ponder::Args(ponder::UserObject())),
                           ponder::NullObject);
         REQUIRE_THROWS_AS(functions[4]->call(ponder::UserObject(), ponder::Args()),
                           ponder::NullObject);
@@ -406,7 +426,7 @@ TEST_CASE("Ponder supports functions")
         MyClass object;
         MyType arg(0);
 
-        REQUIRE_THROWS_AS(functions[2]->call(object, ponder::Args(arg)),
+        REQUIRE_THROWS_AS(functions[2]->callStatic(ponder::Args(&object, arg)),
                           ponder::BadArgument);
         REQUIRE_THROWS_AS(functions[10]->call(object, ponder::Args(arg, arg)),
                           ponder::BadArgument);

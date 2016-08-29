@@ -33,14 +33,10 @@
 
 
 #include <ponder/function.hpp>
-#include <vector>
-#include <string>
-#include <utility>
+#include <ponder/detail/functiontraits.hpp>
 
 namespace ponder {
 namespace detail {
-
-using namespace std::placeholders;
 
 /**
  * \brief Helper function which converts an argument to a C++ type
@@ -57,9 +53,8 @@ using namespace std::placeholders;
  * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
-inline typename std::remove_reference<T>::type convertArg(const Args& args,
-                                                          std::size_t index,
-                                                          IdRef function)
+inline typename std::remove_reference<T>::type
+convertArg(const Args& args, std::size_t index, IdRef function)
 {
     try
     {
@@ -71,41 +66,24 @@ inline typename std::remove_reference<T>::type convertArg(const Args& args,
     }
 }
 
-
+/*
+ * Object function call helper to allow specialisation by return type.
+ */
 template <typename R, typename C>
 class CallHelper
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value callCoerce(F func,
-                      C obj,
-                      const Args& args,
-                      IdRef name,
-                      index_sequence<Is...>)
+    static Value call(F func, C obj, const Args& args, IdRef name, index_sequence<Is...>)
     {
         return func(obj, convertArg<A>(args, Is, name)...);
     }
 
-    template<typename F, typename... A, std::size_t... Is>
-    static Value callDirect(F func,
-                      C obj,
-                      const Args& args,
-                      IdRef name,
-                      index_sequence<Is...>)
-    {
-        return func(obj, args[Is]...);
-    }
-
 public:
+    
     template <typename F, typename... A>
-    static Value callCoerce(F func, C obj, const Args& args, IdRef name)
+    static Value call(F func, C obj, const Args& args, IdRef name)
     {
-        return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
-    }
-
-    template <typename F, typename... A>
-    static Value callDirect(F func, C obj, const Args& args, IdRef name)
-    {
-        return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
@@ -116,41 +94,69 @@ template <typename C>
 class CallHelper<void, C>
 {
     template<typename F, typename... A, std::size_t... Is>
-    static Value callCoerce(F func,
-                      C obj,
-                      const Args& args,
-                      IdRef name,
-                      index_sequence<Is...>)
+    static Value call(F func, C obj, const Args& args, IdRef name, index_sequence<Is...>)
     {
         func(obj, convertArg<A>(args,Is,name)...);
         return Value::nothing;
     }
 
-    template<typename F, typename... A, std::size_t... Is>
-    static Value callDirect(F func,
-                      C obj,
-                      const Args& args,
-                      IdRef name,
-                      index_sequence<Is...>)
-    {
-        func(obj, args[Is]...);
-        return Value::nothing;
-    }
-
 public:
     template <typename F, typename... A>
-    static Value callCoerce(F func, C obj, const Args& args, IdRef name)
+    static Value call(F func, C obj, const Args& args, IdRef name)
     {
-        return callCoerce<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        return call<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
     }
+};
+    
 
-    template <typename F, typename... A>
-    static Value callDirect(F func, C obj, const Args& args, IdRef name)
+/*
+ * Static function call helper to allow specialisation by return type.
+ */
+template <typename R>
+class CallStaticHelper
+{
+    template<typename F, typename... A, std::size_t... Is>
+    static Value call(F func, const Args& args, IdRef name, index_sequence<Is...>)
     {
-        return callDirect<F, A...>(func, obj, args, name, make_index_sequence<sizeof...(A)>());
+        return func(convertArg<A>(args, Is, name)...);
+    }
+    
+public:
+    
+    template <typename F, typename... A>
+    static Value call(F func, const Args& args, IdRef name)
+    {
+        return call<F, A...>(func, args, name, make_index_sequence<sizeof...(A)>());
     }
 };
 
+/*
+ * Specialization of CallStaticHelper for functions returning void
+ */
+template <>
+class CallStaticHelper<void>
+{
+    template<typename F, typename... A, std::size_t... Is>
+    static Value call(F func, const Args& args, IdRef name, index_sequence<Is...>)
+    {
+        func(convertArg<A>(args,Is,name)...);
+        return Value::nothing;
+    }
+    
+public:
+    template <typename F, typename... A>
+    static Value call(F func, const Args& args, IdRef name)
+    {
+        return call<F, A...>(func, args, name, make_index_sequence<sizeof...(A)>());
+    }
+};
+    
+
+enum FunctionImplType
+{
+    FuncImplFunctionWrapper,
+    FuncImplStaticFunction,
+};
     
 /**
  * \class ponder::detail::FunctionImpl
@@ -160,41 +166,78 @@ public:
  * The FunctionImpl class is a template which is specialized
  * according to the underlying function prototype.
  */
-template <typename F1, typename F2 = void> class FunctionImpl;
-    
-/*
- * Specialization of FunctionImpl for all functions.
- */
+template <int F, typename T = void> class FunctionImpl;
+
 template <typename C, typename R, typename... A>
-class FunctionImpl<R (C, A...)> : public Function
+class FunctionImpl<FuncImplFunctionWrapper, R (C, A...)> : public Function
 {
 public:
-
-    /**
-     * \brief Constructor
-     */
+    
     FunctionImpl(IdRef name, std::function<R (C, A...)> function)
-        :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
-        ,   m_function(function)
-    {
-    }
-
+    :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
+    ,   m_function(function)
+    {}
+    
 protected:
     
-    /**
-     * \see Function::execute
-     */
+    /// \see Function::execute
     Value execute(const UserObject& object, const Args& args) const override
     {
         return CallHelper<R, C>::template
-            callCoerce<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
+            call<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
     }
-
+    
 private:
-
+    
     std::function<R (C, A...)> m_function; ///< Object containing the actual function to call
 };
 
+    
+template <typename R, typename... A>
+class FunctionImpl<FuncImplStaticFunction, R (A...)> : public Function
+{
+public:
+    
+    typedef R(*FuncType)(A...);
+    
+    FunctionImpl(IdRef name, FuncType function)
+    :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
+    ,   m_function(function)
+    {}
+    
+protected:
+    
+    /// \see Function::execute
+    Value execute(const UserObject&, const Args& args) const override
+    {
+        return CallStaticHelper<R>::template
+            call<decltype(m_function), A...>(m_function, args, name());
+    }
+    
+private:
+    
+    FuncType m_function; ///< Object containing the actual function to call
+};
+    
+
+// Map from function traits type (FunctionType) to function implementation type.
+// We do this to handle differing function types, e.g. static function have no instance
+// parameter.
+template <int FuncTypeWhich> struct FuncImplTypeMap;
+    
+template <> struct FuncImplTypeMap<(int)FunctionType::Function>
+{ static constexpr int Type = FuncImplStaticFunction; };
+
+template <> struct FuncImplTypeMap<(int)FunctionType::FunctionWrapper>
+{ static constexpr int Type = FuncImplFunctionWrapper; };
+
+template <> struct FuncImplTypeMap<(int)FunctionType::Lambda>
+{ static constexpr int Type = FuncImplFunctionWrapper; };
+
+template <> struct FuncImplTypeMap<(int)FunctionType::MemberFunction>
+{ static constexpr int Type = FuncImplFunctionWrapper; };
+
+    
 } // namespace detail
 } // namespace ponder
 
