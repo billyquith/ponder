@@ -43,6 +43,7 @@ inline const Class& classByIndex(std::size_t index)
 
 inline const Class& classByName(IdRef name)
 {
+    // Note: detail::typeId() not used here so no automated registration.
     return detail::ClassManager::instance().getById(name);
 }
 
