@@ -77,7 +77,7 @@ set(CPACK_RESOURCE_FILE_README ${PONDER_SOURCE_DIR}/README.md)
 set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY Ponder)
 
 # Package filename setup
-include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
+include(${PONDER_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # set package file name
 string(TOLOWER ${CPACK_PACKAGE_NAME} LOWER_PACKAGE_NAME)
