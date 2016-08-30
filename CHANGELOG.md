@@ -6,7 +6,9 @@ Ponder Changelog
 
 ### 1.4
 
+- Added support for binding to static functions (issue #46).
 - Class::create() allows object creation without an Args list.
+- Class::tryFunction() and Class::tryProperty() added.
 
 ### 1.3
 
