@@ -82,6 +82,8 @@ namespace lib
         Holder() = default;
         Holder(const Holder&) = delete;
         
+        Vec vec;
+        
         Holder* ptrRef() { return this; }
         Holder& refRef() { return *this; }
     };
@@ -103,14 +105,15 @@ namespace lib
         
             .function("up", &Vec::up)           // static
         
-            .function("ref", &Vec::ref)         // ref function
-            .property("selfRef", &Vec::ref)        // ref property
+            .function("funcRef", &Vec::ref)     // ref function
+            .property("propRef", &Vec::ref)     // ref property
             ;
         
         ponder::Class::declare<Holder>()
             .constructor()
             //  .property("pref", &Holder::ptrRef) // TODO - fix for self ref pointers
-            .property("rref", &Holder::refRef)
+            .function("rref", &Holder::refRef)
+            .property("vec", &Holder::vec)
             ;
     }
     
@@ -143,6 +146,7 @@ int main()
     
     lib::declare();
     ponder::lua::expose<lib::Vec>(L, "Vec2");
+    ponder::lua::expose<lib::Holder>(L, "Holder");
 
     // class defined
     luaTest(L, "print(Vec2); assert(Vec2 ~= nil)");
@@ -188,15 +192,19 @@ int main()
     luaTest(L, "up = Vec2.up(); assert(type(up) == 'userdata')");
     luaTest(L, "assert(type(up.x) == 'number')");
 
-    // return ref (func)
+    // Vec return ref (func)
     luaTest(L, "r = Vec2(7,8); assert(r.x == 7)");
     luaTest(L, "r.x = 9; assert(r.x == 9)");
-    luaTest(L, "r:ref().x = 19; assert(r.x == 19)");
+    luaTest(L, "r:funcRef().x = 19; assert(r.x == 19)");
 
-    // return ref (prop)
-    luaTest(L, "r = Vec2(7,8); assert(r.x == 7)");
+    // Vec return ref (prop)
+    luaTest(L, "r = Vec2(17,8); assert(r.x == 17)");
     luaTest(L, "r.x = 9; assert(r.x == 9)");
-    luaTest(L, "r.selfRef.x = 19; assert(r.x == 19)");
+    luaTest(L, "r.propRef.x = 19; assert(r.x == 19)");
+
+    // Non-copyable return ref
+    luaTest(L, "h = Holder()");
+    luaTest(L, "h:rref().vec.x = 9; assert(h:rref().vec.x == 9)");
 
     return EXIT_SUCCESS;
 }
