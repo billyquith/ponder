@@ -47,6 +47,12 @@ namespace FunctionTest
         int x;
     };
     
+    struct NonCopyable
+    {
+        NonCopyable() = default;
+        NonCopyable(const NonCopyable&) = delete;
+    };
+    
     static bool operator == (const MyType& left, const MyType& right)
     {
         return left.x == right.x;
@@ -123,6 +129,18 @@ namespace FunctionTest
         {
             return a * b;
         }
+        
+        static NonCopyable& staticFuncRetRef()
+        {
+            static NonCopyable nc;
+            return nc;
+        }
+        
+        static NonCopyable* staticFuncRetPtr()
+        {
+            static NonCopyable nc;
+            return &nc;
+        }
     };
     
     void f1(MyClass* object)  // TODO - allow non-const refs
@@ -162,7 +180,9 @@ namespace FunctionTest
             .value("Two",  Two);
         
         ponder::Class::declare<MyType>("FunctionTest::MyType");
-        
+
+        ponder::Class::declare<NonCopyable>();
+
         ponder::Class::declare<MyBase>("FunctionTest::MyBase");
         
         ponder::Class::declare<MyClass>()
@@ -210,7 +230,10 @@ namespace FunctionTest
                           std::bind(std::bind(&MyClass::f22, _1, _2, _3, 30), _1, _2, 20)))
             .function("statFunc", &MyClass::staticFunc)
             .function("statFunc2", &MyClass::staticFunc2)
-           ;
+        
+            .function("nonCopyRef", &MyClass::staticFuncRetRef)
+            .function("nonCopyPtr", &MyClass::staticFuncRetPtr)
+            ;
         
         ponder::Class::declare<ClassA>()
             .constructor()
@@ -225,6 +248,7 @@ namespace FunctionTest
 PONDER_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::NonCopyable, &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::ClassA,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::ClassB,  &FunctionTest::declare)
@@ -269,6 +293,9 @@ TEST_CASE("Ponder supports functions")
         REQUIRE(functions[20]->returnType() == ponder::ValueType::Integer);
         REQUIRE(functions[21]->returnType() == ponder::ValueType::Integer);
         REQUIRE(functions[22]->returnType() == ponder::ValueType::Integer);
+        
+        REQUIRE(metaclass.function("nonCopyRef").returnType() == ponder::ValueType::User);
+        REQUIRE(metaclass.function("nonCopyPtr").returnType() == ponder::ValueType::User);
     }
 
     SECTION("functions have a number of arguments")
@@ -295,6 +322,8 @@ TEST_CASE("Ponder supports functions")
         REQUIRE(functions[20]->argCount() == 1);
         REQUIRE(functions[21]->argCount() == 1);
         REQUIRE(functions[22]->argCount() == 1);
+        REQUIRE(metaclass.function("nonCopyRef").argCount() == 0);
+        REQUIRE(metaclass.function("nonCopyPtr").argCount() == 0);
     }
     
     SECTION("function arguments have a type")
@@ -369,6 +398,9 @@ TEST_CASE("Ponder supports functions")
         
         ponder::Value r2 = mc.function("statFunc2").callStatic(ponder::Args(2.5f, 3.0f));
         REQUIRE(r2.to<float>() == 7.5f);
+        
+        ponder::Value ncr = mc.function("nonCopyRef").callStatic();
+        ponder::Value ncp = mc.function("nonCopyPtr").callStatic();
     }
     
     SECTION("calling null functions is an error")
