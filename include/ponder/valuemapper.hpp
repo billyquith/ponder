@@ -143,7 +143,7 @@ struct ValueMapper
         {return source.get<T>();}
 };
 
-/*
+/**
  * Specialization of ValueMapper for abstract types
  */
 template <typename T>
@@ -153,7 +153,7 @@ struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value >::type
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
 };
 
-/*
+/**
  * Specialization of ValueMapper for booleans
  */
 template <>
@@ -170,7 +170,7 @@ struct ValueMapper<bool>
     static bool from(const ponder::UserObject& source) {return source.pointer() != nullptr;}
 };
 
-/*
+/**
  * Specialization of ValueMapper for integers
  */
 template <typename T>
@@ -217,7 +217,7 @@ struct ValueMapper<T,
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::User, ponder::ValueType::Real));}
 };
 
-/*
+/**
  * Specialization of ValueMapper for ponder::String
  */
 template <>
@@ -240,7 +240,7 @@ struct ValueMapper<ponder::String>
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::User, ponder::ValueType::String));}
 };
 
-/*
+/**
  * Specialization of ValueMapper for arrays.
  * No conversion allowed, only type mapping is provided.
  *
@@ -257,7 +257,7 @@ struct ValueMapper<T,
     static const ponder::ValueType type = ponder::ValueType::Array;
 };
 
-/*
+/**
  * Specializations of ValueMapper for char arrays.
  * Conversion to char[N] is disabled (can't return an array).
  */
@@ -274,7 +274,7 @@ struct ValueMapper<const char[N]>
     static ponder::String to(const char source[N]) {return ponder::String(source);}
 };
 
-/*
+/**
  * Specialization of ValueMapper for enum types
  */
 template <typename T>
@@ -317,7 +317,7 @@ struct ValueMapper<T,
     }
 };
 
-/*
+/**
  * Specialization of ValueMapper for EnumObject
  */
 template <>
@@ -339,7 +339,7 @@ struct ValueMapper<ponder::EnumObject>
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::ValueType::Enum));}
 };
 
-/*
+/**
  * Specialization of ValueMapper for ponder::ValueType.
  */
 template <>
@@ -350,7 +350,7 @@ struct ValueMapper<ponder::ValueType>
         {return ponder::String(ponder::detail::valueTypeAsString(source));}
 };
 
-/*
+/**
  * Specialization of ValueMapper for UserObject
  */
 template <>
@@ -372,7 +372,7 @@ struct ValueMapper<ponder::UserObject>
         {PONDER_ERROR(ponder::BadType(ponder::ValueType::Enum,   ponder::ValueType::User));}
 };
 
-/*
+/**
  * Specialization of ValueMapper for smart pointers. Forward the pointer type.
  */
 template <template <typename> class T, typename U>
@@ -382,7 +382,7 @@ struct ValueMapper<T<U>,
 {
 };
 
-/*
+/**
  * Specialization of ValueMapper for const T& -- just forward to ValueMapper<T>
  */
 template <typename T>
@@ -390,7 +390,7 @@ struct ValueMapper<const T&> : public ValueMapper<T>
 {
 };
 
-/*
+/**
  * Specialization of ValueMapper for const T -- just forward to ValueMapper<T>
  */
 template <typename T>
@@ -398,7 +398,7 @@ struct ValueMapper<const T> : public ValueMapper<T>
 {
 };
 
-/*
+/**
  * Specialization of ValueMapper for void.
  * Conversion to void should never happen, the only aim of this
  * specialization is to define the proper type mapping.
@@ -409,7 +409,7 @@ struct ValueMapper<void>
     static const ponder::ValueType type = ponder::ValueType::None;
 };
 
-/*
+/**
  * Specialization of ValueMapper for NoType.
  * Conversion to NoType should never happen, the only aim of this
  * specialization is to define the proper mapped type.
@@ -420,7 +420,7 @@ struct ValueMapper<ponder::NoType>
     static const ponder::ValueType type = ponder::ValueType::None;
 };
 
-/*
+/**
  * Specialization of ValueMapper for non-const references.
  * Conversions to non-const references are disabled (can't return a temporary by reference)
  */
@@ -436,7 +436,7 @@ struct ValueMapper<T&> : public ValueMapper<T>
     }
 };
 
-/*
+/**
  * Specialization of ValueMapper for const char*.
  * Conversions to const char* are disabled (can't return a pointer to a temporary)
  */

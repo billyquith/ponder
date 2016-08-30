@@ -100,7 +100,7 @@ const Class& ClassManager::getByIndex(std::size_t index) const
 
 const Class& ClassManager::getById(IdRef id) const
 {
-    ClassTable::const_iterator it = m_classes.find(Id(id));
+    ClassTable::const_iterator it = m_classes.find(id);
     if (it == m_classes.end())
         PONDER_ERROR(ClassNotFound(id));
 
@@ -109,7 +109,7 @@ const Class& ClassManager::getById(IdRef id) const
 
 const Class* ClassManager::getByIdSafe(IdRef id) const
 {
-    ClassTable::const_iterator it = m_classes.find(Id(id));
+    ClassTable::const_iterator it = m_classes.find(id);
     return (it == m_classes.end()) ? nullptr : it->second;
 }
 

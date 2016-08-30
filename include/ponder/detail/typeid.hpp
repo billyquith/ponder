@@ -62,12 +62,13 @@ struct StaticTypeId
 };
 
 /**
- * \brief Utility class to check if a type has a Ponder id (i.e. has been registered with PONDER_TYPE)
+ * \brief Utility class to check if a type has a Ponder id (i.e. has been registered 
+ *        with PONDER_TYPE)
  */
 template <typename T>
 struct HasStaticTypeId
 {
-    enum { value = StaticTypeId<typename RawType<T>::Type>::defined };
+    static constexpr bool value = StaticTypeId<typename RawType<T>::Type>::defined;
 };
 
 /**
@@ -132,7 +133,8 @@ template <typename T> const char* typeId()                {return staticTypeId<T
 template <typename T> const char* typeId(const T& object) {return DynamicTypeId<T>::get(object);}
 
 /**
- * \brief Utility class to get a valid Ponder identifier from a C++ type even if the type wasn't declared
+ * \brief Utility class to get a valid Ponder identifier from a C++ type even if the 
+ *        type wasn't declared
  */
 template <typename T, typename E = void>
 struct SafeTypeId

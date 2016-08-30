@@ -47,5 +47,5 @@ elseif(UNIX)
 endif()
 
 # setup MacOSX build environment if necessary
-include(${CMAKE_SOURCE_DIR}/cmake/MacOSX.cmake)
+include(${PONDER_SOURCE_DIR}/cmake/MacOSX.cmake)
 
