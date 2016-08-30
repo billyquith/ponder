@@ -36,11 +36,11 @@ cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 # set project's name
 project(Ponder)
 
-set(PONDER_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # include project configuration
-include(${CMAKE_SOURCE_DIR}/cmake/Config.cmake)
-include(${CMAKE_SOURCE_DIR}/cmake/PackageFilename.cmake)
+include(${PONDER_SOURCE_DIR}/cmake/Config.cmake)
+include(${PONDER_SOURCE_DIR}/cmake/PackageFilename.cmake)
 
 # all source files
 set(SRC_HEADERS
@@ -177,8 +177,8 @@ include_directories(
 
 # generate version.hpp
 message("Generate version.hpp")
-configure_file(${CMAKE_SOURCE_DIR}/cmake/version.in
-               ${CMAKE_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
+configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
+               ${PONDER_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
