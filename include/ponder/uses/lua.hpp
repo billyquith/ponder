@@ -294,14 +294,11 @@ static int l_inst_newindex(lua_State *L)   // (obj, key, value) obj[key] = value
     const std::string key(lua_tostring(L, 2));
     
     // check if assigning to a property
-    for (auto&& prop : cls->propertyIterator())
+    const Property *pp = nullptr;
+    if (cls->tryProperty(key, pp))
     {
-        if (prop.name() == key)
-        {
-            ponder::UserObject *uobj = (ponder::UserObject*) ud;
-            const Property *pprop = prop.value().get();
-            pprop->set(*uobj, getValue(L, 3, pprop->type()));
-        }
+        ponder::UserObject *uobj = (ponder::UserObject*) ud;
+        pp->set(*uobj, getValue(L, 3, pp->type()));
     }
     
     return 0;
