@@ -71,7 +71,19 @@ namespace lib
             return x*o.x + y*o.y;
         }
         
-        static Vec up() { return Vec(0, 1.f); }
+        static Vec up() { return Vec(0, 1.f); }     // static function
+        
+        Vec& ref() { return *this; }                // return ref
+    };
+    
+    
+    struct Holder
+    {
+        Holder() = default;
+        Holder(const Holder&) = delete;
+        
+        Holder* ptrRef() { return this; }
+        Holder& refRef() { return *this; }
     };
 
     
@@ -88,13 +100,24 @@ namespace lib
             .function("add2", &Vec::operator+).tag("+")
             .function("length", &Vec::length)
             .function("dot", &Vec::dot)
-            .function("up", &Vec::up)
+        
+            .function("up", &Vec::up)           // static
+        
+            .function("ref", &Vec::ref)         // ref function
+            .property("selfRef", &Vec::ref)        // ref property
+            ;
+        
+        ponder::Class::declare<Holder>()
+            .constructor()
+            //  .property("pref", &Holder::ptrRef) // TODO - fix for self ref pointers
+            .property("rref", &Holder::refRef)
             ;
     }
     
 } // namespace lib
 
 PONDER_TYPE(lib::Vec)
+PONDER_TYPE(lib::Holder)
 
 static bool luaTest(lua_State *L, const char *source, bool success = true)
 {
@@ -151,13 +174,29 @@ int main()
     // method call with object arg
     luaTest(L, "a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c ~= nil)");
     
-    // method call with return object
+    // method call (:) with return object
     luaTest(L, "c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
-    
+    luaTest(L, "assert(c.x == 5); assert(c.y == 7);");
+
+    // method call (.) with with return object
+    luaTest(L, "assert(type(Vec2.add) == 'function')");
+//    luaTest(L, "c = Vec2.add(a,b); assert(c ~= nil); print(c.x, c.y);"); - TODO - check static
+//    luaTest(L, "assert(c.x == 5); assert(c.y == 7);");
+
     // static func
     luaTest(L, "assert(type(Vec2.up) == 'function')");
     luaTest(L, "up = Vec2.up(); assert(type(up) == 'userdata')");
     luaTest(L, "assert(type(up.x) == 'number')");
+
+    // return ref (func)
+    luaTest(L, "r = Vec2(7,8); assert(r.x == 7)");
+    luaTest(L, "r.x = 9; assert(r.x == 9)");
+    luaTest(L, "r:ref().x = 19; assert(r.x == 19)");
+
+    // return ref (prop)
+    luaTest(L, "r = Vec2(7,8); assert(r.x == 7)");
+    luaTest(L, "r.x = 9; assert(r.x == 9)");
+    luaTest(L, "r.selfRef.x = 19; assert(r.x == 19)");
 
     return EXIT_SUCCESS;
 }

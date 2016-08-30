@@ -208,6 +208,7 @@ static Value getValue(lua_State *L, int index, ValueType typeExpected = ValueTyp
     return Value(); // no value
 }
     
+// func(...)
 static int l_func_call(lua_State *L)
 {
     lua_pushvalue(L, lua_upvalueindex(1));
@@ -228,6 +229,7 @@ static int l_func_call(lua_State *L)
     return 0;
 }
 
+// obj:meth(...)
 static int l_method_call(lua_State *L)
 {
     void *ud = lua_touserdata(L, 1);  // userobj
@@ -257,12 +259,13 @@ static int l_method_call(lua_State *L)
     return 0;
 }
 
-static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
+// obj[key]
+static int l_inst_index(lua_State *L)
 {
     lua_pushvalue(L, lua_upvalueindex(1));
     const Class *cls = (const Class *) lua_touserdata(L, -1);
     
-    void *ud = lua_touserdata(L, 1);                // userobj
+    void *ud = lua_touserdata(L, 1);                // userobj - (obj, key) -> obj[key]
     const IdRef key(lua_tostring(L, 2));
     
     // check if getting property value
@@ -285,6 +288,7 @@ static int l_inst_index(lua_State *L)   // (obj, key) -> obj[key]
     return 0;
 }
 
+// obj[key] = value
 static int l_inst_newindex(lua_State *L)   // (obj, key, value) obj[key] = value
 {
     lua_pushvalue(L, lua_upvalueindex(1));
@@ -365,6 +369,7 @@ static int l_instance_create(lua_State *L)
     return 1;
 }
 
+// Type.__index(key)
 static int l_get_class_static(lua_State *L)
 {
     // get Class* from class object
@@ -375,8 +380,8 @@ static int l_get_class_static(lua_State *L)
     const Function *fp = nullptr;
     if (cls->tryFunction(key, fp))
     {
-        lua_pushlightuserdata(L, (void*) fp);
-        lua_pushcclosure(L, l_func_call, 1);
+        lua_pushlightuserdata(L, (void*) fp);   // function info
+        lua_pushcclosure(L, l_func_call, 1);    // function object
         return 1;
     }
     

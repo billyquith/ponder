@@ -54,11 +54,6 @@ namespace TraitsTest
         static int staticFunc() { return 77; }
     };
     
-    static float classStatic(Class& cls, float x)
-    {
-        return Class().method(x);
-    }
-
     struct Methods
     {
         void foo() {}

@@ -73,11 +73,21 @@ namespace ponder_ext
  *
  * \brief Template providing a mapping between C++ types/values and Ponder types/values
  *
- * ValueMapper<T> defines three things in order to make T fully compliant with the system:
+ * ValueMapper<T> defines a mapping to and from type T. It defines three things in 
+ * order to make T fully compliant with the system:
  *
  * \li The abstract Ponder type that T is mapped to
- * \li A function to convert from T to the mapped Ponder type
- * \li A function to convert from all supported Ponder types to T
+ * \li A function to convert from T *to* the mapped Ponder type
+ * \li A function to convert *from* all supported Ponder types to T
+ *
+ * Pseudo-code:
+ * \code
+ * template <> struct ValueMapper<TypeSpecialised>
+ * {
+ *     static PonderValueType to(ValueType value)      { return convertToPonderType(value); }
+ *     static TypeSpecialised from(PonderValueType pv) { return convertPonderToType(pc); }
+ * };
+ * \endcode
  *
  * ValueMapper is specialized for every supported type, and can be specialized
  * for any of your own types in order to extend the system.
