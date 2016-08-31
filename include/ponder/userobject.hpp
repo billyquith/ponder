@@ -117,17 +117,6 @@ public:
     static UserObject copy(const T& object);
 
     /**
-     * \brief Construct the user object from a parent object and a member property
-     *
-     * This constructor allows to create user objects that are accessed through a property
-     * of another user object, and that cannot be stored in memory.
-     *
-     * \param parent Parent user object
-     * \param member Member of \a parent used to access the actual object
-     */
-    UserObject(const UserObject& parent, const UserProperty& member);
-
-    /**
      * \brief Copy constructor
      *
      * \param copy Instance to copy
@@ -295,25 +284,10 @@ private:
     /**
      * \brief Assign a new value to a property of the object
      *
-     * This functions is meant to be used only by Property, and
-     * is needed for proper propagation of the modification to the
-     * parent objects.
-     *
      * \param property Property to modify
      * \param value New value to assign
      */
     void set(const Property& property, const Value& value) const;
-
-    /**
-     * \brief Recursively set a property
-     *
-     * See the description of UserObject::set(property, value).
-     *
-     * \param object Object to modify
-     * \param property Property to set when the recursion is over
-     * \param value Value to assign when the recursion is over
-     */
-    void cascadeSet(const UserObject& object, const Property& property, const Value& value) const;
 
 private:
 
@@ -322,32 +296,6 @@ private:
     
     /// Optional abstract holder storing the object
     std::shared_ptr<detail::AbstractObjectHolder> m_holder;
-    
-    /// Optional parent object
-    std::unique_ptr<ParentObject> m_parent;
-    
-    /// Optional pointer to the child object (m_parent.object.m_child == this)
-    const UserObject* m_child;
-};
-
-
-/**
- * \brief Structure holding the informations about a parent object
- *
- * A parent object is composed of a <object, property> pair.
- */
-class ParentObject : detail::noncopyable
-{
-public:
-
-    /**
-     * \brief Default constructor
-     */
-    ParentObject(const UserObject& obj, const UserProperty& mem) : object(obj), member(mem) {}
-
-    UserObject object; ///< Parent object
-    const UserProperty& member; ///< Member of the parent giving access to the child object
-    UserObject lastValue; ///< Last value of the object (stored here for persistency)
 };
 
 

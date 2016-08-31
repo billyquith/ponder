@@ -34,7 +34,7 @@
 #include "test.hpp"
 #include <ostream>
 
-#if 1
+#if 0
 static bool g_log = false;
 #   define DATA_LOG(FMT, ...) if (g_log) printf(FMT, ##__VA_ARGS__)
 #   define DATA_ON(B) g_log = B
@@ -554,31 +554,6 @@ TEST_CASE("Ponder supports user objects")
     
         REQUIRE(userObject.call("concat", ponder::Args("one", "two")) == ponder::Value("onetwo"));
     //    REQUIRE(userObject.call("concat", "one", "two"), ponder::Value("onetwo")); TODO - Args optional
-    }
-
-    SECTION("objects can be composed of other objects")
-    {
-        const ponder::UserProperty& p1 =
-            static_cast<const ponder::UserProperty&>(
-                ponder::classByType<Composed1>().property("p") );
-        
-        const ponder::UserProperty& p2 =
-            static_cast<const ponder::UserProperty&>(
-                ponder::classByType<Composed2>().property("p") );
-
-        Composed1 composed1;
-        ponder::UserObject composed2(composed1, p1);
-        ponder::UserObject composed3(composed2, p2);
-
-        composed3.set("x", 1);
-        REQUIRE(composed1.get().get().x ==1);
-        REQUIRE(composed2.get<Composed2>().get().x ==1);
-        REQUIRE(composed3.get<Composed3>().x ==1);
-
-        composed3.set("x", 2);
-        REQUIRE(composed1.get().get().x ==2);
-        REQUIRE(composed2.get<Composed2>().get().x ==2);
-        REQUIRE(composed3.get<Composed3>().x ==2);
     }
     
     SECTION("objects can created from existing user data")

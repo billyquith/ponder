@@ -35,8 +35,6 @@ template <typename T>
 UserObject::UserObject(const T& object)
     : m_class(&classByObject(object))
     , m_holder()
-    , m_parent()
-    , m_child(nullptr)
 {
     typedef detail::ObjectTraits<T&> Traits;
     typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
