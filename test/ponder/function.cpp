@@ -271,31 +271,37 @@ TEST_CASE("Ponder supports functions")
 
     SECTION("functions are classified")
     {
-//        REQUIRE(functions[1]->returnType() ==  ponder::ValueType::None);
-//        REQUIRE(functions[2]->returnType() ==  ponder::ValueType::Integer);
-//        REQUIRE(functions[3]->returnType() ==  ponder::ValueType::String);
-//        REQUIRE(functions[4]->returnType() ==  ponder::ValueType::User);
-//        REQUIRE(functions[5]->returnType() ==  ponder::ValueType::User);
-//        REQUIRE(functions[6]->returnType() ==  ponder::ValueType::None);
-//        REQUIRE(functions[7]->returnType() ==  ponder::ValueType::User);
-//        REQUIRE(functions[8]->returnType() ==  ponder::ValueType::None);
-//        REQUIRE(functions[9]->returnType() ==  ponder::ValueType::None);
-//        REQUIRE(functions[10]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[11]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[12]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[13]->returnType() == ponder::ValueType::None);
-        REQUIRE((functions[14]->classification() == ponder::FunctionType::Lambda));
-//        REQUIRE(functions[15]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[16]->returnType() == ponder::ValueType::Integer);
-//        REQUIRE(functions[17]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[18]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[19]->returnType() == ponder::ValueType::None);
-//        REQUIRE(functions[20]->returnType() == ponder::ValueType::Integer);
-//        REQUIRE(functions[21]->returnType() == ponder::ValueType::Integer);
-//        REQUIRE(functions[22]->returnType() == ponder::ValueType::Integer);
-//        
-//        REQUIRE(metaclass.function("nonCopyRef").returnType() == ponder::ValueType::User);
-//        REQUIRE(metaclass.function("nonCopyPtr").returnType() == ponder::ValueType::User);
+        IS_TRUE(functions[1]->classification() == ponder::FunctionType::Function);
+        IS_TRUE(functions[2]->classification() == ponder::FunctionType::Function);
+        IS_TRUE(functions[3]->classification() == ponder::FunctionType::Function);
+        
+        IS_TRUE(functions[4]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[5]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[6]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[7]->classification() == ponder::FunctionType::MemberFunction);
+        
+        IS_TRUE(functions[8]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[9]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[10]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[11]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[12]->classification() == ponder::FunctionType::MemberFunction);
+        IS_TRUE(functions[13]->classification() == ponder::FunctionType::MemberFunction);
+        
+        IS_TRUE(functions[14]->classification() == ponder::FunctionType::Lambda);
+        IS_TRUE(functions[15]->classification() == ponder::FunctionType::Lambda);
+        IS_TRUE(functions[16]->classification() == ponder::FunctionType::Lambda);
+        IS_TRUE(functions[17]->classification() == ponder::FunctionType::Lambda);
+        IS_TRUE(functions[18]->classification() == ponder::FunctionType::Lambda);
+        IS_TRUE(functions[19]->classification() == ponder::FunctionType::Lambda);
+        
+        IS_TRUE(functions[20]->classification() == ponder::FunctionType::FunctionWrapper);
+        IS_TRUE(functions[21]->classification() == ponder::FunctionType::FunctionWrapper);
+        IS_TRUE(functions[22]->classification() == ponder::FunctionType::FunctionWrapper);
+
+        IS_TRUE(metaclass.function("nonCopyRef").classification()
+                == ponder::FunctionType::Function);
+        IS_TRUE(metaclass.function("nonCopyPtr").classification()
+                == ponder::FunctionType::Function);
     }
 
     SECTION("functions have a return type")
