@@ -32,20 +32,25 @@
 #define PONDER_DETAIL_FUNCTIONIMPL_HPP
 
 #include <ponder/function.hpp>
-//#include <ponder/detail/objecttraits.hpp>
 #include <ponder/detail/functiontraits.hpp>
 #include <ponder/valuemapper.hpp>
 
 namespace ponder {
 namespace detail {
-
     
+struct FunctionParamInfo
+{
+    const std::type_info *m_typeinfo;
+    ValueType m_valueType;
+};
+    
+template <int SZ>
 struct FunctionMapParamsToValueType
 {
-    typedef std::vector<ValueType> ReturnType;
+    typedef std::array<FunctionParamInfo, SZ> ReturnType;
     
     template <typename T>
-    static ValueType apply() { return mapType<T>(); }
+    static FunctionParamInfo apply() { return { &typeid(T), mapType<T>() }; }
 };
     
     
@@ -57,7 +62,7 @@ struct FunctionApplyToParams<std::tuple<A...>, B>
 {
     static typename B::ReturnType foreach()
     {
-        return typename B::ReturnType { B::template apply<A>()... };
+        return typename B::ReturnType { {B::template apply<A>()...} };
     }
 };
     
@@ -70,10 +75,18 @@ struct FunctionApplyToParams<std::tuple<void>, B>
     }
 };
     
+/*
+ *  Bake the function type information into non-templated Function.
+ */
 template <typename T>
 class FunctionImpl : public Function
 {
     typedef T FuncTraits;
+    
+    static constexpr std::size_t c_nParams =
+        std::tuple_size<typename FuncTraits::Details::ParamTypes>::value;
+    
+    std::array<FunctionParamInfo, c_nParams> m_paramInfo;
     
 public:
 
@@ -82,9 +95,23 @@ public:
         m_name = name;
         m_funcType = FuncTraits::which;
         m_returnType = mapType<typename FuncTraits::ReturnType>();
-        m_argTypes = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
-                                           FunctionMapParamsToValueType>::foreach();
+        m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
+                                            FunctionMapParamsToValueType<c_nParams>>::foreach();
     }
+    
+protected:
+    
+    std::size_t argCount() const override { return c_nParams; }
+
+    ValueType argType(std::size_t index) const override
+    {
+        // Make sure that the index is not out of range
+        if (index >= c_nParams)
+            PONDER_ERROR(OutOfRange(index, c_nParams));
+        
+        return m_paramInfo[index].m_valueType;
+    }
+
 };
 
 template <typename F>

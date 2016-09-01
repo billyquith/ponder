@@ -47,7 +47,7 @@ namespace ponder {
 class Args;
 class UserObject;
 class ClassVisitor;
-
+    
 /**
  * \brief Abstract representation of a function
  *
@@ -61,7 +61,7 @@ public:
     /**
      * \brief Destructor
      */
-    // virtual ~Function();
+    virtual ~Function();
 
     /**
      * \brief Get the name of the function
@@ -73,18 +73,18 @@ public:
     FunctionType classification() const { return m_funcType; }
 
     /**
-     * \brief Get the number of arguments of the function
-     *
-     * \return Total number of arguments taken by the function
-     */
-    std::size_t argCount() const;   // XXXX - rename param
-
-    /**
      * \brief Get the type of variable returned by the function
      *
      * \return Type of the result of the function
      */
     ValueType returnType() const;
+
+    /**
+     * \brief Get the number of arguments of the function
+     *
+     * \return Total number of arguments taken by the function
+     */
+    virtual std::size_t argCount() const = 0;   // XXXX - rename param
 
     /**
      * \brief Get the type of an argument given by its index
@@ -95,7 +95,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    ValueType argType(std::size_t index) const;
+    virtual ValueType argType(std::size_t index) const = 0;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
@@ -105,8 +105,6 @@ public:
     virtual void accept(ClassVisitor& visitor) const;
 
 protected:
-
-//    template <typename T> friend class ClassBuilder;
 
     /**
      * \brief Construct the function from its description
@@ -118,25 +116,13 @@ protected:
      * \return Value returned by the function call
      */
     Function(IdRef name) : m_name(name) {}
-//             ValueType returnType,
-//             const std::vector<ValueType>& argTypes = std::vector<ValueType>());
-    
-//    virtual Value execute(const UserObject& object, const Args& args) const = 0; // XXXX
     
     Function(const Function&) = delete;
 
     Id m_name; ///< Name of the function
-    
-//    struct Param
-//    {
-//        IdRef m_name;
-//        const std::type_info *m_typeinfo;
-//    };
-//    std::array<Param>   // XXXX
-    
-    ValueType m_returnType; ///< Return type
-    std::vector<ValueType> m_argTypes; ///< Type of all the function arguments
     FunctionType m_funcType;
+    ValueType m_returnType; ///< Return type
+    
 };
 
 } // namespace ponder

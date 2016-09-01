@@ -40,37 +40,14 @@ IdRef Function::name() const
     return m_name;
 }
 
-std::size_t Function::argCount() const
-{
-    return m_argTypes.size();
-}
-
 ValueType Function::returnType() const
 {
     return m_returnType;
-}
-
-ValueType Function::argType(std::size_t index) const
-{
-    // Make sure that the index is not out of range
-    if (index >= m_argTypes.size())
-        PONDER_ERROR(OutOfRange(index, m_argTypes.size()));
-
-    return m_argTypes[index];
 }
 
 void Function::accept(ClassVisitor& visitor) const
 {
     visitor.visit(*this);
 }
-
-//Function::Function(IdRef name,
-//                   ValueType returnType,
-//                   const std::vector<ValueType>& argTypes)
-//    : m_name(name)
-//    , m_returnType(returnType)
-//    , m_argTypes(argTypes)
-//{
-//}
 
 } // namespace ponder
