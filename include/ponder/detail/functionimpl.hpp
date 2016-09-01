@@ -101,9 +101,9 @@ public:
     
 protected:
     
-    std::size_t argCount() const override { return c_nParams; }
+    std::size_t paramCount() const override { return c_nParams; }
 
-    ValueType argType(std::size_t index) const override
+    ValueType paramType(std::size_t index) const override
     {
         // Make sure that the index is not out of range
         if (index >= c_nParams)

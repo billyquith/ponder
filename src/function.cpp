@@ -35,6 +35,10 @@
 
 namespace ponder {
     
+Function::~Function()
+{
+}
+    
 IdRef Function::name() const
 {
     return m_name;

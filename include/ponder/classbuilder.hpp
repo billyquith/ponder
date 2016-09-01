@@ -93,7 +93,7 @@ public:
     /**
      * \brief Declare a new property from a single accessor
      *
-     * The accessor argument can be a getter of any valid type, or a direct
+     * The accessor parameter can be a getter of any valid type, or a direct
      * pointer-to-member (which is considered both a getter and a setter)
      *
      * Example:
@@ -124,7 +124,7 @@ public:
     /**
      * \brief Declare a new property from a pair of accessors
      *
-     * The accessor1 and accessor2 arguments can be a pair of getter/setter, or
+     * The accessor1 and accessor2 parameters can be a pair of getter/setter, or
      * two getters which must be composed to form a single getter.
      * If F1 is a direct pointer-to-member, it is considered both a getter and a setter.
      *
@@ -162,7 +162,7 @@ public:
     /**
      * \brief Declare a new property from three accessors
      *
-     * The accessor1 and accessor2 arguments are a pair of getter/setter, accessor3 is
+     * The accessor1 and accessor2 parameters are a pair of getter/setter, accessor3 is
      * an accessor to compose to accessor1 and accessor2 to get the final accessors.
      *
      * This allows to expose a property which requires an extra level of indirection to 
@@ -208,7 +208,7 @@ public:
     /**
      * \brief Declare a new function from any bindable type
      *
-     * The function argument can be any valid type: a non-member function,
+     * The function parameter can be any valid type: a non-member function,
      * a member function, const, non-const, etc.
      *
      * \param name Name of the function (must be unique within the metaclass)
@@ -289,7 +289,7 @@ public:
     /**
      * \brief Declare a constructor for the metaclass.
      * 
-     * Variable number of arguments can be passed.
+     * Variable number of parameters can be passed.
      *
      * \return Reference to this, in order to chain other calls
      */

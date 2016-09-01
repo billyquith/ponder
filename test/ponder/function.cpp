@@ -197,15 +197,15 @@ namespace FunctionTest
             .function("f4", &MyClass::f4) // non-const
             .function("f5", &MyClass::f5) // const
             .function("f6", &MyClass::f6) // inherited
-            .function("f7", &MyClass::f7) // ponder::Value as return and argument types
+            .function("f7", &MyClass::f7) // ponder::Value as return and parameter types
             
-            // ***** arguments count ******
-            .function("f8",  &MyClass::f8)  // 0 argument
-            .function("f9",  &MyClass::f9)  // 1 argument
-            .function("f10", &MyClass::f10) // 2 arguments
-            .function("f11", &MyClass::f11) // 3 arguments
-            .function("f12", &MyClass::f12) // 4 arguments
-            .function("f13", &MyClass::f13) // 5 arguments
+            // ***** parameters count ******
+            .function("f8",  &MyClass::f8)  // 0 parameter
+            .function("f9",  &MyClass::f9)  // 1 parameter
+            .function("f10", &MyClass::f10) // 2 parameters
+            .function("f11", &MyClass::f11) // 3 parameters
+            .function("f12", &MyClass::f12) // 4 parameters
+            .function("f13", &MyClass::f13) // 5 parameters
             
             // ***** nested functions *****
             .function("f14", [](MyClass& self){ self.inner.f14(); })
@@ -333,77 +333,77 @@ TEST_CASE("Ponder supports functions")
         REQUIRE(metaclass.function("nonCopyPtr").returnType() == ponder::ValueType::User);
     }
 
-    SECTION("functions have a number of arguments")
+    SECTION("functions have a number of parameters")
     {
-        REQUIRE(functions[1]->argCount() ==  1);
-        REQUIRE(functions[2]->argCount() ==  2);
-        REQUIRE(functions[3]->argCount() ==  1);
-        REQUIRE(functions[4]->argCount() ==  0);
-        REQUIRE(functions[5]->argCount() ==  0);
-        REQUIRE(functions[6]->argCount() ==  0);
-        REQUIRE(functions[7]->argCount() ==  1);
-        REQUIRE(functions[8]->argCount() ==  0);
-        REQUIRE(functions[9]->argCount() ==  1);
-        REQUIRE(functions[10]->argCount() == 2);
-        REQUIRE(functions[11]->argCount() == 3);
-        REQUIRE(functions[12]->argCount() == 4);
-        REQUIRE(functions[13]->argCount() == 5);
+        REQUIRE(functions[1]->paramCount() ==  1);
+        REQUIRE(functions[2]->paramCount() ==  2);
+        REQUIRE(functions[3]->paramCount() ==  1);
+        REQUIRE(functions[4]->paramCount() ==  0);
+        REQUIRE(functions[5]->paramCount() ==  0);
+        REQUIRE(functions[6]->paramCount() ==  0);
+        REQUIRE(functions[7]->paramCount() ==  1);
+        REQUIRE(functions[8]->paramCount() ==  0);
+        REQUIRE(functions[9]->paramCount() ==  1);
+        REQUIRE(functions[10]->paramCount() == 2);
+        REQUIRE(functions[11]->paramCount() == 3);
+        REQUIRE(functions[12]->paramCount() == 4);
+        REQUIRE(functions[13]->paramCount() == 5);
         
-        REQUIRE(functions[14]->argCount() == 1);
-        REQUIRE(functions[15]->argCount() == 1);
-        REQUIRE(functions[16]->argCount() == 1);
-        REQUIRE(functions[17]->argCount() == 1);
-        REQUIRE(functions[18]->argCount() == 1);
-        REQUIRE(functions[19]->argCount() == 1);
+        REQUIRE(functions[14]->paramCount() == 1);
+        REQUIRE(functions[15]->paramCount() == 1);
+        REQUIRE(functions[16]->paramCount() == 1);
+        REQUIRE(functions[17]->paramCount() == 1);
+        REQUIRE(functions[18]->paramCount() == 1);
+        REQUIRE(functions[19]->paramCount() == 1);
         
-        REQUIRE(functions[20]->argCount() == 2);
-        REQUIRE(functions[21]->argCount() == 2);
-        REQUIRE(functions[22]->argCount() == 2);
+        REQUIRE(functions[20]->paramCount() == 2);
+        REQUIRE(functions[21]->paramCount() == 2);
+        REQUIRE(functions[22]->paramCount() == 2);
         
-        REQUIRE(metaclass.function("nonCopyRef").argCount() == 0);
-        REQUIRE(metaclass.function("nonCopyPtr").argCount() == 0);
+        REQUIRE(metaclass.function("nonCopyRef").paramCount() == 0);
+        REQUIRE(metaclass.function("nonCopyPtr").paramCount() == 0);
     }
     
-    SECTION("function arguments have a type")
+    SECTION("function parameters have a type")
     {
-        REQUIRE(functions[1]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[2]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[2]->argType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[3]->argType(0) == ponder::ValueType::User);
-        REQUIRE_THROWS_AS(functions[4]->argType(0), ponder::OutOfRange);
-        REQUIRE_THROWS_AS(functions[5]->argType(0), ponder::OutOfRange);
-        REQUIRE_THROWS_AS(functions[6]->argType(0), ponder::OutOfRange);
-        REQUIRE(functions[7]->argType(0) ==  ponder::ValueType::User);
-        REQUIRE_THROWS_AS(functions[8]->argType(0), ponder::OutOfRange);
-        REQUIRE(functions[9]->argType(0) ==  ponder::ValueType::Boolean);
-        REQUIRE(functions[10]->argType(0) == ponder::ValueType::Real);
-        REQUIRE(functions[10]->argType(1) == ponder::ValueType::Real);
-        REQUIRE(functions[11]->argType(0) == ponder::ValueType::Integer);
-        REQUIRE(functions[11]->argType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[11]->argType(2) == ponder::ValueType::Integer);
-        REQUIRE(functions[12]->argType(0) == ponder::ValueType::String);
-        REQUIRE(functions[12]->argType(1) == ponder::ValueType::String);
-        REQUIRE(functions[12]->argType(2) == ponder::ValueType::String);
-        REQUIRE(functions[12]->argType(3) == ponder::ValueType::String);
-        REQUIRE(functions[13]->argType(0) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->argType(1) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->argType(2) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->argType(3) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->argType(4) == ponder::ValueType::Enum);
+        REQUIRE(functions[1]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[2]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[2]->paramType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[3]->paramType(0) == ponder::ValueType::User);
+        REQUIRE_THROWS_AS(functions[4]->paramType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[5]->paramType(0), ponder::OutOfRange);
+        REQUIRE_THROWS_AS(functions[6]->paramType(0), ponder::OutOfRange);
+        REQUIRE(functions[7]->paramType(0) ==  ponder::ValueType::User);
+        REQUIRE_THROWS_AS(functions[8]->paramType(0), ponder::OutOfRange);
+        REQUIRE(functions[9]->paramType(0) ==  ponder::ValueType::Boolean);
+        REQUIRE(functions[10]->paramType(0) == ponder::ValueType::Real);
+        REQUIRE(functions[10]->paramType(1) == ponder::ValueType::Real);
+        REQUIRE(functions[11]->paramType(0) == ponder::ValueType::Integer);
+        REQUIRE(functions[11]->paramType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[11]->paramType(2) == ponder::ValueType::Integer);
+        REQUIRE(functions[12]->paramType(0) == ponder::ValueType::String);
+        REQUIRE(functions[12]->paramType(1) == ponder::ValueType::String);
+        REQUIRE(functions[12]->paramType(2) == ponder::ValueType::String);
+        REQUIRE(functions[12]->paramType(3) == ponder::ValueType::String);
+        REQUIRE(functions[13]->paramType(0) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->paramType(1) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->paramType(2) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->paramType(3) == ponder::ValueType::Enum);
+        REQUIRE(functions[13]->paramType(4) == ponder::ValueType::Enum);
         
-        REQUIRE(functions[14]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[15]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[16]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[17]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[18]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[19]->argType(0) == ponder::ValueType::User);
+        REQUIRE(functions[14]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[15]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[16]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[17]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[18]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[19]->paramType(0) == ponder::ValueType::User);
         
-        REQUIRE(functions[20]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[20]->argType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[21]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[21]->argType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[22]->argType(0) == ponder::ValueType::User);
-        REQUIRE(functions[22]->argType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[20]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[20]->paramType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[21]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[21]->paramType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[22]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[22]->paramType(1) == ponder::ValueType::Integer);
     }
     
     
@@ -471,7 +471,7 @@ TEST_CASE("Ponder supports functions")
 //                          ponder::NullObject);
 //    }
 //    
-//    SECTION("calling a function without enough arguments is an error")
+//    SECTION("calling a function without enough parameters is an error")
 //    {
 //        MyClass object;
 //        
@@ -497,7 +497,7 @@ TEST_CASE("Ponder supports functions")
 //                          ponder::NotEnoughArguments);
 //    }
 //
-//    SECTION("functions must be called with the correct arguments")
+//    SECTION("functions must be called with the correct parameters")
 //    {
 //        MyClass object;
 //        MyType arg(0);

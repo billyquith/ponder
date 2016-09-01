@@ -177,9 +177,9 @@
 //        IS_TRUE(metaclass->function(0).returnType() == ponder::ValueType::String);
 //    }
 //
-//    SECTION("argCount")
+//    SECTION("paramCount")
 //    {
-//        REQUIRE(metaclass->function(0).argCount() == 0);
+//        REQUIRE(metaclass->function(0).paramCount() == 0);
 //    }
 //    
 //    SECTION("propertyGet")

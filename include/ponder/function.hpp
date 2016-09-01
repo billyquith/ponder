@@ -80,22 +80,22 @@ public:
     ValueType returnType() const;
 
     /**
-     * \brief Get the number of arguments of the function
+     * \brief Get the number of parameters of the function
      *
-     * \return Total number of arguments taken by the function
+     * \return Total number of parameters taken by the function
      */
-    virtual std::size_t argCount() const = 0;   // XXXX - rename param
+    virtual std::size_t paramCount() const = 0;
 
     /**
-     * \brief Get the type of an argument given by its index
+     * \brief Get the type of an parameter given by its index
      *
-     * \param index Index of the argument
+     * \param index Index of the parameter
      *
-     * \return Type of the index-th argument
+     * \return Type of the index-th parameter
      *
      * \throw OutOfRange index is out of range
      */
-    virtual ValueType argType(std::size_t index) const = 0;
+    virtual ValueType paramType(std::size_t index) const = 0;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
@@ -111,7 +111,7 @@ protected:
      *
      * \param name Name of the function
      * \param returnType Type of the function result
-     * \param argTypes Types of the function arguments (empty array by default)
+     * \param paramTypes Types of the function parameters (empty array by default)
      *
      * \return Value returned by the function call
      */

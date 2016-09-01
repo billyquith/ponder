@@ -248,8 +248,8 @@ void ObjectFactory::destruct(const UserObject& object) const
 Value FunctionCaller::call(const UserObject& object, const Args& args) const
 {
     // Check the number of arguments
-    if (args.count() < m_func.argCount())
-        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.argCount()));
+    if (args.count() < m_func.paramCount())
+        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
 
     // Execute the function
     return execute(object, args);
@@ -258,8 +258,8 @@ Value FunctionCaller::call(const UserObject& object, const Args& args) const
 Value FunctionCaller::callStatic(const Args& args) const
 {
     // Check the number of arguments
-    if (args.count() < m_func.argCount())
-        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.argCount()));
+    if (args.count() < m_func.paramCount())
+        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
 
     // Execute the function
     return execute(UserObject::nothing, args);

@@ -475,7 +475,7 @@ TEST_CASE("Ponder supports user objects")
         }
     }
 
-//    SECTION("object methods can have one argument")
+//    SECTION("object methods can have one parameter")
 //    {
 //        Call object;
 //        ponder::UserObject userObject(object);
@@ -487,7 +487,7 @@ TEST_CASE("Ponder supports user objects")
 //        REQUIRE(object.sum == 7);
 //    }
 //
-//    SECTION("object methods can have two argument")
+//    SECTION("object methods can have two parameter")
 //    {
 //        Call object;
 //        ponder::UserObject userObject(object);
@@ -501,7 +501,7 @@ TEST_CASE("Ponder supports user objects")
 //        REQUIRE(object.sum == 7+8);
 //    }
 //
-//    SECTION("object methods can have three argument")
+//    SECTION("object methods can have three parameter")
 //    {
 //        Call object;
 //        ponder::UserObject userObject(object);
@@ -533,7 +533,7 @@ TEST_CASE("Ponder supports user objects")
 //        REQUIRE(userObject.call("f") == ponder::Value(9));
 //    }
 //
-//    SECTION("objects methods with argument can return values")
+//    SECTION("objects methods with parameter can return values")
 //    {
 //        Call object;
 //        ponder::UserObject userObject(object);

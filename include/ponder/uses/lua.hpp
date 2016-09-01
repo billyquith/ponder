@@ -215,10 +215,10 @@ static int l_func_call(lua_State *L)
     const Function *func = (const Function *) lua_touserdata(L, -1);
     
     Args args;
-    for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
+    for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
     {
         // we know the arg type so check it
-        const ValueType at = func->argType(i);
+        const ValueType at = func->paramType(i);
         args += getValue(L, i, at);
     }
     
@@ -245,10 +245,10 @@ static int l_method_call(lua_State *L)
     
     Args args;
     constexpr auto c_argOffset = 2u;
-    for (std::size_t nargs = func->argCount(), i = 0; i < nargs; ++i)
+    for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
     {
         // we know the arg type so check it
-        const ValueType at = func->argType(i);
+        const ValueType at = func->paramType(i);
         args += getValue(L, i + c_argOffset, at);
     }
     

@@ -61,7 +61,7 @@ public:
      * \param metaMethod Qt meta method
      */
     QtFunction(const QMetaMethod& metaMethod)
-        : ponder::Function(functionName(metaMethod), returnType(metaMethod), argTypes(metaMethod))
+        : ponder::Function(functionName(metaMethod), returnType(metaMethod), paramTypes(metaMethod))
         , m_metaMethod(metaMethod)
     {
     }
@@ -174,13 +174,13 @@ private:
     }
 
     /**
-     * \brief Extract the arguments types of a meta method
+     * \brief Extract the parameters types of a meta method
      *
      * \param metaMethod Qt meta method
      *
      * \return Arguments types of the meta method
      */
-    static std::vector<ponder::ValueType> argTypes(const QMetaMethod& metaMethod)
+    static std::vector<ponder::ValueType> paramTypes(const QMetaMethod& metaMethod)
     {
         std::vector<ponder::ValueType> types;
 

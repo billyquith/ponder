@@ -154,7 +154,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     
     REQUIRE(metaclass != nullptr);
 
-//    SECTION("with no arguments")
+//    SECTION("with no parameters")
 //    {
 //        ponder::UserObject object;
 //        
@@ -175,7 +175,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        metaclass->destroy(object);
 //    }
 //
-//    SECTION("with one argument")
+//    SECTION("with one parameter")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(1));
 //
@@ -192,7 +192,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        metaclass->destroy(object);
 //    }
 //
-//    SECTION("with two arguments")
+//    SECTION("with two parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
 //
@@ -210,7 +210,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //    }
 //
 //
-//    SECTION("with three arguments")
+//    SECTION("with three parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
 //
@@ -227,7 +227,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        metaclass->destroy(object);
 //    }
 //
-//    SECTION("with four arguments")
+//    SECTION("with four parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
 //
@@ -244,7 +244,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        metaclass->destroy(object);
 //    }
 //
-//    SECTION("with five arguments")
+//    SECTION("with five parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
 //
@@ -261,7 +261,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        metaclass->destroy(object);
 //    }
 //
-//    SECTION("with invalid arguments")
+//    SECTION("with invalid parameters")
 //    {
 //        IS_TRUE( metaclass->construct(ponder::Args("hello")) == ponder::UserObject::nothing );
 //        IS_TRUE( metaclass->construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing );
@@ -275,7 +275,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
 {
     const ponder::Class &metaclass = ponder::classByType<MyClass>();
     
-    SECTION("with no arguments")
+    SECTION("with no parameters")
     {
         ponder::UserObject object;
         
@@ -297,7 +297,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
         fact.destroy(object);
     }
     
-    SECTION("with one argument")
+    SECTION("with one parameter")
     {
         ponder::runtime::ObjectFactory fact(metaclass);
         ponder::UserObject object = fact.construct(ponder::Args(1));
@@ -315,7 +315,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
         fact.destroy(object);
     }
     
-//    SECTION("with two arguments")
+//    SECTION("with two parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
 //        
@@ -333,7 +333,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
 //    }
 //    
 //    
-//    SECTION("with three arguments")
+//    SECTION("with three parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
 //        
@@ -350,7 +350,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with four arguments")
+//    SECTION("with four parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
 //        
@@ -367,7 +367,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with five arguments")
+//    SECTION("with five parameters")
 //    {
 //        ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
 //        
@@ -395,7 +395,7 @@ TEST_CASE("Object factory constructors can use placement new")
     REQUIRE(sz > 0);
     REQUIRE(sz == sizeof(MyClass));
     
-    SECTION("with no arguments")
+    SECTION("with no parameters")
     {
         char buff[sizeof(MyClass) + 20];
         const char c_guard = 0xcd;
@@ -439,7 +439,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //    
 //    REQUIRE(metaclass != nullptr);
 //    
-//    SECTION("with no arguments")
+//    SECTION("with no parameters")
 //    {
 //        ponder::UserObject object;
 //        
@@ -460,7 +460,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with one argument")
+//    SECTION("with one parameter")
 //    {
 //        ponder::UserObject object = metaclass->create(1);
 //        
@@ -477,7 +477,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with two arguments")
+//    SECTION("with two parameters")
 //    {
 //        ponder::UserObject object = metaclass->create(2, 2.);
 //        
@@ -495,7 +495,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //    }
 //    
 //    
-//    SECTION("with three arguments")
+//    SECTION("with three parameters")
 //    {
 //        ponder::UserObject object = metaclass->create(3, 3., "3");
 //        
@@ -512,7 +512,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with four arguments")
+//    SECTION("with four parameters")
 //    {
 //        ponder::UserObject object = metaclass->create(4, 4., "4", four);
 //        
@@ -529,7 +529,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with five arguments")
+//    SECTION("with five parameters")
 //    {
 //        ponder::UserObject object = metaclass->create(5, 5., "5", five, 5);
 //        
@@ -546,7 +546,7 @@ TEST_CASE("Object factory constructors can use placement new")
 //        metaclass->destroy(object);
 //    }
 //    
-//    SECTION("with invalid arguments")
+//    SECTION("with invalid parameters")
 //    {
 //        IS_TRUE( metaclass->create("hello") == ponder::UserObject::nothing );
 //        IS_TRUE( metaclass->create(MyType(10)) == ponder::UserObject::nothing );

@@ -87,7 +87,7 @@ class Function;
  *     void visit(const ponder::Function& function)
  *     {
  *         std::cout << "Function: " << function.name() << " - "
- *                   << "number of arguments:" << function.argCount() << std::endl;
+ *                   << "number of parameters:" << function.paramCount() << std::endl;
  *     }
  * };
  * 
