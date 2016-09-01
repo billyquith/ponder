@@ -94,10 +94,10 @@ void UserObject::set(std::size_t index, const Value& value) const
     getClass().property(index).set(*this, value);
 }
 
-Value UserObject::call(IdRef function, const Args& args) const
-{
-    return getClass().function(function).call(*this, args);
-}
+//Value UserObject::call(IdRef function, const Args& args) const
+//{
+//    return getClass().function(function).call(*this, args);
+//}
 
 UserObject& UserObject::operator=(const UserObject& other)
 {

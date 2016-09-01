@@ -188,7 +188,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("what is not a function types")
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
         
         static_assert(FunctionTraits<int>::which == FunctionType::None,
                       "FunctionTraits<>::which failed");
@@ -209,7 +209,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type function")
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
         
         static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
@@ -254,7 +254,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type member function")  // T(C::*)()
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
         
         static_assert(FunctionTraits<void(Methods::*)()>::isFunction,
                       "FunctionTraits<>::isFunction failed");
@@ -271,24 +271,24 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type member object")   // T(C::*)
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
         
         struct Members {
             int m;
             float a[5];
         };
 
-        static_assert(FunctionTraits<int Members::*>::isFunction,
+        static_assert( ! FunctionTraits<int Members::*>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<int Members::*>::which == FunctionType::MemberObject,
                       "FunctionTraits<>::which failed");
         
-        static_assert(FunctionTraits<float (Members::*)[]>::isFunction,
+        static_assert( ! FunctionTraits<float (Members::*)[]>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<float (Members::*)[]>::which == FunctionType::MemberObject,
                       "FunctionTraits<>::which failed");
         
-        static_assert(FunctionTraits<decltype(&Members::a)>::isFunction,
+        static_assert( ! FunctionTraits<decltype(&Members::a)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(&Members::a)>::which == FunctionType::MemberObject,
                       "FunctionTraits<>::which failed");
@@ -297,7 +297,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type function wrapper")  // std::function<>
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
         
         static_assert(FunctionTraits<std::function<void()>>::isFunction,
                       "FunctionTraits<>::which failed");
@@ -321,7 +321,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type lambda")  // [] () {}
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
         
         auto l1 = [] () {};
         auto l2 = [] (int&) { return "hello"; };
@@ -349,7 +349,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("functions can return values")
     {
         using ponder::detail::FunctionTraits;
-        using ponder::detail::FunctionType;
+        using ponder::FunctionType;
 
         typedef decltype(&FuncReturn::i) fn;
         static_assert(FunctionTraits<fn>::isFunction, "");

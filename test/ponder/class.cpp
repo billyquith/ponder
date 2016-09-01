@@ -445,7 +445,7 @@ TEST_CASE("Classes can be templates")
     REQUIRE(metaclass.constructorCount() > 0);
     REQUIRE(metaclass.propertyCount() > 0);
     
-    auto const& obj = metaclass.construct();
+//    auto const& obj = metaclass.construct();
 }
 
 // Classes declared using Ponder *can declare* virtually inherited base classes,

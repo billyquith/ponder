@@ -26,8 +26,8 @@
 **
 ****************************************************************************/
 
-#ifndef PONDER_LUA_HPP
-#define PONDER_LUA_HPP
+#ifndef PONDER_USES_LUA_HPP
+#define PONDER_USES_LUA_HPP
 
 #include <ponder/class.hpp>
 
@@ -71,13 +71,13 @@ void expose(lua_State *L, const IdRef exposeName)
     
 bool runString(lua_State *L, const char *luaCode);
 
-} // namespace ponder
 } // namespace lua
+} // namespace ponder
 
 //----------------------------------------------------------------------------
 
 // define once in client program to instance this
-#ifdef PONDER_LUA_IMPL
+#ifdef PONDER_USES_LUA_IMPL
 
 namespace ponder {
 namespace lua {
@@ -448,6 +448,6 @@ bool runString(lua_State *L, const char *luaCode)
 } // lua
 } // ponder
 
-#endif // PONDER_LUA_IMPL
+#endif // PONDER_USES_LUA_IMPL
 
-#endif // PONDER_LUA_HPP
+#endif // PONDER_USES_LUA_HPP

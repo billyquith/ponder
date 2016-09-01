@@ -28,10 +28,22 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+
+
+// Is T a user type.
+template <typename T> struct IsUserType {
+    static constexpr bool value = std::is_class<T>::value
+    && !std::is_same<typename detail::RawType<T>::Type, Value>::value
+    && !std::is_same<typename detail::RawType<T>::Type, std::string>::value;
+};
+
+// Decide whether the UserObject holder should be ref (true) or copy (false).
+template <typename T> struct IsUserObjRef {
+    static constexpr bool value = std::is_pointer<T>::value || std::is_reference<T>::value;
+};
+
 
 /**
  * \brief Helper structure allowing a shortcut when converting a ponder::Value to ponder::Value

@@ -31,6 +31,7 @@
 #ifndef PONDER_DETAIL_FUNCTIONTRAITS_HPP
 #define PONDER_DETAIL_FUNCTIONTRAITS_HPP
 
+#include <ponder/type.hpp>
 #include <type_traits>
 #include <array>
 #include <vector>
@@ -38,6 +39,7 @@
 #include <functional>
 
 namespace ponder {
+    
 namespace detail {
     
 namespace function {
@@ -48,10 +50,12 @@ struct FunctionDetails
     typedef void ReturnType;
 };
 
-template <typename R, typename ...A>
+template <typename R, typename... A>
 struct FunctionDetails<R(*)(A...)>
 {
+    typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
+    typedef ReturnType(FunctionType)(A...);
 };
     
     
@@ -59,18 +63,20 @@ struct FunctionDetails<R(*)(A...)>
 template <typename T>
 struct MethodDetails {};
 
-template <typename C, typename R, typename ...A>
+template <typename C, typename R, typename... A>
 struct MethodDetails<R(C::*)(A...)>
 {
     typedef C ClassType;
+    typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
     typedef ReturnType(FunctionType)(ClassType&, A...);
 };
 
-template <typename C, typename R, typename ...A>
+template <typename C, typename R, typename... A>
 struct MethodDetails<R(C::*)(A...) const>
 {
     typedef const C ClassType;
+    typedef std::tuple<A...> ParamTypes;
     typedef const R ReturnType;
     typedef ReturnType(FunctionType)(ClassType const&, A...);
 };
@@ -98,8 +104,9 @@ struct CallableDetails : public CallableDetails<decltype(&T::operator())> {};
 template <typename C, typename R, typename... A>
 struct CallableDetails<R(C::*)(A...) const>
 {
-    typedef R(FunctionType)(A...);
+    typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
+    typedef R(FunctionType)(A...);
 };
 
 
@@ -153,18 +160,6 @@ struct RefDetails<std::list<T>(C::*)>
 
 } // namespace function
     
-// Type of function recognised.
-enum class FunctionType
-{
-    None,               // not a function
-    Function,           // a function
-    MemberFunction,     // function in a class or struct
-    MemberObject,       // object in a class or struct
-    FunctionWrapper,    // std::function<>
-    BindExpression,     // std::bind()
-    Lambda              // lambda function [](){}
-};
-    
 /**
  * \class FunctionTraits
  *
@@ -181,8 +176,8 @@ enum class FunctionType
 template <typename T, typename E = void>
 struct FunctionTraits
 {
-    static constexpr bool isFunction = false;
     static constexpr FunctionType which = FunctionType::None;
+    static constexpr bool isFunction = false;
 };
 
 /**
@@ -192,10 +187,12 @@ template <typename T>
 struct FunctionTraits<T,
     typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
-    static constexpr bool isFunction = true;
     static constexpr FunctionType which = FunctionType::Function;
-    typedef typename std::remove_pointer<T>::type type;
-    typedef typename function::FunctionDetails<T>::ReturnType ReturnType;
+    static constexpr bool isFunction = true;
+    
+    typedef typename function::FunctionDetails<T> Details;
+    typedef typename std::remove_pointer<T>::type FunctionType;
+    typedef typename Details::ReturnType ReturnType;
 };
 
 /**
@@ -204,31 +201,38 @@ struct FunctionTraits<T,
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>
 {
-    static constexpr bool isFunction = true;
     static constexpr FunctionType which = FunctionType::MemberFunction;
-    typedef typename function::MethodDetails<T>::FunctionType type;
-    typedef typename function::MethodDetails<T>::ReturnType ReturnType;
+    static constexpr bool isFunction = true;
+    
+    typedef typename function::MethodDetails<T> Details;
+    typedef typename Details::FunctionType FunctionType;
+    typedef typename Details::ReturnType ReturnType;
 };
 
 /**
  * Specialization for native callable types (member pointer types)
+ * This isn't a function, but we include it so that we can genericise member types.
+ *
+ * TODO - should member be wrapped (in lambda?) so we don't have to include this?
  */
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
-    static constexpr bool isFunction = true;
     static constexpr FunctionType which = FunctionType::MemberObject;
+    static constexpr bool isFunction = false;
+    
     typedef typename function::RefDetails<T>::RefType ReturnType;
 };
 
 /**
- * Specialization for functors (classes exporting a result_type type)
+ * Specialization for functors (classes exporting a result_type type, T operator() ).
  */
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::value>::type>
 {
-    static constexpr bool isFunction = true;
     static constexpr FunctionType which = FunctionType::BindExpression;
+    static constexpr bool isFunction = true;
+    
     typedef typename T::result_type ReturnType;
 };
 
@@ -240,10 +244,11 @@ struct FunctionTraits<T,
     typename std::enable_if<function::IsCallable<T>::value
                             && function::IsFunctionWrapper<T>::value>::type>
 {
-    static constexpr bool isFunction = true;
     static constexpr FunctionType which = FunctionType::FunctionWrapper;
+    static constexpr bool isFunction = true;
+    
     typedef function::CallableDetails<T> Details;
-    typedef typename Details::FunctionType type;
+    typedef typename Details::FunctionType FunctionType;
     typedef typename Details::ReturnType ReturnType;
 };
 
@@ -255,10 +260,11 @@ struct FunctionTraits<T,
     typename std::enable_if<function::IsCallable<T>::value
                             && !function::IsFunctionWrapper<T>::value>::type>
 {
-    static constexpr bool isFunction = true;
     static constexpr FunctionType which = FunctionType::Lambda;
+    static constexpr bool isFunction = true;
+    
     typedef function::CallableDetails<T> Details;
-    typedef typename Details::FunctionType type;
+    typedef typename Details::FunctionType FunctionType;
     typedef typename Details::ReturnType ReturnType;
 };
 

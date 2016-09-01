@@ -29,7 +29,7 @@
 #include <ponder/class.hpp>
 #include <ponder/detail/format.hpp>
 #include <ponder/classbuilder.hpp>
-#define PONDER_LUA_IMPL
+#define PONDER_USES_LUA_IMPL
 #include <ponder/uses/lua.hpp>
 #include <list>
 

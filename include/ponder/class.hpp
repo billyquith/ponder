@@ -118,12 +118,12 @@ class PONDER_API Class : public TagHolder, detail::noncopyable
     
     // These are shared_ptr as the objects can be inherited. When this happens the
     // pointers are copied.
+    typedef std::shared_ptr<Constructor> ConstructorPtr;
     typedef std::shared_ptr<Property> PropertyPtr;
     typedef std::shared_ptr<Function> FunctionPtr;
-    typedef std::shared_ptr<Constructor> ConstructorPtr;
     
-    typedef std::vector<ConstructorPtr> ConstructorList;
     typedef std::vector<BaseInfo> BaseList;
+    typedef std::vector<ConstructorPtr> ConstructorList;
     typedef detail::Dictionary<Id, IdRef, PropertyPtr> PropertyTable;
     typedef detail::Dictionary<Id, IdRef, FunctionPtr> FunctionTable;
     typedef void (*Destructor)(const UserObject&, bool);
@@ -182,84 +182,12 @@ public:     // reflection
     IdRef name() const;
 
     /**
-     * \brief Return the memory size of a class instance
-     *
-     * \return Size in bytes
-     */
-    std::size_t sizeOf() const;
-
-    /**
-     * \brief Construct a new instance of the C++ class bound to the metaclass
-     *
-     * If no constructor can match the provided arguments, UserObject::nothing
-     * is returned. If a pointer is provided then placement new is used instead of
-     * the new instance being dynamically allocated using new.
-     * The new instance is wrapped into a UserObject.
-     *
-     * \note It must be destroyed with the appropriate destruction function: 
-     * Class::destroy for new and Class::destruct for placement new.
-     *
-     * \param args Arguments to pass to the constructor (empty by default)
-     * \param ptr Optional pointer to the location to construct the object (placement new)
-     *
-     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
-     * \sa create()
-     */
-    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const;
-
-    /**
-     * \brief Create a new instance of the class bound to the metaclass
-     *
-     * Create an object without having to create an Args list. See notes for Class::construct().
-     * If you need to create an argument list at runtime and use it to create an object then
-     * see Class::construct().
-     *
-     * \param args An argument list.
-     *
-     * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
-     * \sa construct()
-     */
-    template <typename ...A>
-    UserObject create(A... args) const;
-
-    /**
-     * \brief Return the total number of constructors of this metaclass
-     *
-     * \return Number of constructors
-     */
-    std::size_t constructorCount() const;
-    
-    /**
-     * \brief Destroy an instance of the C++ class bound to the metaclass
-     *
-     * This function must be called to destroy every instance created with
-     * Class::construct.
-     *
-     * \param object Object to be destroyed
-     *
-     * \see construct
-     */
-    void destroy(const UserObject& object) const;    
-
-    /**
-     * \brief Destruct an object created using placement new
-     *
-     * This function must be called to destroy every instance created with
-     * Class::construct.
-     *
-     * \param object Object to be destroyed
-     *
-     * \see construct
-     */
-    void destruct(const UserObject& object) const;
-
-    /**
      * \brief Return the total number of base metaclasses of this metaclass
      *
      * \return Number of base metaclasses
      */
     std::size_t baseCount() const;
-
+    
     /**
      * \brief Return a base metaclass from its index
      *
@@ -271,6 +199,23 @@ public:     // reflection
      */
     const Class& base(std::size_t index) const;
 
+    /**
+     * \brief Return the total number of constructors of this metaclass
+     *
+     * \return Number of constructors
+     */
+    std::size_t constructorCount() const;
+    
+    const Constructor* constructor(std::size_t index) const
+    {
+        return m_constructors[index].get();
+    }
+    
+    void destruct(const UserObject &uobj, bool destruct) const
+    {
+        m_destructor(uobj, destruct);
+    }
+    
     /**
      * \brief Return the total number of functions of this metaclass
      *
@@ -402,6 +347,13 @@ public:     // reflection
      * \endcode
      */
     bool tryProperty(const IdRef name, const Property*& propRet) const;
+    
+    /**
+     * \brief Return the memory size of a class instance
+     *
+     * \return Size in bytes
+     */
+    std::size_t sizeOf() const;
 
     /**
      * \brief Create a UserObject from an opaque user pointer

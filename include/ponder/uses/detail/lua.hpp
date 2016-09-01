@@ -1,11 +1,10 @@
 /****************************************************************************
 **
-** This file is part of the Ponder library, formerly CAMP.
+** This file is part of the Ponder library.
 **
 ** The MIT License (MIT)
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2016 Billy Quith.
+** Copyright (C) 2016 Bill Quith.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -27,50 +26,13 @@
 **
 ****************************************************************************/
 
-
-#include <ponder/function.hpp>
-#include <ponder/classvisitor.hpp>
-#include <ponder/args.hpp>
-
+#ifndef PONDER_USES_DETAIL_LUA_HPP
+#define PONDER_USES_DETAIL_LUA_HPP
 
 namespace ponder {
+namespace uses {
     
-IdRef Function::name() const
-{
-    return m_name;
-}
-
-std::size_t Function::argCount() const
-{
-    return m_argTypes.size();
-}
-
-ValueType Function::returnType() const
-{
-    return m_returnType;
-}
-
-ValueType Function::argType(std::size_t index) const
-{
-    // Make sure that the index is not out of range
-    if (index >= m_argTypes.size())
-        PONDER_ERROR(OutOfRange(index, m_argTypes.size()));
-
-    return m_argTypes[index];
-}
-
-void Function::accept(ClassVisitor& visitor) const
-{
-    visitor.visit(*this);
-}
-
-//Function::Function(IdRef name,
-//                   ValueType returnType,
-//                   const std::vector<ValueType>& argTypes)
-//    : m_name(name)
-//    , m_returnType(returnType)
-//    , m_argTypes(argTypes)
-//{
-//}
-
+} // namespace uses
 } // namespace ponder
+
+#endif // PONDER_USES_DETAIL_LUA_HPP

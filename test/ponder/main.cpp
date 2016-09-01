@@ -29,6 +29,9 @@
 
 #include <ponder/detail/classmanager.hpp>
 
+#define PONDER_USES_RUNTIME_IMPL
+#include <ponder/uses/runtime.hpp>
+
 // This must be defined once in the entire project
 #define CATCH_CONFIG_MAIN
 #include "test.hpp"

@@ -27,8 +27,7 @@
 **
 ****************************************************************************/
 
-namespace ponder
-{
+namespace ponder {
     
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
@@ -126,13 +125,14 @@ template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::function(IdRef name, F function)
 {
-    // Get a uniform function type from F, whatever it really is
-    typedef detail::FunctionTraits<F> Traits;
-    
-    static constexpr int implType = detail::FuncImplTypeMap<(int)Traits::which>::Type;
-    
-    // Construct and add the metafunction
-    return addFunction(new detail::FunctionImpl<implType, typename Traits::type>(name, function));
+//    // Get a uniform function type from F, whatever it really is
+//    typedef detail::FunctionTraits<F> Traits;
+//    
+//    static constexpr int implType = detail::FuncImplTypeMap<(int)Traits::which>::Type;
+//    
+//    // Construct and add the metafunction
+//    return addFunction(new detail::FunctionImpl<implType, typename Traits::type>(name, function));
+    return addFunction(detail::newFunction(name, function));
 }
 
 template <typename T>
@@ -150,7 +150,7 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 
     // For the special case of Getter<Value>, the ambiguity between both constructors
     // cannot be automatically solved, so let's do it manually
-    typedef typename detail::if_c<detail::FunctionTraits<U>::isFunction,
+    typedef typename detail::if_c<detail::FunctionTraits<U>::which != FunctionType::None,
                                   std::function<Value (T&)>, Value>::type Type;
 
     // Add the new tag (override if already exists)
@@ -206,29 +206,6 @@ ClassBuilder<T>& ClassBuilder<T>::writable(F function)
 }
 
 template <typename T>
-ClassBuilder<T>& ClassBuilder<T>::callable(bool value)
-{
-    // Make sure we have a valid function
-    assert(m_currentFunction != nullptr);
-
-    m_currentFunction->m_callable = detail::Getter<bool>(value);
-
-    return *this;
-}
-
-template <typename T>
-template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::callable(F function)
-{
-    // Make sure we have a valid function
-    assert(m_currentFunction != nullptr);
-
-    m_currentFunction->m_callable = detail::Getter<bool>(std::function<bool (T&)>(function));
-
-    return *this;
-}
-
-template <typename T>
 template <typename... A>
 ClassBuilder<T>& ClassBuilder<T>::constructor()
 {
@@ -251,9 +228,9 @@ ClassBuilder<T>& ClassBuilder<T>::external()
         addProperty(mapper.property(i));
 
     // Retrieve the functions
-    std::size_t functionCount = mapper.functionCount();
-    for (std::size_t i = 0; i < functionCount; ++i)
-        addFunction(mapper.function(i));
+//    std::size_t functionCount = mapper.functionCount();
+//    for (std::size_t i = 0; i < functionCount; ++i)
+//        addFunction(mapper.function(i));
 
     return *this;
 }

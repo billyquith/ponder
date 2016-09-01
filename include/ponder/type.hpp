@@ -60,6 +60,19 @@ enum class ValueType
     User        ///< User-defined classes
 };
 
+    
+// Type of function recognised.
+enum class FunctionType
+{
+    None,               // not a function
+    Function,           // a function
+    MemberFunction,     // function in a class or struct
+    MemberObject,       // object in a class or struct
+    FunctionWrapper,    // std::function<>
+    BindExpression,     // std::bind()
+    Lambda              // lambda function [](){}
+};
+    
 } // namespace ponder
 
 

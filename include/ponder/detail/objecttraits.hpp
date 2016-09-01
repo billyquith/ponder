@@ -36,8 +36,8 @@
 
 
 namespace ponder {
-namespace detail {
-    
+namespace detail {    
+
 /// Type classification for a type relating to an object.
 enum class ObjectType
 {

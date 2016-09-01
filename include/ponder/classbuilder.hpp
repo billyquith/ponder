@@ -36,16 +36,16 @@
 #include <ponder/classget.hpp>
 #include <ponder/class.hpp>
 #include <ponder/detail/functionimpl.hpp>
-#include <ponder/detail/functiontraits.hpp>
 #include <ponder/detail/constructorimpl.hpp>
 #include <ponder/detail/propertyfactory.hpp>
 #include <ponder/pondertype.hpp>
+#include <ponder/uses/detail/uses.hpp>
 #include <cassert>
 #include <string>
 
 
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief Proxy class which fills a metaclass with its members
  *
@@ -64,7 +64,7 @@ template <typename T>
 class ClassBuilder
 {
 public:
-
+    
     /**
      * \brief Construct the builder with a target metaclass to fill
      *
@@ -285,29 +285,6 @@ public:
      */
     template <typename F>
     ClassBuilder<T>& writable(F function);
-
-    /**
-     * \brief Set the callable state of the current function with a static value
-     *
-     * \param value True to set the current function as callable, false otherwise
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    ClassBuilder<T>& callable(bool value);
-
-    /**
-     * \brief Set the callable state of the current function with a dynamic value
-     *
-     * function can be any C++ callable type, and will be called to return the
-     * callable state of the function each time it is requested. This way, the callable
-     * state of a function can depend on metaclass instances.
-     *
-     * \param function Function to call to get the callable state of the function
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F>
-    ClassBuilder<T>& callable(F function);
 
     /**
      * \brief Declare a constructor for the metaclass.

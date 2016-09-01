@@ -42,8 +42,8 @@
 #include <vector>
 
 
-namespace ponder
-{
+namespace ponder {
+    
 class Args;
 class UserObject;
 class ClassVisitor;
@@ -51,8 +51,8 @@ class ClassVisitor;
 /**
  * \brief Abstract representation of a function
  *
- * Functions are members of metaclasses. Their main purpose is to be called; they also provide
- * detailed informations about their prototype.
+ * Functions are members of metaclasses. Their purpose is to provide detailed information
+ * about their prototype.
  */
 class PONDER_API Function : public TagHolder
 {
@@ -61,7 +61,7 @@ public:
     /**
      * \brief Destructor
      */
-    virtual ~Function();
+    // virtual ~Function();
 
     /**
      * \brief Get the name of the function
@@ -69,13 +69,15 @@ public:
      * \return Name of the function
      */
     IdRef name() const;
+    
+    FunctionType classification() const { return m_funcType; }
 
     /**
      * \brief Get the number of arguments of the function
      *
      * \return Total number of arguments taken by the function
      */
-    std::size_t argCount() const;
+    std::size_t argCount() const;   // XXXX - rename param
 
     /**
      * \brief Get the type of variable returned by the function
@@ -96,44 +98,6 @@ public:
     ValueType argType(std::size_t index) const;
 
     /**
-     * \brief Check if the function is currently callable for a given object
-     *
-     * \param object Object
-     *
-     * \return True if the function can be called, false otherwise
-     *
-     * \throw NullObject object is invalid
-     */
-    bool callable(const UserObject& object) const;
-
-    /**
-     * \brief Call the function
-     *
-     * \param object Object
-     * \param args Arguments to pass to the function, for example "ponder::Args::empty"
-     *
-     * \return Value returned by the function call
-     *
-     * \throw ForbiddenCall the function is not callable
-     * \throw NullObject object is invalid
-     * \throw NotEnoughArguments too few arguments are provided
-     * \throw BadArgument one of the arguments can't be converted to the requested type
-     */
-    Value call(const UserObject& object, const Args& args = Args::empty) const;
-
-    /**
-     * \brief Call the static function
-     *
-     * \param args Arguments to pass to the function, for example "ponder::Args::empty"
-     *
-     * \return Value returned by the function call
-     *
-     * \throw NotEnoughArguments too few arguments are provided
-     * \throw BadArgument one of the arguments can't be converted to the requested type
-     */
-    Value callStatic(const Args& args = Args::empty) const;
-
-    /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
@@ -142,7 +106,7 @@ public:
 
 protected:
 
-    template <typename T> friend class ClassBuilder;
+//    template <typename T> friend class ClassBuilder;
 
     /**
      * \brief Construct the function from its description
@@ -153,31 +117,26 @@ protected:
      *
      * \return Value returned by the function call
      */
-    Function(IdRef name,
-             ValueType returnType,
-             const std::vector<ValueType>& argTypes = std::vector<ValueType>());
-
-    /**
-     * \brief Do the actual call
-     *
-     * This function is a pure virtual which has to be implemented in derived classes.
-     *
-     * \param object Object
-     * \param args Arguments to pass to the function
-     *
-     * \return Value returned by the function call
-     *
-     * \throw NullObject object is invalid
-     * \throw BadArgument one of the arguments can't be converted to the requested type
-     */
-    virtual Value execute(const UserObject& object, const Args& args) const = 0;
-
-private:
+    Function(IdRef name) : m_name(name) {}
+//             ValueType returnType,
+//             const std::vector<ValueType>& argTypes = std::vector<ValueType>());
+    
+//    virtual Value execute(const UserObject& object, const Args& args) const = 0; // XXXX
+    
+    Function(const Function&) = delete;
 
     Id m_name; ///< Name of the function
+    
+//    struct Param
+//    {
+//        IdRef m_name;
+//        const std::type_info *m_typeinfo;
+//    };
+//    std::array<Param>   // XXXX
+    
     ValueType m_returnType; ///< Return type
     std::vector<ValueType> m_argTypes; ///< Type of all the function arguments
-    detail::Getter<bool> m_callable; ///< Accessor to get the callable state of the function
+    FunctionType m_funcType;
 };
 
 } // namespace ponder
