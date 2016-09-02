@@ -35,11 +35,11 @@
 #include <ponder/type.hpp>
 #include <ponder/classget.hpp>
 #include <ponder/class.hpp>
+#include <ponder/uses/detail/uses.hpp>
 #include <ponder/detail/functionimpl.hpp>
 #include <ponder/detail/constructorimpl.hpp>
 #include <ponder/detail/propertyfactory.hpp>
 #include <ponder/pondertype.hpp>
-#include <ponder/uses/detail/uses.hpp>
 #include <cassert>
 #include <string>
 

@@ -29,13 +29,40 @@
 #ifndef PONDER_USES_DETAIL_HPP
 #define PONDER_USES_DETAIL_HPP
 
+#include <ponder/uses/detail/runtime.hpp>
+#include <ponder/uses/detail/lua.hpp>
+
 namespace ponder {
 namespace uses {
+
+struct RuntimeModule
+{
+    template <typename T, typename F>
+    static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
+    {
+        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::which>::Type;
+        
+        return new runtime::impl::FunctionCallerImpl<implType, typename T::FunctionType>(name, function);
+    }
+};
+
+// Global information on the compile-time type users.
+struct Users
+{
+    enum { eRuntimeModule };
+    
+    typedef std::tuple<RuntimeModule> Modules;
+    
+    typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
+
+    template <int I>
+    struct PerFuncType { typedef typename std::tuple_element<I, PerFunctionUserData>::type Type; };
+    
+    template <int I>
+    static typename PerFuncType<I>::Type getPerFuncData(PerFunctionUserData &ud) { return std::get<I>(ud); }
+};
     
 } // namespace uses
 } // namespace ponder
-
-#include <ponder/uses/detail/runtime.hpp>
-#include <ponder/uses/detail/lua.hpp>
 
 #endif // PONDER_USES_DETAIL_HPP

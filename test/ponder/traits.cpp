@@ -32,7 +32,7 @@
 #include <ponder/detail/util.hpp>
 #include <ponder/arraymapper.hpp>
 #include <ponder/function.hpp>
-#include <ponder/detail/functionimpl.hpp>
+#include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <array>
 #include <string.h> // strcmp()

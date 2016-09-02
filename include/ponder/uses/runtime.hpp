@@ -126,7 +126,7 @@ private:
 };
 
         
-class FunctionCaller
+class FunctionCaller // XXXX docs
 {
 public:
     
@@ -178,7 +178,7 @@ protected:
      * \throw NullObject object is invalid
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
-    virtual Value execute(const UserObject& object, const Args& args) const = 0;
+    virtual Value execute(const UserObject& object, const Args& args) const;
     
 private:
     
@@ -265,6 +265,16 @@ Value FunctionCaller::callStatic(const Args& args) const
     return execute(UserObject::nothing, args);
 }   
 
+Value FunctionCaller::execute(const UserObject& object, const Args& args) const
+{
+    const runtime::impl::FunctionCaller *fc =
+        std::get<uses::Users::eRuntimeModule>(
+            *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData()));
+    
+    return fc->execute(object, args);
+}
+
+    
 } // runtime
 } // ponder
 

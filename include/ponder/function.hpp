@@ -103,7 +103,9 @@ public:
      * \param visitor Visitor to accept
      */
     virtual void accept(ClassVisitor& visitor) const;
-
+    
+    virtual const void* getUserData() const = 0;
+    
 protected:
 
     /**

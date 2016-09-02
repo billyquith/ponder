@@ -233,7 +233,7 @@ public:
      * \throw NotEnoughArguments too few arguments are provided
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
-//    Value call(IdRef function, const Args& args = Args::empty) const;
+//    Value call(IdRef function, const Args& args = Args::empty) const; XXXX
     
     /**
      * \brief Assignment operator

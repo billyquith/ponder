@@ -34,6 +34,22 @@
 namespace ponder {
 namespace runtime {
 namespace impl {
+    
+    
+class FunctionCaller
+{
+public:
+    FunctionCaller(const IdRef name) : m_name(name) {}
+    FunctionCaller(const FunctionCaller&) = delete;
+    virtual ~FunctionCaller() {}
+    
+    const IdRef name() const { return m_name; }
+    
+    virtual Value execute(const UserObject&, const Args& args) const = 0;
+    
+private:
+    const IdRef m_name;
+};
 
 /*
  *  The ValueMapper assumes all user objects converted to UserObjects are references,
@@ -194,12 +210,12 @@ template <int F, typename T = void> class FunctionCallerImpl;
     
 
 template <typename C, typename R, typename... A>
-class FunctionCallerImpl<FuncImplFunctionWrapper, R (C, A...)> : public Function
+class FunctionCallerImpl<FuncImplFunctionWrapper, R (C, A...)> : public FunctionCaller
 {
 public:
     
     FunctionCallerImpl(IdRef name, std::function<R (C, A...)> function)
-    :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
+    :   FunctionCaller(name)
     ,   m_function(function)
     {}
     
@@ -219,14 +235,14 @@ private:
 
     
 template <typename R, typename... A>
-class FunctionCallerImpl<FuncImplStaticFunction, R (A...)> : public Function
+class FunctionCallerImpl<FuncImplStaticFunction, R (A...)> : public FunctionCaller
 {
 public:
     
     typedef R(*FuncType)(A...);
     
     FunctionCallerImpl(IdRef name, FuncType function)
-    :   Function(name, mapType<R>(), std::vector<ValueType> { mapType<A>()... })
+    :   FunctionCaller(name)
     ,   m_function(function)
     {}
     
@@ -263,7 +279,7 @@ template <> struct FuncImplTypeMap<(int)FunctionType::MemberFunction>
 { static constexpr int Type = FuncImplFunctionWrapper; };
 
 
-} // namespace detail
+} // namespace impl
 } // namespace runtime
 } // namespace ponder
 

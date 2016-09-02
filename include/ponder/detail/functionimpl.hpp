@@ -55,7 +55,7 @@ struct FunctionMapParamsToValueType
     
     
 // Apply B to canonical function F = R(A...)
-template <typename F, typename B> struct FunctionApplyToParams;
+template <typename FuncArgTuple, typename B> struct FunctionApplyToParams;
     
 template <typename B, typename... A>
 struct FunctionApplyToParams<std::tuple<A...>, B>
@@ -71,14 +71,18 @@ struct FunctionApplyToParams<std::tuple<void>, B>
 {
     static typename B::ReturnType foreach()
     {
-        return typename B::ReturnType { };
+        return typename B::ReturnType {};
     }
 };
-    
+
+//--------------------------------------------------------------------------------------
+// FunctionImpl
+//--------------------------------------------------------------------------------------
+
 /*
  *  Bake the function type information into non-templated Function.
  */
-template <typename T>
+template <typename T, typename F>
 class FunctionImpl : public Function
 {
     typedef T FuncTraits;
@@ -90,16 +94,32 @@ class FunctionImpl : public Function
     
 public:
 
-    FunctionImpl(IdRef name) : Function(name)
+    FunctionImpl(IdRef name, F function) : Function(name)
     {
         m_name = name;
         m_funcType = FuncTraits::which;
         m_returnType = mapType<typename FuncTraits::ReturnType>();
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueType<c_nParams>>::foreach();
+        
+        processUsers(m_name, function);
     }
     
-protected:
+    const void* getUserData() const override
+    {
+        return &m_userData;
+    }
+
+private:
+
+    uses::Users::PerFunctionUserData m_userData;
+
+    void processUsers(IdRef name, F function)
+    {
+        typedef std::tuple_element<0, uses::Users::Modules>::type UserFuncProcessor;
+        std::get<0>(m_userData) = UserFuncProcessor::perFunction<T,F>(name, function);
+    }
+    
     
     std::size_t paramCount() const override { return c_nParams; }
 
@@ -111,9 +131,9 @@ protected:
         
         return m_paramInfo[index].m_valueType;
     }
-
 };
 
+// Used by ClassBuilder to create new function instance.
 template <typename F>
 static inline Function* newFunction(IdRef name, F function)
 {
@@ -121,7 +141,7 @@ static inline Function* newFunction(IdRef name, F function)
     
     static_assert(FuncTraits::which != FunctionType::None, "Type is not a function");
     
-    return new FunctionImpl<FuncTraits>(name);
+    return new FunctionImpl<FuncTraits, F>(name, function);
 }
 
 } // namespace detail
