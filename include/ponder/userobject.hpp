@@ -218,24 +218,6 @@ public:
     void set(std::size_t index, const Value& value) const;
 
     /**
-     * \brief Call an object's function
-     *
-     * This function is defined for convenience, it is a shortcut
-     * for `object.getClass().function(name).call(object, args);`
-     *
-     * \param function Name of the function to call
-     * \param args Arguments to pass to the function
-     *
-     * \return Value returned by the function
-     *
-     * \throw FunctionNotFound \a function is not a function of the object class
-     * \throw ForbiddenCall \a function is not callable
-     * \throw NotEnoughArguments too few arguments are provided
-     * \throw BadArgument one of the arguments can't be converted to the requested type
-     */
-//    Value call(IdRef function, const Args& args = Args::empty) const; XXXX
-    
-    /**
      * \brief Assignment operator
      *
      * \param other User object to assign

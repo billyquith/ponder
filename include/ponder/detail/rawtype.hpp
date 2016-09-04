@@ -105,15 +105,6 @@ struct RawType<T&>
     typedef typename RawType<T>::Type Type;
 };
 
-///*
-// * Specialized version for reference modifier
-// */
-//template <typename T>
-//struct RawType< const T&>
-//{
-//    typedef typename RawType<T>::Type Type;
-//};
-
 /*
  * Specialized version for raw pointers
  */

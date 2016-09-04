@@ -41,19 +41,7 @@
 namespace ponder {
 namespace runtime {
     
-namespace impl {
-    
-//template <typename F>
-//static inline const Function* functionCallerFactory(IdRef name, F function)
-//{
-//    using Traits = detail::FunctionTraits<F>;
-//    
-//    return new runtime::impl::FunctionCallerImpl<implType, typename Traits::type>(name, function));
-//}
-    
-} // namespace detail
-    
-    
+
 class ObjectFactory
 {
 public:

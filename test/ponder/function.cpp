@@ -467,7 +467,7 @@ TEST_CASE("Registered functions can be called with the runtime")
         ponder::Value ncp = FunctionCaller(mc.function("nonCopyPtr")).callStatic();
     }
     
-    SECTION("calling null functions is an error") //XXXX 
+    SECTION("calling null functions is an error")
     {
         using ponder::runtime::FunctionCaller;
 
