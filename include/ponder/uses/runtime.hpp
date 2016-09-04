@@ -186,6 +186,15 @@ private:
     runtime::impl::FunctionCaller *m_caller;
 };
 
+static inline Value call(const Function &fn, const UserObject &obj, const Args &args = Args::empty)
+{
+    return FunctionCaller(fn).call(obj, args);
+}
+
+static inline Value callStatic(const Function &fn, const Args &args = Args::empty)
+{
+    return FunctionCaller(fn).callStatic(args);
+}
 
 } // namespace runtime
 } // namespace ponder

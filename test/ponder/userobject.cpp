@@ -31,6 +31,7 @@
 #include <ponder/userobject.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
+#include <ponder/uses/runtime.hpp>
 #include "test.hpp"
 #include <ostream>
 
@@ -256,18 +257,19 @@ TEST_CASE("Ponder supports user objects")
         IS_TRUE(ponder::UserObject::nothing == ponder::UserObject::nothing);
     }
 
-//    SECTION("destroyed objects are nothing") XXXX
-//    {
-//        ponder::UserObject obj;
-//        IS_TRUE(obj == ponder::UserObject::nothing);
-//
-//        auto const& metaclass = ponder::classByType<MyClass>();
-//        obj = metaclass.construct(ponder::Args(1));
-//        IS_TRUE(obj != ponder::UserObject::nothing);
-//        
-//        metaclass.destroy(obj);
-//        IS_TRUE(obj == ponder::UserObject::nothing);
-//    }
+    SECTION("destroyed objects are nothing")
+    {
+        ponder::UserObject obj;
+        IS_TRUE(obj == ponder::UserObject::nothing);
+
+        auto const& metaclass = ponder::classByType<MyClass>();
+        ponder::runtime::ObjectFactory fact(metaclass);
+        obj = fact.construct(ponder::Args(1));
+        IS_TRUE(obj != ponder::UserObject::nothing);
+        
+        fact.destroy(obj);
+        IS_TRUE(obj == ponder::UserObject::nothing);
+    }
 
     SECTION("user objects reference other objects")
     {

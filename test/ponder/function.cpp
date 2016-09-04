@@ -425,125 +425,130 @@ TEST_CASE("Registered functions can be called with the runtime")
         functions[i] = &metaclass.function("f" + std::to_string(i));
     }
 
-    SECTION("Functions can be called")    // XXXX
+    SECTION("Functions can be called")
     {
-        MyClass object;
-
         using ponder::runtime::FunctionCaller;
         
-        IS_TRUE(FunctionCaller(*functions[1]).callStatic(ponder::Args(&object))
-                == ponder::Value::nothing);
+        MyClass object;
         
-       IS_TRUE(FunctionCaller(*functions[2]).callStatic(ponder::Args(&object, 10)) == ponder::Value(12));
-       IS_TRUE(FunctionCaller(*functions[3]).callStatic(ponder::Args(&object)) == ponder::Value("3"));
-       IS_TRUE(FunctionCaller(*functions[4]).call(object, ponder::Args()).to<MyType>() == MyType(4));
-       IS_TRUE(FunctionCaller(*functions[5]).call(object, ponder::Args()).to<MyType>() == MyType(5));
-       IS_TRUE(FunctionCaller(*functions[6]).call(object, ponder::Args()) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[7]).call(object, ponder::Args("hi")) == ponder::Value("hi"));
-       IS_TRUE(FunctionCaller(*functions[8]).call(object, ponder::Args()) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[9]).call(object, ponder::Args(true)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[10]).call(object, ponder::Args(1., 2.f)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[11]).call(object, ponder::Args(1, 2, 3)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[12]).call(object, ponder::Args("1", "2", "3", "4")) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[13]).call(object, ponder::Args(Zero, One, Two, Zero, One)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[1]).callStatic(ponder::Args(&object)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[2]).callStatic(ponder::Args(&object, 10)) == ponder::Value(12));
+        IS_TRUE(FunctionCaller(*functions[3]).callStatic(ponder::Args(&object)) == ponder::Value("3"));
+        IS_TRUE(FunctionCaller(*functions[4]).call(object, ponder::Args()).to<MyType>() == MyType(4));
+        IS_TRUE(FunctionCaller(*functions[5]).call(object, ponder::Args()).to<MyType>() == MyType(5));
+        IS_TRUE(FunctionCaller(*functions[6]).call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[7]).call(object, ponder::Args("hi")) == ponder::Value("hi"));
+        IS_TRUE(FunctionCaller(*functions[8]).call(object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[9]).call(object, ponder::Args(true)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[10]).call(object, ponder::Args(1., 2.f)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[11]).call(object, ponder::Args(1, 2, 3)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[12]).call(object, ponder::Args("1", "2", "3", "4")) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[13]).call(object, ponder::Args(Zero, One, Two, Zero, One)) == ponder::Value::nothing);
         
-       IS_TRUE(FunctionCaller(*functions[14]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[15]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[16]).callStatic(ponder::Args(object)) == ponder::Value(16));
-       IS_TRUE(FunctionCaller(*functions[17]).callStatic(ponder::Args(object, 20)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[18]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
-       IS_TRUE(FunctionCaller(*functions[19]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[14]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[15]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[16]).callStatic(ponder::Args(object)) == ponder::Value(16));
+        IS_TRUE(FunctionCaller(*functions[17]).callStatic(ponder::Args(object, 20)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[18]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(*functions[19]).callStatic(ponder::Args(object)) == ponder::Value::nothing);
         
-       IS_TRUE(FunctionCaller(*functions[20]).callStatic(ponder::Args(object, 10)) == ponder::Value(10));
-       IS_TRUE(FunctionCaller(*functions[21]).callStatic(ponder::Args(object, 10)) == ponder::Value(30));
-       IS_TRUE(FunctionCaller(*functions[22]).callStatic(ponder::Args(object, 10)) == ponder::Value(60));
-
-       auto const& mc = ponder::classByType<MyClass>();
-       ponder::Value r = FunctionCaller(mc.function("statFunc")).callStatic();
-       IS_TRUE(r.to<int>() == 77);
-
-       ponder::Value r2 = FunctionCaller(mc.function("statFunc2")).callStatic(ponder::Args(2.5f, 3.0f));
-       REQUIRE(r2.to<float>() == 7.5f);
-
-       ponder::Value ncr = FunctionCaller(mc.function("nonCopyRef")).callStatic();
-       ponder::Value ncp = FunctionCaller(mc.function("nonCopyPtr")).callStatic();
+        IS_TRUE(FunctionCaller(*functions[20]).callStatic(ponder::Args(object, 10)) == ponder::Value(10));
+        IS_TRUE(FunctionCaller(*functions[21]).callStatic(ponder::Args(object, 10)) == ponder::Value(30));
+        IS_TRUE(FunctionCaller(*functions[22]).callStatic(ponder::Args(object, 10)) == ponder::Value(60));
+        
+        auto const& mc = ponder::classByType<MyClass>();
+        ponder::Value r = FunctionCaller(mc.function("statFunc")).callStatic();
+        IS_TRUE(r.to<int>() == 77);
+        
+        ponder::Value r2 = FunctionCaller(mc.function("statFunc2")).callStatic(ponder::Args(2.5f, 3.0f));
+        REQUIRE(r2.to<float>() == 7.5f);
+        
+        ponder::Value ncr = FunctionCaller(mc.function("nonCopyRef")).callStatic();
+        ponder::Value ncp = FunctionCaller(mc.function("nonCopyPtr")).callStatic();
     }
     
-//    SECTION("calling null functions is an error") // XXXX
-//    {
-//        REQUIRE_THROWS_AS(functions[1]->callStatic(ponder::Args(ponder::UserObject())),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[3]->callStatic(ponder::Args(ponder::UserObject())),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[4]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[5]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[6]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[8]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[15]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[16]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[18]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//        REQUIRE_THROWS_AS(functions[19]->call(ponder::UserObject(), ponder::Args()),
-//                          ponder::NullObject);
-//    }
-//    
-//    SECTION("calling a function without enough parameters is an error")
-//    {
-//        MyClass object;
-//        
-//        REQUIRE_THROWS_AS(functions[2]->call(object, ponder::Args()),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[7]->call(object, ponder::Args()),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[9]->call(object, ponder::Args()),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[10]->call(object, ponder::Args(1.)),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[11]->call(object, ponder::Args(1, 2)),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[12]->call(object, ponder::Args("1", "2", "3")),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[13]->call(object, ponder::Args(Zero, One, Two, Zero)),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[20]->call(object, ponder::Args()),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[21]->call(object, ponder::Args()),
-//                          ponder::NotEnoughArguments);
-//        REQUIRE_THROWS_AS(functions[22]->call(object, ponder::Args()),
-//                          ponder::NotEnoughArguments);
-//    }
-//
-//    SECTION("functions must be called with the correct parameters")
-//    {
-//        MyClass object;
-//        MyType arg(0);
-//
-//        REQUIRE_THROWS_AS(functions[2]->callStatic(ponder::Args(&object, arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[10]->call(object, ponder::Args(arg, arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[11]->call(object, ponder::Args(arg, arg, arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[12]->call(object, ponder::Args(arg, arg, arg, arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[13]->call(object, ponder::Args(arg, arg, arg, arg, arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[20]->call(object, ponder::Args(arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[21]->call(object, ponder::Args(arg)),
-//                          ponder::BadArgument);
-//        REQUIRE_THROWS_AS(functions[22]->call(object, ponder::Args(arg)),
-//                          ponder::BadArgument);
-//    }
+    SECTION("calling null functions is an error") //XXXX 
+    {
+        using ponder::runtime::FunctionCaller;
+
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[1]).callStatic(ponder::Args(ponder::UserObject())),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[3]).callStatic(ponder::Args(ponder::UserObject())),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[4]).call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[5]).call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[6]).call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[8]).call(ponder::UserObject(), ponder::Args()),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[15]).callStatic(ponder::Args(ponder::UserObject())),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[16]).callStatic(ponder::Args(ponder::UserObject())),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[18]).callStatic(ponder::Args(ponder::UserObject())),
+                          ponder::NullObject);
+        REQUIRE_THROWS_AS(FunctionCaller(*functions[19]).callStatic(ponder::Args(ponder::UserObject())),
+                          ponder::NullObject);
+    }
+    
+    SECTION("calling a function without enough parameters is an error")
+    {
+        using ponder::runtime::call;
+        
+        MyClass object;
+        
+        REQUIRE_THROWS_AS(call(*functions[2], object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[7], object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[9], object, ponder::Args()),
+                        ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[10], object, ponder::Args(1.)),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[11], object, ponder::Args(1, 2)),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[12], object, ponder::Args("1", "2", "3")),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[13], object, ponder::Args(Zero, One, Two, Zero)),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[20], object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[21], object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+        REQUIRE_THROWS_AS(call(*functions[22], object, ponder::Args()),
+                          ponder::NotEnoughArguments);
+    }
+
+   SECTION("functions must be called with the correct parameters")
+   {
+       using ponder::runtime::call;
+       using ponder::runtime::callStatic;
+       
+       MyClass object;
+       MyType arg(0);
+
+       REQUIRE_THROWS_AS(callStatic(*functions[2], ponder::Args(&object, arg, arg)),
+                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(call(*functions[10], object, ponder::Args(arg, arg)),
+                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(call(*functions[11], object, ponder::Args(arg, arg, arg)),
+                         ponder::BadArgument);
+//       REQUIRE_THROWS_AS(call(*functions[12], object, ponder::Args(arg, arg, arg, arg)), XXXX
+//                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(call(*functions[13], object, ponder::Args(arg, arg, arg, arg, arg)),
+                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(callStatic(*functions[20], ponder::Args(object, arg)),
+                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(callStatic(*functions[21], ponder::Args(object, arg)),
+                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(callStatic(*functions[22], ponder::Args(object, arg)),
+                         ponder::BadArgument);
+   }
 }
 
-TEST_CASE("Functions can modify objects") // XXXX
+TEST_CASE("Functions can modify objects") //XXXX 
 {
     // ModifyA() is called on an object of class A with the intent to modify that object:
     ClassA objectA;
