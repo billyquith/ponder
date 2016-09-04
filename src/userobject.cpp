@@ -52,14 +52,7 @@ UserObject::UserObject(const UserObject& copy)
 
 void* UserObject::pointer() const
 {
-    if (m_holder)
-    {
-        return m_holder->object();
-    }
-    else
-    {
-        return nullptr;
-    }
+    return m_holder ? m_holder->object() : nullptr;
 }
 
 const Class& UserObject::getClass() const
@@ -99,7 +92,7 @@ void UserObject::set(std::size_t index, const Value& value) const
 //    return getClass().function(function).call(*this, args);
 //}
 
-UserObject& UserObject::operator=(const UserObject& other)
+UserObject& UserObject::operator = (const UserObject& other)
 {
     m_class = other.m_class;
     m_holder = other.m_holder;

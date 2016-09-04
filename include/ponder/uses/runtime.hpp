@@ -186,6 +186,43 @@ private:
     runtime::impl::FunctionCaller *m_caller;
 };
 
+//--------------------------------------------------------------------------------------
+// Helpers
+
+static inline void destroy(const UserObject &uo)
+{
+    ObjectFactory(uo.getClass()).destroy(uo);
+}
+
+namespace impl {
+    
+struct UserObjectDeleter {
+    void operator () (UserObject *uo) { destroy(*uo); }
+};
+    
+} // namespace impl
+    
+typedef std::unique_ptr<UserObject, impl::UserObjectDeleter> UniquePtr;
+
+inline UniquePtr makeUniquePtr(UserObject *uo)
+{
+    return UniquePtr(uo);
+}
+
+template <typename... A>
+static inline UserObject create(const Class &cls, A... args)
+{
+    return ObjectFactory(cls).create(args...);
+}
+    
+template <typename... A>
+static inline UniquePtr createUnique(const Class &cls, A... args)
+{
+    auto p = new UserObject;
+    *p = create(cls, args...);
+    return makeUniquePtr(p);
+}
+
 static inline Value call(const Function &fn, const UserObject &obj, const Args &args = Args::empty)
 {
     return FunctionCaller(fn).call(obj, args);

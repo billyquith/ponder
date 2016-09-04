@@ -36,10 +36,9 @@
 #include <ponder/classcast.hpp>
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /**
  * \brief Abstract base class for object holders
  *

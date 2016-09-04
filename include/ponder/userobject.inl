@@ -28,8 +28,7 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
+namespace ponder {
     
 template <typename T>
 UserObject::UserObject(const T& object)

@@ -39,8 +39,8 @@
 #include <ponder/detail/util.hpp>
 
 
-namespace ponder
-{
+namespace ponder {
+    
 class Property;
 class UserProperty;
 class Value;
