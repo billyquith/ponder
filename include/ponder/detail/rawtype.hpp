@@ -84,7 +84,7 @@ struct IsSmartPointer<std::shared_ptr<T>, U>
 template <typename T, typename E = void>
 struct RawType
 {
-    typedef T Type;
+    typedef T Type;     // XXXX rename to type
 };
 
 /*
@@ -104,6 +104,15 @@ struct RawType<T&>
 {
     typedef typename RawType<T>::Type Type;
 };
+
+///*
+// * Specialized version for reference modifier
+// */
+//template <typename T>
+//struct RawType< const T&>
+//{
+//    typedef typename RawType<T>::Type Type;
+//};
 
 /*
  * Specialized version for raw pointers

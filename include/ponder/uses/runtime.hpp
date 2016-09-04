@@ -79,7 +79,7 @@ public:
      * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
      * \sa create()
      */
-    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const;
+    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const; // XXXX rename
 
     /**
      * \brief Create a new instance of the class bound to the metaclass
@@ -130,7 +130,7 @@ class FunctionCaller // XXXX docs
 {
 public:
     
-    FunctionCaller(const Function &f) : m_func(f) {}
+    FunctionCaller(const Function &f);
     
     virtual ~FunctionCaller() {}
     
@@ -183,6 +183,7 @@ protected:
 private:
     
     const Function &m_func;
+    runtime::impl::FunctionCaller *m_caller;
 };
 
 
@@ -245,6 +246,14 @@ void ObjectFactory::destruct(const UserObject& object) const
 }
 
 
+FunctionCaller::FunctionCaller(const Function &f)
+    :   m_func(f)
+    ,   m_caller(std::get<uses::Users::eRuntimeModule>(
+                 *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData())))
+{
+}
+
+    
 Value FunctionCaller::call(const UserObject& object, const Args& args) const
 {
     // Check the number of arguments
@@ -267,11 +276,7 @@ Value FunctionCaller::callStatic(const Args& args) const
 
 Value FunctionCaller::execute(const UserObject& object, const Args& args) const
 {
-    const runtime::impl::FunctionCaller *fc =
-        std::get<uses::Users::eRuntimeModule>(
-            *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData()));
-    
-    return fc->execute(object, args);
+    return m_caller->execute(object, args);
 }
 
     

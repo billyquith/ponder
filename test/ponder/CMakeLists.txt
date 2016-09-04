@@ -50,7 +50,6 @@ set(PONDER_TEST_SRCS
     enumproperty.cpp
     example_mainpage.cpp
     function.cpp
-    functionaccess.cpp
     inheritance.cpp
     main.cpp
     mapper.cpp

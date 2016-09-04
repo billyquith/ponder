@@ -43,6 +43,9 @@ namespace ValueTest
     {
         MyClass(int x_) : x(x_) {}
         int x;
+        std::string str_ = "hello";
+        
+        const std::string& str() const {return str_;}
     };
     
     bool operator == (const MyClass& left, const MyClass& right)
@@ -109,7 +112,8 @@ namespace ValueTest
         ponder::Enum::declare<MyEnum>("ValueTest::MyEnum")
             .value("One", One)
             .value("Two", Two);
-        ponder::Class::declare<MyClass>("ValueTest::MyClass");
+        ponder::Class::declare<MyClass>("ValueTest::MyClass")
+            .function("str", &MyClass::str);
     }
 }
 
@@ -620,6 +624,15 @@ TEST_CASE("Default values can be created")
 //        ponder::detail::ValueProvider<std::shared_ptr<MyClass>> vp;
 //        std::shared_ptr<MyClass> v(vp());
 //    }
+}
+
+TEST_CASE("Value mapper maps between C++ and Ponder runtime types")
+{
+    SECTION("return types")
+    {
+        REQUIRE(ponder::mapType<std::string>() == ponder::ValueType::String);
+        REQUIRE(ponder::mapType<const std::string&>() == ponder::ValueType::String);
+    }
 }
 
 

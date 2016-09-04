@@ -59,7 +59,7 @@ namespace ponder
 template <typename T>
 ValueType mapType()
 {
-    return static_cast<ValueType>(ponder_ext::ValueMapper<T>::type);
+    return ponder_ext::ValueMapper<typename detail::RawType<T>::Type>::type;
 }
 
 } // namespace ponder
@@ -385,10 +385,10 @@ struct ValueMapper<T<U>,
 /**
  * Specialization of ValueMapper for const T& -- just forward to ValueMapper<T>
  */
-template <typename T>
-struct ValueMapper<const T&> : public ValueMapper<T>
-{
-};
+//template <typename T>
+//struct ValueMapper<const T&> : public ValueMapper<T>
+//{
+//};
 
 /**
  * Specialization of ValueMapper for const T -- just forward to ValueMapper<T>
@@ -424,17 +424,17 @@ struct ValueMapper<ponder::NoType>
  * Specialization of ValueMapper for non-const references.
  * Conversions to non-const references are disabled (can't return a temporary by reference)
  */
-template <typename T>
-struct ValueMapper<T&> : public ValueMapper<T>
-{
-    template <typename U>
-    static T& from(const U&)
-    {
-        // If you get this error, it means you're trying to cast
-        // a ponder::Value to a non-const reference type, which is not allowed
-        return U::CONVERSION_TO_NON_CONST_REFERENCE_IS_NOT_ALLOWED();
-    }
-};
+//template <typename T>
+//struct ValueMapper<T&> : public ValueMapper<T>
+//{
+//    template <typename U>
+//    static T& from(const U&)
+//    {
+//        // If you get this error, it means you're trying to cast
+//        // a ponder::Value to a non-const reference type, which is not allowed
+//        return U::CONVERSION_TO_NON_CONST_REFERENCE_IS_NOT_ALLOWED();
+//    }
+//};
 
 /**
  * Specialization of ValueMapper for const char*.

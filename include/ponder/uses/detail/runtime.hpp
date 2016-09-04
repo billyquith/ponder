@@ -33,9 +33,13 @@
 
 namespace ponder {
 namespace runtime {
+    
+namespace policy {
+
+} // namespace policy
+    
 namespace impl {
-    
-    
+        
 class FunctionCaller
 {
 public:
@@ -94,17 +98,29 @@ struct CallReturner<T,
  *
  * \thrown BadArgument conversion triggered a BadType error
  */
-template <typename T>
-inline typename std::remove_reference<T>::type
-convertArg(const Args& args, std::size_t index, IdRef function)
-{
-    try {
-        return args[index].to<typename std::remove_reference<T>::type>();
+//template <typename T>
+//inline typename std::remove_reference<T>::type
+//convertArg(const Args& args, std::size_t index, IdRef function)
+//{
+//    try {
+//        return args[index].to<typename std::remove_reference<T>::type>();
+//    }
+//    catch (const BadType&) {
+//        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
+//    }
+//}
+
+    template <typename T>
+    inline T
+    convertArg(const Args& args, std::size_t index, IdRef function)
+    {
+        try {
+            return args[index].to<T>();
+        }
+        catch (const BadType&) {
+            PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
+        }
     }
-    catch (const BadType&) {
-        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
-    }
-}
 
 /*
  * Object function call helper to allow specialisation by return type.
@@ -194,7 +210,8 @@ public:
     
 enum FunctionImplType
 {
-    FuncImplFunctionWrapper,
+    FuncImplClassFunctionWrapper,
+//    FuncImplFunctionWrapper,
     FuncImplStaticFunction,
 };
     
@@ -210,7 +227,7 @@ template <int F, typename T = void> class FunctionCallerImpl;
     
 
 template <typename C, typename R, typename... A>
-class FunctionCallerImpl<FuncImplFunctionWrapper, R (C, A...)> : public FunctionCaller
+class FunctionCallerImpl<FuncImplClassFunctionWrapper, R (C, A...)> : public FunctionCaller
 {
 public:
     
@@ -239,9 +256,7 @@ class FunctionCallerImpl<FuncImplStaticFunction, R (A...)> : public FunctionCall
 {
 public:
     
-    typedef R(*FuncType)(A...);
-    
-    FunctionCallerImpl(IdRef name, FuncType function)
+    FunctionCallerImpl(IdRef name, std::function<R (A...)> function)
     :   FunctionCaller(name)
     ,   m_function(function)
     {}
@@ -249,7 +264,7 @@ public:
 protected:
     
     /// \see Function::execute
-    Value execute(const UserObject&, const Args& args) const
+    Value execute(const UserObject& object, const Args& args) const
     {
         return CallStaticHelper<R>::template
             call<decltype(m_function), A...>(m_function, args, name());
@@ -257,26 +272,53 @@ protected:
     
 private:
     
-    FuncType m_function; ///< Object containing the actual function to call
+    std::function<R (A...)> m_function; ///< Object containing the actual function to call
 };
+
+    
+//template <typename R, typename... A>
+//class FunctionCallerImpl<FuncImplStaticFunction, R (A...)> : public FunctionCaller
+//{
+//public:
+//    
+//    typedef R(*FuncType)(A...);
+//    
+//    FunctionCallerImpl(IdRef name, FuncType function)
+//    :   FunctionCaller(name)
+//    ,   m_function(function)
+//    {}
+//    
+//protected:
+//    
+//    /// \see Function::execute
+//    Value execute(const UserObject&, const Args& args) const
+//    {
+//        return CallStaticHelper<R>::template
+//            call<decltype(m_function), A...>(m_function, args, name());
+//    }
+//    
+//private:
+//    
+//    FuncType m_function; ///< Object containing the actual function to call
+//};
     
 
 // Map from function traits type (FunctionType) to function implementation type.
 // We do this to handle differing function types, e.g. static function have no instance
 // parameter.
-template <int FuncTypeWhich> struct FuncImplTypeMap;
+template <int FuncTypeWhich, typename U=void> struct FuncImplTypeMap;
     
 template <> struct FuncImplTypeMap<(int)FunctionType::Function>
 { static constexpr int Type = FuncImplStaticFunction; };
 
 template <> struct FuncImplTypeMap<(int)FunctionType::FunctionWrapper>
-{ static constexpr int Type = FuncImplFunctionWrapper; };
+{ static constexpr int Type = FuncImplStaticFunction; };
 
 template <> struct FuncImplTypeMap<(int)FunctionType::Lambda>
-{ static constexpr int Type = FuncImplFunctionWrapper; };
+{ static constexpr int Type = FuncImplStaticFunction; };
 
 template <> struct FuncImplTypeMap<(int)FunctionType::MemberFunction>
-{ static constexpr int Type = FuncImplFunctionWrapper; };
+{ static constexpr int Type = FuncImplClassFunctionWrapper; };
 
 
 } // namespace impl
