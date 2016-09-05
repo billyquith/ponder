@@ -34,14 +34,45 @@
 #ifndef PONDER_USES_RUNTIME_HPP
 #define PONDER_USES_RUNTIME_HPP
 
-//#include <ponder/function.hpp>
 #include <ponder/class.hpp>
 #include <ponder/constructor.hpp>
 
 namespace ponder {
 namespace runtime {
     
+static inline void destroy(const UserObject &uo);
 
+namespace detail {
+
+template <typename... A>
+struct ArgsBuilder { static Args makeArgs(A... args) { return {args...}; } };
+    
+template <>
+struct ArgsBuilder<Args> { static Args makeArgs(const Args& args) { return args; } };
+
+//template <>
+//struct ArgsBuilder<void> { static Args makeArgs(const Args& args) { return Args::empty; } };
+
+    
+struct UserObjectDeleter {
+    void operator () (UserObject *uo) { destroy(*uo); }
+};
+
+} // namespace detail
+
+/**
+ * \brief This object is used to create instances of metaclasses
+ *
+ * There are helpers for this class, see ponder::runtime::construct() and
+ * ponder::runtime::create().
+ *
+ * Example of use:
+ * \code
+ * runtime::ObjectFactory fact(classByType<MyClass>.function("fpp"));
+ * fact.create("bar");
+ * \endcode
+ *
+ */
 class ObjectFactory
 {
 public:
@@ -113,14 +144,25 @@ private:
     const Class &m_class;    
 };
 
-        
-class FunctionCaller // XXXX docs
+
+/**
+ * \brief This object is used to invoke a object member function, or method
+ *
+ * There are helpers for this class, see ponder::runtime::call() and 
+ * ponder::runtime::callStatic().
+ *
+ * Example of use:
+ * \code
+ * runtime::FunctionCaller caller(classByType<MyClass>.function("fpp"));
+ * caller.call(Args("bar"));
+ * \endcode
+ *
+ */
+class ObjectCaller
 {
 public:
     
-    FunctionCaller(const Function &f);
-    
-    virtual ~FunctionCaller() {}
+    ObjectCaller(const Function &f);
     
     const Function& function() const { return m_func; }
     
@@ -137,7 +179,36 @@ public:
      * \throw NotEnoughArguments too few arguments are provided
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
-    Value call(const UserObject& object, const Args& args = Args::empty) const;
+    template <typename... A>
+    Value call(const UserObject &obj, A... args);
+    
+private:
+    
+    const Function &m_func;
+    runtime::impl::FunctionCaller *m_caller;
+};
+    
+    
+/**
+ * \brief This object is used to invoke a function
+ *
+ * There are helpers for this class, see ponder::runtime::call() and 
+ * ponder::runtime::callStatic().
+ *
+ * Example of use:
+ * \code
+ * runtime::FunctionCaller caller(classByType<MyClass>.function("fpp"));
+ * caller.call(Args("bar"));
+ * \endcode
+ *
+ */
+class FunctionCaller
+{
+public:
+    
+    FunctionCaller(const Function &f);
+    
+    const Function& function() const { return m_func; }
     
     /**
      * \brief Call the static function
@@ -149,49 +220,14 @@ public:
      * \throw NotEnoughArguments too few arguments are provided
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
-    Value callStatic(const Args& args = Args::empty) const;
-    
-protected:
-    
-    /**
-     * \brief Do the actual call
-     *
-     * This function is a pure virtual which has to be implemented in derived classes.
-     *
-     * \param object Object
-     * \param args Arguments to pass to the function
-     *
-     * \return Value returned by the function call
-     *
-     * \throw NullObject object is invalid
-     * \throw BadArgument one of the arguments can't be converted to the requested type
-     */
-    virtual Value execute(const UserObject& object, const Args& args) const;
+    template <typename... A>
+    Value call(A... args);
     
 private:
     
     const Function &m_func;
     runtime::impl::FunctionCaller *m_caller;
 };
-
-//--------------------------------------------------------------------------------------
-
-static inline void destroy(const UserObject &uo);
-
-namespace detail {
-
-template <typename... A>
-struct ArgsBuilder { static Args makeArgs(A... args) { return {args...}; } };
-    
-template <>
-struct ArgsBuilder<Args> { static Args makeArgs(const Args& args) { return args; } };
-
-    
-struct UserObjectDeleter {
-    void operator () (UserObject *uo) { destroy(*uo); }
-};
-
-} // namespace detail
 
 //--------------------------------------------------------------------------------------
 // Helpers
@@ -225,13 +261,13 @@ static inline UniquePtr createUnique(const Class &cls, A... args)
 template <typename... A>
 static inline Value call(const Function &fn, const UserObject &obj, A... args)
 {
-    return FunctionCaller(fn).call(obj, detail::ArgsBuilder<A...>::makeArgs(args...));
+    return ObjectCaller(fn).call(obj, detail::ArgsBuilder<A...>::makeArgs(args...));
 }
 
 template <typename... A>
 static inline Value callStatic(const Function &fn, A... args)
 {
-    return FunctionCaller(fn).callStatic(detail::ArgsBuilder<A...>::makeArgs(args...));
+    return FunctionCaller(fn).call(detail::ArgsBuilder<A...>::makeArgs(args...));
 }
 
 } // namespace runtime
@@ -243,13 +279,37 @@ static inline Value callStatic(const Function &fn, A... args)
 namespace ponder {
 namespace runtime {
 
-template <typename ...A>
+template <typename... A>
 inline UserObject ObjectFactory::create(A... args) const
 {
     Args a(args...);
     return construct(a);
 }
+
+template <typename... A>
+inline Value ObjectCaller::call(const UserObject &obj, A... vargs)
+{
+    Args args(detail::ArgsBuilder<A...>::makeArgs(vargs...));
     
+    // Check the number of arguments
+    if (args.count() < m_func.paramCount())
+        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
+
+    return m_caller->execute(obj, args);
+}
+    
+template <typename... A>
+inline Value FunctionCaller::call(A... vargs)
+{
+    Args args(detail::ArgsBuilder<A...>::makeArgs(vargs...));
+    
+    // Check the number of arguments
+    if (args.count() < m_func.paramCount())
+        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
+
+    return m_caller->execute(UserObject::nothing, args);
+}
+
 } // namespace runtime
 } // namespace ponder
 
@@ -292,6 +352,12 @@ void ObjectFactory::destruct(const UserObject& object) const
     const_cast<UserObject&>(object) = UserObject::nothing;
 }
 
+ObjectCaller::ObjectCaller(const Function &f)
+    :   m_func(f)
+    ,   m_caller(std::get<uses::Users::eRuntimeModule>(
+                 *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData())))
+{
+}
 
 FunctionCaller::FunctionCaller(const Function &f)
     :   m_func(f)
@@ -299,32 +365,31 @@ FunctionCaller::FunctionCaller(const Function &f)
                  *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData())))
 {
 }
-
     
-Value FunctionCaller::call(const UserObject& object, const Args& args) const
-{
-    // Check the number of arguments
-    if (args.count() < m_func.paramCount())
-        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
-
-    // Execute the function
-    return execute(object, args);
-}
-
-Value FunctionCaller::callStatic(const Args& args) const
-{
-    // Check the number of arguments
-    if (args.count() < m_func.paramCount())
-        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
-
-    // Execute the function
-    return execute(UserObject::nothing, args);
-}   
-
-Value FunctionCaller::execute(const UserObject& object, const Args& args) const
-{
-    return m_caller->execute(object, args);
-}
+//Value FunctionCaller::call(const UserObject& object, const Args& args) const
+//{
+//    // Check the number of arguments
+//    if (args.count() < m_func.paramCount())
+//        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
+//
+//    // Execute the function
+//    return execute(object, args);
+//}
+//
+//Value FunctionCaller::callStatic(const Args& args) const
+//{
+//    // Check the number of arguments
+//    if (args.count() < m_func.paramCount())
+//        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
+//
+//    // Execute the function
+//    return execute(UserObject::nothing, args);
+//}   
+//
+//Value FunctionCaller::execute(const UserObject& object, const Args& args) const
+//{
+//    return m_caller->execute(object, args);
+//}
 
     
 } // runtime

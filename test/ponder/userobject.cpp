@@ -488,7 +488,7 @@ TEST_CASE("Ponder supports user objects")
 //        REQUIRE(object.lastCalled == "meth1");
 //        REQUIRE(object.sum == 7);
 //    }
-//
+
 //    SECTION("object methods can have two parameter")
 //    {
 //        Call object;

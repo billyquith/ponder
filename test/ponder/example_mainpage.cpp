@@ -103,7 +103,7 @@ TEST_CASE("Documentation examples: main page")
     john.set("age", 24);
     
     // Make John say something
-    ponder::runtime::FunctionCaller caller(metaclass.function("speak"));
+    ponder::runtime::ObjectCaller caller(metaclass.function("speak"));
     caller.call(john);
     REQUIRE(john.get<Person>().spoke() == true);
     
