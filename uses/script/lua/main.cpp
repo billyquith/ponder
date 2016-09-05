@@ -47,6 +47,7 @@
 #include <ponder/detail/format.hpp>
 #include <ponder/classbuilder.hpp>
 #define PONDER_USES_LUA_IMPL
+#define PONDER_USES_RUNTIME_IMPL
 #include <ponder/uses/lua.hpp>
 #include <list>
 
