@@ -4,8 +4,10 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
-### 1.4
+### 2.0
 
+- Version 1.4 was unreleased and morphed into 2.0 because of design changes.
+- Runtime functionality (object factory and function calling) decoupled (issue #49).
 - Added support for binding to static functions (issue #46).
 - Removed UserObject parent-child. Simplification, unused.
 - Class::create() allows object creation without an Args list.
