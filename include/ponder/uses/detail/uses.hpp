@@ -46,20 +46,32 @@ struct RuntimeModule
     }
 };
 
+struct LuaModule
+{
+    template <typename T, typename F>
+    static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
+    {
+        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::which>::Type;
+        
+        return new runtime::impl::FunctionCallerImpl<implType, typename T::FunctionType>(name, function);
+    }
+};
+    
 // Global information on the compile-time type users.
 struct Users
 {
-    enum { eRuntimeModule };
+    enum { eRuntimeModule, eLuaModule };
     
-    typedef std::tuple<RuntimeModule> Modules;
+    typedef std::tuple<RuntimeModule, LuaModule> Modules;
     
-    typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
+    typedef std::tuple<runtime::impl::FunctionCaller*,
+                       lua::impl::FunctionBinding*> PerFunctionUserData;
 
-    template <int I>
-    struct PerFuncType { typedef typename std::tuple_element<I, PerFunctionUserData>::type Type; };
-    
-    template <int I>
-    static typename PerFuncType<I>::Type getPerFuncData(PerFunctionUserData &ud) { return std::get<I>(ud); }
+//    template <int I>
+//    struct PerFuncType { typedef typename std::tuple_element<I, PerFunctionUserData>::type Type; };
+//    
+//    template <int I>
+//    static typename PerFuncType<I>::Type getPerFuncData(PerFunctionUserData &ud) { return std::get<I>(ud); }
 };
     
 } // namespace uses

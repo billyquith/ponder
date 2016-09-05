@@ -39,7 +39,7 @@ extern "C" {
 
 namespace ponder {
 namespace lua {
-    
+
 /**
  * \brief Expose a single Ponder metaclass to a Lua state
  *
@@ -78,6 +78,8 @@ bool runString(lua_State *L, const char *luaCode);
 
 // define once in client program to instance this
 #ifdef PONDER_USES_LUA_IMPL
+
+#include <ponder/uses/runtime.hpp>
 
 namespace ponder {
 namespace lua {
@@ -222,7 +224,8 @@ static int l_func_call(lua_State *L)
         args += getValue(L, i, at);
     }
     
-    Value ret = func->callStatic(args);
+    ponder::runtime::FunctionCaller caller(*func);
+    Value ret = caller.callStatic(args);
     if (ret.type() != ValueType::None)
         return pushValue(L, ret);
     
@@ -252,7 +255,8 @@ static int l_method_call(lua_State *L)
         args += getValue(L, i + c_argOffset, at);
     }
     
-    Value ret = func->call(*uobj, args);
+    ponder::runtime::FunctionCaller caller(*func);
+    Value ret = caller.call(*uobj, args);
     if (ret.type() != ValueType::None)
         return pushValue(L, ret);
     
@@ -348,7 +352,8 @@ static int l_instance_create(lua_State *L)
         args += getValue(L, i);
     }
     
-    ponder::UserObject obj(cls->construct(args));
+    ponder::runtime::ObjectFactory fact(*cls);
+    ponder::UserObject obj(fact.construct(args));
     if (obj == ponder::UserObject::nothing)
     {
         lua_pop(L, 1);  // pop new user data

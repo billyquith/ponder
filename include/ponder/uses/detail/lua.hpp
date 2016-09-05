@@ -30,9 +30,13 @@
 #define PONDER_USES_DETAIL_LUA_HPP
 
 namespace ponder {
-namespace uses {
+namespace lua {
+namespace impl {
     
-} // namespace uses
+struct FunctionBinding {};
+    
+} // namespace impl
+} // namespace lua
 } // namespace ponder
 
 #endif // PONDER_USES_DETAIL_LUA_HPP
