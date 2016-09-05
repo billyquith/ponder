@@ -209,25 +209,25 @@ namespace FunctionTest
             .function("f13", &MyClass::f13) // 5 parameters
             
             // ***** nested functions *****
-            .function("f14", [](MyClass& self){ self.inner.f14(); })
+            .function("f14", [](MyClass self){ self.inner.f14(); }) // XXXX modifying copy
             // getter returning an object
-            .function("f15", [](MyClass& self){ self.getInner().f15(); })
+            .function("f15", [](MyClass self){ self.getInner().f15(); })
             // raw pointer
-            .function("f16", [](MyClass& self){ return self.innerPtr->f16(); })
+            .function("f16", [](MyClass self){ return self.innerPtr->f16(); })
             // getter returning a raw pointer
-            .function("f17", [](MyClass const& self){ self.getInnerPtr()->f17(99); })
+            .function("f17", [](MyClass self){ self.getInnerPtr()->f17(99); })
             // smart pointer
-            .function("f18", [](MyClass& self){ self.innerSmartPtr.get()->f18(); })
+            .function("f18", [](MyClass self){ self.innerSmartPtr.get()->f18(); })
             // getter returning a smart pointer
-            .function("f19", [](MyClass& self){ self.getInnerSmartPtr().get()->f19(); })
+            .function("f19", [](MyClass self){ self.getInnerSmartPtr().get()->f19(); })
         
             // ***** std::function *****
             .function("f20",
-                      std::function<int (MyClass&, int)>(std::bind(&MyClass::f20, _1, _2)))
+                      std::function<int (MyClass, int)>(std::bind(&MyClass::f20, _1, _2)))
             .function("f21",
-                      std::function<int (MyClass&, int)>(std::bind(&MyClass::f21, _1, _2, 20)))
+                      std::function<int (MyClass, int)>(std::bind(&MyClass::f21, _1, _2, 20)))
             .function("f22",
-                      std::function<int (MyClass&, int)>(
+                      std::function<int (MyClass, int)>(
                           std::bind(std::bind(&MyClass::f22, _1, _2, _3, 30), _1, _2, 20)))
             .function("statFunc", &MyClass::staticFunc)
             .function("statFunc2", &MyClass::staticFunc2)
@@ -619,8 +619,8 @@ TEST_CASE("Registered functions can be called with the runtime")
                          ponder::BadArgument);
        REQUIRE_THROWS_AS(call(*functions[11], object, ponder::Args(arg, arg, arg)),
                          ponder::BadArgument);
-//       REQUIRE_THROWS_AS(call(*functions[12], object, ponder::Args(arg, arg, arg, arg)), XXXX
-//                         ponder::BadArgument);
+       REQUIRE_THROWS_AS(call(*functions[12], object, ponder::Args(arg, arg, arg, arg)),
+                         ponder::BadArgument);
        REQUIRE_THROWS_AS(call(*functions[13], object, ponder::Args(arg, arg, arg, arg, arg)),
                          ponder::BadArgument);
        REQUIRE_THROWS_AS(callStatic(*functions[20], ponder::Args(object, arg)),

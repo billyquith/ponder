@@ -98,29 +98,28 @@ struct CallReturner<T,
  *
  * \thrown BadArgument conversion triggered a BadType error
  */
+template <typename T>
+inline typename std::remove_reference<T>::type
+convertArg(const Args& args, std::size_t index, IdRef function)
+{
+    try {
+        return args[index].to<typename std::remove_reference<T>::type>();
+    }
+    catch (const BadType&) {
+        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
+    }
+}
+
 //template <typename T>
-//inline typename std::remove_reference<T>::type
-//convertArg(const Args& args, std::size_t index, IdRef function)
+//inline T convertArg(const Args& args, std::size_t index, IdRef function)
 //{
 //    try {
-//        return args[index].to<typename std::remove_reference<T>::type>();
+//        return args[index].to<T>();
 //    }
 //    catch (const BadType&) {
 //        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
 //    }
 //}
-
-    template <typename T>
-    inline T
-    convertArg(const Args& args, std::size_t index, IdRef function)
-    {
-        try {
-            return args[index].to<T>();
-        }
-        catch (const BadType&) {
-            PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
-        }
-    }
 
 /*
  * Object function call helper to allow specialisation by return type.
@@ -211,7 +210,6 @@ public:
 enum FunctionImplType
 {
     FuncImplClassFunctionWrapper,
-//    FuncImplFunctionWrapper,
     FuncImplStaticFunction,
 };
     
@@ -276,33 +274,6 @@ private:
 };
 
     
-//template <typename R, typename... A>
-//class FunctionCallerImpl<FuncImplStaticFunction, R (A...)> : public FunctionCaller
-//{
-//public:
-//    
-//    typedef R(*FuncType)(A...);
-//    
-//    FunctionCallerImpl(IdRef name, FuncType function)
-//    :   FunctionCaller(name)
-//    ,   m_function(function)
-//    {}
-//    
-//protected:
-//    
-//    /// \see Function::execute
-//    Value execute(const UserObject&, const Args& args) const
-//    {
-//        return CallStaticHelper<R>::template
-//            call<decltype(m_function), A...>(m_function, args, name());
-//    }
-//    
-//private:
-//    
-//    FuncType m_function; ///< Object containing the actual function to call
-//};
-    
-
 // Map from function traits type (FunctionType) to function implementation type.
 // We do this to handle differing function types, e.g. static function have no instance
 // parameter.

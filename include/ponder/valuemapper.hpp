@@ -385,10 +385,10 @@ struct ValueMapper<T<U>,
 /**
  * Specialization of ValueMapper for const T& -- just forward to ValueMapper<T>
  */
-//template <typename T>
-//struct ValueMapper<const T&> : public ValueMapper<T>
-//{
-//};
+template <typename T>
+struct ValueMapper<const T&> : public ValueMapper<T>
+{
+};
 
 /**
  * Specialization of ValueMapper for const T -- just forward to ValueMapper<T>
