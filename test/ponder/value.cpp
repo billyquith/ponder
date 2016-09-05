@@ -588,6 +588,24 @@ TEST_CASE("Ponder has variant values")
 }
 
 
+TEST_CASE("Values have their type determined")
+{
+    static_assert(ponder_ext::ValueMapper<bool>::type == ponder::ValueType::Boolean, "");
+    static_assert(ponder_ext::ValueMapper<char>::type == ponder::ValueType::Integer, "");
+    static_assert(ponder_ext::ValueMapper<int>::type == ponder::ValueType::Integer, "");
+    static_assert(ponder_ext::ValueMapper<long>::type == ponder::ValueType::Integer, "");
+    static_assert(ponder_ext::ValueMapper<float>::type == ponder::ValueType::Real, "");
+    static_assert(ponder_ext::ValueMapper<double>::type == ponder::ValueType::Real, "");
+    static_assert(ponder_ext::ValueMapper<MyEnum>::type == ponder::ValueType::Enum, "");
+    static_assert(ponder_ext::ValueMapper<int[10]>::type == ponder::ValueType::Array, "");
+    static_assert(ponder_ext::ValueMapper<MyClass>::type == ponder::ValueType::User, "");
+    
+    static_assert(ponder_ext::ValueMapper<std::string>::type == ponder::ValueType::String, "");
+    static_assert(ponder_ext::ValueMapper<const std::string&>::type == ponder::ValueType::String, "");
+    static_assert(ponder_ext::ValueMapper<const std::string>::type == ponder::ValueType::String, "");
+    static_assert(ponder_ext::ValueMapper<const char*>::type == ponder::ValueType::String, "");
+}
+
 TEST_CASE("Values can be held in containers")
 {
     SECTION("a std::map")
