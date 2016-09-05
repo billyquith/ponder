@@ -50,8 +50,8 @@ struct ArgsBuilder { static Args makeArgs(A... args) { return {args...}; } };
 template <>
 struct ArgsBuilder<Args> { static Args makeArgs(const Args& args) { return args; } };
 
-//template <>
-//struct ArgsBuilder<void> { static Args makeArgs(const Args& args) { return Args::empty; } };
+template <>
+struct ArgsBuilder<void> { static Args makeArgs(const Args& args) { return Args::empty; } };
 
     
 struct UserObjectDeleter {
@@ -151,12 +151,6 @@ private:
  * There are helpers for this class, see ponder::runtime::call() and 
  * ponder::runtime::callStatic().
  *
- * Example of use:
- * \code
- * runtime::FunctionCaller caller(classByType<MyClass>.function("fpp"));
- * caller.call(Args("bar"));
- * \endcode
- *
  */
 class ObjectCaller
 {
@@ -173,6 +167,11 @@ public:
      * \param args Arguments to pass to the function, for example "ponder::Args::empty"
      *
      * \return Value returned by the function call
+     *
+     * \code
+     * runtime::ObjectCaller caller(classByType<MyClass>.function("foo"));
+     * caller.call(instancem, "bar");
+     * \endcode
      *
      * \throw ForbiddenCall the function is not callable
      * \throw NullObject object is invalid
@@ -195,12 +194,6 @@ private:
  * There are helpers for this class, see ponder::runtime::call() and 
  * ponder::runtime::callStatic().
  *
- * Example of use:
- * \code
- * runtime::FunctionCaller caller(classByType<MyClass>.function("fpp"));
- * caller.call(Args("bar"));
- * \endcode
- *
  */
 class FunctionCaller
 {
@@ -216,6 +209,11 @@ public:
      * \param args Arguments to pass to the function, for example "ponder::Args::empty"
      *
      * \return Value returned by the function call
+     *
+     * \code
+     * runtime::FunctionCaller caller(classByType<MyClass>.function("fpp"));
+     * caller.call(Args("bar"));
+     * \endcode
      *
      * \throw NotEnoughArguments too few arguments are provided
      * \throw BadArgument one of the arguments can't be converted to the requested type
@@ -365,32 +363,6 @@ FunctionCaller::FunctionCaller(const Function &f)
                  *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData())))
 {
 }
-    
-//Value FunctionCaller::call(const UserObject& object, const Args& args) const
-//{
-//    // Check the number of arguments
-//    if (args.count() < m_func.paramCount())
-//        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
-//
-//    // Execute the function
-//    return execute(object, args);
-//}
-//
-//Value FunctionCaller::callStatic(const Args& args) const
-//{
-//    // Check the number of arguments
-//    if (args.count() < m_func.paramCount())
-//        PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
-//
-//    // Execute the function
-//    return execute(UserObject::nothing, args);
-//}   
-//
-//Value FunctionCaller::execute(const UserObject& object, const Args& args) const
-//{
-//    return m_caller->execute(object, args);
-//}
-
     
 } // runtime
 } // ponder

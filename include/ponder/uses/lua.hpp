@@ -225,7 +225,7 @@ static int l_func_call(lua_State *L)
     }
     
     ponder::runtime::FunctionCaller caller(*func);
-    Value ret = caller.callStatic(args);
+    Value ret = caller.call(args);
     if (ret.type() != ValueType::None)
         return pushValue(L, ret);
     
@@ -255,7 +255,7 @@ static int l_method_call(lua_State *L)
         args += getValue(L, i + c_argOffset, at);
     }
     
-    ponder::runtime::FunctionCaller caller(*func);
+    ponder::runtime::ObjectCaller caller(*func);
     Value ret = caller.call(*uobj, args);
     if (ret.type() != ValueType::None)
         return pushValue(L, ret);
