@@ -138,18 +138,6 @@ PONDER_AUTO_TYPE(ConstructorTest::MyClass, &ConstructorTest::declare)
 
 using namespace ConstructorTest;
 
-
-//struct ConstructorFixture
-//{
-//    ConstructorFixture()
-//    {
-//        metaclass = &ponder::classByType<MyClass>();
-//    }
-//
-//    const ponder::Class* metaclass;
-//};
-
-
 //-----------------------------------------------------------------------------
 //                      Tests for ponder::Class::construct
 //-----------------------------------------------------------------------------
@@ -255,20 +243,24 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
         REQUIRE(MyClass::instCount == 0);
     }
     
-//    SECTION("using create & auto pointer")
-//    {
-//        auto object = ponder::runtime::createUnique(metaclass, 777, 99.05f, "wow");
-//        
-//        IS_TRUE( *object.get() != ponder::UserObject::nothing );
-//        
-//        MyClass* instance = object.get()->get<MyClass*>();
-//        
-//        REQUIRE(instance->l == 777);
-//        REQUIRE(instance->r == Approx(99.05).epsilon(1E-5));
-//        REQUIRE(instance->s == "wow");
-//        REQUIRE(instance->e == three);
-//        REQUIRE(instance->u.x == 3);
-//    }
+    SECTION("using create & auto pointer")
+    {
+        REQUIRE(MyClass::instCount == 0);
+        {
+            auto object = ponder::runtime::createUnique(metaclass, 777, 99.05f, "wow");
+            
+            IS_TRUE( *object.get() != ponder::UserObject::nothing );
+            
+            MyClass* instance = object.get()->get<MyClass*>();
+            
+            REQUIRE(instance->l == 777);
+            REQUIRE(instance->r == Approx(99.05).epsilon(1E-5));
+            REQUIRE(instance->s == "wow");
+            REQUIRE(instance->e == three);
+            REQUIRE(instance->u.x == 3);
+        }
+        REQUIRE(MyClass::instCount == 0);
+    }
 }
 
 //-----------------------------------------------------------------------------

@@ -175,8 +175,10 @@ private:
 };
 
 //--------------------------------------------------------------------------------------
-// Helpers
 
+static inline void destroy(const UserObject &uo);
+
+namespace detail {
 
 template <typename... A>
 struct ArgsBuilder { static Args makeArgs(A... args) { return {args...}; } };
@@ -185,20 +187,21 @@ template <>
 struct ArgsBuilder<Args> { static Args makeArgs(const Args& args) { return args; } };
 
     
+struct UserObjectDeleter {
+    void operator () (UserObject *uo) { destroy(*uo); }
+};
+
+} // namespace detail
+
+//--------------------------------------------------------------------------------------
+// Helpers
+
 static inline void destroy(const UserObject &uo)
 {
     ObjectFactory(uo.getClass()).destroy(uo);
 }
-
-namespace impl {
     
-struct UserObjectDeleter {
-    void operator () (UserObject *uo) { destroy(*uo); }
-};
-    
-} // namespace impl
-    
-typedef std::unique_ptr<UserObject, impl::UserObjectDeleter> UniquePtr;
+typedef std::unique_ptr<UserObject, detail::UserObjectDeleter> UniquePtr;
 
 inline UniquePtr makeUniquePtr(UserObject *uo)
 {
@@ -222,13 +225,13 @@ static inline UniquePtr createUnique(const Class &cls, A... args)
 template <typename... A>
 static inline Value call(const Function &fn, const UserObject &obj, A... args)
 {
-    return FunctionCaller(fn).call(obj, ArgsBuilder<A...>::makeArgs(args...));
+    return FunctionCaller(fn).call(obj, detail::ArgsBuilder<A...>::makeArgs(args...));
 }
 
 template <typename... A>
 static inline Value callStatic(const Function &fn, A... args)
 {
-    return FunctionCaller(fn).callStatic(ArgsBuilder<A...>::makeArgs(args...));
+    return FunctionCaller(fn).callStatic(detail::ArgsBuilder<A...>::makeArgs(args...));
 }
 
 } // namespace runtime
