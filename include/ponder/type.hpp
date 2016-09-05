@@ -62,7 +62,7 @@ enum class ValueType
 
     
 // Type of function recognised.
-enum class FunctionType
+enum class FunctionFamily
 {
     None,               // not a function
     Function,           // a function

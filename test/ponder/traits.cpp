@@ -188,90 +188,90 @@ TEST_CASE("Ponder supports different function types")
     SECTION("what is not a function types")
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
         
-        static_assert(FunctionTraits<int>::which == FunctionType::None,
-                      "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<float>::which == FunctionType::None,
-                      "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<int*>::which == FunctionType::None,
-                      "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<char*>::which == FunctionType::None,
-                      "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<int**>::which == FunctionType::None,
-                      "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<ponder::String>::which == FunctionType::None,
-                      "FunctionTraits<>::which failed");
-        static_assert(FunctionTraits<NonCallable>::which == FunctionType::None,
+        static_assert(FunctionTraits<int>::family == FunctionFamily::None,
+                      "FunctionTraits<>::family failed");
+        static_assert(FunctionTraits<float>::family == FunctionFamily::None,
+                      "FunctionTraits<>::family failed");
+        static_assert(FunctionTraits<int*>::family == FunctionFamily::None,
+                      "FunctionTraits<>::family failed");
+        static_assert(FunctionTraits<char*>::family == FunctionFamily::None,
+                      "FunctionTraits<>::family failed");
+        static_assert(FunctionTraits<int**>::family == FunctionFamily::None,
+                      "FunctionTraits<>::family failed");
+        static_assert(FunctionTraits<ponder::String>::family == FunctionFamily::None,
+                      "FunctionTraits<>::family failed");
+        static_assert(FunctionTraits<NonCallable>::family == FunctionFamily::None,
                       "FunctionTraits<>::isFunction failed");
     }
     
     SECTION("type function")
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
         
         static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<void(void)>::which == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<void(void)>::family == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
         
         static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<void(int)>::which == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<void(int)>::family == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
         
         static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<int(void)>::which == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int(void)>::family == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
         
         static_assert(ponder::detail::FunctionTraits<int(char*)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<int(char*)>::which == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int(char*)>::family == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
         
         // non-class void(void)
         static_assert(FunctionTraits<decltype(func)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(func)>::which == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<decltype(func)>::family == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
         
         // non-class R(...)
         static_assert(FunctionTraits<decltype(funcArgReturn)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(funcArgReturn)>::which == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<decltype(funcArgReturn)>::family == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
 
         // class static R(void)
         static_assert(FunctionTraits<decltype(&Class::staticFunc)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::which
-                                                                     == FunctionType::Function,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::family
+                                                                     == FunctionFamily::Function,
+                      "FunctionTraits<>::family failed");
     }
     
     SECTION("type member function")  // T(C::*)()
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
         
         static_assert(FunctionTraits<void(Methods::*)()>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<void(Methods::*)()>::which == FunctionType::MemberFunction,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<void(Methods::*)()>::family == FunctionFamily::MemberFunction,
+                      "FunctionTraits<>::family failed");
         
         void (Methods::*meth_t)() = &Methods::foo;
         static_assert(FunctionTraits<decltype(meth_t)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(meth_t)>::which == FunctionType::MemberFunction,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<decltype(meth_t)>::family == FunctionFamily::MemberFunction,
+                      "FunctionTraits<>::family failed");
     }
 
     SECTION("type member object")   // T(C::*)
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
         
         struct Members {
             int m;
@@ -280,80 +280,80 @@ TEST_CASE("Ponder supports different function types")
 
         static_assert( ! FunctionTraits<int Members::*>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<int Members::*>::which == FunctionType::MemberObject,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<int Members::*>::family == FunctionFamily::MemberObject,
+                      "FunctionTraits<>::family failed");
         
         static_assert( ! FunctionTraits<float (Members::*)[]>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<float (Members::*)[]>::which == FunctionType::MemberObject,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<float (Members::*)[]>::family == FunctionFamily::MemberObject,
+                      "FunctionTraits<>::family failed");
         
         static_assert( ! FunctionTraits<decltype(&Members::a)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(&Members::a)>::which == FunctionType::MemberObject,
-                      "FunctionTraits<>::which failed");
+        static_assert(FunctionTraits<decltype(&Members::a)>::family == FunctionFamily::MemberObject,
+                      "FunctionTraits<>::family failed");
     }
     
     SECTION("type function wrapper")  // std::function<>
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
         
         static_assert(FunctionTraits<std::function<void()>>::isFunction,
-                      "FunctionTraits<>::which failed");
+                      "FunctionTraits<>::family failed");
         static_assert(
-            FunctionTraits<std::function<void()>>::which == FunctionType::FunctionWrapper,
-            "FunctionTraits<>::which failed");
+            FunctionTraits<std::function<void()>>::family == FunctionFamily::FunctionWrapper,
+            "FunctionTraits<>::family failed");
         
         static_assert(FunctionTraits<std::function<int(float,int)>>::isFunction,
-                      "FunctionTraits<>::which failed");
+                      "FunctionTraits<>::family failed");
         static_assert(
-            FunctionTraits<std::function<int(float,int)>>::which == FunctionType::FunctionWrapper,
-            "FunctionTraits<>::which failed");
+            FunctionTraits<std::function<int(float,int)>>::family == FunctionFamily::FunctionWrapper,
+            "FunctionTraits<>::family failed");
         
         static_assert(FunctionTraits<std::function<char*(char[])>>::isFunction,
-                      "FunctionTraits<>::which failed");
+                      "FunctionTraits<>::family failed");
         static_assert(
-            FunctionTraits<std::function<char*(char[])>>::which == FunctionType::FunctionWrapper,
-            "FunctionTraits<>::which failed");
+            FunctionTraits<std::function<char*(char[])>>::family == FunctionFamily::FunctionWrapper,
+            "FunctionTraits<>::family failed");
     }
 
     SECTION("type lambda")  // [] () {}
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
         
         auto l1 = [] () {};
         auto l2 = [] (int&) { return "hello"; };
         auto l3 = [] (float, float[]) -> float { return 3.1415927f; };
         
         static_assert(FunctionTraits<decltype(l1)>::isFunction,
-                      "FunctionTraits<>::which failed");
+                      "FunctionTraits<>::family failed");
         static_assert(
-                      FunctionTraits<decltype(l1)>::which == FunctionType::Lambda,
-                      "FunctionTraits<>::which failed");
+                      FunctionTraits<decltype(l1)>::family == FunctionFamily::Lambda,
+                      "FunctionTraits<>::family failed");
         
         static_assert(FunctionTraits<decltype(l2)>::isFunction,
-                      "FunctionTraits<>::which failed");
+                      "FunctionTraits<>::family failed");
         static_assert(
-                      FunctionTraits<decltype(l2)>::which == FunctionType::Lambda,
-                      "FunctionTraits<>::which failed");
+                      FunctionTraits<decltype(l2)>::family == FunctionFamily::Lambda,
+                      "FunctionTraits<>::family failed");
         
         static_assert(FunctionTraits<decltype(l3)>::isFunction,
-                      "FunctionTraits<>::which failed");
+                      "FunctionTraits<>::family failed");
         static_assert(
-                      FunctionTraits<decltype(l3)>::which == FunctionType::Lambda,
-                      "FunctionTraits<>::which failed");
+                      FunctionTraits<decltype(l3)>::family == FunctionFamily::Lambda,
+                      "FunctionTraits<>::family failed");
     }
 
     SECTION("functions can return values")
     {
         using ponder::detail::FunctionTraits;
-        using ponder::FunctionType;
+        using ponder::FunctionFamily;
 
         typedef decltype(&FuncReturn::i) fn;
         static_assert(FunctionTraits<fn>::isFunction, "");
-        static_assert(FunctionTraits<fn>::which == FunctionType::MemberFunction, "");
+        static_assert(FunctionTraits<fn>::family == FunctionFamily::MemberFunction, "");
 
         static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::i)>::ReturnType,
                                                   const int>::value, "");
@@ -415,7 +415,7 @@ TEST_CASE("Ponder has object traits")
 
         static_assert(ponder::detail::ObjectTraits<int&>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<int&>::which == ObjectType::Reference,
+        static_assert(ponder::detail::ObjectTraits<int&>::family == ObjectType::Reference,
                       "ObjectTraits<>::isRef failed");
         static_assert(ponder::detail::ObjectTraits<int*&>::isRef,
                       "ObjectTraits<>::isRef failed");
@@ -429,7 +429,7 @@ TEST_CASE("Ponder has object traits")
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<Callable>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<Callable>::which != ObjectType::Reference,
+        static_assert(ponder::detail::ObjectTraits<Callable>::family != ObjectType::Reference,
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<NonCallable>::isRef,
                       "ObjectTraits<>::isRef failed");
@@ -520,14 +520,14 @@ TEST_CASE("Object traits are classfied")
         using ponder::detail::ObjectTraits;
         using ponder::detail::ObjectType;
         
-        static_assert(ObjectTraits<int>::which == ObjectType::Object, "ObjectTraits<>::which");
-        static_assert(ObjectTraits<float>::which == ObjectType::Object, "ObjectTraits<>::which");
-        static_assert(ObjectTraits<Methods>::which == ObjectType::Object, "ObjectTraits<>::which");
-//        static_assert(ObjectTraits<const int>::which == ObjectType::Object, "ObjectTraits<>::which");
-//        static_assert(ObjectTraits<const float>::which == ObjectType::Object, "ObjectTraits<>::which");
-//        static_assert(ObjectTraits<const Methods>::which == ObjectType::Object, "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int>::family == ObjectType::Object, "ObjectTraits<>::family");
+        static_assert(ObjectTraits<float>::family == ObjectType::Object, "ObjectTraits<>::family");
+        static_assert(ObjectTraits<Methods>::family == ObjectType::Object, "ObjectTraits<>::family");
+//        static_assert(ObjectTraits<const int>::family == ObjectType::Object, "ObjectTraits<>::family");
+//        static_assert(ObjectTraits<const float>::family == ObjectType::Object, "ObjectTraits<>::family");
+//        static_assert(ObjectTraits<const Methods>::family == ObjectType::Object, "ObjectTraits<>::family");
         
-        static_assert(ObjectTraits<int*>::which != ObjectType::Object, "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int*>::family != ObjectType::Object, "ObjectTraits<>::family");
     }
 
     SECTION("type pointer")
@@ -535,19 +535,19 @@ TEST_CASE("Object traits are classfied")
         using ponder::detail::ObjectTraits;
         using ponder::detail::ObjectType;
         
-        static_assert(ObjectTraits<int*>::which == ObjectType::Pointer,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<float*>::which == ObjectType::Pointer,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<Methods*>::which == ObjectType::Pointer,
-                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int*>::family == ObjectType::Pointer,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<float*>::family == ObjectType::Pointer,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<Methods*>::family == ObjectType::Pointer,
+                      "ObjectTraits<>::family");
 
-        static_assert(ObjectTraits<int**>::which == ObjectType::Pointer,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<float**>::which == ObjectType::Pointer,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<Methods**>::which == ObjectType::Pointer,
-                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int**>::family == ObjectType::Pointer,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<float**>::family == ObjectType::Pointer,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<Methods**>::family == ObjectType::Pointer,
+                      "ObjectTraits<>::family");
     }
     
     SECTION("type reference")
@@ -555,19 +555,19 @@ TEST_CASE("Object traits are classfied")
         using ponder::detail::ObjectTraits;
         using ponder::detail::ObjectType;
         
-        static_assert(ObjectTraits<int&>::which == ObjectType::Reference,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<float&>::which == ObjectType::Reference,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<Methods&>::which == ObjectType::Reference,
-                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int&>::family == ObjectType::Reference,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<float&>::family == ObjectType::Reference,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<Methods&>::family == ObjectType::Reference,
+                      "ObjectTraits<>::family");
         
-        static_assert(ObjectTraits<const int&>::which == ObjectType::Reference,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<const float&>::which == ObjectType::Reference,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<const Methods&>::which == ObjectType::Reference,
-                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<const int&>::family == ObjectType::Reference,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<const float&>::family == ObjectType::Reference,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<const Methods&>::family == ObjectType::Reference,
+                      "ObjectTraits<>::family");
     }
     
     SECTION("type smart pointer")
@@ -575,10 +575,10 @@ TEST_CASE("Object traits are classfied")
         using ponder::detail::ObjectTraits;
         using ponder::detail::ObjectType;
         
-//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::which == ObjectType::SmartPointer,
-//                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<std::shared_ptr<Methods>>::which == ObjectType::SmartPointer,
-                      "ObjectTraits<>::which");
+//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::family == ObjectType::SmartPointer,
+//                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<std::shared_ptr<Methods>>::family == ObjectType::SmartPointer,
+                      "ObjectTraits<>::family");
     }
 
     SECTION("type builtin array")
@@ -586,18 +586,18 @@ TEST_CASE("Object traits are classfied")
         using ponder::detail::ObjectTraits;
         using ponder::detail::ObjectType;
         
-        static_assert(ObjectTraits<int[1]>::which == ObjectType::BuiltinArray,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<int[1000]>::which == ObjectType::BuiltinArray,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<float[1]>::which == ObjectType::BuiltinArray,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<Methods[10]>::which == ObjectType::BuiltinArray,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<int[10][10]>::which == ObjectType::BuiltinArray,
-                      "ObjectTraits<>::which");
-        static_assert(ObjectTraits<int[10][20][30]>::which == ObjectType::BuiltinArray,
-                      "ObjectTraits<>::which");
+        static_assert(ObjectTraits<int[1]>::family == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<int[1000]>::family == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<float[1]>::family == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<Methods[10]>::family == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<int[10][10]>::family == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::family");
+        static_assert(ObjectTraits<int[10][20][30]>::family == ObjectType::BuiltinArray,
+                      "ObjectTraits<>::family");
     }
 }
 
@@ -934,7 +934,7 @@ TEST_CASE("Check functionality same as Boost")
                       "boost::function_types problem");
                       
         static_assert(std::is_same<int(TestClass&,float),
-                      ponder::detail::MethodDetails<fn3_t>::FunctionType>::value,
+                      ponder::detail::MethodDetails<fn3_t>::FunctionFamily>::value,
                       "ponder::detail::MethodDetails problem");
                       
         static_assert(std::is_same<int(TestClass&,float),

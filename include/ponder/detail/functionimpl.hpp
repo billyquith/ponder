@@ -97,7 +97,7 @@ public:
     FunctionImpl(IdRef name, F function) : Function(name)
     {
         m_name = name;
-        m_funcType = FuncTraits::which;
+        m_funcType = FuncTraits::family;
         m_returnType = mapType<typename FuncTraits::ReturnType>();
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueType<c_nParams>>::foreach();
@@ -139,7 +139,7 @@ static inline Function* newFunction(IdRef name, F function)
 {
     typedef detail::FunctionTraits<F> FuncTraits;
     
-    static_assert(FuncTraits::which != FunctionType::None, "Type is not a function");
+    static_assert(FuncTraits::family != FunctionFamily::None, "Type is not a function");
     
     return new FunctionImpl<FuncTraits, F>(name, function);
 }

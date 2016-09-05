@@ -144,7 +144,7 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 
     // For the special case of Getter<Value>, the ambiguity between both constructors
     // cannot be automatically solved, so let's do it manually
-    typedef typename detail::if_c<detail::FunctionTraits<U>::which != FunctionType::None,
+    typedef typename detail::if_c<detail::FunctionTraits<U>::family != FunctionFamily::None,
                                   std::function<Value (T&)>, Value>::type Type;
 
     // Add the new tag (override if already exists)

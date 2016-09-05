@@ -40,7 +40,7 @@ struct RuntimeModule
     template <typename T, typename F>
     static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
     {
-        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::which>::Type;
+        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::family>::Type;
         
         return new runtime::impl::FunctionCallerImpl<implType, typename T::FunctionType>(name, function);
     }
@@ -51,7 +51,7 @@ struct LuaModule
     template <typename T, typename F>
     static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
     {
-        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::which>::Type;
+        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::family>::Type;
         
         return new runtime::impl::FunctionCallerImpl<implType, typename T::FunctionType>(name, function);
     }

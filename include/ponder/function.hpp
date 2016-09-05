@@ -70,7 +70,7 @@ public:
      */
     IdRef name() const;
     
-    FunctionType classification() const { return m_funcType; }
+    FunctionFamily classification() const { return m_funcType; }
 
     /**
      * \brief Get the type of variable returned by the function
@@ -122,7 +122,7 @@ protected:
     Function(const Function&) = delete;
 
     Id m_name; ///< Name of the function
-    FunctionType m_funcType;
+    FunctionFamily m_funcType;
     ValueType m_returnType; ///< Return type
     
 };
