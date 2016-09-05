@@ -425,7 +425,7 @@ TEST_CASE("Registered functions can be called with the runtime")
         functions[i] = &metaclass.function("f" + std::to_string(i));
     }
 
-    SECTION("Functions can be called")
+    SECTION("FunctionCaller can be called with Args")
     {
         using ponder::runtime::FunctionCaller;
         
@@ -466,7 +466,91 @@ TEST_CASE("Registered functions can be called with the runtime")
         ponder::Value ncr = FunctionCaller(mc.function("nonCopyRef")).callStatic();
         ponder::Value ncp = FunctionCaller(mc.function("nonCopyPtr")).callStatic();
     }
+
+    SECTION("Function call helpers can be used with ponder::Args")
+    {
+        using namespace ponder::runtime;
+        
+        MyClass object;
+        
+        IS_TRUE(callStatic(*functions[1], ponder::Args(&object)) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[2], ponder::Args(&object, 10)) == ponder::Value(12));
+        IS_TRUE(callStatic(*functions[3], ponder::Args(&object)) == ponder::Value("3"));
+        IS_TRUE(call(*functions[4], object, ponder::Args()).to<MyType>() == MyType(4));
+        IS_TRUE(call(*functions[5], object, ponder::Args()).to<MyType>() == MyType(5));
+        IS_TRUE(call(*functions[6], object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[7], object, ponder::Args("hi")) == ponder::Value("hi"));
+        IS_TRUE(call(*functions[8], object, ponder::Args()) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[9], object, ponder::Args(true)) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[10], object, ponder::Args(1., 2.f)) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[11], object, ponder::Args(1, 2, 3)) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[12], object, ponder::Args("1", "2", "3", "4")) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[13], object, ponder::Args(Zero, One, Two, Zero, One)) == ponder::Value::nothing);
+        
+        IS_TRUE(callStatic(*functions[14], ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[15], ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[16], ponder::Args(object)) == ponder::Value(16));
+        IS_TRUE(callStatic(*functions[17], ponder::Args(object, 20)) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[18], ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[19], ponder::Args(object)) == ponder::Value::nothing);
+        
+        IS_TRUE(callStatic(*functions[20], ponder::Args(object, 10)) == ponder::Value(10));
+        IS_TRUE(callStatic(*functions[21], ponder::Args(object, 10)) == ponder::Value(30));
+        IS_TRUE(callStatic(*functions[22], ponder::Args(object, 10)) == ponder::Value(60));
+        
+        auto const& mc = ponder::classByType<MyClass>();
+        ponder::Value r = callStatic(mc.function("statFunc"));
+        IS_TRUE(r.to<int>() == 77);
+        
+        ponder::Value r2 = callStatic(mc.function("statFunc2"), ponder::Args(2.5f, 3.0f));
+        REQUIRE(r2.to<float>() == 7.5f);
+        
+        ponder::Value ncr = callStatic(mc.function("nonCopyRef"));
+        ponder::Value ncp = callStatic(mc.function("nonCopyPtr"));
+    }
     
+    SECTION("Function call helpers can be used direct")
+    {
+        using namespace ponder::runtime;
+        
+        MyClass object;
+        
+        IS_TRUE(callStatic(*functions[1], &object) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[2], &object, 10) == ponder::Value(12));
+        IS_TRUE(callStatic(*functions[3], &object) == ponder::Value("3"));
+        IS_TRUE(call(*functions[4], object).to<MyType>() == MyType(4));
+        IS_TRUE(call(*functions[5], object).to<MyType>() == MyType(5));
+        IS_TRUE(call(*functions[6], object) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[7], object, "hi") == ponder::Value("hi"));
+        IS_TRUE(call(*functions[8], object) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[9], object, true) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[10], object, 1., 2.f) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[11], object, 1, 2, 3) == ponder::Value::nothing);
+        IS_TRUE(call(*functions[12], object, "1", "2", "3", "4") == ponder::Value::nothing);
+        IS_TRUE(call(*functions[13], object, Zero, One, Two, Zero, One) == ponder::Value::nothing);
+        
+        IS_TRUE(callStatic(*functions[14], object) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[15], object) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[16], object) == ponder::Value(16));
+        IS_TRUE(callStatic(*functions[17], object, 20) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[18], object) == ponder::Value::nothing);
+        IS_TRUE(callStatic(*functions[19], object) == ponder::Value::nothing);
+        
+        IS_TRUE(callStatic(*functions[20], object, 10) == ponder::Value(10));
+        IS_TRUE(callStatic(*functions[21], object, 10) == ponder::Value(30));
+        IS_TRUE(callStatic(*functions[22], object, 10) == ponder::Value(60));
+        
+        auto const& mc = ponder::classByType<MyClass>();
+        ponder::Value r = callStatic(mc.function("statFunc"));
+        IS_TRUE(r.to<int>() == 77);
+        
+        ponder::Value r2 = callStatic(mc.function("statFunc2"), 2.5f, 3.0f);
+        REQUIRE(r2.to<float>() == 7.5f);
+        
+        ponder::Value ncr = callStatic(mc.function("nonCopyRef"));
+        ponder::Value ncp = callStatic(mc.function("nonCopyPtr"));
+    }
+
     SECTION("calling null functions is an error")
     {
         using ponder::runtime::FunctionCaller;
@@ -548,7 +632,7 @@ TEST_CASE("Registered functions can be called with the runtime")
    }
 }
 
-TEST_CASE("Functions can modify objects") //XXXX 
+TEST_CASE("Functions can modify objects")
 {
     // ModifyA() is called on an object of class A with the intent to modify that object:
     ClassA objectA;

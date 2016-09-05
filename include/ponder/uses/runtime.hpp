@@ -177,6 +177,14 @@ private:
 //--------------------------------------------------------------------------------------
 // Helpers
 
+
+template <typename... A>
+struct ArgsBuilder { static Args makeArgs(A... args) { return {args...}; } };
+    
+template <>
+struct ArgsBuilder<Args> { static Args makeArgs(const Args& args) { return args; } };
+
+    
 static inline void destroy(const UserObject &uo)
 {
     ObjectFactory(uo.getClass()).destroy(uo);
@@ -211,14 +219,16 @@ static inline UniquePtr createUnique(const Class &cls, A... args)
     return makeUniquePtr(p);
 }
 
-static inline Value call(const Function &fn, const UserObject &obj, const Args &args = Args::empty)
+template <typename... A>
+static inline Value call(const Function &fn, const UserObject &obj, A... args)
 {
-    return FunctionCaller(fn).call(obj, args);
+    return FunctionCaller(fn).call(obj, ArgsBuilder<A...>::makeArgs(args...));
 }
 
-static inline Value callStatic(const Function &fn, const Args &args = Args::empty)
+template <typename... A>
+static inline Value callStatic(const Function &fn, A... args)
 {
-    return FunctionCaller(fn).callStatic(args);
+    return FunctionCaller(fn).callStatic(ArgsBuilder<A...>::makeArgs(args...));
 }
 
 } // namespace runtime
