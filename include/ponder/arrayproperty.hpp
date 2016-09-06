@@ -52,7 +52,7 @@ public:
      * \param elementType Type of the property
      * \param dynamic Tells if the array is dynamic or not
      */
-    ArrayProperty(IdRef name, ValueType elementType, bool dynamic);
+    ArrayProperty(IdRef name, ValueKind elementType, bool dynamic);
 
     /**
      * \brief Destructor
@@ -64,7 +64,7 @@ public:
      *
      * \return Type of elements
      */
-    ValueType elementType() const;
+    ValueKind elementType() const;
 
     /**
      * \brief Check if the array is dynamic
@@ -251,7 +251,7 @@ protected:
 
 private:
 
-    ValueType m_elementType; ///< Type of the individual elements of the array
+    ValueKind m_elementType; ///< Type of the individual elements of the array
     bool m_dynamic; ///< Is the array dynamic?
 };
 

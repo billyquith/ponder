@@ -108,7 +108,7 @@
 //        public:
 //            
 //            MyProperty(const ponder::String& name)
-//            : ponder::SimpleProperty(name, ponder::ValueType::Integer)
+//            : ponder::SimpleProperty(name, ponder::ValueKind::Integer)
 //            {
 //            }
 //            
@@ -131,7 +131,7 @@
 ////        public:
 ////            
 ////            MyFunction(const ponder::String& name)
-////            : ponder::Function(name, ponder::ValueType::String)
+////            : ponder::Function(name, ponder::ValueKind::String)
 ////            {
 ////            }
 ////            
@@ -173,8 +173,8 @@
 //
 //    SECTION("check types")
 //    {
-//        IS_TRUE(metaclass->property(0).type() == ponder::ValueType::Integer);
-//        IS_TRUE(metaclass->function(0).returnType() == ponder::ValueType::String);
+//        IS_TRUE(metaclass->property(0).type() == ponder::ValueKind::Integer);
+//        IS_TRUE(metaclass->function(0).returnType() == ponder::ValueKind::String);
 //    }
 //
 //    SECTION("paramCount")

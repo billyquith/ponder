@@ -54,7 +54,7 @@ public:
      * \param provided Provided type
      * \param expected Expected type
      */
-    BadType(ValueType provided, ValueType expected);
+    BadType(ValueKind provided, ValueKind expected);
 
 protected:
 
@@ -72,7 +72,7 @@ protected:
      *
      * \return Name of the provided type
      */
-    static ponder::String typeName(ValueType type);
+    static ponder::String typeName(ValueKind type);
 };
 
 /**
@@ -91,7 +91,7 @@ public:
      * \param index Index of the argument in the function prototype
      * \param functionName Name of the function
      */
-    BadArgument(ValueType provided, ValueType expected,
+    BadArgument(ValueKind provided, ValueKind expected,
                 std::size_t index, IdRef functionName);
 };
 

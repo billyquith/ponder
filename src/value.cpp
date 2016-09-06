@@ -39,7 +39,7 @@ const Value Value::nothing;
 
 Value::Value()
     : m_value(NoType())
-    , m_type(ValueType::None)
+    , m_type(ValueKind::None)
 {
 }
 
@@ -49,7 +49,7 @@ Value::Value(const Value& other)
 {
 }
 
-ValueType Value::type() const
+ValueKind Value::type() const
 {
     return m_type;
 }

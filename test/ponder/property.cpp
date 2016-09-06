@@ -251,30 +251,30 @@ TEST_CASE("Classes can have properties")
 
     SECTION("type")
     {
-        REQUIRE(properties[1]->type() ==  ponder::ValueType::Boolean);
-        REQUIRE(properties[2]->type() ==  ponder::ValueType::Integer);
-        REQUIRE(properties[3]->type() ==  ponder::ValueType::String);
-        IS_TRUE(properties[4]->type() ==  ponder::ValueType::User);
-        REQUIRE(properties[5]->type() ==  ponder::ValueType::Boolean);
-        REQUIRE(properties[6]->type() ==  ponder::ValueType::Integer);
-        REQUIRE(properties[7]->type() ==  ponder::ValueType::String);
-        REQUIRE(properties[8]->type() ==  ponder::ValueType::Enum);
-        REQUIRE(properties[9]->type() ==  ponder::ValueType::User);
-        REQUIRE(properties[10]->type() == ponder::ValueType::Boolean);
-        REQUIRE(properties[11]->type() == ponder::ValueType::Integer);
-        REQUIRE(properties[12]->type() == ponder::ValueType::String);
-        REQUIRE(properties[13]->type() == ponder::ValueType::Enum);
-        REQUIRE(properties[14]->type() == ponder::ValueType::Boolean);
-        REQUIRE(properties[15]->type() == ponder::ValueType::Integer);
-        REQUIRE(properties[16]->type() == ponder::ValueType::String);
-        REQUIRE(properties[17]->type() == ponder::ValueType::User);
-        REQUIRE(properties[18]->type() == ponder::ValueType::Boolean);
-        REQUIRE(properties[19]->type() == ponder::ValueType::Integer);
-        REQUIRE(properties[20]->type() == ponder::ValueType::Real);
-        REQUIRE(properties[21]->type() == ponder::ValueType::Integer);
-        REQUIRE(properties[22]->type() == ponder::ValueType::Enum);
-        REQUIRE(properties[23]->type() == ponder::ValueType::String);
-        REQUIRE(properties[24]->type() == ponder::ValueType::User);
+        REQUIRE(properties[1]->type() ==  ponder::ValueKind::Boolean);
+        REQUIRE(properties[2]->type() ==  ponder::ValueKind::Integer);
+        REQUIRE(properties[3]->type() ==  ponder::ValueKind::String);
+        IS_TRUE(properties[4]->type() ==  ponder::ValueKind::User);
+        REQUIRE(properties[5]->type() ==  ponder::ValueKind::Boolean);
+        REQUIRE(properties[6]->type() ==  ponder::ValueKind::Integer);
+        REQUIRE(properties[7]->type() ==  ponder::ValueKind::String);
+        REQUIRE(properties[8]->type() ==  ponder::ValueKind::Enum);
+        REQUIRE(properties[9]->type() ==  ponder::ValueKind::User);
+        REQUIRE(properties[10]->type() == ponder::ValueKind::Boolean);
+        REQUIRE(properties[11]->type() == ponder::ValueKind::Integer);
+        REQUIRE(properties[12]->type() == ponder::ValueKind::String);
+        REQUIRE(properties[13]->type() == ponder::ValueKind::Enum);
+        REQUIRE(properties[14]->type() == ponder::ValueKind::Boolean);
+        REQUIRE(properties[15]->type() == ponder::ValueKind::Integer);
+        REQUIRE(properties[16]->type() == ponder::ValueKind::String);
+        REQUIRE(properties[17]->type() == ponder::ValueKind::User);
+        REQUIRE(properties[18]->type() == ponder::ValueKind::Boolean);
+        REQUIRE(properties[19]->type() == ponder::ValueKind::Integer);
+        REQUIRE(properties[20]->type() == ponder::ValueKind::Real);
+        REQUIRE(properties[21]->type() == ponder::ValueKind::Integer);
+        REQUIRE(properties[22]->type() == ponder::ValueKind::Enum);
+        REQUIRE(properties[23]->type() == ponder::ValueKind::String);
+        REQUIRE(properties[24]->type() == ponder::ValueKind::User);
     }
 
     SECTION("name")

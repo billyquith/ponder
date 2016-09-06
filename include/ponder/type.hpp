@@ -44,11 +44,11 @@ struct NoType
 };
 
 /**
- * \brief Enumeration of abstract value types supported by Ponder
+ * \brief Enumeration of abstract value types supported by Ponder Values
  *
- * \sa ValueMapper
+ * \sa Value ValueMapper
  */
-enum class ValueType
+enum class ValueKind
 {
     None,       ///< No type has been defined yet
     Boolean,    ///< Boolean type (bool)
@@ -62,7 +62,9 @@ enum class ValueType
 
     
 /**
- * \brief Enumeration of the kinds, or families, of function recognised
+ * \brief Enumeration of the kinds of function recognised
+ *
+ * \sa Function
  */
 enum class FunctionKind
 {

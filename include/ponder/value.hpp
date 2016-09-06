@@ -98,7 +98,7 @@ public:
      *
      * \return Type of the value
      */
-    ValueType type() const;
+    ValueKind type() const;
 
     /**
      * \brief Convert the value to the type T
@@ -199,7 +199,7 @@ private:
                                   ponder::String, EnumObject, UserObject> Variant;
 
     Variant m_value; ///< Stored value
-    ValueType m_type; ///< Ponder type of the value
+    ValueKind m_type; ///< Ponder type of the value
 };
 
 /**

@@ -68,7 +68,7 @@ public:
      *
      * \return Type of the property
      */
-    ValueType type() const;
+    ValueKind type() const;
 
     /**
      * \brief Check if the property is currently readable for a given object
@@ -134,7 +134,7 @@ protected:
      * \param name Name of the property
      * \param type Type of the property
      */
-    Property(IdRef name, ValueType type);
+    Property(IdRef name, ValueKind type);
 
     /**
      * \brief Do the actual reading of the value
@@ -174,7 +174,7 @@ protected:
 private:
 
     Id m_name; ///< Name of the property
-    ValueType m_type; ///< Type of the property
+    ValueKind m_type; ///< Type of the property
     detail::Getter<bool> m_readable; ///< Accessor to get the readable state of the property
     detail::Getter<bool> m_writable; ///< Accessor to get the writable state of the property
 };

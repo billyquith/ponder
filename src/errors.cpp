@@ -38,7 +38,7 @@ namespace ponder {
 
 using ponder::detail::fmt::format;
     
-BadType::BadType(ValueType provided, ValueType expected)
+BadType::BadType(ValueKind provided, ValueKind expected)
 : Error("value of type " + typeName(provided)
         + " couldn't be converted to type " + typeName(expected))
 {
@@ -49,13 +49,13 @@ BadType::BadType(const String& message)
 {
 }
 
-ponder::String BadType::typeName(ValueType type)
+ponder::String BadType::typeName(ValueKind type)
 {
     return detail::valueTypeAsString(type);
 }
 
-BadArgument::BadArgument(ValueType provided,
-                         ValueType expected,
+BadArgument::BadArgument(ValueKind provided,
+                         ValueKind expected,
                          std::size_t index,
                          IdRef functionName)
 : BadType(format("argument #{} of function {} couldn't be converted from type {} to type {}",

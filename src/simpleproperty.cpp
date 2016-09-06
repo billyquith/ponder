@@ -35,7 +35,7 @@
 namespace ponder
 {
     
-SimpleProperty::SimpleProperty(IdRef name, ValueType type)
+SimpleProperty::SimpleProperty(IdRef name, ValueKind type)
     : Property(name, type)
 {
 }

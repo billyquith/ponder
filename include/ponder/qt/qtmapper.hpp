@@ -145,7 +145,7 @@ private:
      */
     static bool filter(const QMetaProperty& property)
     {
-        return QtHelper::type(property.type()) != ponder::ValueType::None
+        return QtHelper::type(property.type()) != ponder::ValueKind::None
                || property.isEnumType();
     }
 
@@ -159,8 +159,8 @@ private:
     static bool filter(const QMetaMethod& function)
     {
         // Check return type
-        if ((QtHelper::type(function.typeName()) == ponder::ValueType::None)
-            && QMetaType::type(function.typeName()) != QMetaType::Void) // void maps to ponder::ValueType::None but is a valid return type
+        if ((QtHelper::type(function.typeName()) == ponder::ValueKind::None)
+            && QMetaType::type(function.typeName()) != QMetaType::Void) // void maps to ponder::ValueKind::None but is a valid return type
         {
             return false;
         }
@@ -169,7 +169,7 @@ private:
         QList<QByteArray> args = function.parameterTypes();
         Q_FOREACH(QByteArray arg, args)
         {
-            if (QtHelper::type(arg) == ponder::ValueType::None)
+            if (QtHelper::type(arg) == ponder::ValueKind::None)
                 return false;
         }
 

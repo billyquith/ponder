@@ -7,9 +7,11 @@ Ponder Changelog
 ### 2.0
 
 - Version 1.4 was unreleased and morphed into 2.0 because of design changes.
+- Many things renamed in the hope that this will clarify things. 
 - Runtime functionality (object factory and function calling) decoupled (issue #49).
 - Added support for binding to static functions (issue #46).
 - Removed UserObject parent-child. Simplification, unused.
+- Removed Function callable behaviour. 
 - Class::create() allows object creation without an Args list.
 - Class::tryFunction() and Class::tryProperty() added.
 

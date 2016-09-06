@@ -94,27 +94,27 @@ static int pushValue(lua_State *L, const ponder::Value& val)
 {
     switch (val.type())
     {
-        case ValueType::Boolean:
+        case ValueKind::Boolean:
             lua_pushboolean(L, val.to<bool>());
             return 1;
             
-        case ValueType::Integer:
+        case ValueKind::Integer:
             lua_pushinteger(L, val.to<lua_Integer>());
             return 1;
             
-        case ValueType::Real:
+        case ValueKind::Real:
             lua_pushnumber(L, val.to<lua_Number>());
             return 1;
             
-        case ValueType::String:
+        case ValueKind::String:
             lua_pushstring(L, val.to<std::string>().c_str());
             return 1;
 
-        case ValueType::Enum:
+        case ValueKind::Enum:
             lua_pushinteger(L, val.to<int>());
             return 1;
             
-        case ValueType::User:
+        case ValueKind::User:
             {
                 UserObject vuobj = val.to<UserObject>();
                 Class const& cls = vuobj.getClass();
@@ -139,7 +139,7 @@ static int pushValue(lua_State *L, const ponder::Value& val)
 }
 
 // get a Lua stack value as a Ponder value
-static Value getValue(lua_State *L, int index, ValueType typeExpected = ValueType::None)
+static Value getValue(lua_State *L, int index, ValueKind typeExpected = ValueKind::None)
 {
     if (index > lua_gettop(L))
     {
@@ -150,24 +150,24 @@ static Value getValue(lua_State *L, int index, ValueType typeExpected = ValueTyp
     const int typei = lua_type(L, index);
 
     // if we expect a type then override Lua type to force an error if incorrect
-    if (typeExpected != ValueType::None)
+    if (typeExpected != ValueKind::None)
     {
         int vtype = LUA_TNIL;
         switch (typeExpected) {
-            case ValueType::Boolean:
+            case ValueKind::Boolean:
                 vtype = LUA_TBOOLEAN;
                 break;
                 
-            case ValueType::String:
+            case ValueKind::String:
                 vtype = LUA_TSTRING;
                 break;
                 
-            case ValueType::Real:
-            case ValueType::Integer:
+            case ValueKind::Real:
+            case ValueKind::Integer:
                 vtype = LUA_TNUMBER;
                 break;
                 
-            case ValueType::User:
+            case ValueKind::User:
                 vtype = LUA_TUSERDATA;
                 break;
                 
@@ -220,13 +220,13 @@ static int l_func_call(lua_State *L)
     for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
     {
         // we know the arg type so check it
-        const ValueType at = func->paramType(i);
+        const ValueKind at = func->paramType(i);
         args += getValue(L, i, at);
     }
     
     ponder::runtime::FunctionCaller caller(*func);
     Value ret = caller.call(args);
-    if (ret.type() != ValueType::None)
+    if (ret.type() != ValueKind::None)
         return pushValue(L, ret);
     
     return 0;
@@ -251,13 +251,13 @@ static int l_method_call(lua_State *L)
     for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
     {
         // we know the arg type so check it
-        const ValueType at = func->paramType(i);
+        const ValueKind at = func->paramType(i);
         args += getValue(L, i + c_argOffset, at);
     }
     
     ponder::runtime::ObjectCaller caller(*func);
     Value ret = caller.call(*uobj, args);
-    if (ret.type() != ValueType::None)
+    if (ret.type() != ValueKind::None)
         return pushValue(L, ret);
     
     return 0;

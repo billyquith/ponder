@@ -45,7 +45,7 @@ namespace detail {
  * Implementation of ValueProvider
  * Generic version, use default constructor
  */
-template <typename T, ValueType Type>
+template <typename T, ValueKind Type>
 struct ValueProviderImpl
 {
     T operator()() {return T();}
@@ -57,7 +57,7 @@ struct ValueProviderImpl
  * if the type has no default constructor
  */
 template <typename T>
-struct ValueProviderImpl<T, ValueType::User>
+struct ValueProviderImpl<T, ValueKind::User>
 {
     ValueProviderImpl()
         :   m_value(0) //classByType<T>().construct(Args::empty).template get<T*>()) // XXXX
@@ -82,7 +82,7 @@ struct ValueProviderImpl<T*, Type>
  * Here we assume that the caller will take ownership of the returned value
  */
 template <typename T>
-struct ValueProviderImpl<T*, ValueType::User>
+struct ValueProviderImpl<T*, ValueKind::User>
 {
     T* operator()() {return classByType<T>().construct().template get<T*>();}
 };

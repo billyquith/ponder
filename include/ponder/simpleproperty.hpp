@@ -55,7 +55,7 @@ public:
      * \param name Name of the property
      * \param type Type of the property
      */
-    SimpleProperty(IdRef name, ValueType type);
+    SimpleProperty(IdRef name, ValueKind type);
 
     /**
      * \brief Destructor

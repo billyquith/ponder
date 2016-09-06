@@ -41,11 +41,11 @@ namespace detail {
 struct FunctionParamInfo
 {
     const std::type_info *m_typeinfo;
-    ValueType m_valueType;
+    ValueKind m_valueType;
 };
     
 template <int SZ>
-struct FunctionMapParamsToValueType
+struct FunctionMapParamsToValueKind
 {
     typedef std::array<FunctionParamInfo, SZ> ReturnType;
     
@@ -100,7 +100,7 @@ public:
         m_funcType = FuncTraits::kind;
         m_returnType = mapType<typename FuncTraits::ReturnType>();
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
-                                            FunctionMapParamsToValueType<c_nParams>>::foreach();
+                                            FunctionMapParamsToValueKind<c_nParams>>::foreach();
         
         processUsers(m_name, function);
     }
@@ -123,7 +123,7 @@ private:
     
     std::size_t paramCount() const override { return c_nParams; }
 
-    ValueType paramType(std::size_t index) const override
+    ValueKind paramType(std::size_t index) const override
     {
         // Make sure that the index is not out of range
         if (index >= c_nParams)

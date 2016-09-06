@@ -36,7 +36,7 @@ namespace ponder
 {
     
 EnumProperty::EnumProperty(IdRef name, const Enum& propEnum)
-    : Property(name, ValueType::Enum)
+    : Property(name, ValueKind::Enum)
     , m_enum(&propEnum)
 {
 }

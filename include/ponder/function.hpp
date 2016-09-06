@@ -70,6 +70,11 @@ public:
      */
     IdRef name() const;
     
+   /**
+    * \brief Get the kind of function represented here
+    *
+    * \return Kind of the function
+    */
     FunctionKind kind() const { return m_funcType; }
 
     /**
@@ -77,7 +82,7 @@ public:
      *
      * \return Type of the result of the function
      */
-    ValueType returnType() const;
+    ValueKind returnType() const;
 
     /**
      * \brief Get the number of parameters of the function
@@ -95,7 +100,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    virtual ValueType paramType(std::size_t index) const = 0;
+    virtual ValueKind paramType(std::size_t index) const = 0;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
@@ -104,27 +109,22 @@ public:
      */
     virtual void accept(ClassVisitor& visitor) const;
     
+   /**
+    * \brief Accept the visitation of a ClassVisitor
+    *
+    * \param visitor Visitor to accept
+    */
     virtual const void* getUserData() const = 0;
     
 protected:
 
-    /**
-     * \brief Construct the function from its description
-     *
-     * \param name Name of the function
-     * \param returnType Type of the function result
-     * \param paramTypes Types of the function parameters (empty array by default)
-     *
-     * \return Value returned by the function call
-     */
     Function(IdRef name) : m_name(name) {}
     
     Function(const Function&) = delete;
 
-    Id m_name; ///< Name of the function
-    FunctionKind m_funcType;
-    ValueType m_returnType; ///< Return type
-    
+    Id m_name;                  // Name of the function
+    FunctionKind m_funcType;    // Kind of function
+    ValueKind m_returnType;     // Return type    
 };
 
 } // namespace ponder

@@ -307,31 +307,31 @@ TEST_CASE("Functions can be registered")
 
     SECTION("functions have a return type")
     {
-        REQUIRE(functions[1]->returnType() ==  ponder::ValueType::None);
-        REQUIRE(functions[2]->returnType() ==  ponder::ValueType::Integer);
-        REQUIRE(functions[3]->returnType() ==  ponder::ValueType::String);
-        REQUIRE(functions[4]->returnType() ==  ponder::ValueType::User);
-        REQUIRE(functions[5]->returnType() ==  ponder::ValueType::User);
-        REQUIRE(functions[6]->returnType() ==  ponder::ValueType::None);
-        REQUIRE(functions[7]->returnType() ==  ponder::ValueType::User);
-        REQUIRE(functions[8]->returnType() ==  ponder::ValueType::None);
-        REQUIRE(functions[9]->returnType() ==  ponder::ValueType::None);
-        REQUIRE(functions[10]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[11]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[12]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[13]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[14]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[15]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[16]->returnType() == ponder::ValueType::Integer);
-        REQUIRE(functions[17]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[18]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[19]->returnType() == ponder::ValueType::None);
-        REQUIRE(functions[20]->returnType() == ponder::ValueType::Integer);
-        REQUIRE(functions[21]->returnType() == ponder::ValueType::Integer);
-        REQUIRE(functions[22]->returnType() == ponder::ValueType::Integer);
+        REQUIRE(functions[1]->returnType() ==  ponder::ValueKind::None);
+        REQUIRE(functions[2]->returnType() ==  ponder::ValueKind::Integer);
+        REQUIRE(functions[3]->returnType() ==  ponder::ValueKind::String);
+        REQUIRE(functions[4]->returnType() ==  ponder::ValueKind::User);
+        REQUIRE(functions[5]->returnType() ==  ponder::ValueKind::User);
+        REQUIRE(functions[6]->returnType() ==  ponder::ValueKind::None);
+        REQUIRE(functions[7]->returnType() ==  ponder::ValueKind::User);
+        REQUIRE(functions[8]->returnType() ==  ponder::ValueKind::None);
+        REQUIRE(functions[9]->returnType() ==  ponder::ValueKind::None);
+        REQUIRE(functions[10]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[11]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[12]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[13]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[14]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[15]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[16]->returnType() == ponder::ValueKind::Integer);
+        REQUIRE(functions[17]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[18]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[19]->returnType() == ponder::ValueKind::None);
+        REQUIRE(functions[20]->returnType() == ponder::ValueKind::Integer);
+        REQUIRE(functions[21]->returnType() == ponder::ValueKind::Integer);
+        REQUIRE(functions[22]->returnType() == ponder::ValueKind::Integer);
         
-        REQUIRE(metaclass.function("nonCopyRef").returnType() == ponder::ValueType::User);
-        REQUIRE(metaclass.function("nonCopyPtr").returnType() == ponder::ValueType::User);
+        REQUIRE(metaclass.function("nonCopyRef").returnType() == ponder::ValueKind::User);
+        REQUIRE(metaclass.function("nonCopyPtr").returnType() == ponder::ValueKind::User);
     }
 
     SECTION("functions have a number of parameters")
@@ -367,44 +367,44 @@ TEST_CASE("Functions can be registered")
     
     SECTION("function parameters have a type")
     {
-        REQUIRE(functions[1]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[2]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[2]->paramType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[3]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[1]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[2]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[2]->paramType(1) == ponder::ValueKind::Integer);
+        REQUIRE(functions[3]->paramType(0) == ponder::ValueKind::User);
         REQUIRE_THROWS_AS(functions[4]->paramType(0), ponder::OutOfRange);
         REQUIRE_THROWS_AS(functions[5]->paramType(0), ponder::OutOfRange);
         REQUIRE_THROWS_AS(functions[6]->paramType(0), ponder::OutOfRange);
-        REQUIRE(functions[7]->paramType(0) ==  ponder::ValueType::User);
+        REQUIRE(functions[7]->paramType(0) ==  ponder::ValueKind::User);
         REQUIRE_THROWS_AS(functions[8]->paramType(0), ponder::OutOfRange);
-        REQUIRE(functions[9]->paramType(0) ==  ponder::ValueType::Boolean);
-        REQUIRE(functions[10]->paramType(0) == ponder::ValueType::Real);
-        REQUIRE(functions[10]->paramType(1) == ponder::ValueType::Real);
-        REQUIRE(functions[11]->paramType(0) == ponder::ValueType::Integer);
-        REQUIRE(functions[11]->paramType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[11]->paramType(2) == ponder::ValueType::Integer);
-        REQUIRE(functions[12]->paramType(0) == ponder::ValueType::String);
-        REQUIRE(functions[12]->paramType(1) == ponder::ValueType::String);
-        REQUIRE(functions[12]->paramType(2) == ponder::ValueType::String);
-        REQUIRE(functions[12]->paramType(3) == ponder::ValueType::String);
-        REQUIRE(functions[13]->paramType(0) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->paramType(1) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->paramType(2) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->paramType(3) == ponder::ValueType::Enum);
-        REQUIRE(functions[13]->paramType(4) == ponder::ValueType::Enum);
+        REQUIRE(functions[9]->paramType(0) ==  ponder::ValueKind::Boolean);
+        REQUIRE(functions[10]->paramType(0) == ponder::ValueKind::Real);
+        REQUIRE(functions[10]->paramType(1) == ponder::ValueKind::Real);
+        REQUIRE(functions[11]->paramType(0) == ponder::ValueKind::Integer);
+        REQUIRE(functions[11]->paramType(1) == ponder::ValueKind::Integer);
+        REQUIRE(functions[11]->paramType(2) == ponder::ValueKind::Integer);
+        REQUIRE(functions[12]->paramType(0) == ponder::ValueKind::String);
+        REQUIRE(functions[12]->paramType(1) == ponder::ValueKind::String);
+        REQUIRE(functions[12]->paramType(2) == ponder::ValueKind::String);
+        REQUIRE(functions[12]->paramType(3) == ponder::ValueKind::String);
+        REQUIRE(functions[13]->paramType(0) == ponder::ValueKind::Enum);
+        REQUIRE(functions[13]->paramType(1) == ponder::ValueKind::Enum);
+        REQUIRE(functions[13]->paramType(2) == ponder::ValueKind::Enum);
+        REQUIRE(functions[13]->paramType(3) == ponder::ValueKind::Enum);
+        REQUIRE(functions[13]->paramType(4) == ponder::ValueKind::Enum);
         
-        REQUIRE(functions[14]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[15]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[16]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[17]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[18]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[19]->paramType(0) == ponder::ValueType::User);
+        REQUIRE(functions[14]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[15]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[16]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[17]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[18]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[19]->paramType(0) == ponder::ValueKind::User);
         
-        REQUIRE(functions[20]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[20]->paramType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[21]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[21]->paramType(1) == ponder::ValueType::Integer);
-        REQUIRE(functions[22]->paramType(0) == ponder::ValueType::User);
-        REQUIRE(functions[22]->paramType(1) == ponder::ValueType::Integer);
+        REQUIRE(functions[20]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[20]->paramType(1) == ponder::ValueKind::Integer);
+        REQUIRE(functions[21]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[21]->paramType(1) == ponder::ValueKind::Integer);
+        REQUIRE(functions[22]->paramType(0) == ponder::ValueKind::User);
+        REQUIRE(functions[22]->paramType(1) == ponder::ValueKind::Integer);
     }
 }
 

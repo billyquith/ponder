@@ -183,7 +183,7 @@ static inline bool allTrue(bool a0,bool a1,bool a2,bool a3,bool a4, bool a5, boo
     {return a0 & a1 & a2 & a3 & a4 & a5 & a6 & a7;}
 
 // Get value type enum as string description.
-PONDER_API const char* valueTypeAsString(ValueType t);
+PONDER_API const char* valueTypeAsString(ValueKind t);
 
 } // detail
 } // Ponder

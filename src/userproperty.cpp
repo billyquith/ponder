@@ -36,7 +36,7 @@ namespace ponder
 {
     
 UserProperty::UserProperty(IdRef name, const Class& propClass)
-    : Property(name, ValueType::User)
+    : Property(name, ValueKind::User)
     , m_class(&propClass)
 {
 }

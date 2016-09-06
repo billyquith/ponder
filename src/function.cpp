@@ -44,7 +44,7 @@ IdRef Function::name() const
     return m_name;
 }
 
-ValueType Function::returnType() const
+ValueKind Function::returnType() const
 {
     return m_returnType;
 }

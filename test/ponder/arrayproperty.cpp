@@ -133,18 +133,18 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Array property can be inspected")
 
     SECTION("should be array type")
     {
-        REQUIRE(bools->type() == ponder::ValueType::Array);
-        REQUIRE(ints->type() == ponder::ValueType::Array);
-        REQUIRE(strings->type() == ponder::ValueType::Array);
-        REQUIRE(objects->type() == ponder::ValueType::Array);
+        REQUIRE(bools->type() == ponder::ValueKind::Array);
+        REQUIRE(ints->type() == ponder::ValueKind::Array);
+        REQUIRE(strings->type() == ponder::ValueKind::Array);
+        REQUIRE(objects->type() == ponder::ValueKind::Array);
     }
     
      SECTION("arrays have a type")
      {
-         REQUIRE(bools->elementType() == ponder::ValueType::Boolean);
-         REQUIRE(ints->elementType() == ponder::ValueType::Integer);
-         REQUIRE(strings->elementType() == ponder::ValueType::String);
-         REQUIRE(objects->elementType() == ponder::ValueType::User);
+         REQUIRE(bools->elementType() == ponder::ValueKind::Boolean);
+         REQUIRE(ints->elementType() == ponder::ValueKind::Integer);
+         REQUIRE(strings->elementType() == ponder::ValueKind::String);
+         REQUIRE(objects->elementType() == ponder::ValueKind::User);
      }
      
      SECTION("can be dynamic")

@@ -44,7 +44,7 @@ IdRef Property::name() const
     return m_name;
 }
 
-ValueType Property::type() const
+ValueKind Property::type() const
 {
     return m_type;
 }
@@ -94,7 +94,7 @@ bool Property::isWritable() const
     return true;
 }
 
-Property::Property(IdRef name, ValueType type)
+Property::Property(IdRef name, ValueKind type)
     : m_name(name)
     , m_type(type)
     , m_readable(true)
