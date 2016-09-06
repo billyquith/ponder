@@ -102,21 +102,21 @@ public:
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueKind<c_nParams>>::foreach();
         
-        processUsers(m_name, function);
+        processUses(m_name, function);
     }
     
-    const void* getUserData() const override
+    const void* getUsesData() const override
     {
         return &m_userData;
     }
 
 private:
 
-    uses::Users::PerFunctionUserData m_userData;
+    uses::Uses::PerFunctionUserData m_userData;
 
-    void processUsers(IdRef name, F function)
+    void processUses(IdRef name, F function)
     {
-        typedef std::tuple_element<0, uses::Users::Modules>::type UserFuncProcessor;
+        typedef std::tuple_element<0, uses::Uses::Modules>::type UserFuncProcessor;
         std::get<0>(m_userData) = UserFuncProcessor::perFunction<T,F>(name, function);
     }
     
