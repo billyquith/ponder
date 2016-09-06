@@ -110,16 +110,18 @@ public:
     virtual void accept(ClassVisitor& visitor) const;
     
    /**
-    * \brief Accept the visitation of a ClassVisitor
+    * \brief Get the per-function uses data (internal)
     *
-    * \param visitor Visitor to accept
+    * \note This data is private to the uses module that created it.
+    *
+    * \return Opaque data pointer
     */
-    virtual const void* getUserData() const = 0;
+    virtual const void* getUsesData() const = 0;
     
 protected:
 
+    // FunctionImpl inherits from this and constructs.
     Function(IdRef name) : m_name(name) {}
-    
     Function(const Function&) = delete;
 
     Id m_name;                  // Name of the function

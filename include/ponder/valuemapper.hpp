@@ -123,6 +123,9 @@ namespace ponder_ext
  * Generic version of ValueMapper -- T doesn't match with any specialization
  * and is thus treated as a user object    
  */
+    
+/** \cond NoDocumentation */
+    
 template <typename T, typename C>
 struct ValueMapper
 {
@@ -454,6 +457,8 @@ struct ValueMapper<const char*>
         return T::CONVERSION_TO_CONST_CHAR_PTR_IS_NOT_ALLOWED();
     }
 };
+
+/** \endcond NoDocumentation */
 
 } // namespace ponder_ext
 

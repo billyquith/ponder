@@ -109,6 +109,8 @@ namespace ponder_ext
  * \endcode
  */
 
+/** \cond NoDocumentation */
+
 /*
  * Generic version -- doesn't define anything
  */
@@ -319,6 +321,8 @@ struct ArrayMapper<std::array<T, N> >
         arr.erase(it);
     }
 };
+
+/** \endcond NoDocumentation */
 
 } // namespace ponder_ext
 

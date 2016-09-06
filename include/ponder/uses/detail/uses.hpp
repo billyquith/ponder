@@ -35,43 +35,56 @@
 namespace ponder {
 namespace uses {
 
+/**
+ *  The "uses" modules are a way for Uses of the compile-time types to store
+ *  information. For example, this may be templated code that uses the types only
+ *  available during compilation. These may then be used at runtime. The idea is
+ *  to decouple modules from the metaclass data to avoid complexity.
+ *      
+ *  Each module supplies (pseudo-code):
+ *      
+ *  \code
+ *  struct Module_name {
+ *      static module_ns::impl::PerConstructor_t* perConstructor(IdRef name, C constructor)
+ *      static module_ns::impl::PerFunc_t* perFunction(IdRef name, F function)
+ *  }
+ *  \endcode
+ */
+        
+/**
+ *  \brief Runtime behaviour
+ *
+ *  This module provides runtime behaviour like creation of UserObjects and calling 
+ *  functions
+ */
 struct RuntimeModule
 {
     template <typename T, typename F>
     static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
     {
-        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::kind>::Type;
-        
-        return new runtime::impl::FunctionCallerImpl<implType, typename T::FunctionType>(name, function);
+        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::kind>::Type;        
+        return new runtime::impl::FunctionCallerImpl<implType,
+                                                     typename T::FunctionType>(name, function);
     }
 };
 
-struct LuaModule
+/**
+ * \ brief Global information on the compile-time type Uses.
+ *
+ *  - This can be extended for other modular uses
+ *  - `typedef typename std::tuple_element<I, PerFunctionUserData>::type PerFunc_t;`
+ *  - `PerFunc_t* std::get<I>(getUsesData());`
+ */
+struct Uses
 {
-    template <typename T, typename F>
-    static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
-    {
-        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::kind>::Type;
-        
-        return new runtime::impl::FunctionCallerImpl<implType, typename T::FunctionType>(name, function);
-    }
-};
+    enum { eRuntimeModule };
     
-// Global information on the compile-time type users.
-struct Users
-{
-    enum { eRuntimeModule, eLuaModule };
-    
-    typedef std::tuple<RuntimeModule, LuaModule> Modules;
-    
-    typedef std::tuple<runtime::impl::FunctionCaller*,
-                       lua::impl::FunctionBinding*> PerFunctionUserData;
+    typedef std::tuple<RuntimeModule> Modules;
 
-//    template <int I>
-//    struct PerFuncType { typedef typename std::tuple_element<I, PerFunctionUserData>::type Type; };
-//    
-//    template <int I>
-//    static typename PerFuncType<I>::Type getPerFuncData(PerFunctionUserData &ud) { return std::get<I>(ud); }
+//    typedef std::tuple<runtime::impl::Constructor*> PerConstructorUserData;
+    
+    typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
+
 };
     
 } // namespace uses

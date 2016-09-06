@@ -206,11 +206,24 @@ public:     // reflection
      */
     std::size_t constructorCount() const;
     
+    /**
+     * \brief Access constructors by index
+     *
+     * \param index Index
+     *
+     * \return Constructor
+     */
     const Constructor* constructor(std::size_t index) const
     {
         return m_constructors[index].get();
     }
     
+    /**
+     * \brief Destroy a UserObject instance
+     *
+     * \param uobj User object to destruct
+     * \param destruct True for destruct (placement new), else destroy (new)
+     */
     void destruct(const UserObject &uobj, bool destruct) const
     {
         m_destructor(uobj, destruct);

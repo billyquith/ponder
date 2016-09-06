@@ -77,8 +77,19 @@ class ObjectFactory
 {
 public:
     
+    /**
+     * \brief Constructor
+     *
+     * \param cls The Class to be called
+     * \return a Class reference
+     */
     ObjectFactory(const Class &cls) : m_class(cls) {}
     
+    /**
+     * \brief Get the class begin used
+     *
+     * \return a Class reference
+     */
     const Class& getClass() const { return m_class; }
     
     /**
@@ -94,7 +105,6 @@ public:
      *
      * \param args Arguments to pass to the constructor (empty by default)
      * \param ptr Optional pointer to the location to construct the object (placement new)
-     *
      * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
      * \sa create()
      */
@@ -108,7 +118,6 @@ public:
      * see Class::construct().
      *
      * \param args An argument list.
-     *
      * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
      * \sa construct()
      */
@@ -156,14 +165,25 @@ class ObjectCaller
 {
 public:
     
-    ObjectCaller(const Function &f);
+    /**
+     * \brief Constructor
+     *
+     * \param fn The Function to be called
+     * \return a Function reference
+     */
+    ObjectCaller(const Function &fn);
     
+    /**
+     * \brief Get the function begin used
+     *
+     * \return a Function reference
+     */
     const Function& function() const { return m_func; }
     
     /**
      * \brief Call the function
      *
-     * \param object Object
+     * \param obj Object
      * \param args Arguments to pass to the function, for example "ponder::Args::empty"
      *
      * \return Value returned by the function call
@@ -201,6 +221,11 @@ public:
     
     FunctionCaller(const Function &f);
     
+    /**
+     * \brief Get the function begin used
+     *
+     * \return a Function reference
+     */
     const Function& function() const { return m_func; }
     
     /**
@@ -352,15 +377,15 @@ void ObjectFactory::destruct(const UserObject& object) const
 
 ObjectCaller::ObjectCaller(const Function &f)
     :   m_func(f)
-    ,   m_caller(std::get<uses::Users::eRuntimeModule>(
-                 *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData())))
+    ,   m_caller(std::get<uses::Uses::eRuntimeModule>(
+                 *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(m_func.getUsesData())))
 {
 }
 
 FunctionCaller::FunctionCaller(const Function &f)
     :   m_func(f)
-    ,   m_caller(std::get<uses::Users::eRuntimeModule>(
-                 *reinterpret_cast<const uses::Users::PerFunctionUserData*>(m_func.getUserData())))
+    ,   m_caller(std::get<uses::Uses::eRuntimeModule>(
+                 *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(m_func.getUsesData())))
 {
 }
     
