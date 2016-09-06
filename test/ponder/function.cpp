@@ -256,20 +256,27 @@ PONDER_AUTO_TYPE(FunctionTest::ClassB,  &FunctionTest::declare)
 
 using namespace FunctionTest;
 
+struct FunctionTestFixture
+{
+    FunctionTestFixture()
+    :   metaclass(ponder::classByType<MyClass>())
+    {
+        for (int i = 1; i <= 22; ++i)
+        {
+            functions[i] = &metaclass.function("f" + std::to_string(i));
+        }
+    }
+
+    const ponder::Class &metaclass;
+    const ponder::Function *functions[23];
+};
+
 //-----------------------------------------------------------------------------
 //                         Tests for ponder::Function
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Functions can be registered")
+TEST_CASE_METHOD(FunctionTestFixture, "Functions can be registered")
 {
-    const ponder::Function* functions[23];
-    
-    const ponder::Class& metaclass = ponder::classByType<MyClass>();
-    for (int i = 1; i <= 22; ++i)
-    {
-        functions[i] = &metaclass.function("f" + std::to_string(i));
-    }
-
     SECTION("functions are classified")
     {
         IS_TRUE(functions[1]->kind() == ponder::FunctionKind::Function);
@@ -415,16 +422,8 @@ TEST_CASE("Functions can be registered")
 
 // Leave tests here for now. Possibly move in future as runtime is user module.
 
-TEST_CASE("Registered functions can be called with the runtime")
+TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with the runtime")
 {
-    const ponder::Function* functions[23];
-    
-    const ponder::Class& metaclass = ponder::classByType<MyClass>();
-    for (int i = 1; i <= 22; ++i)
-    {
-        functions[i] = &metaclass.function("f" + std::to_string(i));
-    }
-
     SECTION("FunctionCaller can be called with Args")
     {
         using ponder::runtime::ObjectCaller;
