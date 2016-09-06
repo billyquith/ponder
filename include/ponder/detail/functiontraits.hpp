@@ -176,7 +176,7 @@ struct RefDetails<std::list<T>(C::*)>
 template <typename T, typename E = void>
 struct FunctionTraits
 {
-    static constexpr FunctionFamily family = FunctionFamily::None;
+    static constexpr FunctionKind kind = FunctionKind::None;
     static constexpr bool isFunction = false;
 };
 
@@ -187,7 +187,7 @@ template <typename T>
 struct FunctionTraits<T,
     typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
-    static constexpr FunctionFamily family = FunctionFamily::Function;
+    static constexpr FunctionKind kind = FunctionKind::Function;
     static constexpr bool isFunction = true;
     
     typedef typename function::FunctionDetails<T> Details;
@@ -201,7 +201,7 @@ struct FunctionTraits<T,
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>
 {
-    static constexpr FunctionFamily family = FunctionFamily::MemberFunction;
+    static constexpr FunctionKind kind = FunctionKind::MemberFunction;
     static constexpr bool isFunction = true;
     
     typedef typename function::MethodDetails<T> Details;
@@ -218,7 +218,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
-    static constexpr FunctionFamily family = FunctionFamily::MemberObject;
+    static constexpr FunctionKind kind = FunctionKind::MemberObject;
     static constexpr bool isFunction = false;
     
     typedef typename function::RefDetails<T>::RefType ReturnType;
@@ -230,7 +230,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::value>::type>
 {
-    static constexpr FunctionFamily family = FunctionFamily::BindExpression;
+    static constexpr FunctionKind kind = FunctionKind::BindExpression;
     static constexpr bool isFunction = true;
     
     typedef typename T::result_type ReturnType;
@@ -244,7 +244,7 @@ struct FunctionTraits<T,
     typename std::enable_if<function::IsCallable<T>::value
                             && function::IsFunctionWrapper<T>::value>::type>
 {
-    static constexpr FunctionFamily family = FunctionFamily::FunctionWrapper;
+    static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
     static constexpr bool isFunction = true;
     
     typedef function::CallableDetails<T> Details;
@@ -260,7 +260,7 @@ struct FunctionTraits<T,
     typename std::enable_if<function::IsCallable<T>::value
                             && !function::IsFunctionWrapper<T>::value>::type>
 {
-    static constexpr FunctionFamily family = FunctionFamily::Lambda;
+    static constexpr FunctionKind kind = FunctionKind::Lambda;
     static constexpr bool isFunction = true;
     
     typedef function::CallableDetails<T> Details;

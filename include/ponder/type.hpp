@@ -32,8 +32,8 @@
 #define PONDER_TYPE_HPP
 
 
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief Special empty type associated to \c noType
  *
@@ -61,16 +61,18 @@ enum class ValueType
 };
 
     
-// Type of function recognised.
-enum class FunctionFamily
+/**
+ * \brief Enumeration of the kinds, or families, of function recognised
+ */
+enum class FunctionKind
 {
-    None,               // not a function
-    Function,           // a function
-    MemberFunction,     // function in a class or struct
-    MemberObject,       // object in a class or struct
-    FunctionWrapper,    // std::function<>
-    BindExpression,     // std::bind()
-    Lambda              // lambda function [](){}
+    None,               ///< not a function
+    Function,           ///< a function
+    MemberFunction,     ///< function in a class or struct
+    MemberObject,       ///< object in a class or struct
+    FunctionWrapper,    ///< `std::function<>`
+    BindExpression,     ///< `std::bind()`
+    Lambda              ///< lambda function `[](){}`
 };
     
 } // namespace ponder

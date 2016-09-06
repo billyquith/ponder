@@ -38,7 +38,7 @@
 namespace ponder {
 namespace detail {    
 
-/// Type classification for a type relating to an object.
+/// Type kind for a type relating to an object.
 enum class ObjectType
 {
     None,               // not an object
@@ -87,7 +87,7 @@ struct ObjectTraits
 {
     static constexpr bool isWritable = false;
     static constexpr bool isRef = false;
-    static constexpr ObjectType family = ObjectType::Object;
+    static constexpr ObjectType kind = ObjectType::Object;
 
     typedef T& RefReturnType;
     typedef typename RawType<T>::Type DataType;
@@ -103,7 +103,7 @@ struct ObjectTraits<T*>
 {
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectType family = ObjectType::Pointer;
+    static constexpr ObjectType kind = ObjectType::Pointer;
 
     typedef T* RefReturnType;
     typedef T* PointerType;
@@ -121,7 +121,7 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 {
     static constexpr bool isWritable = !std::is_const<U>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectType family = ObjectType::SmartPointer;
+    static constexpr ObjectType kind = ObjectType::SmartPointer;
 
     typedef U* RefReturnType;
     typedef U* PointerType;
@@ -139,7 +139,7 @@ struct ObjectTraits<T[N]>
 {
     static constexpr bool isWritable = false;
     static constexpr bool isRef = true;
-    static constexpr ObjectType family = ObjectType::BuiltinArray;
+    static constexpr ObjectType kind = ObjectType::BuiltinArray;
 
     typedef T(&RefReturnType)[N];
     typedef typename RawType<T>::Type DataType;
@@ -155,7 +155,7 @@ struct ObjectTraits<T&,
 {
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectType family = ObjectType::Reference;
+    static constexpr ObjectType kind = ObjectType::Reference;
 
     typedef T& RefReturnType;
     typedef T* PointerType;
@@ -174,7 +174,7 @@ struct ObjectTraits<T&,
                 std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
-    static constexpr ObjectType family = ObjectType::None;
+    static constexpr ObjectType kind = ObjectType::None;
 };
 
 /*
@@ -183,7 +183,7 @@ struct ObjectTraits<T&,
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
 {
-    static constexpr ObjectType family = ObjectType::None;
+    static constexpr ObjectType kind = ObjectType::None;
 };
 
 } // namespace detail

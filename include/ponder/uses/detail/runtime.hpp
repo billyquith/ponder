@@ -274,21 +274,21 @@ private:
 };
 
     
-// Map from function traits type (FunctionFamily) to function implementation type.
+// Map from function traits type (FunctionKind) to function implementation type.
 // We do this to handle differing function types, e.g. static function have no instance
 // parameter.
 template <int FuncTypeWhich, typename U=void> struct FuncImplTypeMap;
     
-template <> struct FuncImplTypeMap<(int)FunctionFamily::Function>
+template <> struct FuncImplTypeMap<(int)FunctionKind::Function>
 { static constexpr int Type = FuncImplStaticFunction; };
 
-template <> struct FuncImplTypeMap<(int)FunctionFamily::FunctionWrapper>
+template <> struct FuncImplTypeMap<(int)FunctionKind::FunctionWrapper>
 { static constexpr int Type = FuncImplStaticFunction; };
 
-template <> struct FuncImplTypeMap<(int)FunctionFamily::Lambda>
+template <> struct FuncImplTypeMap<(int)FunctionKind::Lambda>
 { static constexpr int Type = FuncImplStaticFunction; };
 
-template <> struct FuncImplTypeMap<(int)FunctionFamily::MemberFunction>
+template <> struct FuncImplTypeMap<(int)FunctionKind::MemberFunction>
 { static constexpr int Type = FuncImplClassFunctionWrapper; };
 
 

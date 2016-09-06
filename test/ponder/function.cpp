@@ -272,37 +272,37 @@ TEST_CASE("Functions can be registered")
 
     SECTION("functions are classified")
     {
-        IS_TRUE(functions[1]->classification() == ponder::FunctionFamily::Function);
-        IS_TRUE(functions[2]->classification() == ponder::FunctionFamily::Function);
-        IS_TRUE(functions[3]->classification() == ponder::FunctionFamily::Function);
+        IS_TRUE(functions[1]->kind() == ponder::FunctionKind::Function);
+        IS_TRUE(functions[2]->kind() == ponder::FunctionKind::Function);
+        IS_TRUE(functions[3]->kind() == ponder::FunctionKind::Function);
         
-        IS_TRUE(functions[4]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[5]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[6]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[7]->classification() == ponder::FunctionFamily::MemberFunction);
+        IS_TRUE(functions[4]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[5]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[6]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[7]->kind() == ponder::FunctionKind::MemberFunction);
         
-        IS_TRUE(functions[8]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[9]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[10]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[11]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[12]->classification() == ponder::FunctionFamily::MemberFunction);
-        IS_TRUE(functions[13]->classification() == ponder::FunctionFamily::MemberFunction);
+        IS_TRUE(functions[8]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[9]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[10]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[11]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[12]->kind() == ponder::FunctionKind::MemberFunction);
+        IS_TRUE(functions[13]->kind() == ponder::FunctionKind::MemberFunction);
         
-        IS_TRUE(functions[14]->classification() == ponder::FunctionFamily::Lambda);
-        IS_TRUE(functions[15]->classification() == ponder::FunctionFamily::Lambda);
-        IS_TRUE(functions[16]->classification() == ponder::FunctionFamily::Lambda);
-        IS_TRUE(functions[17]->classification() == ponder::FunctionFamily::Lambda);
-        IS_TRUE(functions[18]->classification() == ponder::FunctionFamily::Lambda);
-        IS_TRUE(functions[19]->classification() == ponder::FunctionFamily::Lambda);
+        IS_TRUE(functions[14]->kind() == ponder::FunctionKind::Lambda);
+        IS_TRUE(functions[15]->kind() == ponder::FunctionKind::Lambda);
+        IS_TRUE(functions[16]->kind() == ponder::FunctionKind::Lambda);
+        IS_TRUE(functions[17]->kind() == ponder::FunctionKind::Lambda);
+        IS_TRUE(functions[18]->kind() == ponder::FunctionKind::Lambda);
+        IS_TRUE(functions[19]->kind() == ponder::FunctionKind::Lambda);
         
-        IS_TRUE(functions[20]->classification() == ponder::FunctionFamily::FunctionWrapper);
-        IS_TRUE(functions[21]->classification() == ponder::FunctionFamily::FunctionWrapper);
-        IS_TRUE(functions[22]->classification() == ponder::FunctionFamily::FunctionWrapper);
+        IS_TRUE(functions[20]->kind() == ponder::FunctionKind::FunctionWrapper);
+        IS_TRUE(functions[21]->kind() == ponder::FunctionKind::FunctionWrapper);
+        IS_TRUE(functions[22]->kind() == ponder::FunctionKind::FunctionWrapper);
 
-        IS_TRUE(metaclass.function("nonCopyRef").classification()
-                == ponder::FunctionFamily::Function);
-        IS_TRUE(metaclass.function("nonCopyPtr").classification()
-                == ponder::FunctionFamily::Function);
+        IS_TRUE(metaclass.function("nonCopyRef").kind()
+                == ponder::FunctionKind::Function);
+        IS_TRUE(metaclass.function("nonCopyPtr").kind()
+                == ponder::FunctionKind::Function);
     }
 
     SECTION("functions have a return type")
