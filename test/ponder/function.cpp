@@ -224,9 +224,11 @@ namespace FunctionTest
         
             // ***** std::function *****
             .function("funcWrapper1",
-                      std::function<int (MyClass, int)>(std::bind(&MyClass::funcWrapper1, _1, _2)))
+                      std::function<int (MyClass, int)>(
+                                                std::bind(&MyClass::funcWrapper1, _1, _2)))
             .function("funcWrapper2",
-                      std::function<int (MyClass, int)>(std::bind(&MyClass::funcWrapper2, _1, _2, 20)))
+                      std::function<int (MyClass, int)>(
+                                                std::bind(&MyClass::funcWrapper2, _1, _2, 20)))
             .function("funcWrapper3",
                       std::function<int (MyClass, int)>(
                           std::bind(std::bind(&MyClass::funcWrapper3, _1, _2, _3, 30), _1, _2, 20)))
@@ -475,133 +477,145 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
 {
     SECTION("FunctionCaller can be called with Args")
     {
+        using ponder::Value;
         using ponder::runtime::ObjectCaller;
         using ponder::runtime::FunctionCaller;
         
         MyClass object;
         
-        IS_TRUE(FunctionCaller(fn_nonMember1).call(ponder::Args(&object)) == ponder::Value::nothing);
-        IS_TRUE(FunctionCaller(fn_nonMember2).call(ponder::Args(&object, 10)) == ponder::Value(12));
-        IS_TRUE(FunctionCaller(fn_nonMember3).call(ponder::Args(&object)) == ponder::Value("3"));
+        IS_TRUE(FunctionCaller(fn_nonMember1).call(ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_nonMember2).call(ponder::Args(&object, 10)) == Value(12));
+        IS_TRUE(FunctionCaller(fn_nonMember3).call(ponder::Args(&object)) == Value("3"));
         
         IS_TRUE(ObjectCaller(fn_member1).call(object, ponder::Args()).to<MyType>() == MyType(4));
         IS_TRUE(ObjectCaller(fn_member2).call(object, ponder::Args()).to<MyType>() == MyType(5));
-        IS_TRUE(ObjectCaller(fn_member3).call(object, ponder::Args()) == ponder::Value::nothing);
-        IS_TRUE(ObjectCaller(fn_member4).call(object, ponder::Args("hi")) == ponder::Value("hi"));
+        IS_TRUE(ObjectCaller(fn_member3).call(object, ponder::Args()) == Value::nothing);
+        IS_TRUE(ObjectCaller(fn_member4).call(object, ponder::Args("hi")) == Value("hi"));
         
-        IS_TRUE(ObjectCaller(fn_memberParams1).call(object, ponder::Args()) == ponder::Value::nothing);
-        IS_TRUE(ObjectCaller(fn_memberParams2).call(object, ponder::Args(true)) == ponder::Value::nothing);
-        IS_TRUE(ObjectCaller(fn_memberParams3).call(object, ponder::Args(1., 2.f)) == ponder::Value::nothing);
-        IS_TRUE(ObjectCaller(fn_memberParams4).call(object, ponder::Args(1, 2, 3)) == ponder::Value::nothing);
-        IS_TRUE(ObjectCaller(fn_memberParams5).call(object, ponder::Args("1", "2", "3", "4")) == ponder::Value::nothing);
-        IS_TRUE(ObjectCaller(fn_memberParams6).call(object, ponder::Args(Zero, One, Two, Zero, One)) == ponder::Value::nothing);
+        IS_TRUE(ObjectCaller(fn_memberParams1)
+                    .call(object, ponder::Args()) == Value::nothing);
+        IS_TRUE(ObjectCaller(fn_memberParams2)
+                    .call(object, ponder::Args(true)) == Value::nothing);
+        IS_TRUE(ObjectCaller(fn_memberParams3)
+                    .call(object, ponder::Args(1., 2.f)) == Value::nothing);
+        IS_TRUE(ObjectCaller(fn_memberParams4)
+                    .call(object, ponder::Args(1, 2, 3)) == Value::nothing);
+        IS_TRUE(ObjectCaller(fn_memberParams5)
+                    .call(object, ponder::Args("1", "2", "3", "4")) == Value::nothing);
+        IS_TRUE(ObjectCaller(fn_memberParams6)
+                    .call(object, ponder::Args(Zero, One, Two, Zero, One))
+                        == Value::nothing);
         
-        IS_TRUE(FunctionCaller(fn_lambdaFunc1).call(ponder::Args(object)) == ponder::Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc2).call(ponder::Args(object)) == ponder::Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc3).call(ponder::Args(object)) == ponder::Value(16));
-        IS_TRUE(FunctionCaller(fn_lambdaFunc4).call(ponder::Args(object, 20)) == ponder::Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc5).call(ponder::Args(object)) == ponder::Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc6).call(ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc1).call(ponder::Args(object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc2).call(ponder::Args(object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc3).call(ponder::Args(object)) == Value(16));
+        IS_TRUE(FunctionCaller(fn_lambdaFunc4).call(ponder::Args(object, 20)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc5).call(ponder::Args(object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc6).call(ponder::Args(object)) == Value::nothing);
         
-        IS_TRUE(FunctionCaller(fn_funcWrapper1).call(ponder::Args(object, 10)) == ponder::Value(10));
-        IS_TRUE(FunctionCaller(fn_funcWrapper2).call(ponder::Args(object, 10)) == ponder::Value(30));
-        IS_TRUE(FunctionCaller(fn_funcWrapper3).call(ponder::Args(object, 10)) == ponder::Value(60));
+        IS_TRUE(FunctionCaller(fn_funcWrapper1).call(ponder::Args(object, 10)) == Value(10));
+        IS_TRUE(FunctionCaller(fn_funcWrapper2).call(ponder::Args(object, 10)) == Value(30));
+        IS_TRUE(FunctionCaller(fn_funcWrapper3).call(ponder::Args(object, 10)) == Value(60));
         
         auto const& mc = ponder::classByType<MyClass>();
-        ponder::Value r = FunctionCaller(fn_nonClassFunc1).call();
+        Value r = FunctionCaller(fn_nonClassFunc1).call();
         IS_TRUE(r.to<int>() == 77);
         
-        ponder::Value r2 = FunctionCaller(fn_nonClassFunc2).call(ponder::Args(2.5f, 3.0f));
+        Value r2 = FunctionCaller(fn_nonClassFunc2).call(ponder::Args(2.5f, 3.0f));
         REQUIRE(r2.to<float>() == 7.5f);
         
-        ponder::Value ncr = FunctionCaller(fn_nonCopyRef).call();
-        ponder::Value ncp = FunctionCaller(fn_nonCopyPtr).call();
+        Value ncr = FunctionCaller(fn_nonCopyRef).call();
+        Value ncp = FunctionCaller(fn_nonCopyPtr).call();
     }
 
     SECTION("Function call helpers can be used with ponder::Args")
     {
+        using ponder::Value;
         using namespace ponder::runtime;
         
         MyClass object;
         
-        IS_TRUE(callStatic(fn_nonMember1, ponder::Args(&object)) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_nonMember2, ponder::Args(&object, 10)) == ponder::Value(12));
-        IS_TRUE(callStatic(fn_nonMember3, ponder::Args(&object)) == ponder::Value("3"));
+        IS_TRUE(callStatic(fn_nonMember1, ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_nonMember2, ponder::Args(&object, 10)) == Value(12));
+        IS_TRUE(callStatic(fn_nonMember3, ponder::Args(&object)) == Value("3"));
         
         IS_TRUE(call(fn_member1, object, ponder::Args()).to<MyType>() == MyType(4));
         IS_TRUE(call(fn_member2, object, ponder::Args()).to<MyType>() == MyType(5));
-        IS_TRUE(call(fn_member3, object, ponder::Args()) == ponder::Value::nothing);
-        IS_TRUE(call(fn_member4, object, ponder::Args("hi")) == ponder::Value("hi"));
-        IS_TRUE(call(fn_memberParams1, object, ponder::Args()) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams2, object, ponder::Args(true)) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams3, object, ponder::Args(1., 2.f)) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams4, object, ponder::Args(1, 2, 3)) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams5, object, ponder::Args("1", "2", "3", "4")) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams6, object, ponder::Args(Zero, One, Two, Zero, One)) == ponder::Value::nothing);
+        IS_TRUE(call(fn_member3, object, ponder::Args()) == Value::nothing);
+        IS_TRUE(call(fn_member4, object, ponder::Args("hi")) == Value("hi"));
+        IS_TRUE(call(fn_memberParams1, object, ponder::Args()) == Value::nothing);
+        IS_TRUE(call(fn_memberParams2, object, ponder::Args(true)) == Value::nothing);
+        IS_TRUE(call(fn_memberParams3, object, ponder::Args(1., 2.f)) == Value::nothing);
+        IS_TRUE(call(fn_memberParams4, object, ponder::Args(1, 2, 3)) == Value::nothing);
+        IS_TRUE(call(fn_memberParams5, object, ponder::Args("1", "2", "3", "4"))
+                    == Value::nothing);
+        IS_TRUE(call(fn_memberParams6, object, ponder::Args(Zero, One, Two, Zero, One))
+                    == Value::nothing);
         
-        IS_TRUE(callStatic(fn_lambdaFunc1, ponder::Args(object)) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc2, ponder::Args(object)) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc3, ponder::Args(object)) == ponder::Value(16));
-        IS_TRUE(callStatic(fn_lambdaFunc4, ponder::Args(object, 20)) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc5, ponder::Args(object)) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc6, ponder::Args(object)) == ponder::Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc1, ponder::Args(object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc2, ponder::Args(object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc3, ponder::Args(object)) == Value(16));
+        IS_TRUE(callStatic(fn_lambdaFunc4, ponder::Args(object, 20)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc5, ponder::Args(object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc6, ponder::Args(object)) == Value::nothing);
         
-        IS_TRUE(callStatic(fn_funcWrapper1, ponder::Args(object, 10)) == ponder::Value(10));
-        IS_TRUE(callStatic(fn_funcWrapper2, ponder::Args(object, 10)) == ponder::Value(30));
-        IS_TRUE(callStatic(fn_funcWrapper3, ponder::Args(object, 10)) == ponder::Value(60));
+        IS_TRUE(callStatic(fn_funcWrapper1, ponder::Args(object, 10)) == Value(10));
+        IS_TRUE(callStatic(fn_funcWrapper2, ponder::Args(object, 10)) == Value(30));
+        IS_TRUE(callStatic(fn_funcWrapper3, ponder::Args(object, 10)) == Value(60));
         
         auto const& mc = ponder::classByType<MyClass>();
-        ponder::Value r = FunctionCaller(fn_nonClassFunc1).call();
+        Value r = FunctionCaller(fn_nonClassFunc1).call();
         IS_TRUE(r.to<int>() == 77);
         
-        ponder::Value r2 = callStatic(fn_nonClassFunc2, ponder::Args(2.5f, 3.0f));
+        Value r2 = callStatic(fn_nonClassFunc2, ponder::Args(2.5f, 3.0f));
         REQUIRE(r2.to<float>() == 7.5f);
         
-        ponder::Value ncr = callStatic(fn_nonCopyRef);
-        ponder::Value ncp = callStatic(fn_nonCopyPtr);
+        Value ncr = callStatic(fn_nonCopyRef);
+        Value ncp = callStatic(fn_nonCopyPtr);
     }
     
     SECTION("Function call helpers can be used direct")
     {
+        using ponder::Value;
         using namespace ponder::runtime;
         
         MyClass object;
         
-        IS_TRUE(callStatic(fn_nonMember1, &object) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_nonMember2, &object, 10) == ponder::Value(12));
-        IS_TRUE(callStatic(fn_nonMember3, &object) == ponder::Value("3"));
+        IS_TRUE(callStatic(fn_nonMember1, &object) == Value::nothing);
+        IS_TRUE(callStatic(fn_nonMember2, &object, 10) == Value(12));
+        IS_TRUE(callStatic(fn_nonMember3, &object) == Value("3"));
         
         IS_TRUE(call(fn_member1, object).to<MyType>() == MyType(4));
         IS_TRUE(call(fn_member2, object).to<MyType>() == MyType(5));
-        IS_TRUE(call(fn_member3, object) == ponder::Value::nothing);
-        IS_TRUE(call(fn_member4, object, "hi") == ponder::Value("hi"));
-        IS_TRUE(call(fn_memberParams1, object) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams2, object, true) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams3, object, 1., 2.f) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams4, object, 1, 2, 3) == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams5, object, "1", "2", "3", "4") == ponder::Value::nothing);
-        IS_TRUE(call(fn_memberParams6, object, Zero, One, Two, Zero, One) == ponder::Value::nothing);
+        IS_TRUE(call(fn_member3, object) == Value::nothing);
+        IS_TRUE(call(fn_member4, object, "hi") == Value("hi"));
+        IS_TRUE(call(fn_memberParams1, object) == Value::nothing);
+        IS_TRUE(call(fn_memberParams2, object, true) == Value::nothing);
+        IS_TRUE(call(fn_memberParams3, object, 1., 2.f) == Value::nothing);
+        IS_TRUE(call(fn_memberParams4, object, 1, 2, 3) == Value::nothing);
+        IS_TRUE(call(fn_memberParams5, object, "1", "2", "3", "4") == Value::nothing);
+        IS_TRUE(call(fn_memberParams6, object, Zero, One, Two, Zero, One) == Value::nothing);
         
-        IS_TRUE(callStatic(fn_lambdaFunc1, object) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc2, object) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc3, object) == ponder::Value(16));
-        IS_TRUE(callStatic(fn_lambdaFunc4, object, 20) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc5, object) == ponder::Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc6, object) == ponder::Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc1, object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc2, object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc3, object) == Value(16));
+        IS_TRUE(callStatic(fn_lambdaFunc4, object, 20) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc5, object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc6, object) == Value::nothing);
         
-        IS_TRUE(callStatic(fn_funcWrapper1, object, 10) == ponder::Value(10));
-        IS_TRUE(callStatic(fn_funcWrapper2, object, 10) == ponder::Value(30));
-        IS_TRUE(callStatic(fn_funcWrapper3, object, 10) == ponder::Value(60));
+        IS_TRUE(callStatic(fn_funcWrapper1, object, 10) == Value(10));
+        IS_TRUE(callStatic(fn_funcWrapper2, object, 10) == Value(30));
+        IS_TRUE(callStatic(fn_funcWrapper3, object, 10) == Value(60));
         
         auto const& mc = ponder::classByType<MyClass>();
-        ponder::Value r = FunctionCaller(fn_nonClassFunc1).call();
+        Value r = FunctionCaller(fn_nonClassFunc1).call();
         IS_TRUE(r.to<int>() == 77);
         
-        ponder::Value r2 = callStatic(fn_nonClassFunc2, 2.5f, 3.0f);
+        Value r2 = callStatic(fn_nonClassFunc2, 2.5f, 3.0f);
         REQUIRE(r2.to<float>() == 7.5f);
         
-        ponder::Value ncr = callStatic(fn_nonCopyRef);
-        ponder::Value ncp = callStatic(fn_nonCopyPtr);
+        Value ncr = callStatic(fn_nonCopyRef);
+        Value ncp = callStatic(fn_nonCopyPtr);
     }
 
     SECTION("calling null functions is an error")
