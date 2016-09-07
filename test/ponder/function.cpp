@@ -161,18 +161,19 @@ namespace FunctionTest
     }
     
     
-    class ClassA
+    class DataHolder
     {
     public:
-        ClassA() : TestMember(0) {}
+        DataHolder() : TestMember(0) {}
         int TestMember;
     };
     
-    class ClassB
+    class DataModifier
     {
     public:
-        void ModifyA(ClassA* obj) { obj->TestMember = 5; }
+        void modifyData(DataHolder* obj) { obj->TestMember = 5; }
     };
+    
     
     void declare()
     {
@@ -241,13 +242,13 @@ namespace FunctionTest
             .function("nonCopyPtr", &MyClass::staticFuncRetPtr)
             ;
         
-        ponder::Class::declare<ClassA>()
+        ponder::Class::declare<DataHolder>()
             .constructor()
-            .property("TestMember", &ClassA::TestMember);
+            .property("TestMember", &DataHolder::TestMember);
         
-        ponder::Class::declare<ClassB>()
+        ponder::Class::declare<DataModifier>()
             .constructor()
-            .function("ModifyA", &ClassB::ModifyA);
+            .function("modifyData", &DataModifier::modifyData);
     }
 }
 
@@ -256,8 +257,8 @@ PONDER_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::NonCopyable, &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
-PONDER_AUTO_TYPE(FunctionTest::ClassA,  &FunctionTest::declare)
-PONDER_AUTO_TYPE(FunctionTest::ClassB,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::DataHolder,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::DataModifier,  &FunctionTest::declare)
 
 using namespace FunctionTest;
 
@@ -702,13 +703,13 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
 
 TEST_CASE("Functions can modify objects")
 {
-    // ModifyA() is called on an object of class A with the intent to modify that object:
-    ClassA objectA;
+    // modifyData() is called on an object of class A with the intent to modify that object:
+    DataHolder objectA;
     
-    const ponder::Class& metaClassB = ponder::classByType<FunctionTest::ClassB>();
+    const ponder::Class& metaClassB = ponder::classByType<FunctionTest::DataModifier>();
     ponder::runtime::ObjectFactory bfact(metaClassB);
     ponder::UserObject wrapperB =  bfact.construct();
-    ponder::runtime::ObjectCaller functionB(metaClassB.function("ModifyA"));
+    ponder::runtime::ObjectCaller functionB(metaClassB.function("modifyData"));
     
     REQUIRE(objectA.TestMember == 0);
     functionB.call(wrapperB, &objectA);
