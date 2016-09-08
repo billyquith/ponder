@@ -61,13 +61,13 @@ typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
 }
 
 template <typename T>
-UserObject UserObject::ref(T& object)
+UserObject UserObject::makeRef(T& object)
 {
     return UserObject(object);
 }
 
 template <typename T>
-UserObject UserObject::ref(const T& object)
+UserObject UserObject::makeRef(const T& object)
 {
     typedef detail::ObjectTraits<const T&> Traits;
     typedef detail::ObjectHolderByConstRef<typename Traits::DataType> Holder;
@@ -80,7 +80,7 @@ UserObject UserObject::ref(const T& object)
 }
 
 template <typename T>
-UserObject UserObject::copy(const T& object)
+UserObject UserObject::makeCopy(const T& object)
 {
     typedef detail::ObjectTraits<const T&> Traits;
     typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
@@ -90,6 +90,12 @@ UserObject UserObject::copy(const T& object)
     userObject.m_holder.reset(new Holder(Traits::getPointer(object)));
 
     return userObject;
+}
+
+template <typename T>
+const T& UserObject::cref() const
+{
+    return *reinterpret_cast<T*>(m_holder->object());
 }
 
 } // namespace ponder

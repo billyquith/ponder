@@ -98,7 +98,7 @@ public:
      *
      * \return Type of the value
      */
-    ValueKind type() const;
+    ValueKind type() const;  // XXXX rename to kind()
 
     /**
      * \brief Convert the value to the type T
@@ -108,7 +108,13 @@ public:
      * \throw BadType the stored value is not convertible to T
      */
     template <typename T>
-    T to() const;
+    T to() const;           // XXXX copies
+
+    template <typename T>
+    T& ref() const;           // XXXX addeda
+
+    template <typename T>
+    const T& cref() const;           // XXXX addeda
 
     /**
      * \brief Cast operator to implicitly convert the value to a type T
@@ -118,7 +124,7 @@ public:
      * \throw BadType the stored value is not convertible to T
      */
     template <typename T>
-    operator T() const;
+    operator T() const;     // XXXX remove? behaviour unclear.
 
     /**
      * \brief Check if the stored value can be converted to a type T

@@ -54,8 +54,8 @@ class ParentObject;
  * be passed to and manipulated by all the entities in Ponder.
  *
  * \note UserObjects are stored interally as objects (a copy) or references (an existing 
- *       object). To be sure which you are constructing use UserObject::ref() or
- *       UserObject::copy().
+ *       object). To be sure which you are constructing use UserObject::makeRef() or
+ *       UserObject::makeCopy().
  *
  * \sa EnumObject
  */
@@ -73,7 +73,7 @@ public:
     /**
      * \brief Construct the user object from an instance
      *
-     * User objects. Also see UserObject::ref() and UserObject::copy().
+     * User objects. Also see UserObject::makeRef() and UserObject::makeCopy().
      *
      * \param object Instance to store in the user object
      */
@@ -90,7 +90,7 @@ public:
      * \return UserObject containing a reference to \a  object
      */
     template <typename T>
-    static UserObject ref(T& object);
+    static UserObject makeRef(T& object);
     
     /**
      * \brief Construct a user object from a const reference to an object
@@ -102,7 +102,7 @@ public:
      * \return UserObject containing a const reference to \a object
      */
     template <typename T>
-    static UserObject ref(const T& object);
+    static UserObject makeRef(const T& object);
     
     /**
      * \brief Construct a user object with a copy of an object
@@ -114,7 +114,7 @@ public:
      * \return UserObject containing a copy of \a object
      */
     template <typename T>
-    static UserObject copy(const T& object);
+    static UserObject makeCopy(const T& object);
 
     /**
      * \brief Copy constructor
@@ -147,6 +147,9 @@ public:
      * \return Pointer to the stored object
      */
     void* pointer() const;
+    
+    template <typename T>
+    const T& cref() const;
 
     /**
      * \brief Retrieve the metaclass of the stored instance

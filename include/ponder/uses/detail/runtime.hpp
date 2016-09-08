@@ -33,56 +33,81 @@
 
 namespace ponder {
 namespace runtime {
-    
-namespace policy {
-
-} // namespace policy
-    
 namespace impl {
-        
-class FunctionCaller
-{
-public:
-    FunctionCaller(const IdRef name) : m_name(name) {}
-    FunctionCaller(const FunctionCaller&) = delete;
-    virtual ~FunctionCaller() {}
+
+//-----------------------------------------------------------------------------
+// Handle returning copies
     
-    const IdRef name() const { return m_name; }
+template <typename R, typename U = void> struct CallReturnCopy;
+
+template <typename R>
+struct CallReturnCopy<R, typename std::enable_if<!detail::IsUserType<R>::value>::type>
+{
+    static inline Value value(const R& o) {return Value(o);}
+};
+
+template <typename R>
+struct CallReturnCopy<R, typename std::enable_if<detail::IsUserType<R>::value>::type>
+{
+    static inline UserObject value(const R& o) {return UserObject::makeCopy(o);}
+};
+
+//-----------------------------------------------------------------------------
+// Handle returning internal references
     
-    virtual Value execute(const UserObject&, const Args& args) const = 0;
+template <typename R, typename U = void> struct CallReturnInternalRef;
+
+template <typename R>
+struct CallReturnInternalRef<R,
+    typename std::enable_if<
+        !detail::IsUserType<R>::value
+        && !std::is_same<typename detail::RawType<R>::Type, UserObject>::value
+    >::type>
+{
+    static inline Value value(const R& o) {return Value(o);}
+};
+
+template <typename R>
+struct CallReturnInternalRef<R,
+    typename std::enable_if<
+        detail::IsUserType<R>::value
+        || std::is_same<typename detail::RawType<R>::Type, UserObject>::value
+    >::type>
+{
+    static inline UserObject value(const R& o) {return UserObject::makeRef(o);}
+};
+
+//-----------------------------------------------------------------------------
+// Choose which returner to use, based on policy
+//  - map policy kind to actionable policy type
     
-private:
-    const IdRef m_name;
-};
+template <typename Policies_t, typename R> struct ChooseCallReturner;
 
-/*
- *  The ValueMapper assumes all user objects converted to UserObjects are references,
- *  however, this is not correct if we return by value, i.e. Obj foo(); as opposed
- *  to: const Obj& foo();
- *  This template ensures that we return the correct UserObject holder type.
- */
-template <typename T, typename U = void>
-struct CallReturner
+template <typename... Ps, typename R>
+struct ChooseCallReturner<std::tuple<policy::ReturnCopy, Ps...>, R>
 {
-    static inline Value value(const T& o) {return Value(o);}
+    typedef CallReturnCopy<R> type;
 };
 
-template <typename T>
-struct CallReturner<T,
-    typename std::enable_if< detail::IsUserType<T>::value
-                          && !detail::IsUserObjRef<T>::value >::type>
+template <typename... Ps, typename R>
+struct ChooseCallReturner<std::tuple<policy::ReturnInternalRef, Ps...>, R>
 {
-    static inline UserObject value(const T& o) {return UserObject::copy(o);}
+    typedef CallReturnInternalRef<R> type;
 };
 
-template <typename T>
-struct CallReturner<T,
-    typename std::enable_if< detail::IsUserType<T>::value
-                          && detail::IsUserObjRef<T>::value >::type>
+template <typename R>
+    struct ChooseCallReturner<std::tuple<>, R> // default
 {
-    static inline UserObject value(const T& o) {return UserObject::ref(o);}
+    typedef CallReturnCopy<R> type;
 };
 
+template <typename P, typename... Ps, typename R>
+struct ChooseCallReturner<std::tuple<P, Ps...>, R> // recurse
+{
+    typedef typename ChooseCallReturner<std::tuple<Ps...>, R>::type type;
+};
+
+//-----------------------------------------------------------------------------
     
 /**
  * \brief Helper function which converts an argument to a C++ type
@@ -110,27 +135,17 @@ convertArg(const Args& args, std::size_t index, IdRef function)
     }
 }
 
-//template <typename T>
-//inline T convertArg(const Args& args, std::size_t index, IdRef function)
-//{
-//    try {
-//        return args[index].to<T>();
-//    }
-//    catch (const BadType&) {
-//        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
-//    }
-//}
+//-----------------------------------------------------------------------------
+// Object function call helper to allow specialisation by return type.
 
-/*
- * Object function call helper to allow specialisation by return type.
- */
-template <typename R, typename C>
+template <typename R, typename C, typename Policies_t>
 class CallObjectHelper
 {
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, C obj, const Args& args, IdRef name, detail::index_sequence<Is...>)
     {
-        return CallReturner<R>::value(func(obj, convertArg<A>(args, Is, name)...));
+        typedef typename ChooseCallReturner<Policies_t, R>::type CallReturner;
+        return CallReturner::value(func(obj, convertArg<A>(args, Is, name)...));
     }
 
 public:
@@ -142,11 +157,9 @@ public:
     }
 };
 
-/*
- * Specialization of CallObjectHelper for functions returning void
- */
-template <typename C>
-class CallObjectHelper<void, C>
+// Specialization of CallObjectHelper for functions returning void
+template <typename Policies_t, typename C>
+class CallObjectHelper<void, C, Policies_t>
 {
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, C obj, const Args& args, IdRef name, detail::index_sequence<Is...>)
@@ -164,16 +177,17 @@ public:
 };
     
 
-/*
- * Static function call helper to allow specialisation by return type.
- */
-template <typename R>
+//-----------------------------------------------------------------------------
+// Static function call helper to allow specialisation by return type.
+
+template <typename R, typename Policies_t>
 class CallStaticHelper
 {
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, const Args& args, IdRef name, detail::index_sequence<Is...>)
     {
-        return CallReturner<R>::value(func(convertArg<A>(args, Is, name)...));
+        typedef typename ChooseCallReturner<Policies_t, R>::type CallReturner;
+        return CallReturner::value(func(convertArg<A>(args, Is, name)...));
     }
     
 public:
@@ -185,11 +199,9 @@ public:
     }
 };
 
-/*
- * Specialization of CallStaticHelper for functions returning void
- */
-template <>
-class CallStaticHelper<void>
+// Specialization of CallStaticHelper for functions returning void
+template <typename Policies_t>
+class CallStaticHelper<void, Policies_t>
 {
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, const Args& args, IdRef name, detail::index_sequence<Is...>)
@@ -205,27 +217,40 @@ public:
         return call<F, A...>(func, args, name, detail::make_index_sequence<sizeof...(A)>());
     }
 };
+
+//-----------------------------------------------------------------------------
+// Base for runtime function caller
+
+class FunctionCaller
+{
+public:
+    FunctionCaller(const IdRef name) : m_name(name) {}
+    FunctionCaller(const FunctionCaller&) = delete;
+    virtual ~FunctionCaller() {}
     
+    const IdRef name() const { return m_name; }
     
+    virtual Value execute(const UserObject&, const Args& args) const = 0;
+    
+private:
+    const IdRef m_name;
+};
+    
+   
 enum FunctionImplType
 {
     FuncImplClassFunctionWrapper,
     FuncImplStaticFunction,
 };
     
-/**
- * \class FunctionCallerImpl
- *
- * \brief -
- *
+/*
  * The FunctionImpl class is a template which is specialized
  * according to the underlying function prototype.
  */
-template <int F, typename T = void> class FunctionCallerImpl;
+template <int E, typename Policies_t, typename T = void> class FunctionCallerImpl;
     
-
-template <typename C, typename R, typename... A>
-class FunctionCallerImpl<FuncImplClassFunctionWrapper, R (C, A...)> : public FunctionCaller
+template <typename Policies_t, typename C, typename R, typename... A>
+class FunctionCallerImpl<FuncImplClassFunctionWrapper, Policies_t, R (C, A...)> : public FunctionCaller
 {
 public:
     
@@ -239,7 +264,7 @@ protected:
     /// \see Function::execute
     Value execute(const UserObject& object, const Args& args) const
     {
-        return CallObjectHelper<R, C>::template
+        return CallObjectHelper<R, C, Policies_t>::template
             call<decltype(m_function), A...>(m_function, object.get<C>(), args, name());
     }
     
@@ -249,8 +274,8 @@ private:
 };
 
     
-template <typename R, typename... A>
-class FunctionCallerImpl<FuncImplStaticFunction, R (A...)> : public FunctionCaller
+template <typename Policies_t, typename R, typename... A>
+class FunctionCallerImpl<FuncImplStaticFunction, Policies_t, R (A...)> : public FunctionCaller
 {
 public:
     
@@ -264,7 +289,7 @@ protected:
     /// \see Function::execute
     Value execute(const UserObject& object, const Args& args) const
     {
-        return CallStaticHelper<R>::template
+        return CallStaticHelper<R, Policies_t>::template
             call<decltype(m_function), A...>(m_function, args, name());
     }
     

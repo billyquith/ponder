@@ -37,7 +37,9 @@
 
 namespace ponder {
 namespace detail {
-    
+
+//--------------------------------------------------------------------------------------
+
 struct FunctionParamInfo
 {
     const std::type_info *m_typeinfo;
@@ -75,6 +77,26 @@ struct FunctionApplyToParams<std::tuple<void>, B>
     }
 };
 
+//--------------------------------------------------------------------------------------    
+
+template <typename R, typename... P>
+struct ReturnPolicy
+{
+    static constexpr policy::ReturnKind kind = policy::ReturnKind::Copy;   // default
+};
+
+template <>
+struct ReturnPolicy<void>   // nothing returned
+{
+    static constexpr policy::ReturnKind kind = policy::ReturnKind::NoReturn;
+};
+
+template <typename R>
+struct ReturnPolicy<R, policy::ReturnInternalRef>
+{
+    static constexpr policy::ReturnKind kind = policy::ReturnKind::InternalRef;
+};
+
 //--------------------------------------------------------------------------------------
 // FunctionImpl
 //--------------------------------------------------------------------------------------
@@ -82,10 +104,11 @@ struct FunctionApplyToParams<std::tuple<void>, B>
 /*
  *  Bake the function type information into non-templated Function.
  */
-template <typename T, typename F>
+template <typename T, typename F, typename... P>
 class FunctionImpl : public Function
 {
     typedef T FuncTraits;
+    typedef std::tuple<P...> FuncPolicies;
     
     static constexpr std::size_t c_nParams =
         std::tuple_size<typename FuncTraits::Details::ParamTypes>::value;
@@ -94,11 +117,12 @@ class FunctionImpl : public Function
     
 public:
 
-    FunctionImpl(IdRef name, F function) : Function(name)
+    FunctionImpl(IdRef name, F function, P... policies) : Function(name)
     {
         m_name = name;
         m_funcType = FuncTraits::kind;
         m_returnType = mapType<typename FuncTraits::ReturnType>();
+        m_returnPolicy = ReturnPolicy<typename FuncTraits::ReturnType, P...>::kind;
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueKind<c_nParams>>::foreach();
         
@@ -111,13 +135,16 @@ public:
     }
 
 private:
+    
+    FunctionImpl(const FunctionImpl&) = delete;
 
     uses::Uses::PerFunctionUserData m_userData;
 
     void processUses(IdRef name, F function)
     {
         typedef std::tuple_element<0, uses::Uses::Modules>::type UserFuncProcessor;
-        std::get<0>(m_userData) = UserFuncProcessor::perFunction<T,F>(name, function);
+        std::get<0>(m_userData) =
+            UserFuncProcessor::perFunction<F, T, FuncPolicies>(name, function);
     }
     
     
@@ -134,14 +161,14 @@ private:
 };
 
 // Used by ClassBuilder to create new function instance.
-template <typename F>
-static inline Function* newFunction(IdRef name, F function)
+template <typename F, typename... P>
+static inline Function* newFunction(IdRef name, F function, P... policies)
 {
     typedef detail::FunctionTraits<F> FuncTraits;
     
     static_assert(FuncTraits::kind != FunctionKind::None, "Type is not a function");
     
-    return new FunctionImpl<FuncTraits, F>(name, function);
+    return new FunctionImpl<FuncTraits, F, P...>(name, function, policies...);
 }
 
 } // namespace detail

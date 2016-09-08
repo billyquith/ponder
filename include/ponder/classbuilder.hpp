@@ -216,8 +216,8 @@ public:
      *
      * \return Reference to this, in order to chain other calls
      */
-    template <typename F>
-    ClassBuilder<T>& function(IdRef name, F function);
+    template <typename F, typename... P>
+    ClassBuilder<T>& function(IdRef name, F function, P... policies);
 
     /**
      * \brief Declare a new static tag

@@ -46,7 +46,7 @@ struct ToUserObject
     template <typename T>
     static UserObject get(const T& value)
     {
-        return UserObject::copy(value);
+        return UserObject::makeCopy(value);
     }
 };
 
@@ -61,13 +61,13 @@ struct ToUserObject<true>
     template <typename T>
     static UserObject get(const T& value)
     {
-        return UserObject::ref(value);
+        return UserObject::makeRef(value);
     }
 
     template <typename T>
     static UserObject get(T& value)
     {
-        return UserObject::ref(value);
+        return UserObject::makeRef(value);
     }
 };
 

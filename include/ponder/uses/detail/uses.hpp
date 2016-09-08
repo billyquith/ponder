@@ -59,11 +59,12 @@ namespace uses {
  */
 struct RuntimeModule
 {
-    template <typename T, typename F>
+    template <typename F, typename T, typename Policies_t>
     static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
     {
-        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::kind>::Type;        
-        return new runtime::impl::FunctionCallerImpl<implType,
+        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::kind>::Type;
+        
+        return new runtime::impl::FunctionCallerImpl<implType, Policies_t,
                                                      typename T::FunctionType>(name, function);
     }
 };
@@ -82,6 +83,12 @@ struct Uses
     typedef std::tuple<RuntimeModule> Modules;
 
 //    typedef std::tuple<runtime::impl::Constructor*> PerConstructorUserData;
+    
+    struct FunctionInfo
+    {
+        IdRef name;
+        
+    };
     
     typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
 

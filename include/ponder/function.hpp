@@ -83,6 +83,8 @@ public:
      * \return Type of the result of the function
      */
     ValueKind returnType() const;
+    
+    policy::ReturnKind returnPolicy() const { return m_returnPolicy; }
 
     /**
      * \brief Get the number of parameters of the function
@@ -126,9 +128,11 @@ protected:
 
     Id m_name;                  // Name of the function
     FunctionKind m_funcType;    // Kind of function
-    ValueKind m_returnType;     // Return type    
+    
+    ValueKind m_returnType;             // Runtime return type
+    policy::ReturnKind m_returnPolicy;  // Return policy
 };
-
+    
 } // namespace ponder
 
 

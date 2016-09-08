@@ -76,6 +76,28 @@ enum class FunctionKind
     BindExpression,     ///< `std::bind()`
     Lambda              ///< lambda function `[](){}`
 };
+
+    
+namespace policy {
+
+enum class ReturnKind
+{
+    NoReturn,       // void, returns nothing
+    Copy,
+    InternalRef
+};
+    
+struct ReturnCopy
+{
+    static constexpr ReturnKind kind = ReturnKind::Copy;
+};
+
+struct ReturnInternalRef
+{
+    static constexpr ReturnKind kind = ReturnKind::InternalRef;
+};
+    
+} // namespace policy
     
 } // namespace ponder
 

@@ -44,10 +44,17 @@ namespace FunctionTest
     
     struct MyType
     {
-        MyType(int x_) : x(x_) {}
+        static int instCount, copyCount;
+        
+        MyType(int x_) : x(x_) { ++instCount; }
+        MyType(const MyType& o) : x(o.x) { ++instCount; ++copyCount; }
+        ~MyType() { --instCount; }
+        
         int x;
     };
-    
+
+    int MyType::instCount = 0, MyType::copyCount = 0;
+
     struct NonCopyable
     {
         NonCopyable() = default;
@@ -175,6 +182,20 @@ namespace FunctionTest
     };
     
     
+    class Policy
+    {
+    public:
+        Policy() : internalInst(99) {}
+        
+        const MyType& returnCopy() const { return internalInst; }
+        
+        const MyType& internalRefConst() const { return internalInst; }
+        MyType& internalRef() { return internalInst; }
+        
+        MyType internalInst;
+    };
+    
+    
     void declare()
     {
         ponder::Enum::declare<MyEnum>("FunctionTest::MyEnum")
@@ -238,8 +259,8 @@ namespace FunctionTest
             .function("nonClassFunc1", &MyClass::staticFunc)
             .function("nonClassFunc2", &MyClass::staticFunc2)
         
-            .function("nonCopyRef", &MyClass::staticFuncRetRef)
-            .function("nonCopyPtr", &MyClass::staticFuncRetPtr)
+            .function("nonCopyRef", &MyClass::staticFuncRetRef, ponder::policy::ReturnInternalRef())
+            .function("nonCopyPtr", &MyClass::staticFuncRetPtr, ponder::policy::ReturnInternalRef())
             ;
         
         ponder::Class::declare<DataHolder>()
@@ -249,16 +270,24 @@ namespace FunctionTest
         ponder::Class::declare<DataModifier>()
             .constructor()
             .function("modifyData", &DataModifier::modifyData);
+        
+        ponder::Class::declare<Policy>()
+            .constructor()
+            .function("returnCopy", &Policy::returnCopy, ponder::policy::ReturnCopy())
+            .function("constInternalRef", &Policy::internalRefConst, ponder::policy::ReturnInternalRef())
+            .function("internalRef", &Policy::internalRef, ponder::policy::ReturnInternalRef())
+            ;
     }
 }
 
-PONDER_AUTO_TYPE(FunctionTest::MyEnum,  &FunctionTest::declare)
-PONDER_AUTO_TYPE(FunctionTest::MyType,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyEnum, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyType, &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::MyClass, &FunctionTest::declare)
 PONDER_AUTO_TYPE(FunctionTest::NonCopyable, &FunctionTest::declare)
-PONDER_AUTO_TYPE(FunctionTest::MyBase,  &FunctionTest::declare)
-PONDER_AUTO_TYPE(FunctionTest::DataHolder,  &FunctionTest::declare)
-PONDER_AUTO_TYPE(FunctionTest::DataModifier,  &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::MyBase, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::DataHolder, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::DataModifier, &FunctionTest::declare)
+PONDER_AUTO_TYPE(FunctionTest::Policy, &FunctionTest::declare)
 
 using namespace FunctionTest;
 
@@ -329,7 +358,7 @@ struct FunctionTestFixture
 //                         Tests for ponder::Function
 //-----------------------------------------------------------------------------
 
-TEST_CASE_METHOD(FunctionTestFixture, "Functions can be registered")
+TEST_CASE_METHOD(FunctionTestFixture, "Registered function properties can be introspected")
 {
     SECTION("functions are classified")
     {
@@ -467,12 +496,104 @@ TEST_CASE_METHOD(FunctionTestFixture, "Functions can be registered")
     }
 }
 
+//-----------------------------------------------------------------------------
+//                         Functions policies
+//-----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(FunctionTestFixture, "Functions can have policies")
+{
+    auto const& clsPolicy = ponder::classByType<Policy>();
+    
+    const ponder::Function &fn_policyCopy(clsPolicy.function("returnCopy")),
+                           &fn_policyInternalRefConst(clsPolicy.function("constInternalRef")),
+                           &fn_policyInternalRef(clsPolicy.function("internalRef"));
+
+    SECTION("All functions have default return policy")
+    {
+        REQUIRE(fn_nonMember1.returnPolicy() == ponder::policy::ReturnKind::NoReturn); // void
+        REQUIRE(fn_nonMember2.returnPolicy() == ponder::policy::ReturnKind::Copy); // int
+        REQUIRE(fn_nonMember3.returnPolicy() == ponder::policy::ReturnKind::Copy); // const&
+        REQUIRE(fn_member1.returnPolicy() == ponder::policy::ReturnKind::Copy); // const&
+    }
+    
+    SECTION("Policy kinds")
+    {
+        REQUIRE(fn_policyCopy.returnPolicy() == ponder::policy::ReturnKind::Copy);
+        REQUIRE(fn_policyInternalRefConst.returnPolicy() == ponder::policy::ReturnKind::InternalRef);
+        REQUIRE(fn_policyInternalRef.returnPolicy() == ponder::policy::ReturnKind::InternalRef);
+    }
+    
+    SECTION("Return copy")
+    {
+        using namespace ponder;
+        MyType::instCount = MyType::copyCount = 0;
+        {
+            Policy pobj;
+            REQUIRE(pobj.internalRefConst().x == 99);
+            REQUIRE(pobj.internalInst.x == 99);
+            REQUIRE(MyType::instCount == 1);
+            REQUIRE(MyType::copyCount == 0);
+            
+            UserObject puo = UserObject::makeRef(pobj);
+            REQUIRE(MyType::instCount == 1);
+            REQUIRE(MyType::copyCount == 0);
+
+            UserObject retuo = runtime::call(fn_policyCopy, puo).to<UserObject>();
+            REQUIRE(MyType::instCount == 2);
+            REQUIRE(MyType::copyCount == 1);
+            
+            REQUIRE(pobj.internalInst.x == 99);
+            REQUIRE(retuo.get<MyType>().x == 99); // check copy
+            
+            pobj.internalInst.x = 123;
+            REQUIRE(pobj.internalInst.x == 123);
+            REQUIRE(retuo.get<MyType>().x == 99); // check copy not changed
+        }
+        REQUIRE(MyType::instCount == 0);
+        REQUIRE(MyType::copyCount == 1);
+    }
+    
+    SECTION("Return internal ref const")
+    {
+        using namespace ponder;
+        MyType::instCount = MyType::copyCount = 0;
+        {
+            Policy pobj;
+            REQUIRE(pobj.internalRefConst().x == 99);
+            REQUIRE(pobj.internalInst.x == 99);
+            REQUIRE(MyType::instCount == 1);
+            REQUIRE(MyType::copyCount == 0);
+            
+            UserObject puo = UserObject::makeRef(pobj);
+            REQUIRE(MyType::instCount == 1);
+            REQUIRE(MyType::copyCount == 0);
+            
+            Value ret = runtime::call(fn_policyInternalRefConst, puo);
+            REQUIRE(ret.type() == ValueKind::User);
+            REQUIRE(MyType::instCount == 1);
+            REQUIRE(MyType::copyCount == 0);
+            
+            const MyType& mt = ret.cref<UserObject>().cref<MyType>();
+            REQUIRE(MyType::instCount == 1);
+            REQUIRE(MyType::copyCount == 0);
+            
+            REQUIRE(pobj.internalInst.x == 99);
+            REQUIRE(mt.x == 99); // check ref
+            
+            pobj.internalInst.x = 123;
+            REQUIRE(pobj.internalInst.x == 123);
+            REQUIRE(mt.x == 123); // check ref has changed
+        }
+        REQUIRE(MyType::instCount == 0);
+        REQUIRE(MyType::copyCount == 0);
+    }
+}
 
 //-----------------------------------------------------------------------------
 //                  Tests for ponder::runtime::FunctionCaller
 //-----------------------------------------------------------------------------
 
-// Leave tests here for now. Possibly move in future as runtime is user module.
+// Leave tests here for now. Possibly move in future as runtime is uses module.
 
 TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with the runtime")
 {

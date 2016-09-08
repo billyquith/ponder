@@ -34,9 +34,11 @@ namespace detail {
 
 // Is T a user type.
 template <typename T> struct IsUserType {
-    static constexpr bool value = std::is_class<T>::value
-        && !std::is_same<typename detail::RawType<T>::Type, Value>::value
-        && !std::is_same<typename detail::RawType<T>::Type, std::string>::value;
+    typedef typename detail::RawType<T>::Type RawType;
+    static constexpr bool value = std::is_class<RawType>::value
+        && !std::is_same<RawType, Value>::value
+        && !std::is_same<RawType, UserObject>::value
+        && !std::is_same<RawType, std::string>::value;
 };
 
 // Decide whether the UserObject holder should be ref (true) or copy (false).
@@ -81,6 +83,33 @@ T Value::to() const
         PONDER_ERROR(BadType(type(), mapType<T>()));
     }
 }
+
+template <typename T>
+T& Value::ref() const
+{
+    try
+    {
+        return m_value.get<T>();
+    }
+    catch (detail::bad_conversion&)
+    {
+        PONDER_ERROR(BadType(type(), mapType<T>()));
+    }
+}
+
+template <typename T>
+const T& Value::cref() const
+{
+    try
+    {
+        return m_value.get<T>();
+    }
+    catch (detail::bad_conversion&)
+    {
+        PONDER_ERROR(BadType(type(), mapType<T>()));
+    }
+}
+
 
 template <typename T>
 Value::operator T() const

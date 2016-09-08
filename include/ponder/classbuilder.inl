@@ -122,11 +122,11 @@ ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
 }
 
 template <typename T>
-template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::function(IdRef name, F function)
+template <typename F, typename... P>
+ClassBuilder<T>& ClassBuilder<T>::function(IdRef name, F function, P... policies)
 {
     // Construct and add the metafunction
-    return addFunction(detail::newFunction(name, function));
+    return addFunction(detail::newFunction(name, function, policies...));
 }
 
 template <typename T>

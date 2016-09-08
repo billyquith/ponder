@@ -340,10 +340,10 @@ TEST_CASE("Ponder supports user objects")
         IS_TRUE(ponder::UserObject(&object1) == ponder::UserObject(&object1));
         IS_TRUE(ponder::UserObject(object1)  != ponder::UserObject(object2));
 
-        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::ref(object1));
-        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::ref(&object1));
-        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::copy(object1));
-        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::copy(&object1));
+        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::makeRef(object1));
+        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::makeRef(&object1));
+        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::makeCopy(object1));
+        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::makeCopy(&object1));
     }
 
     SECTION("check we can reference non-copyable objects")
@@ -371,7 +371,7 @@ TEST_CASE("Ponder supports user objects")
     {
         MyClass object(4);
         ponder::UserObject uobj1(object);
-        ponder::UserObject uobj2(ponder::UserObject::copy(object));
+        ponder::UserObject uobj2(ponder::UserObject::makeCopy(object));
         
         IS_TRUE(uobj1 != uobj2);
 
@@ -392,7 +392,7 @@ TEST_CASE("Ponder supports user objects")
     SECTION("objects can referenced/shallow copied")
     {
         MyClass object(5);
-        ponder::UserObject userObject = ponder::UserObject::ref(object);
+        ponder::UserObject userObject = ponder::UserObject::makeRef(object);
 
         REQUIRE(userObject.get<MyClass>() == object);  // same value
         REQUIRE(userObject.get<MyClass*>() == &object); // same address
