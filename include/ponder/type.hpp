@@ -80,6 +80,9 @@ enum class FunctionKind
     
 namespace policy {
 
+/**
+ * \brief Enumeration of the kinds of return policy
+ */
 enum class ReturnKind
 {
     NoReturn,       // void, returns nothing
@@ -87,14 +90,28 @@ enum class ReturnKind
     InternalRef
 };
     
+/**
+ * \brief Call return copy policy
+ *
+ * When added to a function declaration this sets the call return policy to copy. Any
+ * values returned by a function are copied. This is the default behaviour.
+ */
 struct ReturnCopy
 {
-    static constexpr ReturnKind kind = ReturnKind::Copy;
+    static constexpr ReturnKind kind = ReturnKind::Copy; ///< The policy enum kind.
 };
 
+/**
+ * \brief Call return internal reference policy
+ *
+ * When added to a function declaration this sets the call return policy to internal
+ * reference. References returned by the function are returned as references values. This
+ * is useful for declaring things like singletons, which return values that we do not
+ * want to copy.
+ */
 struct ReturnInternalRef
 {
-    static constexpr ReturnKind kind = ReturnKind::InternalRef;
+    static constexpr ReturnKind kind = ReturnKind::InternalRef;  ///< The policy enum kind.
 };
     
 } // namespace policy

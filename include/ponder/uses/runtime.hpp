@@ -108,7 +108,7 @@ public:
      * \return New instance wrapped into a UserObject, or UserObject::nothing if it failed
      * \sa create()
      */
-    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const; // XXXX rename
+    UserObject construct(const Args& args = Args::empty, void* ptr = nullptr) const;
 
     /**
      * \brief Create a new instance of the class bound to the metaclass
@@ -219,6 +219,11 @@ class FunctionCaller
 {
 public:
     
+    /**
+     * \brief Constructor
+     *
+     * \param f The function to call
+     */
     FunctionCaller(const Function &f);
     
     /**

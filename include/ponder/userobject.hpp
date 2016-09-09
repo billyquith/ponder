@@ -148,6 +148,14 @@ public:
      */
     void* pointer() const;
     
+    /**
+     * \brief Get a const reference to the object data contained
+     *
+     * Returns a const reference to the contained object, of type T. The user is responsible for
+     * ensuring that the type passed is correct.
+     *
+     * \return A const reference to the contained object.
+     */
     template <typename T>
     const T& cref() const;
 

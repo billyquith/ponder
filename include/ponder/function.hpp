@@ -84,6 +84,11 @@ public:
      */
     ValueKind returnType() const;
     
+    /**
+     * \brief Get the kind of return policy this function uses
+     *
+     * \return Kind of return policy enum
+     */
     policy::ReturnKind returnPolicy() const { return m_returnPolicy; }
 
     /**

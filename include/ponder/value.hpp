@@ -103,18 +103,40 @@ public:
     /**
      * \brief Convert the value to the type T
      *
+     * Convert the value contained to the type provided. An exception is throw if the target
+     * type is not compatible. The value returned will be a copy. See ref() and cref() for
+     * referencing the internal data.
+     *
      * \return Value converted to T
      *
      * \throw BadType the stored value is not convertible to T
      */
     template <typename T>
-    T to() const;           // XXXX copies
+    T to() const;
 
+    /**
+     * \brief Get a reference to the value data contained
+     *
+     * Get a reference to the contained value of type T. The user is responsible for ensuring
+     * that the type passed is correct. See cref() for a non-const reference, or to() to
+     * convert the value.
+     *
+     * \return A non-const reference to the contained data.
+     */
     template <typename T>
-    T& ref() const;           // XXXX addeda
+    T& ref() const;
 
+    /**
+     * \brief Get a const reference to the value data contained
+     *
+     * Get a const reference to the contained value of type T. The user is responsible for 
+     * ensuring that the type passed is correct. See ref() for a const reference, or to() to
+     * convert the value.
+     *
+     * \return A const reference to the contained data.
+     */
     template <typename T>
-    const T& cref() const;           // XXXX addeda
+    const T& cref() const;
 
     /**
      * \brief Cast operator to implicitly convert the value to a type T

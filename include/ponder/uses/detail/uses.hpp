@@ -59,6 +59,7 @@ namespace uses {
  */
 struct RuntimeModule
 {
+    /// Factory for per-function runtime data
     template <typename F, typename T, typename Policies_t>
     static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
     {
@@ -70,28 +71,27 @@ struct RuntimeModule
 };
 
 /**
- * \ brief Global information on the compile-time type Uses.
+ * \brief Global information on the compile-time type Uses.
  *
  *  - This can be extended for other modular uses
- *  - `typedef typename std::tuple_element<I, PerFunctionUserData>::type PerFunc_t;`
- *  - `PerFunc_t* std::get<I>(getUsesData());`
  */
 struct Uses
 {
-    enum { eRuntimeModule };
-    
-    typedef std::tuple<RuntimeModule> Modules;
-
-//    typedef std::tuple<runtime::impl::Constructor*> PerConstructorUserData;
-    
-    struct FunctionInfo
-    {
-        IdRef name;
-        
+    enum {
+        eRuntimeModule  ///< Runtime module enumeration
     };
     
-    typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
+     /// Modules we would like to use.
+    typedef std::tuple<RuntimeModule> Modules;
 
+    //    typedef std::tuple<runtime::impl::Constructor*> PerConstructorUserData; TODO
+
+    /// Type that stores the per-function uses data
+    typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
+    
+    // Access note:
+    //  typedef typename std::tuple_element<I, PerFunctionUserData>::type PerFunc_t;
+    //  PerFunc_t* std::get<I>(getUsesData());
 };
     
 } // namespace uses

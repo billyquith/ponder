@@ -84,7 +84,7 @@ struct IsSmartPointer<std::shared_ptr<T>, U>
 template <typename T, typename E = void>
 struct RawType
 {
-    typedef T Type;     // XXXX rename to type
+    typedef T Type;
 };
 
 /*
