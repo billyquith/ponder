@@ -11,14 +11,23 @@ function clean () {
 
 clean
 
-git clone https://github.com/billyquith/ponder.git $DOCDIR -b master --depth=1
+git clone https://github.com/billyquith/ponder.git $DOCDIR -b 2.0 --depth=1
+
 pushd $DOCDIR
-cmake -G Ninja
-ninja doc
+mkdir build && cd build
+    cmake -G Ninja ..
+cd ..
+
+python doc/api/docinsert.py 
+if [ $? -ne 0 ]; then exit 1; fi
+    
+cd build
+    ninja doc
+cd ..
 popd
 
 rm docs/*
 cp -r $DOCDIR/doc/api/html/* docs/
 
-clean
+# clean
 
