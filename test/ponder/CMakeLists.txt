@@ -48,7 +48,6 @@ set(PONDER_TEST_SRCS
     enumclassproperty.cpp
     enumobject.cpp
     enumproperty.cpp
-    example_mainpage.cpp
     function.cpp
     inheritance.cpp
     main.cpp

@@ -1,14 +1,10 @@
 ###############################################################################
 ##
-## Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-## Contact: Tegesoft Information (contact@tegesoft.com)
-##
-## This file is part of the Ponder library, formerly CAMP.
+## This file is part of the Ponder library.
 ##
 ## The MIT License (MIT)
 ##
-## Copyright (c) 2009-2014 TEGESO/TEGESOFT
-## Copyright (C) 2015-2016 Billy Quith.
+## Copyright (C) 2015-2016 Bill Quith.
 ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -30,20 +26,29 @@
 ##
 ###############################################################################
 
+# set project's name
+project(exampletest)
 
-add_subdirectory(ponder)
+# all source files
+set(TEST_SRCS
+    main.cpp
+    simple.cpp
+)
 
-if(BUILD_TEST_EXAMPLES)
-    add_subdirectory(examples)
-endif()
+include_directories(
+    ${PONDER_SOURCE_DIR}/include
+)
 
-if(BUILD_TEST_LUA)
-    add_subdirectory(lua)
-endif()
+link_directories(
+    ${PONDER_BINARY_DIR}
+)
 
-# add the qt subdirectory, but do not build it by default
-if(BUILD_TEST_QT)
-    add_subdirectory(qt)
-endif()
+add_executable(egtest ${TEST_SRCS})
 
+target_compile_features(egtest PUBLIC cxx_range_for cxx_variadic_templates) # required
+
+target_link_libraries(egtest ponder)
+
+# Add the executable as a CTest
+add_test(egtest egtest)
 

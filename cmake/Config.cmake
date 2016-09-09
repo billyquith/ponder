@@ -27,6 +27,12 @@ if(NOT BUILD_TEST)
     )
 endif()
 
+if(NOT BUILD_TEST_EXAMPLES)
+    set(BUILD_TEST_EXAMPLES TRUE
+        CACHE BOOL "TRUE to build the example tests, FALSE otherwise."
+    )
+endif()
+
 if(NOT BUILD_TEST_LUA)
     set(BUILD_TEST_LUA FALSE
         CACHE BOOL "TRUE to build the Lua-specific tests (requires Lua), FALSE otherwise."
