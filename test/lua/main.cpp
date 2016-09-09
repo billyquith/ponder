@@ -92,6 +92,8 @@ namespace lib
     
     void declare()
     {
+        using namespace ponder::policy;
+    
         ponder::Class::declare<Vec>()
             .constructor()
             .constructor<float, float>()
@@ -113,7 +115,7 @@ namespace lib
         ponder::Class::declare<Holder>()
             .constructor()
             //  .property("pref", &Holder::ptrRef) // TODO - fix for self ref pointers
-            .function("rref", &Holder::refRef)
+            .function("rref", &Holder::refRef, ReturnInternalRef())
             .property("vec", &Holder::vec)
             ;
     }
@@ -123,9 +125,9 @@ namespace lib
 PONDER_TYPE(lib::Vec)
 PONDER_TYPE(lib::Holder)
 
-static bool luaTest(lua_State *L, const char *source, bool success = true)
+static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
 {
-    fmt::print("------------------------------------------------------------\n");
+    fmt::print("l:{}------------------------------------------------------\n", lineNb);
     fmt::print("Test{}: {}\n", success ? "" : "(should fail)", source);
     const bool ok = ponder::lua::runString(L, source);
     if (ok != success)
@@ -137,6 +139,9 @@ static bool luaTest(lua_State *L, const char *source, bool success = true)
     fmt::print("\n");
     return true;
 }
+
+#define LUA_PASS(SRC) luaTest(L,SRC,__LINE__,true)
+#define LUA_FAIL(SRC) luaTest(L,SRC,__LINE__,false)
 
 int main()
 {
@@ -150,62 +155,62 @@ int main()
     ponder::lua::expose<lib::Holder>(L, "Holder");
 
     // class defined
-    luaTest(L, "print(Vec2); assert(Vec2 ~= nil)");
+    LUA_PASS("print(Vec2); assert(Vec2 ~= nil)");
 
     // instance
-    luaTest(L, "v = Vec2(); assert(v ~= nil)");
-    luaTest(L, "assert(type(v) == 'userdata')");
+    LUA_PASS("v = Vec2(); assert(v ~= nil)");
+    LUA_PASS("assert(type(v) == 'userdata')");
     
     // property read
-    luaTest(L, "assert(v.x == 0)");
-    luaTest(L, "assert(v.y == 0)");
+    LUA_PASS("assert(v.x == 0)");
+    LUA_PASS("assert(v.y == 0)");
 
     // property write
-    luaTest(L, "v.x = 7; assert(v.x == 7)");
-    luaTest(L, "v.y = -3; assert(v.y == -3)");
-    luaTest(L, "assert(type(v.x) == 'number'); assert(type(v.y) == 'number')");
-    luaTest(L, "v.x = 1.25");
-    luaTest(L, "v.x = 1.76e6");
-    luaTest(L, "v.x = 'fail'", false);
+    LUA_PASS("v.x = 7; assert(v.x == 7)");
+    LUA_PASS("v.y = -3; assert(v.y == -3)");
+    LUA_PASS("assert(type(v.x) == 'number'); assert(type(v.y) == 'number')");
+    LUA_PASS("v.x = 1.25");
+    LUA_PASS("v.x = 1.76e6");
+    LUA_FAIL("v.x = 'fail'");
 
     // method call with args
-    luaTest(L, "v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
-    luaTest(L, "v:set('fail'); print(v.x, v.y)", false);
-    luaTest(L, "v:set(); print(v.x, v.y)", false);
+    LUA_PASS("v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
+    LUA_FAIL("v:set('fail'); print(v.x, v.y)");
+    LUA_FAIL("v:set(); print(v.x, v.y)");
 
     // method call return args
-    luaTest(L, "l = Vec2(3,0); assert(l:length() == 3)");
+    LUA_PASS("l = Vec2(3,0); assert(l:length() == 3)");
 
     // method call with object arg
-    luaTest(L, "a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c ~= nil)");
+    LUA_PASS("a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c ~= nil)");
     
     // method call (:) with return object
-    luaTest(L, "c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
-    luaTest(L, "assert(c.x == 5); assert(c.y == 7);");
+    LUA_PASS("c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
+    LUA_PASS("assert(c.x == 5); assert(c.y == 7);");
 
     // method call (.) with with return object
-    luaTest(L, "assert(type(Vec2.add) == 'function')");
-//    luaTest(L, "c = Vec2.add(a,b); assert(c ~= nil); print(c.x, c.y);"); - TODO - check static
-//    luaTest(L, "assert(c.x == 5); assert(c.y == 7);");
+    LUA_PASS("assert(type(Vec2.add) == 'function')");
+//    LUA_PASS("c = Vec2.add(a,b); assert(c ~= nil); print(c.x, c.y);"); - TODO - check static
+//    LUA_PASS("assert(c.x == 5); assert(c.y == 7);");
 
     // static func
-    luaTest(L, "assert(type(Vec2.up) == 'function')");
-    luaTest(L, "up = Vec2.up(); assert(type(up) == 'userdata')");
-    luaTest(L, "assert(type(up.x) == 'number')");
+    LUA_PASS("assert(type(Vec2.up) == 'function')");
+    LUA_PASS("up = Vec2.up(); assert(type(up) == 'userdata')");
+    LUA_PASS("assert(type(up.x) == 'number')");
 
     // Vec return ref (func)
-    luaTest(L, "r = Vec2(7,8); assert(r.x == 7)");
-    luaTest(L, "r.x = 9; assert(r.x == 9)");
-    luaTest(L, "r:funcRef().x = 19; assert(r.x == 19)");
+    LUA_PASS("r = Vec2(7,8); assert(r.x == 7)");
+    LUA_PASS("r.x = 9; assert(r.x == 9)");
+    LUA_PASS("r:funcRef().x = 19; assert(r.x == 19)");
 
     // Vec return ref (prop)
-    luaTest(L, "r = Vec2(17,8); assert(r.x == 17)");
-    luaTest(L, "r.x = 9; assert(r.x == 9)");
-    luaTest(L, "r.propRef.x = 19; assert(r.x == 19)");
+    LUA_PASS("r = Vec2(17,8); assert(r.x == 17)");
+    LUA_PASS("r.x = 9; assert(r.x == 9)");
+    LUA_PASS("r.propRef.x = 19; assert(r.x == 19)");
 
     // Non-copyable return ref
-    luaTest(L, "h = Holder()");
-    luaTest(L, "h:rref().vec.x = 9; assert(h:rref().vec.x == 9)");
+    LUA_PASS("h = Holder()");
+    LUA_PASS("h:rref().vec.x = 9; assert(h:rref().vec.x == 9)");
 
     return EXIT_SUCCESS;
 }
