@@ -17,6 +17,6 @@ test/Debug
 test/Release
 
 # Auto-generated documentation files
-doc/api/*/*
 doc/egs
+doc/api/pages/_*
 *.doxy

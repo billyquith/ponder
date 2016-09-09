@@ -10,7 +10,7 @@ ROOT_DIR = os.path.abspath(os.path.join(THIS_DIR, '../..'))
 EG_SRC_DIR = os.path.join(ROOT_DIR, 'test/examples')
 EG_USE_DIR = os.path.join(ROOT_DIR, 'doc/egs')
 
-EG_LIST_PAGE = os.path.join(ROOT_DIR, 'doc/api/pages/examples.hpp')
+EG_LIST_PAGE = os.path.join(ROOT_DIR, 'doc/api/pages/_examples.hpp')
 LIST_PAGE = """
 /**
 
