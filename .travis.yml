@@ -7,7 +7,8 @@ compiler:
   - gcc
 env:
   - BUILD_CONFIG=Debug
-  - BUILD_CONFIG=Release
+  - BUILD_CONFIG=Release CFG_SHARED=ON
+  - BUILD_CONFIG=Release CFG_SHARED=OFF
 osx_image: xcode7.3
 
 sudo: required
@@ -36,7 +37,7 @@ before_script:
   - cmake --version
   - mkdir build && cd build
   - echo "Generating project for $PROJGEN, config $BUILD_CONFIG."
-  - cmake .. -G "$PROJGEN" -DBUILD_TEST=ON -DBUILD_TEST_LUA=ON
+  - cmake .. -G "$PROJGEN" -DBUILD_TEST=ON -DBUILD_TEST_LUA=ON -DBUILD_SHARED_LIBS=$CFG_SHARED
 script:
   - cmake --build . --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
 
