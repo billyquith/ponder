@@ -219,12 +219,12 @@ namespace detail
  * \code
  * class MyBase
  * {
- *     PONDER_RTTI()
+ *     PONDER_POLYMORPHIC()
  * };
  *
  * class MyDerived : public MyBase
  * {
- *     PONDER_RTTI()
+ *     PONDER_POLYMORPHIC()
  * };
  *
  * MyBase* b = new MyDerived;
@@ -232,7 +232,7 @@ namespace detail
  * // mc == metaclass of MyDerived
  * \endcode
  */
-#define PONDER_RTTI() \
+#define PONDER_POLYMORPHIC() \
     public: virtual const char* ponderClassId() const \
         {return ponder::detail::staticTypeId(this);} \
     private:

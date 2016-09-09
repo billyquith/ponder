@@ -58,12 +58,12 @@ namespace ClassTest
     struct Base
     {
         virtual ~Base() {}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct Derived : Base
     {
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct DerivedNoRtti : Base
@@ -374,14 +374,14 @@ TEST_CASE("Classes can have hierarchies")
     
     SECTION("with rtti")
     {
-        // Ponder finds its real type thanks to PONDER_RTTI
+        // Ponder finds its real type thanks to PONDER_POLYMORPHIC
         REQUIRE(ponder::classByObject(derived).name() == "ClassTest::Derived");
         REQUIRE(ponder::classByObject(*derived).name() == "ClassTest::Derived");        
     }
     
     SECTION("without rtti")
     {
-        // Ponder fails to find its derived type without PONDER_RTTI
+        // Ponder fails to find its derived type without PONDER_POLYMORPHIC
         REQUIRE(ponder::classByObject(nortti).name() == "ClassTest::Base");
         REQUIRE(ponder::classByObject(*nortti).name() == "ClassTest::Base");
     }
@@ -396,12 +396,12 @@ TEST_CASE("Classes can have hierarchies")
     SECTION("without rtti, no polymorphism")
     {
         Base* nonGenericBase = nortti;
-        // Ponder fails to find its derived type without PONDER_RTTI
+        // Ponder fails to find its derived type without PONDER_POLYMORPHIC
         REQUIRE(ponder::classByObject(nonGenericBase).name() == "ClassTest::Base");
         REQUIRE(ponder::classByObject(*nonGenericBase).name() == "ClassTest::Base");
     }
 
-    // Ponder finds the closest derived type which has PONDER_RTTI
+    // Ponder finds the closest derived type which has PONDER_POLYMORPHIC
     // REQUIRE(ponder::classByObject(nortti2).name(),  "ClassTest::Derived");
     // REQUIRE(ponder::classByObject(*nortti2).name(), "ClassTest::Derived");
 

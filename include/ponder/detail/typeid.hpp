@@ -99,7 +99,7 @@ struct HasPonderRtti
  *
  * If the object has a dynamic type which is different from its static type
  * (i.e. `Base* obj = new Derived`), and both classes use the
- * PONDER_RTTI macro, then the system is able to return the identifier of
+ * PONDER_POLYMORPHIC macro, then the system is able to return the identifier of
  * the true dynamic type of the object.
  */
 template <typename T, typename E = void>

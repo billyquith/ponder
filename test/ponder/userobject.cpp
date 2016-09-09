@@ -57,7 +57,7 @@ namespace UserObjectTest
         MyBase(int b_) : b(b_) {}
         virtual ~MyBase() {}
         int b;
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     bool operator==(const MyBase& left, const MyBase& right)
@@ -75,7 +75,7 @@ namespace UserObjectTest
         MyClass(int x_) : MyBase(x_ + 1), x(x_) {}
         int x;
         int f() const {return x;}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     bool operator==(const MyClass& left, const MyClass& right)
@@ -96,13 +96,13 @@ namespace UserObjectTest
     {
         virtual ~MyAbstractClass() {}
         virtual void f() = 0;
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct MyConcreteClass : MyAbstractClass
     {
         virtual void f() {}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct Composed3

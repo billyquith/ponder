@@ -43,7 +43,7 @@ namespace InheritanceTest
         int f1() const {return 1;}
         int po1;
         int fo1() {return 1;}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct MyClass2
@@ -55,7 +55,7 @@ namespace InheritanceTest
         virtual int fv() const {return p2;}
         int po2;
         int fo2() {return 2;}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct MyClass3 : public MyClass1, public MyClass2
@@ -67,7 +67,7 @@ namespace InheritanceTest
         virtual int fv() const {return p3;}
         int po3;
         int fo3() {return 3;}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     struct MyClass4 : public MyClass3
@@ -79,7 +79,7 @@ namespace InheritanceTest
         virtual int fv() const {return p4;}
         int po4;
         int fo4() {return 4;}
-        PONDER_RTTI();
+        PONDER_POLYMORPHIC();
     };
     
     void declare()
