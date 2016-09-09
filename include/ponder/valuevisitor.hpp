@@ -40,7 +40,7 @@ namespace ponder
  * A value visitor acts like compile-time dispatchers which automatically
  * calls the function which matches the actual type of the stored value.
  * This is a more direct and straight-forward approach than using a runtime switch,
- * based on value.type() and then converting to the proper type.
+ * based on value.kind() and then converting to the proper type.
  * It also gives access to enum and user objects, which can give useful informations with
  * no knowledge about the actual C++ class or enum.
  *

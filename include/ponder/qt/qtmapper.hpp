@@ -145,7 +145,7 @@ private:
      */
     static bool filter(const QMetaProperty& property)
     {
-        return QtHelper::type(property.type()) != ponder::ValueKind::None
+        return QtHelper::type(property.kind()) != ponder::ValueKind::None
                || property.isEnumType();
     }
 

@@ -82,7 +82,7 @@ TEST_CASE("Enum properties")
     
     SECTION("have enum type")
     {
-        IS_TRUE(property->type() == ponder::ValueKind::Enum);
+        IS_TRUE(property->kind() == ponder::ValueKind::Enum);
     }
 
     SECTION("wrap an Enum")

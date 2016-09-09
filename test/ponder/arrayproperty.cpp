@@ -133,10 +133,10 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Array property can be inspected")
 
     SECTION("should be array type")
     {
-        REQUIRE(bools->type() == ponder::ValueKind::Array);
-        REQUIRE(ints->type() == ponder::ValueKind::Array);
-        REQUIRE(strings->type() == ponder::ValueKind::Array);
-        REQUIRE(objects->type() == ponder::ValueKind::Array);
+        REQUIRE(bools->kind() == ponder::ValueKind::Array);
+        REQUIRE(ints->kind() == ponder::ValueKind::Array);
+        REQUIRE(strings->kind() == ponder::ValueKind::Array);
+        REQUIRE(objects->kind() == ponder::ValueKind::Array);
     }
     
      SECTION("arrays have a type")

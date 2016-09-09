@@ -149,22 +149,22 @@ TEST_CASE("Ponder has variant values")
     
     SECTION("values have type")
     {
-        IS_TRUE(noValue.type() ==      ponder::ValueKind::None);
-        IS_TRUE(boolValue.type() ==    ponder::ValueKind::Boolean);
-        IS_TRUE(charValue.type() ==    ponder::ValueKind::Integer);
-        IS_TRUE(shortValue.type() ==   ponder::ValueKind::Integer);
-        IS_TRUE(intValue.type() ==     ponder::ValueKind::Integer);
-        IS_TRUE(longValue.type() ==    ponder::ValueKind::Integer);
-        IS_TRUE(ucharValue.type() ==   ponder::ValueKind::Integer);
-        IS_TRUE(ushortValue.type() ==  ponder::ValueKind::Integer);
-        IS_TRUE(uintValue.type() ==    ponder::ValueKind::Integer);
-        IS_TRUE(ulongValue.type() ==   ponder::ValueKind::Integer);
-        IS_TRUE(floatValue.type() ==   ponder::ValueKind::Real);
-        IS_TRUE(doubleValue.type() ==  ponder::ValueKind::Real);
-        IS_TRUE(cstringValue.type() == ponder::ValueKind::String);
-        IS_TRUE(stringValue.type() ==  ponder::ValueKind::String);
-        IS_TRUE(enumValue.type() ==    ponder::ValueKind::Enum);
-        IS_TRUE(objectValue.type() ==  ponder::ValueKind::User);
+        IS_TRUE(noValue.kind() ==      ponder::ValueKind::None);
+        IS_TRUE(boolValue.kind() ==    ponder::ValueKind::Boolean);
+        IS_TRUE(charValue.kind() ==    ponder::ValueKind::Integer);
+        IS_TRUE(shortValue.kind() ==   ponder::ValueKind::Integer);
+        IS_TRUE(intValue.kind() ==     ponder::ValueKind::Integer);
+        IS_TRUE(longValue.kind() ==    ponder::ValueKind::Integer);
+        IS_TRUE(ucharValue.kind() ==   ponder::ValueKind::Integer);
+        IS_TRUE(ushortValue.kind() ==  ponder::ValueKind::Integer);
+        IS_TRUE(uintValue.kind() ==    ponder::ValueKind::Integer);
+        IS_TRUE(ulongValue.kind() ==   ponder::ValueKind::Integer);
+        IS_TRUE(floatValue.kind() ==   ponder::ValueKind::Real);
+        IS_TRUE(doubleValue.kind() ==  ponder::ValueKind::Real);
+        IS_TRUE(cstringValue.kind() == ponder::ValueKind::String);
+        IS_TRUE(stringValue.kind() ==  ponder::ValueKind::String);
+        IS_TRUE(enumValue.kind() ==    ponder::ValueKind::Enum);
+        IS_TRUE(objectValue.kind() ==  ponder::ValueKind::User);
     }
 
     SECTION("boolean values can be converted to other types")

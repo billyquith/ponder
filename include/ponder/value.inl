@@ -80,7 +80,7 @@ T Value::to() const
     }
     catch (detail::bad_conversion&)
     {
-        PONDER_ERROR(BadType(type(), mapType<T>()));
+        PONDER_ERROR(BadType(kind(), mapType<T>()));
     }
 }
 
@@ -93,7 +93,7 @@ T& Value::ref() const
     }
     catch (detail::bad_conversion&)
     {
-        PONDER_ERROR(BadType(type(), mapType<T>()));
+        PONDER_ERROR(BadType(kind(), mapType<T>()));
     }
 }
 
@@ -106,7 +106,7 @@ const T& Value::cref() const
     }
     catch (detail::bad_conversion&)
     {
-        PONDER_ERROR(BadType(type(), mapType<T>()));
+        PONDER_ERROR(BadType(kind(), mapType<T>()));
     }
 }
 

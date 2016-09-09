@@ -569,7 +569,7 @@ TEST_CASE_METHOD(FunctionTestFixture, "Functions can have policies")
             REQUIRE(MyType::copyCount == 0);
             
             Value ret = runtime::call(fn_policyInternalRefConst, puo);
-            REQUIRE(ret.type() == ValueKind::User);
+            REQUIRE(ret.kind() == ValueKind::User);
             REQUIRE(MyType::instCount == 1);
             REQUIRE(MyType::copyCount == 0);
             

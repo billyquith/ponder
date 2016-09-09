@@ -49,7 +49,7 @@ Value::Value(const Value& other)
 {
 }
 
-ValueKind Value::type() const
+ValueKind Value::kind() const
 {
     return m_type;
 }

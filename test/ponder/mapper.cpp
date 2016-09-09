@@ -173,7 +173,7 @@
 //
 //    SECTION("check types")
 //    {
-//        IS_TRUE(metaclass->property(0).type() == ponder::ValueKind::Integer);
+//        IS_TRUE(metaclass->property(0).kind() == ponder::ValueKind::Integer);
 //        IS_TRUE(metaclass->function(0).returnType() == ponder::ValueKind::String);
 //    }
 //

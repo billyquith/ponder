@@ -94,11 +94,11 @@ public:
     Value(const T& val);
 
     /**
-     * \brief Return the Ponder type of the value
+     * \brief Return the Ponder runtime kind of the value
      *
      * \return Type of the value
      */
-    ValueKind type() const;  // XXXX rename to kind()
+    ValueKind kind() const;
 
     /**
      * \brief Convert the value to the type T

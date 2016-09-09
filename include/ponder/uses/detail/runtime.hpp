@@ -131,7 +131,7 @@ convertArg(const Args& args, std::size_t index, IdRef function)
         return args[index].to<typename std::remove_reference<T>::type>();
     }
     catch (const BadType&) {
-        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, function));
+        PONDER_ERROR(BadArgument(args[index].kind(), mapType<T>(), index, function));
     }
 }
 

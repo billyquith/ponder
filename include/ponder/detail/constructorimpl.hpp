@@ -65,7 +65,7 @@ inline typename std::remove_reference<T>::type convertArg(const Args& args, std:
     }
     catch (const BadType&)
     {
-        PONDER_ERROR(BadArgument(args[index].type(), mapType<T>(), index, "constructor"));
+        PONDER_ERROR(BadArgument(args[index].kind(), mapType<T>(), index, "constructor"));
     }
 }
 

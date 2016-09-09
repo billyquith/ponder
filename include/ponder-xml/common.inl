@@ -53,12 +53,12 @@ void serialize(const UserObject& object, typename Proxy::NodeType node, const Va
         if (!Proxy::isValid(child))
             continue;
 
-        if (property.type() == userType)
+        if (property.kind() == userType)
         {
             // The current property is a composed type: serialize it recursively
             serialize<Proxy>(property.get(object).to<UserObject>(), child, exclude);
         }
-        else if (property.type() == arrayType)
+        else if (property.kind() == arrayType)
         {
             // The current property is an array
             const ArrayProperty& arrayProperty = static_cast<const ArrayProperty&>(property);
@@ -110,12 +110,12 @@ void deserialize(const UserObject& object, typename Proxy::NodeType node, const 
         if (!Proxy::isValid(child))
             continue;
 
-        if (property.type() == userType)
+        if (property.kind() == userType)
         {
             // The current property is a composed type: deserialize it recursively
             deserialize<Proxy>(property.get(object).to<UserObject>(), child, exclude);
         }
-        else if (property.type() == arrayType)
+        else if (property.kind() == arrayType)
         {
             // The current property is an array
             const ArrayProperty& arrayProperty = static_cast<const ArrayProperty&>(property);

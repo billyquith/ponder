@@ -66,7 +66,7 @@ public:
      */
     static ponder::ValueKind type(QVariant::Type theType)
     {
-        // We add an extra conversion to QVariant::Type because variant.type() may return metatypes
+        // We add an extra conversion to QVariant::Type because variant.kind() may return metatypes
         // that do not exist in QVariant (such as QMetaType::Long which is considered a user type)
         switch (variantType(theType))
         {
@@ -165,7 +165,7 @@ public:
      */
     static QVariant valueToVariant(const ponder::Value& value)
     {
-        switch (value.type())
+        switch (value.kind())
         {
             default:
             case ponder::ValueKind::None:     return QVariant();
@@ -187,9 +187,9 @@ public:
      */
     static ponder::Value variantToValue(const QVariant& variant)
     {
-        // We add an extra conversion to QVariant::Type because variant.type() may return metatypes
+        // We add an extra conversion to QVariant::Type because variant.kind() may return metatypes
         // that do not exist in QVariant (such as QMetaType::Long which is considered a user type)
-        switch (variantType(variant.type()))
+        switch (variantType(variant.kind()))
         {
             default:
             case QVariant::Invalid:   return ponder::Value();

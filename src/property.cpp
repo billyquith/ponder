@@ -44,7 +44,7 @@ IdRef Property::name() const
     return m_name;
 }
 
-ValueKind Property::type() const
+ValueKind Property::kind() const
 {
     return m_type;
 }

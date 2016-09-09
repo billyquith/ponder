@@ -606,7 +606,7 @@ TEST_CASE("User objects wrap C++ objects")
 //        REQUIRE(uo2.get<Data>().x == 6);
 //        
 //        ponder::Value uoa = uo1.call("addCopy", ponder::Args(uo2));
-//        REQUIRE(uoa.type() == ponder::ValueKind::User);
+//        REQUIRE(uoa.kind() == ponder::ValueKind::User);
 //        REQUIRE(uoa.to<Data*>()->x == 9);
 //    }
 //
@@ -623,7 +623,7 @@ TEST_CASE("User objects wrap C++ objects")
 //        REQUIRE(uo2.get<Data>().x == 6);
 //        
 //        ponder::Value uoa = uo1.call("addRef", ponder::Args(uo2));
-//        REQUIRE(uoa.type() == ponder::ValueKind::User);
+//        REQUIRE(uoa.kind() == ponder::ValueKind::User);
 //        REQUIRE(uoa.to<Data*>()->x == 9);
 //    }
 }

@@ -70,7 +70,7 @@ TEST_CASE("Ponder has user properties")
     const ponder::UserProperty* property =
         static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
     
-    IS_TRUE(property->type() == ponder::ValueKind::User);
+    IS_TRUE(property->kind() == ponder::ValueKind::User);
     IS_TRUE(property->getClass() == ponder::classByType<UserPropertyTest::MyType>());
     
     SECTION("properties can be got")

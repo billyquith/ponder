@@ -92,7 +92,7 @@ namespace fmt = ponder::detail::fmt;
 // push a Ponder value onto the Lua state stack
 static int pushValue(lua_State *L, const ponder::Value& val)
 {
-    switch (val.type())
+    switch (val.kind())
     {
         case ValueKind::Boolean:
             lua_pushboolean(L, val.to<bool>());
@@ -226,7 +226,7 @@ static int l_func_call(lua_State *L)
     
     ponder::runtime::FunctionCaller caller(*func);
     Value ret = caller.call(args);
-    if (ret.type() != ValueKind::None)
+    if (ret.kind() != ValueKind::None)
         return pushValue(L, ret);
     
     return 0;
@@ -257,7 +257,7 @@ static int l_method_call(lua_State *L)
     
     ponder::runtime::ObjectCaller caller(*func);
     Value ret = caller.call(*uobj, args);
-    if (ret.type() != ValueKind::None)
+    if (ret.kind() != ValueKind::None)
         return pushValue(L, ret);
     
     return 0;
@@ -306,7 +306,7 @@ static int l_inst_newindex(lua_State *L)   // (obj, key, value) obj[key] = value
     if (cls->tryProperty(key, pp))
     {
         ponder::UserObject *uobj = (ponder::UserObject*) ud;
-        pp->set(*uobj, getValue(L, 3, pp->type()));
+        pp->set(*uobj, getValue(L, 3, pp->kind()));
     }
     
     return 0;

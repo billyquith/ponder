@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(type)
 {
     ponder::Value value = QString("hello");
 
-    BOOST_CHECK_EQUAL(value.type(), ponder::stringType);
+    BOOST_CHECK_EQUAL(value.kind(), ponder::stringType);
 }
 
 BOOST_AUTO_TEST_CASE(conversionsFromQString)

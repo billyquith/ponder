@@ -68,7 +68,7 @@ public:
      *
      * \return Type of the property
      */
-    ValueKind type() const;
+    ValueKind kind() const;
 
     /**
      * \brief Check if the property is currently readable for a given object

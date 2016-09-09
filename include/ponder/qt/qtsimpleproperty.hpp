@@ -60,7 +60,7 @@ public:
      * \param metaProperty Qt meta property
      */
     QtSimpleProperty(const QMetaProperty& metaProperty)
-        : ponder::SimpleProperty(metaProperty.name(), metaProperty.isEnumType() ? ponder::ValueKind::Enum : QtHelper::type(metaProperty.type()))
+        : ponder::SimpleProperty(metaProperty.name(), metaProperty.isEnumType() ? ponder::ValueKind::Enum : QtHelper::type(metaProperty.kind()))
         , m_metaProperty(metaProperty)
     {
     }

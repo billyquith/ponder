@@ -75,12 +75,12 @@ BOOST_AUTO_TEST_CASE(name)
 
 BOOST_AUTO_TEST_CASE(type)
 {
-    BOOST_CHECK_EQUAL(metaclass->property("m_bool_read").type(),   ponder::boolType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_int_read").type(),    ponder::intType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_ulong_read").type(),  ponder::intType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_double_read").type(), ponder::realType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_string_read").type(), ponder::stringType);
-    BOOST_CHECK_EQUAL(metaclass->property("m_enum_read").type(),   ponder::enumType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_bool_read").kind(),   ponder::boolType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_int_read").kind(),    ponder::intType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_ulong_read").kind(),  ponder::intType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_double_read").kind(), ponder::realType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_string_read").kind(), ponder::stringType);
+    BOOST_CHECK_EQUAL(metaclass->property("m_enum_read").kind(),   ponder::enumType);
 }
 
 BOOST_AUTO_TEST_CASE(get)
