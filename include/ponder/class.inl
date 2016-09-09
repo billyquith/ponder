@@ -28,26 +28,26 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
+namespace ponder {
     
-namespace detail
+namespace detail {
+
+template <typename T>
+void destroy(const UserObject& object, bool destruct)
 {
-    template <typename T>
-    void destroy(const UserObject& object, bool destruct)
-    {
-        if (destruct)
-            object.get<T*>() -> ~T();
-        else
-            delete object.get<T*>();
-    }
-    
-    template <typename T>
-    UserObject userObjectCreator(void* ptr)
-    {
-        return UserObject(static_cast<T*>(ptr));
-    }
+    if (destruct)
+        object.get<T*>() -> ~T();
+    else
+        delete object.get<T*>();
 }
+
+template <typename T>
+UserObject userObjectCreator(void* ptr)
+{
+    return UserObject(static_cast<T*>(ptr));
+}
+    
+} // namespace detail
 
 template <typename T>
 inline ClassBuilder<T> Class::declare(IdRef id)
