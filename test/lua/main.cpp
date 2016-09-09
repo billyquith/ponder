@@ -92,7 +92,7 @@ namespace lib
     
     void declare()
     {
-        using namespace ponder::policy;
+        using namespace ponder;
     
         ponder::Class::declare<Vec>()
             .constructor()
@@ -108,14 +108,14 @@ namespace lib
         
             .function("up", &Vec::up)           // static
         
-            .function("funcRef", &Vec::ref)     // ref function
+            .function("funcRef", &Vec::ref, policy::ReturnInternalRef())     // ref function
             .property("propRef", &Vec::ref)     // ref property
             ;
         
         ponder::Class::declare<Holder>()
             .constructor()
             //  .property("pref", &Holder::ptrRef) // TODO - fix for self ref pointers
-            .function("rref", &Holder::refRef, ReturnInternalRef())
+            .function("rref", &Holder::refRef, policy::ReturnInternalRef())
             .property("vec", &Holder::vec)
             ;
     }

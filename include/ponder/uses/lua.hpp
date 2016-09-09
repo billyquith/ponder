@@ -90,7 +90,8 @@ namespace fmt = ponder::detail::fmt;
 #define PONDER_LUA_INSTTBLS "_instmt"
 
 // push a Ponder value onto the Lua state stack
-static int pushValue(lua_State *L, const ponder::Value& val)
+static int pushValue(lua_State *L, const ponder::Value& val,
+                     policy::ReturnKind retPolicy = policy::ReturnKind::Copy)
 {
     switch (val.kind())
     {
@@ -116,7 +117,9 @@ static int pushValue(lua_State *L, const ponder::Value& val)
             
         case ValueKind::User:
             {
-                UserObject vuobj = val.to<UserObject>();
+                UserObject vuobj(retPolicy == policy::ReturnKind::InternalRef
+                                    ? val.cref<UserObject>()
+                                    : val.to<UserObject>());
                 Class const& cls = vuobj.getClass();
                 void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
                 new(ud) UserObject(vuobj);
@@ -258,7 +261,7 @@ static int l_method_call(lua_State *L)
     ponder::runtime::ObjectCaller caller(*func);
     Value ret = caller.call(*uobj, args);
     if (ret.kind() != ValueKind::None)
-        return pushValue(L, ret);
+        return pushValue(L, ret, func->returnPolicy());
     
     return 0;
 }
