@@ -39,8 +39,9 @@ def processDoc(fpath):
             cmds = sln[3:].strip().split(',')
             
             for cmd in cmds:
+                cmd = cmd.strip()
                 if cmd == 'eg_begin':
-                    egname,egtxt = '???',[]
+                    egname,egtxt = None,[]
                 elif cmd == 'eg_end':                
                     egs.append({'name':egname, 'txt':egtxt})
                     egname = None
