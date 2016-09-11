@@ -55,7 +55,17 @@ struct FunctionDetails<R(*)(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(type)(A...);
+    typedef ReturnType(FunctionType)(A...);
+    typedef ReturnType(*Typedef)(A...);
+};
+
+template <typename R, typename... A>
+struct FunctionDetails<R(A...)>
+{
+    typedef std::tuple<A...> ParamTypes;
+    typedef R ReturnType;
+    typedef ReturnType(FunctionType)(A...);
+    typedef ReturnType(Typedef)(A...);
 };
     
     
@@ -70,6 +80,7 @@ struct MethodDetails<R(C::*)(A...)>
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
     typedef ReturnType(FunctionType)(ClassType&, A...);
+    typedef ReturnType(ClassType::*Typedef)(A...);
 };
 
 template <typename C, typename R, typename... A>
@@ -79,6 +90,7 @@ struct MethodDetails<R(C::*)(A...) const>
     typedef std::tuple<A...> ParamTypes;
     typedef const R ReturnType;
     typedef ReturnType(FunctionType)(ClassType const&, A...);
+    typedef ReturnType(ClassType::*Typedef)(A...) const;
 };
 
 
@@ -107,6 +119,7 @@ struct CallableDetails<R(C::*)(A...) const>
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
     typedef R(FunctionType)(A...);
+    typedef R(Typedef)(A...);
 };
 
 
@@ -191,7 +204,8 @@ struct FunctionTraits<T,
     static constexpr bool isFunction = true;
     
     typedef typename function::FunctionDetails<T> Details;
-    typedef typename std::remove_pointer<T>::type FunctionType;
+    typedef typename Details::FunctionType FunctionType;
+    typedef typename Details::Typedef Typedef;
     typedef typename Details::ReturnType ReturnType;
 };
 
@@ -206,6 +220,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     
     typedef typename function::MethodDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
+    typedef typename Details::Typedef Typedef;
     typedef typename Details::ReturnType ReturnType;
 };
 
@@ -249,6 +264,7 @@ struct FunctionTraits<T,
     
     typedef function::CallableDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
+    typedef typename Details::Typedef Typedef;
     typedef typename Details::ReturnType ReturnType;
 };
 
@@ -265,6 +281,7 @@ struct FunctionTraits<T,
     
     typedef function::CallableDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
+    typedef typename Details::Typedef Typedef;
     typedef typename Details::ReturnType ReturnType;
 };
 
