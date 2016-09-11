@@ -57,7 +57,7 @@ class recursive_wrapper
         this->get() = rhs;
     }
 
-  public:
+public:
     using type = T;
 
     /**
