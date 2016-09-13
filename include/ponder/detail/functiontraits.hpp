@@ -54,6 +54,7 @@ template <typename R, typename... A>
 struct FunctionDetails<R(*)(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
+    typedef std::tuple<A...> CallTypes;
     typedef R ReturnType;
     typedef ReturnType(FunctionType)(A...);
     typedef ReturnType(*Typedef)(A...);
@@ -63,6 +64,7 @@ template <typename R, typename... A>
 struct FunctionDetails<R(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
+    typedef std::tuple<A...> CallTypes;
     typedef R ReturnType;
     typedef ReturnType(FunctionType)(A...);
     typedef ReturnType(Typedef)(A...);
@@ -78,6 +80,7 @@ struct MethodDetails<R(C::*)(A...)>
 {
     typedef C ClassType;
     typedef std::tuple<A...> ParamTypes;
+    typedef std::tuple<ClassType&, A...> CallTypes;
     typedef R ReturnType;
     typedef ReturnType(FunctionType)(ClassType&, A...);
     typedef ReturnType(ClassType::*Typedef)(A...);
@@ -88,6 +91,7 @@ struct MethodDetails<R(C::*)(A...) const>
 {
     typedef const C ClassType;
     typedef std::tuple<A...> ParamTypes;
+    typedef std::tuple<const ClassType&, A...> CallTypes;
     typedef const R ReturnType;
     typedef ReturnType(FunctionType)(ClassType const&, A...);
     typedef ReturnType(ClassType::*Typedef)(A...) const;
@@ -117,6 +121,7 @@ template <typename C, typename R, typename... A>
 struct CallableDetails<R(C::*)(A...) const>
 {
     typedef std::tuple<A...> ParamTypes;
+    typedef std::tuple<A...> CallTypes;
     typedef R ReturnType;
     typedef R(FunctionType)(A...);
     typedef R(Typedef)(A...);

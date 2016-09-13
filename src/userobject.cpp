@@ -44,10 +44,30 @@ UserObject::UserObject()
 {
 }
 
-UserObject::UserObject(const UserObject& copy)
-    : m_class(copy.m_class)
-    , m_holder(copy.m_holder)
+UserObject::UserObject(const UserObject& other)
+    : m_class(other.m_class)
+    , m_holder(other.m_holder)
 {
+}
+
+UserObject::UserObject(const UserObject&& other) noexcept
+    : m_class(std::move(other.m_class))
+    , m_holder(std::move(other.m_holder))
+{
+}
+
+UserObject& UserObject::operator = (const UserObject& other)
+{
+    m_class = other.m_class;
+    m_holder = other.m_holder;
+    return *this;
+}
+
+UserObject& UserObject::operator = (const UserObject&& other) noexcept
+{
+    m_class = other.m_class;
+    m_holder = std::move(other.m_holder);
+    return *this;
 }
 
 void* UserObject::pointer() const
@@ -85,14 +105,6 @@ void UserObject::set(IdRef property, const Value& value) const
 void UserObject::set(std::size_t index, const Value& value) const
 {
     getClass().property(index).set(*this, value);
-}
-
-UserObject& UserObject::operator = (const UserObject& other)
-{
-    m_class = other.m_class;
-    m_holder = other.m_holder;
-
-    return *this;
 }
 
 bool UserObject::operator == (const UserObject& other) const

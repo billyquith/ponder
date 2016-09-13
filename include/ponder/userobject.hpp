@@ -79,7 +79,7 @@ public:
      */
     template <typename T>
     UserObject(const T& object);
-
+    
     /**
      * \brief Construct a user object from a reference to an object
      *
@@ -90,7 +90,7 @@ public:
      * \return UserObject containing a reference to \a  object
      */
     template <typename T>
-    static UserObject makeRef(T& object);
+    static UserObject makeRef(T&& object);
     
     /**
      * \brief Construct a user object from a const reference to an object
@@ -102,7 +102,7 @@ public:
      * \return UserObject containing a const reference to \a object
      */
     template <typename T>
-    static UserObject makeRef(const T& object);
+    static UserObject makeRef(const T&& object);
     
     /**
      * \brief Construct a user object with a copy of an object
@@ -119,9 +119,34 @@ public:
     /**
      * \brief Copy constructor
      *
-     * \param copy Instance to copy
+     * \param other instance to copy
      */
-    UserObject(const UserObject& copy);
+    UserObject(const UserObject& other);
+
+    /**
+     * \brief Move constructor
+     *
+     * \param other instance to move
+     */
+    UserObject(const UserObject&& other) noexcept;
+    
+    /**
+     * \brief Copy assignment operator
+     *
+     * \param other User object to assign
+     *
+     * \return Reference to this
+     */
+    UserObject& operator = (const UserObject& other);
+
+    /**
+     * \brief Move assignment operator
+     *
+     * \param other User object to assign
+     *
+     * \return Reference to this
+     */
+    UserObject& operator = (const UserObject&& other) noexcept;
 
     /**
      * \brief Retrieve the instance stored in the user object
@@ -227,15 +252,6 @@ public:
      * \throw BadType \a value can't be converted to the property's type
      */
     void set(std::size_t index, const Value& value) const;
-
-    /**
-     * \brief Assignment operator
-     *
-     * \param other User object to assign
-     *
-     * \return Reference to this
-     */
-    UserObject& operator = (const UserObject& other);
 
     /**
      * \brief Operator == to compare equality between two user objects

@@ -79,6 +79,14 @@ public:
     Value();
 
     /**
+     * \brief Construct the value from a variable of type T
+     *
+     * \param val Value to store
+     */
+    template <typename T>
+    Value(const T& val);
+
+    /**
      * \brief Copy constructor
      *
      * \param other Value to copy
@@ -86,12 +94,15 @@ public:
     Value(const Value& other);
 
     /**
-     * \brief Construct the value from a variable of type T
+     * \brief Move constructor
      *
-     * \param val Value to store
+     * \param other Value to move
      */
-    template <typename T>
-    Value(const T& val);
+    Value(const Value&& other) noexcept;
+    
+    void operator = (const Value& other);
+    
+    void operator = (const Value&& other) noexcept;
 
     /**
      * \brief Return the Ponder runtime kind of the value
