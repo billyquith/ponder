@@ -50,7 +50,7 @@ UserObject::UserObject(const UserObject& other)
 {
 }
 
-UserObject::UserObject(const UserObject&& other) noexcept
+UserObject::UserObject(UserObject&& other) noexcept
     : m_class(std::move(other.m_class))
     , m_holder(std::move(other.m_holder))
 {

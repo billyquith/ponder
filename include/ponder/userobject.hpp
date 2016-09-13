@@ -128,7 +128,7 @@ public:
      *
      * \param other instance to move
      */
-    UserObject(const UserObject&& other) noexcept;
+    UserObject(UserObject&& other) noexcept;
     
     /**
      * \brief Copy assignment operator
