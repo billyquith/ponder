@@ -63,7 +63,7 @@ UserObject& UserObject::operator = (const UserObject& other)
     return *this;
 }
 
-UserObject& UserObject::operator = (const UserObject&& other) noexcept
+UserObject& UserObject::operator = (UserObject&& other) noexcept
 {
     m_class = other.m_class;
     m_holder = std::move(other.m_holder);

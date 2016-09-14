@@ -131,7 +131,7 @@ struct ValueMapper
 {
     static const ponder::ValueKind type = ponder::ValueKind::User;
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
-    static ponder::UserObject&& to(T&& source) {return std::move(ponder::UserObject(source));}
+//    static ponder::UserObject&& to(T&& source) {return std::move(ponder::UserObject(source));}
 
     static T from(bool)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean,ponder::mapType<T>()));}

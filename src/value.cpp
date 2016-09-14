@@ -48,10 +48,10 @@ Value::Value(const Value& other)
 {
 }
 
-Value::Value(const Value&& other) noexcept
+Value::Value(Value&& other) noexcept
     :   m_type(other.m_type)
 {
-    std::swap(m_value, const_cast<Variant&>(other.m_value));
+    std::swap(m_value, other.m_value);
 }
 
 void Value::operator = (const Value& other)
@@ -60,9 +60,9 @@ void Value::operator = (const Value& other)
     m_type = other.m_type;
 }
     
-void Value::operator = (const Value&& other) noexcept
+void Value::operator = (Value&& other) noexcept
 {
-    std::swap(m_value, const_cast<Variant&>(other.m_value));
+    std::swap(m_value, other.m_value);
     m_type = other.m_type;
 }
 
