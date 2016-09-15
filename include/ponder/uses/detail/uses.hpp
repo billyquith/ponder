@@ -63,8 +63,6 @@ struct RuntimeModule
     template <typename F, typename FTraits, typename Policies_t>
     static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
     {
-//        static constexpr int implType = runtime::impl::FuncImplTypeMap<(int)T::kind>::Type;
-        
         return new runtime::impl::FunctionCallerImpl<F, FTraits, Policies_t>(name, function);
     }
 };

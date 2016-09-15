@@ -232,12 +232,8 @@ private:
     const IdRef m_name;
 };
 
-/*
- * The FunctionImpl class is a template which is specialized
- * according to the underlying function prototype.
- */
-//template <int E, typename Policies_t, typename T = void> class FunctionCallerImpl;
-    
+// The FunctionImpl class is a template which is specialized according to the
+// underlying function prototype.
 template <typename F, typename FTraits, typename FPolicies>
 class FunctionCallerImpl : public FunctionCaller
 {
