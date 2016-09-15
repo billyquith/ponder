@@ -85,7 +85,7 @@ T Value::to() const
 }
 
 template <typename T>
-T& Value::ref() const
+T& Value::ref()
 {
     try
     {

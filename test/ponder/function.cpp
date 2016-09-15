@@ -152,12 +152,12 @@ namespace FunctionTest
         }
     };
     
-    void nonMember1(MyClass* object)  // TODO - allow non-const refs
+    void nonMember1(MyClass& object)  // TODO - allow non-const refs
     {
-        object->p1 = true;
+        object.p1 = true;
     }
     
-    int nonMember2(MyClass object, int x)
+    int nonMember2(MyClass& object, int x)
     {
         return object.p2 + x;
     }
@@ -232,17 +232,17 @@ namespace FunctionTest
             .function("memberParams6", &MyClass::memberParams6)     // 5 parameters
             
             // ***** nested functions *****
-            .function("lambdaFunc1", [](MyClass self){ self.inner.nested1(); }) // XXXX modifying copy
+            .function("lambdaFunc1", [](MyClass& self){ self.inner.nested1(); })
             // getter returning an object
-            .function("lambdaFunc2", [](MyClass self){ self.getInner().nested2(); })
+            .function("lambdaFunc2", [](MyClass& self){ self.getInner().nested2(); })
             // raw pointer
-            .function("lambdaFunc3", [](MyClass self){ return self.innerPtr->nested3(); })
+            .function("lambdaFunc3", [](MyClass& self){ return self.innerPtr->nested3(); })
             // getter returning a raw pointer
-            .function("lambdaFunc4", [](MyClass self){ self.getInnerPtr()->nested4(99); })
+            .function("lambdaFunc4", [](MyClass& self){ self.getInnerPtr()->nested4(99); })
             // smart pointer
-            .function("lambdaFunc5", [](MyClass self){ self.innerSmartPtr.get()->nested5(); })
+            .function("lambdaFunc5", [](MyClass& self){ self.innerSmartPtr.get()->nested5(); })
             // getter returning a smart pointer
-            .function("lambdaFunc6", [](MyClass self){ self.getInnerSmartPtr().get()->nested6(); })
+            .function("lambdaFunc6", [](MyClass& self){self.getInnerSmartPtr().get()->nested6();})
         
             // ***** std::function *****
             .function("funcWrapper1",
@@ -302,8 +302,8 @@ struct FunctionTestFixture
     ,   fn_member2(metaclass.function("member2"))
     ,   fn_member3(metaclass.function("member3"))
     ,   fn_member4(metaclass.function("member4"))
-    ,   fn_memberParams1 (metaclass.function("memberParams1"))
-    ,   fn_memberParams2 (metaclass.function("memberParams2"))
+    ,   fn_memberParams1(metaclass.function("memberParams1"))
+    ,   fn_memberParams2(metaclass.function("memberParams2"))
     ,   fn_memberParams3(metaclass.function("memberParams3"))
     ,   fn_memberParams4(metaclass.function("memberParams4"))
     ,   fn_memberParams5(metaclass.function("memberParams5"))

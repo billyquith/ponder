@@ -128,6 +128,15 @@ public:
      * \return Reference to this
      */
     Args& operator += (const Value& arg);
+    
+    /**
+     * \brief Overload of operator += to append a new argument to the list
+     *
+     * \param arg Argument to append to the list
+     *
+     * \return Reference to this
+     */
+    Args& insert(std::size_t index, const Value& v);
 
 public:
 

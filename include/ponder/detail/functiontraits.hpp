@@ -44,6 +44,7 @@ namespace detail {
     
 namespace function {
 
+// Function (ex-class)
 template <typename T>
 struct FunctionDetails
 {
@@ -55,8 +56,9 @@ struct FunctionDetails<R(*)(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(FunctionType)(A...);
     typedef ReturnType(*Typedef)(A...);
+    typedef ReturnType(FunctionType)(A...);
+    typedef std::tuple<A...> FunctionCallTypes;
 };
 
 template <typename R, typename... A>
@@ -64,8 +66,9 @@ struct FunctionDetails<R(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(FunctionType)(A...);
     typedef ReturnType(Typedef)(A...);
+    typedef ReturnType(FunctionType)(A...);
+    typedef std::tuple<A...> FunctionCallTypes;
 };
     
     
@@ -79,8 +82,9 @@ struct MethodDetails<R(C::*)(A...)>
     typedef C ClassType;
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(FunctionType)(ClassType&, A...);
     typedef ReturnType(ClassType::*Typedef)(A...);
+    typedef ReturnType(FunctionType)(ClassType&, A...);
+    typedef std::tuple<ClassType&, A...> FunctionCallTypes;
 };
 
 template <typename C, typename R, typename... A>
@@ -91,6 +95,7 @@ struct MethodDetails<R(C::*)(A...) const>
     typedef const R ReturnType;
     typedef ReturnType(FunctionType)(ClassType const&, A...);
     typedef ReturnType(ClassType::*Typedef)(A...) const;
+    typedef std::tuple<const ClassType&, A...> FunctionCallTypes;
 };
 
 
@@ -116,10 +121,12 @@ struct CallableDetails : public CallableDetails<decltype(&T::operator())> {};
 template <typename C, typename R, typename... A>
 struct CallableDetails<R(C::*)(A...) const>
 {
+    typedef C ClassType;
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef R(FunctionType)(A...);
     typedef R(Typedef)(A...);
+    typedef R(FunctionType)(A...);
+    typedef std::tuple<A...> FunctionCallTypes;
 };
 
 

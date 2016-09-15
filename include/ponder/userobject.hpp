@@ -152,12 +152,23 @@ public:
      * \brief Get a const reference to the object data contained
      *
      * Returns a const reference to the contained object, of type T. The user is responsible for
-     * ensuring that the type passed is correct.
+     * ensuring that the type passed is correct. See ref() for non-const ref.
      *
      * \return A const reference to the contained object.
      */
     template <typename T>
     const T& cref() const;
+
+   /**
+    * \brief Get a non-const reference to the object data contained
+    *
+    * Returns a reference to the contained object, of type T. The user is responsible for
+    * ensuring that the type passed is correct. See cref() for const ref.
+    *
+    * \return A reference to the contained object.
+    */
+    template <typename T>
+    T& ref();
 
     /**
      * \brief Retrieve the metaclass of the stored instance

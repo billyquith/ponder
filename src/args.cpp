@@ -66,4 +66,10 @@ Args& Args::operator+=(const Value& arg)
     return *this;
 }
 
+Args& Args::insert(std::size_t index, const Value& v)
+{
+    m_values.insert(m_values.begin() + index, v);
+    return *this;
+}
+
 } // namespace ponder

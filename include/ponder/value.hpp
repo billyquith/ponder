@@ -124,7 +124,7 @@ public:
      * \return A non-const reference to the contained data.
      */
     template <typename T>
-    T& ref() const;
+    T& ref();
 
     /**
      * \brief Get a const reference to the value data contained

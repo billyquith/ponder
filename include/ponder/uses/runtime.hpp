@@ -317,13 +317,18 @@ inline UserObject ObjectFactory::create(A... args) const
 template <typename... A>
 inline Value ObjectCaller::call(const UserObject &obj, A... vargs)
 {
+    if (obj.pointer() == nullptr)
+        PONDER_ERROR(NullObject(&obj.getClass()));
+
     Args args(detail::ArgsBuilder<A...>::makeArgs(vargs...));
     
     // Check the number of arguments
     if (args.count() < m_func.paramCount())
         PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
 
-    return m_caller->execute(obj, args);
+    args.insert(0, obj);
+
+    return m_caller->execute(args);
 }
     
 template <typename... A>
@@ -335,7 +340,7 @@ inline Value FunctionCaller::call(A... vargs)
     if (args.count() < m_func.paramCount())
         PONDER_ERROR(NotEnoughArguments(m_func.name(), args.count(), m_func.paramCount()));
 
-    return m_caller->execute(UserObject::nothing, args);
+    return m_caller->execute(args);
 }
 
 } // namespace runtime

@@ -93,6 +93,12 @@ UserObject UserObject::makeCopy(const T& object)
 }
 
 template <typename T>
+T& UserObject::ref()
+{
+    return *reinterpret_cast<T*>(m_holder->object());
+}
+
+template <typename T>
 const T& UserObject::cref() const
 {
     return *reinterpret_cast<T*>(m_holder->object());
