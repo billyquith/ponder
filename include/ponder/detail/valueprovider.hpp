@@ -91,7 +91,7 @@ struct ValueProviderImpl<T*, ValueKind::User>
  * Helper structure to instanciate new values based on their type
  */
 template <typename T>
-struct ValueProvider : ValueProviderImpl<T, ponder_ext::ValueMapper<T>::type>
+struct ValueProvider : ValueProviderImpl<T, ponder_ext::ValueMapper<T>::kind>
 {
 };
 

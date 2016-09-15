@@ -176,7 +176,7 @@ public:
         typedef typename ChooseCallReturner<FPolicies, R>::type CallReturner;
         
         return CallReturner::value(
-            func(ConvertArg<(int)ponder_ext::ValueMapper<typename detail::RawType<A>::Type>::type,
+            func(ConvertArg<(int)ponder_ext::ValueMapper<typename detail::RawType<A>::Type>::kind,
                             A>::convert(args, Is)...));
     }
 };
@@ -190,7 +190,7 @@ public:
     template<typename F, typename... A, std::size_t... Is>
     static Value call(F func, const Args& args, detail::index_sequence<Is...>)
     {
-        func(ConvertArg<(int)ponder_ext::ValueMapper<typename detail::RawType<A>::Type>::type,
+        func(ConvertArg<(int)ponder_ext::ValueMapper<typename detail::RawType<A>::Type>::kind,
                         A>::convert(args,Is)...);
         return Value::nothing;
     }

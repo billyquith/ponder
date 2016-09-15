@@ -364,7 +364,7 @@ struct PropertyFactory1
         typedef Accessor1<C, ReturnType> AccessorType;
 
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
+        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
         
         return new PropertyType(name, AccessorType(accessor));
     }
@@ -383,7 +383,7 @@ struct PropertyFactory2
         typedef Accessor2<C, ReturnType> AccessorType;
 
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
+        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
 
         return new PropertyType(name, AccessorType(accessor1, accessor2));
     }
@@ -413,7 +413,7 @@ struct PropertyFactory2<C, F1, F2,
         typedef Accessor3<C, OtherClassType, ReturnType> AccessorType;
 
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
+        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
 
         return new PropertyType(name, AccessorType(accessor1, accessor2));
     }
@@ -433,7 +433,7 @@ struct PropertyFactory3
         typedef Accessor2<C, ReturnType> AccessorType;
 
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::type>::Type PropertyType;
+        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
 
         return new PropertyType(name,
             AccessorType(std::bind(accessor1, std::bind(accessor3, _1)),
