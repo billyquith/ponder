@@ -628,16 +628,16 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
                     .call(object, ponder::Args(Zero, One, Two, Zero, One))
                         == Value::nothing);
         
-        IS_TRUE(FunctionCaller(fn_lambdaFunc1).call(ponder::Args(object)) == Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc2).call(ponder::Args(object)) == Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc3).call(ponder::Args(object)) == Value(16));
-        IS_TRUE(FunctionCaller(fn_lambdaFunc4).call(ponder::Args(object, 20)) == Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc5).call(ponder::Args(object)) == Value::nothing);
-        IS_TRUE(FunctionCaller(fn_lambdaFunc6).call(ponder::Args(object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc1).call(ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc2).call(ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc3).call(ponder::Args(&object)) == Value(16));
+        IS_TRUE(FunctionCaller(fn_lambdaFunc4).call(ponder::Args(&object, 20)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc5).call(ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(FunctionCaller(fn_lambdaFunc6).call(ponder::Args(&object)) == Value::nothing);
         
-        IS_TRUE(FunctionCaller(fn_funcWrapper1).call(ponder::Args(object, 10)) == Value(10));
-        IS_TRUE(FunctionCaller(fn_funcWrapper2).call(ponder::Args(object, 10)) == Value(30));
-        IS_TRUE(FunctionCaller(fn_funcWrapper3).call(ponder::Args(object, 10)) == Value(60));
+        IS_TRUE(FunctionCaller(fn_funcWrapper1).call(ponder::Args(&object, 10)) == Value(10));
+        IS_TRUE(FunctionCaller(fn_funcWrapper2).call(ponder::Args(&object, 10)) == Value(30));
+        IS_TRUE(FunctionCaller(fn_funcWrapper3).call(ponder::Args(&object, 10)) == Value(60));
         
         auto const& mc = ponder::classByType<MyClass>();
         Value r = FunctionCaller(fn_nonClassFunc1).call();
@@ -661,29 +661,29 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         IS_TRUE(callStatic(fn_nonMember2, ponder::Args(&object, 10)) == Value(12));
         IS_TRUE(callStatic(fn_nonMember3, ponder::Args(&object)) == Value("3"));
         
-        IS_TRUE(call(fn_member1, object, ponder::Args()).to<MyType>() == MyType(4));
-        IS_TRUE(call(fn_member2, object, ponder::Args()).to<MyType>() == MyType(5));
-        IS_TRUE(call(fn_member3, object, ponder::Args()) == Value::nothing);
-        IS_TRUE(call(fn_member4, object, ponder::Args("hi")) == Value("hi"));
-        IS_TRUE(call(fn_memberParams1, object, ponder::Args()) == Value::nothing);
-        IS_TRUE(call(fn_memberParams2, object, ponder::Args(true)) == Value::nothing);
-        IS_TRUE(call(fn_memberParams3, object, ponder::Args(1., 2.f)) == Value::nothing);
-        IS_TRUE(call(fn_memberParams4, object, ponder::Args(1, 2, 3)) == Value::nothing);
-        IS_TRUE(call(fn_memberParams5, object, ponder::Args("1", "2", "3", "4"))
+        IS_TRUE(call(fn_member1, &object, ponder::Args()).to<MyType>() == MyType(4));
+        IS_TRUE(call(fn_member2, &object, ponder::Args()).to<MyType>() == MyType(5));
+        IS_TRUE(call(fn_member3, &object, ponder::Args()) == Value::nothing);
+        IS_TRUE(call(fn_member4, &object, ponder::Args("hi")) == Value("hi"));
+        IS_TRUE(call(fn_memberParams1, &object, ponder::Args()) == Value::nothing);
+        IS_TRUE(call(fn_memberParams2, &object, ponder::Args(true)) == Value::nothing);
+        IS_TRUE(call(fn_memberParams3, &object, ponder::Args(1., 2.f)) == Value::nothing);
+        IS_TRUE(call(fn_memberParams4, &object, ponder::Args(1, 2, 3)) == Value::nothing);
+        IS_TRUE(call(fn_memberParams5, &object, ponder::Args("1", "2", "3", "4"))
                     == Value::nothing);
-        IS_TRUE(call(fn_memberParams6, object, ponder::Args(Zero, One, Two, Zero, One))
+        IS_TRUE(call(fn_memberParams6, &object, ponder::Args(Zero, One, Two, Zero, One))
                     == Value::nothing);
         
-        IS_TRUE(callStatic(fn_lambdaFunc1, ponder::Args(object)) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc2, ponder::Args(object)) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc3, ponder::Args(object)) == Value(16));
-        IS_TRUE(callStatic(fn_lambdaFunc4, ponder::Args(object, 20)) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc5, ponder::Args(object)) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc6, ponder::Args(object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc1, ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc2, ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc3, ponder::Args(&object)) == Value(16));
+        IS_TRUE(callStatic(fn_lambdaFunc4, ponder::Args(&object, 20)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc5, ponder::Args(&object)) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc6, ponder::Args(&object)) == Value::nothing);
         
-        IS_TRUE(callStatic(fn_funcWrapper1, ponder::Args(object, 10)) == Value(10));
-        IS_TRUE(callStatic(fn_funcWrapper2, ponder::Args(object, 10)) == Value(30));
-        IS_TRUE(callStatic(fn_funcWrapper3, ponder::Args(object, 10)) == Value(60));
+        IS_TRUE(callStatic(fn_funcWrapper1, ponder::Args(&object, 10)) == Value(10));
+        IS_TRUE(callStatic(fn_funcWrapper2, ponder::Args(&object, 10)) == Value(30));
+        IS_TRUE(callStatic(fn_funcWrapper3, ponder::Args(&object, 10)) == Value(60));
         
         auto const& mc = ponder::classByType<MyClass>();
         Value r = FunctionCaller(fn_nonClassFunc1).call();
@@ -707,16 +707,16 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         IS_TRUE(callStatic(fn_nonMember2, &object, 10) == Value(12));
         IS_TRUE(callStatic(fn_nonMember3, &object) == Value("3"));
         
-        IS_TRUE(call(fn_member1, object).to<MyType>() == MyType(4));
-        IS_TRUE(call(fn_member2, object).to<MyType>() == MyType(5));
-        IS_TRUE(call(fn_member3, object) == Value::nothing);
-        IS_TRUE(call(fn_member4, object, "hi") == Value("hi"));
-        IS_TRUE(call(fn_memberParams1, object) == Value::nothing);
-        IS_TRUE(call(fn_memberParams2, object, true) == Value::nothing);
-        IS_TRUE(call(fn_memberParams3, object, 1., 2.f) == Value::nothing);
-        IS_TRUE(call(fn_memberParams4, object, 1, 2, 3) == Value::nothing);
-        IS_TRUE(call(fn_memberParams5, object, "1", "2", "3", "4") == Value::nothing);
-        IS_TRUE(call(fn_memberParams6, object, Zero, One, Two, Zero, One) == Value::nothing);
+        IS_TRUE(call(fn_member1, &object).to<MyType>() == MyType(4));
+        IS_TRUE(call(fn_member2, &object).to<MyType>() == MyType(5));
+        IS_TRUE(call(fn_member3, &object) == Value::nothing);
+        IS_TRUE(call(fn_member4, &object, "hi") == Value("hi"));
+        IS_TRUE(call(fn_memberParams1, &object) == Value::nothing);
+        IS_TRUE(call(fn_memberParams2, &object, true) == Value::nothing);
+        IS_TRUE(call(fn_memberParams3, &object, 1., 2.f) == Value::nothing);
+        IS_TRUE(call(fn_memberParams4, &object, 1, 2, 3) == Value::nothing);
+        IS_TRUE(call(fn_memberParams5, &object, "1", "2", "3", "4") == Value::nothing);
+        IS_TRUE(call(fn_memberParams6, &object, Zero, One, Two, Zero, One) == Value::nothing);
         
         IS_TRUE(callStatic(fn_lambdaFunc1, &object) == Value::nothing);
         IS_TRUE(callStatic(fn_lambdaFunc2, &object) == Value::nothing);
@@ -773,25 +773,25 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         
         MyClass object;
         
-        REQUIRE_THROWS_AS(call(fn_nonMember2, object, ponder::Args()),
+        REQUIRE_THROWS_AS(call(fn_nonMember2, &object, ponder::Args()),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_member4, object, ponder::Args()),
+        REQUIRE_THROWS_AS(call(fn_member4, &object, ponder::Args()),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_memberParams2, object, ponder::Args()),
+        REQUIRE_THROWS_AS(call(fn_memberParams2, &object, ponder::Args()),
                         ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_memberParams3, object, ponder::Args(1.)),
+        REQUIRE_THROWS_AS(call(fn_memberParams3, &object, ponder::Args(1.)),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_memberParams4, object, ponder::Args(1, 2)),
+        REQUIRE_THROWS_AS(call(fn_memberParams4, &object, ponder::Args(1, 2)),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_memberParams5, object, ponder::Args("1", "2", "3")),
+        REQUIRE_THROWS_AS(call(fn_memberParams5, &object, ponder::Args("1", "2", "3")),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_memberParams6, object, ponder::Args(Zero, One, Two, Zero)),
+        REQUIRE_THROWS_AS(call(fn_memberParams6, &object, ponder::Args(Zero, One, Two, Zero)),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_funcWrapper1, object, ponder::Args()),
+        REQUIRE_THROWS_AS(call(fn_funcWrapper1, &object, ponder::Args()),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_funcWrapper2, object, ponder::Args()),
+        REQUIRE_THROWS_AS(call(fn_funcWrapper2, &object, ponder::Args()),
                           ponder::NotEnoughArguments);
-        REQUIRE_THROWS_AS(call(fn_funcWrapper3, object, ponder::Args()),
+        REQUIRE_THROWS_AS(call(fn_funcWrapper3, &object, ponder::Args()),
                           ponder::NotEnoughArguments);
     }
 
@@ -805,19 +805,19 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
 
        REQUIRE_THROWS_AS(callStatic(fn_nonMember2, ponder::Args(&object, arg, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(call(fn_memberParams3, object, ponder::Args(arg, arg)),
+       REQUIRE_THROWS_AS(call(fn_memberParams3, &object, ponder::Args(arg, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(call(fn_memberParams4, object, ponder::Args(arg, arg, arg)),
+       REQUIRE_THROWS_AS(call(fn_memberParams4, &object, ponder::Args(arg, arg, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(call(fn_memberParams5, object, ponder::Args(arg, arg, arg, arg)),
+       REQUIRE_THROWS_AS(call(fn_memberParams5, &object, ponder::Args(arg, arg, arg, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(call(fn_memberParams6, object, ponder::Args(arg, arg, arg, arg, arg)),
+       REQUIRE_THROWS_AS(call(fn_memberParams6, &object, ponder::Args(arg, arg, arg, arg, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(callStatic(fn_funcWrapper1, ponder::Args(object, arg)),
+       REQUIRE_THROWS_AS(callStatic(fn_funcWrapper1, ponder::Args(&object, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(callStatic(fn_funcWrapper2, ponder::Args(object, arg)),
+       REQUIRE_THROWS_AS(callStatic(fn_funcWrapper2, ponder::Args(&object, arg)),
                          ponder::BadArgument);
-       REQUIRE_THROWS_AS(callStatic(fn_funcWrapper3, ponder::Args(object, arg)),
+       REQUIRE_THROWS_AS(callStatic(fn_funcWrapper3, ponder::Args(&object, arg)),
                          ponder::BadArgument);
    }
 }
