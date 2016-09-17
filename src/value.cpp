@@ -32,8 +32,7 @@
 #include <ponder/value.hpp>
 
 
-namespace ponder
-{
+namespace ponder {
     
 const Value Value::nothing;
 
@@ -48,6 +47,24 @@ Value::Value(const Value& other)
     , m_type(other.m_type)
 {
 }
+
+// Value::Value(Value&& other) noexcept
+// {
+//     std::swap(m_type, other.m_type);
+//     std::swap(m_value, other.m_value);
+// }
+
+void Value::operator = (const Value& other)
+{
+    m_value = other.m_value;
+    m_type = other.m_type;
+}
+    
+// void Value::operator = (Value&& other) noexcept
+// {
+//     std::swap(m_value, other.m_value);
+//     m_type = other.m_type;
+// }
 
 ValueKind Value::kind() const
 {

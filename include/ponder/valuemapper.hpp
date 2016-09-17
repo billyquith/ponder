@@ -129,7 +129,7 @@ namespace ponder_ext
 template <typename T, typename C>
 struct ValueMapper
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::User;  // XXXX rename type to kind
+    static const ponder::ValueKind kind = ponder::ValueKind::User;
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
 
     static T from(bool)

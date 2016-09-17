@@ -63,7 +63,14 @@ typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
 template <typename T>
 UserObject UserObject::makeRef(T& object)
 {
-    return UserObject(object);
+    typedef detail::ObjectTraits<T&> Traits;
+    typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
+
+    UserObject userObject;
+    userObject.m_class = &classByObject(object);
+    userObject.m_holder.reset(new Holder(Traits::getPointer(object)));
+
+    return userObject;
 }
 
 template <typename T>
