@@ -127,7 +127,7 @@ struct ChooseCallReturner<std::tuple<P, Ps...>, R> // recurse
 template <int TFrom, typename TTo>
 struct ConvertArg
 {
-    static inline typename std::remove_reference<TTo>::type
+    static typename std::remove_reference<TTo>::type
     convert(const Args& args, std::size_t index)
     {
         try {
@@ -142,7 +142,7 @@ struct ConvertArg
 template <typename TTo>
 struct ConvertArg<(int)ValueKind::User, TTo&>
 {
-    static inline TTo&
+    static TTo&
     convert(const Args& args, std::size_t index)
     {
         auto&& uobj = const_cast<Value&>(args[index]).ref<UserObject>();
@@ -155,10 +155,13 @@ struct ConvertArg<(int)ValueKind::User, TTo&>
 template <typename TTo>
 struct ConvertArg<(int)ValueKind::User, const TTo&>
 {
-    static inline const TTo&
+    static const TTo&
     convert(const Args& args, std::size_t index)
     {
-        return args[index].cref<UserObject>().cref<TTo>();
+        auto&& uobj = args[index].cref<UserObject>();
+        if (uobj.pointer() == nullptr)
+            PONDER_ERROR(NullObject(&uobj.getClass()));
+        return uobj.cref<TTo>();
     }
 };
 
@@ -253,7 +256,8 @@ private:
     
     Value execute(const Args& args) const
     {
-        return FunctionType::template call<decltype(m_function), FTraits, FPolicies>(m_function, args);
+        return FunctionType::template
+            call<decltype(m_function), FTraits, FPolicies>(m_function, args);
     }
 };
 
