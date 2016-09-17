@@ -34,6 +34,7 @@
 #include <ponder/config.hpp>
 #include <ponder/detail/format.hpp>
 #include <ponder/type.hpp>
+#include <type_traits>
 
 namespace ponder {
 namespace detail {
@@ -136,7 +137,13 @@ T convert(const U& from)
 
 // index_sequence
 // From: http://stackoverflow.com/a/32223343/3233
+// A pre C++14 version supplied here. MSVC chokes on this but has its own version.
 //
+#ifdef _MSC_VER
+#   define _PONDER_SEQNS std
+#else
+#   define _PONDER_SEQNS ::ponder::detail
+
 template <size_t... Ints>
 struct index_sequence
 {
@@ -161,6 +168,8 @@ typename make_index_sequence<N - N/2>::type>
 
 template<> struct make_index_sequence<0> : index_sequence<> { };
 template<> struct make_index_sequence<1> : index_sequence<0> { };
+
+#endif // index_sequence
 
 // Return true if all args true. Useful for variadic template expansions.
 static inline bool allTrue()

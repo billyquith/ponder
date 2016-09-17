@@ -250,12 +250,14 @@ TEST_CASE("Ponder supports different function types")
                                                                      == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
     }
-    
+
+
     SECTION("type member function")  // T(C::*)()
     {
         using ponder::detail::FunctionTraits;
         using ponder::FunctionKind;
-        
+
+        static_assert(std::is_member_function_pointer<void (TraitsTest::Methods::*)()>::value, "MFP");
         static_assert(FunctionTraits<void(Methods::*)()>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(Methods::*)()>::kind == FunctionKind::MemberFunction,
@@ -824,7 +826,7 @@ TEST_CASE("Lexical cast is used")
 // From: http://en.cppreference.com/w/cpp/utility/integer_sequence
 
 template<typename R, typename Array, std::size_t... I>
-R a2t_impl(const Array& a, ponder::detail::index_sequence<I...>)
+R a2t_impl(const Array& a, _PONDER_SEQNS::index_sequence<I...>)
 {
     return std::make_tuple(a[I]...);
 }
@@ -832,7 +834,7 @@ R a2t_impl(const Array& a, ponder::detail::index_sequence<I...>)
 template< typename R,
           typename T,
           std::size_t N,
-          typename Indices = ponder::detail::make_index_sequence<N> >
+          typename Indices = _PONDER_SEQNS::make_index_sequence<N> >
 R a2t(const std::array<T, N>& a)
 {
     return a2t_impl<R>(a, Indices());
@@ -842,7 +844,7 @@ TEST_CASE("Check Ponder utilities work correctly")
 {
     SECTION("integer_sequence")
     {
-        auto is = ponder::detail::make_index_sequence<3>();
+        auto is = _PONDER_SEQNS::make_index_sequence<3>();
         REQUIRE(is.size() == 3);
 
         std::array<int, 4> array {{1,2,3,4}};

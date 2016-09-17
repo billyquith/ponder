@@ -123,7 +123,7 @@ namespace FunctionTest
         const Inner* getInnerPtr() const {return innerPtr;}
         
         std::shared_ptr<Inner> innerSmartPtr;
-        const std::shared_ptr<Inner> getInnerSmartPtr() {return innerSmartPtr;}
+        std::shared_ptr<Inner> getInnerSmartPtr() {return innerSmartPtr;}
         
         int funcWrapper1(int x) {return x;}
         int funcWrapper2(int x, int y) {return x + y;}
@@ -718,16 +718,16 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         IS_TRUE(call(fn_memberParams5, object, "1", "2", "3", "4") == Value::nothing);
         IS_TRUE(call(fn_memberParams6, object, Zero, One, Two, Zero, One) == Value::nothing);
         
-        IS_TRUE(callStatic(fn_lambdaFunc1, object) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc2, object) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc3, object) == Value(16));
-        IS_TRUE(callStatic(fn_lambdaFunc4, object, 20) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc5, object) == Value::nothing);
-        IS_TRUE(callStatic(fn_lambdaFunc6, object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc1, &object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc2, &object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc3, &object) == Value(16));
+        IS_TRUE(callStatic(fn_lambdaFunc4, &object, 20) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc5, &object) == Value::nothing);
+        IS_TRUE(callStatic(fn_lambdaFunc6, &object) == Value::nothing);
         
-        IS_TRUE(callStatic(fn_funcWrapper1, object, 10) == Value(10));
-        IS_TRUE(callStatic(fn_funcWrapper2, object, 10) == Value(30));
-        IS_TRUE(callStatic(fn_funcWrapper3, object, 10) == Value(60));
+        IS_TRUE(callStatic(fn_funcWrapper1, &object, 10) == Value(10));
+        IS_TRUE(callStatic(fn_funcWrapper2, &object, 10) == Value(30));
+        IS_TRUE(callStatic(fn_funcWrapper3, &object, 10) == Value(60));
         
         auto const& mc = ponder::classByType<MyClass>();
         Value r = FunctionCaller(fn_nonClassFunc1).call();

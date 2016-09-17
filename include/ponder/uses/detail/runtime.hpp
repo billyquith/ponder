@@ -30,6 +30,7 @@
 #define PONDER_USES_DETAIL_RUNTIME_HPP
 
 #include <ponder/detail/rawtype.hpp>
+#include <ponder/detail/util.hpp>
 
 namespace ponder {
 namespace runtime {
@@ -127,8 +128,9 @@ struct ChooseCallReturner<std::tuple<P, Ps...>, R> // recurse
 template <int TFrom, typename TTo>
 struct ConvertArg
 {
-    static typename std::remove_reference<TTo>::type
-    convert(const Args& args, std::size_t index)
+    typedef typename std::remove_reference<TTo>::type ReturnType;
+    static ReturnType
+    convert(const Args& args, size_t index)
     {
         try {
             return args[index].to<typename std::remove_reference<TTo>::type>();
@@ -142,7 +144,8 @@ struct ConvertArg
 template <typename TTo>
 struct ConvertArg<(int)ValueKind::User, TTo&>
 {
-    static TTo&
+    typedef TTo& ReturnType;
+    static ReturnType
     convert(const Args& args, std::size_t index)
     {
         auto&& uobj = const_cast<Value&>(args[index]).ref<UserObject>();
@@ -155,7 +158,8 @@ struct ConvertArg<(int)ValueKind::User, TTo&>
 template <typename TTo>
 struct ConvertArg<(int)ValueKind::User, const TTo&>
 {
-    static const TTo&
+    typedef const TTo& ReturnType;
+    static ReturnType
     convert(const Args& args, std::size_t index)
     {
         auto&& uobj = args[index].cref<UserObject>();
@@ -168,19 +172,29 @@ struct ConvertArg<(int)ValueKind::User, const TTo&>
 //-----------------------------------------------------------------------------
 // Object function call helper to allow specialisation by return type. Applies policies.
 
+template <typename A>
+struct ConvertArgs
+{
+    typedef typename ::ponder::detail::RawType<A>::Type Raw;
+    static constexpr ValueKind kind = ponder_ext::ValueMapper<Raw>::kind;
+    typedef ConvertArg<(int)kind, A> Convertor;
+    
+    static typename Convertor::ReturnType convert(const Args& args, std::size_t index)
+    {
+        return Convertor::convert(args, index);
+    }
+};
+
 template <typename R, typename FTraits, typename FPolicies>
 class CallHelper
 {
 public:
 
-    template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, const Args& args, detail::index_sequence<Is...>)
+    template<typename F, typename... A, size_t... Is>
+    static Value call(F func, const Args& args, _PONDER_SEQNS::index_sequence<Is...>)
     {
         typedef typename ChooseCallReturner<FPolicies, R>::type CallReturner;
-        
-        return CallReturner::value(
-            func(ConvertArg<(int)ponder_ext::ValueMapper<typename detail::RawType<A>::Type>::kind,
-                            A>::convert(args, Is)...));
+        return CallReturner::value(func(ConvertArgs<A>::convert(args, Is)...));
     }
 };
 
@@ -190,11 +204,10 @@ class CallHelper<void, FTraits, FPolicies>
 {
 public:
 
-    template<typename F, typename... A, std::size_t... Is>
-    static Value call(F func, const Args& args, detail::index_sequence<Is...>)
+    template<typename F, typename... A, size_t... Is>
+    static Value call(F func, const Args& args, _PONDER_SEQNS::index_sequence<Is...>)
     {
-        func(ConvertArg<(int)ponder_ext::ValueMapper<typename detail::RawType<A>::Type>::kind,
-                        A>::convert(args,Is)...);
+        func(ConvertArgs<A>::convert(args,Is)...);
         return Value::nothing;
     }
 };
@@ -211,8 +224,9 @@ template <typename R, typename... A> struct FunctionWrapper<R, std::tuple<A...>>
     template <typename F, typename FTraits, typename FPolicies>
     static Value call(F func, const Args& args)
     {
+        typedef _PONDER_SEQNS::make_index_sequence<sizeof...(A)> ArgEnumerator;
         return CallHelper<R, FTraits, FPolicies>::template
-            call<F, A...>(func, args, detail::make_index_sequence<sizeof...(A)>());
+            call<F, A...>(func, args, ArgEnumerator());
     }
 };
     
