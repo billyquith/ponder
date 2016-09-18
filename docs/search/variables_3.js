@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['name',['name',['../structponder_1_1_enum_1_1_pair.html#aa43237f279a89a4d5a3213623fff2c0d',1,'ponder::Enum::Pair']]],
-  ['nothing',['nothing',['../classponder_1_1_user_object.html#aad747b3a6763ff287d7a730c79700e74',1,'ponder::UserObject::nothing()'],['../classponder_1_1_value.html#a3c07dc232d4bb450397fe0ec8a712e61',1,'ponder::Value::nothing()']]]
+  ['type',['type',['../structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html#a0479e6dd92b8fdd81f4c2f57dd17cfa0',1,'ponder_ext::ValueMapper&lt; QString &gt;']]]
 ];

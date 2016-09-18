@@ -1,4 +1,0 @@
-var structponder__ext_1_1_value_mapper_3_01_t_00_01_01_01_01_01_01_01_01_01_01_01typename_01std_1_1e7a15d51b672cb019cb00b6c567924056 =
-[
-    [ "type", "structponder__ext_1_1_value_mapper_3_01_t_00_01_01_01_01_01_01_01_01_01_01_01typename_01std_1_1e7a15d51b672cb019cb00b6c567924056.html#a930d8a242ec12148bf328c8a0bb23c61", null ]
-];

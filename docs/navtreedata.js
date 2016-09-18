@@ -5,8 +5,9 @@ var NAVTREE =
       [ "Overview", "index.html#overview", null ],
       [ "Useful links", "index.html#links", null ],
       [ "Quick example", "index.html#example", null ],
-      [ "License", "index.html#license", null ]
+      [ "License", "index.html#license_sect", null ]
     ] ],
+    [ "Ponder License", "license_page.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -15,7 +16,8 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ]
+        [ "Typedefs", "functions_type.html", null ],
+        [ "Enumerator", "functions_eval.html", null ]
       ] ]
     ] ],
     [ "Files", null, [
@@ -24,15 +26,15 @@ var NAVTREE =
         [ "All", "globals.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
 ".html",
-"classponder_1_1_user_object.html#ab206ad3298c783aa76aee7313cf3bb0d",
-"structponder__ext_1_1_value_mapper_3_01ponder_1_1_string_01_4.html#a15b3e58e6d891afaf71ba5fc977dd04a"
+"classponder_1_1_value.html#a97dfb718ba57003cac2f6f6f305e0656"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

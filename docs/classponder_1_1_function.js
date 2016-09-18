@@ -1,14 +1,12 @@
 var classponder_1_1_function =
 [
     [ "~Function", "classponder_1_1_function.html#a168f58da88f1a9f09778f8462cff7e21", null ],
-    [ "Function", "classponder_1_1_function.html#a4f8e4a6315f7478a5b269c488bb6313b", null ],
-    [ "accept", "classponder_1_1_function.html#a1df70386ec18272af7a5d5e7f0b9f8d5", null ],
-    [ "argCount", "classponder_1_1_function.html#ac4f0e0c6a347c0e5361d9a450c3a9b79", null ],
-    [ "argType", "classponder_1_1_function.html#a0f9e906f77bcff4debcc7bb906e9c7d9", null ],
-    [ "call", "classponder_1_1_function.html#a2431170a9092673624ff7b49a3999877", null ],
-    [ "callable", "classponder_1_1_function.html#a9b9e1eda6db635f758c923de336997bd", null ],
-    [ "execute", "classponder_1_1_function.html#a967ae72ba01ba61f605c1f2939e339a2", null ],
-    [ "name", "classponder_1_1_function.html#a12c03207cd6100b9840d40b819e19635", null ],
-    [ "returnType", "classponder_1_1_function.html#a382c61aa93e1aabc2d1f5b0d036b4c7c", null ],
-    [ "ClassBuilder", "classponder_1_1_function.html#a5aafcfbb163661718b1e403f84d2b38d", null ]
+    [ "accept", "classponder_1_1_function.html#ad117294aab9c21d3303eb16db6fb1ebe", null ],
+    [ "getUsesData", "classponder_1_1_function.html#a679ce1b9c764b9841bc7067d155848e9", null ],
+    [ "kind", "classponder_1_1_function.html#aa34a87ee3edb1deda7ec06feb4479b09", null ],
+    [ "name", "classponder_1_1_function.html#ae89c5947f4f6285e94dc076f7f8d0ac4", null ],
+    [ "paramCount", "classponder_1_1_function.html#a0908ca7cee200f04a755989eccf80324", null ],
+    [ "paramType", "classponder_1_1_function.html#ac8b26210d805726b9a01074a0575ff7d", null ],
+    [ "returnPolicy", "classponder_1_1_function.html#a0ba04692c585e9d8eb4027ba2f8bc44a", null ],
+    [ "returnType", "classponder_1_1_function.html#a6740b8e20ebb10a5e79748fb44e465d1", null ]
 ];

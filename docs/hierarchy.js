@@ -1,13 +1,9 @@
 var hierarchy =
 [
     [ "ponder::Args", "classponder_1_1_args.html", null ],
-    [ "ponder_ext::ArrayMapper< T >", "structponder__ext_1_1_array_mapper.html", null ],
+    [ "ArrayMapper", "class_array_mapper.html", null ],
     [ "ponder_ext::ArrayMapper< QList< T > >", "structponder__ext_1_1_array_mapper_3_01_q_list_3_01_t_01_4_01_4.html", null ],
     [ "ponder_ext::ArrayMapper< QVector< T > >", "structponder__ext_1_1_array_mapper_3_01_q_vector_3_01_t_01_4_01_4.html", null ],
-    [ "ponder_ext::ArrayMapper< std::array< T, N > >", "structponder__ext_1_1_array_mapper_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4.html", null ],
-    [ "ponder_ext::ArrayMapper< std::list< T > >", "structponder__ext_1_1_array_mapper_3_01std_1_1list_3_01_t_01_4_01_4.html", null ],
-    [ "ponder_ext::ArrayMapper< std::vector< T > >", "structponder__ext_1_1_array_mapper_3_01std_1_1vector_3_01_t_01_4_01_4.html", null ],
-    [ "ponder_ext::ArrayMapper< T[N]>", "structponder__ext_1_1_array_mapper_3_01_t[_n]_4.html", null ],
     [ "ponder::ClassBuilder< T >", "classponder_1_1_class_builder.html", null ],
     [ "ponder::ClassVisitor", "classponder_1_1_class_visitor.html", null ],
     [ "ponder::Constructor", "classponder_1_1_constructor.html", null ],
@@ -35,16 +31,21 @@ var hierarchy =
         [ "ponder::PropertyNotFound", "classponder_1_1_property_not_found.html", null ]
       ] ]
     ] ],
+    [ "ponder::runtime::FunctionCaller", "classponder_1_1runtime_1_1_function_caller.html", null ],
     [ "ponder::detail::noncopyable", null, [
       [ "ponder::Class", "classponder_1_1_class.html", null ],
-      [ "ponder::Enum", "classponder_1_1_enum.html", null ],
-      [ "ponder::ParentObject", "classponder_1_1_parent_object.html", null ]
+      [ "ponder::Enum", "classponder_1_1_enum.html", null ]
     ] ],
     [ "ponder::NoType", "structponder_1_1_no_type.html", null ],
+    [ "ponder::runtime::ObjectCaller", "classponder_1_1runtime_1_1_object_caller.html", null ],
+    [ "ponder::runtime::ObjectFactory", "classponder_1_1runtime_1_1_object_factory.html", null ],
     [ "ponder::Observer", "classponder_1_1_observer.html", null ],
     [ "ponder::Enum::Pair", "structponder_1_1_enum_1_1_pair.html", null ],
     [ "ponder_ext::QtHelper", "classponder__ext_1_1_qt_helper.html", null ],
     [ "ponder_ext::QtMapper< T >", "classponder__ext_1_1_qt_mapper.html", null ],
+    [ "ponder::policy::ReturnCopy", "structponder_1_1policy_1_1_return_copy.html", null ],
+    [ "ponder::policy::ReturnInternalRef", "structponder_1_1policy_1_1_return_internal_ref.html", null ],
+    [ "ponder::uses::RuntimeModule", "structponder_1_1uses_1_1_runtime_module.html", null ],
     [ "ponder::TagHolder", "classponder_1_1_tag_holder.html", [
       [ "ponder::Class", "classponder_1_1_class.html", null ],
       [ "ponder::Function", "classponder_1_1_function.html", [
@@ -60,29 +61,10 @@ var hierarchy =
       ] ]
     ] ],
     [ "ponder::UserObject", "classponder_1_1_user_object.html", null ],
+    [ "ponder::uses::Uses", "structponder_1_1uses_1_1_uses.html", null ],
     [ "ponder::Value", "classponder_1_1_value.html", null ],
     [ "ponder_ext::ValueMapper< T, C >", "structponder__ext_1_1_value_mapper.html", null ],
-    [ "ponder_ext::ValueMapper< bool >", "structponder__ext_1_1_value_mapper_3_01bool_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< char[N]>", "structponder__ext_1_1_value_mapper_3_01char[_n]_4.html", null ],
-    [ "ponder_ext::ValueMapper< const char * >", "structponder__ext_1_1_value_mapper_3_01const_01char_01_5_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< const char[N]>", "structponder__ext_1_1_value_mapper_3_01const_01char[_n]_4.html", null ],
-    [ "ponder_ext::ValueMapper< ponder::EnumObject >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_enum_object_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< ponder::NoType >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_no_type_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< ponder::String >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_string_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< ponder::UserObject >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_user_object_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< ponder::ValueType >", "structponder__ext_1_1_value_mapper_3_01ponder_1_1_value_type_01_4.html", null ],
     [ "ponder_ext::ValueMapper< QString >", "structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html", null ],
-    [ "ponder_ext::ValueMapper< T >", "structponder__ext_1_1_value_mapper.html", [
-      [ "ponder_ext::ValueMapper< const T & >", "structponder__ext_1_1_value_mapper_3_01const_01_t_01_6_01_4.html", null ],
-      [ "ponder_ext::ValueMapper< const T >", "structponder__ext_1_1_value_mapper_3_01const_01_t_01_4.html", null ],
-      [ "ponder_ext::ValueMapper< T & >", "structponder__ext_1_1_value_mapper_3_01_t_01_6_01_4.html", null ]
-    ] ],
-    [ "ponder_ext::ValueMapper< T,           typename std::enable_if<                                                                                                                          std::is_floating_point< T >::value                                                                                                                   &&!std::is_const< T >::value                                                                                                                           &&!std::is_reference< T >::value                                                                                           >::type >", "structponder__ext_1_1_value_mapper_3_01_t_00_01_01_01_01_01_01_01_01_01_01_01typename_01std_1_1e0c6e982770a65e7a4c10b08765daa2cf.html", null ],
-    [ "ponder_ext::ValueMapper< T,           typename std::enable_if<                                                                                                                          std::is_integral< T >::value                                                                                                                   &&!std::is_const< T >::value                                                                                                                                                           &&!std::is_reference< T >::value                                                                                           >::type >", "structponder__ext_1_1_value_mapper_3_01_t_00_01_01_01_01_01_01_01_01_01_01_01typename_01std_1_1e44d0519db531775b86710b4694ea19a5.html", null ],
-    [ "ponder_ext::ValueMapper< T,           typename std::enable_if<                                                                                                                  std::is_enum< T >::value                                                                                                           &&!std::is_const< T >::value                                                                                                                   &&!std::is_reference< T >::value                                                                                   >::type >", "structponder__ext_1_1_value_mapper_3_01_t_00_01_01_01_01_01_01_01_01_01_01_01typename_01std_1_1e4199b3dca5bdc4cf747246988ba9a009.html", null ],
-    [ "ponder_ext::ValueMapper< T,           typename std::enable_if<                                                                                  ponder_ext::ArrayMapper< T >::isArray                                                                           &&!std::is_same< typename ponder_ext::ArrayMapper< T >::ElementType, char >::value                                                                           &&!std::is_same< typename ponder_ext::ArrayMapper< T >::ElementType, const char >::value                                           >::type >", "structponder__ext_1_1_value_mapper_3_01_t_00_01_01_01_01_01_01_01_01_01_01_01typename_01std_1_1e7a15d51b672cb019cb00b6c567924056.html", null ],
-    [ "ponder_ext::ValueMapper< T, typename std::enable_if< std::is_abstract< T >::value >::type >", "structponder__ext_1_1_value_mapper_3_01_t_00_01typename_01std_1_1enable__if_3_01std_1_1is__abstr85687ede66d7307abfdf52ed94bbcaeb.html", null ],
-    [ "ponder_ext::ValueMapper< void >", "structponder__ext_1_1_value_mapper_3_01void_01_4.html", null ],
     [ "ponder::ValueVisitor< T >", "classponder_1_1_value_visitor.html", null ],
     [ "ponder::ValueVisitor< bool >", "classponder_1_1_value_visitor.html", null ]
 ];

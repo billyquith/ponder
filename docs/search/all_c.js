@@ -1,16 +1,18 @@
 var searchData=
 [
-  ['object',['object',['../classponder_1_1_parent_object.html#aadb9f3236ca57ee2687d5d7fa3c2d921',1,'ponder::ParentObject']]],
-  ['observer',['Observer',['../classponder_1_1_observer.html#a8539b128aee7dcf907ea1fb4884dfb5e',1,'ponder::Observer']]],
+  ['objectcaller',['ObjectCaller',['../classponder_1_1runtime_1_1_object_caller.html',1,'ponder::runtime']]],
+  ['objectcaller',['ObjectCaller',['../classponder_1_1runtime_1_1_object_caller.html#ad5acc2a4e271dc09f2792fb6cb75e966',1,'ponder::runtime::ObjectCaller']]],
+  ['objectfactory',['ObjectFactory',['../classponder_1_1runtime_1_1_object_factory.html',1,'ponder::runtime']]],
+  ['objectfactory',['ObjectFactory',['../classponder_1_1runtime_1_1_object_factory.html#ae284764fb7f9b4ad16d591c3e54963f2',1,'ponder::runtime::ObjectFactory']]],
   ['observer',['Observer',['../classponder_1_1_observer.html',1,'ponder']]],
-  ['operator_20t',['operator T',['../classponder_1_1_value.html#a0a04dc90487eba0ce9988b5e78e7a60e',1,'ponder::Value']]],
-  ['operator_21_3d',['operator!=',['../classponder_1_1_class.html#a688466ca439b521726764893a3370dce',1,'ponder::Class::operator!=()'],['../classponder_1_1_enum.html#ae08551aede97d29bca9655abbf235645',1,'ponder::Enum::operator!=()'],['../classponder_1_1_user_object.html#aaaa07fcdd4bd3246904634a80a5d9fd3',1,'ponder::UserObject::operator!=()'],['../classponder_1_1_value.html#a73e8d666c0778ce9104d2066a5fb5f14',1,'ponder::Value::operator!=()']]],
-  ['operator_2b',['operator+',['../classponder_1_1_args.html#a286a7c1735e31a9c4a61cbe792835adf',1,'ponder::Args']]],
+  ['operator_20t',['operator T',['../classponder_1_1_value.html#a64f12ccf7b2d47df080cc4f2d385220d',1,'ponder::Value']]],
+  ['operator_21_3d',['operator!=',['../classponder_1_1_class.html#a2ef881c41f52b4ea325fb0dc15bf485a',1,'ponder::Class::operator!=()'],['../classponder_1_1_enum.html#ae05fae46f8a9b1e17d78f265fa037b78',1,'ponder::Enum::operator!=()'],['../classponder_1_1_user_object.html#a7d1bb3c2bce8e537d4c0319d6700d847',1,'ponder::UserObject::operator!=()'],['../classponder_1_1_value.html#ad6c4099bada60e2655be22c92f48d43f',1,'ponder::Value::operator!=()']]],
+  ['operator_2b',['operator+',['../classponder_1_1_args.html#aecb81709a0873a071aed436e4abb723c',1,'ponder::Args']]],
   ['operator_2b_3d',['operator+=',['../classponder_1_1_args.html#a611b75ec90afe2ecb9d4ba3364bb4d92',1,'ponder::Args']]],
-  ['operator_3c',['operator&lt;',['../classponder_1_1_enum_object.html#ae04118585fdad71fe179defa3cef30d5',1,'ponder::EnumObject::operator&lt;()'],['../classponder_1_1_user_object.html#a8caa5b7a051dac29cfeb6a1f4b427aad',1,'ponder::UserObject::operator&lt;()'],['../classponder_1_1_value.html#a79d83ab58881d20b7af703bb34fd2615',1,'ponder::Value::operator&lt;()']]],
-  ['operator_3d',['operator=',['../classponder_1_1_user_object.html#ac69b4f63ee0d9c71ad21215b5ce7c64b',1,'ponder::UserObject']]],
-  ['operator_3d_3d',['operator==',['../classponder_1_1_class.html#ae697298e068a6099fb697a209286807d',1,'ponder::Class::operator==()'],['../classponder_1_1_enum.html#a06d8dab116b33b0bb983f0811abdb786',1,'ponder::Enum::operator==()'],['../classponder_1_1_enum_object.html#a2ad5b7837d32b755a2e2105a74a9dceb',1,'ponder::EnumObject::operator==()'],['../classponder_1_1_user_object.html#a3e865e8ccb78e340ee6fef08e41a6d7e',1,'ponder::UserObject::operator==()'],['../classponder_1_1_value.html#a1a0632b3f30d2a21a4a813c7b4e6bf95',1,'ponder::Value::operator==()']]],
-  ['operator_5b_5d',['operator[]',['../classponder_1_1_args.html#a369b83df5bdb413a573ec72167b80376',1,'ponder::Args']]],
+  ['operator_3c',['operator&lt;',['../classponder_1_1_enum_object.html#a2cf0a65a32d2ea43293c761cfc9b228c',1,'ponder::EnumObject::operator&lt;()'],['../classponder_1_1_user_object.html#adc66f5adb7781595618d60816a792f96',1,'ponder::UserObject::operator&lt;()'],['../classponder_1_1_value.html#a05195ebf03c57a1f55f8d14b89d1d861',1,'ponder::Value::operator&lt;()']]],
+  ['operator_3d',['operator=',['../classponder_1_1_user_object.html#ac69b4f63ee0d9c71ad21215b5ce7c64b',1,'ponder::UserObject::operator=(const UserObject &amp;other)'],['../classponder_1_1_user_object.html#abd0947809aead3c183033bdcd0528868',1,'ponder::UserObject::operator=(UserObject &amp;&amp;other) noexcept'],['../classponder_1_1_value.html#ac72bc2fe9b33d0217adf338e5f3be8fa',1,'ponder::Value::operator=()']]],
+  ['operator_3d_3d',['operator==',['../classponder_1_1_class.html#a5f80b6e8df779652ce30c9485ec6424e',1,'ponder::Class::operator==()'],['../classponder_1_1_enum.html#a31aa9b10e2766f09cae9feedba3e6d70',1,'ponder::Enum::operator==()'],['../classponder_1_1_enum_object.html#a8f0cae9eeb75777008a05d20513d6737',1,'ponder::EnumObject::operator==()'],['../classponder_1_1_user_object.html#a35bb50d115b8e8826ff6b97a0dbb43d5',1,'ponder::UserObject::operator==()'],['../classponder_1_1_value.html#a2d75042bc2453bc56bec574fc4828bf9',1,'ponder::Value::operator==()']]],
+  ['operator_5b_5d',['operator[]',['../classponder_1_1_args.html#a5d1b690aaf8e0ab63c4890735ab8b500',1,'ponder::Args']]],
   ['outofrange',['OutOfRange',['../classponder_1_1_out_of_range.html#ad86df99bcf16f86f4a4dfd078b165271',1,'ponder::OutOfRange']]],
   ['outofrange',['OutOfRange',['../classponder_1_1_out_of_range.html',1,'ponder']]]
 ];

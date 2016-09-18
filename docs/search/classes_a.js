@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tagholder',['TagHolder',['../classponder_1_1_tag_holder.html',1,'ponder']]]
+  ['simpleproperty',['SimpleProperty',['../classponder_1_1_simple_property.html',1,'ponder']]]
 ];

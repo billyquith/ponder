@@ -1,13 +1,12 @@
 var searchData=
 [
-  ['call',['call',['../classponder_1_1_function.html#a2431170a9092673624ff7b49a3999877',1,'ponder::Function::call()'],['../classponder_1_1_user_object.html#aabc56810b2b295e7b408d5ee67a6a867',1,'ponder::UserObject::call()']]],
-  ['callable',['callable',['../classponder_1_1_class_builder.html#adcee62a2bbdd933a5f4fb969eac2f9a2',1,'ponder::ClassBuilder::callable(bool value)'],['../classponder_1_1_class_builder.html#aca55da0ffed1fcd992c274b7e8f471e4',1,'ponder::ClassBuilder::callable(F function)'],['../classponder_1_1_function.html#a9b9e1eda6db635f758c923de336997bd',1,'ponder::Function::callable()']]],
+  ['call',['call',['../classponder_1_1runtime_1_1_object_caller.html#a26a069ed377b40a631737679000a9b10',1,'ponder::runtime::ObjectCaller::call()'],['../classponder_1_1runtime_1_1_function_caller.html#a3c948a3e71623741cca3eefc75044ccb',1,'ponder::runtime::FunctionCaller::call()']]],
   ['class',['Class',['../classponder_1_1_class.html',1,'ponder']]],
   ['classadded',['classAdded',['../classponder_1_1_observer.html#a913704bbd9fad8aa89ad24048c427705',1,'ponder::Observer']]],
   ['classalreadycreated',['ClassAlreadyCreated',['../classponder_1_1_class_already_created.html',1,'ponder']]],
   ['classalreadycreated',['ClassAlreadyCreated',['../classponder_1_1_class_already_created.html#a7331141bacf6bf64fb80d60381b5b3ba',1,'ponder::ClassAlreadyCreated']]],
-  ['classbuilder',['ClassBuilder',['../classponder_1_1_class_builder.html',1,'ponder']]],
   ['classbuilder',['ClassBuilder',['../classponder_1_1_class_builder.html#ac7ebcf960547983815c38029e1d320da',1,'ponder::ClassBuilder']]],
+  ['classbuilder',['ClassBuilder',['../classponder_1_1_class_builder.html',1,'ponder']]],
   ['classbyindex',['classByIndex',['../classponder_1_1_class.html#a2e1f75471829834ceacc6da89000958a',1,'ponder::Class']]],
   ['classbyname',['classByName',['../classponder_1_1_class.html#a4b9f82637a3619ffd1bb0a9c2d2e2d4d',1,'ponder::Class']]],
   ['classbyobject',['classByObject',['../classponder_1_1_class.html#a9c561417d8093359c87245892419d730',1,'ponder::Class']]],
@@ -19,13 +18,12 @@ var searchData=
   ['classremoved',['classRemoved',['../classponder_1_1_observer.html#a1aef6288832f4cb849256223d44696b8',1,'ponder::Observer']]],
   ['classunrelated',['ClassUnrelated',['../classponder_1_1_class_unrelated.html',1,'ponder']]],
   ['classunrelated',['ClassUnrelated',['../classponder_1_1_class_unrelated.html#a001a596e5771b17f12f1a8b6231c03d5',1,'ponder::ClassUnrelated']]],
-  ['classvisitor',['ClassVisitor',['../classponder_1_1_class_visitor.html#af6ab5c7fa06135c556d267e84e95f2dd',1,'ponder::ClassVisitor']]],
   ['classvisitor',['ClassVisitor',['../classponder_1_1_class_visitor.html',1,'ponder']]],
-  ['construct',['construct',['../classponder_1_1_class.html#ab3204fb2bf255781781c06e560f8bbcf',1,'ponder::Class']]],
-  ['constructor',['constructor',['../classponder_1_1_class_builder.html#a48951e06f6b685fe51d5a81be80ac426',1,'ponder::ClassBuilder']]],
+  ['construct',['construct',['../classponder_1_1runtime_1_1_object_factory.html#a7a069498e4b4888772f0016a3bfd54ca',1,'ponder::runtime::ObjectFactory']]],
+  ['constructor',['constructor',['../classponder_1_1_class.html#a0a737f283bb7d158989d5cfcfe5990e2',1,'ponder::Class::constructor()'],['../classponder_1_1_class_builder.html#a48951e06f6b685fe51d5a81be80ac426',1,'ponder::ClassBuilder::constructor()']]],
   ['constructor',['Constructor',['../classponder_1_1_constructor.html',1,'ponder']]],
-  ['constructorcount',['constructorCount',['../classponder_1_1_class.html#a79bca29dd7f150d069e13181b6615131',1,'ponder::Class']]],
-  ['copy',['copy',['../classponder_1_1_user_object.html#ab206ad3298c783aa76aee7313cf3bb0d',1,'ponder::UserObject']]],
-  ['count',['count',['../classponder_1_1_args.html#aee2cb3381d40f9457cab5b70b82f39b0',1,'ponder::Args']]],
-  ['create',['create',['../classponder_1_1_constructor.html#a8beb4b66bad342b1e83a7dadac6d16f7',1,'ponder::Constructor']]]
+  ['constructorcount',['constructorCount',['../classponder_1_1_class.html#a31e67350fb9d53401243e2840ea9598d',1,'ponder::Class']]],
+  ['count',['count',['../classponder_1_1_args.html#aa7164abbd2703afa56b435bd5bd41ceb',1,'ponder::Args']]],
+  ['create',['create',['../classponder_1_1_constructor.html#aa7a60a650763bbdd1d2c92d587b6e060',1,'ponder::Constructor::create()'],['../classponder_1_1runtime_1_1_object_factory.html#ab7492eac27921b039bd92379f699fa87',1,'ponder::runtime::ObjectFactory::create()']]],
+  ['cref',['cref',['../classponder_1_1_user_object.html#aa0f5811b843479f4ba7ff4361be29144',1,'ponder::UserObject::cref()'],['../classponder_1_1_value.html#a161a8c4f606570aefae42ae94ed3340e',1,'ponder::Value::cref()']]]
 ];

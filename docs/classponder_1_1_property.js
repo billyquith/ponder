@@ -1,18 +1,13 @@
 var classponder_1_1_property =
 [
     [ "~Property", "classponder_1_1_property.html#a8b6b6321a6af967b4198023ccb0dfef7", null ],
-    [ "Property", "classponder_1_1_property.html#afb8cd24fbe7c861aa6572cc2774fcb53", null ],
-    [ "accept", "classponder_1_1_property.html#a3d2d27dc75291cd78db4890d18fb9561", null ],
-    [ "get", "classponder_1_1_property.html#a62d3046a89a94972c124796b06cf8c07", null ],
-    [ "getValue", "classponder_1_1_property.html#ab7a6a81f43697729220f6f5d858cad78", null ],
-    [ "isReadable", "classponder_1_1_property.html#aabb14f399e8481337a0504950033c730", null ],
-    [ "isWritable", "classponder_1_1_property.html#a8de12d2d86d16a2015740acc017d1d9c", null ],
-    [ "name", "classponder_1_1_property.html#a8db3442bcf193ad4768f0f5f80c80d33", null ],
-    [ "readable", "classponder_1_1_property.html#a38d37b007263d04c117e74c07deb4c31", null ],
-    [ "set", "classponder_1_1_property.html#a2d61c5044e909fc4d88c3d0366e98516", null ],
-    [ "setValue", "classponder_1_1_property.html#af9de6f0926bcb6e25781acc9fd8ee2df", null ],
-    [ "type", "classponder_1_1_property.html#ad51b9663892e64c751bfff05d1d081ad", null ],
-    [ "writable", "classponder_1_1_property.html#a15b947189b6c320e93509af6fe4762f8", null ],
+    [ "accept", "classponder_1_1_property.html#aca7c3eab94dfff5b94d336e02de30546", null ],
+    [ "get", "classponder_1_1_property.html#a3f846dd3b6b7c96c895c38e0f46d88dd", null ],
+    [ "kind", "classponder_1_1_property.html#a2e49e1551218e3f0fe0a1ad1e8345447", null ],
+    [ "name", "classponder_1_1_property.html#af3d2e6e8981719b44948f1b68943b9e2", null ],
+    [ "readable", "classponder_1_1_property.html#a4f6271e675f63b75cf80f6bce76847e3", null ],
+    [ "set", "classponder_1_1_property.html#a124152f93ad8370725a3a75c23fe64a9", null ],
+    [ "writable", "classponder_1_1_property.html#aca4a59c603a6f5982d91aede3c8df7f3", null ],
     [ "ClassBuilder", "classponder_1_1_property.html#a5aafcfbb163661718b1e403f84d2b38d", null ],
     [ "UserObject", "classponder_1_1_property.html#a3877ce361195c6eaf2c89c0c16fcb056", null ]
 ];
