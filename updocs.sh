@@ -26,8 +26,8 @@ cd build
 cd ..
 popd
 
-rm docs/*
-cp -r $DOCDIR/doc/api/html/* docs/
+rm -r docs
+cp -r $DOCDIR/build/doc/api/html docs
 
 clean
 
