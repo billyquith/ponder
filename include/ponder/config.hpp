@@ -69,9 +69,9 @@
 #if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
     // Workaround a bug in libstdc++ where erase() should accept const iterator
     // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577
-    #define PONDER_WORKAROUND_GCC_N2350 1
+    #define _PONDER_WORKAROUND_GCC_N2350 1
 #else
-    #define PONDER_WORKAROUND_GCC_N2350 0
+    #define _PONDER_WORKAROUND_GCC_N2350 0
 #endif
 
 // If user doesn't define traits use the default:

@@ -157,7 +157,7 @@ public:
         if (it != m_contents.end())
         {
             // Avoid std::vector.erase here due to bug in libstdc++ < v4.9
-#if PONDER_WORKAROUND_GCC_N2350
+#if _PONDER_WORKAROUND_GCC_N2350
             std::size_t pos = it - m_contents.begin();
             const std::size_t sz = m_contents.size() - 1;
             while (pos < sz)
