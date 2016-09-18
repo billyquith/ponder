@@ -41,8 +41,8 @@ Runtime registration, interrogation, and manipulation of types.</p>
 						<ul>
               <li><a href="{{ site.github.url }}">Hosted on Github</a></li>
 							<li><a href="https://travis-ci.org/billyquith/ponder" target="_blank">
-								    <img src="https://travis-ci.org/billyquith/ponder.svg?branch=master" /></a></li>
-							<li><a href="https://ci.appveyor.com/project/billyquith/ponder/branch/master" target="_blank">
+								    <img src="https://travis-ci.org/billyquith/ponder.svg?branch=master" /></a>
+                  <a href="https://ci.appveyor.com/project/billyquith/ponder/branch/master" target="_blank">
 								    <img src="https://ci.appveyor.com/api/projects/status/spskn9y93e8osve2/branch/master?svg=true" /></a></li>
 						</ul>
 					</div>
@@ -63,43 +63,19 @@ Runtime registration, interrogation, and manipulation of types.</p>
 	<section class="wrapper style1">
 		<div class="container">
 			<div class="row">
-				<section class="6u">
+				<section class="12u">
 					<div class="box post">
-						<a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic03.jpg" alt="" /></a>
+						<a href="#" class="image left" style="max-width: 220px"><img src="{{ site.baseurl }}/images/pic01.jpg" alt="" /></a>
 						<div class="inner">
-<h3>What is reflection?</h3>
-<p><a href="https://en.wikipedia.org/wiki/Reflection_(computer_programming)" target="_blank">Reflection</a>
-allows a program to inspect its own type data at runtime. For example, this is useful for
-data-driven programs: we might create classes from descriptions in data read at runtime.</p>
+              <h3>Blog latest</h3>
+              {% for post in site.posts limit:1 %}
+  							<a href="{{ site.baseurl }}{{ post.url }}"><h2>{{ post.title }}</h2></a>
+  							<i>{{ post.date | date_to_string }}</i>
+                {{ post.excerpt }}
+              {% endfor %}
 						</div>
 					</div>
 				</section>
-				<section class="6u">
-					<div class="box post">
-						<a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic01.jpg" alt="" /></a>
-						<div class="inner">
-  <h3>Features</h3>
-  <ul>
-    <li>- Inspect members of a class.</li>
-    <li>- Create class instances from data.</li>
-    <li>- Get/set properties on instances at runtime.</li>
-    <li>- Export type data as XML.</li>    
-  </ul>
-						</div>
-					</div>
-				</section>
-        <!-- <section class="6u">
-          <div class="box post">
-            <a href="#" class="image left"><img src="{{ site.baseurl }}/images/pic01.jpg" alt="" /></a>
-            <div class="inner">
-<h3>Fork of CAMP</h3>
-<p>Ponder continues the from <a href="https://github.com/tegesoft/camp" target="_blank">CAMP</a>, removing the
-Boost dependency, instead, using C++11 features. The aim here is to
-<a href="https://youtu.be/nesCaocNjtQ" target="_blank">allow simplification</a> using C++11, and improve
-build times.</p>
-            </div>
-          </div>
-        </section> -->
 			</div>
 <h3>Simple Example</h3>
 			<div class="row">
@@ -120,7 +96,7 @@ private:
 				</section>
 				<section class="5u">
 					<div class="box post">
-A C++ class that we would like to expose for reflection.
+A C++ class that we would like to use.
 					</div>
 				</section>
 			</div>
@@ -161,12 +137,13 @@ Iterate over objects in a metaclass, e.g. to print out values.
 				<section class="7u">
 					<div class="box post">
 {% highlight cpp %}
-auto& metaclass = ponder::classByName("Adder"); // find the class
+auto const& metaclass = ponder::classByType<Adder>(); // find the class
 
 auto adder = metaclass.construct(); // create an instance
 
-adder.call("add", 7); // call a function
-adder.call("add", 5);
+auto const& func = metaclass.function("add");
+ponder::runtime::call(func, 7); // call a function
+ponder::runtime::call(func, 5);
 
 int total = adder.get("total"); // get a property
 {% endhighlight %}
