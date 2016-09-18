@@ -160,52 +160,6 @@ public:
     ClassBuilder<T>& property(IdRef name, F1 accessor1, F2 accessor2);
 
     /**
-     * \brief Declare a new property from three accessors
-     *
-     * The accessor1 and accessor2 parameters are a pair of getter/setter, accessor3 is
-     * an accessor to compose to accessor1 and accessor2 to get the final accessors.
-     *
-     * This allows to expose a property which requires an extra level of indirection to 
-     * be accessed (for example, a property of a member of the class instead of a property of 
-     * the class itself).
-     *
-     * Example:
-     *
-     * \code
-     * struct Point
-     * {
-     *     float getX() const;
-     *     void setX(float);
-     *
-     *     float getY() const;
-     *     void setY(float);
-     * };
-     * 
-     * class Entity
-     * {
-     * public:
-     *
-     *     Point p;
-     * };
-     *
-     * ponder::Class::declare<Entity>("Entity")
-     *     // will internally resolve to e.p.get/setX()
-     *     .property("x", &Point::getX, &Point::setX, &Entity::p)
-     *     // will internally resolve to e.p.get/setY()
-     *     .property("y", &Point::getY, &Point::setY, &Entity::p);
-     * \endcode
-     *
-     * \param name Name of the property (must be unique within the metaclass)
-     * \param accessor1 First accessor (getter)
-     * \param accessor2 Second accessor (setter)
-     * \param accessor3 Third accessor (getter)
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F1, typename F2, typename F3>
-    ClassBuilder<T>& property(IdRef name, F1 accessor1, F2 accessor2, F3 accessor3);
-
-    /**
      * \brief Declare a new function from any bindable type
      *
      * The function parameter can be any valid type: a non-member function,

@@ -20,6 +20,7 @@ Ponder Changelog
 - Removed Function callable behaviour. Unused complication.
 - Class::create() allows object creation without an Args list.
 - Class::tryFunction() and Class::tryProperty() added.
+- Remove properties with 3 accessors. Simplification, use lambdas.
 
 
 ### 1.3

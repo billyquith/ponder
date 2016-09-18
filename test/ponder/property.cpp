@@ -103,12 +103,18 @@ namespace PropertyTest
         
         // ***** nested properties *****
         struct Inner
-        {
-            Inner() : p14(false), p15(15), p16("16"), p17(MyType(17)) {}
+        {            
             bool p14;
             const int p15;
-            ponder::String p16; ponder::String getP16() const {return p16;}
-            MyType p17; const MyType& getP17() const {return p17;} void setP17(MyType t) {p17 = t;}
+            ponder::String p16;
+         
+            Inner() : p14(false), p15(15), p16("16"), p17(MyType(17)) {}
+            
+            ponder::String getP16() const {return p16;}
+            
+            MyType p17;
+            const MyType& getP17() const {return p17;}
+            void setP17(MyType t) {p17 = t;}
         };
         Inner inner;
         Inner& getInner() {return inner;}
@@ -184,7 +190,8 @@ namespace PropertyTest
              // read-only getter
             .property("p16", &MyClass::Inner::getP16, &MyClass::getInner)
              // read-only getter + write-only setter
-            .property("p17", &MyClass::Inner::getP17, &MyClass::Inner::setP17, &MyClass::inner)
+            .property("p17", [](MyClass& self) -> const MyType& {return self.getInner().getP17();},
+                             [](MyClass& self, const MyType &value){self.getInner().setP17(value);})
         
             // ***** std::function *****
              // pointer to read-write member
@@ -251,15 +258,15 @@ TEST_CASE("Classes can have properties")
 
     SECTION("type")
     {
-        REQUIRE(properties[1]->kind() ==  ponder::ValueKind::Boolean);
-        REQUIRE(properties[2]->kind() ==  ponder::ValueKind::Integer);
-        REQUIRE(properties[3]->kind() ==  ponder::ValueKind::String);
-        IS_TRUE(properties[4]->kind() ==  ponder::ValueKind::User);
-        REQUIRE(properties[5]->kind() ==  ponder::ValueKind::Boolean);
-        REQUIRE(properties[6]->kind() ==  ponder::ValueKind::Integer);
-        REQUIRE(properties[7]->kind() ==  ponder::ValueKind::String);
-        REQUIRE(properties[8]->kind() ==  ponder::ValueKind::Enum);
-        REQUIRE(properties[9]->kind() ==  ponder::ValueKind::User);
+        REQUIRE(properties[ 1]->kind() == ponder::ValueKind::Boolean);
+        REQUIRE(properties[ 2]->kind() == ponder::ValueKind::Integer);
+        REQUIRE(properties[ 3]->kind() == ponder::ValueKind::String);
+        IS_TRUE(properties[ 4]->kind() == ponder::ValueKind::User);
+        REQUIRE(properties[ 5]->kind() == ponder::ValueKind::Boolean);
+        REQUIRE(properties[ 6]->kind() == ponder::ValueKind::Integer);
+        REQUIRE(properties[ 7]->kind() == ponder::ValueKind::String);
+        REQUIRE(properties[ 8]->kind() == ponder::ValueKind::Enum);
+        REQUIRE(properties[ 9]->kind() == ponder::ValueKind::User);
         REQUIRE(properties[10]->kind() == ponder::ValueKind::Boolean);
         REQUIRE(properties[11]->kind() == ponder::ValueKind::Integer);
         REQUIRE(properties[12]->kind() == ponder::ValueKind::String);
@@ -279,15 +286,15 @@ TEST_CASE("Classes can have properties")
 
     SECTION("name")
     {
-        REQUIRE(properties[1]->name() == "p1");
-        REQUIRE(properties[2]->name() == "p2");
-        REQUIRE(properties[3]->name() == "p3");
-        REQUIRE(properties[4]->name() == "p4");
-        REQUIRE(properties[5]->name() == "p5");
-        REQUIRE(properties[6]->name() == "p6");
-        REQUIRE(properties[7]->name() == "p7");
-        REQUIRE(properties[8]->name() == "p8");
-        REQUIRE(properties[9]->name() == "p9");
+        REQUIRE(properties[ 1]->name() == "p1");
+        REQUIRE(properties[ 2]->name() == "p2");
+        REQUIRE(properties[ 3]->name() == "p3");
+        REQUIRE(properties[ 4]->name() == "p4");
+        REQUIRE(properties[ 5]->name() == "p5");
+        REQUIRE(properties[ 6]->name() == "p6");
+        REQUIRE(properties[ 7]->name() == "p7");
+        REQUIRE(properties[ 8]->name() == "p8");
+        REQUIRE(properties[ 9]->name() == "p9");
         REQUIRE(properties[10]->name() == "p10");
         REQUIRE(properties[11]->name() == "p11");
         REQUIRE(properties[12]->name() == "p12");
@@ -309,15 +316,15 @@ TEST_CASE("Classes can have properties")
     {
         MyClass object;
 
-        REQUIRE(properties[1]->readable(object) == true);
-        REQUIRE(properties[2]->readable(object) == true);
-        REQUIRE(properties[3]->readable(object) == true);
-        REQUIRE(properties[4]->readable(object) == true);
-        REQUIRE(properties[5]->readable(object) == true);
-        REQUIRE(properties[6]->readable(object) == true);
-        REQUIRE(properties[7]->readable(object) == true);
-        REQUIRE(properties[8]->readable(object) == true);
-        REQUIRE(properties[9]->readable(object) == true);
+        REQUIRE(properties[ 1]->readable(object) == true);
+        REQUIRE(properties[ 2]->readable(object) == true);
+        REQUIRE(properties[ 3]->readable(object) == true);
+        REQUIRE(properties[ 4]->readable(object) == true);
+        REQUIRE(properties[ 5]->readable(object) == true);
+        REQUIRE(properties[ 6]->readable(object) == true);
+        REQUIRE(properties[ 7]->readable(object) == true);
+        REQUIRE(properties[ 8]->readable(object) == true);
+        REQUIRE(properties[ 9]->readable(object) == true);
         REQUIRE(properties[10]->readable(object) == true);
         REQUIRE(properties[11]->readable(object) == true);
         REQUIRE(properties[12]->readable(object) == true);
@@ -339,15 +346,15 @@ TEST_CASE("Classes can have properties")
     {
         MyClass object;
 
-        REQUIRE(properties[1]->writable(object) == false);
-        REQUIRE(properties[2]->writable(object) == false);
-        REQUIRE(properties[3]->writable(object) == true);
-        REQUIRE(properties[4]->writable(object) == true);
-        REQUIRE(properties[5]->writable(object) == true);
-        REQUIRE(properties[6]->writable(object) == false);
-        REQUIRE(properties[7]->writable(object) == true);
-        REQUIRE(properties[8]->writable(object) == false);
-        REQUIRE(properties[9]->writable(object) ==  true);
+        REQUIRE(properties[ 1]->writable(object) == false);
+        REQUIRE(properties[ 2]->writable(object) == false);
+        REQUIRE(properties[ 3]->writable(object) == true);
+        REQUIRE(properties[ 4]->writable(object) == true);
+        REQUIRE(properties[ 5]->writable(object) == true);
+        REQUIRE(properties[ 6]->writable(object) == false);
+        REQUIRE(properties[ 7]->writable(object) == true);
+        REQUIRE(properties[ 8]->writable(object) == false);
+        REQUIRE(properties[ 9]->writable(object) == true);
         REQUIRE(properties[10]->writable(object) == false);
         REQUIRE(properties[11]->writable(object) == false);
         REQUIRE(properties[12]->writable(object) == true);
@@ -370,15 +377,15 @@ TEST_CASE("Classes can have properties")
     {
         MyClass object;
 
-        REQUIRE(properties[1]->get(object) == ponder::Value(object.p1));
-        REQUIRE(properties[2]->get(object) == ponder::Value(object.p2));
-        REQUIRE(properties[3]->get(object) == ponder::Value(object.p3));
-        IS_TRUE(properties[4]->get(object) == ponder::Value(object.p4));
-        REQUIRE(properties[5]->get(object) == ponder::Value(object.p5));
-        REQUIRE(properties[6]->get(object) == ponder::Value(object.p6));
-        REQUIRE(properties[7]->get(object) == ponder::Value(object.p7));
-        REQUIRE(properties[8]->get(object) == ponder::Value(object.p8));
-        IS_TRUE( properties[9]->get(object) == ponder::Value(*object.p9) );
+        REQUIRE(properties[ 1]->get(object) == ponder::Value(object.p1));
+        REQUIRE(properties[ 2]->get(object) == ponder::Value(object.p2));
+        REQUIRE(properties[ 3]->get(object) == ponder::Value(object.p3));
+        IS_TRUE(properties[ 4]->get(object) == ponder::Value(object.p4));
+        REQUIRE(properties[ 5]->get(object) == ponder::Value(object.p5));
+        REQUIRE(properties[ 6]->get(object) == ponder::Value(object.p6));
+        REQUIRE(properties[ 7]->get(object) == ponder::Value(object.p7));
+        REQUIRE(properties[ 8]->get(object) == ponder::Value(object.p8));
+        IS_TRUE(properties[ 9]->get(object) == ponder::Value(*object.p9) );
         REQUIRE(properties[10]->get(object) == ponder::Value(object.p10));
         REQUIRE(properties[11]->get(object) == ponder::Value(object.p11));
         REQUIRE(properties[12]->get(object) == ponder::Value(object.p12));
@@ -386,14 +393,14 @@ TEST_CASE("Classes can have properties")
         REQUIRE(properties[14]->get(object) == ponder::Value(object.inner.p14));
         REQUIRE(properties[15]->get(object) == ponder::Value(object.inner.p15));
         REQUIRE(properties[16]->get(object) == ponder::Value(object.inner.p16));
-        IS_TRUE( properties[17]->get(object) == ponder::Value(object.inner.p17) );
+        IS_TRUE(properties[17]->get(object) == ponder::Value(object.inner.p17));
         REQUIRE(properties[18]->get(object) == ponder::Value(object.p18));
         REQUIRE(properties[19]->get(object) == ponder::Value(object.p19));
         REQUIRE(properties[20]->get(object) == ponder::Value(object.p20));
         REQUIRE(properties[21]->get(object) == ponder::Value(object.p21));
         IS_TRUE(properties[22]->get(object) == ponder::Value(object.p22));
-        IS_TRUE( properties[23]->get(object) == ponder::Value(object.getP23("str")) );
-        IS_TRUE( properties[24]->get(object) == ponder::Value(object.p24) );
+        IS_TRUE(properties[23]->get(object) == ponder::Value(object.getP23("str")) );
+        IS_TRUE(properties[24]->get(object) == ponder::Value(object.p24) );
     }
 
 
@@ -401,10 +408,10 @@ TEST_CASE("Classes can have properties")
     {
         MyClass object;
 
-        REQUIRE_THROWS_AS(properties[1]->set(object, false), ponder::ForbiddenWrite);
-        REQUIRE_THROWS_AS(properties[2]->set(object, -2), ponder::ForbiddenWrite);
-        REQUIRE_THROWS_AS(properties[6]->set(object, -6), ponder::ForbiddenWrite);
-        REQUIRE_THROWS_AS(properties[8]->set(object, Two),  ponder::ForbiddenWrite);
+        REQUIRE_THROWS_AS(properties[ 1]->set(object, false), ponder::ForbiddenWrite);
+        REQUIRE_THROWS_AS(properties[ 2]->set(object, -2), ponder::ForbiddenWrite);
+        REQUIRE_THROWS_AS(properties[ 6]->set(object, -6), ponder::ForbiddenWrite);
+        REQUIRE_THROWS_AS(properties[ 8]->set(object, Two),  ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[10]->set(object, false), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[11]->set(object, -11), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[15]->set(object, -15), ponder::ForbiddenWrite);
@@ -412,11 +419,11 @@ TEST_CASE("Classes can have properties")
         REQUIRE_THROWS_AS(properties[18]->set(object, false), ponder::ForbiddenWrite);
         REQUIRE_THROWS_AS(properties[23]->set(object, "-23"), ponder::ForbiddenWrite);
 
-        properties[3]->set(object,  "-3");
-        properties[4]->set(object,  MyType(-4));
-        properties[5]->set(object,  true);
-        properties[7]->set(object,  "-7");
-        properties[9]->set(object,  MyType(-9));
+        properties[ 3]->set(object, "-3");
+        properties[ 4]->set(object, MyType(-4));
+        properties[ 5]->set(object, true);
+        properties[ 7]->set(object, "-7");
+        properties[ 9]->set(object, MyType(-9));
         properties[12]->set(object, "-12");
         properties[13]->set(object, Zero);
         properties[14]->set(object, false);
@@ -429,7 +436,7 @@ TEST_CASE("Classes can have properties")
         REQUIRE(object.p3 ==        "-3");
         REQUIRE(object.p4 ==        MyType(-4));
         REQUIRE(object.p5 ==        true);
-        REQUIRE(object.p7 ==      "-7");
+        REQUIRE(object.p7 ==        "-7");
         REQUIRE(*object.p9 ==       MyType(-9));
         REQUIRE(object.p12 ==       "-12");
         REQUIRE(object.p13 ==       Zero);
