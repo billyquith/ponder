@@ -92,18 +92,14 @@ public:
      * \param other Value to copy
      */
     Value(const Value& other);
-
-    /**
-     * \brief Move constructor
-     *
-     * \param other Value to move
-     */
-    // Value(Value&& other) noexcept;
     
+    /**
+     * \brief Assignment operator
+     *
+     * \param other Value to assign to this
+     */
     void operator = (const Value& other);
     
-    // void operator = (Value&& other) noexcept;
-
     /**
      * \brief Return the Ponder runtime kind of the value
      *
