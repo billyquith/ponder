@@ -28,64 +28,12 @@ Another possible application would be the serialization of objects to XML, text 
 binary formats. Or you can even combine all these examples to provide a powerful
 and consistent interface for manipulating your objects outside C++ code.
 
-### Example
+### Links
 
-The following example exposes our chosen view of a C++ class:
-
-```cpp
-class Person  // A C++ class
-{
-public:
-    Person(const std::string& name) : m_name(name), m_age(0) {}
-
-    std::string name() const {return m_name;}
-
-    unsigned int age() const {return m_age;}
-    void setAge(unsigned int age) {m_age = age;}
-
-    void speak() {
-        std::cout << "Hi! My name is " << m_name << " and I'm " << m_age << " years old."
-                  << std::endl;
-    }
-    
-private:
-    std::string m_name;
-    unsigned int m_age;
-};
-
-PONDER_TYPE(Person) // declare type
-
-void declare() // register details (once)
-{
-    ponder::Class::declare<Person>("Person")
-        .constructor<std::string>()
-        .property("name", &Person::name)
-        .property("age", &Person::age, &Person::setAge)
-        .function("speak", &Person::speak)
-        ;
-}
-
-void use()
-{
-    // Retrieve the metaclass by its name
-    const ponder::Class& metaclass = ponder::classByName("Person");
-    
-    // Use the metaclass to construct a new person named John
-    ponder::UserObject john = metaclass.construct(ponder::Args("John"));
-    
-    // Print its name
-    std::cout << "John's name is: " << john.get("name") << std::endl;
-    
-    // Set its age to 24
-    john.set("age", 24);
-    
-    // Make John say something
-    john.call("speak");
-    
-    // Kill John
-    metaclass.destroy(john);
-}
-```
+ - [Ponder website](http://billyquith.github.io/ponder/).
+ - [Online documentation](http://billyquith.github.io/ponder/docs/).
+ - [Project blog](http://billyquith.github.io/ponder/blog/).
+ - [GitHub project](https://github.com/billyquith/ponder).
 
 ### Build
 
@@ -98,13 +46,6 @@ mkdir build && cd build
 cmake -G Ninja ..
 ninja
 ```
-
-### Links
-
- - [Ponder website](http://billyquith.github.io/ponder/).
- - [GitHub project](https://github.com/billyquith/ponder).
- - [Project blog](http://billyquith.github.io/ponder/blog/).
- - [Online documentation](http://billyquith.github.io/ponder/docs/).
 
 ### History
 

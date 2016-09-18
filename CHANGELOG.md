@@ -13,10 +13,14 @@ Ponder Changelog
   - ValueType now ValueKind. Avoid clash with "type".
   - Arguments now parameters. Functions have parameters and are called with arguments.
 - Added support for binding to static functions (issue #46).
+- Lua binding generator. Functional but sparse functionality. (issue #40).
+- `PONDER_RTTI` renamed to `PONDER_POLYMORPHIC` (issue #36).
+- Added function call return policies (issue #51).
 - Removed UserObject parent-child. Simplification, unused.
 - Removed Function callable behaviour. Unused complication.
 - Class::create() allows object creation without an Args list.
 - Class::tryFunction() and Class::tryProperty() added.
+
 
 ### 1.3
 
