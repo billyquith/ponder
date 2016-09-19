@@ -390,8 +390,8 @@ TEST_CASE("Ponder has object traits")
                       "ObjectTraits<>::isWriteable failed");
 
         // is not writable
-//        static_assert(ObjectTraits<const int>::isWritable,
-//                      "ObjectTraits<>::isWriteable failed");  FIX ?
+        static_assert( ! ObjectTraits<const int>::isWritable,
+                      "ObjectTraits<>::isWriteable failed");
         static_assert( ! ObjectTraits<int>::isWritable,
                       "ObjectTraits<>::isWriteable failed");
         static_assert( ! ObjectTraits<const int*>::isWritable,
