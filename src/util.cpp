@@ -41,10 +41,8 @@
 // Convert from string:
 //  http://tinodidriksen.com/2010/02/16/cpp-convert-string-to-int-speed/
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
 
 static inline int stricmp(const char* a, const char* b)
 {
@@ -61,7 +59,7 @@ template <typename T>
 static bool parse_integer(const String& from, T& to)
 {
     try {
-        const long p = std::stol(from.c_str());
+        const long p = std::stol(from.c_str(), nullptr, 0);
         to = static_cast<T>(p);
     } catch (std::logic_error&) {
         return false;
@@ -121,7 +119,7 @@ bool conv(const String& from, unsigned long& to)
 bool conv(const String& from, long long& to)
 {
     try {
-        to = std::stoll(from.c_str());
+        to = std::stoll(from.c_str(), nullptr, 0);
     } catch (std::logic_error&) {
         return false;
     }
@@ -131,7 +129,7 @@ bool conv(const String& from, long long& to)
 bool conv(const String& from, unsigned long long& to)
 {
     try {
-        to = std::stoull(from.c_str());
+        to = std::stoull(from.c_str(), nullptr, 0);
     } catch (std::logic_error&) {
         return false;
     }

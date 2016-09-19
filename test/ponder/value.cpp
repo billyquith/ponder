@@ -587,6 +587,140 @@ TEST_CASE("Ponder has variant values")
     }
 }
 
+TEST_CASE("We can convert values from strings")
+{
+    using ponder::detail::conv;
+
+    SECTION("bool")
+    {
+        bool r;
+
+        REQUIRE(conv("1", r) == true);
+        REQUIRE(r == true);
+
+        REQUIRE(conv("true", r) == true);
+        REQUIRE(r == true);
+
+        REQUIRE(conv("0", r) == true);
+        REQUIRE(r == false);
+
+        REQUIRE(conv("false", r) == true);
+        REQUIRE(r == false);
+    }
+
+    SECTION("bool fail")
+    {
+        bool r;
+
+        REQUIRE(conv("X", r) == false);
+        REQUIRE(conv("", r) == false);
+    }
+    
+    SECTION("int")
+    {
+        int r;
+
+        REQUIRE(conv("1", r) == true);
+        REQUIRE(r == 1);
+
+        REQUIRE(conv("-1", r) == true);
+        REQUIRE(r == -1);
+
+        REQUIRE(conv("87654321", r) == true);
+        REQUIRE(r == 87654321);
+
+        REQUIRE(conv("-87654321", r) == true);
+        REQUIRE(r == -87654321);
+        
+        REQUIRE(conv("-87654321", r) == true);
+        REQUIRE(r == -87654321);
+        
+        REQUIRE(conv("0xabc", r) == true);  // hex
+        REQUIRE(r == 0xABC);
+        
+        REQUIRE(conv("0654", r) == true);   // octal
+        REQUIRE(r == 0654);
+    }
+
+    SECTION("int fail")
+    {
+        int r;
+
+        REQUIRE(conv("", r) == false);
+        REQUIRE(conv("whoops", r) == false);
+        REQUIRE(conv(".78", r) == false);
+    }
+    
+    SECTION("long long")
+    {
+        long long r;
+
+        REQUIRE(conv("1", r) == true);
+        REQUIRE(r == 1);
+
+        REQUIRE(conv("-1", r) == true);
+        REQUIRE(r == -1);
+
+        REQUIRE(conv("87654321", r) == true);
+        REQUIRE(r == 87654321);
+
+        REQUIRE(conv("-87654321", r) == true);
+        REQUIRE(r == -87654321);
+        
+        REQUIRE(conv("-87654321", r) == true);
+        REQUIRE(r == -87654321);
+        
+        REQUIRE(conv("0xabc", r) == true);  // hex
+        REQUIRE(r == 0xABC);
+
+        REQUIRE(conv("0x1234567812345678", r) == true);  // hex
+        REQUIRE(r == 0x1234567812345678);
+        
+        REQUIRE(conv("0654", r) == true);   // octal
+        REQUIRE(r == 0654);
+    }
+
+    SECTION("long long fail")
+    {
+        long long r;
+
+        REQUIRE(conv("", r) == false);
+        REQUIRE(conv("whoops", r) == false);
+        REQUIRE(conv(".78", r) == false);
+    }
+    
+    SECTION("float")
+    {
+        float r;
+
+        REQUIRE(conv("1", r) == true);
+        REQUIRE(r == 1.f);
+
+        REQUIRE(conv("-1", r) == true);
+        REQUIRE(r == -1.f);
+
+        REQUIRE(conv("87654321", r) == true);
+        REQUIRE(r == 87654321);
+
+        REQUIRE(conv("-87654321", r) == true);
+        REQUIRE(r == -87654321);
+        
+        REQUIRE(conv("-87654321", r) == true);
+        REQUIRE(r == -87654321);
+        
+        REQUIRE(conv("0xabc", r) == true);  // hex
+        REQUIRE(r == 0xABC);        
+    }
+
+    SECTION("float fail")
+    {
+        float r;
+
+        REQUIRE(conv("", r) == false);
+        REQUIRE(conv("whoops", r) == false);
+    }
+
+}
 
 TEST_CASE("Values have their type determined")
 {
