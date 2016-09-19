@@ -4,7 +4,11 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
-### 2.0
+### 2.1
+
+- Declaration report generator.
+
+## 2.0
 
 - Version 1.4 was unreleased and morphed into 2.0 because of extensive design changes.
 - Runtime functionality (object factory and function calling) decoupled (issue #49).
@@ -50,10 +54,10 @@ Ponder Changelog
 - Dictionaries ordered internally. Allows for fast binary searching of keys.
 - Documentation fixes.
 
-### 1.0.2
+#### 1.0.2
 
 - Moved to Catch for unit testing. 
 
-### 1.0
+## 1.0
 
 - Boost dependency removed.

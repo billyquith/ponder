@@ -32,15 +32,14 @@
 #define PONDER_DETAIL_CLASSMANAGER_HPP
 
 #include <ponder/detail/observernotifier.hpp>
-#include <string>
 #include <map>
 
-namespace ponder
-{
+namespace ponder {
+    
 class Class;
 
-namespace detail
-{
+namespace detail {
+    
 /**
  * \brief Manages creation, storage, retrieval and destruction of metaclasses
  *
@@ -158,8 +157,6 @@ private:
 };
 
 } // namespace detail
-
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_CLASSMANAGER_HPP

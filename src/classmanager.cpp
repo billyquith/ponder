@@ -32,10 +32,8 @@
 #include <ponder/class.hpp>
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
     
 ClassManager& ClassManager::instance()
 {
@@ -133,6 +131,5 @@ ClassManager::~ClassManager()
     }
 }
 
-} // namespace detail
-
 } // namespace ponder
+} // namespace detail

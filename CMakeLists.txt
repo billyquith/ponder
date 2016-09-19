@@ -126,6 +126,7 @@ set(SRC_HEADERS
     include/ponder/qt/qtsimpleproperty.hpp
     include/ponder/qt/qvector.hpp        
     # Uses
+    include/ponder/uses/report.hpp
     include/ponder/uses/runtime.hpp
     include/ponder/uses/detail/runtime.hpp
     include/ponder/uses/lua.hpp
@@ -159,6 +160,8 @@ set(SRC_SOURCE
     src/userproperty.cpp
     src/util.cpp
     src/value.cpp
+    # Uses
+    src/uses/report.cpp
 )
 
 source_group("Headers"

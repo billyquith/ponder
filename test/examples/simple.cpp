@@ -28,6 +28,10 @@
 
 #include "test.hpp"
 
+#include <ponder/uses/report.hpp>
+#include <ponder/detail/format.hpp>
+using namespace ponder::detail::fmt;
+
 //$ eg_begin,name=intro
 
 #include <ponder/classbuilder.hpp>
@@ -99,12 +103,24 @@ static void use()
 
 //$ eg_end
 
+static void reportAll()
+{
+    ponder::uses::reportAll();
+}
+
 TEST_CASE("simple tests")
 {
     SECTION("intro")
     {
+        print("------------------------------------------------------------\n");
         declare();
         use();
+    }
+    
+    SECTION("report")
+    {
+        print("------------------------------------------------------------\n");
+        reportAll();
     }
 }
 
