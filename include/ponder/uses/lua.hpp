@@ -135,14 +135,14 @@ static int pushValue(lua_State *L, const ponder::Value& val,
             }
             return 1;
         default:
-            lua_pushliteral(L, "Unknown type in Ponder value");
-            lua_error(L);
+            luaL_error(L, "Unknown type in Ponder value");
     }
     return 0;
 }
 
 // get a Lua stack value as a Ponder value
-static Value getValue(lua_State *L, int index, ValueKind typeExpected = ValueKind::None)
+static Value getValue(lua_State *L, int index,
+                      ValueKind typeExpected = ValueKind::None, int argIndex = -1)
 {
     if (index > lua_gettop(L))
         return Value();
@@ -173,11 +173,15 @@ static Value getValue(lua_State *L, int index, ValueKind typeExpected = ValueKin
                 
             default: ;
         }
+        
         if (vtype != typei)
         {
-            lua_pushfstring(L, "Expecting %s but got %s",
-                            lua_typename(L, vtype), lua_typename(L, typei));
-            lua_error(L);
+            if (argIndex < 0)
+                luaL_error(L, "Expecting %s but got %s",
+                           lua_typename(L, vtype), lua_typename(L, typei));
+            else
+                luaL_error(L, "Argument %d: expecting %s but got %s",
+                           argIndex, lua_typename(L, vtype), lua_typename(L, typei));
         }
     }
     
@@ -203,8 +207,7 @@ static Value getValue(lua_State *L, int index, ValueKind typeExpected = ValueKin
             }
 
         default:
-            lua_pushfstring(L, "Cannot convert %s to Ponder value", lua_typename(L, typei));
-            lua_error(L);
+            luaL_error(L, "Cannot convert %s to Ponder value", lua_typename(L, typei));
     }
     
     return Value(); // no value
@@ -223,7 +226,7 @@ static int l_func_call(lua_State *L)
     {
         // we know the arg type so check it
         const ValueKind at = func->paramType(i);
-        args += getValue(L, i + c_argOffset, at);
+        args += getValue(L, i + c_argOffset, at, i+1);
     }
     
     ponder::runtime::FunctionCaller caller(*func);
@@ -240,8 +243,7 @@ static int l_method_call(lua_State *L)
     void *ud = lua_touserdata(L, 1);  // userobj
     if (!ud)
     {
-        lua_pushliteral(L, "Method call 'this' is null. (Use Class:method() ?)");
-        lua_error(L);
+        luaL_error(L, "Method call 'this' is null. (Use Class:method() ?)");
     }
     ponder::UserObject *uobj = (ponder::UserObject*) ud;
 
@@ -254,7 +256,7 @@ static int l_method_call(lua_State *L)
     {
         // we know the arg type so check it
         const ValueKind at = func->paramType(i);
-        args += getValue(L, i + c_argOffset, at);
+        args += getValue(L, i + c_argOffset, at, i+1);
     }
     
     ponder::runtime::ObjectCaller caller(*func);
@@ -359,8 +361,7 @@ static int l_instance_create(lua_State *L)
     if (obj == ponder::UserObject::nothing)
     {
         lua_pop(L, 1);  // pop new user data
-        lua_pushliteral(L, "Matching constructor not found");
-        lua_error(L);
+        luaL_error(L, "Matching constructor not found");
     }
     
     void *ud = lua_newuserdata(L, sizeof(UserObject));   // +1
