@@ -65,8 +65,7 @@ ValueKind mapType()
 } // namespace ponder
 
 
-namespace ponder_ext
-{
+namespace ponder_ext {
     
 /**
  * \class ValueMapper
@@ -101,7 +100,7 @@ namespace ponder_ext
  *     struct ValueMapper<MyStringClass>
  *     {
  *         // The corresponding Ponder type is "string"
- *         static const int type = ponder::string;
+ *         static const ponder::ValueKind kind = ponder::ValueKind::String;
  *  
  *         // Convert from MyStringClass to ponder::String
  *         static ponder::String to(const MyStringClass& source)

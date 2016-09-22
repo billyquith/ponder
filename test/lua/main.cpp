@@ -41,6 +41,28 @@ static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
 
 namespace fmt = ponder::detail::fmt;
 
+namespace ponder_ext
+{
+    template <>
+    struct ValueMapper<ponder::detail::string_view>
+    {
+        static const ponder::ValueKind kind = ponder::ValueKind::String;
+        
+        // convert to ponder::String
+        static ponder::String to(const ponder::detail::string_view& source)
+        {
+            return ponder::String(source);
+        }
+
+        // convert to string_view from ponder type
+        template <typename T>
+        static ponder::detail::string_view from(const T& source)
+        {
+            return ponder::detail::string_view(ValueMapper<ponder::String>::from(source));
+        }
+    };
+}
+
 namespace lib
 {
     static constexpr float FLOAT_EPSILON = 1e-5f;
@@ -63,9 +85,6 @@ namespace lib
         Vec operator + (const Vec& o) const { return Vec(x + o.x, y + o.y); }
         const Vec& operator += (const Vec& o) { x += o.x, y += o.y; return *this; }
         
-        Vec operator * (float s) const { return Vec(x*s, y*s); }
-        Vec operator * (const Vec& o) const { return Vec(x * o.x, y * o.y); }
-
         float length() const        { return std::sqrt(x*x + y*y); }
         
         float dot(const Vec &o) const {
@@ -87,6 +106,11 @@ namespace lib
         
         Holder* ptrRef() { return this; }
         Holder& refRef() { return *this; }
+    };
+    
+    struct Types
+    {
+        static int len(const ponder::detail::string_view str) { return str.length(); }
     };
     
     struct Dummy
@@ -124,7 +148,11 @@ namespace lib
             .function("rref", &Holder::refRef, policy::ReturnInternalRef())
             .property("vec", &Holder::vec)
             ;
-        
+
+        ponder::Class::declare<Types>()
+            .function("len", &Types::len)
+            ;
+
         ponder::Class::declare<Dummy>()
             .function("halve", &Dummy::halve)
             .function("twice", &twice)
@@ -136,6 +164,7 @@ namespace lib
 
 PONDER_TYPE(lib::Vec)
 PONDER_TYPE(lib::Holder)
+PONDER_TYPE(lib::Types)
 PONDER_TYPE(lib::Dummy)
 
 static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
@@ -166,7 +195,10 @@ int main()
     lib::declare();
     ponder::lua::expose<lib::Vec>(L, "Vec2");
     ponder::lua::expose<lib::Holder>(L, "Holder");
+    ponder::lua::expose<lib::Types>(L, "Types");
     ponder::lua::expose<lib::Dummy>(L, "Dummy");
+    
+    //------------------------------------------------------------------
 
     // class defined
     LUA_PASS("print(Vec2); assert(Vec2 ~= nil)");
@@ -217,9 +249,19 @@ int main()
     LUA_PASS("r.x = 9; assert(r.x == 9)");
     LUA_PASS("r.propRef.x = 19; assert(r.x == 19)");
 
+    //------------------------------------------------------------------
+
     // Non-copyable return ref
     LUA_PASS("h = Holder()");
     LUA_PASS("h:rref().vec.x = 9; assert(h:rref().vec.x == 9)");
+    
+    //------------------------------------------------------------------
+    
+    LUA_PASS("assert(type(Types) == 'userdata')");
+    LUA_PASS("x = Types.len('two'); assert(type(x) == 'number' and x == 3)");
+    LUA_PASS("assert(Types.len('1234567890') ~= 11)");
+
+    //------------------------------------------------------------------
 
     // Class static function
     LUA_PASS("assert(type(Dummy) == 'userdata')");
