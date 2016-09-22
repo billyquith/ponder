@@ -145,10 +145,7 @@ static int pushValue(lua_State *L, const ponder::Value& val,
 static Value getValue(lua_State *L, int index, ValueKind typeExpected = ValueKind::None)
 {
     if (index > lua_gettop(L))
-    {
-        lua_pushliteral(L, "Trying to get arg off stack end");
-        lua_error(L);
-    }
+        return Value();
     
     const int typei = lua_type(L, index);
 
@@ -217,14 +214,16 @@ static Value getValue(lua_State *L, int index, ValueKind typeExpected = ValueKin
 static int l_func_call(lua_State *L)
 {
     lua_pushvalue(L, lua_upvalueindex(1));
-    const Function *func = (const Function *) lua_touserdata(L, -1);
-    
+    const Function *func = (const Function *) lua_touserdata(L, -1);    
+    lua_pop(L, 1);
+ 
     Args args;
+    constexpr std::size_t c_argOffset = 1;
     for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
     {
         // we know the arg type so check it
         const ValueKind at = func->paramType(i);
-        args += getValue(L, i, at);
+        args += getValue(L, i + c_argOffset, at);
     }
     
     ponder::runtime::FunctionCaller caller(*func);
@@ -250,7 +249,7 @@ static int l_method_call(lua_State *L)
     const Function *func = (const Function *) lua_touserdata(L, -1);
     
     Args args;
-    constexpr auto c_argOffset = 2u;
+    constexpr std::size_t c_argOffset = 2;
     for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
     {
         // we know the arg type so check it

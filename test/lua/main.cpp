@@ -88,7 +88,13 @@ namespace lib
         Holder* ptrRef() { return this; }
         Holder& refRef() { return *this; }
     };
+    
+    struct Dummy
+    {
+        static int halve(int x) { return x/2; }
+    };
 
+    int twice(int x) { return 2*x; }
     
     void declare()
     {
@@ -118,12 +124,19 @@ namespace lib
             .function("rref", &Holder::refRef, policy::ReturnInternalRef())
             .property("vec", &Holder::vec)
             ;
+        
+        ponder::Class::declare<Dummy>()
+            .function("halve", &Dummy::halve)
+            .function("twice", &twice)
+            ;
+
     }
     
 } // namespace lib
 
 PONDER_TYPE(lib::Vec)
 PONDER_TYPE(lib::Holder)
+PONDER_TYPE(lib::Dummy)
 
 static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
 {
@@ -153,6 +166,7 @@ int main()
     lib::declare();
     ponder::lua::expose<lib::Vec>(L, "Vec2");
     ponder::lua::expose<lib::Holder>(L, "Holder");
+    ponder::lua::expose<lib::Dummy>(L, "Dummy");
 
     // class defined
     LUA_PASS("print(Vec2); assert(Vec2 ~= nil)");
@@ -188,14 +202,9 @@ int main()
     LUA_PASS("c = a:add(b); assert(c ~= nil); print(c.x, c.y);");
     LUA_PASS("assert(c.x == 5); assert(c.y == 7);");
 
-    // method call (.) with with return object
-    LUA_PASS("assert(type(Vec2.add) == 'function')");
-//    LUA_PASS("c = Vec2.add(a,b); assert(c ~= nil); print(c.x, c.y);"); - TODO - check static
-//    LUA_PASS("assert(c.x == 5); assert(c.y == 7);");
-
     // static func
     LUA_PASS("assert(type(Vec2.up) == 'function')");
-    LUA_PASS("up = Vec2.up(); assert(type(up) == 'userdata')");
+    LUA_PASS("up = Vec2.up(7); assert(type(up) == 'userdata')");
     LUA_PASS("assert(type(up.x) == 'number')");
 
     // Vec return ref (func)
@@ -211,6 +220,16 @@ int main()
     // Non-copyable return ref
     LUA_PASS("h = Holder()");
     LUA_PASS("h:rref().vec.x = 9; assert(h:rref().vec.x == 9)");
+
+    // Class static function
+    LUA_PASS("assert(type(Dummy) == 'userdata')");
+    LUA_PASS("assert(type(Dummy.halve) == 'function')");
+    LUA_PASS("x = Dummy.halve(16); assert(x == 8)");
+
+    // Non-class function
+    LUA_PASS("assert(type(Dummy) == 'userdata')");
+    LUA_PASS("assert(type(Dummy.twice) == 'function')");
+    LUA_PASS("x = Dummy.twice(7); assert(x == 14)");
 
     return EXIT_SUCCESS;
 }
