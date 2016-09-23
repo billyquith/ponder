@@ -110,21 +110,12 @@ struct ChooseCallReturner<std::tuple<P, Ps...>, R> // recurse
 
 //-----------------------------------------------------------------------------
     
-/**
- * \brief Helper function which converts an argument to a C++ type
+/*
+ * Helper function which converts an argument to a C++ type
  *
  * The main purpose of this function is to convert any BadType error to
  * a BadArgument one.
- *
- * \param args List of arguments
- * \param index Index of the argument to convert
- * \param function Name of the calling function
- *
- * \return Value of args[index] converted to T
- *
- * \thrown BadArgument conversion triggered a BadType error
  */
- 
 template <int TFrom, typename TTo>
 struct ConvertArg
 {
@@ -141,6 +132,7 @@ struct ConvertArg
     }
 };
 
+// Specialisation for returning references.
 template <typename TTo>
 struct ConvertArg<(int)ValueKind::User, TTo&>
 {
@@ -155,6 +147,7 @@ struct ConvertArg<(int)ValueKind::User, TTo&>
     }
 };
 
+// Specialisation for returning const references.
 template <typename TTo>
 struct ConvertArg<(int)ValueKind::User, const TTo&>
 {
