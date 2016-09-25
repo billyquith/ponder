@@ -381,7 +381,7 @@ TEST_CASE("Ponder has object traits")
     SECTION("types can be tested for being writable")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
         
         // is writable
         static_assert(ObjectTraits<int*>::isWritable,
@@ -407,7 +407,7 @@ TEST_CASE("Ponder has object traits")
     SECTION("types can be references")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
 
         // is ref
         static_assert(ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
@@ -417,7 +417,7 @@ TEST_CASE("Ponder has object traits")
 
         static_assert(ponder::detail::ObjectTraits<int&>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<int&>::kind == ObjectType::Reference,
+        static_assert(ponder::detail::ObjectTraits<int&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::isRef failed");
         static_assert(ponder::detail::ObjectTraits<int*&>::isRef,
                       "ObjectTraits<>::isRef failed");
@@ -431,7 +431,7 @@ TEST_CASE("Ponder has object traits")
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<Callable>::isRef,
                       "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<Callable>::kind != ObjectType::Reference,
+        static_assert(ponder::detail::ObjectTraits<Callable>::kind != ObjectKind::Reference,
                       "ObjectTraits<>::isRef failed");
         static_assert( ! ponder::detail::ObjectTraits<NonCallable>::isRef,
                       "ObjectTraits<>::isRef failed");
@@ -520,85 +520,85 @@ TEST_CASE("Object traits are classfied")
     SECTION("type object")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
         
-        static_assert(ObjectTraits<int>::kind == ObjectType::Object, "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float>::kind == ObjectType::Object, "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods>::kind == ObjectType::Object, "ObjectTraits<>::kind");
-//        static_assert(ObjectTraits<const int>::kind == ObjectType::Object, "ObjectTraits<>::kind");
-//        static_assert(ObjectTraits<const float>::kind == ObjectType::Object, "ObjectTraits<>::kind");
-//        static_assert(ObjectTraits<const Methods>::kind == ObjectType::Object, "ObjectTraits<>::kind");
+        static_assert(ObjectTraits<int>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
+        static_assert(ObjectTraits<float>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
+        static_assert(ObjectTraits<Methods>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
+//        static_assert(ObjectTraits<const int>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
+//        static_assert(ObjectTraits<const float>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
+//        static_assert(ObjectTraits<const Methods>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
         
-        static_assert(ObjectTraits<int*>::kind != ObjectType::Object, "ObjectTraits<>::kind");
+        static_assert(ObjectTraits<int*>::kind != ObjectKind::Object, "ObjectTraits<>::kind");
     }
 
     SECTION("type pointer")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
         
-        static_assert(ObjectTraits<int*>::kind == ObjectType::Pointer,
+        static_assert(ObjectTraits<int*>::kind == ObjectKind::Pointer,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float*>::kind == ObjectType::Pointer,
+        static_assert(ObjectTraits<float*>::kind == ObjectKind::Pointer,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods*>::kind == ObjectType::Pointer,
+        static_assert(ObjectTraits<Methods*>::kind == ObjectKind::Pointer,
                       "ObjectTraits<>::kind");
 
-        static_assert(ObjectTraits<int**>::kind == ObjectType::Pointer,
+        static_assert(ObjectTraits<int**>::kind == ObjectKind::Pointer,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float**>::kind == ObjectType::Pointer,
+        static_assert(ObjectTraits<float**>::kind == ObjectKind::Pointer,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods**>::kind == ObjectType::Pointer,
+        static_assert(ObjectTraits<Methods**>::kind == ObjectKind::Pointer,
                       "ObjectTraits<>::kind");
     }
     
     SECTION("type reference")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
         
-        static_assert(ObjectTraits<int&>::kind == ObjectType::Reference,
+        static_assert(ObjectTraits<int&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float&>::kind == ObjectType::Reference,
+        static_assert(ObjectTraits<float&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods&>::kind == ObjectType::Reference,
+        static_assert(ObjectTraits<Methods&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::kind");
         
-        static_assert(ObjectTraits<const int&>::kind == ObjectType::Reference,
+        static_assert(ObjectTraits<const int&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<const float&>::kind == ObjectType::Reference,
+        static_assert(ObjectTraits<const float&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<const Methods&>::kind == ObjectType::Reference,
+        static_assert(ObjectTraits<const Methods&>::kind == ObjectKind::Reference,
                       "ObjectTraits<>::kind");
     }
     
     SECTION("type smart pointer")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
         
-//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::kind == ObjectType::SmartPointer,
+//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::kind == ObjectKind::SmartPointer,
 //                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<std::shared_ptr<Methods>>::kind == ObjectType::SmartPointer,
+        static_assert(ObjectTraits<std::shared_ptr<Methods>>::kind == ObjectKind::SmartPointer,
                       "ObjectTraits<>::kind");
     }
 
     SECTION("type builtin array")
     {
         using ponder::detail::ObjectTraits;
-        using ponder::detail::ObjectType;
+        using ponder::ObjectKind;
         
-        static_assert(ObjectTraits<int[1]>::kind == ObjectType::BuiltinArray,
+        static_assert(ObjectTraits<int[1]>::kind == ObjectKind::BuiltinArray,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<int[1000]>::kind == ObjectType::BuiltinArray,
+        static_assert(ObjectTraits<int[1000]>::kind == ObjectKind::BuiltinArray,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float[1]>::kind == ObjectType::BuiltinArray,
+        static_assert(ObjectTraits<float[1]>::kind == ObjectKind::BuiltinArray,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods[10]>::kind == ObjectType::BuiltinArray,
+        static_assert(ObjectTraits<Methods[10]>::kind == ObjectKind::BuiltinArray,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<int[10][10]>::kind == ObjectType::BuiltinArray,
+        static_assert(ObjectTraits<int[10][10]>::kind == ObjectKind::BuiltinArray,
                       "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<int[10][20][30]>::kind == ObjectType::BuiltinArray,
+        static_assert(ObjectTraits<int[10][20][30]>::kind == ObjectKind::BuiltinArray,
                       "ObjectTraits<>::kind");
     }
 }

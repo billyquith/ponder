@@ -31,23 +31,10 @@
 #ifndef PONDER_DETAIL_OBJECTTRAITS_HPP
 #define PONDER_DETAIL_OBJECTTRAITS_HPP
 
-
 #include <ponder/detail/rawtype.hpp>
-
 
 namespace ponder {
 namespace detail {    
-
-/// Type kind for a type relating to an object.
-enum class ObjectType
-{
-    None,               // not an object
-    Object,             // a raw object, e.g. int
-    Pointer,            // pointer to an object, e.g. T*
-    Reference,          // reference to an object, e.g. T&
-    SmartPointer,       // smart pointer reference
-    BuiltinArray,       // builtin array, e.g. T[N]
-};
     
 /**
  * \class ObjectTraits
@@ -87,7 +74,7 @@ struct ObjectTraits
 {
     static constexpr bool isWritable = false;
     static constexpr bool isRef = false;
-    static constexpr ObjectType kind = ObjectType::Object;
+    static constexpr ObjectKind kind = ObjectKind::Object;
 
     typedef T& RefReturnType;
     typedef typename RawType<T>::Type DataType;
@@ -103,7 +90,7 @@ struct ObjectTraits<T*>
 {
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectType kind = ObjectType::Pointer;
+    static constexpr ObjectKind kind = ObjectKind::Pointer;
 
     typedef T* RefReturnType;
     typedef T* PointerType;
@@ -121,7 +108,7 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 {
     static constexpr bool isWritable = !std::is_const<U>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectType kind = ObjectType::SmartPointer;
+    static constexpr ObjectKind kind = ObjectKind::SmartPointer;
 
     typedef U* RefReturnType;
     typedef U* PointerType;
@@ -139,7 +126,7 @@ struct ObjectTraits<T[N]>
 {
     static constexpr bool isWritable = false;
     static constexpr bool isRef = true;
-    static constexpr ObjectType kind = ObjectType::BuiltinArray;
+    static constexpr ObjectKind kind = ObjectKind::BuiltinArray;
 
     typedef T(&RefReturnType)[N];
     typedef typename RawType<T>::Type DataType;
@@ -155,7 +142,7 @@ struct ObjectTraits<T&,
 {
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectType kind = ObjectType::Reference;
+    static constexpr ObjectKind kind = ObjectKind::Reference;
 
     typedef T& RefReturnType;
     typedef T* PointerType;
@@ -174,7 +161,7 @@ struct ObjectTraits<T&,
                 std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
     : ObjectTraits<T>
 {
-    static constexpr ObjectType kind = ObjectType::None;
+    static constexpr ObjectKind kind = ObjectKind::None;
 };
 
 /*
@@ -183,7 +170,7 @@ struct ObjectTraits<T&,
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
 {
-    static constexpr ObjectType kind = ObjectType::None;
+    static constexpr ObjectKind kind = ObjectKind::None;
 };
 
 } // namespace detail

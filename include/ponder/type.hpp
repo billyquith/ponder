@@ -60,6 +60,20 @@ enum class ValueKind
     User        ///< User-defined classes
 };
 
+/**
+ * \brief Enumeration of kinds of object
+ *
+ * \sa Value ValueMapper
+ */
+enum class ObjectKind
+{
+    None,               // not an object
+    Object,             // a raw object, e.g. int
+    Pointer,            // pointer to an object, e.g. T*
+    Reference,          // reference to an object, e.g. T&
+    SmartPointer,       // smart pointer reference
+    BuiltinArray,       // builtin array, e.g. T[N]
+};
     
 /**
  * \brief Enumeration of the kinds of function recognised
