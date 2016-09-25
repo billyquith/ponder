@@ -39,7 +39,7 @@
 
 #include <ponder/type.hpp>
 
-#include "json.hpp"
+#include "picojson.h"
 
 using namespace ponder;
 using ponder::detail::string_view;
@@ -47,7 +47,6 @@ using ponder::detail::string_view;
 namespace {
     
     using namespace ponder::detail::fmt;
-    using json = nlohmann::json;
 
     class Reporter
     {
@@ -93,41 +92,41 @@ namespace {
         }
     };
 
-    class JsonReporter : public Reporter
-    {
-        std::stack<json::object_t> m_what;
-        json::array_t m_root;
-        
-    public:
-        
-        JsonReporter() {}
-        virtual ~JsonReporter() {}
-        
-        std::string toJson()
-        {
-//            json::object_t ret;
-//            ret["classes"] = m_root;
-//            return ret;
-            return "";
-        }
-        
-        void open(string_view name) override
-        {
-            json::object_t node;
-            m_root.push_back(node);
-            m_what.push(node);
-        }
-        
-        void close() override
-        {
-            m_what.pop();
-        }
-        
-        void info(string_view key, string_view value) override
-        {
-            m_what.top()[key.to_string()] = value.to_string();
-        }
-    };
+//    class JsonReporter : public Reporter
+//    {
+//        std::stack<json::object_t> m_what;
+//        json::array_t m_root;
+//        
+//    public:
+//        
+//        JsonReporter() {}
+//        virtual ~JsonReporter() {}
+//        
+//        std::string toJson()
+//        {
+////            json::object_t ret;
+////            ret["classes"] = m_root;
+////            return ret;
+//            return "";
+//        }
+//        
+//        void open(string_view name) override
+//        {
+//            json::object_t node;
+//            m_root.push_back(node);
+//            m_what.push(node);
+//        }
+//        
+//        void close() override
+//        {
+//            m_what.pop();
+//        }
+//        
+//        void info(string_view key, string_view value) override
+//        {
+//            m_what.top()[key.to_string()] = value.to_string();
+//        }
+//    };
 
     class ReportVisitor : public ponder::ClassVisitor
     {
@@ -241,9 +240,9 @@ void ponder::uses::reportAll()
         reportTo(rep);
     }
     
-    {
-        JsonReporter rep;
-        reportTo(rep);
-        std::cout << rep.toJson() << std::endl;
-    }
+//    {
+//        JsonReporter rep;
+//        reportTo(rep);
+//        std::cout << rep.toJson() << std::endl;
+//    }
 }
