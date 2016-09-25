@@ -34,6 +34,10 @@
 #include <ponder/uses/lua.hpp>
 #include <list>
 
+extern "C" {
+#include <lualib.h>
+}
+
 static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
 
 #define PLDB(X) X

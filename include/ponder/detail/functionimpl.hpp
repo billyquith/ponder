@@ -126,7 +126,8 @@ public:
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueKind<c_nParams>>::foreach();
         
-        processUses(m_name, function);
+        processUses<uses::Uses::eRuntimeModule>(m_name, function);
+        processUses<uses::Uses::eLuaModule>(m_name, function);
     }
     
     const void* getUsesData() const override
@@ -140,11 +141,13 @@ private:
 
     uses::Uses::PerFunctionUserData m_userData;
 
+    template <int M>
     void processUses(IdRef name, F function)
     {
-        typedef std::tuple_element<0, uses::Uses::Modules>::type UserFuncProcessor;
-        std::get<0>(m_userData) =
-            UserFuncProcessor::perFunction<F, T, FuncPolicies>(name, function);
+        typedef typename std::tuple_element<M, uses::Uses::Modules>::type Processor;
+        
+        std::get<M>(m_userData) =
+            Processor::template perFunction<F, T, FuncPolicies>(name, function);
     }
     
     

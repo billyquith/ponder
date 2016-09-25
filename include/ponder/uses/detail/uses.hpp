@@ -68,6 +68,21 @@ struct RuntimeModule
 };
 
 /**
+ *  \brief Lua behaviour
+ *
+ *  This module provides Lua support.
+ */
+struct LuaModule
+{
+    /// Factory for per-function runtime data
+    template <typename F, typename FTraits, typename Policies_t>
+    static lua::impl::FunctionCaller* perFunction(IdRef name, F function)
+    {
+        return new lua::impl::FunctionCallerImpl<F, FTraits, Policies_t>(name, function);
+    }
+};
+
+/**
  * \brief Global information on the compile-time type Uses.
  *
  *  - This can be extended for other modular uses
@@ -75,16 +90,20 @@ struct RuntimeModule
 struct Uses
 {
     enum {
-        eRuntimeModule  ///< Runtime module enumeration
+        eRuntimeModule,     ///< Runtime module enumeration
+        eLuaModule,         ///< Lua module enumeration
     };
     
      /// Modules we would like to use.
-    typedef std::tuple<RuntimeModule> Modules;
+    typedef std::tuple<RuntimeModule, LuaModule> Modules;
 
     //    typedef std::tuple<runtime::impl::Constructor*> PerConstructorUserData; TODO
 
     /// Type that stores the per-function uses data
-    typedef std::tuple<runtime::impl::FunctionCaller*> PerFunctionUserData;
+    typedef std::tuple<
+            runtime::impl::FunctionCaller*,
+            lua::impl::FunctionCaller*
+        > PerFunctionUserData;
     
     // Access note:
     //  typedef typename std::tuple_element<I, PerFunctionUserData>::type PerFunc_t;
