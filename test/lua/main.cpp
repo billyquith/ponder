@@ -104,7 +104,7 @@ namespace lib
     struct Holder
     {
         Holder() = default;
-        Holder(const Holder&) = delete;
+        Holder(const Holder&) = delete;              
         
         Vec vec;
         
@@ -225,6 +225,7 @@ int main()
 
     // method call with args
     LUA_PASS("v:set(12, 8.5); assert(v.x == 12 and v.y == 8.5)");
+    LUA_PASS("v:set(1, 2); assert(v.x == 1 and v.y == 2)");
     LUA_FAIL("v:set('fail'); print(v.x, v.y)");
     LUA_FAIL("v:set(); print(v.x, v.y)");
 
@@ -232,7 +233,7 @@ int main()
     LUA_PASS("l = Vec2(3,0); assert(l:length() == 3)");
 
     // method call with object arg
-    LUA_PASS("a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c ~= nil)");
+    LUA_PASS("a,b = Vec2(2,3), Vec2(3,4); c = a:dot(b); print(c); assert(c == 2*3+3*4)");
     
     // method call (:) with return object
     LUA_PASS("c = a:add(b); assert(c ~= nil); print(c.x, c.y);");

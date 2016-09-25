@@ -26,8 +26,8 @@
 **
 ****************************************************************************/
 
-#ifndef PONDER_USES_DETAIL_LUA_HPP
-#define PONDER_USES_DETAIL_LUA_HPP
+#ifndef PONDER_USES_LUA_IMPL_HPP
+#define PONDER_USES_LUA_IMPL_HPP
 
 extern "C" {
 #include <lua.h>
@@ -36,12 +36,75 @@ extern "C" {
 
 namespace ponder {
 namespace lua {
-    
+namespace impl {
+
 // forward declare
 int pushUserObject(lua_State *L, const UserObject& uobj);
 
-namespace impl {
+//-----------------------------------------------------------------------------
+// Convert Lua call arguments to C++ types.
 
+template <typename P, typename U = void> struct LuaValueReader {};
+
+template <typename P>
+struct  LuaValueReader<P, typename std::enable_if<std::is_integral<P>::value>::type>
+{
+    typedef P ParamType;
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        return luaL_checkinteger(L, index);
+    }
+};
+
+template <typename P>
+struct LuaValueReader<P, typename std::enable_if<std::is_floating_point<P>::value>::type>
+{
+    typedef P ParamType;
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        return luaL_checknumber(L, index);
+    }
+};
+
+template <typename P>
+struct LuaValueReader<P, typename std::enable_if<std::is_enum<P>::value>::type>
+{
+    typedef P ParamType;
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        const lua_Integer i = luaL_checkinteger(L, index);
+        return static_cast<P>(i);
+    }
+};
+
+template <>
+struct LuaValueReader<detail::string_view>
+{
+    typedef detail::string_view ParamType;
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        return ParamType(luaL_checkstring(L, index));
+    }
+};
+
+template <typename P>
+struct LuaValueReader<P, typename std::enable_if<detail::IsUserType<P>::value>::type>
+{
+    typedef P ParamType;
+    typedef typename detail::RawType<ParamType>::Type RawType;
+    
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        if (!lua_isuserdata(L, index))
+        {
+            luaL_error(L, "Argument %d: expecting user data", index);
+        }
+        
+        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, index));        
+        return uobj->ref<RawType>();
+    }
+};
+    
 //-----------------------------------------------------------------------------
 // Write values to Lua. Push to stack.
 
@@ -169,76 +232,11 @@ struct ChooseCallReturner<std::tuple<P, Ps...>, R> // recurse
 };
 
 //-----------------------------------------------------------------------------
-// Convert Lua call arguments to C++ types.
-
-template <typename P, typename U = void> struct LuaValueReader {};
-
-template <typename P>
-struct LuaValueReader<P, typename std::enable_if<std::is_integral<P>::value>::type>
-{
-    typedef P ParamType;
-    static ParamType convert(lua_State* L, std::size_t index)
-    {
-        return lua_tointeger(L, index);
-    }
-};
-
-template <typename P>
-struct LuaValueReader<P, typename std::enable_if<std::is_floating_point<P>::value>::type>
-{
-    typedef P ParamType;
-    static ParamType convert(lua_State* L, std::size_t index)
-    {
-        return lua_tonumber(L, index);
-    }
-};
-
-template <typename P>
-struct LuaValueReader<P, typename std::enable_if<std::is_enum<P>::value>::type>
-{
-    typedef P ParamType;
-    static ParamType convert(lua_State* L, std::size_t index)
-    {
-        const lua_Integer i = lua_tointeger(L, index);
-        return static_cast<P>(i);
-    }
-};
-
-template <>
-struct LuaValueReader<detail::string_view>
-{
-    typedef detail::string_view ParamType;
-    static ParamType convert(lua_State* L, std::size_t index)
-    {
-        return ParamType(lua_tostring(L, index));
-    }
-};
-
-template <typename P>
-struct LuaValueReader<P, typename std::enable_if<detail::IsUserType<P>::value>::type>
-{
-    typedef P ParamType;
-    static ParamType convert(lua_State* L, std::size_t index)
-    {
-        if (!lua_isuserdata(L, index))
-        {
-            luaL_error(L, "Argument %d: expecting user data", index);
-        }
-        
-        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, 1));
-        
-        return uobj->ref<typename std::remove_reference<ParamType>::type>();
-    }
-};
-
-//-----------------------------------------------------------------------------
 // Object function call helper to allow specialisation by return type. Applies policies.
 
 template <typename P>
 struct ConvertArgs
 {
-//    typedef typename ::ponder::detail::RawType<P>::Type Raw;
-//    static constexpr ValueKind kind = ponder_ext::ValueMapper<Raw>::kind;
     typedef LuaValueReader<P> Convertor;
     
     static typename Convertor::ParamType convert(lua_State* L, std::size_t index)
@@ -355,4 +353,4 @@ private:
 } // namespace lua
 } // namespace ponder
 
-#endif // PONDER_USES_DETAIL_LUA_HPP
+#endif // PONDER_USES_LUA_IMPL_HPP

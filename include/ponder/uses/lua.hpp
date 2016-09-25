@@ -31,12 +31,6 @@
 
 #include <ponder/class.hpp>
 
-extern "C" {
-//#include <lua.h>
-//#include <lauxlib.h>
-//#include <lualib.h>
-}
-
 namespace ponder {
 namespace lua {
 
@@ -83,25 +77,23 @@ bool runString(lua_State *L, const char *luaCode);
 
 namespace ponder {
 namespace lua {
-
+namespace impl {
+    
 namespace fmt = ponder::detail::fmt;
 
-#define PONDER_LUA_METATBLS "_ponder_meta"
-#define PONDER_LUA_INSTTBLS "_instmt"
+#define _PONDER_LUA_METATBLS "_ponder_meta"
+#define _PONDER_LUA_INSTTBLS "_instmt"
 
 
 int pushUserObject(lua_State *L, const UserObject& uobj)
 {
-//    UserObject vuobj(retPolicy == policy::ReturnKind::InternalRef
-//                        ? val.cref<UserObject>()
-//                        : val.to<UserObject>());
     Class const& cls = uobj.getClass();
     void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
     new(ud) UserObject(uobj);
 
     // set instance metatable
     lua_pushglobaltable(L);                     // +1   _G
-    lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
+    lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
     lua_rawget(L, -2);                          // 0 -+ _G.META
     lua_pushstring(L, cls.name().data());       // +1
     lua_rawget(L, -2);                          // 0 -+ _G_META.MT
@@ -219,36 +211,6 @@ static Value getValue(lua_State *L, int index,
     return Value(); // no value
 }
     
-// obj:meth(...)
-static int l_method_call(lua_State *L)
-{
-    void *ud = lua_touserdata(L, 1);  // userobj
-    if (!ud)
-    {
-        luaL_error(L, "Method call 'this' is null. (Use Class:method() ?)");
-    }
-    ponder::UserObject *uobj = (ponder::UserObject*) ud;
-
-    lua_pushvalue(L, lua_upvalueindex(1));
-    const Function *func = (const Function *) lua_touserdata(L, -1);
-    
-    Args args;
-    constexpr std::size_t c_argOffset = 2;
-    for (std::size_t nargs = func->paramCount(), i = 0; i < nargs; ++i)
-    {
-        // we know the arg type so check it
-        const ValueKind at = func->paramType(i);
-        args += getValue(L, i + c_argOffset, at, i+1);
-    }
-    
-    ponder::runtime::ObjectCaller caller(*func);
-    Value ret = caller.call(*uobj, args);
-    if (ret.kind() != ValueKind::None)
-        return pushValue(L, ret, func->returnPolicy());
-    
-    return 0;
-}
-
 // obj[key]
 static int l_inst_index(lua_State *L)
 {
@@ -270,8 +232,11 @@ static int l_inst_index(lua_State *L)
     const Function *fp = nullptr;
     if (cls->tryFunction(key, fp))
     {
-        lua_pushlightuserdata(L, (void*) fp);
-        lua_pushcclosure(L, l_method_call, 1);
+        lua::impl::FunctionCaller *caller =     // XXXX extract per func data in Function
+            std::get<uses::Uses::eLuaModule>(
+                *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(fp->getUsesData()));
+        
+        caller->pushFunction(L);
         return 1;
     }
     
@@ -325,7 +290,7 @@ static int l_instance_create(lua_State *L)
     
     // set instance metatable
     lua_getmetatable(L, 1);             // +1
-    lua_pushliteral(L, PONDER_LUA_INSTTBLS);       // +1
+    lua_pushliteral(L, _PONDER_LUA_INSTTBLS);       // +1
     lua_rawget(L, -2);                  // -1+1 -> mt
     lua_setmetatable(L, -3);            // -1
     lua_pop(L, 1);
@@ -373,7 +338,7 @@ static void createInstanceMetatable(lua_State *L, const Class& cls)
     lua_rawset(L, -3);                          // -2
 
     lua_pushglobaltable(L);                     // +1
-    lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
+    lua_pushliteral(L, _PONDER_LUA_METATBLS);    // +1
     lua_rawget(L, -2);                          // 0 -+
     lua_pushstring(L, cls.name().data());       // +1 k
     lua_pushvalue(L, -4);                       // +1 v
@@ -381,17 +346,21 @@ static void createInstanceMetatable(lua_State *L, const Class& cls)
     lua_pop(L, 2);                              // -1 _G, _G.METAS
 }
 
+} // namespace impl
+
 void expose(lua_State *L, const Class& cls, const IdRef name)
 {
+    using namespace impl;
+    
     // ensure _G.META
     lua_pushglobaltable(L);                     // +1
-    lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
+    lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
     lua_rawget(L, -2);                          // 0 -+
     if (lua_isnil(L, -1))
     {
         // first time
         lua_pop(L, 1);                              // -1 pop nil
-        lua_pushliteral(L, PONDER_LUA_METATBLS);    // +1
+        lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
         lua_createtable(L, 0, 20);                  // +1
         lua_rawset(L, -3);                          // -2 _G[META] = {}
     }
@@ -410,7 +379,7 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     lua_rawset(L, -3);                          // -2 meta.__index = get_class_statics
 
     // create instance metatable. store ref in the class metatable
-    lua_pushliteral(L, PONDER_LUA_INSTTBLS);    // +1 k
+    lua_pushliteral(L, _PONDER_LUA_INSTTBLS);   // +1 k
     createInstanceMetatable(L, cls);            // +1
     lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
 
@@ -434,7 +403,7 @@ bool runString(lua_State *L, const char *luaCode)
     if (ret == LUA_OK)
         return true;
     
-    fmt::print("Error: {}\n", lua_tostring(L, -1));
+    impl::fmt::print("Error: {}\n", lua_tostring(L, -1));
     return false; // failed
 }
 

@@ -26,8 +26,8 @@
 **
 ****************************************************************************/
 
-#ifndef PONDER_USES_DETAIL_RUNTIME_HPP
-#define PONDER_USES_DETAIL_RUNTIME_HPP
+#ifndef PONDER_USES_RUNTIME_IMPL_HPP
+#define PONDER_USES_RUNTIME_IMPL_HPP
 
 #include <ponder/detail/rawtype.hpp>
 #include <ponder/detail/util.hpp>
@@ -272,4 +272,4 @@ private:
 } // namespace runtime
 } // namespace ponder
 
-#endif // PONDER_USES_DETAIL_RUNTIME_HPP
+#endif // PONDER_USES_RUNTIME_IMPL_HPP
