@@ -232,7 +232,7 @@ static int l_inst_index(lua_State *L)
     const Function *fp = nullptr;
     if (cls->tryFunction(key, fp))
     {
-        lua::impl::FunctionCaller *caller =     // XXXX extract per func data in Function
+        lua::impl::FunctionCaller *caller =
             std::get<uses::Uses::eLuaModule>(
                 *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(fp->getUsesData()));
         
@@ -309,7 +309,7 @@ static int l_get_class_static(lua_State *L)
     const Function *func = nullptr;
     if (cls->tryFunction(key, func))
     {
-        lua::impl::FunctionCaller *caller =     // XXXX extract per func data in Function
+        lua::impl::FunctionCaller *caller =
             std::get<uses::Uses::eLuaModule>(
                 *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(func->getUsesData()));
         

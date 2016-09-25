@@ -125,16 +125,12 @@ public:
         m_returnPolicy = ReturnPolicy<typename FuncTraits::ReturnType, P...>::kind;
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueKind<c_nParams>>::foreach();
+        Function::m_usesData = &m_userData;
         
         processUses<uses::Uses::eRuntimeModule>(m_name, function);
         PONDER_IF_LUA(processUses<uses::Uses::eLuaModule>(m_name, function);)
     }
     
-    const void* getUsesData() const override
-    {
-        return &m_userData;
-    }
-
 private:
     
     FunctionImpl(const FunctionImpl&) = delete;

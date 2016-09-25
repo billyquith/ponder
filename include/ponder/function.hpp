@@ -123,7 +123,7 @@ public:
     *
     * \return Opaque data pointer
     */
-    virtual const void* getUsesData() const = 0;
+    const void* getUsesData() const {return m_usesData;}
     
 protected:
 
@@ -133,9 +133,9 @@ protected:
 
     Id m_name;                  // Name of the function
     FunctionKind m_funcType;    // Kind of function
-    
     ValueKind m_returnType;             // Runtime return type
     policy::ReturnKind m_returnPolicy;  // Return policy
+    const void *m_usesData;
 };
     
 } // namespace ponder
