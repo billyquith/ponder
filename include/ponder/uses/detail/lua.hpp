@@ -81,6 +81,18 @@ struct LuaValueReader<P, typename std::enable_if<std::is_enum<P>::value>::type>
     }
 };
 
+template <typename P>
+struct LuaValueReader<P,
+    typename std::enable_if<std::is_same<std::string,
+                                typename detail::RawType<P>::Type>::value>::type>
+{
+    typedef std::string ParamType;
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        return ParamType(luaL_checkstring(L, index));
+    }
+};
+
 template <>
 struct LuaValueReader<detail::string_view>
 {
@@ -92,9 +104,9 @@ struct LuaValueReader<detail::string_view>
 };
 
 template <typename P>
-struct LuaValueReader<P, typename std::enable_if<detail::IsUserType<P>::value>::type>
+struct LuaValueReader<P&, typename std::enable_if<detail::IsUserType<P>::value>::type>
 {
-    typedef P ParamType;
+    typedef P& ParamType;
     typedef typename detail::RawType<ParamType>::Type RawType;
     
     static inline ParamType convert(lua_State* L, std::size_t index)
@@ -108,7 +120,25 @@ struct LuaValueReader<P, typename std::enable_if<detail::IsUserType<P>::value>::
         return uobj->ref<RawType>();
     }
 };
+
+template <typename P>
+struct LuaValueReader<P*, typename std::enable_if<detail::IsUserType<P>::value>::type>
+{
+    typedef P* ParamType;
+    typedef typename detail::RawType<ParamType>::Type RawType;
     
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        if (!lua_isuserdata(L, index))
+        {
+            luaL_error(L, "Argument %d: expecting user data", index);
+        }
+        
+        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, index));        
+        return &uobj->ref<RawType>();
+    }
+};
+
 //-----------------------------------------------------------------------------
 // Write values to Lua. Push to stack.
 

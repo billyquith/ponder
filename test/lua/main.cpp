@@ -114,14 +114,20 @@ namespace lib
     
     struct Types
     {
+        struct Obj {
+            Obj(const Obj&) = delete;
+        } o;
+        
         static int len(const ponder::detail::string_view str) { return str.length(); }
+        
+        Obj* retPtr() { return &o; }
+        void passPtr(Obj *po) {}
     };
     
     struct Dummy
     {
         static int halve(int x) { return x/2; }
     };
-
     int twice(int x) { return 2*x; }
     
     void declare()
@@ -155,6 +161,8 @@ namespace lib
 
         ponder::Class::declare<Types>()
             .function("len", &Types::len)
+            .function("retp", &Types::retPtr, policy::ReturnInternalRef())
+            .function("passp", &Types::passPtr)
             ;
 
         ponder::Class::declare<Dummy>()
@@ -169,6 +177,7 @@ namespace lib
 PONDER_TYPE(lib::Vec)
 PONDER_TYPE(lib::Holder)
 PONDER_TYPE(lib::Types)
+PONDER_TYPE(lib::Types::Obj)
 PONDER_TYPE(lib::Dummy)
 
 static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
