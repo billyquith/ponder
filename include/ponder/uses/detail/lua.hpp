@@ -29,6 +29,10 @@
 #ifndef PONDER_USES_LUA_IMPL_HPP
 #define PONDER_USES_LUA_IMPL_HPP
 
+#if PONDER_USING_LUA
+
+#define PONDER_IF_LUA(...) __VA_ARGS__
+
 extern "C" {
 #include <lua.h>
 #include <lauxlib.h>
@@ -352,5 +356,9 @@ private:
 } // namespace impl
 } // namespace lua
 } // namespace ponder
+
+#else // !PONDER_USING_LUA
+#   define PONDER_IF_LUA(...)
+#endif
 
 #endif // PONDER_USES_LUA_IMPL_HPP

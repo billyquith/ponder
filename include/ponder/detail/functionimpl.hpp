@@ -127,7 +127,7 @@ public:
                                             FunctionMapParamsToValueKind<c_nParams>>::foreach();
         
         processUses<uses::Uses::eRuntimeModule>(m_name, function);
-        processUses<uses::Uses::eLuaModule>(m_name, function);
+        PONDER_IF_LUA(processUses<uses::Uses::eLuaModule>(m_name, function);)
     }
     
     const void* getUsesData() const override

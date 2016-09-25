@@ -59,7 +59,10 @@
 #   define PONDER_API
 #endif
 
-
+#ifndef PONDER_USING_LUA
+#   define PONDER_USING_LUA 0
+#endif
+    
 // We disable some annoying warnings of VC++
 #if defined(_MSC_VER)
     #pragma warning(disable: 4275) // non dll-interface class 'X' used as base for dll-interface class 'Y'

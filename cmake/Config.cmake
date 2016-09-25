@@ -6,6 +6,12 @@ set(VERSION_PATCH 0)
 set(VERSION_STR "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 message("Project version: ${VERSION_STR}")
 
+if(NOT USES_LUA)
+    set(USES_LUA FALSE
+        CACHE BOOL "TRUE to include Lua support (requires Lua), FALSE otherwise."
+    )
+endif()
+
 # Set the default build type to release with debug info
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo

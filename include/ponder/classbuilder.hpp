@@ -35,7 +35,7 @@
 #include <ponder/type.hpp>
 #include <ponder/classget.hpp>
 #include <ponder/class.hpp>
-#include <ponder/uses/detail/uses.hpp>
+#include <ponder/uses/uses.hpp>
 #include <ponder/detail/functionimpl.hpp>
 #include <ponder/detail/constructorimpl.hpp>
 #include <ponder/detail/propertyfactory.hpp>
