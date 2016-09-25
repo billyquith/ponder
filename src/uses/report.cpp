@@ -39,7 +39,7 @@
 
 #include <ponder/type.hpp>
 
-#include "picojson.h"
+// #include "picojson.h"
 
 using namespace ponder;
 using ponder::detail::string_view;
