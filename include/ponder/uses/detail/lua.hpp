@@ -189,6 +189,38 @@ struct LuaValueWriter<UserObject>
     }
 };
 
+// Return tuples as individual elements. tuple<x,y> -> x,y
+template <typename... R>
+struct LuaValueWriter<const std::tuple<R...>>
+{
+    template <size_t... Is>
+    static inline void pushElements(lua_State *L,
+                                    std::tuple<R...> const& value,
+                                    _PONDER_SEQNS::index_sequence<Is...>)
+    {
+        const int r[sizeof...(R)] = { LuaValueWriter<R>::push(L, std::get<Is>(value))... };
+        (void)r;
+    }
+    
+    static inline int push(lua_State *L, std::tuple<R...> const& value)
+    {
+        typedef _PONDER_SEQNS::make_index_sequence<sizeof...(R)> Enumerator;
+        pushElements(L, value, Enumerator());
+        return sizeof...(R);
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Handle returning multiple values
+
+template <typename R, typename U = void> struct CallReturnMultiple;
+
+template <typename R>
+struct CallReturnMultiple<R>
+{
+    static inline int value(lua_State *L, R&& o) {return LuaValueWriter<R>::push(L, o);}
+};
+    
 //-----------------------------------------------------------------------------
 // Handle returning copies
 
@@ -251,6 +283,12 @@ template <typename... Ps, typename R>
 struct ChooseCallReturner<std::tuple<policy::ReturnInternalRef, Ps...>, R>
 {
     typedef CallReturnInternalRef<R> type;
+};
+
+template <typename... Ps, typename R>
+struct ChooseCallReturner<std::tuple<policy::ReturnMultiple, Ps...>, R>
+{
+    typedef CallReturnMultiple<R> type;
 };
 
 template <typename R>

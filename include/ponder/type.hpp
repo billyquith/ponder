@@ -101,7 +101,8 @@ enum class ReturnKind
 {
     NoReturn,       // void, returns nothing
     Copy,
-    InternalRef
+    InternalRef,
+    Multiple
 };
     
 /**
@@ -126,6 +127,18 @@ struct ReturnCopy
 struct ReturnInternalRef
 {
     static constexpr ReturnKind kind = ReturnKind::InternalRef;  ///< The policy enum kind.
+};
+
+/**
+ * \brief Return multiple values
+ *
+ * When added to a function declaration this sets the call return policy to support multiple
+ * value returning. The function should return a `std::tuple<...>` containing the multiple
+ * values. Note that the tuple needs to be declared as a type.
+ */
+struct ReturnMultiple
+{
+    static constexpr ReturnKind kind = ReturnKind::Multiple; ///< The policy enum kind.
 };
     
 } // namespace policy

@@ -84,6 +84,8 @@ namespace lib
             return std::abs(dx) < FLOAT_EPSILON && std::abs(dy) < FLOAT_EPSILON;
         }
         
+        std::tuple<float,float> get() const { return std::make_tuple(x,y); }
+
         void set(float x_, float y_) { x = x_, y = y_; }
         
         Vec operator + (const Vec& o) const { return Vec(x + o.x, y + o.y); }
@@ -140,18 +142,21 @@ namespace lib
             .constructor<const Vec&>()
             .property("x", &Vec::x)
             .property("y", &Vec::y)
+            .function("get", &Vec::get, policy::ReturnMultiple()) // tuple
             .function("set", &Vec::set)
             .function("add", &Vec::operator+=)
             .function("add2", &Vec::operator+).tag("+")
             .function("length", &Vec::length)
             .function("dot", &Vec::dot)
         
-            .function("up", &Vec::up)           // static
+            .function("up", &Vec::up)   // static
         
-            .function("funcRef", &Vec::ref, policy::ReturnInternalRef())     // ref function
+            .function("funcRef", &Vec::ref, policy::ReturnInternalRef())  // ref function
             .property("propRef", &Vec::ref)     // ref property
             ;
-        
+
+        ponder::Class::declare<std::tuple<float,float>>();
+
         ponder::Class::declare<Holder>()
             .constructor()
             //  .property("pref", &Holder::ptrRef) // TODO - fix for self ref pointers
@@ -175,6 +180,7 @@ namespace lib
 } // namespace lib
 
 PONDER_TYPE(lib::Vec)
+PONDER_TYPE(std::tuple<float,float>)
 PONDER_TYPE(lib::Holder)
 PONDER_TYPE(lib::Types)
 PONDER_TYPE(lib::Types::Obj)
@@ -262,6 +268,9 @@ int main()
     LUA_PASS("r = Vec2(17,8); assert(r.x == 17)");
     LUA_PASS("r.x = 9; assert(r.x == 9)");
     LUA_PASS("r.propRef.x = 19; assert(r.x == 19)");
+    
+    // Vec return tuple or multiple values.
+    LUA_PASS("t = Vec2(11,22); x,y = t:get(); print(x,y); assert(x == 11); assert(y == 22)");
 
     //------------------------------------------------------------------
 
