@@ -209,6 +209,10 @@ struct LuaValueWriter<const std::tuple<R...>>
         return sizeof...(R);
     }
 };
+    
+// Non-const tuples are const to us.
+template <typename... R>
+struct LuaValueWriter<std::tuple<R...>> : public LuaValueWriter<const std::tuple<R...>> {};
 
 //-----------------------------------------------------------------------------
 // Handle returning multiple values
