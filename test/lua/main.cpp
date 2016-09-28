@@ -132,6 +132,8 @@ namespace lib
     };
     int twice(int x) { return 2*x; }
     
+    enum class Colour { Red, Green, Blue };
+    
     void declare()
     {
         using namespace ponder;
@@ -175,6 +177,11 @@ namespace lib
             .function("twice", &twice)
             ;
 
+        ponder::Enum::declare<Colour>()
+            .value("red", Colour::Red)
+            .value("green", Colour::Green)
+            .value("blue", Colour::Blue)
+            ;
     }
     
 } // namespace lib
@@ -185,6 +192,7 @@ PONDER_TYPE(lib::Holder)
 PONDER_TYPE(lib::Types)
 PONDER_TYPE(lib::Types::Obj)
 PONDER_TYPE(lib::Dummy)
+PONDER_TYPE(lib::Colour)
 
 static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
 {
@@ -216,6 +224,7 @@ int main()
     ponder::lua::expose<lib::Holder>(L, "Holder");
     ponder::lua::expose<lib::Types>(L, "Types");
     ponder::lua::expose<lib::Dummy>(L, "Dummy");
+    ponder::lua::expose<lib::Colour>(L, "Colour");
     
     //------------------------------------------------------------------
 
@@ -295,6 +304,14 @@ int main()
     LUA_PASS("assert(type(Dummy) == 'userdata')");
     LUA_PASS("assert(type(Dummy.twice) == 'function')");
     LUA_PASS("x = Dummy.twice(7); assert(x == 14)");
+
+    //------------------------------------------------------------------
+    
+    // Enum
+    LUA_PASS("assert(type(Colour) == 'table')");
+    LUA_PASS("assert(Colour.red == 0)");
+    LUA_PASS("assert(Colour.green == 1)");
+    LUA_PASS("assert(Colour.blue == 2)");
 
     return EXIT_SUCCESS;
 }

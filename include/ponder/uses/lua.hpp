@@ -33,29 +33,63 @@
 
 namespace ponder {
 namespace lua {
-
+    
 /**
  * \brief Expose a single Ponder metaclass to a Lua state
  *
  * \param L Lua state in which to expose the class.
- * \param cls Name of the metaclass in Ponder.
+ * \param cls Metaclass instance in Ponder.
  * \param exposeName The name of the class in the Lua state.
  */
 void expose(lua_State *L, const Class& cls, const IdRef exposeName);
 
 /**
- * \brief Expose a single Ponder metaclass to a Lua state
+ * \brief Expose a single Ponder enumeration to a Lua state
  *
- * \param C Metaclass type to expose.
+ * \param L Lua state in which to expose the class.
+ * \param e Enum instance in Ponder.
+ * \param exposeName The name of the class in the Lua state.
+ */
+void expose(lua_State *L, const Enum& e, const IdRef exposeName);
+
+namespace detail {
+
+template <typename T, typename U = void> struct Exposer {};
+    
+template <typename T>
+struct Exposer<T, typename std::enable_if<std::is_class<T>::value>::type>
+{
+    static inline void exposeType(lua_State *L, const IdRef exposeName)
+    {
+        expose(L, classByType<T>(), exposeName);
+    }
+};
+
+template <typename T>
+struct Exposer<T, typename std::enable_if<std::is_enum<T>::value>::type>
+{
+    static inline void exposeType(lua_State *L, const IdRef exposeName)
+    {
+        expose(L, enumByType<T>(), exposeName);
+    }
+};
+
+} // namespace detail
+
+/**
+ * \brief Expose a single Ponder type to a Lua state
+ *
+ * \param T Type to expose. Can be a class or enumeration.
  * \param L Lua state in which to expose the class.
  * \param exposeName The name of the class in the Lua state.
  */
-template <typename C>
+template <typename T>
 void expose(lua_State *L, const IdRef exposeName)
 {
-    expose(L, classByType<C>(), exposeName);
+    detail::Exposer<T>::exposeType(L, exposeName);
 }
 
+    
 /**
  * \brief Expose all existing Ponder registered objects to a Lua state
  *
@@ -395,6 +429,20 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     
     lua_rawset(L, -3);                          // -2 _G[CLASSNAME] = class_obj
     lua_pop(L, 2);                              // -2 global,meta
+}
+
+void expose(lua_State *L, const Enum& enm, const IdRef name)
+{
+    const auto nb = enm.size();
+    lua_createtable(L, 0, nb);
+    for (std::size_t i=0; i < nb; ++i)
+    {
+        auto const& p = enm.pair(i);
+        lua_pushstring(L, id::c_str(p.name));
+        lua_pushinteger(L, p.value);
+        lua_settable(L, -3);
+    }
+    lua_setglobal(L, id::c_str(name));
 }
 
 bool runString(lua_State *L, const char *luaCode)

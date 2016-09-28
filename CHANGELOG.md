@@ -6,6 +6,10 @@ Ponder Changelog
 
 ### 2.1
 
+- Bind Lua argument convertion directly to function. Saves Value conversion.
+- Lua custom type conversion with LuaValueRead and LuaValueWrite.
+- Lua supports enums.
+- Lua can return multiple values via `std::tuple<...>`.
 - Declaration report generator.
 
 ## 2.0
