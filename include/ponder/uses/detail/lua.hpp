@@ -38,12 +38,21 @@ extern "C" {
 #include <lauxlib.h>
 }
 
-namespace ponder {
-namespace lua {
-namespace impl {
+//-----------------------------------------------------------------------------
+
+namespace ponder_ext {
+    
+using namespace ponder;
 
 // forward declare
 int pushUserObject(lua_State *L, const UserObject& uobj);
+    
+inline UserObject* toUserObject(lua_State *L, int index)
+{
+    return reinterpret_cast<UserObject*>(lua_touserdata(L, index));
+}
+    
+struct LuaTable { lua_State *L; };
 
 //-----------------------------------------------------------------------------
 // Convert Lua call arguments to C++ types.
@@ -84,7 +93,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_enum<P>::value>::type>
 template <typename P>
 struct LuaValueReader<P,
     typename std::enable_if<std::is_same<std::string,
-                                typename detail::RawType<P>::Type>::value>::type>
+                            typename detail::RawType<P>::Type>::value>::type>
 {
     typedef std::string ParamType;
     static inline ParamType convert(lua_State* L, std::size_t index)
@@ -94,9 +103,9 @@ struct LuaValueReader<P,
 };
 
 template <>
-struct LuaValueReader<detail::string_view>
+struct LuaValueReader<ponder::detail::string_view>
 {
-    typedef detail::string_view ParamType;
+    typedef ponder::detail::string_view ParamType;
     static inline ParamType convert(lua_State* L, std::size_t index)
     {
         return ParamType(luaL_checkstring(L, index));
@@ -122,10 +131,10 @@ struct LuaValueReader<P&, typename std::enable_if<detail::IsUserType<P>::value>:
 };
 
 template <typename P>
-struct LuaValueReader<P*, typename std::enable_if<detail::IsUserType<P>::value>::type>
+struct LuaValueReader<P*, typename std::enable_if<ponder::detail::IsUserType<P>::value>::type>
 {
     typedef P* ParamType;
-    typedef typename detail::RawType<ParamType>::Type RawType;
+    typedef typename ponder::detail::RawType<ParamType>::Type RawType;
     
     static inline ParamType convert(lua_State* L, std::size_t index)
     {
@@ -136,6 +145,19 @@ struct LuaValueReader<P*, typename std::enable_if<detail::IsUserType<P>::value>:
         
         UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, index));        
         return &uobj->ref<RawType>();
+    }
+};
+
+// User function wants to parse a Lua table.
+template <>
+struct LuaValueReader<LuaTable>
+{
+    typedef LuaTable ParamType;
+    static inline ParamType convert(lua_State* L, std::size_t index)
+    {
+        luaL_checktype(L, index, LUA_TTABLE);
+        LuaTable t = {L};
+        return t;
     }
 };
 
@@ -172,9 +194,9 @@ struct LuaValueWriter<std::string>
 };
 
 template <>
-struct LuaValueWriter<detail::string_view>
+struct LuaValueWriter<ponder::detail::string_view>
 {
-    static inline int push(lua_State *L, const detail::string_view& value)
+    static inline int push(lua_State *L, const ponder::detail::string_view& value)
     {
         return lua_pushstring(L, value.data()), 1;
     }
@@ -213,6 +235,14 @@ struct LuaValueWriter<const std::tuple<R...>>
 // Non-const tuples are const to us.
 template <typename... R>
 struct LuaValueWriter<std::tuple<R...>> : public LuaValueWriter<const std::tuple<R...>> {};
+    
+} // namespace ponder_ext
+
+namespace ponder {
+namespace lua {
+namespace impl {
+    
+using namespace ponder_ext;
 
 //-----------------------------------------------------------------------------
 // Handle returning multiple values

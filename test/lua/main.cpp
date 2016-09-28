@@ -134,6 +134,25 @@ namespace lib
     
     enum class Colour { Red, Green, Blue };
     
+    struct Parsing
+    {
+        int a;
+        std::string b;
+        
+        void init(ponder_ext::LuaTable lt)
+        {
+            assert(lua_istable(lt.L, -1)); // should be guaranteed by conversion
+            
+            lua_getfield(lt.L, -1, "a");
+            a = luaL_checknumber(lt.L, -1);
+            lua_pop(lt.L, 1);
+            
+            lua_getfield(lt.L, -1, "b");
+            b = luaL_checkstring(lt.L, -1);
+            lua_pop(lt.L, 1);
+        }
+    };
+    
     void declare()
     {
         using namespace ponder;
@@ -182,6 +201,13 @@ namespace lib
             .value("green", Colour::Green)
             .value("blue", Colour::Blue)
             ;
+        
+        ponder::Class::declare<Parsing>()
+            .constructor()
+            .function("init", &Parsing::init)
+            .property("a", &Parsing::a)
+            .property("b", &Parsing::b)
+            ;
     }
     
 } // namespace lib
@@ -193,6 +219,7 @@ PONDER_TYPE(lib::Types)
 PONDER_TYPE(lib::Types::Obj)
 PONDER_TYPE(lib::Dummy)
 PONDER_TYPE(lib::Colour)
+PONDER_TYPE(lib::Parsing)
 
 static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
 {
@@ -225,6 +252,7 @@ int main()
     ponder::lua::expose<lib::Types>(L, "Types");
     ponder::lua::expose<lib::Dummy>(L, "Dummy");
     ponder::lua::expose<lib::Colour>(L, "Colour");
+    ponder::lua::expose<lib::Parsing>(L, "Parsing");
     
     //------------------------------------------------------------------
 
@@ -312,6 +340,12 @@ int main()
     LUA_PASS("assert(Colour.red == 0)");
     LUA_PASS("assert(Colour.green == 1)");
     LUA_PASS("assert(Colour.blue == 2)");
+
+    //------------------------------------------------------------------
+    
+    // Parsing
+    LUA_PASS("p = Parsing(); assert(type(p)=='userdata')");
+    LUA_PASS("p:init{a=77, b='w00t'}; assert(p.a == 77 and p.b == 'w00t')");
 
     return EXIT_SUCCESS;
 }

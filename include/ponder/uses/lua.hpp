@@ -109,22 +109,17 @@ bool runString(lua_State *L, const char *luaCode);
 
 #include <ponder/uses/runtime.hpp>
 
-namespace ponder {
-namespace lua {
-namespace impl {
-    
-namespace fmt = ponder::detail::fmt;
-
 #define _PONDER_LUA_METATBLS "_ponder_meta"
 #define _PONDER_LUA_INSTTBLS "_instmt"
 
+namespace ponder_ext {
 
 int pushUserObject(lua_State *L, const UserObject& uobj)
 {
     Class const& cls = uobj.getClass();
     void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
     new(ud) UserObject(uobj);
-
+    
     // set instance metatable
     lua_pushglobaltable(L);                     // +1   _G
     lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
@@ -135,6 +130,14 @@ int pushUserObject(lua_State *L, const UserObject& uobj)
     lua_pop(L, 2);
     return 1;
 }
+
+} // namespace ponder_ext
+
+namespace ponder {
+namespace lua {
+namespace impl {
+    
+namespace fmt = ponder::detail::fmt;
     
 // push a Ponder value onto the Lua state stack
 static int pushValue(lua_State *L, const ponder::Value& val,

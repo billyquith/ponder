@@ -10,6 +10,7 @@ Ponder Changelog
 - Lua custom type conversion with LuaValueRead and LuaValueWrite.
 - Lua supports enums.
 - Lua can return multiple values via `std::tuple<...>`.
+- Lua functions can parse table arguments.
 - Declaration report generator.
 
 ## 2.0
