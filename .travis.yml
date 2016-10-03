@@ -42,8 +42,6 @@ script:
   - cmake --build . --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
 
 notifications:
-  email:
-    on_failure: change
-    on_success: change
+  email: false
 
 
