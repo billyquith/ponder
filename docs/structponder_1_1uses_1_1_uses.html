@@ -34,7 +34,7 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">2.0</span>
+   &#160;<span id="projectnumber">2.1</span>
    </div>
   </td>
   <td><a href="../" class="title_link">home</a></td>
@@ -94,27 +94,29 @@ $(document).ready(function(){initNavTree('structponder_1_1uses_1_1_uses.html',''
 </div><!--header-->
 <div class="contents">
 
-<p>Global information on the compile-time type <a class="el" href="structponder_1_1uses_1_1_uses.html" title="Global information on the compile-time type Uses. ">Uses</a>.  
+<p>Lua behaviour.  
  <a href="structponder_1_1uses_1_1_uses.html#details">More...</a></p>
 
 <p><code>#include &lt;uses.hpp&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:af28b9a2b0403a0bcf96690f0be568aa4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structponder_1_1uses_1_1_uses.html#af28b9a2b0403a0bcf96690f0be568aa4a2f06b64f56ad984828f69550046b18f8">eRuntimeModule</a>
+<tr class="memitem:af28b9a2b0403a0bcf96690f0be568aa4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="structponder_1_1uses_1_1_uses.html#af28b9a2b0403a0bcf96690f0be568aa4a2f06b64f56ad984828f69550046b18f8">eRuntimeModule</a>, 
+<a class="el" href="structponder_1_1uses_1_1_uses.html#af28b9a2b0403a0bcf96690f0be568aa4ac661d9ff2eeced019d9c7e2693bc813d">PONDER_IF_LUA</a> =(eLuaModule)
  }</td></tr>
 <tr class="separator:af28b9a2b0403a0bcf96690f0be568aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb29e796faa4b8c8f86638f7227be548"><td class="memItemLeft" align="right" valign="top"><a id="adb29e796faa4b8c8f86638f7227be548"></a>
-typedef std::tuple&lt; <a class="el" href="structponder_1_1uses_1_1_runtime_module.html">RuntimeModule</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structponder_1_1uses_1_1_uses.html#adb29e796faa4b8c8f86638f7227be548">Modules</a></td></tr>
-<tr class="memdesc:adb29e796faa4b8c8f86638f7227be548"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modules we would like to use. <br /></td></tr>
-<tr class="separator:adb29e796faa4b8c8f86638f7227be548"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31a215d9c4739603ec42083726772027"><td class="memItemLeft" align="right" valign="top"><a id="a31a215d9c4739603ec42083726772027"></a>
-typedef std::tuple&lt; runtime::impl::FunctionCaller * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structponder_1_1uses_1_1_uses.html#a31a215d9c4739603ec42083726772027">PerFunctionUserData</a></td></tr>
-<tr class="memdesc:a31a215d9c4739603ec42083726772027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type that stores the per-function uses data. <br /></td></tr>
-<tr class="separator:a31a215d9c4739603ec42083726772027"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c25baaed092072da0faf8cb98a4d972"><td class="memItemLeft" align="right" valign="top"><a id="a0c25baaed092072da0faf8cb98a4d972"></a>
+typedef std::tuple&lt; <a class="el" href="structponder_1_1uses_1_1_runtime_module.html">RuntimeModule</a> <a class="el" href="structponder_1_1uses_1_1_uses.html#af28b9a2b0403a0bcf96690f0be568aa4ac661d9ff2eeced019d9c7e2693bc813d">PONDER_IF_LUA</a>(, LuaModule)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structponder_1_1uses_1_1_uses.html#a0c25baaed092072da0faf8cb98a4d972">Modules</a></td></tr>
+<tr class="memdesc:a0c25baaed092072da0faf8cb98a4d972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modules we would like to use. <br /></td></tr>
+<tr class="separator:a0c25baaed092072da0faf8cb98a4d972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15bd015678ff2ff4c8e87faab97f89f4"><td class="memItemLeft" align="right" valign="top"><a id="a15bd015678ff2ff4c8e87faab97f89f4"></a>
+typedef std::tuple&lt; runtime::impl::FunctionCaller *<a class="el" href="structponder_1_1uses_1_1_uses.html#af28b9a2b0403a0bcf96690f0be568aa4ac661d9ff2eeced019d9c7e2693bc813d">PONDER_IF_LUA</a>(, lua::impl::FunctionCaller *) &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structponder_1_1uses_1_1_uses.html#a15bd015678ff2ff4c8e87faab97f89f4">PerFunctionUserData</a></td></tr>
+<tr class="memdesc:a15bd015678ff2ff4c8e87faab97f89f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type that stores the per-function uses data. <br /></td></tr>
+<tr class="separator:a15bd015678ff2ff4c8e87faab97f89f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Global information on the compile-time type <a class="el" href="structponder_1_1uses_1_1_uses.html" title="Global information on the compile-time type Uses. ">Uses</a>. </p>
+<div class="textblock"><p>Lua behaviour. </p>
+<p>This module provides Lua support. Global information on the compile-time type <a class="el" href="structponder_1_1uses_1_1_uses.html" title="Lua behaviour. ">Uses</a>.</p>
 <ul>
 <li>This can be extended for other modular uses </li>
 </ul>
@@ -133,12 +135,14 @@ typedef std::tuple&lt; runtime::impl::FunctionCaller * &gt;&#160;</td><td class=
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af28b9a2b0403a0bcf96690f0be568aa4a2f06b64f56ad984828f69550046b18f8"></a>eRuntimeModule&#160;</td><td class="fielddoc"><p>Runtime module enumeration. </p>
 </td></tr>
+<tr><td class="fieldname"><a id="af28b9a2b0403a0bcf96690f0be568aa4ac661d9ff2eeced019d9c7e2693bc813d"></a>PONDER_IF_LUA&#160;</td><td class="fielddoc"><p>Lua module enumeration. </p>
+</td></tr>
 </table>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/ponder/uses/detail/uses.hpp</li>
+<li>include/ponder/uses/uses.hpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

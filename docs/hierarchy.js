@@ -45,6 +45,7 @@ var hierarchy =
     [ "ponder_ext::QtMapper< T >", "classponder__ext_1_1_qt_mapper.html", null ],
     [ "ponder::policy::ReturnCopy", "structponder_1_1policy_1_1_return_copy.html", null ],
     [ "ponder::policy::ReturnInternalRef", "structponder_1_1policy_1_1_return_internal_ref.html", null ],
+    [ "ponder::policy::ReturnMultiple", "structponder_1_1policy_1_1_return_multiple.html", null ],
     [ "ponder::uses::RuntimeModule", "structponder_1_1uses_1_1_runtime_module.html", null ],
     [ "ponder::TagHolder", "classponder_1_1_tag_holder.html", [
       [ "ponder::Class", "classponder_1_1_class.html", null ],

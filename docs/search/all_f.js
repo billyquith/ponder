@@ -7,6 +7,7 @@ var searchData=
   ['result_5ftype',['result_type',['../classponder_1_1_value_visitor.html#a9e3747df5714af5feaee952552f4db30',1,'ponder::ValueVisitor']]],
   ['returncopy',['ReturnCopy',['../structponder_1_1policy_1_1_return_copy.html',1,'ponder::policy']]],
   ['returninternalref',['ReturnInternalRef',['../structponder_1_1policy_1_1_return_internal_ref.html',1,'ponder::policy']]],
+  ['returnmultiple',['ReturnMultiple',['../structponder_1_1policy_1_1_return_multiple.html',1,'ponder::policy']]],
   ['returnpolicy',['returnPolicy',['../classponder_1_1_function.html#a0ba04692c585e9d8eb4027ba2f8bc44a',1,'ponder::Function']]],
   ['returntype',['returnType',['../classponder_1_1_function.html#a6740b8e20ebb10a5e79748fb44e465d1',1,'ponder::Function']]],
   ['runtimemodule',['RuntimeModule',['../structponder_1_1uses_1_1_runtime_module.html',1,'ponder::uses']]]

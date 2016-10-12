@@ -7,7 +7,6 @@ var classponder_1_1_class_builder =
     [ "function", "classponder_1_1_class_builder.html#aac2cc96fdb32e76e141ef4f3515d257d", null ],
     [ "property", "classponder_1_1_class_builder.html#a937cf65b06279e6e051816e2a333413f", null ],
     [ "property", "classponder_1_1_class_builder.html#abed17afae7651fd70361605e121a1070", null ],
-    [ "property", "classponder_1_1_class_builder.html#a9b1279506758ce8a5134cb4a90665d32", null ],
     [ "readable", "classponder_1_1_class_builder.html#ad4371fd394af7d0a9633e7affc60772a", null ],
     [ "readable", "classponder_1_1_class_builder.html#aa18b69a5458efef1ef08d3476bcedcd1", null ],
     [ "tag", "classponder_1_1_class_builder.html#ab0ddb031497444197aadc6666314e93b", null ],

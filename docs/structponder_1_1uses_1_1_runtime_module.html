@@ -34,7 +34,7 @@ ga('create', 'UA-3400898-6', 'auto'); ga('send', 'pageview');
  <tr style="height: 16px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ponder
-   &#160;<span id="projectnumber">2.0</span>
+   &#160;<span id="projectnumber">2.1</span>
    </div>
   </td>
   <td><a href="../" class="title_link">home</a></td>
@@ -109,11 +109,11 @@ template&lt;typename F , typename FTraits , typename Policies_t &gt; </td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Runtime behaviour. </p>
-<p>The "uses" modules are a way for <a class="el" href="structponder_1_1uses_1_1_uses.html" title="Global information on the compile-time type Uses. ">Uses</a> of the compile-time types to store information. For example, this may be templated code that uses the types only available during compilation. These may then be used at runtime. The idea is to decouple modules from the metaclass data to avoid complexity.</p>
+<p>The "uses" modules are a way for <a class="el" href="structponder_1_1uses_1_1_uses.html" title="Lua behaviour. ">Uses</a> of the compile-time types to store information. For example, this may be templated code that uses the types only available during compilation. These may then be used at runtime. The idea is to decouple modules from the metaclass data to avoid complexity.</p>
 <p>Each module supplies (pseudo-code):</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span>Module_name {</div><div class="line">    <span class="keyword">static</span> module_ns::impl::PerConstructor_t* perConstructor(IdRef name, C constructor)</div><div class="line">    <span class="keyword">static</span> module_ns::impl::PerFunc_t* <a class="code" href="structponder_1_1uses_1_1_runtime_module.html#acae5d4837343d2a4353d7f32f3ada02b">perFunction</a>(IdRef name, F <span class="keyword">function</span>)</div><div class="line">}</div></div><!-- fragment --><p> This module provides runtime behaviour like creation of UserObjects and calling functions </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/ponder/uses/detail/uses.hpp</li>
+<li>include/ponder/uses/uses.hpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
