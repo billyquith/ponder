@@ -39,7 +39,7 @@ Function::~Function()
 {
 }
     
-IdRef Function::name() const
+IdReturn Function::name() const
 {
     return m_name;
 }

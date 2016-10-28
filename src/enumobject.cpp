@@ -40,7 +40,7 @@ long EnumObject::value() const
     return m_value;
 }
 
-IdRef EnumObject::name() const
+IdReturn EnumObject::name() const
 {
     return m_enum->name(m_value);
 }

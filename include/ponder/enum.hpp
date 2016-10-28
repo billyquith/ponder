@@ -145,7 +145,7 @@ public:
      *
      * \return String containing the name of the metaenum
      */
-    IdRef name() const;
+    IdReturn name() const;
         
     /**
      * \brief Return the size of the metaenum
@@ -207,7 +207,7 @@ public:
      *
      * \throw InvalidEnumValue value doesn't exist in the metaenum
      */
-    IdRef name(EnumValue value) const;
+    IdReturn name(EnumValue value) const;
 
     /**
      * \brief Return the name corresponding to given a value for enum class
@@ -219,7 +219,7 @@ public:
      * \throw InvalidEnumValue value doesn't exist in the metaenum
      */
     template <typename E>
-    IdRef name(E value) const {return name(static_cast<EnumValue>(value));}
+    IdReturn name(E value) const {return name(static_cast<EnumValue>(value));}
 
     /**
      * \brief Return the value corresponding to given a name

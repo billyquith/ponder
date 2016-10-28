@@ -68,7 +68,7 @@ public:
      *
      * \return Name of the function
      */
-    IdRef name() const;
+    IdReturn name() const;
     
    /**
     * \brief Get the kind of function represented here

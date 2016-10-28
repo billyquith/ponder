@@ -41,7 +41,7 @@ Class::Class(IdRef name)
 {
 }    
     
-IdRef Class::name() const
+IdReturn Class::name() const
 {
     return m_id;
 }

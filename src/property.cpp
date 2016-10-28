@@ -39,7 +39,7 @@ Property::~Property()
 {
 }
 
-IdRef Property::name() const
+IdReturn Property::name() const
 {
     return m_name;
 }

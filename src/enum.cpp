@@ -40,7 +40,7 @@ Enum::Enum(IdRef name)
 {
 }
 
-IdRef Enum::name() const
+IdReturn Enum::name() const
 {
     return m_name;
 }
@@ -70,7 +70,7 @@ bool Enum::hasValue(EnumValue value) const
     return m_enums.containsValue(value);
 }
 
-IdRef Enum::name(EnumValue value) const
+IdReturn Enum::name(EnumValue value) const
 {
     auto it = m_enums.findValue(value);
     

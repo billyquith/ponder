@@ -61,7 +61,7 @@ public:
      *
      * \return Name of the property
      */
-    IdRef name() const;
+    IdReturn name() const;
 
     /**
      * \brief Get the type of the property

@@ -78,7 +78,7 @@ public:
      *
      * \return String containing the name of the enum object
      */
-    IdRef name() const;
+    IdReturn name() const;
 
     /**
      * \brief Retrieve the metaenum of the stored enum object

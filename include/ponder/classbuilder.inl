@@ -44,7 +44,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
 {
     // Retrieve the base metaclass and its name
     const Class& baseClass = classByType<U>();
-    Id baseName = baseClass.name();
+    IdReturn baseName = baseClass.name();
 
     // First make sure that the base class is not already a base of the current class
     for (Class::BaseInfo& bi : m_target->m_bases)

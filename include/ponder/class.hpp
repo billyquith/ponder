@@ -179,7 +179,7 @@ public:     // reflection
      *
      * \return String containing the name of the metaclass
      */
-    IdRef name() const;
+    IdReturn name() const;
 
     /**
      * \brief Return the total number of base metaclasses of this metaclass

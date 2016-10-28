@@ -4,6 +4,10 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
+### 2.1.1
+
+- Identifiers/names now return IdReturn (`const std::string&`) to improve usability.
+
 ### 2.1
 
 - Bind Lua argument convertion directly to function. Saves Value conversion.
@@ -11,7 +15,6 @@ Ponder Changelog
 - Lua supports enums.
 - Lua can return multiple values via `std::tuple<...>`.
 - Lua functions can parse table arguments.
-- Declaration report generator.
 
 ## 2.0
 
