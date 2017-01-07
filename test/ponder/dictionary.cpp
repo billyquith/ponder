@@ -5,7 +5,7 @@
  ** The MIT License (MIT)
  **
  ** Copyright (C) 2009-2010 TECHNOGERMA Systems France and/or its subsidiary(-ies).
- ** Copyright (C) 2015-2016 Billy Quith.
+ ** Copyright (C) 2015-2017 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
