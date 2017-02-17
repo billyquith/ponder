@@ -38,15 +38,17 @@ extern "C" {
 #include <lauxlib.h>
 }
 
+// forward declare
+namespace ponder { namespace lua {
+    int pushUserObject(lua_State *L, const ponder::UserObject& uobj);
+}}
+
 //-----------------------------------------------------------------------------
 
 namespace ponder_ext {
     
 using namespace ponder;
 
-// forward declare
-int pushUserObject(lua_State *L, const UserObject& uobj);
-    
 inline UserObject* toUserObject(lua_State *L, int index)
 {
     return reinterpret_cast<UserObject*>(lua_touserdata(L, index));
@@ -207,7 +209,7 @@ struct LuaValueWriter<UserObject>
 {
     static inline int push(lua_State *L, const UserObject& value)
     {
-        return pushUserObject(L, value);
+        return ponder::lua::pushUserObject(L, value);
     }
 };
 
