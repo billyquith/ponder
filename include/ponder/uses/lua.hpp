@@ -31,6 +31,11 @@
 
 #include <ponder/class.hpp>
 
+extern "C" {
+#include <lua.h>
+#include <lauxlib.h>
+}
+
 namespace ponder {
 namespace lua {
     
@@ -108,11 +113,14 @@ bool runString(lua_State *L, const char *luaCode);
 #ifdef PONDER_USES_LUA_IMPL
 
 #include <ponder/uses/runtime.hpp>
+#include <ponder/uses/detail/lua.hpp>
 
 #define _PONDER_LUA_METATBLS "_ponder_meta"
 #define _PONDER_LUA_INSTTBLS "_instmt"
 
 namespace ponder_ext {
+    
+using namespace ponder;
 
 int pushUserObject(lua_State *L, const UserObject& uobj)
 {
