@@ -14,7 +14,7 @@ var classponder_1_1_class =
     [ "getUserObjectFromPointer", "classponder_1_1_class.html#a7df3ad7b49e64e842ca2095e1d23d519", null ],
     [ "hasFunction", "classponder_1_1_class.html#a7b9db369b07e34389eeb47156b6410a4", null ],
     [ "hasProperty", "classponder_1_1_class.html#a731f11f378ed2bd86e6606dcce781cbe", null ],
-    [ "name", "classponder_1_1_class.html#a820d3bb41039f5ff423d62b9473fbb4e", null ],
+    [ "name", "classponder_1_1_class.html#a8b1e1a6349c3dda49e69d480c7fe587b", null ],
     [ "operator!=", "classponder_1_1_class.html#a2ef881c41f52b4ea325fb0dc15bf485a", null ],
     [ "operator==", "classponder_1_1_class.html#a5f80b6e8df779652ce30c9485ec6424e", null ],
     [ "property", "classponder_1_1_class.html#ad9e78bbd69c89c07f499915b02a8a06f", null ],
