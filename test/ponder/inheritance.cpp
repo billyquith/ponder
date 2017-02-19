@@ -168,45 +168,45 @@ TEST_CASE("Classes support inheritence")
 //        REQUIRE(class2->function("virtual").call(object3) == ponder::Value(30));
 //        REQUIRE(class2->function("virtual").call(object4) == ponder::Value(40));
 //    }
-//    
-//    SECTION("have properties")
-//    {
-//        MyClass1 object1;
-//        MyClass2 object2;
-//        MyClass3 object3;
-//        MyClass4 object4;
-//
-//        REQUIRE(class1->property("p1").get(object1) == ponder::Value(10));
-//        REQUIRE(class3->property("p1").get(object3) == ponder::Value(10));
-//        REQUIRE(class4->property("p1").get(object4) == ponder::Value(10));
-//
-//        REQUIRE(class2->property("p2").get(object2) == ponder::Value(20));
-//        REQUIRE(class3->property("p2").get(object3) == ponder::Value(20));
-//        REQUIRE(class4->property("p2").get(object4) == ponder::Value(20));
-//
-//        REQUIRE(class3->property("p3").get(object3) == ponder::Value(30));
-//        REQUIRE(class4->property("p3").get(object4) == ponder::Value(30));
-//
-//        REQUIRE(class4->property("p4").get(object4) == ponder::Value(40));
-//    }
-//    
-//    SECTION("cast to base class")
-//    {
-//        MyClass3 object3;
-//        MyClass4 object4;
-//
-//        MyClass2* base3 = &object3;
-//        MyClass3* base4 = &object4;
-//
-//        REQUIRE(class2->property("p2").get(base3) == ponder::Value(20));
-//        REQUIRE(class2->property("p2").get(base4) == ponder::Value(20));
-//
-//        REQUIRE(class3->property("p3").get(base3) == ponder::Value(30));
-//        REQUIRE(class3->property("p3").get(base4) == ponder::Value(30));
-//
-//        REQUIRE(class4->property("p4").get(base4) == ponder::Value(40));
-//    }
-//
+    
+    SECTION("have properties")
+    {
+        MyClass1 object1;
+        MyClass2 object2;
+        MyClass3 object3;
+        MyClass4 object4;
+
+        REQUIRE(class1->property("p1").get(object1) == ponder::Value(10));
+        REQUIRE(class3->property("p1").get(object3) == ponder::Value(10));
+        REQUIRE(class4->property("p1").get(object4) == ponder::Value(10));
+
+        REQUIRE(class2->property("p2").get(object2) == ponder::Value(20));
+        REQUIRE(class3->property("p2").get(object3) == ponder::Value(20));
+        REQUIRE(class4->property("p2").get(object4) == ponder::Value(20));
+
+        REQUIRE(class3->property("p3").get(object3) == ponder::Value(30));
+        REQUIRE(class4->property("p3").get(object4) == ponder::Value(30));
+
+        REQUIRE(class4->property("p4").get(object4) == ponder::Value(40));
+    }
+    
+    SECTION("cast to base class")
+    {
+        MyClass3 object3;
+        MyClass4 object4;
+
+        MyClass2* base3 = &object3;
+        MyClass3* base4 = &object4;
+
+        REQUIRE(class2->property("p2").get(base3) == ponder::Value(20));
+        REQUIRE(class2->property("p2").get(base4) == ponder::Value(20));
+
+        REQUIRE(class3->property("p3").get(base3) == ponder::Value(30));
+        REQUIRE(class3->property("p3").get(base4) == ponder::Value(30));
+
+        REQUIRE(class4->property("p4").get(base4) == ponder::Value(40));
+    }
+
 //    SECTION("can override functions in derived class")
 //    {
 //        MyClass1 object1;
@@ -223,28 +223,28 @@ TEST_CASE("Classes support inheritence")
 //        REQUIRE(class4->function("overridden").call(object2) == ponder::Value(4));
 //        REQUIRE(class4->function("overridden").call(object3) == ponder::Value(4));
 //    }
-//
-//    SECTION("can overridde properties")
-//    {
-//        MyClass1 object1;
-//        MyClass2 object2;
-//        MyClass3 object3;
-//        MyClass4 object4;
-//
-//        // Here, the result should always depend on the metaclass, not the object
-//        // (just like in C++ where non-virtual functions are resolved using the static type)
-//
-//        REQUIRE(class1->property("overridden").get(object1) == ponder::Value(10));
-//        REQUIRE(class2->property("overridden").get(object2) == ponder::Value(20));
-//        REQUIRE(class3->property("overridden").get(object3) == ponder::Value(30));
-//        REQUIRE(class4->property("overridden").get(object4) == ponder::Value(40));
-//
-//        REQUIRE(class1->property("overridden").get(object3) == ponder::Value(10));
-//        REQUIRE(class2->property("overridden").get(object3) == ponder::Value(20));
-//
-//        REQUIRE(class1->property("overridden").get(object4) == ponder::Value(10));
-//        REQUIRE(class2->property("overridden").get(object4) == ponder::Value(20));
-//        REQUIRE(class3->property("overridden").get(object4) == ponder::Value(30));
-//    }    
+
+    SECTION("can overridde properties")
+    {
+        MyClass1 object1;
+        MyClass2 object2;
+        MyClass3 object3;
+        MyClass4 object4;
+
+        // Here, the result should always depend on the metaclass, not the object
+        // (just like in C++ where non-virtual functions are resolved using the static type)
+
+        REQUIRE(class1->property("overridden").get(object1) == ponder::Value(10));
+        REQUIRE(class2->property("overridden").get(object2) == ponder::Value(20));
+        REQUIRE(class3->property("overridden").get(object3) == ponder::Value(30));
+        REQUIRE(class4->property("overridden").get(object4) == ponder::Value(40));
+
+        REQUIRE(class1->property("overridden").get(object3) == ponder::Value(10));
+        REQUIRE(class2->property("overridden").get(object3) == ponder::Value(20));
+
+        REQUIRE(class1->property("overridden").get(object4) == ponder::Value(10));
+        REQUIRE(class2->property("overridden").get(object4) == ponder::Value(20));
+        REQUIRE(class3->property("overridden").get(object4) == ponder::Value(30));
+    }    
 }
 
