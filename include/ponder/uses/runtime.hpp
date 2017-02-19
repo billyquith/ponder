@@ -27,8 +27,9 @@
 **
 ****************************************************************************/
 
-/*
- *  Runtime uses for Ponder registered data.
+/**
+ * \file
+ * \brief Runtime uses for Ponder registered data.
  */
 
 #ifndef PONDER_USES_RUNTIME_HPP
@@ -36,6 +37,11 @@
 
 #include <ponder/class.hpp>
 #include <ponder/constructor.hpp>
+
+/**
+ * \namespace ponder::runtime
+ * \brief Contains Ponder runtime support public API.
+ */
 
 namespace ponder {
 namespace runtime {

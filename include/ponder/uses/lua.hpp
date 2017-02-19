@@ -29,6 +29,11 @@
 #ifndef PONDER_USES_LUA_HPP
 #define PONDER_USES_LUA_HPP
 
+/**
+ * \file
+ * \brief This file contains the user Lua API for Ponder
+ */
+
 #include <ponder/class.hpp>
 
 extern "C" {
@@ -36,9 +41,20 @@ extern "C" {
 #include <lauxlib.h>
 }
 
+/**
+ * \namespace ponder::lua
+ * \brief Contains Ponder Lua support public API.
+ *
+ * \namespace ponder::lua::detail
+ * \brief Ponder Lua support hidden implementation details.
+ *
+ * \namespace ponder::lua::impl
+ * \brief Ponder Lua support hidden implementation details.
+ */
+
 namespace ponder {
 namespace lua {
-    
+
 /**
  * \brief Expose a single Ponder metaclass to a Lua state
  *
