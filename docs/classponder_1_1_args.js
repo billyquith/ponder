@@ -6,6 +6,5 @@ var classponder_1_1_args =
     [ "insert", "classponder_1_1_args.html#a27e602c2b475b32cbf8ce44157c7a4b9", null ],
     [ "operator+", "classponder_1_1_args.html#aecb81709a0873a071aed436e4abb723c", null ],
     [ "operator+=", "classponder_1_1_args.html#a611b75ec90afe2ecb9d4ba3364bb4d92", null ],
-    [ "operator[]", "classponder_1_1_args.html#a5d1b690aaf8e0ab63c4890735ab8b500", null ],
-    [ "empty", "classponder_1_1_args.html#a5c4f0353087866c07c006e248cea43dd", null ]
+    [ "operator[]", "classponder_1_1_args.html#a5d1b690aaf8e0ab63c4890735ab8b500", null ]
 ];

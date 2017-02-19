@@ -32,7 +32,8 @@ var hierarchy =
       ] ]
     ] ],
     [ "ponder::runtime::FunctionCaller", "classponder_1_1runtime_1_1_function_caller.html", null ],
-    [ "ponder::detail::noncopyable", null, [
+    [ "ponder::uses::LuaModule", "structponder_1_1uses_1_1_lua_module.html", null ],
+    [ "noncopyable", null, [
       [ "ponder::Class", "classponder_1_1_class.html", null ],
       [ "ponder::Enum", "classponder_1_1_enum.html", null ]
     ] ],
@@ -66,6 +67,5 @@ var hierarchy =
     [ "ponder::Value", "classponder_1_1_value.html", null ],
     [ "ponder_ext::ValueMapper< T, C >", "structponder__ext_1_1_value_mapper.html", null ],
     [ "ponder_ext::ValueMapper< QString >", "structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html", null ],
-    [ "ponder::ValueVisitor< T >", "classponder_1_1_value_visitor.html", null ],
-    [ "ponder::ValueVisitor< bool >", "classponder_1_1_value_visitor.html", null ]
+    [ "ponder::ValueVisitor< T >", "classponder_1_1_value_visitor.html", null ]
 ];

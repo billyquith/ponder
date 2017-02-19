@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['undeclare',['undeclare',['../classponder_1_1_class.html#a50ad69360839d9be510611b1efe2e290',1,'ponder::Class::undeclare()'],['../classponder_1_1_enum.html#a18aacb98f89f4c12abb9ed856a3639b3',1,'ponder::Enum::undeclare()']]],
-  ['userobject',['UserObject',['../classponder_1_1_user_object.html',1,'ponder']]],
-  ['userobject',['UserObject',['../classponder_1_1_user_object.html#a6dee11a4b91dc4a9017f5fcd28b52999',1,'ponder::UserObject::UserObject()'],['../classponder_1_1_user_object.html#af104456579d2347f864004b77543a364',1,'ponder::UserObject::UserObject(const T &amp;object)'],['../classponder_1_1_user_object.html#a016d129cbdceecc5df7ab906ce86c16b',1,'ponder::UserObject::UserObject(const UserObject &amp;other)'],['../classponder_1_1_user_object.html#ac708fcca6afc47e018cbfcfe6b2a0181',1,'ponder::UserObject::UserObject(UserObject &amp;&amp;other) noexcept']]],
-  ['userproperty',['UserProperty',['../classponder_1_1_user_property.html',1,'ponder']]],
-  ['userproperty',['UserProperty',['../classponder_1_1_user_property.html#a8d21bf49cd8d2f876d5d85e8cd65402d',1,'ponder::UserProperty']]],
-  ['uses',['Uses',['../structponder_1_1uses_1_1_uses.html',1,'ponder::uses']]]
+  ['tag',['tag',['../classponder_1_1_class_builder.html#ab0ddb031497444197aadc6666314e93b',1,'ponder::ClassBuilder::tag(const Value &amp;id)'],['../classponder_1_1_class_builder.html#afb4f45fc038289e48534f52b482b58fe',1,'ponder::ClassBuilder::tag(const Value &amp;id, const U &amp;value)'],['../classponder_1_1_tag_holder.html#a87597b03859c06a5789985b7a5c13b8b',1,'ponder::TagHolder::tag(const Value &amp;id) const'],['../classponder_1_1_tag_holder.html#a0f9749ca3daa3d8c1e87b56d7c6e15e4',1,'ponder::TagHolder::tag(const Value &amp;id, const UserObject &amp;object) const']]],
+  ['tagcount',['tagCount',['../classponder_1_1_tag_holder.html#a95b59332241cba29e059b4cbd1a8c44a',1,'ponder::TagHolder']]],
+  ['tagholder',['TagHolder',['../classponder_1_1_tag_holder.html',1,'ponder::TagHolder'],['../classponder_1_1_tag_holder.html#aea37776a2b05275c1692541a12f0ad85',1,'ponder::TagHolder::TagHolder()']]],
+  ['tagid',['tagId',['../classponder_1_1_tag_holder.html#adfac24d7f879af6391e7dad3646cea4b',1,'ponder::TagHolder']]],
+  ['to',['to',['../structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html#ae8f9ad9edad81f92b8599fd2e26b7ff5',1,'ponder_ext::ValueMapper&lt; QString &gt;::to()'],['../classponder_1_1_value.html#ab38dde1245617d167a4bae3a03912184',1,'ponder::Value::to()']]],
+  ['tryfunction',['tryFunction',['../classponder_1_1_class.html#a7c3259bd949c2e33162997e9f8b7a485',1,'ponder::Class']]],
+  ['tryproperty',['tryProperty',['../classponder_1_1_class.html#a16c6bca95847590e5df7fa9d41d2071f',1,'ponder::Class']]],
+  ['type',['type',['../structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html#a0479e6dd92b8fdd81f4c2f57dd17cfa0',1,'ponder_ext::ValueMapper&lt; QString &gt;::type()'],['../classponder__ext_1_1_qt_helper.html#a550b95e7ae0df6a7249da197a4e9424e',1,'ponder_ext::QtHelper::type(const char *typeName)'],['../classponder__ext_1_1_qt_helper.html#a3fa11cbe618a30517b0666eda47eb6e7',1,'ponder_ext::QtHelper::type(QVariant::Type theType)']]],
+  ['typename',['typeName',['../classponder_1_1_bad_type.html#ae762c92f7caa353806d06050e5087c01',1,'ponder::BadType']]]
 ];

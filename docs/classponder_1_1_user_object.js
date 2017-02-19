@@ -9,9 +9,6 @@ var classponder_1_1_user_object =
     [ "get", "classponder_1_1_user_object.html#af46d92b72b98e7702a17358dc6a0970c", null ],
     [ "get", "classponder_1_1_user_object.html#a110702caccd07e8013f8a2b6be1cbfe7", null ],
     [ "getClass", "classponder_1_1_user_object.html#af4a215a18e61bfe86438eaf92a812981", null ],
-    [ "makeCopy", "classponder_1_1_user_object.html#a397d73d5fda25db632ccca70517be865", null ],
-    [ "makeRef", "classponder_1_1_user_object.html#ae7a0ee39a0074f8427198cfd954d948f", null ],
-    [ "makeRef", "classponder_1_1_user_object.html#a0f66f19895f8e0a19ae9e82e2d0143e2", null ],
     [ "operator!=", "classponder_1_1_user_object.html#a7d1bb3c2bce8e537d4c0319d6700d847", null ],
     [ "operator<", "classponder_1_1_user_object.html#adc66f5adb7781595618d60816a792f96", null ],
     [ "operator=", "classponder_1_1_user_object.html#ac69b4f63ee0d9c71ad21215b5ce7c64b", null ],
@@ -21,6 +18,5 @@ var classponder_1_1_user_object =
     [ "ref", "classponder_1_1_user_object.html#a31cd22f19cd52215e6b059076179faff", null ],
     [ "set", "classponder_1_1_user_object.html#a82534e59247ba6fa4a5c562f5051fe1c", null ],
     [ "set", "classponder_1_1_user_object.html#afa67873aeaea1da9067eed58d365f79a", null ],
-    [ "Property", "classponder_1_1_user_object.html#a386f5a9cf65610cb62143865e5637272", null ],
-    [ "nothing", "classponder_1_1_user_object.html#aad747b3a6763ff287d7a730c79700e74", null ]
+    [ "Property", "classponder_1_1_user_object.html#a386f5a9cf65610cb62143865e5637272", null ]
 ];

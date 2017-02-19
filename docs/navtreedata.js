@@ -8,6 +8,14 @@ var NAVTREE =
       [ "License", "index.html#license_sect", null ]
     ] ],
     [ "Ponder License", "license_page.html", null ],
+    [ "Namespaces", null, [
+      [ "Namespace List", "namespaces.html", "namespaces" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
+      ] ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -33,8 +41,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-".html",
-"classponder_1_1_value.html#ab38dde1245617d167a4bae3a03912184"
+"annotated.html",
+"classponder_1_1_value.html#a0aad43f7a2c6a8fb3e28e4044abdbbd9"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

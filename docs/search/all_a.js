@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['makecopy',['makeCopy',['../classponder_1_1_user_object.html#a397d73d5fda25db632ccca70517be865',1,'ponder::UserObject']]],
-  ['makeref',['makeRef',['../classponder_1_1_user_object.html#ae7a0ee39a0074f8427198cfd954d948f',1,'ponder::UserObject::makeRef(T &amp;object)'],['../classponder_1_1_user_object.html#a0f66f19895f8e0a19ae9e82e2d0143e2',1,'ponder::UserObject::makeRef(const T &amp;object)']]],
-  ['matches',['matches',['../classponder_1_1_constructor.html#a3fc59b33790f53d3cc65076289d20f2b',1,'ponder::Constructor']]],
-  ['modules',['Modules',['../structponder_1_1uses_1_1_uses.html#a0c25baaed092072da0faf8cb98a4d972',1,'ponder::uses::Uses']]]
+  ['lambda',['Lambda',['../namespaceponder.html#a19b1bfb43a01f887ea5b9845f518cf63a04a7da3c5b04cad85da1eebb92315b8b',1,'ponder']]],
+  ['lua_2ehpp',['lua.hpp',['../lua_8hpp.html',1,'']]],
+  ['luamodule',['LuaModule',['../structponder_1_1uses_1_1_lua_module.html',1,'ponder::uses']]]
 ];

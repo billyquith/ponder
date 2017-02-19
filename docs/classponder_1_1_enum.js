@@ -2,7 +2,6 @@ var classponder_1_1_enum =
 [
     [ "Pair", "structponder_1_1_enum_1_1_pair.html", "structponder_1_1_enum_1_1_pair" ],
     [ "EnumValue", "classponder_1_1_enum.html#aa8a1b99d12268564a54b94fc64881c82", null ],
-    [ "declare", "classponder_1_1_enum.html#a3f6168a6bf5db4f36c5c6e3524590f76", null ],
     [ "hasName", "classponder_1_1_enum.html#afa57f3f030a29f0a913b6e75f0e4e086", null ],
     [ "hasValue", "classponder_1_1_enum.html#a6d9bfb7cef1720c37488fee45af52bc7", null ],
     [ "hasValue", "classponder_1_1_enum.html#a665185a4d6afae4198cabc71b249006d", null ],
@@ -13,7 +12,6 @@ var classponder_1_1_enum =
     [ "operator==", "classponder_1_1_enum.html#a31aa9b10e2766f09cae9feedba3e6d70", null ],
     [ "pair", "classponder_1_1_enum.html#af7b2e7e60ea2097f867cc9fffef269e3", null ],
     [ "size", "classponder_1_1_enum.html#a070431343758a9e38b9439a2f5bc4413", null ],
-    [ "undeclare", "classponder_1_1_enum.html#a18aacb98f89f4c12abb9ed856a3639b3", null ],
     [ "value", "classponder_1_1_enum.html#abf16261c6829a54565bc893e95076e71", null ],
     [ "value", "classponder_1_1_enum.html#a1d7115b5198e4119f3a830d93419e6cb", null ],
     [ "detail::EnumManager", "classponder_1_1_enum.html#ab4dd1d23b7155a4f25921e2d2c2db13a", null ],

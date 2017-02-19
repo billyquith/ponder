@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['tag',['tag',['../classponder_1_1_class_builder.html#ab0ddb031497444197aadc6666314e93b',1,'ponder::ClassBuilder::tag(const Value &amp;id)'],['../classponder_1_1_class_builder.html#afb4f45fc038289e48534f52b482b58fe',1,'ponder::ClassBuilder::tag(const Value &amp;id, const U &amp;value)'],['../classponder_1_1_tag_holder.html#a87597b03859c06a5789985b7a5c13b8b',1,'ponder::TagHolder::tag(const Value &amp;id) const'],['../classponder_1_1_tag_holder.html#a0f9749ca3daa3d8c1e87b56d7c6e15e4',1,'ponder::TagHolder::tag(const Value &amp;id, const UserObject &amp;object) const']]],
-  ['tagcount',['tagCount',['../classponder_1_1_tag_holder.html#a95b59332241cba29e059b4cbd1a8c44a',1,'ponder::TagHolder']]],
-  ['tagholder',['TagHolder',['../classponder_1_1_tag_holder.html',1,'ponder']]],
-  ['tagid',['tagId',['../classponder_1_1_tag_holder.html#adfac24d7f879af6391e7dad3646cea4b',1,'ponder::TagHolder']]],
-  ['to',['to',['../structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html#ae8f9ad9edad81f92b8599fd2e26b7ff5',1,'ponder_ext::ValueMapper&lt; QString &gt;::to()'],['../classponder_1_1_value.html#ab38dde1245617d167a4bae3a03912184',1,'ponder::Value::to()']]],
-  ['tryfunction',['tryFunction',['../classponder_1_1_class.html#a7c3259bd949c2e33162997e9f8b7a485',1,'ponder::Class']]],
-  ['tryproperty',['tryProperty',['../classponder_1_1_class.html#a16c6bca95847590e5df7fa9d41d2071f',1,'ponder::Class']]],
-  ['type',['type',['../structponder__ext_1_1_value_mapper_3_01_q_string_01_4.html#a0479e6dd92b8fdd81f4c2f57dd17cfa0',1,'ponder_ext::ValueMapper&lt; QString &gt;::type()'],['../classponder__ext_1_1_qt_helper.html#a550b95e7ae0df6a7249da197a4e9424e',1,'ponder_ext::QtHelper::type(const char *typeName)'],['../classponder__ext_1_1_qt_helper.html#a3fa11cbe618a30517b0666eda47eb6e7',1,'ponder_ext::QtHelper::type(QVariant::Type theType)']]]
+  ['set',['set',['../classponder_1_1_array_property.html#a40c791122795d796ab1475f291bd4824',1,'ponder::ArrayProperty::set()'],['../classponder_1_1_property.html#a124152f93ad8370725a3a75c23fe64a9',1,'ponder::Property::set()'],['../classponder_1_1_user_object.html#a82534e59247ba6fa4a5c562f5051fe1c',1,'ponder::UserObject::set(IdRef property, const Value &amp;value) const'],['../classponder_1_1_user_object.html#afa67873aeaea1da9067eed58d365f79a',1,'ponder::UserObject::set(std::size_t index, const Value &amp;value) const']]],
+  ['setelement',['setElement',['../classponder_1_1_array_property.html#a258ddf3da51ddd1e9fd976d3f86bd128',1,'ponder::ArrayProperty']]],
+  ['setsize',['setSize',['../classponder_1_1_array_property.html#af4d341b068956eefd8eccf2bf6f6a31f',1,'ponder::ArrayProperty']]],
+  ['setvalue',['setValue',['../classponder_1_1_array_property.html#a0a752591299901b3d7c1900d2d987936',1,'ponder::ArrayProperty::setValue()'],['../classponder_1_1_property.html#aa0c8b43a27c468bfee37ae8c65391a47',1,'ponder::Property::setValue()'],['../classponder__ext_1_1_qt_simple_property.html#ae4cc79faf8ad89335d3979ffb37c6af1',1,'ponder_ext::QtSimpleProperty::setValue()']]],
+  ['simpleproperty',['SimpleProperty',['../classponder_1_1_simple_property.html',1,'ponder::SimpleProperty'],['../classponder_1_1_simple_property.html#afc80deb72af27b48179843212dfdbb6d',1,'ponder::SimpleProperty::SimpleProperty()']]],
+  ['size',['size',['../classponder_1_1_array_property.html#a2bb1ebffbf88c116172ba0f7f0ce254c',1,'ponder::ArrayProperty::size()'],['../classponder_1_1_enum.html#a070431343758a9e38b9439a2f5bc4413',1,'ponder::Enum::size()']]],
+  ['sizeof',['sizeOf',['../classponder_1_1_class.html#ac14fcdb69ea4a0443754f2559fb95fd4',1,'ponder::Class']]],
+  ['str',['str',['../classponder_1_1_error.html#a45bd6ffd22259d651415ee3d7c0961f6',1,'ponder::Error']]],
+  ['string',['String',['../namespaceponder.html#a70733c0387bfaf658c5ded607c30d473a27118326006d3829667a400ad23d5d98',1,'ponder']]]
 ];
