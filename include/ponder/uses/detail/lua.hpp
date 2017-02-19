@@ -196,6 +196,24 @@ struct LuaValueWriter<std::string>
 };
 
 template <>
+struct LuaValueWriter<const char*>          // non-const object
+{
+    static inline int push(lua_State *L, const char* value)
+    {
+        return lua_pushstring(L, value), 1;
+    }
+};
+
+template <>
+struct LuaValueWriter<const char* const>    // const object
+{
+    static inline int push(lua_State *L, const char* value)
+    {
+        return lua_pushstring(L, value), 1;
+    }
+};
+
+template <>
 struct LuaValueWriter<ponder::detail::string_view>
 {
     static inline int push(lua_State *L, const ponder::detail::string_view& value)
@@ -265,6 +283,7 @@ template <typename R, typename U = void> struct CallReturnCopy;
 template <typename R>
 struct CallReturnCopy<R, typename std::enable_if<!detail::IsUserType<R>::value>::type>
 {
+    // "no member named push" error here means the type returned is not covered.
     static inline int value(lua_State *L, R&& o) {return LuaValueWriter<R>::push(L, o);}
 };
 
