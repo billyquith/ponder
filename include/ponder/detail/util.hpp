@@ -63,7 +63,7 @@ struct if_c<false,T,F>
     typedef F type;
 };
 
-class bad_conversion : std::exception {};
+class bad_conversion : public std::exception {};
 
 template <typename T, typename F, typename O = void>
 struct convert_impl
