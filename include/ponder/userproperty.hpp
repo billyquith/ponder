@@ -68,6 +68,13 @@ public:
     const Class& getClass() const;
 
     /**
+    * \brief Get a user object from a parent instance
+    *
+    * \return User object representing the user property
+    */
+    virtual UserObject getObject(const UserObject& parentInstance) const = 0;
+
+    /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept
