@@ -93,6 +93,8 @@ using fmt::internal::Arg;
 // Disable deprecation warning for strerror. The latter is not called but
 // MSVC fails to detect it.
 # pragma warning(disable: 4996)
+# pragma warning(disable: 4061)  // enum is not explicitly handled by a case label
+# pragma warning(disable: 4774)  // format string expected in argument 3 is not a string literal
 #endif
 
 // Dummy implementations of strerror_r and strerror_s called if corresponding
