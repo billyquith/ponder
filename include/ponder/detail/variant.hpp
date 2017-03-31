@@ -41,6 +41,9 @@
 
 #include "variant_recursive_wrapper.hpp"
 
+#pragma push_macro("new")
+#undef new
+
 // clang-format off
 // [[deprecated]] is only available in C++14, use this for the time being
 #if __cplusplus <= 201103L
@@ -985,5 +988,7 @@ ResultType const& get_unchecked(T const& var)
 }
 } // namespace util
 } // namespace mapbox
+
+#pragma pop_macro("new")
 
 #endif // MAPBOX_UTIL_VARIANT_HPP
