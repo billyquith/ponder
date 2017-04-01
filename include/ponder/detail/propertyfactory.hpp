@@ -157,11 +157,8 @@ public:
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
 
-    enum
-    {
-        canRead = true,
-        canWrite = false
-    };
+    static constexpr bool canRead = true;
+    static constexpr bool canWrite = false;
 
     template <typename F>
     Accessor1(F getter)
@@ -197,11 +194,8 @@ public:
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
 
-    enum
-    {
-        canRead = true,
-        canWrite = true
-    };
+    static constexpr bool canRead = true;
+    static constexpr bool canWrite = true;
 
     template <typename F>
     Accessor1(F getter)
@@ -237,11 +231,8 @@ public:
     typedef C ClassType;
     typedef typename std::remove_reference<R>::type ArgumentType;
 
-    enum
-    {
-        canRead = true,
-        canWrite = true
-    };
+    static constexpr bool canRead = true;
+    static constexpr bool canWrite = true;
 
     template <typename F1, typename F2>
     Accessor2(F1 getter, F2 setter)
@@ -279,11 +270,8 @@ public:
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
 
-    enum
-    {
-        canRead = true,
-        canWrite = false
-    };
+    static constexpr bool canRead = true;
+    static constexpr bool canWrite = false;
 
     template <typename F1, typename F2>
     Accessor3(F1 getter1, F2 getter2)
@@ -321,11 +309,8 @@ public:
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
 
-    enum
-    {
-        canRead = true,
-        canWrite = true
-    };
+    static constexpr bool canRead = true;
+    static constexpr bool canWrite = true;
 
     template <typename F1, typename F2>
     Accessor3(F1 getter1, F2 getter2)
