@@ -40,8 +40,7 @@ namespace ponder
 class Class;
 
 /**
- * \brief Specialized type of property for user types
- *
+ * \brief Specialized type of property for user types.
  */
 class PONDER_API UserProperty : public Property
 {
@@ -68,11 +67,14 @@ public:
     const Class& getClass() const;
 
     /**
-    * \brief Get a user object from a parent instance
+    * \brief Get a property user object from a user object instance
     *
-    * \return User object representing the user property
+    * This user property is a member of a metaclass. To get the property
+    * value we pass the metaclass object instance, which contains the property.
+    *
+    * \return User object represented by the user property
     */
-    virtual UserObject getObject(const UserObject& parentInstance) const = 0;
+    virtual UserObject getObject(const UserObject& objectInstance) const = 0;
 
     /**
      * \brief Accept the visitation of a ClassVisitor

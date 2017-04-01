@@ -28,7 +28,6 @@
 ****************************************************************************/
 
 
-
 namespace ponder
 {
 namespace detail
@@ -92,9 +91,10 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
 }
 
 template <typename A>
-UserObject UserPropertyImpl<A>::getObject(const UserObject& parentInstance) const
+UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
 {
-    return ToUserObject<A::Traits::isRef>::get(m_accessor.get(parentInstance.get<typename A::ClassType>()));
+    return ToUserObject<A::Traits::isRef>::get(
+                    m_accessor.get(objectInstance.get<typename A::ClassType>()));
 }
 
 template <typename A>
