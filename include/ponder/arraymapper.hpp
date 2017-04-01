@@ -274,6 +274,46 @@ struct ArrayMapper<std::array<T, N> >
     }
 };
 
+ /*
+ * Specialization of ArrayMapper for std::vector<bool>
+ */
+ template <>
+ struct ArrayMapper<std::vector<bool> >
+ {
+     enum { isArray = true };
+     typedef bool ElementType;
+
+     static bool dynamic()
+     {
+         return true;
+     }
+
+     static std::size_t size(const std::vector<bool>& arr)
+     {
+         return arr.size();
+     }
+
+     static const bool get(const std::vector<bool>& arr, std::size_t index)
+     {
+         return arr[index];
+     }
+
+     static void set(std::vector<bool>& arr, std::size_t index, const bool& value)
+     {
+         arr[index] = value;
+     }
+
+     static void insert(std::vector<bool>& arr, std::size_t before, const bool& value)
+     {
+         arr.insert(arr.begin() + before, value);
+     }
+
+     static void remove(std::vector<bool>& arr, std::size_t index)
+     {
+         arr.erase(arr.begin() + index);
+     }
+ };
+
 /*
  * Specialization of ArrayMapper for std::list
  */
