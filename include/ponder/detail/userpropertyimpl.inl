@@ -92,6 +92,12 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
 }
 
 template <typename A>
+UserObject UserPropertyImpl<A>::getObject(const UserObject& parentInstance) const
+{
+    return ToUserObject<A::Traits::isRef>::get(m_accessor.get(parentInstance.get<typename A::ClassType>()));
+}
+
+template <typename A>
 bool UserPropertyImpl<A>::isReadable() const
 {
     return A::canRead;
