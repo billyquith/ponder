@@ -64,7 +64,7 @@ namespace {
 
         void indent()
         {
-            int ind = m_what.size();
+            auto ind = m_what.size();
             while (ind-- > 0)
                 print("  ");
         }

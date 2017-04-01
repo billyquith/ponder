@@ -61,8 +61,7 @@ namespace ponder_ext
  * By default, ValueMapper supports the following types of array:
  *
  * \li T[]
- * \li boost::array
- * \li std::vector
+ * \li std::vector & std::vector<bool>
  * \li std::list
  *
  * Here is an example of mapping for the std::vector class:
@@ -117,7 +116,7 @@ namespace ponder_ext
 template <typename T>
 struct ArrayMapper
 {
-    enum { isArray = false };
+    static constexpr bool isArray = false;
 };
 
 /*
@@ -126,7 +125,7 @@ struct ArrayMapper
 template <typename T, std::size_t N>
 struct ArrayMapper<T[N]>
 {
-    enum { isArray = true };
+    static constexpr bool isArray = true;
     typedef T ElementType;
 
     static bool dynamic()
@@ -162,9 +161,9 @@ struct ArrayMapper<T[N]>
  * Specialization of ArrayMapper for std::array
  */
 template <typename T, std::size_t N>
-struct ArrayMapper<std::array<T, N> >
+struct ArrayMapper<std::array<T, N>>
 {
-    enum { isArray = true };
+    static constexpr bool isArray = true;
     typedef T ElementType;
 
     static bool dynamic()
@@ -202,7 +201,7 @@ struct ArrayMapper<std::array<T, N> >
 //template <typename T, std::size_t N>
 //struct ArrayMapper<boost::array<T, N> >
 //{
-//    enum { isArray = true };
+//    static constexpr bool isArray = true;
 //    typedef T ElementType;
 //
 //    static bool dynamic()
@@ -240,7 +239,7 @@ struct ArrayMapper<std::array<T, N> >
  template <typename T>
  struct ArrayMapper<std::vector<T> >
  {
-     enum { isArray = true };
+     static constexpr bool isArray = true;
      typedef T ElementType;
 
     static bool dynamic()
@@ -275,12 +274,13 @@ struct ArrayMapper<std::array<T, N> >
 };
 
  /*
- * Specialization of ArrayMapper for std::vector<bool>
- */
+  * Specialization of ArrayMapper for std::vector<bool>
+  * - See https://github.com/billyquith/ponder/issues/72
+  */
  template <>
- struct ArrayMapper<std::vector<bool> >
+ struct ArrayMapper<std::vector<bool>>
  {
-     enum { isArray = true };
+     static constexpr bool isArray = true;
      typedef bool ElementType;
 
      static bool dynamic()
@@ -293,7 +293,7 @@ struct ArrayMapper<std::array<T, N> >
          return arr.size();
      }
 
-     static const bool get(const std::vector<bool>& arr, std::size_t index)
+     static bool get(const std::vector<bool>& arr, std::size_t index)
      {
          return arr[index];
      }
@@ -318,9 +318,9 @@ struct ArrayMapper<std::array<T, N> >
  * Specialization of ArrayMapper for std::list
  */
  template <typename T>
- struct ArrayMapper<std::list<T> >
+ struct ArrayMapper<std::list<T>>
  {
-     enum { isArray = true };
+     static constexpr bool isArray = true;
      typedef T ElementType;
 
     static bool dynamic()
