@@ -218,7 +218,7 @@ PONDER_API void&#160;</td><td class="memItemRight" valign="bottom"><b>ponder::de
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">public</span>: <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* ponderClassId() const \</div><div class="line">        {<span class="keywordflow">return</span> ponder::detail::staticTypeId(<span class="keyword">this</span>);} \</div><div class="line">    private:</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">public</span>: \</div><div class="line">        virtual <span class="keyword">const</span> <span class="keywordtype">char</span>* ponderClassId()<span class="keyword"> const </span>{<span class="keywordflow">return</span> ponder::detail::staticTypeId(<span class="keyword">this</span>);} \</div><div class="line">    private:</div></div><!-- fragment -->
 <p>Macro used to activate the Ponder RTTI system into a hierarchy of classes. </p>
 <p>This macro must be inserted in both base and derived classes if you want Ponder to be able to retrieve the dynamic type of <em>polymorphic objects</em>.</p>
 <dl class="section note"><dt>Note</dt><dd>This macro does not need to be inserted into all Ponder classes being declared, only ones which would like to support features like downcasting via polymorphism.</dd></dl>

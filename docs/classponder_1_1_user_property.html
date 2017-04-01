@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('classponder_1_1_user_property.html',''
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classponder_1_1_user_property-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">ponder::UserProperty Class Reference</div>  </div>
+<div class="title">ponder::UserProperty Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -123,6 +123,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:ae5e6ae0c12260d41270654b05ebf2018"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classponder_1_1_class.html">Class</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_property.html#ae5e6ae0c12260d41270654b05ebf2018">getClass</a> () const</td></tr>
 <tr class="memdesc:ae5e6ae0c12260d41270654b05ebf2018"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the owner class.  <a href="#ae5e6ae0c12260d41270654b05ebf2018">More...</a><br /></td></tr>
 <tr class="separator:ae5e6ae0c12260d41270654b05ebf2018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaab97d0bcfeacdae2291e1fc61b103a4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classponder_1_1_user_object.html">UserObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_property.html#aaab97d0bcfeacdae2291e1fc61b103a4">getObject</a> (const <a class="el" href="classponder_1_1_user_object.html">UserObject</a> &amp;objectInstance) const =0</td></tr>
+<tr class="memdesc:aaab97d0bcfeacdae2291e1fc61b103a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a property user object from a user object instance.  <a href="#aaab97d0bcfeacdae2291e1fc61b103a4">More...</a><br /></td></tr>
+<tr class="separator:aaab97d0bcfeacdae2291e1fc61b103a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaab29cef87e6a455a652c6af7e4c56b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_user_property.html#aaab29cef87e6a455a652c6af7e4c56b5">accept</a> (<a class="el" href="classponder_1_1_class_visitor.html">ClassVisitor</a> &amp;visitor) const override</td></tr>
 <tr class="memdesc:aaab29cef87e6a455a652c6af7e4c56b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept the visitation of a <a class="el" href="classponder_1_1_class_visitor.html" title="Base class for writing custom Class visitors. ">ClassVisitor</a>.  <a href="#aaab29cef87e6a455a652c6af7e4c56b5">More...</a><br /></td></tr>
 <tr class="separator:aaab29cef87e6a455a652c6af7e4c56b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -288,6 +291,36 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Get the owner class. </p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classponder_1_1_class.html" title="ponder::Class represents a metaclass composed of properties and functions ">Class</a> the property is bound to </dd></dl>
+
+</div>
+</div>
+<a id="aaab97d0bcfeacdae2291e1fc61b103a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaab97d0bcfeacdae2291e1fc61b103a4">&#9670;&nbsp;</a></span>getObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classponder_1_1_user_object.html">UserObject</a> ponder::UserProperty::getObject </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classponder_1_1_user_object.html">UserObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>objectInstance</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a property user object from a user object instance. </p>
+<p>This user property is a member of a metaclass. To get the property value we pass the metaclass object instance, which contains the property.</p>
+<dl class="section return"><dt>Returns</dt><dd>User object represented by the user property </dd></dl>
 
 </div>
 </div>
