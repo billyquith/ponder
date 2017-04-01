@@ -87,7 +87,7 @@ protected:
     /**
     * \see UserProperty::getObject
     */
-    UserObject getObject(const UserObject& parentInstance) const;
+    UserObject getObject(const UserObject& parentInstance) const override;
 
 private:
 
