@@ -28,7 +28,6 @@
 
 #include <ponder/uses/report.hpp>
 #include <ponder/classvisitor.hpp>
-#include <ponder/detail/format.hpp>
 #include <stack>
 #include <iostream>
 
@@ -46,8 +45,6 @@ using ponder::detail::string_view;
 
 namespace {
     
-    using namespace ponder::detail::fmt;
-
     class Reporter
     {
     public:        
@@ -64,9 +61,9 @@ namespace {
 
         void indent()
         {
-            auto ind = m_what.size();
-            while (ind-- > 0)
-                print("  ");
+//            auto ind = m_what.size();
+//            while (ind-- > 0)
+//                print("  ");
         }
 
     public:
@@ -75,9 +72,9 @@ namespace {
         
         void open(string_view name) override
         {
-            indent();
-            print("{}:\n", name);
-            m_what.push(name);
+//            indent();
+//            print("{}:\n", name);
+//            m_what.push(name);
         }
         
         void close() override
@@ -87,8 +84,8 @@ namespace {
         
         void info(string_view key, string_view value) override
         {
-            indent();
-            print("{} = {}\n", key, value);
+//            indent();
+//            print("{} = {}\n", key, value);
         }
     };
 

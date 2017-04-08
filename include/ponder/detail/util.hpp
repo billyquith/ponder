@@ -32,7 +32,6 @@
 #define PONDER_UTIL_HPP
 
 #include <ponder/config.hpp>
-#include <ponder/detail/format.hpp>
 #include <ponder/type.hpp>
 #include <type_traits>
 
@@ -78,7 +77,7 @@ struct convert_impl
 template <typename F>
 Id to_str(F from)
 {
-    return detail::fmt::format("{}", from);
+    return std::to_string(from);
 }
 
 template <typename S>

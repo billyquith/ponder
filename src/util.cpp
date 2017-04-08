@@ -36,10 +36,6 @@
 #   include <strings.h>
 #endif
 
-// Convert to string:
-//  #include "format.h"
-//  http://zverovich.net/2013/09/07/integer-to-string-conversion-in-cplusplus.html
-
 // Convert from string:
 //  http://tinodidriksen.com/2010/02/16/cpp-convert-string-to-int-speed/
 
