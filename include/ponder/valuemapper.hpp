@@ -39,6 +39,15 @@
 #include <ponder/errors.hpp>
 #include <ponder/detail/util.hpp>
 
+/**
+ * \namespace ponder_ext
+ * \brief Ponder user extendable namespace.
+ * 
+ * C++ only allows specialisation within the same namespace as the type you 
+ * are extending. To avoid clashes with the ponder namespace we use `ponder_ext` 
+ * to provide a safe place to place custom specialisations.
+ * \see ValueMapper.
+ */
 
 namespace ponder_ext
 {

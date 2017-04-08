@@ -30,8 +30,10 @@
 
 #include <ponder/detail/util.hpp>
 
-#if !defined(WIN32) || defined(__MINGW32__)
-   #include <strings.h>
+#ifdef _MSC_VER
+#   include <string.h>
+#else
+#   include <strings.h>
 #endif
 
 // Convert to string:
@@ -46,7 +48,10 @@ namespace detail {
 
 static inline int stricmp(const char* a, const char* b)
 {
-#if defined(WIN32) && !defined(__MINGW32__)
+    // MSVC is the odd one out.
+    // POSIX: http://www.unix.com/man-page/POSIX/3posix/strcasecmp/
+    // MinGW uses POSIX and non-MS compiler.
+#ifdef _MSC_VER
     return _strcmpi(a, b);
 #else
     return strcasecmp(a, b);

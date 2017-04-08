@@ -233,8 +233,8 @@ namespace detail
  * \endcode
  */
 #define PONDER_POLYMORPHIC() \
-    public: virtual const char* ponderClassId() const \
-        {return ponder::detail::staticTypeId(this);} \
+    public: \
+        virtual const char* ponderClassId() const {return ponder::detail::staticTypeId(this);} \
     private:
 
 } // namespace ponder

@@ -468,7 +468,7 @@ class MemoryBuffer : private Allocator, public Buffer<T> {
   T data_[SIZE];
 
   // Free memory allocated by the buffer.
-  void free() {
+  void Free() {
     if (this->ptr_ != data_) this->deallocate(this->ptr_, this->capacity_);
   }
 
@@ -478,7 +478,7 @@ class MemoryBuffer : private Allocator, public Buffer<T> {
  public:
   explicit MemoryBuffer(const Allocator &alloc = Allocator())
       : Allocator(alloc), Buffer<T>(data_, SIZE) {}
-  ~MemoryBuffer() { free(); }
+  ~MemoryBuffer() { Free(); }
 
 #if FMT_USE_RVALUE_REFERENCES
  private:
@@ -507,7 +507,7 @@ class MemoryBuffer : private Allocator, public Buffer<T> {
 
   MemoryBuffer &operator=(MemoryBuffer &&other) {
     assert(this != &other);
-    free();
+    Free();
     move(other);
     return *this;
   }

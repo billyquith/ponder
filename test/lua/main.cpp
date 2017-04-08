@@ -124,6 +124,8 @@ namespace lib
         
         Obj* retPtr() { return &o; }
         void passPtr(Obj *po) {}
+        
+        static const char* getString() { return "blah"; }
     };
     
     struct Dummy
@@ -189,6 +191,7 @@ namespace lib
             .function("len", &Types::len)
             .function("retp", &Types::retPtr, policy::ReturnInternalRef())
             .function("passp", &Types::passPtr)
+            .function("getStr", &Types::getString)
             ;
 
         ponder::Class::declare<Dummy>()
@@ -317,9 +320,12 @@ int main()
     
     //------------------------------------------------------------------
     
+    // Types
     LUA_PASS("assert(type(Types) == 'userdata')");
     LUA_PASS("x = Types.len('two'); assert(type(x) == 'number' and x == 3)");
     LUA_PASS("assert(Types.len('1234567890') ~= 11)");
+    
+    LUA_PASS("assert(Types.getStr() == 'blah')");
 
     //------------------------------------------------------------------
 
