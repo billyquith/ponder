@@ -93,6 +93,8 @@ using fmt::internal::Arg;
 // Disable deprecation warning for strerror. The latter is not called but
 // MSVC fails to detect it.
 # pragma warning(disable: 4996)
+# pragma warning(disable: 4061)  // enum is not explicitly handled by a case label
+# pragma warning(disable: 4774)  // format string expected in argument 3 is not a string literal
 #endif
 
 // Dummy implementations of strerror_r and strerror_s called if corresponding
@@ -458,7 +460,9 @@ class BasicArgFormatter : public ArgVisitor<Impl, void> {
     } else {
       out = writer_.grow_buffer(1);
     }
-    *out = internal::CharTraits<Char>::cast(value);
+    if (value < 0 || value > WCHAR_MAX)
+        FMT_THROW(FormatError("invalid value for char"));
+    *out = internal::CharTraits<Char>::cast(static_cast<wchar_t>(value));
   }
 
   void visit_string(Arg::StringValue<char> value) {

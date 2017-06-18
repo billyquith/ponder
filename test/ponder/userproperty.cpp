@@ -67,19 +67,20 @@ TEST_CASE("Ponder has user properties")
 {
     const ponder::Class& metaclass = ponder::classByType<UserPropertyTest::MyClass>();
     
-    const ponder::UserProperty* property =
-        static_cast<const ponder::UserProperty*>(&metaclass.property("prop"));
+    const ponder::Property* property = &metaclass.property("prop");
     
     IS_TRUE(property->kind() == ponder::ValueKind::User);
-    IS_TRUE(property->getClass() == ponder::classByType<UserPropertyTest::MyType>());
     
-    SECTION("properties can be got")
+    IS_TRUE(static_cast<const ponder::UserProperty*>(property)->getClass()
+            == ponder::classByType<UserPropertyTest::MyType>());
+    
+    SECTION("propery values can be got")
     {
         REQUIRE(property->get(UserPropertyTest::MyClass(-1)).to<UserPropertyTest::MyType>().x == -1);
         REQUIRE(property->get(UserPropertyTest::MyClass(20)).to<UserPropertyTest::MyType>().x == 20);
     }
     
-    SECTION("properies can be set")
+    SECTION("property values can be set")
     {
         UserPropertyTest::MyClass object1(1);
         UserPropertyTest::MyClass object2(10);
@@ -89,6 +90,16 @@ TEST_CASE("Ponder has user properties")
         // reverse order on purpose (to exhibit memory corruptions)
         REQUIRE(property->get(object2).to<UserPropertyTest::MyType>().x == 20);
         REQUIRE(property->get(object1).to<UserPropertyTest::MyType>().x ==  2);
+    }
+    
+    SECTION("user properties wrap user objects")
+    {
+        UserPropertyTest::MyClass object1(11);
+        property->set(object1, UserPropertyTest::MyType(22));
+
+        auto uobj = static_cast<const ponder::UserProperty*>(property)->getObject(object1);
+        
+        IS_TRUE(uobj.cref<UserPropertyTest::MyClass>().prop.x == object1.prop.x);
     }
 }
 

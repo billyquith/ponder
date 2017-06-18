@@ -28,7 +28,6 @@
 ****************************************************************************/
 
 
-
 namespace ponder
 {
 namespace detail
@@ -89,6 +88,13 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
 {
     if (!m_accessor.set(object.get<typename A::ClassType>(), value))
         PONDER_ERROR(ForbiddenWrite(name()));
+}
+
+template <typename A>
+UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
+{
+    return ToUserObject<A::Traits::isRef>::get(
+                    m_accessor.get(objectInstance.get<typename A::ClassType>()));
 }
 
 template <typename A>

@@ -29,11 +29,32 @@
 #ifndef PONDER_USES_LUA_HPP
 #define PONDER_USES_LUA_HPP
 
+/**
+ * \file
+ * \brief This file contains the user Lua API for Ponder
+ */
+
 #include <ponder/class.hpp>
+
+extern "C" {
+#include <lua.h>
+#include <lauxlib.h>
+}
+
+/**
+ * \namespace ponder::lua
+ * \brief Contains Ponder Lua support public API.
+ *
+ * \namespace ponder::lua::detail
+ * \brief Ponder Lua support hidden implementation details.
+ *
+ * \namespace ponder::lua::impl
+ * \brief Ponder Lua support hidden implementation details.
+ */
 
 namespace ponder {
 namespace lua {
-    
+
 /**
  * \brief Expose a single Ponder metaclass to a Lua state
  *
@@ -89,6 +110,20 @@ void expose(lua_State *L, const IdRef exposeName)
     detail::Exposer<T>::exposeType(L, exposeName);
 }
 
+/**
+ * \brief Push a copy of a UserObject onto the Lua stack
+ *
+ * You choose whether to copy or reference an object. E.g.
+ * \code
+ * pushUserObject(L, val.cref<UserObject>());  // reference
+ * pushUserObject(L, val.to<UserObject>());    // copy
+ * \endcode
+ *
+ * \param L Lua state to use.
+ * \param uobj The UserObject to copy.
+ * \return Number of items pushed onto the Lua stack
+ */
+int pushUserObject(lua_State *L, const UserObject& uobj);
     
 /**
  * \brief Expose all existing Ponder registered objects to a Lua state
@@ -108,37 +143,17 @@ bool runString(lua_State *L, const char *luaCode);
 #ifdef PONDER_USES_LUA_IMPL
 
 #include <ponder/uses/runtime.hpp>
+#include <ponder/uses/detail/lua.hpp>
 
 #define _PONDER_LUA_METATBLS "_ponder_meta"
 #define _PONDER_LUA_INSTTBLS "_instmt"
-
-namespace ponder_ext {
-
-int pushUserObject(lua_State *L, const UserObject& uobj)
-{
-    Class const& cls = uobj.getClass();
-    void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
-    new(ud) UserObject(uobj);
-    
-    // set instance metatable
-    lua_pushglobaltable(L);                     // +1   _G
-    lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
-    lua_rawget(L, -2);                          // 0 -+ _G.META
-    lua_pushstring(L, cls.name().data());       // +1
-    lua_rawget(L, -2);                          // 0 -+ _G_META.MT
-    lua_setmetatable(L, -4);                    // -1
-    lua_pop(L, 2);
-    return 1;
-}
-
-} // namespace ponder_ext
 
 namespace ponder {
 namespace lua {
 namespace impl {
     
 namespace fmt = ponder::detail::fmt;
-    
+
 // push a Ponder value onto the Lua state stack
 static int pushValue(lua_State *L, const ponder::Value& val,
                      policy::ReturnKind retPolicy = policy::ReturnKind::Copy)
@@ -446,6 +461,23 @@ void expose(lua_State *L, const Enum& enm, const IdRef name)
         lua_settable(L, -3);
     }
     lua_setglobal(L, id::c_str(name));
+}
+
+int pushUserObject(lua_State *L, const UserObject& uobj)
+{
+    Class const& cls = uobj.getClass();
+    void *ud = lua_newuserdata(L, sizeof(UserObject));  // +1
+    new(ud) UserObject(uobj);
+    
+    // set instance metatable
+    lua_pushglobaltable(L);                     // +1   _G
+    lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
+    lua_rawget(L, -2);                          // 0 -+ _G.META
+    lua_pushstring(L, cls.name().data());       // +1
+    lua_rawget(L, -2);                          // 0 -+ _G_META.MT
+    lua_setmetatable(L, -4);                    // -1
+    lua_pop(L, 2);
+    return 1;
 }
 
 bool runString(lua_State *L, const char *luaCode)

@@ -32,6 +32,12 @@
 #include <ponder/uses/detail/runtime.hpp>
 #include <ponder/uses/detail/lua.hpp>
 
+/**
+ * \namespace ponder::uses
+ * \brief Uses for Ponder.
+ * Code within this namespace uses the types registered with Ponder for various purposes.
+ */
+
 namespace ponder {
 namespace uses {
 

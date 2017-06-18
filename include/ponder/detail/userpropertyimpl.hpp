@@ -84,6 +84,11 @@ protected:
      */
     void setValue(const UserObject& object, const Value& value) const override;
 
+    /**
+    * \see UserProperty::getObject
+    */
+    UserObject getObject(const UserObject& parentInstance) const override;
+
 private:
 
     A m_accessor; ///< Object used to access the actual C++ property

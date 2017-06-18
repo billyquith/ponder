@@ -31,6 +31,16 @@
 #ifndef PONDER_TYPE_HPP
 #define PONDER_TYPE_HPP
 
+/**
+ * \namespace ponder
+ * \brief Root namespace that encapsulates all of Ponder.
+ *
+ * \namespace ponder::detail
+ * \brief Ponder hidden implementation details.
+ *
+ * \namespace ponder::policy
+ * \brief Ponder policy options.
+ */
 
 namespace ponder {
     
