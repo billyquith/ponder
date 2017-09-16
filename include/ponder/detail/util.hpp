@@ -79,11 +79,11 @@ Id to_str(F from)
 {
     return std::to_string(from);
 }
-
-template <typename S>
-struct convert_impl <Id, S>
+    
+template <typename F>
+struct convert_impl <Id, F>
 {
-    Id operator () (const S& from)
+    Id operator () (const F& from)
     {
         return detail::to_str(from);
     }
@@ -116,8 +116,8 @@ PONDER_API bool conv(const String& from, double& to);
 template <typename T>
 struct convert_impl <T, Id,
     typename std::enable_if< (std::is_integral<T>::value || std::is_floating_point<T>::value)
-                              && !std::is_const<T>::value
-                              && !std::is_reference<T>::value >::type >
+                             && !std::is_const<T>::value
+                             && !std::is_reference<T>::value >::type >
 {
     T operator () (const String& from)
     {
@@ -128,10 +128,10 @@ struct convert_impl <T, Id,
     }
 };
 
-template <typename T, typename U>
-T convert(const U& from)
+template <typename T, typename F>
+T convert(const F& from)
 {
-    return convert_impl<T,U>()(from);
+    return convert_impl<T,F>()(from);
 }
 
 // index_sequence

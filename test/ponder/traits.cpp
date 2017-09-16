@@ -723,10 +723,10 @@ TEST_CASE("Lexical cast is used")
         REQUIRE(ponder::detail::convert<ponder::String>(i) == std::to_string(i));
     
         const float f = 108.75f;
-        REQUIRE(ponder::detail::convert<ponder::String>(f) == "108.75");
+        REQUIRE(ponder::detail::convert<ponder::String>(f) == "108.750000");
 
         const double d = 108.125;
-        REQUIRE(ponder::detail::convert<ponder::String>(d) == "108.125");
+        REQUIRE(ponder::detail::convert<ponder::String>(d) == "108.125000");
 
         const bool bt = true, bf = false;
         REQUIRE(ponder::detail::convert<ponder::String>(bt) == "1");
