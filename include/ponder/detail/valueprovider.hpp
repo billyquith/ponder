@@ -71,7 +71,7 @@ struct ValueProviderImpl<T, ValueKind::User>
  * Specialization for pointer to primitive types: use new to allocate objects
  * Here we assume that the caller will take ownership of the returned value
  */
-template <typename T, int Type>
+template <typename T, ValueKind Type>
 struct ValueProviderImpl<T*, Type>
 {
     T* operator()() {return new T;}
