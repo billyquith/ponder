@@ -61,9 +61,9 @@ namespace {
 
         void indent()
         {
-//            auto ind = m_what.size();
-//            while (ind-- > 0)
-//                print("  ");
+            auto ind = m_what.size();
+            while (ind-- > 0)
+                std::printf("  ");
         }
 
     public:
@@ -72,9 +72,9 @@ namespace {
         
         void open(string_view name) override
         {
-//            indent();
-//            print("{}:\n", name);
-//            m_what.push(name);
+            indent();
+            std::printf("%s:\n", name.data());
+            m_what.push(name);
         }
         
         void close() override
@@ -84,8 +84,8 @@ namespace {
         
         void info(string_view key, string_view value) override
         {
-//            indent();
-//            print("{} = {}\n", key, value);
+            indent();
+            std::printf("%s = %s\n", key.data(), value.data());
         }
     };
 
