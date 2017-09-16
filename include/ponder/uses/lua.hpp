@@ -152,8 +152,6 @@ namespace ponder {
 namespace lua {
 namespace impl {
     
-namespace fmt = ponder::detail::fmt;
-
 // push a Ponder value onto the Lua state stack
 static int pushValue(lua_State *L, const ponder::Value& val,
                      policy::ReturnKind retPolicy = policy::ReturnKind::Copy)
@@ -486,7 +484,7 @@ bool runString(lua_State *L, const char *luaCode)
     if (ret == LUA_OK)
         return true;
     
-    impl::fmt::print("Error: {}\n", lua_tostring(L, -1));
+    std::printf("Error: %s\n", lua_tostring(L, -1));
     return false; // failed
 }
 
