@@ -29,7 +29,7 @@
 # set project's name
 project(luatest)
 
-find_package(Lua 5.2 REQUIRED)
+find_package(Lua 5.3 REQUIRED)
 
 # all source files
 set(TEST_SRCS

@@ -39,7 +39,7 @@ extern "C" {
 #include <lualib.h>
 }
 
-static_assert(LUA_VERSION_NUM>=502, "Expecting Lua 5.2");
+static_assert(LUA_VERSION_NUM>=503, "Expecting Lua 5.3");
 
 #define PLDB(X) X
 #define PASSERT(X) if(!(X)) __builtin_trap()
