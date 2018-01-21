@@ -75,7 +75,7 @@ if(DOXYGEN_FOUND)
     endforeach()
 
     # target setup
-    add_custom_target(doc
+    add_custom_target(ponder_docs
         COMMAND ${CMAKE_COMMAND} -E echo_append "Building API Documentation..."
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIGURED_INPUT}
         COMMAND ${CMAKE_COMMAND} -E echo "Done."
