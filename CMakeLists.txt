@@ -199,11 +199,12 @@ add_library(ponder ${PONDER_SRCS})
 target_compile_features(ponder PUBLIC cxx_range_for cxx_variadic_templates) # required
 
 # define the export macro
-if(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)    
     set_target_properties(ponder PROPERTIES DEFINE_SYMBOL PONDER_EXPORTS)
 else()
     add_definitions(-DPONDER_STATIC)
 endif()
+message(STATUS "Ponder as shared lib: ${BUILD_SHARED_LIBS}")
 
 # define d suffix on windows
 if(WIN32)
