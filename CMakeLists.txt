@@ -37,6 +37,8 @@ cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 # set project's name
 project(Ponder)
 
+set(CMAKE_CXX_STANDARD 14)
+
 set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # include project configuration
@@ -194,9 +196,6 @@ configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
-
-# required standard level (needed to pass -std=c++11 to gcc and clang)
-target_compile_features(ponder PUBLIC cxx_range_for cxx_variadic_templates) # required
 
 # define the export macro
 if(BUILD_SHARED_LIBS)    

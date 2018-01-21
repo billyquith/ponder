@@ -86,9 +86,6 @@ link_directories(
 # instruct CMake to build an executable from all of the source files
 add_executable(pondertest ${PONDER_TEST_SRCS})
 
-# required standard level (needed to pass -std=c++11 to gcc and clang)
-target_compile_features(pondertest PRIVATE cxx_range_for cxx_variadic_templates) # required
-
 # last thing we have to do is to tell CMake what libraries our executable needs,
 target_link_libraries(pondertest ponder)
 
