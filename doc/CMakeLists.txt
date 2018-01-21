@@ -37,7 +37,7 @@
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
     # setup variables to be replaced in the source Doxyfile
-    set(DOXYGEN_INPUT_DIR ${CMAKE_SOURCE_DIR})
+    set(DOXYGEN_INPUT_DIR ${PONDER_SOURCE_DIR})
    
     ###################################
     # local documentation
