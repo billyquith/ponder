@@ -36,6 +36,11 @@
 #include <stdexcept>
 #include <algorithm>
 
+#ifdef WIN32
+#undef min
+#undef max
+#endif
+
 namespace ponder {
 namespace detail {
     
