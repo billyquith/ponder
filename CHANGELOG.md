@@ -4,9 +4,11 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
-### 2.3
+## 3.0
 
+- Extensive refactoring of the API.
 - Remove dynamic read/write attribute from properties. (issue #91)
+- Remove TagHolder. (issue #92)
 
 ### 2.2
 
