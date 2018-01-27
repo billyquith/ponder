@@ -184,7 +184,7 @@ class CallHelper
 public:
 
     template<typename F, typename... A, size_t... Is>
-    static Value call(F func, const Args& args, _PONDER_SEQNS::index_sequence<Is...>)
+    static Value call(F func, const Args& args, PONDER__SEQNS::index_sequence<Is...>)
     {
         typedef typename ChooseCallReturner<FPolicies, R>::type CallReturner;
         return CallReturner::value(func(ConvertArgs<A>::convert(args, Is)...));
@@ -198,7 +198,7 @@ class CallHelper<void, FTraits, FPolicies>
 public:
 
     template<typename F, typename... A, size_t... Is>
-    static Value call(F func, const Args& args, _PONDER_SEQNS::index_sequence<Is...>)
+    static Value call(F func, const Args& args, PONDER__SEQNS::index_sequence<Is...>)
     {
         func(ConvertArgs<A>::convert(args,Is)...);
         return Value::nothing;
@@ -217,7 +217,7 @@ template <typename R, typename... A> struct FunctionWrapper<R, std::tuple<A...>>
     template <typename F, typename FTraits, typename FPolicies>
     static Value call(F func, const Args& args)
     {
-        typedef _PONDER_SEQNS::make_index_sequence<sizeof...(A)> ArgEnumerator;
+        typedef PONDER__SEQNS::make_index_sequence<sizeof...(A)> ArgEnumerator;
         return CallHelper<R, FTraits, FPolicies>::template
             call<F, A...>(func, args, ArgEnumerator());
     }

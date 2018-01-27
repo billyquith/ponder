@@ -145,8 +145,8 @@ PONDER_API bool runString(lua_State *L, const char *luaCode);
 #include <ponder/uses/runtime.hpp>
 #include <ponder/uses/detail/lua.hpp>
 
-#define _PONDER_LUA_METATBLS "_ponder_meta"
-#define _PONDER_LUA_INSTTBLS "_instmt"
+#define PONDER__LUA_METATBLS "_ponder_meta"
+#define PONDER__LUA_INSTTBLS "_instmt"
 
 namespace ponder {
 namespace lua {
@@ -340,7 +340,7 @@ static int l_instance_create(lua_State *L)
     
     // set instance metatable
     lua_getmetatable(L, 1);             // +1
-    lua_pushliteral(L, _PONDER_LUA_INSTTBLS);       // +1
+    lua_pushliteral(L, PONDER__LUA_INSTTBLS);       // +1
     lua_rawget(L, -2);                  // -1+1 -> mt
     lua_setmetatable(L, -3);            // -1
     lua_pop(L, 1);
@@ -388,7 +388,7 @@ static void createInstanceMetatable(lua_State *L, const Class& cls)
     lua_rawset(L, -3);                          // -2
 
     lua_pushglobaltable(L);                     // +1
-    lua_pushliteral(L, _PONDER_LUA_METATBLS);    // +1
+    lua_pushliteral(L, PONDER__LUA_METATBLS);    // +1
     lua_rawget(L, -2);                          // 0 -+
     lua_pushstring(L, cls.name().data());       // +1 k
     lua_pushvalue(L, -4);                       // +1 v
@@ -404,13 +404,13 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     
     // ensure _G.META
     lua_pushglobaltable(L);                     // +1
-    lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
+    lua_pushliteral(L, PONDER__LUA_METATBLS);   // +1
     lua_rawget(L, -2);                          // 0 -+
     if (lua_isnil(L, -1))
     {
         // first time
         lua_pop(L, 1);                              // -1 pop nil
-        lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
+        lua_pushliteral(L, PONDER__LUA_METATBLS);   // +1
         lua_createtable(L, 0, 20);                  // +1
         lua_rawset(L, -3);                          // -2 _G[META] = {}
     }
@@ -429,7 +429,7 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     lua_rawset(L, -3);                          // -2 meta.__index = get_class_statics
 
     // create instance metatable. store ref in the class metatable
-    lua_pushliteral(L, _PONDER_LUA_INSTTBLS);   // +1 k
+    lua_pushliteral(L, PONDER__LUA_INSTTBLS);   // +1 k
     createInstanceMetatable(L, cls);            // +1
     lua_rawset(L, -3);                          // -2 meta._inst_ = inst_mt
 
@@ -469,7 +469,7 @@ int pushUserObject(lua_State *L, const UserObject& uobj)
     
     // set instance metatable
     lua_pushglobaltable(L);                     // +1   _G
-    lua_pushliteral(L, _PONDER_LUA_METATBLS);   // +1
+    lua_pushliteral(L, PONDER__LUA_METATBLS);   // +1
     lua_rawget(L, -2);                          // 0 -+ _G.META
     lua_pushstring(L, cls.name().data());       // +1
     lua_rawget(L, -2);                          // 0 -+ _G_META.MT

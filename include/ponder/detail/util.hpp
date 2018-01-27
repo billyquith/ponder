@@ -139,9 +139,9 @@ T convert(const F& from)
 // A pre C++14 version supplied here. MSVC chokes on this but has its own version.
 //
 #ifdef _MSC_VER
-#   define _PONDER_SEQNS std
+#   define PONDER__SEQNS std
 #else
-#   define _PONDER_SEQNS ::ponder::detail
+#   define PONDER__SEQNS ::ponder::detail
 
 template <size_t... Ints>
 struct index_sequence

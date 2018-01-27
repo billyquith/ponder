@@ -154,7 +154,10 @@ struct ReturnMultiple
 };
     
 } // namespace policy
-    
+
+/**
+ * \brief Base class for all supported types.
+ */
 class PONDER_API Type
 {
 public:
