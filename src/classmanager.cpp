@@ -84,6 +84,16 @@ std::size_t ClassManager::count() const
     return m_classes.size();
 }
 
+ClassManager::ClassTable::const_iterator ClassManager::begin() const
+{
+    return m_classes.begin();
+}
+    
+ClassManager::ClassTable::const_iterator ClassManager::end() const
+{
+    return m_classes.end();
+}
+
 const Class& ClassManager::getByIndex(std::size_t index) const
 {
     // Make sure that the index is not out of range

@@ -36,6 +36,11 @@ inline std::size_t classCount()
     return detail::ClassManager::instance().count();
 }
 
+inline const detail::ClassManager& classIterator()
+{
+    return detail::ClassManager::instance();
+}
+
 inline const Class& classByIndex(std::size_t index)
 {
     return detail::ClassManager::instance().getByIndex(index);

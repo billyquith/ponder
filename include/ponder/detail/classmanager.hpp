@@ -50,6 +50,8 @@ namespace detail {
  */
 class PONDER_API ClassManager : public ObserverNotifier
 {
+    typedef std::map<Id, Class*> ClassTable; ///< No need for shared pointers in here, we're the one and only instance holder
+
 public:
 
     /**
@@ -91,6 +93,10 @@ public:
      * \return Number of metaclasses that have been registered
      */
     std::size_t count() const;
+    
+    ClassTable::const_iterator begin() const;
+    
+    ClassTable::const_iterator end() const;
 
     /**
      * \brief Get a metaclass from its global index
@@ -152,7 +158,6 @@ public:
 
 private:
 
-    typedef std::map<Id, Class*> ClassTable; ///< No need for shared pointers in here, we're the one and only instance holder
     ClassTable m_classes; ///< Table storing classes indexed by their ID
 };
 

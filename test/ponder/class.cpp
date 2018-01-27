@@ -285,6 +285,17 @@ TEST_CASE("Class metadata can be retrieved")
         REQUIRE_THROWS_AS(ponder::classByObject(object2), ponder::ClassNotFound);
         REQUIRE_THROWS_AS(ponder::classByObject(&object2), ponder::ClassNotFound);
     }
+    
+    SECTION("iteration")
+    {
+        size_t count = 0;
+        for (auto&& cls : ponder::classIterator())
+        {
+            (void) cls.second->name();
+            ++count;
+        }
+        REQUIRE(count == ponder::classCount());
+    }
 }
 
 

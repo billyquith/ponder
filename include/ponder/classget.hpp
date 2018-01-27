@@ -50,6 +50,8 @@ namespace ponder
  * \return Global metaclass count
  */
 std::size_t classCount();
+    
+const detail::ClassManager& classIterator();
 
 /**
  * \relates Class
