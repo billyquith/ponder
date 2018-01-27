@@ -60,9 +60,9 @@ template <typename T>
 struct ValueProviderImpl<T, ValueKind::User>
 {
     ValueProviderImpl()
-        :   m_value(classByType<T>().construct(Args::empty).template get<T*>())
+        :   m_value(0) //classByType<T>().construct(Args::empty).template get<T*>()) // XXXX
     {}
-    ~ValueProviderImpl() {classByType<T>().destroy(m_value);}
+    ~ValueProviderImpl() {} // {classByType<T>().destroy(m_value);}
     T& operator()() {return *m_value;}
     T* m_value;
 };
