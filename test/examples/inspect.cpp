@@ -30,96 +30,62 @@
 
 #include <ponder/uses/report.hpp>
 
-//! [simple_example]
+//! [inspect_example]
 
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/runtime.hpp>
 #include <iostream>
 
-// An example class for defining a person.
-class Person
+class A
 {
 public:
-
-    // Constructor
-    Person(const std::string& name)
-        : m_name(name)
-        , m_age(0)
-    {}
+    A(int v) : m_value(v) {}
     
-    // getter for name
-    std::string name() const {return m_name;}
-    
-    // getter/setter for age
-    unsigned int age() const {return m_age;}
-    void setAge(unsigned int age) {m_age = age;}
-    
-    // dump info about the person
-    void dump()
-    {
-        std::cout << "Name: " << m_name << ", age: " << m_age << " years old." << std::endl;
-    }
-    
+    int getValue() const { return m_value; }
+        
 private:
-    std::string m_name;
-    unsigned int m_age;
+    int m_value;
 };
 
-// Declare the type to Ponder
-PONDER_TYPE(Person)
+PONDER_TYPE(A)
 
 static void declare()
 {
-    // Declare the class members to Ponder
-    ponder::Class::declare<Person>("Person")
-        .constructor<std::string>()
-        .property("name", &Person::name)
-        .property("age", &Person::age, &Person::setAge)
-        .function("dump", &Person::dump)
+    ponder::Class::declare<A>("A")
+        .constructor<int>()
+        .property("value", &A::getValue)
         ;
 }
 
-// An example of how you might use Ponder:
-static void use()
+static void inspect()
 {
-    // Retrieve the metaclass (containing the member data)
-    const ponder::Class& metaclass = ponder::classByType<Person>();
-    
-    // Use the metaclass to construct a new person named John
-    ponder::runtime::ObjectFactory factory(metaclass);
-    ponder::UserObject john = factory.create("John");
-    
-    // Set John's age
-    john.set("age", 97);
-    
-    // Dump John's info
-    ponder::runtime::call(metaclass.function("dump"), john);
-    
-    // Kill John (not really)
-    factory.destroy(john);
+    for (auto&& cls : ponder::classIterator())
+    {
+        std::cout << "Class " << cls.first << std::endl;
+    }
 }
 
-//! [simple_example]
+//! [inspect_example]
 
-static void reportAll()
-{
-    ponder::uses::reportAll();
-}
+// static void reportAll()
+// {
+//     ponder::uses::reportAll();
+// }
 
-TEST_CASE("simple tests")
+TEST_CASE("inspect types")
 {
     SECTION("intro")
     {
         std::printf("------------------------------------------------------------\n");
         declare();
-        use();
+        inspect();
     }
     
-    SECTION("report")
-    {
-        std::printf("------------------------------------------------------------\n");
-        reportAll();
-    }
+    // SECTION("report")
+    // {
+    //     std::printf("------------------------------------------------------------\n");
+    //     reportAll();
+    // }
 }
 
 

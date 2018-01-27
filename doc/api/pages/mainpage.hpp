@@ -36,7 +36,11 @@ and consistent interface for manipulating your objects outside C++ code.
 
 Here is a simple example of how to use Ponder:
 
-\include eg_intro.cpp
+\snippet simple.cpp simple_example
+
+One way to retrieve the reflected API:
+
+\snippet inspect.cpp inspect_example
 
 \section license_sect License
 

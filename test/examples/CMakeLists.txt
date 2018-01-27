@@ -33,6 +33,7 @@ project(exampletest)
 set(TEST_SRCS
     main.cpp
     simple.cpp
+    inspect.cpp
 )
 
 include_directories(
