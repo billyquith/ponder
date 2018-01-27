@@ -36,7 +36,6 @@
 #include <ponder/classcast.hpp>
 #include <ponder/property.hpp>
 #include <ponder/function.hpp>
-#include <ponder/tagholder.hpp>
 #include <ponder/userobject.hpp>
 #include <ponder/detail/typeid.hpp>
 #include <ponder/detail/dictionary.hpp>
@@ -105,7 +104,7 @@ class ClassVisitor;
  *
  * \sa Enum, TagHolder, ClassBuilder, Function, Property
  */
-class PONDER_API Class : public TagHolder, detail::noncopyable
+class PONDER_API Class : public Type, detail::noncopyable
 {
     /**
      * \brief Structure holding informations about a base metaclass

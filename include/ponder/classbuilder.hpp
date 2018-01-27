@@ -174,27 +174,6 @@ public:
     ClassBuilder<T>& function(IdRef name, F function, P... policies);
 
     /**
-     * \brief Declare a new static tag
-     *
-     * \param id Identifier of the new tag (must be unique within the metaclass)
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    ClassBuilder<T>& tag(const Value& id);
-
-    /**
-     * \brief Declare a new tag with value
-     *
-     * \param id Identifier of the new tag (must be unique within the metaclass)
-     * \param value Value associated to the tag. It can be a static value, or a function
-     *              which will be evaluated each time the tag will be requested
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename U>
-    ClassBuilder<T>& tag(const Value& id, const U& value);
-
-    /**
      * \brief Declare a constructor for the metaclass.
      * 
      * Variable number of parameters can be passed.
@@ -267,7 +246,6 @@ private:
     ClassBuilder<T>& addFunction(Function* function);
 
     Class* m_target; ///< Target metaclass to fill
-    TagHolder* m_currentTagHolder; ///< Last tag holder which has been declared
     Property* m_currentProperty; ///< Last metaproperty which has been declared
     Function* m_currentFunction; ///< Last function which has been declared
 };

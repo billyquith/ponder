@@ -32,11 +32,11 @@
 #define PONDER_PROPERTY_HPP
 
 
-#include <ponder/tagholder.hpp>
-#include <ponder/type.hpp>
+#include <ponder/value.hpp>
 
 namespace ponder
 {
+
 class ClassVisitor;
 
 /**
@@ -47,7 +47,7 @@ class ClassVisitor;
  *
  * \sa SimpleProperty, ArrayProperty, EnumProperty, ObjectProperty
  */
-class PONDER_API Property : public TagHolder
+class PONDER_API Property : public Type
 {
 public:
 

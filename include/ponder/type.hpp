@@ -31,6 +31,8 @@
 #ifndef PONDER_TYPE_HPP
 #define PONDER_TYPE_HPP
 
+#include <ponder/config.hpp>
+
 /**
  * \namespace ponder
  * \brief Root namespace that encapsulates all of Ponder.
@@ -152,6 +154,12 @@ struct ReturnMultiple
 };
     
 } // namespace policy
+    
+class PONDER_API Type
+{
+public:
+    virtual ~Type() {}
+};
     
 } // namespace ponder
 

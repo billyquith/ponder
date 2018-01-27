@@ -76,7 +76,6 @@ set(SRC_HEADERS
     include/ponder/pondertype.hpp
     include/ponder/property.hpp
     include/ponder/simpleproperty.hpp
-    include/ponder/tagholder.hpp
     include/ponder/type.hpp
     include/ponder/userobject.hpp
     include/ponder/userobject.inl
@@ -155,7 +154,6 @@ set(SRC_SOURCE
     src/pondertype.cpp
     src/property.cpp
     src/simpleproperty.cpp
-    src/tagholder.cpp
     src/userobject.cpp
     src/userproperty.cpp
     src/util.cpp

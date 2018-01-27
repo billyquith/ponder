@@ -32,7 +32,6 @@ namespace ponder {
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)
-    , m_currentTagHolder(m_target)
     , m_currentProperty(nullptr)
     , m_currentFunction(nullptr)
 {
@@ -118,30 +117,6 @@ ClassBuilder<T>& ClassBuilder<T>::function(IdRef name, F function, P... policies
 }
 
 template <typename T>
-ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id)
-{
-    return tag(id, Value::nothing);
-}
-
-template <typename T>
-template <typename U>
-ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
-{
-    // Make sure we have a valid tag holder, and the tag doesn't already exists
-    assert(m_currentTagHolder && !m_currentTagHolder->hasTag(id));
-
-    // For the special case of Getter<Value>, the ambiguity between both constructors
-    // cannot be automatically solved, so let's do it manually
-    typedef typename detail::if_c<detail::FunctionTraits<U>::kind != FunctionKind::None,
-                                  std::function<Value (T&)>, Value>::type Type;
-
-    // Add the new tag (override if already exists)
-    m_currentTagHolder->m_tags[id] = detail::Getter<Value>(Type(value));
-
-    return *this;
-}
-
-template <typename T>
 template <typename... A>
 ClassBuilder<T>& ClassBuilder<T>::constructor()
 {
@@ -183,7 +158,6 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
     // Insert the new property
     properties.insert(property->name(), Class::PropertyPtr(property));
 
-    m_currentTagHolder = m_currentProperty = property;
     m_currentFunction = nullptr;
 
     return *this;
@@ -201,7 +175,6 @@ ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
     // Insert the new function
     functions.insert(function->name(), Class::FunctionPtr(function));
 
-    m_currentTagHolder = m_currentFunction = function;
     m_currentProperty = nullptr;
 
     return *this;

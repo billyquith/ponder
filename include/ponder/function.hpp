@@ -35,7 +35,6 @@
 #include <ponder/config.hpp>
 #include <ponder/detail/getter.hpp>
 #include <ponder/args.hpp>
-#include <ponder/tagholder.hpp>
 #include <ponder/type.hpp>
 #include <ponder/value.hpp>
 #include <string>
@@ -54,7 +53,7 @@ class ClassVisitor;
  * Functions are members of metaclasses. Their purpose is to provide detailed information
  * about their prototype.
  */
-class PONDER_API Function : public TagHolder
+class PONDER_API Function : public Type
 {
 public:
 

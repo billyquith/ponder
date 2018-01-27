@@ -57,7 +57,7 @@ namespace PropertyAccessTest
         using namespace std::placeholders;
         
         ponder::Class::declare<MyClass>("PropertyAccessTest::MyClass")
-                
+        
             // ***** implicit - based on the availability of a getter/setter *****
             .property("p8",  &MyClass::get)
             .property("p9",  &MyClass::ref)
