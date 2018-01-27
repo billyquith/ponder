@@ -316,60 +316,60 @@ TEST_CASE("Classes can have properties")
     {
         MyClass object;
 
-        REQUIRE(properties[ 1]->readable(object) == true);
-        REQUIRE(properties[ 2]->readable(object) == true);
-        REQUIRE(properties[ 3]->readable(object) == true);
-        REQUIRE(properties[ 4]->readable(object) == true);
-        REQUIRE(properties[ 5]->readable(object) == true);
-        REQUIRE(properties[ 6]->readable(object) == true);
-        REQUIRE(properties[ 7]->readable(object) == true);
-        REQUIRE(properties[ 8]->readable(object) == true);
-        REQUIRE(properties[ 9]->readable(object) == true);
-        REQUIRE(properties[10]->readable(object) == true);
-        REQUIRE(properties[11]->readable(object) == true);
-        REQUIRE(properties[12]->readable(object) == true);
-        REQUIRE(properties[13]->readable(object) == true);
-        REQUIRE(properties[14]->readable(object) == true);
-        REQUIRE(properties[15]->readable(object) == true);
-        REQUIRE(properties[16]->readable(object) == true);
-        REQUIRE(properties[17]->readable(object) == true);
-        REQUIRE(properties[18]->readable(object) == true);
-        REQUIRE(properties[19]->readable(object) == true);
-        REQUIRE(properties[20]->readable(object) == true);
-        REQUIRE(properties[21]->readable(object) == true);
-        REQUIRE(properties[22]->readable(object) == true);
-        REQUIRE(properties[23]->readable(object) == true);
-        REQUIRE(properties[24]->readable(object) == true);
+        REQUIRE(properties[ 1]->isReadable() == true);
+        REQUIRE(properties[ 2]->isReadable() == true);
+        REQUIRE(properties[ 3]->isReadable() == true);
+        REQUIRE(properties[ 4]->isReadable() == true);
+        REQUIRE(properties[ 5]->isReadable() == true);
+        REQUIRE(properties[ 6]->isReadable() == true);
+        REQUIRE(properties[ 7]->isReadable() == true);
+        REQUIRE(properties[ 8]->isReadable() == true);
+        REQUIRE(properties[ 9]->isReadable() == true);
+        REQUIRE(properties[10]->isReadable() == true);
+        REQUIRE(properties[11]->isReadable() == true);
+        REQUIRE(properties[12]->isReadable() == true);
+        REQUIRE(properties[13]->isReadable() == true);
+        REQUIRE(properties[14]->isReadable() == true);
+        REQUIRE(properties[15]->isReadable() == true);
+        REQUIRE(properties[16]->isReadable() == true);
+        REQUIRE(properties[17]->isReadable() == true);
+        REQUIRE(properties[18]->isReadable() == true);
+        REQUIRE(properties[19]->isReadable() == true);
+        REQUIRE(properties[20]->isReadable() == true);
+        REQUIRE(properties[21]->isReadable() == true);
+        REQUIRE(properties[22]->isReadable() == true);
+        REQUIRE(properties[23]->isReadable() == true);
+        REQUIRE(properties[24]->isReadable() == true);
     }
 
     SECTION("writable")
     {
         MyClass object;
 
-        REQUIRE(properties[ 1]->writable(object) == false);
-        REQUIRE(properties[ 2]->writable(object) == false);
-        REQUIRE(properties[ 3]->writable(object) == true);
-        REQUIRE(properties[ 4]->writable(object) == true);
-        REQUIRE(properties[ 5]->writable(object) == true);
-        REQUIRE(properties[ 6]->writable(object) == false);
-        REQUIRE(properties[ 7]->writable(object) == true);
-        REQUIRE(properties[ 8]->writable(object) == false);
-        REQUIRE(properties[ 9]->writable(object) == true);
-        REQUIRE(properties[10]->writable(object) == false);
-        REQUIRE(properties[11]->writable(object) == false);
-        REQUIRE(properties[12]->writable(object) == true);
-        REQUIRE(properties[13]->writable(object) == true);
-        REQUIRE(properties[14]->writable(object) == true);
-        REQUIRE(properties[15]->writable(object) == false);
-        REQUIRE(properties[16]->writable(object) == false);
-        REQUIRE(properties[17]->writable(object) == true);
-        REQUIRE(properties[18]->writable(object) == false);
-        REQUIRE(properties[19]->writable(object) == true);
-        REQUIRE(properties[20]->writable(object) == true);
-        REQUIRE(properties[21]->writable(object) == true);
-        REQUIRE(properties[22]->writable(object) == false);
-        REQUIRE(properties[23]->writable(object) == false);
-        REQUIRE(properties[24]->writable(object) == true);
+        REQUIRE(properties[ 1]->isWritable() == false);
+        REQUIRE(properties[ 2]->isWritable() == false);
+        REQUIRE(properties[ 3]->isWritable() == true);
+        REQUIRE(properties[ 4]->isWritable() == true);
+        REQUIRE(properties[ 5]->isWritable() == true);
+        REQUIRE(properties[ 6]->isWritable() == false);
+        REQUIRE(properties[ 7]->isWritable() == true);
+        REQUIRE(properties[ 8]->isWritable() == false);
+        REQUIRE(properties[ 9]->isWritable() == true);
+        REQUIRE(properties[10]->isWritable() == false);
+        REQUIRE(properties[11]->isWritable() == false);
+        REQUIRE(properties[12]->isWritable() == true);
+        REQUIRE(properties[13]->isWritable() == true);
+        REQUIRE(properties[14]->isWritable() == true);
+        REQUIRE(properties[15]->isWritable() == false);
+        REQUIRE(properties[16]->isWritable() == false);
+        REQUIRE(properties[17]->isWritable() == true);
+        REQUIRE(properties[18]->isWritable() == false);
+        REQUIRE(properties[19]->isWritable() == true);
+        REQUIRE(properties[20]->isWritable() == true);
+        REQUIRE(properties[21]->isWritable() == true);
+        REQUIRE(properties[22]->isWritable() == false);
+        REQUIRE(properties[23]->isWritable() == false);
+        REQUIRE(properties[24]->isWritable() == true);
     }
 
 

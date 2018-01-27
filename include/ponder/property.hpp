@@ -71,26 +71,18 @@ public:
     ValueKind kind() const;
 
     /**
-     * \brief Check if the property is currently readable for a given object
-     *
-     * \param object Object
+     * \brief Check if the property can be read
      *
      * \return True if the property can be read, false otherwise
-     *
-     * \throw NullObject object is invalid
      */
-    bool readable(const UserObject& object) const;
-
+    virtual bool isReadable() const;
+    
     /**
-     * \brief Check if the property is currently writable for a given object
-     *
-     * \param object Object
+     * \brief Check if the property can be written
      *
      * \return True if the property can be written, false otherwise
-     *
-     * \throw NullObject object is invalid
      */
-    bool writable(const UserObject& object) const;
+    virtual bool isWritable() const;
 
     /**
      * \brief Get the current value of the property for a given object
@@ -157,26 +149,10 @@ protected:
      */
     virtual void setValue(const UserObject& object, const Value& value) const = 0;
 
-    /**
-     * \brief Check if the property can be read
-     *
-     * \return True if the property can be read, false otherwise
-     */
-    virtual bool isReadable() const;
-
-    /**
-     * \brief Check if the property can be written
-     *
-     * \return True if the property can be written, false otherwise
-     */
-    virtual bool isWritable() const;
-
 private:
 
     Id m_name; ///< Name of the property
     ValueKind m_type; ///< Type of the property
-    detail::Getter<bool> m_readable; ///< Accessor to get the readable state of the property
-    detail::Getter<bool> m_writable; ///< Accessor to get the writable state of the property
 };
 
 } // namespace ponder

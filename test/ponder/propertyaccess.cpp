@@ -57,19 +57,7 @@ namespace PropertyAccessTest
         using namespace std::placeholders;
         
         ponder::Class::declare<MyClass>("PropertyAccessTest::MyClass")
-        
-            // ***** constant value *****
-            .property("p0", &MyClass::p).readable(false).writable(true)
-            .property("p1", &MyClass::p).readable(true).writable(false)
-            .property("p2", &MyClass::p).readable(false).writable(false)
-        
-            // ***** function *****
-            .property("p3", &MyClass::p).readable(&MyClass::b1)
-            .property("p4", &MyClass::p).readable(&MyClass::b2)
-            .property("p5", &MyClass::p).readable(std::bind(&MyClass::b1, _1))
-            .property("p6", &MyClass::p).readable(&MyClass::m_b)
-            .property("p7", &MyClass::p).readable(std::function<bool (MyClass&)>(&MyClass::m_b))
-        
+                
             // ***** implicit - based on the availability of a getter/setter *****
             .property("p8",  &MyClass::get)
             .property("p9",  &MyClass::ref)
@@ -95,56 +83,22 @@ TEST_CASE("Properties can be accessed")
     
     SECTION("readableImplicit")
     {
-        REQUIRE(metaclass->property("p8").readable(object_t) == true);
-        REQUIRE(metaclass->property("p8").readable(object_f) == true);
-        REQUIRE(metaclass->property("p9").readable(object_t) == true);
-        REQUIRE(metaclass->property("p9").readable(object_f) == true);
-        REQUIRE(metaclass->property("p10").readable(object_t) == true);
-        REQUIRE(metaclass->property("p10").readable(object_f) == true);
-    }
-
-    SECTION("readableStatic")
-    {
-        REQUIRE(metaclass->property("p0").readable(object_t) == false);
-        REQUIRE(metaclass->property("p0").readable(object_f) == false);
-        REQUIRE(metaclass->property("p1").readable(object_t) == true);
-        REQUIRE(metaclass->property("p1").readable(object_f) == true);
-        REQUIRE(metaclass->property("p2").readable(object_t) == false);
-        REQUIRE(metaclass->property("p2").readable(object_f) == false);
-        REQUIRE(metaclass->property("p3").readable(object_t) == true);
-        REQUIRE(metaclass->property("p3").readable(object_f) == true);
-        REQUIRE(metaclass->property("p4").readable(object_t) == false);
-        REQUIRE(metaclass->property("p4").readable(object_f) == false);
-        REQUIRE(metaclass->property("p5").readable(object_t) == true);
-        REQUIRE(metaclass->property("p5").readable(object_f) == true);
-    }
-
-    SECTION("readableDynamic")
-    {
-        REQUIRE(metaclass->property("p6").readable(object_t) == true);
-        REQUIRE(metaclass->property("p6").readable(object_f) == false);
-        REQUIRE(metaclass->property("p7").readable(object_t) == true);
-        REQUIRE(metaclass->property("p7").readable(object_f) == false);
+        REQUIRE(metaclass->property("p8").isReadable() == true);
+        REQUIRE(metaclass->property("p8").isReadable() == true);
+        REQUIRE(metaclass->property("p9").isReadable() == true);
+        REQUIRE(metaclass->property("p9").isReadable() == true);
+        REQUIRE(metaclass->property("p10").isReadable() == true);
+        REQUIRE(metaclass->property("p10").isReadable() == true);
     }
 
     SECTION("writableImplicit")
     {
-        REQUIRE(metaclass->property("p8").writable(object_t) == false);
-        REQUIRE(metaclass->property("p8").writable(object_f) == false);
-        REQUIRE(metaclass->property("p9").writable(object_t) == true);
-        REQUIRE(metaclass->property("p9").writable(object_f) == true);
-        REQUIRE(metaclass->property("p10").writable(object_t) == true);
-        REQUIRE(metaclass->property("p10").writable(object_f) == true);
+        REQUIRE(metaclass->property("p8").isWritable() == false);
+        REQUIRE(metaclass->property("p8").isWritable() == false);
+        REQUIRE(metaclass->property("p9").isWritable() == true);
+        REQUIRE(metaclass->property("p9").isWritable() == true);
+        REQUIRE(metaclass->property("p10").isWritable() == true);
+        REQUIRE(metaclass->property("p10").isWritable() == true);
     }
-
-    SECTION("writableStatic")
-    {
-        REQUIRE(metaclass->property("p0").writable(object_t) == true);
-        REQUIRE(metaclass->property("p0").writable(object_f) == true);
-        REQUIRE(metaclass->property("p1").writable(object_t) == false);
-        REQUIRE(metaclass->property("p1").writable(object_f) == false);
-        REQUIRE(metaclass->property("p2").writable(object_t) == false);
-        REQUIRE(metaclass->property("p2").writable(object_f) == false);
-    }    
 }
 

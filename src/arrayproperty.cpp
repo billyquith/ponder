@@ -59,7 +59,7 @@ bool ArrayProperty::dynamic() const
 std::size_t ArrayProperty::size(const UserObject& object) const
 {
     // Check if the property is readable
-    if (!readable(object))
+    if (!isReadable())
         PONDER_ERROR(ForbiddenRead(name()));
 
     return getSize(object);
@@ -72,7 +72,7 @@ void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the property is writable
-    if (!writable(object))
+    if (!isWritable())
         PONDER_ERROR(ForbiddenWrite(name()));
 
     setSize(object, newSize);
@@ -81,7 +81,7 @@ void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
 Value ArrayProperty::get(const UserObject& object, std::size_t index) const
 {
     // Check if the property is readable
-    if (!readable(object))
+    if (!isReadable())
         PONDER_ERROR(ForbiddenRead(name()));
 
     // Make sure that the index is not out of range
@@ -95,7 +95,7 @@ Value ArrayProperty::get(const UserObject& object, std::size_t index) const
 void ArrayProperty::set(const UserObject& object, std::size_t index, const Value& value) const
 {
     // Check if the property is writable
-    if (!writable(object))
+    if (!isWritable())
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
@@ -113,7 +113,7 @@ void ArrayProperty::insert(const UserObject& object, std::size_t before, const V
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the property is writable
-    if (!writable(object))
+    if (!isWritable())
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
@@ -131,7 +131,7 @@ void ArrayProperty::remove(const UserObject& object, std::size_t index) const
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the property is writable
-    if (!writable(object))
+    if (!isWritable())
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range

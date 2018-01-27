@@ -4,6 +4,10 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
+### 2.3
+
+- Remove dynamic read/write attribute from properties. (issue #91)
+
 ### 2.2
 
 - Removed dependency on cppformat (issue #59)

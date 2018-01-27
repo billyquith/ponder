@@ -142,52 +142,6 @@ ClassBuilder<T>& ClassBuilder<T>::tag(const Value& id, const U& value)
 }
 
 template <typename T>
-ClassBuilder<T>& ClassBuilder<T>::readable(bool value)
-{
-    // Make sure we have a valid property
-    assert(m_currentProperty != nullptr);
-
-    m_currentProperty->m_readable = detail::Getter<bool>(value);
-
-    return *this;
-}
-
-template <typename T>
-template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::readable(F function)
-{
-    // Make sure we have a valid property
-    assert(m_currentProperty != nullptr);
-
-    m_currentProperty->m_readable = detail::Getter<bool>(std::function<bool (T&)>(function));
-
-    return *this;
-}
-
-template <typename T>
-ClassBuilder<T>& ClassBuilder<T>::writable(bool value)
-{
-    // Make sure we have a valid property
-    assert(m_currentProperty != nullptr);
-
-    m_currentProperty->m_writable = detail::Getter<bool>(value);
-
-    return *this;
-}
-
-template <typename T>
-template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::writable(F function)
-{
-    // Make sure we have a valid property
-    assert(m_currentProperty != nullptr);
-
-    m_currentProperty->m_writable = detail::Getter<bool>(std::function<bool (T&)>(function));
-
-    return *this;
-}
-
-template <typename T>
 template <typename... A>
 ClassBuilder<T>& ClassBuilder<T>::constructor()
 {

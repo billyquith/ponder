@@ -195,52 +195,6 @@ public:
     ClassBuilder<T>& tag(const Value& id, const U& value);
 
     /**
-     * \brief Set the readable state of the current property with a static value
-     *
-     * \param value True to set the current property as readable, false otherwise
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    ClassBuilder<T>& readable(bool value);
-
-    /**
-     * \brief Set the readable state of the current property with a dynamic value
-     *
-     * function can be any C++ callable type, and will be called to return the
-     * readable state of the property each time it is requested. This way, the readable
-     * state of a property can depend on metaclass instances.
-     *
-     * \param function Function to call to get the readable state of the property
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F>
-    ClassBuilder<T>& readable(F function);
-
-    /**
-     * \brief Set the writable state of the current property with a static value
-     *
-     * \param value True to set the current property as writable, false otherwise
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    ClassBuilder<T>& writable(bool value);
-
-    /**
-     * \brief Set the writable state of the current property with a dynamic value
-     *
-     * function can be any C++ callable type, and will be called to return the
-     * writable state of the property each time it is requested. This way, the writable
-     * state of a property can depend on metaclass instances.
-     *
-     * \param function Function to call to get the writable state of the property
-     *
-     * \return Reference to this, in order to chain other calls
-     */
-    template <typename F>
-    ClassBuilder<T>& writable(F function);
-
-    /**
      * \brief Declare a constructor for the metaclass.
      * 
      * Variable number of parameters can be passed.
