@@ -28,13 +28,12 @@
 
 #include "test.hpp"
 
-#include <ponder/uses/report.hpp>
-
-//! [inspect_example]
-
+//#include <ponder/uses/report.hpp>
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/runtime.hpp>
 #include <iostream>
+
+//! [inspect_example]
 
 class A
 {
@@ -57,6 +56,7 @@ static void declare()
         ;
 }
 
+//! [classIterator]
 static void inspect()
 {
     for (auto&& cls : ponder::classIterator())
@@ -64,6 +64,7 @@ static void inspect()
         std::cout << "Class " << cls.first << std::endl;
     }
 }
+//! [classIterator]
 
 //! [inspect_example]
 

@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 
+//! \file classget.hpp
 
 #ifndef PONDER_CLASSGET_HPP
 #define PONDER_CLASSGET_HPP
@@ -43,14 +44,22 @@
 namespace ponder
 {
 /**
- * \relates Class
- *
  * \brief Get the total number of existing metaclasses
+ *
+ * \relates Class
  *
  * \return Global metaclass count
  */
 std::size_t classCount();
     
+/**
+ * \brief Get an iterator that can be used to iterate over all registered classes
+ *
+ * \relates Class
+ * \snippet inspect.cpp classIterator
+ *
+ * \return Class iterator
+ */
 const detail::ClassManager& classIterator();
 
 /**
