@@ -124,7 +124,7 @@ set(SRC_HEADERS
     include/ponder/qt/qthelper.hpp
     include/ponder/qt/qtmapper.hpp
     include/ponder/qt/qtsimpleproperty.hpp
-    include/ponder/qt/qvector.hpp        
+    include/ponder/qt/qvector.hpp
     # Uses
     include/ponder/uses/uses.hpp
     include/ponder/uses/report.hpp
@@ -196,7 +196,7 @@ configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
 add_library(ponder ${PONDER_SRCS})
 
 # define the export macro
-if(BUILD_SHARED_LIBS)    
+if(BUILD_SHARED_LIBS)
     set_target_properties(ponder PROPERTIES DEFINE_SYMBOL PONDER_EXPORTS)
 else()
     add_definitions(-DPONDER_STATIC)
@@ -220,12 +220,6 @@ if(BUILD_TEST)
     enable_testing()
     add_subdirectory(test)
 endif()
-
-###############################
-# uses
-###############################
-
-add_subdirectory(uses)
 
 ###############################
 # doc
