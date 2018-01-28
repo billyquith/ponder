@@ -9,6 +9,7 @@ Ponder Changelog
 - Extensive refactoring of the API.
 - Remove dynamic read/write attribute from properties. (issue #91)
 - Remove TagHolder. (issue #92)
+- Removed `ponder::classByIndex()`. Use `ponder::classIterator()` instead.
 
 ### 2.2
 
@@ -74,7 +75,7 @@ Ponder Changelog
 
 #### 1.0.2
 
-- Moved to Catch for unit testing. 
+- Moved to Catch for unit testing.
 
 ## 1.0
 

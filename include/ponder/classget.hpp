@@ -63,22 +63,6 @@ std::size_t classCount();
 const detail::ClassManager& classIterator();
 
 /**
- * \brief Get a metaclass from its global index
- *
- * The purpose of this function is to provide a way to iterate through
- * all existing metaclasses. \sa classCount
- *
- * \relates Class
- *
- * \param index Index of the metaclass to get
- *
- * \return Reference to the index-th metaclass
- *
- * \throw OutOfRange index is out of range
- */
-const Class& classByIndex(std::size_t index);
-
-/**
  * \brief Get a metaclass from its name
  *
  * \note Automated registration does not occur when using this lookup call (since we don't

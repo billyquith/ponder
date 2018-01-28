@@ -41,11 +41,6 @@ inline const detail::ClassManager& classIterator()
     return detail::ClassManager::instance();
 }
 
-inline const Class& classByIndex(std::size_t index)
-{
-    return detail::ClassManager::instance().getByIndex(index);
-}
-
 inline const Class& classByName(IdRef name)
 {
     // Note: detail::typeId() not used here so no automated registration.
