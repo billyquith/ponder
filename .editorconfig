@@ -1,0 +1,12 @@
+# Configuration file for EditorConfig
+# More information is available under http://EditorConfig.org
+
+# Ignore any other files further up in the file system
+root = true
+
+# Configuration for all files
+[*]
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
