@@ -214,13 +214,10 @@ PONDER_TYPE(FunctionKind);
 
 static void reportTo(Reporter &rep)
 {
-    auto const& clmgr = detail::ClassManager::instance();
-    auto nbClasses = clmgr.count();
-    
     ReportVisitor repVis(rep);
-    for (auto ci = 0; ci < nbClasses; ++ci)
+    for (auto const& clsIt : classIterator())
     {
-        auto const& cls = clmgr.getByIndex(ci);
+        auto const& cls = *clsIt.second;
         rep.open("Class");
         rep.info("name", cls.name());
         cls.visit(repVis);

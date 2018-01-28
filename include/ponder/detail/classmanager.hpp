@@ -50,7 +50,8 @@ namespace detail {
  */
 class PONDER_API ClassManager : public ObserverNotifier
 {
-    typedef std::map<Id, Class*> ClassTable; ///< No need for shared pointers in here, we're the one and only instance holder
+    // No need for shared pointers in here, we're the one and only instance holder
+    typedef std::map<Id, Class*> ClassTable;
 
 public:
 
@@ -94,23 +95,23 @@ public:
      */
     std::size_t count() const;
     
+    /**
+     * \brief Begin iterator for iterating over contained classes
+     *
+     * \return An iterator
+     *
+     * \see classIterator()
+     */
     ClassTable::const_iterator begin() const;
     
-    ClassTable::const_iterator end() const;
-
     /**
-     * \brief Get a metaclass from its global index
+     * \brief End iterator for iterating over contained classes
      *
-     * This function, together with ClassManager::count, provides a way to iterate through
-     * all the metaclasses that have been declared.
+     * \return An iterator
      *
-     * \param index Global index of the metaclass to get
-     *
-     * \return Reference to the index-th metaclass
-     *
-     * \throw OutOfRange index is out of range
+     * \see classIterator()
      */
-    const Class& getByIndex(std::size_t index) const;
+    ClassTable::const_iterator end() const;
 
     /**
      * \brief Get a metaclass from a C++ type

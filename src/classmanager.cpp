@@ -94,18 +94,6 @@ ClassManager::ClassTable::const_iterator ClassManager::end() const
     return m_classes.end();
 }
 
-const Class& ClassManager::getByIndex(std::size_t index) const
-{
-    // Make sure that the index is not out of range
-    if (index >= m_classes.size())
-        PONDER_ERROR(OutOfRange(index, m_classes.size()));
-
-    ClassTable::const_iterator it = m_classes.begin();
-    std::advance(it, index);
-
-    return *it->second;
-}
-
 const Class& ClassManager::getById(IdRef id) const
 {
     ClassTable::const_iterator it = m_classes.find(id);
