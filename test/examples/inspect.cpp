@@ -56,15 +56,15 @@ static void declare()
         ;
 }
 
-//! [classIterator]
 static void inspect()
 {
+    //! [classIterator]
     for (auto&& cls : ponder::classIterator())
     {
         std::cout << "Class " << cls.first << std::endl;
     }
+    //! [classIterator]
 }
-//! [classIterator]
 
 //! [inspect_example]
 

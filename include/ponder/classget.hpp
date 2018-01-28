@@ -58,17 +58,17 @@ std::size_t classCount();
  * \relates Class
  * \snippet inspect.cpp classIterator
  *
- * \return Class iterator
+ * \return Class iterator: `pair<String, Class*>`
  */
 const detail::ClassManager& classIterator();
 
 /**
- * \relates Class
- *
  * \brief Get a metaclass from its global index
  *
  * The purpose of this function is to provide a way to iterate through
  * all existing metaclasses. \sa classCount
+ *
+ * \relates Class
  *
  * \param index Index of the metaclass to get
  *
@@ -79,12 +79,12 @@ const detail::ClassManager& classIterator();
 const Class& classByIndex(std::size_t index);
 
 /**
- * \relates Class
- *
  * \brief Get a metaclass from its name
  *
  * \note Automated registration does not occur when using this lookup call (since we don't
  *       have the object type). Use PONDER_TYPE() registration if you use this.
+ *
+ * \relates Class
  *
  * \param name Name of the metaclass to retrieve (case sensitive)
  *
@@ -95,9 +95,9 @@ const Class& classByIndex(std::size_t index);
 const Class& classByName(IdRef name);
 
 /**
- * \relates Class
- *
  * \brief Get a metaclass from a C++ object
+ *
+ * \relates Class
  *
  * \param object object to get the metaclass of
  *
@@ -109,9 +109,9 @@ template <typename T>
 const Class& classByObject(const T& object);
 
 /**
- * \relates Class
- *
  * \brief Get a metaclass from its C++ type
+ *
+ * \relates Class
  *
  * \return Reference to the metaclass bound to type T
  *
@@ -121,11 +121,11 @@ template <typename T>
 const Class& classByType();
 
 /**
- * \relates Class
- *
  * \brief Get a metaclass from its C++ type
  *
- * \return Pointer to the metaclass bound to type T, or null pointer if no metaclass has 
+ * \relates Class
+ *
+ * \return Pointer to the metaclass bound to type T, or null pointer if no metaclass has
  *         been declared
  */
 template <typename T>
