@@ -36,10 +36,6 @@ set(TEST_SRCS
     inspect.cpp
 )
 
-include_directories(
-    ${PONDER_SOURCE_DIR}/include
-)
-
 link_directories(
     ${PONDER_BINARY_DIR}
 )

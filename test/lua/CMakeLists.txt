@@ -37,7 +37,6 @@ set(TEST_SRCS
 )
 
 include_directories(
-    ${PONDER_SOURCE_DIR}/include
     ${LUA_INCLUDE_DIR}
 )
 
