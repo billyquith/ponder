@@ -60,7 +60,6 @@ QT4_WRAP_CPP(PONDER_TEST_QT_MOC_SRCS functionmapping.hpp propertymapping.hpp)
 
 # include files search paths
 include_directories(
-    ${PONDER_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
 )
 

@@ -70,10 +70,9 @@ set(PONDER_TEST_SRCS
 # find_package(Boost 1.38.0)
 
 # include files search paths
-include_directories(
-    ${PONDER_SOURCE_DIR}/include
-    # ${Boost_INCLUDE_DIRS}
-)
+# include_directories(
+#   ${Boost_INCLUDE_DIRS}
+# )
 
 # no implicit link to boost.test library
 # add_definitions(-DBOOST_TEST_NO_LIB)
