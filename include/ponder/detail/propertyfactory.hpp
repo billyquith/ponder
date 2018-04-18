@@ -421,8 +421,8 @@ struct PropertyFactory3
         typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
 
         return new PropertyType(name,
-            AccessorType(std::bind(accessor1, std::bind(accessor3, _1)),
-                         std::bind(accessor2, std::bind(accessor3, _1), _2)));
+            AccessorType(std::bind(accessor1, std::bind(accessor3, std::placeholders::_1)),
+                         std::bind(accessor2, std::bind(accessor3, std::placeholders::_1), std::placeholders::_2)));
     }
 };
 
