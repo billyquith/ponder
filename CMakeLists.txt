@@ -182,11 +182,6 @@ set(PONDER_SRCS
     ${SRC_SOURCE}
 )
 
-# include files search paths
-include_directories(
-    ${PONDER_SOURCE_DIR}/include
-)
-
 # generate version.hpp
 message("Generate version.hpp")
 configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
@@ -194,6 +189,12 @@ configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
+
+# include files search paths
+target_include_directories(ponder PUBLIC
+    $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
 # define the export macro
 if(BUILD_SHARED_LIBS)
