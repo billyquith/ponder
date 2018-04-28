@@ -24,6 +24,7 @@ deps/include
 deps/lib
 deps/lua-*/src/lua
 deps/lua-*/src/luac
+bd_*/
 
 # Auto-generated documentation files
 doc/egs

@@ -13,11 +13,6 @@ matrix:
       compiler: clang
     - os: linux
       compiler: gcc
-
-env:
-  - BUILD_CONFIG=Debug CFG_SHARED=OFF
-  - BUILD_CONFIG=Release CFG_SHARED=ON
-  - BUILD_CONFIG=Release CFG_SHARED=OFF
       
 install:
   - echo Lang:$LANG. OS:$TRAVIS_OS_NAME. CC:$CC.
@@ -29,24 +24,17 @@ install:
       #if [ -z `brew list | grep doxygen` ]; then brew install doxygen; fi
       if [ -z `brew list | grep cmake` ]; then brew install cmake; fi
       brew outdated cmake || brew upgrade cmake
-      export PROJGEN=Xcode
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get -qq update
       sudo apt-get install -y cmake
       lua -v && which lua
-      export PROJGEN="Unix Makefiles"
     fi
   - ./ci/lua_local.sh
   
-before_script:
-  - cmake --version
-  - mkdir build && cd build
-  - echo "Generating project for $PROJGEN, config $BUILD_CONFIG."
-  - cmake .. -G"$PROJGEN" -DBUILD_TEST=ON -DBUILD_TEST_LUA=ON -DBUILD_SHARED_LIBS=$CFG_SHARED
 script:
-  - cmake --build . --config $BUILD_CONFIG && ctest -C $BUILD_CONFIG -V
+  - ./ci/build.sh
 
 notifications:
   email: false
