@@ -29,7 +29,6 @@ install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get -qq update
       sudo apt-get install -y cmake
-      lua -v && which lua
     fi
   - ./ci/lua_local.sh
   
