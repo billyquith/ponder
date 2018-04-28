@@ -9,5 +9,6 @@ cd lua-5.3.4
 
 case `uname -s` in
 Darwin) make macosx install INSTALL_TOP=../..;;
-*) make linux install INSTALL_TOP=../..;;
+Linux) make linux install INSTALL_TOP=../..;;
+*) echo "Unhandled OS"; exit 1;;
 esac
