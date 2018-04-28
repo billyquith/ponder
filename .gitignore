@@ -12,9 +12,18 @@ Thumbs.db
 *.lib
 *.dll
 *.dylib
+*.o
+*.a
+*.1
 include/ponder/version.hpp
 test/Debug
 test/Release
+
+deps/bin
+deps/include
+deps/lib
+deps/lua-*/src/lua
+deps/lua-*/src/luac
 
 # Auto-generated documentation files
 doc/egs
