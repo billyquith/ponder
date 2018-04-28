@@ -11,7 +11,7 @@ function proj # opts
 {
     [[ -d $BDIR ]] || mkdir $BDIR
     cd $BDIR
-    cmake .. -G"$GEN" "$1"
+    if ! cmake .. -G"$GEN" "$1"; then exit 1; fi
 }
 
 function build_test # configs
@@ -19,8 +19,8 @@ function build_test # configs
     for cfg in $1
     do
         echo "Build and testing config: $cfg"
-        cmake --build . --config $cfg
-        ctest -C $cfg -V
+        if ! cmake --build . --config $cfg; then exit 1; fi
+        if ! ctest -C $cfg -V; then exit 1; fi
     done
     cd ..
 }
