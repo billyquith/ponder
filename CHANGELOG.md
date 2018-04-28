@@ -4,6 +4,10 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
+### Develop
+
+- Cmake project name changed to "ponder" to match namespace (issue #95).
+
 ### 2.2
 
 - Removed dependency on cppformat (issue #59)

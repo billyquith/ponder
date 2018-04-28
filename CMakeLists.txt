@@ -35,7 +35,7 @@ cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 # set project's name
-project(Ponder)
+project(ponder)
 
 set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
