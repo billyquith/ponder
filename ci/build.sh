@@ -2,7 +2,10 @@
 
 case `uname -s` in
 Darwin) if [ ! -z `which ninja` ]; then GEN=Ninja; else GEN=Xcode; fi;;
-Linux) if [ ! -z `which ninja` ]; then GEN=Ninja; else GEN="Unix Makefiles"; fi;;
+Linux)
+    #if [ ! -z `which ninja` ]; then GEN=Ninja; else GEN="Unix Makefiles"; fi
+    GEN="Unix Makefiles"
+    ;;
 esac
 
 cmake --version
