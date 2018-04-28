@@ -29,21 +29,20 @@
 #define PONDER_USES_LUA_IMPL
 #define PONDER_USES_RUNTIME_IMPL
 #include <ponder/class.hpp>
-#include <ponder/detail/format.hpp>
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/lua.hpp>
 #include <list>
+#include <cstdio>
+#include <cmath>
 
 extern "C" {
 #include <lualib.h>
 }
 
-static_assert(LUA_VERSION_NUM==502, "Expecting Lua 5.2");
+static_assert(LUA_VERSION_NUM>=503, "Expecting Lua 5.3");
 
 #define PLDB(X) X
 #define PASSERT(X) if(!(X)) __builtin_trap()
-
-namespace fmt = ponder::detail::fmt;
 
 namespace ponder_ext
 {
@@ -226,16 +225,16 @@ PONDER_TYPE(lib::Parsing)
 
 static bool luaTest(lua_State *L, const char *source, int lineNb, bool success = true)
 {
-    fmt::print("l:{}------------------------------------------------------\n", lineNb);
-    fmt::print("Test{}: {}\n", success ? "" : "(should fail)", source);
+    std::printf("l:%d------------------------------------------------------\n", lineNb);
+    std::printf("Test%s: %s\n", success ? "" : "(should fail)", source);
     const bool ok = ponder::lua::runString(L, source);
     if (ok != success)
     {
-        fmt::print("FAILED");
+        std::printf("FAILED");
         exit(EXIT_FAILURE);
         return false;
     }
-    fmt::print("\n");
+    std::printf("\n");
     return true;
 }
 
@@ -244,7 +243,7 @@ static bool luaTest(lua_State *L, const char *source, int lineNb, bool success =
 
 int main()
 {
-    fmt::print("Lua version {}\n", LUA_VERSION);
+    std::printf("Lua version %s\n", LUA_VERSION);
     
     lua_State *L = luaL_newstate();
     luaopen_base(L);

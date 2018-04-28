@@ -37,7 +37,7 @@ namespace uses {
 /**
  * \brief Expose a single Ponder metaclass to a Lua state
  */
-void reportAll();
+PONDER_API void reportAll();
 
 } // namespace uses
 } // namespace ponder

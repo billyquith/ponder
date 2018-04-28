@@ -29,8 +29,6 @@
 #include "test.hpp"
 
 #include <ponder/uses/report.hpp>
-#include <ponder/detail/format.hpp>
-using namespace ponder::detail::fmt;
 
 //$ eg_begin,name=intro
 
@@ -112,14 +110,14 @@ TEST_CASE("simple tests")
 {
     SECTION("intro")
     {
-        print("------------------------------------------------------------\n");
+        std::printf("------------------------------------------------------------\n");
         declare();
         use();
     }
     
     SECTION("report")
     {
-        print("------------------------------------------------------------\n");
+        std::printf("------------------------------------------------------------\n");
         reportAll();
     }
 }

@@ -72,17 +72,16 @@ bool Value::operator < (const Value& other) const
 std::istream& operator >> (std::istream& stream, Value& value)
 {
     // Use the string conversion
-    Id str;
-    if (stream >> str)
-        value = str;
-
+//    ponder::Id str;
+//    stream >> str;
+//    value = str;
     return stream;
 }
 
 std::ostream& operator << (std::ostream& stream, const Value& value)
 {
     // Use the string conversion
-    return stream << value.to<Id>();
+    return stream; // << value.to<ponder::Id>();
 }
 
 } // namespace ponder

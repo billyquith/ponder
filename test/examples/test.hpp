@@ -2,8 +2,6 @@
 
 #include "../catch.hpp"
 
-#include <ponder/detail/format.hpp>
-
 // see https://github.com/philsquared/Catch/blob/master/docs/tostring.md
 
 // Catch REQUIRE(x == y) converts x & y to strings so it can report errors. This causes

@@ -93,7 +93,6 @@ set(SRC_HEADERS
     include/ponder/detail/enummanager.hpp
     include/ponder/detail/enumpropertyimpl.hpp
     include/ponder/detail/enumpropertyimpl.inl
-    include/ponder/detail/format.hpp
     include/ponder/detail/functionimpl.hpp
     include/ponder/detail/functiontraits.hpp
     include/ponder/detail/getter.hpp
@@ -148,7 +147,6 @@ set(SRC_SOURCE
     src/enumproperty.cpp
     src/error.cpp
     src/errors.cpp
-    src/format.cpp
     src/function.cpp
     src/observer.cpp
     src/observernotifier.cpp

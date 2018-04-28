@@ -62,7 +62,7 @@ namespace lua {
  * \param cls Metaclass instance in Ponder.
  * \param exposeName The name of the class in the Lua state.
  */
-void expose(lua_State *L, const Class& cls, const IdRef exposeName);
+PONDER_API void expose(lua_State *L, const Class& cls, const IdRef exposeName);
 
 /**
  * \brief Expose a single Ponder enumeration to a Lua state
@@ -71,7 +71,7 @@ void expose(lua_State *L, const Class& cls, const IdRef exposeName);
  * \param e Enum instance in Ponder.
  * \param exposeName The name of the class in the Lua state.
  */
-void expose(lua_State *L, const Enum& e, const IdRef exposeName);
+PONDER_API void expose(lua_State *L, const Enum& e, const IdRef exposeName);
 
 namespace detail {
 
@@ -105,7 +105,7 @@ struct Exposer<T, typename std::enable_if<std::is_enum<T>::value>::type>
  * \param exposeName The name of the class in the Lua state.
  */
 template <typename T>
-void expose(lua_State *L, const IdRef exposeName)
+PONDER_API void expose(lua_State *L, const IdRef exposeName)
 {
     detail::Exposer<T>::exposeType(L, exposeName);
 }
@@ -123,7 +123,7 @@ void expose(lua_State *L, const IdRef exposeName)
  * \param uobj The UserObject to copy.
  * \return Number of items pushed onto the Lua stack
  */
-int pushUserObject(lua_State *L, const UserObject& uobj);
+PONDER_API int pushUserObject(lua_State *L, const UserObject& uobj);
     
 /**
  * \brief Expose all existing Ponder registered objects to a Lua state
@@ -132,7 +132,7 @@ int pushUserObject(lua_State *L, const UserObject& uobj);
  */
 // void exposeAll(lua_State *L);
     
-bool runString(lua_State *L, const char *luaCode);
+PONDER_API bool runString(lua_State *L, const char *luaCode);
 
 } // namespace lua
 } // namespace ponder
@@ -152,8 +152,6 @@ namespace ponder {
 namespace lua {
 namespace impl {
     
-namespace fmt = ponder::detail::fmt;
-
 // push a Ponder value onto the Lua state stack
 static int pushValue(lua_State *L, const ponder::Value& val,
                      policy::ReturnKind retPolicy = policy::ReturnKind::Copy)
@@ -486,7 +484,7 @@ bool runString(lua_State *L, const char *luaCode)
     if (ret == LUA_OK)
         return true;
     
-    impl::fmt::print("Error: {}\n", lua_tostring(L, -1));
+    std::printf("Error: %s\n", lua_tostring(L, -1));
     return false; // failed
 }
 

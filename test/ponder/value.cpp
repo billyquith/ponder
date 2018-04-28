@@ -246,7 +246,7 @@ TEST_CASE("Ponder has variant values")
         REQUIRE(doubleValue.to<unsigned long>() ==  1);
         REQUIRE(doubleValue.to<float>() == Approx(1.f).epsilon(1E-5f));
         REQUIRE(doubleValue.to<double>() == Approx(1.).epsilon(1E-5));
-        REQUIRE(doubleValue.to<ponder::String>() ==    "1");
+        REQUIRE(doubleValue.to<ponder::String>() == "1.000000");
         REQUIRE(doubleValue.to<MyEnum>() ==         One);
         REQUIRE_THROWS_AS(doubleValue.to<MyClass>(), ponder::BadType);
 

@@ -6,7 +6,7 @@ Ponder Changelog
 
 ### 2.2
 
-- 
+- Removed dependency on cppformat (issue #59)
 
 #### 2.1.1
 

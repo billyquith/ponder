@@ -84,6 +84,7 @@
 #endif // PONDER_ID_TRAITS_USER
 
 #include "detail/idtraits.hpp"
+#include <cassert>
 
 #endif // PONDER_CONFIG_HPP
 

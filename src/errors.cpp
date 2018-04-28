@@ -31,12 +31,9 @@
 #include <ponder/errors.hpp>
 #include <ponder/class.hpp>
 #include <ponder/detail/util.hpp>
-#include <ponder/detail/format.hpp>
 
 
 namespace ponder {
-
-using ponder::detail::fmt::format;
     
 BadType::BadType(ValueKind provided, ValueKind expected)
 : Error("value of type " + typeName(provided)
@@ -58,8 +55,10 @@ BadArgument::BadArgument(ValueKind provided,
                          ValueKind expected,
                          std::size_t index,
                          IdRef functionName)
-: BadType(format("argument #{} of function {} couldn't be converted from type {} to type {}",
-                 str(index), String(functionName), typeName(provided), typeName(expected)))
+: BadType("argument #" + str(index) +
+          " of function " + String(functionName) +
+          " couldn't be converted from type " + typeName(provided) +
+          " to type " + typeName(expected))
 {
 }
 
