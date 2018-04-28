@@ -37,6 +37,8 @@ cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 # set project's name
 project(ponder)
 
+set(CMAKE_CXX_STANDARD 14)
+
 set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # include project configuration
