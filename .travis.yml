@@ -21,14 +21,14 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update
-      #if [ -z `brew list | grep doxygen` ]; then brew install doxygen; fi
       if [ -z `brew list | grep cmake` ]; then brew install cmake; fi
       brew outdated cmake || brew upgrade cmake
+      #if [ -z `which ninja` ]; then brew install ninja; fi
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get -qq update
-      sudo apt-get install -y cmake
+      sudo apt-get install -y cmake ninja
     fi
   - ./ci/lua_local.sh
   

@@ -11,7 +11,7 @@ function proj # opts
 {
     [[ -d $BDIR ]] || mkdir $BDIR
     cd $BDIR
-    cmake .. -G$GEN "$1"
+    cmake .. -G"$GEN" "$1"
 }
 
 function build_test # configs
