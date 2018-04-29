@@ -212,10 +212,7 @@ public:     // reflection
      *
      * \return Constructor
      */
-    const Constructor* constructor(std::size_t index) const
-    {
-        return m_constructors[index].get();
-    }
+    const Constructor* constructor(std::size_t index) const;
     
     /**
      * \brief Destroy a UserObject instance
@@ -223,10 +220,7 @@ public:     // reflection
      * \param uobj User object to destruct
      * \param destruct True for destruct (placement new), else destroy (new)
      */
-    void destruct(const UserObject &uobj, bool destruct) const
-    {
-        m_destructor(uobj, destruct);
-    }
+    void destruct(const UserObject &uobj, bool destruct) const;
     
     /**
      * \brief Return the total number of functions of this metaclass

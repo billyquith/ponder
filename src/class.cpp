@@ -56,6 +56,16 @@ std::size_t Class::constructorCount() const
     return m_constructors.size();
 }
 
+const Constructor* Class::constructor(std::size_t index) const
+{
+    return m_constructors[index].get();
+}
+
+void Class::destruct(const UserObject &uobj, bool destruct) const
+{
+    m_destructor(uobj, destruct);
+}
+
 std::size_t Class::baseCount() const
 {
     return m_bases.size();
