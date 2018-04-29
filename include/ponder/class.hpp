@@ -27,10 +27,8 @@
 **
 ****************************************************************************/
 
-
 #ifndef PONDER_CLASS_HPP
 #define PONDER_CLASS_HPP
-
 
 #include <ponder/classget.hpp>
 #include <ponder/classcast.hpp>
@@ -45,6 +43,39 @@
 namespace ponder
 {
 
+    class TypeUserDataStore
+    {
+        typedef size_t key_t;
+        typedef detail::Dictionary<Id, IdRef, Value> store_t;
+        typedef std::map<key_t, store_t> class_store_t;
+        class_store_t m_store;
+    public:
+        void addValue(key_t k, IdRef name, const Value& v)
+        {
+            auto it = m_store.find(k);
+            if (it == m_store.end())
+            {
+                auto ret = m_store.insert(class_store_t::value_type(k, store_t()));
+                it = ret.first;
+            }
+            it->second.insert(name, v);
+        }
+        
+        const Value* getValue(key_t k, IdRef name) const
+        {
+            auto it = m_store.find(k);
+            if (it != m_store.end())
+            {
+                auto vit = it->second.findKey(name);
+                if (vit != it->second.end())
+                    return &vit->second;
+            }
+            return nullptr;
+        }
+    };
+    
+    extern TypeUserDataStore g_memberDataStore;
+    
 template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
@@ -104,11 +135,9 @@ class ClassVisitor;
  *
  * \sa Enum, TagHolder, ClassBuilder, Function, Property
  */
-class PONDER_API Class : public Type, detail::noncopyable
+class PONDER_API Class : public Type, detail::NonCopyable
 {
-    /**
-     * \brief Structure holding informations about a base metaclass
-     */
+    // Structure holding informations about a base metaclass
     struct BaseInfo
     {
         const Class* base;
@@ -128,14 +157,14 @@ class PONDER_API Class : public Type, detail::noncopyable
     typedef void (*Destructor)(const UserObject&, bool);
     typedef UserObject (*UserObjectCreator)(void*);
     
-    std::size_t m_sizeof;       ///< Size of the class in bytes.
-    Id m_id;                    ///< Name of the metaclass
-    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
-    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
-    BaseList m_bases;           ///< List of base metaclasses
-    ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor;    ///< Destructor (function able to delete an abstract object)
-    UserObjectCreator m_userObjectCreator; ///< Convert pointer of class instance to UserObject
+    std::size_t m_sizeof;           // Size of the class in bytes.
+    Id m_id;                        // Name of the metaclass
+    FunctionTable m_functions;      // Table of metafunctions indexed by ID
+    PropertyTable m_properties;     // Table of metaproperties indexed by ID
+    BaseList m_bases;               // List of base metaclasses
+    ConstructorList m_constructors; // List of metaconstructors
+    Destructor m_destructor;        // Destructor (function able to delete an abstract object)
+    UserObjectCreator m_userObjectCreator; // Convert pointer of class instance to UserObject
 
 public:     // declaration
 

@@ -38,15 +38,15 @@
 namespace ponder {
 namespace detail {
 
-class noncopyable
+class NonCopyable
 {
 protected:
-    noncopyable() {}
-    ~noncopyable() {}
+    NonCopyable() {}
+    ~NonCopyable() {}
     
 private:
-    noncopyable( const noncopyable& ) = delete;
-    noncopyable& operator=( const noncopyable& ) = delete;
+    NonCopyable( const NonCopyable& ) = delete;
+    NonCopyable& operator=( const NonCopyable& ) = delete;
 };
 
 

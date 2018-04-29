@@ -95,6 +95,7 @@ public:
         const_iterator end() const      { return m_end; }
     };
     
+    // Allow iteration of dictionary without exposing the API.
     Iterator getIterator() const { return Iterator(begin(), end()); }
 
     const_iterator findKey(KEY_REF key) const

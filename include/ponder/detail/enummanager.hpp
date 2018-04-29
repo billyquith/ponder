@@ -51,7 +51,7 @@ namespace detail
  *
  * \sa Enum
  */
-class PONDER_API EnumManager : public ObserverNotifier, detail::noncopyable
+class PONDER_API EnumManager : public ObserverNotifier, detail::NonCopyable
 {
 public:
 

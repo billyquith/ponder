@@ -221,8 +221,6 @@ public:
      */
     bool operator < (const Value& other) const;
 
-public:
-
     /**
      * \brief Special Value instance representing an empty value
      */
