@@ -127,11 +127,12 @@ set(SRC_HEADERS
     include/ponder/qt/qvector.hpp
     # Uses
     include/ponder/uses/uses.hpp
-    include/ponder/uses/report.hpp
+    include/ponder/uses/serialise.hpp
     include/ponder/uses/runtime.hpp
     include/ponder/uses/detail/runtime.hpp
     include/ponder/uses/lua.hpp
     include/ponder/uses/detail/lua.hpp
+    include/ponder/uses/report.hpp
 )
 
 set(SRC_SOURCE
