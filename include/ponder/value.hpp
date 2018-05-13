@@ -147,16 +147,6 @@ public:
     const T& cref() const;
 
     /**
-     * \brief Cast operator to implicitly convert the value to a type T
-     *
-     * \return Value converted to T
-     *
-     * \throw BadType the stored value is not convertible to T
-     */
-    template <typename T>
-    operator T() const;     // XXXX remove? behaviour unclear.
-
-    /**
      * \brief Check if the stored value can be converted to a type T
      *
      * If this function returns true, then calling to<T>() or operator T() will succeed.
