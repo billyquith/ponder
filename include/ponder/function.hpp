@@ -55,6 +55,7 @@ class ClassVisitor;
  */
 class PONDER_API Function : public Type
 {
+    PONDER__NON_COPYABLE(Function);
 public:
 
     /**
@@ -128,7 +129,6 @@ protected:
 
     // FunctionImpl inherits from this and constructs.
     Function(IdRef name) : m_name(name) {}
-    Function(const Function&) = delete;
 
     Id m_name;                  // Name of the function
     FunctionKind m_funcType;    // Kind of function

@@ -112,16 +112,7 @@ class PONDER_API Type
 {
 public:
     virtual ~Type() {}
-    //Value* getUserData(IdRef name);
 };
-
-//class PONDER_API ClassMember
-//{
-//public:
-//    virtual ~ClassMember() {}
-//    ClassMember(const ClassMember&) = delete;
-//    ClassMember& operator=(const ClassMember&) = delete;
-//};
     
 namespace policy {
 

@@ -57,6 +57,7 @@ set(PONDER_TEST_SRCS
     string_view.cpp
     tagholder.cpp
     traits.cpp
+    userdata.cpp
     userobject.cpp
     userproperty.cpp
     value.cpp

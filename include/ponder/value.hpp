@@ -43,6 +43,7 @@
 
 namespace ponder
 {
+
 /**
  * \brief Variant class which is used to wrap values in the Ponder system
  *

@@ -4,7 +4,6 @@
 **
 ** The MIT License (MIT)
 **
-** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 ** Copyright (C) 2015-2018 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,29 +26,41 @@
 **
 ****************************************************************************/
 
-
-#ifndef PONDER_CLASSCAST_HPP
-#define PONDER_CLASSCAST_HPP
+#ifndef PONDER_USERDATA_HPP
+#define PONDER_USERDATA_HPP
 
 #include <ponder/config.hpp>
+#include <ponder/value.hpp>
 
-namespace ponder
+namespace ponder {
+
+class UserData
 {
-class Class;
+public:
+    UserData(IdRef name, Value&& value) : m_name(name), m_value(value) {}
+    
+    IdReturn getName() const { return m_name; }
+    
+    const Value& getValue() const { return m_value; }
+    Value& getValue() { return m_value; }
 
-/**
- * \brief Convert a pointer from a source metaclass to a related target metaclass
- *
- * \param pointer Source pointer to convert
- * \param sourceClass Source metaclass to convert from
- * \param targetClass Target metaclass to convert to
- *
- * \return Converted pointer, or 0 on failure
- *
- * \throw ClassUnrelated sourceClass is not a base nor a derived of targetClass
- */
-PONDER_API void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass);
+private:
+    Id m_name;
+    Value m_value;
+};
+    
+class IUserDataStore
+{
+public:
+    virtual ~IUserDataStore() {}
+    virtual void setValue(const Type* t, IdRef name, const Value& v) = 0;
+    virtual const Value* getValue(const Type* t, IdRef name) const = 0;
+    virtual void removeValue(Type* t, IdRef name) = 0;
+};
+
+IUserDataStore* getUserDataStore();
 
 } // namespace ponder
 
-#endif // PONDER_CLASSCAST_HPP
+
+#endif // PONDER_USERDATA_HPP

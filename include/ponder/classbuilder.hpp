@@ -40,22 +40,13 @@
 #include <ponder/detail/constructorimpl.hpp>
 #include <ponder/detail/propertyfactory.hpp>
 #include <ponder/pondertype.hpp>
+#include <ponder/userdata.hpp>
 #include <cassert>
 #include <string>
 
 
 namespace ponder {
-    
-struct UserData {
-    Id m_name;
-    Value m_value;
-    
-    UserData(IdRef name, Value const& value)
-        :   m_name(name)
-        ,   m_value(value)
-    {}
-};
-    
+        
 /**
  * \brief Proxy class which fills a metaclass with its members
  *
@@ -232,38 +223,32 @@ public:
     template <template <typename> class U>
     ClassBuilder<T>& external();
 
+    /**
+     * \brief Add user data to the last declared member type
+     *
+     * \code
+     * ponder::Class::declare<MyClass>("MyClass")
+     *     .function("foo", &MyClass::foo)( ponder::UserData("user", 3) );
+     * \endcode
+     *
+     * \return Reference to this, in order to chain other calls
+     */
     template <typename... U>
-    ClassBuilder<T>& operator () (U... uds)
+    ClassBuilder<T>& operator () (U&&... uds)
     {
         const std::initializer_list<UserData> il = {uds...};
         for (UserData const& ud : il)
-            g_memberDataStore.addValue(size_t(m_target), ud.m_name, ud.m_value);
+            getUserDataStore()->setValue(m_currentType, ud.getName(), ud.getValue());
         return *this;
     }
 
 private:
 
-    /**
-     * \brief Add a new property to the target class
-     *
-     * \param property Property to add
-     *
-     * \return Reference to this, in order to chain other calls
-     */
     ClassBuilder<T>& addProperty(Property* property);
-
-    /**
-     * \brief Add a new function to the target class
-     *
-     * \param function Function to add
-     *
-     * \return Reference to this, in order to chain other calls
-     */
     ClassBuilder<T>& addFunction(Function* function);
 
     Class* m_target; // Target metaclass to fill
-    Property* m_currentProperty; // Last property which has been declared
-    Function* m_currentFunction; // Last function which has been declared
+    Type* m_currentType; // Last member type which has been declared
 };
 
 } // namespace ponder

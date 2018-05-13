@@ -86,5 +86,9 @@
 #include "detail/idtraits.hpp"
 #include <cassert>
 
+#define PONDER__NON_COPYABLE(CLS) \
+    CLS(CLS const&) = delete; \
+    CLS& operator=(CLS const&) = delete
+
 #endif // PONDER_CONFIG_HPP
 

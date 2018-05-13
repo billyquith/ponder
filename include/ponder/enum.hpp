@@ -76,8 +76,9 @@ namespace ponder
  *
  * \sa Class, EnumBuilder
  */
-class PONDER_API Enum : detail::NonCopyable
+class PONDER_API Enum : public Type
 {
+    PONDER__NON_COPYABLE(Enum);
 public:
     typedef long EnumValue;  //!< Type used to hold the enum value.
 

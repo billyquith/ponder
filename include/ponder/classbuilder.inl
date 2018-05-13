@@ -32,8 +32,7 @@ namespace ponder {
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)
-    , m_currentProperty(nullptr)
-    , m_currentFunction(nullptr)
+    , m_currentType(nullptr)
 {
 }
 
@@ -158,7 +157,7 @@ ClassBuilder<T>& ClassBuilder<T>::addProperty(Property* property)
     // Insert the new property
     properties.insert(property->name(), Class::PropertyPtr(property));
 
-    m_currentFunction = nullptr;
+    m_currentType = property;
 
     return *this;
 }
@@ -175,7 +174,7 @@ ClassBuilder<T>& ClassBuilder<T>::addFunction(Function* function)
     // Insert the new function
     functions.insert(function->name(), Class::FunctionPtr(function));
 
-    m_currentProperty = nullptr;
+    m_currentType = function;
 
     return *this;
 }

@@ -119,14 +119,6 @@ namespace ClassTest
     {
     };
     
-    class HasUserData
-    {
-    public:
-        void noData(int) {}
-        void data1(float) {}
-        void data2(double) {}
-    };
-    
     void declare()
     {
         ponder::Class::declare<MyClass>("ClassTest::MyClass")
@@ -153,17 +145,6 @@ namespace ClassTest
         ponder::Class::declare< DataTemplate<float,5,5> >()
             .function("get", &DataTemplate<float,5,5>::get)
             .function("set", &DataTemplate<float,5,5>::set);
-        
-        ponder::Class::declare<HasUserData>()
-            .function("none", &HasUserData::noData)()
-            .function("data1", &HasUserData::data1)
-            ( ponder::UserData("value", 3) )
-            .function("data2", &HasUserData::data2)
-            (
-                ponder::UserData("value", 2.5f),
-                ponder::UserData("value2", "xyz")
-            )
-            ;
         
 #if TEST_VIRTUAL
         ponder::Class::declare< VirtualBase >()
@@ -225,7 +206,6 @@ PONDER_AUTO_TYPE(ClassTest::VirtualX, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::VirtualY, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::VirtualZ, &ClassTest::declare)
 PONDER_AUTO_TYPE(ClassTest::VirtualUser, &ClassTest::declare)
-PONDER_AUTO_TYPE(ClassTest::HasUserData, &ClassTest::declare)
 
 PONDER_TYPE(ClassTest::TemporaryRegistration);
 
@@ -381,17 +361,6 @@ TEST_CASE("Class members can be inspected")
                     ;
             }
         }
-    }
-}
-
-
-TEST_CASE("Class members can have userdata")
-{
-    const ponder::Class& cls = ponder::classByType<HasUserData>();
-    
-    SECTION("Empty userdata")
-    {
-        //REQUIRE(cls.function("none").getUserData("name") == nullptr)
     }
 }
 

@@ -35,8 +35,6 @@
 namespace ponder
 {
 
-TypeUserDataStore g_memberDataStore;
-
 Class::Class(IdRef name)
 : m_sizeof(0)
 , m_id(name)
