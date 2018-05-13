@@ -7,6 +7,8 @@ Ponder Changelog
 ## 3.0 - Develop
 
 - Extensive refactoring of the API.
+- All types have common ancestor: Type.
+- Added UserData per Type. (issue #98)
 - Remove dynamic read/write attribute from properties. (issue #91)
 - Remove TagHolder. (issue #92)
 - Removed `ponder::classByIndex()`. Use `ponder::classIterator()` instead.
