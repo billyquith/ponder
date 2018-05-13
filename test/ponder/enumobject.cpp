@@ -142,8 +142,10 @@ TEST_CASE("Enum objects")
     SECTION("must be declared")
     {
         // The meta-enum of MyUndeclaredEnum is *not* declared
-        REQUIRE_THROWS_AS(ponder::EnumObject obj(Undeclared), ponder::EnumNotFound);
-    }    
+        REQUIRE_THROWS_AS([](){
+            ponder::EnumObject obj(Undeclared);
+        }(), ponder::EnumNotFound);
+    }
 }
     
 

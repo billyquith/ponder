@@ -143,8 +143,10 @@ TEST_CASE("Enum class objects")
     SECTION("must be declared")
     {
         // The meta-enum of MyUndeclaredEnum is *not* declared
-        REQUIRE_THROWS_AS(ponder::EnumObject obj(MyUndeclaredEnum::Undeclared),
-                          ponder::EnumNotFound);
+        // Note: use lambda here as Catch2 test needs to be an expression.
+        REQUIRE_THROWS_AS([](){
+            ponder::EnumObject obj(MyUndeclaredEnum::Undeclared);
+        }(), ponder::EnumNotFound);
     }    
 }
     
