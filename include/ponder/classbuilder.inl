@@ -32,7 +32,7 @@ namespace ponder {
 template <typename T>
 ClassBuilder<T>::ClassBuilder(Class& target)
     : m_target(&target)
-    , m_currentType(nullptr)
+    , m_currentType(&target)
 {
 }
 

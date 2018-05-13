@@ -32,8 +32,9 @@ project(exampletest)
 # all source files
 set(TEST_SRCS
     main.cpp
-    simple.cpp
     inspect.cpp
+    simple.cpp
+    userdata.cpp
 )
 
 link_directories(

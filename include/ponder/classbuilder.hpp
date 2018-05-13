@@ -238,7 +238,7 @@ public:
     {
         const std::initializer_list<UserData> il = {uds...};
         for (UserData const& ud : il)
-            getUserDataStore()->setValue(m_currentType, ud.getName(), ud.getValue());
+            userDataStore()->setValue(*m_currentType, ud.getName(), ud.getValue());
         return *this;
     }
 

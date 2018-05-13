@@ -40,25 +40,25 @@ class TypeUserDataStore : public IUserDataStore
     
 public:
 
-    void setValue(const Type* t, IdRef name, const Value& v) final;
-    const Value* getValue(const Type* t, IdRef name) const final;
-    void removeValue(Type* t, IdRef name) final;
+    void setValue(const Type& t, IdRef name, const Value& v) final;
+    const Value* getValue(const Type& t, IdRef name) const final;
+    void removeValue(const Type& t, IdRef name) final;
 };
     
-void TypeUserDataStore::setValue(const Type* t, IdRef name, const Value& v)
+void TypeUserDataStore::setValue(const Type& t, IdRef name, const Value& v)
 {
-    auto it = m_store.find(t);
+    auto it = m_store.find(&t);
     if (it == m_store.end())
     {
-        auto ret = m_store.insert(class_store_t::value_type(t, store_t()));
+        auto ret = m_store.insert(class_store_t::value_type(&t, store_t()));
         it = ret.first;
     }
     it->second.insert(name, v);
 }
 
-const Value* TypeUserDataStore::getValue(const Type* t, IdRef name) const
+const Value* TypeUserDataStore::getValue(const Type& t, IdRef name) const
 {
-    auto it = m_store.find(const_cast<Type*>(t));
+    auto it = m_store.find(&t);
     if (it != m_store.end())
     {
         auto vit = it->second.findKey(name);
@@ -68,9 +68,9 @@ const Value* TypeUserDataStore::getValue(const Type* t, IdRef name) const
     return nullptr;
 }
 
-void TypeUserDataStore::removeValue(Type* t, IdRef name)
+void TypeUserDataStore::removeValue(const Type& t, IdRef name)
 {
-    auto it = m_store.find(t);
+    auto it = m_store.find(&t);
     if (it != m_store.end())
     {
         it->second.erase(name);
@@ -79,7 +79,7 @@ void TypeUserDataStore::removeValue(Type* t, IdRef name)
 
 std::unique_ptr<TypeUserDataStore> g_memberDataStore;
 
-IUserDataStore* getUserDataStore()
+IUserDataStore* userDataStore()
 {
     auto p = g_memberDataStore.get();
     

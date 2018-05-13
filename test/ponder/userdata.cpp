@@ -68,8 +68,8 @@ TEST_CASE("User data is stored in a store")
     {
         auto const& cls = ponder::classByType<HasUserData>();
         
-        ponder::getUserDataStore()->setValue(&cls, "test1", ponder::Value(2345));
-        const ponder::Value* uv = ponder::getUserDataStore()->getValue(&cls, "test1");
+        ponder::userDataStore()->setValue(cls, "test1", ponder::Value(2345));
+        const ponder::Value* uv = ponder::userDataStore()->getValue(cls, "test1");
     }
 }
 
@@ -79,20 +79,20 @@ TEST_CASE("Class members can have user data")
 
     SECTION("Empty user data")
     {
-        REQUIRE(ponder::getUserDataStore()->getValue(&cls.function("none"), "name") == nullptr);
+        REQUIRE(ponder::userDataStore()->getValue(cls.function("none"), "name") == nullptr);
     }
 
     SECTION("Per member user data")
     {
-        auto uds = ponder::getUserDataStore();
+        auto uds = ponder::userDataStore();
         REQUIRE(cls.hasFunction("data1"));
-        const ponder::Value *uv = uds->getValue(&cls.function("data1"), "value");
+        const ponder::Value *uv = uds->getValue(cls.function("data1"), "value");
         REQUIRE(uv != nullptr);
         REQUIRE(*uv == ponder::Value(3));
 
         REQUIRE(cls.hasFunction("data2"));
-        REQUIRE(*uds->getValue(&cls.function("data2"), "value") == ponder::Value(2.5f));
-        REQUIRE(*uds->getValue(&cls.function("data2"), "value2") == ponder::Value("xyz"));
+        REQUIRE(*uds->getValue(cls.function("data2"), "value") == ponder::Value(2.5f));
+        REQUIRE(*uds->getValue(cls.function("data2"), "value2") == ponder::Value("xyz"));
     }
 }
 

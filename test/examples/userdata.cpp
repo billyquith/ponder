@@ -4,7 +4,7 @@
 **
 ** The MIT License (MIT)
 **
-** Copyright (C) 2015-2017 Nick Trout.
+** Copyright (C) 2015-2018 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -27,59 +27,68 @@
 ****************************************************************************/
 
 #include "test.hpp"
-
-//#include <ponder/uses/report.hpp>
 #include <ponder/classbuilder.hpp>
-#include <ponder/uses/runtime.hpp>
 #include <iostream>
 
-//! [inspect_example]
+//! [userdata_example]
 
-class A
+class Vec2D
 {
 public:
-    A(int v) : m_value(v) {}
-    
-    int getValue() const { return m_value; }
-        
-private:
-    int m_value;
+    Vec2D(float x_, float y_) : x(x_), y(y_) {}
+    Vec2D operator+(const Vec2D& o) const { return Vec2D(x+o.x, y+o.y); }
+    float x,y;
 };
 
-PONDER_TYPE(A)
+PONDER_TYPE(Vec2D)
 
 static void declare()
 {
-    ponder::Class::declare<A>("A")
-        .constructor<int>()
-        .property("value", &A::getValue)
+    using namespace ponder;
+    
+    Class::declare<Vec2D>("Vec2D")
+            ( UserData("help", "2D vector") )
+        .constructor<float,float>()
+        .property("x", &Vec2D::x)( UserData("default", 0.f) )
+        .property("y", &Vec2D::y)( UserData("default", 0.f) )
+        .function("add", &Vec2D::operator+)
+            (
+                UserData("help", "add vector to this and return result"),
+                UserData("eg", "result = a + b")
+            )
         ;
 }
 
-static void inspect()
+static void test()
 {
-    //! [classIterator]
-    for (auto&& cls : ponder::classIterator())
+    //! [get_user_data]    
+    auto const& cls = ponder::classByType<Vec2D>();
+    
+    // print help about the class
+    const ponder::Value* help = ponder::userDataStore()->getValue(cls, "help");
+    std::cout << "Class " << cls.name() << ": ";
+    std::cout << (help ? help->to<ponder::Id>() : "no help") << std::endl;
+    
+    // print functions and any help
+    for (auto const& it : cls.functionIterator())
     {
-        std::cout << "Class " << cls.first << std::endl;
-    }
-    //! [classIterator]
+        auto const& fn = it.second;
+        std::cout << "\t" << fn->name() << ": ";
+        help = ponder::userDataStore()->getValue(*fn, "help");
+        if (help)
+            std::cout << (help ? help->to<ponder::Id>() : "no help") << std::endl;
+    }    
+    //! [get_user_data]
 }
 
-//! [inspect_example]
+//! [userdata_example]
 
-// static void reportAll()
-// {
-//     ponder::uses::reportAll();
-// }
-
-TEST_CASE("inspect types")
+TEST_CASE("test types")
 {
     SECTION("intro")
     {
-        std::printf("------------------------------------------------------------\n");
         declare();
-        inspect();
+        test();
     }
 }
 
