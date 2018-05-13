@@ -85,7 +85,7 @@ IUserDataStore* getUserDataStore()
     
     if (p == nullptr)
     {
-        g_memberDataStore = std::make_unique<TypeUserDataStore>();
+        g_memberDataStore = std::unique_ptr<TypeUserDataStore>(new TypeUserDataStore());
         p = g_memberDataStore.get();
     }
     
