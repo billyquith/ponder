@@ -38,18 +38,6 @@
 namespace ponder {
 namespace detail {
 
-class noncopyable
-{
-protected:
-    noncopyable() {}
-    ~noncopyable() {}
-    
-private:
-    noncopyable( const noncopyable& ) = delete;
-    noncopyable& operator=( const noncopyable& ) = delete;
-};
-
-
 template<bool C, typename T, typename F>
 struct if_c
 {

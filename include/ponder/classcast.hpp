@@ -31,9 +31,7 @@
 #ifndef PONDER_CLASSCAST_HPP
 #define PONDER_CLASSCAST_HPP
 
-
 #include <ponder/config.hpp>
-
 
 namespace ponder
 {

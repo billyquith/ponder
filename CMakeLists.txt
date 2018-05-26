@@ -35,7 +35,7 @@ cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 # set project's name
-project(Ponder)
+project(ponder)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -77,6 +77,7 @@ set(SRC_HEADERS
     include/ponder/property.hpp
     include/ponder/simpleproperty.hpp
     include/ponder/type.hpp
+    include/ponder/userdata.hpp
     include/ponder/userobject.hpp
     include/ponder/userobject.inl
     include/ponder/userproperty.hpp
@@ -155,6 +156,8 @@ set(SRC_SOURCE
     src/pondertype.cpp
     src/property.cpp
     src/simpleproperty.cpp
+    src/type.cpp
+    src/userdata.cpp
     src/userobject.cpp
     src/userproperty.cpp
     src/util.cpp
@@ -183,11 +186,6 @@ set(PONDER_SRCS
     ${SRC_SOURCE}
 )
 
-# include files search paths
-include_directories(
-    ${PONDER_SOURCE_DIR}/include
-)
-
 # generate version.hpp
 message("Generate version.hpp")
 configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
@@ -195,6 +193,12 @@ configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
+
+# include files search paths
+target_include_directories(ponder PUBLIC
+    $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
 # define the export macro
 if(BUILD_SHARED_LIBS)

@@ -32,12 +32,9 @@ project(exampletest)
 # all source files
 set(TEST_SRCS
     main.cpp
-    simple.cpp
     inspect.cpp
-)
-
-include_directories(
-    ${PONDER_SOURCE_DIR}/include
+    simple.cpp
+    userdata.cpp
 )
 
 link_directories(

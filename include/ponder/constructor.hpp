@@ -31,7 +31,6 @@
 #ifndef PONDER_CONSTRUCTOR_HPP
 #define PONDER_CONSTRUCTOR_HPP
 
-
 namespace ponder
 {
 class Args;
@@ -44,7 +43,7 @@ class UserObject;
  *
  * \sa Property, Function
  */
-class Constructor
+class Constructor : public Type
 {
 public:
 
@@ -52,7 +51,7 @@ public:
      * \brief Destructor
      */
     virtual ~Constructor() {}
-
+    
     /**
      * \brief Check if the constructor matches the given set of arguments
      *

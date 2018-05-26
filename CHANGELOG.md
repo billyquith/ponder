@@ -4,12 +4,15 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
-## 3.0
+## 3.0 - Develop
 
 - Extensive refactoring of the API.
+- All types have common ancestor: Type.
+- Added UserData per Type. (issue #98)
 - Remove dynamic read/write attribute from properties. (issue #91)
 - Remove TagHolder. (issue #92)
 - Removed `ponder::classByIndex()`. Use `ponder::classIterator()` instead.
+- Cmake project name changed to "ponder" to match namespace (issue #95).
 
 ### 2.2
 

@@ -46,6 +46,8 @@
 
 namespace ponder {
     
+class Value;
+    
 /**
  * \brief Special empty type associated to \c noType
  *
@@ -103,6 +105,14 @@ enum class FunctionKind
     Lambda              ///< lambda function `[](){}`
 };
 
+/**
+ * \brief Base class for all supported types.
+ */
+class PONDER_API Type
+{
+public:
+    virtual ~Type() {}
+};
     
 namespace policy {
 
@@ -155,15 +165,6 @@ struct ReturnMultiple
     
 } // namespace policy
 
-/**
- * \brief Base class for all supported types.
- */
-class PONDER_API Type
-{
-public:
-    virtual ~Type() {}
-};
-    
 } // namespace ponder
 
 

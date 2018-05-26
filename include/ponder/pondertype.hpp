@@ -144,7 +144,7 @@ namespace detail
  * Example:
  *
  * \code
- * class NonCopyable : util::noncopyable
+ * class NonCopyable : util::NonCopyable
  * {
  *     int x;
  * };

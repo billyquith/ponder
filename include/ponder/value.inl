@@ -110,13 +110,6 @@ const T& Value::cref() const
     }
 }
 
-
-template <typename T>
-Value::operator T() const
-{
-    return to<T>();
-}
-
 template <typename T>
 bool Value::isCompatible() const
 {

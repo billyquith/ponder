@@ -81,12 +81,6 @@ TEST_CASE("inspect types")
         declare();
         inspect();
     }
-    
-    // SECTION("report")
-    // {
-    //     std::printf("------------------------------------------------------------\n");
-    //     reportAll();
-    // }
 }
 
 

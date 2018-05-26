@@ -79,12 +79,16 @@
 
 // If user doesn't define traits use the default:
 #ifndef PONDER_ID_TRAITS_USER
-//#define PONDER_ID_TRAITS_STD_STRING       // Use std::string and const std::string&
-#define PONDER_ID_TRAITS_STRING_VIEW      // Use std::string and ponder::string_view
+//# define PONDER_ID_TRAITS_STD_STRING      // Use std::string and const std::string&
+#   define PONDER_ID_TRAITS_STRING_VIEW     // Use std::string and ponder::string_view
 #endif // PONDER_ID_TRAITS_USER
 
 #include "detail/idtraits.hpp"
 #include <cassert>
+
+#define PONDER__NON_COPYABLE(CLS) \
+    CLS(CLS const&) = delete; \
+    CLS& operator=(CLS const&) = delete
 
 #endif // PONDER_CONFIG_HPP
 

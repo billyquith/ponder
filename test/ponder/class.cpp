@@ -145,7 +145,7 @@ namespace ClassTest
         ponder::Class::declare< DataTemplate<float,5,5> >()
             .function("get", &DataTemplate<float,5,5>::get)
             .function("set", &DataTemplate<float,5,5>::set);
-
+        
 #if TEST_VIRTUAL
         ponder::Class::declare< VirtualBase >()
             ;
@@ -342,7 +342,8 @@ TEST_CASE("Class members can be inspected")
                 case 0:
                     REQUIRE(prop.name() == ponder::String("prop"));
                     break;
-                default: ;
+                default:
+                    ;
             }
         }
     }
@@ -356,7 +357,8 @@ TEST_CASE("Class members can be inspected")
                 case 0:
                     REQUIRE(func.name() == ponder::String("func"));
                     break;
-                default: ;
+                default:
+                    ;
             }
         }
     }

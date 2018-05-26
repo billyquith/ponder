@@ -29,7 +29,9 @@
 # set project's name
 project(luatest)
 
-find_package(Lua 5.3 REQUIRED)
+# Use local Lua for testing to avoid find_package(Lua 5.3 REQUIRED) OS install inconsistencies
+set(LUA_INCLUDE_DIR "${PONDER_SOURCE_DIR}/deps/include")
+set(LUA_LIBRARIES "-L${PONDER_SOURCE_DIR}/deps/lib -llua")
 
 # all source files
 set(TEST_SRCS
@@ -37,7 +39,6 @@ set(TEST_SRCS
 )
 
 include_directories(
-    ${PONDER_SOURCE_DIR}/include
     ${LUA_INCLUDE_DIR}
 )
 

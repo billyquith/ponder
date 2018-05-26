@@ -49,6 +49,7 @@ class ClassVisitor;
  */
 class PONDER_API Property : public Type
 {
+    PONDER__NON_COPYABLE(Property);
 public:
 
     /**

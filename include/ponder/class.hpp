@@ -27,10 +27,8 @@
 **
 ****************************************************************************/
 
-
 #ifndef PONDER_CLASS_HPP
 #define PONDER_CLASS_HPP
-
 
 #include <ponder/classget.hpp>
 #include <ponder/classcast.hpp>
@@ -44,7 +42,7 @@
 
 namespace ponder
 {
-
+    
 template <typename T> class ClassBuilder;
 class Constructor;
 class Args;
@@ -104,11 +102,11 @@ class ClassVisitor;
  *
  * \sa Enum, TagHolder, ClassBuilder, Function, Property
  */
-class PONDER_API Class : public Type, detail::noncopyable
-{
-    /**
-     * \brief Structure holding informations about a base metaclass
-     */
+class PONDER_API Class : public Type
+{    
+    PONDER__NON_COPYABLE(Class);
+    
+    // Structure holding informations about a base metaclass
     struct BaseInfo
     {
         const Class* base;
@@ -128,14 +126,14 @@ class PONDER_API Class : public Type, detail::noncopyable
     typedef void (*Destructor)(const UserObject&, bool);
     typedef UserObject (*UserObjectCreator)(void*);
     
-    std::size_t m_sizeof;       ///< Size of the class in bytes.
-    Id m_id;                    ///< Name of the metaclass
-    FunctionTable m_functions;  ///< Table of metafunctions indexed by ID
-    PropertyTable m_properties; ///< Table of metaproperties indexed by ID
-    BaseList m_bases;           ///< List of base metaclasses
-    ConstructorList m_constructors; ///< List of metaconstructors
-    Destructor m_destructor;    ///< Destructor (function able to delete an abstract object)
-    UserObjectCreator m_userObjectCreator; ///< Convert pointer of class instance to UserObject
+    std::size_t m_sizeof;           // Size of the class in bytes.
+    Id m_id;                        // Name of the metaclass
+    FunctionTable m_functions;      // Table of metafunctions indexed by ID
+    PropertyTable m_properties;     // Table of metaproperties indexed by ID
+    BaseList m_bases;               // List of base metaclasses
+    ConstructorList m_constructors; // List of metaconstructors
+    Destructor m_destructor;        // Destructor (function able to delete an abstract object)
+    UserObjectCreator m_userObjectCreator; // Convert pointer of class instance to UserObject
 
 public:     // declaration
 
@@ -212,10 +210,7 @@ public:     // reflection
      *
      * \return Constructor
      */
-    const Constructor* constructor(std::size_t index) const
-    {
-        return m_constructors[index].get();
-    }
+    const Constructor* constructor(std::size_t index) const;
     
     /**
      * \brief Destroy a UserObject instance
@@ -223,10 +218,7 @@ public:     // reflection
      * \param uobj User object to destruct
      * \param destruct True for destruct (placement new), else destroy (new)
      */
-    void destruct(const UserObject &uobj, bool destruct) const
-    {
-        m_destructor(uobj, destruct);
-    }
+    void destruct(const UserObject &uobj, bool destruct) const;
     
     /**
      * \brief Return the total number of functions of this metaclass
