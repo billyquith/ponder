@@ -28,7 +28,7 @@
 
 #include "test.hpp"
 
-#include <ponder/uses/report.hpp>
+//#include <ponder/uses/report.hpp>
 
 //! [simple_example]
 
@@ -101,10 +101,10 @@ static void use()
 
 //! [simple_example]
 
-static void reportAll()
-{
-    ponder::uses::reportAll();
-}
+//static void reportAll()
+//{
+//    ponder::uses::reportAll();
+//}
 
 TEST_CASE("simple tests")
 {
@@ -115,11 +115,11 @@ TEST_CASE("simple tests")
         use();
     }
     
-    SECTION("report")
-    {
-        std::printf("------------------------------------------------------------\n");
-        reportAll();
-    }
+//    SECTION("report")
+//    {
+//        std::printf("------------------------------------------------------------\n");
+//        reportAll();
+//    }
 }
 
 

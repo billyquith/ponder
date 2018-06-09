@@ -127,12 +127,14 @@ set(SRC_HEADERS
     include/ponder/qt/qvector.hpp
     # Uses
     include/ponder/uses/uses.hpp
-    include/ponder/uses/serialise.hpp
     include/ponder/uses/runtime.hpp
     include/ponder/uses/detail/runtime.hpp
     include/ponder/uses/lua.hpp
     include/ponder/uses/detail/lua.hpp
-    include/ponder/uses/report.hpp
+    # Archive
+    include/ponder/uses/serialise.hpp
+    include/ponder/uses/archive/rapidjson.hpp
+    include/ponder/uses/archive/rapidxml.hpp
 )
 
 set(SRC_SOURCE
@@ -162,7 +164,6 @@ set(SRC_SOURCE
     src/util.cpp
     src/value.cpp
     # Uses
-    src/uses/report.cpp
 )
 
 source_group("Headers"
@@ -195,7 +196,13 @@ set(PONDER_DEPS_LIBRARIES)
 if(USES_RAPIDJSON)
     set(RAPIDJSON_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidjson/include)
     message(STATUS "Including RapidJSON from ${RAPIDJSON_INCLUDES}")
-    set(PONDER_DEPS_INCLUDES ${RAPIDJSON_INCLUDES})
+    set(PONDER_DEPS_INCLUDES ${PONDER_DEPS_INCLUDES} ${RAPIDJSON_INCLUDES})
+endif()
+
+if(USES_RAPIDXML)
+    set(RAPIDXML_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidxml/include)
+    message(STATUS "Including RapidXML from ${RAPIDXML_INCLUDES}")
+    set(PONDER_DEPS_INCLUDES ${PONDER_DEPS_INCLUDES} ${RAPIDXML_INCLUDES})
 endif()
 
 ###############################
@@ -212,7 +219,8 @@ add_library(ponder ${PONDER_SRCS})
 
 # include files search paths
 target_include_directories(ponder PUBLIC
-    $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include ${PONDER_DEPS_INCLUDES}>
+    $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PONDER_DEPS_INCLUDE}>
     $<INSTALL_INTERFACE:include>
 )
 

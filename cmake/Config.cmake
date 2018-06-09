@@ -19,6 +19,12 @@ if(NOT USES_RAPIDJSON)
     )
 endif()
 
+if(NOT USES_RAPIDXML)
+    set(USES_RAPIDXML TRUE
+        CACHE BOOL "TRUE to include RapidXML support, FALSE otherwise."
+    )
+endif()
+
 # Set the default build type to release with debug info
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo

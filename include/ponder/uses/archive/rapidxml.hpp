@@ -26,79 +26,49 @@
 **
 ****************************************************************************/
 
-#ifndef PONDER_USES_SERIALISE_HPP
-#define PONDER_USES_SERIALISE_HPP
+#pragma once
+#ifndef PONDER_ARCVHIVE_RAPIDXML_HPP
+#define PONDER_ARCVHIVE_RAPIDXML_HPP
 
 #include <ponder/class.hpp>
-//#include <iostream>
+#include <rapidxml/rapidxml.hpp>
 
 namespace ponder {
 namespace archive {
-    
-    namespace detail {
-    } // namespace detail
-    
-    enum class ValueKind
-    {
-        UserObject
-    };
-    
-//    class TextArchive
-//    {
-//    public:
-//
-//        struct Node
-//        {
-//        };
-//
-//        using node_t = Node;
-//
-//        node_t beginNode(node_t parent, ValueKind vk)
-//        {
-//            indent();
-//            ++m_indent;
-//
-//            return Node();
-//        }
-//
-//    private:
-//
-//        void indent()
-//        {
-//            for (auto i = 0u; i < m_indent; ++i)
-//                m_stream << '\t';
-//        }
-//
-//        std::ostream m_stream;
-//        unsigned int m_indent{ 0 };
-//    };
 
-    template <class ARCHIVE>
-    class ArchiveWriter
-    {
-    public:
-        
-        using archive_t = ARCHIVE;
-        using node_t = typename archive_t::node_t;
-        
-        ArchiveWriter(archive_t& archive)
-        :   m_archive(archive)
-        {}
-        
-        void write(node_t parent, const UserObject& obj)
-        {
-            auto& item = m_archive.beginNode(obj);
-            item.setValue(obj);
-            m_archive.endNode(item);
-        }
-        
-    private:
-        
-        archive_t m_archive;
+namespace detail {
+} // namespace detail
 
-    };
-    
+class RapidXmlArchive
+{
+public:
+
+   struct Node
+   {
+   };
+
+   using node_t = Node;
+
+   node_t beginNode(node_t parent, ValueKind vk)
+   {
+       indent();
+       ++m_indent;
+
+       return Node();
+   }
+
+private:
+
+   void indent()
+   {
+       for (auto i = 0u; i < m_indent; ++i)
+           m_stream << '\t';
+   }
+
+   unsigned int m_indent{ 0 };
+};
+
 } // namespace archive
 } // namespace ponder
 
-#endif // PONDER_USES_SERIALISE_HPP
+#endif // PONDER_ARCVHIVE_RAPIDXML_HPP
