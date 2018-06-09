@@ -13,6 +13,12 @@ if(NOT USES_LUA)
     )
 endif()
 
+if(NOT USES_RAPIDJSON)
+    set(USES_RAPIDJSON TRUE
+        CACHE BOOL "TRUE to include RapidJSON support, FALSE otherwise."
+    )
+endif()
+
 # Set the default build type to release with debug info
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo

@@ -13,6 +13,7 @@ Ponder Changelog
 - Remove TagHolder. (issue #92)
 - Removed `ponder::classByIndex()`. Use `ponder::classIterator()` instead.
 - Cmake project name changed to "ponder" to match namespace (issue #95).
+- Add RapidJSON for use by JSON serialiser (issue #43).
 
 ### 2.2
 

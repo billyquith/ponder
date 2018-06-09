@@ -34,7 +34,6 @@
 cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
-# set project's name
 project(ponder)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -186,6 +185,23 @@ set(PONDER_SRCS
     ${SRC_SOURCE}
 )
 
+###############################
+# dependencies
+###############################
+
+set(PONDER_DEPS_INCLUDES)
+set(PONDER_DEPS_LIBRARIES)
+
+if(USES_RAPIDJSON)
+    set(RAPIDJSON_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidjson/include)
+    message(STATUS "Including RapidJSON from ${RAPIDJSON_INCLUDES}")
+    set(PONDER_DEPS_INCLUDES ${RAPIDJSON_INCLUDES})
+endif()
+
+###############################
+# compile environment
+###############################
+
 # generate version.hpp
 message("Generate version.hpp")
 configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
@@ -196,7 +212,7 @@ add_library(ponder ${PONDER_SRCS})
 
 # include files search paths
 target_include_directories(ponder PUBLIC
-    $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include ${PONDER_DEPS_INCLUDES}>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -227,7 +243,7 @@ if(BUILD_TEST)
 endif()
 
 ###############################
-# doc
+# documentation
 ###############################
 
 add_subdirectory(doc)
