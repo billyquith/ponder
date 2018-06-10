@@ -38,19 +38,14 @@ namespace archive {
     namespace detail {
     } // namespace detail
     
-//    enum class ValueKind
-//    {
-//        UserObject
-//    };
-    
     /*!
-     
      An archive writer requires the following concepts:
      
         class Archive
         {
         public:
             node_t* addChild(node_t* parent, const std::string& name);
+            void setText(node_t* node, const std::string& text);
             static bool isValid(node_t* node);
         };
      
@@ -129,6 +124,101 @@ namespace archive {
 
     };
 
+    /*!
+     An archive writer requires the following concepts:
+     
+     class Archive
+     {
+     public:
+         node_t* addChild(node_t* parent, const std::string& name);
+         void setText(node_t* node, const std::string& text);
+         static bool isValid(node_t* node);
+     };
+     
+     */
+    template <class ARCHIVE>
+    class ArchiveReader
+    {
+    public:
+        
+        using archive_t = ARCHIVE;
+        using node_t = typename archive_t::node_t;
+        
+        ArchiveReader(archive_t& archive)
+        :   m_archive(archive)
+        {}
+        
+        void read(node_t* node, const UserObject& object)
+        {
+            // Iterate over the object's properties using its metaclass
+            const Class& metaclass = object.getClass();
+            for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
+            {
+                const Property& property = metaclass.property(i);
+    
+                // If the property has the exclude tag, ignore it
+//                if ((exclude != Value::nothing) && property.hasTag(exclude))
+//                    continue;
+    
+                // Find the child node corresponding to the new property
+                node_t* child = m_archive.findFirstChild(node, property.name());
+                if (!archive_t::isValid(child))
+                    continue;
+    
+                if (property.kind() == ValueKind::User)
+                {
+                    // The current property is a composed type: deserialize it recursively
+                    read(child, property.get(object).to<UserObject>());
+                }
+//                else if (property.kind() == arrayType)
+//                {
+//                    // The current property is an array
+//                    const ArrayProperty& arrayProperty = static_cast<const ArrayProperty&>(property);
+//
+//                    // Iterate over the child XML node and extract all the array elements
+//                    std::size_t index = 0;
+//                    for (typename Proxy::NodeType item = Proxy::findFirstChild(child, "item")
+//                         ; Proxy::isValid(item)
+//                         ; item = Proxy::findNextSibling(item, "item"))
+//                    {
+//                        // Make sure that there are enough elements in the array
+//                        std::size_t count = arrayProperty.size(object);
+//                        if (index >= count)
+//                        {
+//                            if (arrayProperty.dynamic())
+//                                arrayProperty.resize(object, index + 1);
+//                            else
+//                                break;
+//                        }
+//
+//                        if (arrayProperty.elementType() == userType)
+//                        {
+//                            // The array elements are composed objects: deserialize them recursively
+//                            deserialize<Proxy>(arrayProperty.get(object, index).to<UserObject>(), item, exclude);
+//                        }
+//                        else
+//                        {
+//                            // The array elements are simple properties: read their value from the text of their XML node
+//                            arrayProperty.set(object, index, Proxy::getText(item));
+//                        }
+//
+//                        index++;
+//                    }
+//                }
+                else
+                {
+                    // The current property is a simple property: read its value from the node's text
+                    property.set(object, m_archive.getText(child));
+                }
+            }
+        }
+        
+    private:
+        
+        archive_t& m_archive;
+        
+    };
+    
 //    template <typename Proxy>
 //    void serialize(const UserObject& object, typename Proxy::NodeType node, const Value& exclude)
 //    {

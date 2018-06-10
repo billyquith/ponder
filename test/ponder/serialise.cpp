@@ -33,6 +33,7 @@
 #include <ponder/classbuilder.hpp>
 #include <rapidxml/rapidxml_print.hpp>
 #include <iostream>
+#include <sstream>
 
 namespace SerialiseTest
 {
@@ -77,21 +78,47 @@ TEST_CASE("Can serialise using RapidXML")
 {
     SECTION("members")
     {
-        std::unique_ptr<Simple> s = std::make_unique<Simple>(78, std::string("yadda"), 99.25f);
-        REQUIRE(s != nullptr);
+        std::string serialised;
         
-        rapidxml::xml_document<> doc;
-        auto rootNode = doc.allocate_node(rapidxml::node_element, "simple");
-        REQUIRE(rootNode != nullptr);
-        doc.append_node(rootNode);
-
-        ponder::archive::RapidXmlArchive<> archive;
-        ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
-        writer.write(rootNode, ponder::UserObject::makeRef(*s));
+        {
+            std::unique_ptr<Simple> s = std::make_unique<Simple>(78, std::string("yadda"), 99.25f);
+            REQUIRE(s != nullptr);
+            
+            rapidxml::xml_document<> doc;
+            auto rootNode = doc.allocate_node(rapidxml::node_element, "simple");
+            REQUIRE(rootNode != nullptr);
+            doc.append_node(rootNode);
+            
+            ponder::archive::RapidXmlArchive<> archive;
+            ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
+            writer.write(rootNode, ponder::UserObject::makeRef(*s));
+            
+            //rapidxml::print(std::cout, doc, 0);
+            //std::cout << doc;
+            
+            std::ostringstream ostrm;
+            ostrm << doc;
+            serialised = ostrm.str();
+            doc.clear();
+        }
         
-        //rapidxml::print(std::cout, doc, 0);
-        
-        
+        {
+            std::unique_ptr<Simple> s2 = std::make_unique<Simple>(0, "", 0.f);
+            REQUIRE(s2 != nullptr);
+            
+            rapidxml::xml_document<> doc;
+            doc.parse<0>(const_cast<char*>(serialised.data()));
+            auto rootNode = doc.first_node();
+            REQUIRE(rootNode != nullptr);
+            
+            ponder::archive::RapidXmlArchive<> archive;
+            ponder::archive::ArchiveReader<ponder::archive::RapidXmlArchive<>> reader(archive);
+            reader.read(rootNode, ponder::UserObject::makeRef(*s2));
+            
+            CHECK(s2->m_i == 78);
+            CHECK(s2->getF() == 99.25f);
+            CHECK(s2->m_s == std::string("yadda"));
+        }
     }
 }
 

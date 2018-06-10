@@ -60,6 +60,21 @@ public:
         node->value(node->document()->allocate_string(text.c_str()));
     }
 
+    node_t* findFirstChild(node_t* node, const std::string& name)
+    {
+        return node->first_node(name.c_str());
+    }
+    
+    node_t* findNextSibling(node_t* node, const std::string& name)
+    {
+        return node->next_sibling(name.c_str());
+    }
+    
+    std::string getText(node_t* node)
+    {
+        return node->value();
+    }
+
     static bool isValid(node_t* node)
     {
         return node != nullptr;
