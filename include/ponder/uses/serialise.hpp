@@ -30,7 +30,7 @@
 #define PONDER_USES_SERIALISE_HPP
 
 #include <ponder/class.hpp>
-//#include <iostream>
+#include <ponder/arrayproperty.hpp>
 
 namespace ponder {
 namespace archive {
@@ -38,41 +38,23 @@ namespace archive {
     namespace detail {
     } // namespace detail
     
-    enum class ValueKind
-    {
-        UserObject
-    };
-    
-//    class TextArchive
+//    enum class ValueKind
 //    {
-//    public:
-//
-//        struct Node
-//        {
-//        };
-//
-//        using node_t = Node;
-//
-//        node_t beginNode(node_t parent, ValueKind vk)
-//        {
-//            indent();
-//            ++m_indent;
-//
-//            return Node();
-//        }
-//
-//    private:
-//
-//        void indent()
-//        {
-//            for (auto i = 0u; i < m_indent; ++i)
-//                m_stream << '\t';
-//        }
-//
-//        std::ostream m_stream;
-//        unsigned int m_indent{ 0 };
+//        UserObject
 //    };
-
+    
+    /*!
+     
+     An archive writer requires the following concepts:
+     
+        class Archive
+        {
+        public:
+            node_t* addChild(node_t* parent, const std::string& name);
+            static bool isValid(node_t* node);
+        };
+     
+     */
     template <class ARCHIVE>
     class ArchiveWriter
     {
@@ -85,19 +67,191 @@ namespace archive {
         :   m_archive(archive)
         {}
         
-        void write(node_t parent, const UserObject& obj)
+        void write(node_t* parent, const UserObject& object)
         {
-            auto& item = m_archive.beginNode(obj);
-            item.setValue(obj);
-            m_archive.endNode(item);
+            // Iterate over the object's properties using its metaclass
+            const Class& metaclass = object.getClass();
+            for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
+            {
+                const Property& property = metaclass.property(i);
+    
+                // If the property has the exclude tag, ignore it
+//                if ((exclude != Value::nothing) && property.hasTag(exclude))
+//                    continue;
+    
+                // Create a child node for the new property
+                node_t* child = m_archive.addChild(parent, property.name());
+                if (!archive_t::isValid(child))
+                    continue;
+    
+                if (property.kind() == ValueKind::User)
+                {
+                    // The current property is a composed type: serialize it recursively
+                    write(child, property.get(object).to<UserObject>());
+                }
+//                else if (property.kind() == ValueKind::Array)
+//                {
+//                    // The current property is an array
+//                    const ArrayProperty& arrayProperty = static_cast<const ArrayProperty&>(property);
+//
+//                    // Iterate over the array elements
+//                    std::size_t count = arrayProperty.size(object);
+//                    for (std::size_t j = 0; j < count; ++j)
+//                    {
+//                        // Add a new XML node for each array element
+//                        node_t* item = m_archive.addChild(child, "item");
+//                        if (archive_t::isValid(item))
+//                        {
+//                            if (arrayProperty.elementType() == ValueKind::User)
+//                            {
+//                                // The array elements are composed objects: serialize them recursively
+//                                write(item, arrayProperty.get(object, j).to<UserObject>());
+//                            }
+//                            else
+//                            {
+//                                // The array elements are simple properties: write them as the text of their XML node
+//                                m_archive.setText(item, arrayProperty.get(object, j).to<std::string>());
+//                            }
+//                        }
+//                    }
+//                }
+                else
+                {
+                    // The current property is a simple property: write its value as the node's text
+                    m_archive.setText(child, property.get(object).to<std::string>());
+                }
+            }
         }
         
     private:
         
-        archive_t m_archive;
+        archive_t& m_archive;
 
     };
-    
+
+//    template <typename Proxy>
+//    void serialize(const UserObject& object, typename Proxy::NodeType node, const Value& exclude)
+//    {
+//        // Iterate over the object's properties using its metaclass
+//        const Class& metaclass = object.getClass();
+//        for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
+//        {
+//            const Property& property = metaclass.property(i);
+//
+//            // If the property has the exclude tag, ignore it
+//            if ((exclude != Value::nothing) && property.hasTag(exclude))
+//                continue;
+//
+//            // Create a child node for the new property
+//            typename Proxy::NodeType child = Proxy::addChild(node, property.name());
+//            if (!Proxy::isValid(child))
+//                continue;
+//
+//            if (property.kind() == userType)
+//            {
+//                // The current property is a composed type: serialize it recursively
+//                serialize<Proxy>(property.get(object).to<UserObject>(), child, exclude);
+//            }
+//            else if (property.kind() == arrayType)
+//            {
+//                // The current property is an array
+//                const ArrayProperty& arrayProperty = static_cast<const ArrayProperty&>(property);
+//
+//                // Iterate over the array elements
+//                std::size_t count = arrayProperty.size(object);
+//                for (std::size_t j = 0; j < count; ++j)
+//                {
+//                    // Add a new XML node for each array element
+//                    typename Proxy::NodeType item = Proxy::addChild(child, "item");
+//                    if (Proxy::isValid(item))
+//                    {
+//                        if (arrayProperty.elementType() == userType)
+//                        {
+//                            // The array elements are composed objects: serialize them recursively
+//                            serialize<Proxy>(arrayProperty.get(object, j).to<UserObject>(), item, exclude);
+//                        }
+//                        else
+//                        {
+//                            // The array elements are simple properties: write them as the text of their XML node
+//                            Proxy::setText(item, arrayProperty.get(object, j));
+//                        }
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                // The current property is a simple property: write its value as the node's text
+//                Proxy::setText(child, property.get(object));
+//            }
+//        }
+//    }
+//
+//    template <typename Proxy>
+//    void deserialize(const UserObject& object, typename Proxy::NodeType node, const Value& exclude)
+//    {
+//        // Iterate over the object's properties using its metaclass
+//        const Class& metaclass = object.getClass();
+//        for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
+//        {
+//            const Property& property = metaclass.property(i);
+//
+//            // If the property has the exclude tag, ignore it
+//            if ((exclude != Value::nothing) && property.hasTag(exclude))
+//                continue;
+//
+//            // Find the child node corresponding to the new property
+//            typename Proxy::NodeType child = Proxy::findFirstChild(node, property.name());
+//            if (!Proxy::isValid(child))
+//                continue;
+//
+//            if (property.kind() == userType)
+//            {
+//                // The current property is a composed type: deserialize it recursively
+//                deserialize<Proxy>(property.get(object).to<UserObject>(), child, exclude);
+//            }
+//            else if (property.kind() == arrayType)
+//            {
+//                // The current property is an array
+//                const ArrayProperty& arrayProperty = static_cast<const ArrayProperty&>(property);
+//
+//                // Iterate over the child XML node and extract all the array elements
+//                std::size_t index = 0;
+//                for (typename Proxy::NodeType item = Proxy::findFirstChild(child, "item")
+//                     ; Proxy::isValid(item)
+//                     ; item = Proxy::findNextSibling(item, "item"))
+//                {
+//                    // Make sure that there are enough elements in the array
+//                    std::size_t count = arrayProperty.size(object);
+//                    if (index >= count)
+//                    {
+//                        if (arrayProperty.dynamic())
+//                            arrayProperty.resize(object, index + 1);
+//                        else
+//                            break;
+//                    }
+//
+//                    if (arrayProperty.elementType() == userType)
+//                    {
+//                        // The array elements are composed objects: deserialize them recursively
+//                        deserialize<Proxy>(arrayProperty.get(object, index).to<UserObject>(), item, exclude);
+//                    }
+//                    else
+//                    {
+//                        // The array elements are simple properties: read their value from the text of their XML node
+//                        arrayProperty.set(object, index, Proxy::getText(item));
+//                    }
+//
+//                    index++;
+//                }
+//            }
+//            else
+//            {
+//                // The current property is a simple property: read its value from the node's text
+//                property.set(object, Proxy::getText(child));
+//            }
+//        }
+//    }
+
 } // namespace archive
 } // namespace ponder
 

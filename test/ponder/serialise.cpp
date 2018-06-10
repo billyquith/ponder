@@ -28,8 +28,11 @@
  ****************************************************************************/
 
 #include "test.hpp"
+#include <ponder/uses/archive/rapidxml.hpp>
 #include <ponder/uses/serialise.hpp>
 #include <ponder/classbuilder.hpp>
+#include <rapidxml/rapidxml_print.hpp>
+#include <iostream>
 
 namespace SerialiseTest
 {
@@ -70,18 +73,25 @@ using namespace SerialiseTest;
 //                         Tests for serialisation
 //-----------------------------------------------------------------------------
 
-TEST_CASE("Serialise saves an object state")
+TEST_CASE("Can serialise using RapidXML")
 {
-    SECTION("simple")
+    SECTION("members")
     {
-//        auto const& mc = ponder::classByType<Simple>();
-//        auto& s = ponder::runtime;
-        auto s = new Simple(78, std::string("yadda"), 99.25f);
+        std::unique_ptr<Simple> s = std::make_unique<Simple>(78, std::string("yadda"), 99.25f);
         REQUIRE(s != nullptr);
         
-//        ponder::archive::ArchiveWriter<ponder::archive::Archive<ponder::archive::TextWriter>>> archive;
+        rapidxml::xml_document<> doc;
+        auto rootNode = doc.allocate_node(rapidxml::node_element, "simple");
+        REQUIRE(rootNode != nullptr);
+        doc.append_node(rootNode);
+
+        ponder::archive::RapidXmlArchive<> archive;
+        ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
+        writer.write(rootNode, ponder::UserObject::makeRef(*s));
         
-//        serialise(archive, ponder::UserObject::makeRef(*s));
+        //rapidxml::print(std::cout, doc, 0);
+        
+        
     }
 }
 

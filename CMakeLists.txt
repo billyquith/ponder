@@ -176,6 +176,8 @@ source_group("Headers\\Qt"
              REGULAR_EXPRESSION "include/ponder/qt/.+")
 source_group("Headers\\Uses"
              REGULAR_EXPRESSION "include/ponder/uses/.+")
+source_group("Headers\\Uses\\Archive"
+             REGULAR_EXPRESSION "include/ponder/uses/archive/.+")
 source_group("Headers\\Uses\\Detail"
              REGULAR_EXPRESSION "include/ponder/uses/detail/.+")
 source_group("Headers\\XML"
@@ -197,12 +199,14 @@ if(USES_RAPIDJSON)
     set(RAPIDJSON_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidjson/include)
     message(STATUS "Including RapidJSON from ${RAPIDJSON_INCLUDES}")
     set(PONDER_DEPS_INCLUDES ${PONDER_DEPS_INCLUDES} ${RAPIDJSON_INCLUDES})
+    include_directories(${RAPIDJSON_INCLUDES})
 endif()
 
 if(USES_RAPIDXML)
     set(RAPIDXML_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidxml/include)
     message(STATUS "Including RapidXML from ${RAPIDXML_INCLUDES}")
     set(PONDER_DEPS_INCLUDES ${PONDER_DEPS_INCLUDES} ${RAPIDXML_INCLUDES})
+    include_directories(${RAPIDXML_INCLUDES})
 endif()
 
 ###############################
@@ -220,7 +224,6 @@ add_library(ponder ${PONDER_SRCS})
 # include files search paths
 target_include_directories(ponder PUBLIC
     $<BUILD_INTERFACE:${PONDER_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PONDER_DEPS_INCLUDE}>
     $<INSTALL_INTERFACE:include>
 )
 
