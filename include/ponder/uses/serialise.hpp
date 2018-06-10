@@ -39,7 +39,7 @@ namespace archive {
     } // namespace detail
     
     /*!
-     An archive writer requires the following concepts:
+     For writing archive requires the following concepts:
      
         class Archive
         {
@@ -125,13 +125,14 @@ namespace archive {
     };
 
     /*!
-     An archive writer requires the following concepts:
+     For reading an archive requires the following concepts:
      
      class Archive
      {
      public:
-         node_t* addChild(node_t* parent, const std::string& name);
-         void setText(node_t* node, const std::string& text);
+         node_t* findFirstChild(node_t* node, const std::string& name);
+         node_t* findNextSibling(node_t* node, const std::string& name);
+         std::string getText(node_t* node)
          static bool isValid(node_t* node);
      };
      
