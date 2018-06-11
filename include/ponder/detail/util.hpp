@@ -34,9 +34,12 @@
 #include <ponder/config.hpp>
 #include <ponder/type.hpp>
 #include <type_traits>
+#include <memory>
 
 namespace ponder {
 namespace detail {
+
+//------------------------------------------------------------------------------
 
 template<bool C, typename T, typename F>
 struct if_c
@@ -49,6 +52,8 @@ struct if_c<false,T,F>
 {
     typedef F type;
 };
+
+//------------------------------------------------------------------------------
 
 class bad_conversion : public std::exception {};
 
@@ -122,6 +127,7 @@ T convert(const F& from)
     return convert_impl<T,F>()(from);
 }
 
+//------------------------------------------------------------------------------
 // index_sequence
 // From: http://stackoverflow.com/a/32223343/3233
 // A pre C++14 version supplied here. MSVC chokes on this but has its own version.
@@ -158,6 +164,7 @@ template<> struct make_index_sequence<1> : index_sequence<0> { };
 
 #endif // index_sequence
 
+//------------------------------------------------------------------------------
 // make_unique supplied for compilers missing it (e.g. clang 5.0 on Travis Linux).
 // source: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3656.htm
     
@@ -190,6 +197,7 @@ template<class T, class... Args>
 typename _Unique_if<T>::_Known_bound
 make_unique(Args&&...) = delete;
     
+//------------------------------------------------------------------------------
 // Return true if all args true. Useful for variadic template expansions.
 static inline bool allTrue()
     {return true;}
