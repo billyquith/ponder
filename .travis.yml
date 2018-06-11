@@ -27,7 +27,7 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get -qq update
-      sudo apt-get install -y cmake ninja libc++-dev
+      sudo apt-get install -y cmake ninja
     fi
   - ./ci/lua_local.sh
   
