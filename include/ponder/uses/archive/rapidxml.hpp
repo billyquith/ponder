@@ -28,8 +28,8 @@
 ****************************************************************************/
 
 #pragma once
-#ifndef PONDER_ARCVHIVE_RAPIDXML_HPP
-#define PONDER_ARCVHIVE_RAPIDXML_HPP
+#ifndef PONDER_ARCHIVE_RAPIDXML_HPP
+#define PONDER_ARCHIVE_RAPIDXML_HPP
 
 #include <ponder/class.hpp>
 #include <rapidxml/rapidxml.hpp>
@@ -37,9 +37,9 @@
 namespace ponder {
 namespace archive {
 
-namespace detail {
-} // namespace detail
-
+/**
+ * \brief Archive used to read/write using RapidXML.
+ */
 template <typename CH = char>
 class RapidXmlArchive
 {
@@ -85,4 +85,4 @@ public:
 } // namespace archive
 } // namespace ponder
 
-#endif // PONDER_ARCVHIVE_RAPIDXML_HPP
+#endif // PONDER_ARCHIVE_RAPIDXML_HPP

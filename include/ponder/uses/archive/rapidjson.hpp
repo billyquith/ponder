@@ -27,8 +27,8 @@
 ****************************************************************************/
 
 #pragma once
-#ifndef PONDER_ARCVHIVE_RAPIDJSON_HPP
-#define PONDER_ARCVHIVE_RAPIDJSON_HPP
+#ifndef PONDER_ARCHIVE_RAPIDJSON_HPP
+#define PONDER_ARCHIVE_RAPIDJSON_HPP
 
 #include <ponder/class.hpp>
 #include <rapidjson/rapidjson.hpp>
@@ -51,24 +51,14 @@ public:
 
    node_t beginNode(node_t parent, ValueKind vk)
    {
-       indent();
-       ++m_indent;
-
        return Node();
    }
 
 private:
 
-   void indent()
-   {
-       for (auto i = 0u; i < m_indent; ++i)
-           m_stream << '\t';
-   }
-
-   unsigned int m_indent{ 0 };
 };
 
 } // namespace archive
 } // namespace ponder
 
-#endif // PONDER_ARCVHIVE_RAPIDJSON_HPP
+#endif // PONDER_ARCHIVE_RAPIDJSON_HPP
