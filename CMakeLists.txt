@@ -37,7 +37,7 @@ cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_NOTE "-alpha") # E.g. alpha, beta, dev.
+set(VERSION_NOTE "-alpha") # e.g. "-alpha", "-beta".
 
 set(PONDER_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 set(PONDER_VERSION_STR "${PONDER_VERSION}${VERSION_NOTE}")
@@ -45,7 +45,7 @@ set(PONDER_VERSION_STR "${PONDER_VERSION}${VERSION_NOTE}")
 project(ponder
         VERSION ${PONDER_VERSION}
         DESCRIPTION "C++ reflection library"
-        LANGUAGES CXX)
+        LANGUAGES C CXX)
 message("Project version: ${PONDER_VERSION_STR}")
 
 set(CMAKE_CXX_STANDARD 14)
