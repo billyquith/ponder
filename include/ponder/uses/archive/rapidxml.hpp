@@ -46,37 +46,37 @@ class RapidXmlArchive
 public:
 
     using ch_t = CH;
-    using node_t = rapidxml::xml_node<ch_t>;
+    using node_t = rapidxml::xml_node<ch_t> *;
 
-    node_t* addChild(node_t* parent, const std::string& name)
+    node_t addChild(node_t parent, const std::string& name)
     {
         const char* allocatedName = parent->document()->allocate_string(name.c_str(), name.length());
-        node_t* child = parent->document()->allocate_node(rapidxml::node_element, allocatedName);
+        node_t child = parent->document()->allocate_node(rapidxml::node_element, allocatedName);
         parent->append_node(child);
         return child;
     }
     
-    void setText(node_t* node, const std::string& text)
+    void setText(node_t node, const std::string& text)
     {
         node->value(node->document()->allocate_string(text.c_str()));
     }
 
-    node_t* findFirstChild(node_t* node, const std::string& name)
+    node_t findFirstChild(node_t node, const std::string& name)
     {
         return node->first_node(name.c_str());
     }
     
-    node_t* findNextSibling(node_t* node, const std::string& name)
+    node_t findNextSibling(node_t node, const std::string& name)
     {
         return node->next_sibling(name.c_str());
     }
     
-    std::string getText(node_t* node)
+    std::string getText(node_t node)
     {
         return node->value();
     }
 
-    static bool isValid(node_t* node)
+    static bool isValid(node_t node)
     {
         return node != nullptr;
     }

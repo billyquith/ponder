@@ -63,7 +63,7 @@ namespace archive {
         :   m_archive(archive)
         {}
         
-        void write(node_t* parent, const UserObject& object)
+        void write(node_t parent, const UserObject& object)
         {
             // Iterate over the object's properties using its metaclass
             const Class& metaclass = object.getClass();
@@ -76,7 +76,7 @@ namespace archive {
 //                    continue;
     
                 // Create a child node for the new property
-                node_t* child = m_archive.addChild(parent, property.name());
+                node_t child = m_archive.addChild(parent, property.name());
                 if (!archive_t::isValid(child))
                     continue;
     
@@ -150,7 +150,7 @@ namespace archive {
         :   m_archive(archive)
         {}
         
-        void read(node_t* node, const UserObject& object)
+        void read(node_t node, const UserObject& object)
         {
             // Iterate over the object's properties using its metaclass
             const Class& metaclass = object.getClass();
@@ -163,7 +163,7 @@ namespace archive {
 //                    continue;
     
                 // Find the child node corresponding to the new property
-                node_t* child = m_archive.findFirstChild(node, property.name());
+                node_t child = m_archive.findFirstChild(node, property.name());
                 if (!archive_t::isValid(child))
                     continue;
     
