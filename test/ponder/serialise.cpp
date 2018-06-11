@@ -40,6 +40,8 @@ namespace SerialiseTest
     class Simple
     {
     public:
+        Simple() : m_i(0), m_f(0.f) {}
+        
         Simple(int i, const std::string& s, float f)
         :   m_i(i)
         ,   m_s(s)
@@ -51,9 +53,19 @@ namespace SerialiseTest
         
         int m_i;
         std::string m_s;
-
+        
     private:
         float m_f;
+    };
+    
+    class Ref
+    {
+    public:
+        Ref() : m_ref(nullptr) {}
+        ~Ref() {}
+        
+        Simple m_instance;
+        Simple *m_ref;
     };
     
     static void declare()
@@ -63,10 +75,16 @@ namespace SerialiseTest
             .property("float", &Simple::getF, &Simple::setF)
             .property("string", &Simple::m_s)
             ;
+        
+        ponder::Class::declare<Ref>()
+            .property("instance", &Ref::m_instance)
+//            .property("ref", &Ref::m_ref)
+            ;
     }
 }
 
 PONDER_AUTO_TYPE(SerialiseTest::Simple, &SerialiseTest::declare)
+PONDER_AUTO_TYPE(SerialiseTest::Ref, &SerialiseTest::declare)
 
 using namespace SerialiseTest;
 
@@ -76,12 +94,12 @@ using namespace SerialiseTest;
 
 TEST_CASE("Can serialise using RapidXML")
 {
-    SECTION("members")
+    SECTION("member values")
     {
         std::string serialised;
         
         {
-            std::unique_ptr<Simple> s = std::make_unique<Simple>(78, std::string("yadda"), 99.25f);
+            std::unique_ptr<Simple> s = ponder::detail::make_unique<Simple>(78, std::string("yadda"), 99.25f);
             REQUIRE(s != nullptr);
             
             rapidxml::xml_document<> doc;
@@ -103,7 +121,7 @@ TEST_CASE("Can serialise using RapidXML")
         }
         
         {
-            std::unique_ptr<Simple> s2 = std::make_unique<Simple>(0, "", 0.f);
+            std::unique_ptr<Simple> s2 = ponder::detail::make_unique<Simple>(0, "", 0.f);
             REQUIRE(s2 != nullptr);
             
             rapidxml::xml_document<> doc;
@@ -120,6 +138,55 @@ TEST_CASE("Can serialise using RapidXML")
             CHECK(s2->m_s == std::string("yadda"));
         }
     }
+    
+    SECTION("object hierarchy")
+    {
+        std::string serialised;
+        
+        {
+            std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
+            REQUIRE(r != nullptr);
+            
+            r->m_instance.m_i = 89;
+            r->m_instance.setF(0.75f);
+            r->m_instance.m_s = "stringy";
+
+            rapidxml::xml_document<> doc;
+            auto rootNode = doc.allocate_node(rapidxml::node_element, "ref");
+            REQUIRE(rootNode != nullptr);
+            doc.append_node(rootNode);
+            
+            ponder::archive::RapidXmlArchive<> archive;
+            ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
+            writer.write(rootNode, ponder::UserObject::makeRef(*r));
+            
+            std::cout << doc;
+            
+            std::ostringstream ostrm;
+            ostrm << doc;
+            serialised = ostrm.str();
+            doc.clear();
+        }
+        
+//        {
+//            std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
+//            REQUIRE(r != nullptr);
+//
+//            rapidxml::xml_document<> doc;
+//            doc.parse<0>(const_cast<char*>(serialised.data()));
+//            auto rootNode = doc.first_node();
+//            REQUIRE(rootNode != nullptr);
+//
+//            ponder::archive::RapidXmlArchive<> archive;
+//            ponder::archive::ArchiveReader<ponder::archive::RapidXmlArchive<>> reader(archive);
+//            reader.read(rootNode, ponder::UserObject::makeRef(*r));
+//
+//            CHECK(r->m_instance.m_i == 89);
+//            CHECK(r->m_instance.getF() == 0.75f);
+//            CHECK(r->m_instance.m_s == std::string("stringy"));
+//        }
+    }
+
 }
 
 
