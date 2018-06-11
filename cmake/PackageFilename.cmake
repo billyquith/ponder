@@ -34,7 +34,7 @@
 # generate package filename
 # setup CPACK_PACKAGE_FILE_NAME and CPACK_SOURCE_PACKAGE_FILE_NAME according to
 # the current build architecture, system and compiler
-# Note that CPACK_PACKAGE_NAME and VERSION_STR must be defined
+# Note that CPACK_PACKAGE_NAME and PONDER_VERSION_STR must be defined
 ###############################
 
 # detect architecture

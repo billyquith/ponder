@@ -4,6 +4,6 @@ libdir=${prefix}/lib
 
 Name: ponder
 Description: Ponder is a multi-purpose reflection library for C++
-Version: @VERSION_STR@
+Version: @PONDER_VERSION_STR@
 CFlags: -I${includedir}
 Libs: -L${libdir} -lponder

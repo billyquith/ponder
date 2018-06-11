@@ -16,7 +16,6 @@ matrix:
       
 install:
   - echo Lang:$LANG. OS:$TRAVIS_OS_NAME. CC:$CC.
-  - uname -s
   - uname -a
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then

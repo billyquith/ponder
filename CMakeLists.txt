@@ -31,12 +31,25 @@
 ###############################################################################
 
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
-project(ponder)
+set(VERSION_MAJOR 3)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
+set(VERSION_NOTE "-alpha") # E.g. alpha, beta, dev.
+
+set(PONDER_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+set(PONDER_VERSION_STR "${PONDER_VERSION}${VERSION_NOTE}")
+
+project(ponder
+        VERSION ${PONDER_VERSION}
+        DESCRIPTION "C++ reflection library"
+        LANGUAGES CXX)
+message("Project version: ${PONDER_VERSION_STR}")
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -275,7 +288,7 @@ configure_package_config_file(cmake/PonderConfig.cmake.in
 
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/PonderConfigVersion.cmake
-    VERSION ${VERSION_STR}
+    VERSION ${PONDER_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
