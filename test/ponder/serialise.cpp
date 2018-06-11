@@ -94,7 +94,7 @@ using namespace SerialiseTest;
 
 TEST_CASE("Can serialise using RapidXML")
 {
-    SECTION("member values")
+    SECTION("Member values")
     {
         std::string serialised;
         
@@ -139,7 +139,8 @@ TEST_CASE("Can serialise using RapidXML")
         }
     }
     
-    SECTION("object hierarchy")
+    // Simple nested object
+    SECTION("Nested object")
     {
         std::string serialised;
         
@@ -160,7 +161,7 @@ TEST_CASE("Can serialise using RapidXML")
             ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
             writer.write(rootNode, ponder::UserObject::makeRef(*r));
             
-            std::cout << doc;
+            //std::cout << doc;
             
             std::ostringstream ostrm;
             ostrm << doc;
@@ -168,33 +169,27 @@ TEST_CASE("Can serialise using RapidXML")
             doc.clear();
         }
         
-//        {
-//            std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
-//            REQUIRE(r != nullptr);
-//
-//            rapidxml::xml_document<> doc;
-//            doc.parse<0>(const_cast<char*>(serialised.data()));
-//            auto rootNode = doc.first_node();
-//            REQUIRE(rootNode != nullptr);
-//
-//            ponder::archive::RapidXmlArchive<> archive;
-//            ponder::archive::ArchiveReader<ponder::archive::RapidXmlArchive<>> reader(archive);
-//            reader.read(rootNode, ponder::UserObject::makeRef(*r));
-//
-//            CHECK(r->m_instance.m_i == 89);
-//            CHECK(r->m_instance.getF() == 0.75f);
-//            CHECK(r->m_instance.m_s == std::string("stringy"));
-//        }
+        {
+            std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
+            REQUIRE(r != nullptr);
+
+            rapidxml::xml_document<> doc;
+            doc.parse<0>(const_cast<char*>(serialised.data()));
+            auto rootNode = doc.first_node();
+            REQUIRE(rootNode != nullptr);
+
+            ponder::archive::RapidXmlArchive<> archive;
+            ponder::archive::ArchiveReader<ponder::archive::RapidXmlArchive<>> reader(archive);
+            reader.read(rootNode, ponder::UserObject::makeRef(*r));
+
+            CHECK(r->m_instance.m_i == 89);
+            CHECK(r->m_instance.getF() == 0.75f);
+            CHECK(r->m_instance.m_s == std::string("stringy"));
+        }
     }
 
 }
 
 
-//TEST_CASE("Serialise saves an object state")
-//{
-//    SECTION("simple")
-//    {
-//    }
-//}
 
 
