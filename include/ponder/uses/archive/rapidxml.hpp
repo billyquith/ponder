@@ -76,7 +76,7 @@ public:
         return node->value();
     }
 
-    static bool isValid(node_t node)
+    bool isValid(node_t node)
     {
         return node != nullptr;
     }

@@ -53,6 +53,7 @@ namespace SerialiseTest
         
         int m_i;
         std::string m_s;
+        std::vector<int> m_v;
         
     private:
         float m_f;
@@ -74,6 +75,7 @@ namespace SerialiseTest
             .property("int", &Simple::m_i)
             .property("float", &Simple::getF, &Simple::setF)
             .property("string", &Simple::m_s)
+            .property("vector", &Simple::m_v)
             ;
         
         ponder::Class::declare<Ref>()
@@ -101,6 +103,7 @@ TEST_CASE("Can serialise using RapidXML")
         {
             std::unique_ptr<Simple> s = ponder::detail::make_unique<Simple>(78, std::string("yadda"), 99.25f);
             REQUIRE(s != nullptr);
+            s->m_v = {3,6,9};
             
             rapidxml::xml_document<> doc;
             auto rootNode = doc.allocate_node(rapidxml::node_element, "simple");
@@ -111,7 +114,6 @@ TEST_CASE("Can serialise using RapidXML")
             ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
             writer.write(rootNode, ponder::UserObject::makeRef(*s));
             
-            //rapidxml::print(std::cout, doc, 0);
             //std::cout << doc;
             
             std::ostringstream ostrm;
@@ -136,6 +138,7 @@ TEST_CASE("Can serialise using RapidXML")
             CHECK(s2->m_i == 78);
             CHECK(s2->getF() == 99.25f);
             CHECK(s2->m_s == std::string("yadda"));
+            CHECK(s2->m_v == std::vector<int>({3,6,9}));
         }
     }
     
