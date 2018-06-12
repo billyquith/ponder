@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
 case `uname -s` in
-Darwin) if [ ! -z `which ninja` ]; then GEN=Ninja; else GEN=Xcode; fi;;
+Darwin)
+    if [ ! -z `which ninja` ]; then
+        GEN=Ninja;
+    else
+        GEN=Xcode;
+        BUILDARGS="-- -quiet"; # otherwise xcodebuild very verbose
+    fi
+    ;;
 Linux)
     #if [ ! -z `which ninja` ]; then GEN=Ninja; else GEN="Unix Makefiles"; fi
     GEN="Unix Makefiles"
@@ -22,7 +29,7 @@ function build_test # configs
     for cfg in $1
     do
         echo "Build and testing config: $cfg"
-        if ! cmake --build . --config $cfg; then exit 1; fi
+        if ! cmake --build . --config $cfg $BUILDARGS; then exit 1; fi
         if ! ctest -C $cfg -V; then exit 1; fi
     done
     cd ..
