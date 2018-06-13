@@ -39,10 +39,9 @@
 #include <ponder/detail/functiontraits.hpp>
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 using namespace std::placeholders;
     
 /*
@@ -112,7 +111,7 @@ struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type 
 };
 
 /**
- * Helper structure to return values
+ * \brief Helper structure to return values
  *
  * The purpose of this structure is to provide workarounds for types
  * that don't exactly satisfy the compiler when returned. For example,
@@ -404,30 +403,7 @@ struct PropertyFactory2<C, F1, F2,
     }
 };
 
-/*
- * Property factory which instanciates the proper type of property from 3 accessors
- */
-template <typename C, typename F1, typename F2, typename F3>
-struct PropertyFactory3
-{
-    typedef typename FunctionTraits<F1>::ReturnType ReturnType;
-    typedef typename FunctionTraits<F3>::ReturnType InnerType;
-
-    static Property* get(IdRef name, F1 accessor1, F2 accessor2, F3 accessor3)
-    {
-        typedef Accessor2<C, ReturnType> AccessorType;
-
-        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
-
-        return new PropertyType(name,
-            AccessorType(std::bind(accessor1, std::bind(accessor3, std::placeholders::_1)),
-                         std::bind(accessor2, std::bind(accessor3, std::placeholders::_1), std::placeholders::_2)));
-    }
-};
-
 } // namespace detail
-
 } // namespace ponder
 
 
