@@ -22,12 +22,8 @@ build_script:
       mkdir build
       cd build
       set OPTS=-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF
-      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (
-        cmake %OPTS% -G "Visual Studio 14 2015%ARCH%" ..
-      )
-      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (
-        cmake %OPTS% -G "Visual Studio 15 2017%ARCH%" ..
-      )
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" cmake %OPTS% -G "Visual Studio 14 2015%ARCH%" ..
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" cmake %OPTS% -G "Visual Studio 15 2017%ARCH%" ..
       cmake --build . --config "%CFG%"
 
 test_script:
