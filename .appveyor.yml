@@ -8,8 +8,8 @@ image:
 
 environment:
   matrix:
-    - ARCH: 
-    - ARCH: Win64
+    - ARCH: ""
+    - ARCH: " Win64"
 
 build:
   parallel: true
