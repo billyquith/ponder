@@ -46,7 +46,7 @@ namespace detail
 using namespace std::placeholders;
     
 /*
- * Instanciate simple properties
+ * Instantiate simple properties
  */
 template <typename A, ValueKind T>
 struct PropertyMapper
@@ -55,7 +55,7 @@ struct PropertyMapper
 };
 
 /*
- * Instanciate array properties
+ * Instantiate array properties
  */
 template <typename A>
 struct PropertyMapper<A, ponder::ValueKind::Array>
@@ -64,7 +64,7 @@ struct PropertyMapper<A, ponder::ValueKind::Array>
 };
 
 /*
- * Instanciate enum properties
+ * Instantiate enum properties
  */
 template <typename A>
 struct PropertyMapper<A, ponder::ValueKind::Enum>
@@ -73,7 +73,7 @@ struct PropertyMapper<A, ponder::ValueKind::Enum>
 };
 
 /*
- * Instanciate user properties
+ * Instantiate user properties
  */
 template <typename A>
 struct PropertyMapper<A, ponder::ValueKind::User>
@@ -337,7 +337,7 @@ private:
 
 
 /*
- * Property factory which instanciates the proper type of property from 1 accessor
+ * Property factory which instantiates the proper type of property from 1 accessor
  */
 template <typename C, typename F>
 struct PropertyFactory1
@@ -356,7 +356,7 @@ struct PropertyFactory1
 };
 
 /*
- * Property factory which instanciates the proper type of property from 2 accessors
+ * Property factory which instantiates the proper type of property from 2 accessors
  */
 template <typename C, typename F1, typename F2, typename E = void>
 struct PropertyFactory2
@@ -405,7 +405,7 @@ struct PropertyFactory2<C, F1, F2,
 };
 
 /*
- * Property factory which instanciates the proper type of property from 3 accessors
+ * Property factory which instantiates the proper type of property from 3 accessors
  */
 template <typename C, typename F1, typename F2, typename F3>
 struct PropertyFactory3

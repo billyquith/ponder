@@ -47,7 +47,7 @@ class Enum;
  * new metaenum. It contains functions to declare <name, value> pairs to
  * fill the metaenum.
  *
- * This class should never be explicitely instanciated, unless you
+ * This class should never be explicitely instantiated, unless you
  * need to split the metaenum creation in multiple parts.
  */
 class PONDER_API EnumBuilder
