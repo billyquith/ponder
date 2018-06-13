@@ -17,6 +17,7 @@ build:
   parallel: true
 
 build_script:
+  - cmd: echo "image:%APPVEYOR_BUILD_WORKER_IMAGE%"
   - cmd: mkdir build
   - cmd: cd build
   - cmd: cmake --version
