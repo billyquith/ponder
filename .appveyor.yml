@@ -21,7 +21,7 @@ build_script:
       cmake --version
       mkdir build
       cd build
-      set OPTS="-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF"
+      set OPTS=-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF
       if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (
         cmake %OPTS% -G "Visual Studio 14 2015%ARCH%" ..
       )
