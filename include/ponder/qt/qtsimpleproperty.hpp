@@ -45,7 +45,7 @@ namespace ponder_ext
 /**
  * \brief Specialization of ponder::SimpleProperty implemented using a Qt property
  *
- * This class is instanciated and returned by QtMapper<T>.
+ * This class is instantiated and returned by QtMapper<T>.
  *
  * \sa QtMapper
  */

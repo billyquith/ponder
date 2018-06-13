@@ -58,7 +58,7 @@ namespace ponder {
  * ClassBuilder also contains functions to set attributes of metafunctions
  * and metaproperties.
  *
- * This class should never be explicitely instanciated, unless you
+ * This class should never be explicitely instantiated, unless you
  * need to split the metaclass creation in multiple parts.
  */
 template <typename T>

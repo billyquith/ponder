@@ -1,28 +1,35 @@
-os: Visual Studio 2015
-platform: x64
-shallow_clone: true
-version: 1.0.{build}
 
-# Matrix: GENERATOR, CFG
+version: 1.0.{build}
+shallow_clone: true
+
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
 
 environment:
   matrix:
-    - GENERATOR: Visual Studio 15 2017
-    - GENERATOR: Visual Studio 15 2017 Win64
-    - GENERATOR: Visual Studio 14 2015
-    - GENERATOR: Visual Studio 14 2015 Win64
+    - DESC: VS 32-bit
+      ARCH: ""
+    - DESC: VS 64-bit
+      ARCH: " Win64"
 
 build:
   parallel: true
 
 build_script:
-  - cmd: mkdir build
-  - cmd: cd build
-  - cmd: cmake -DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF -G "%GENERATOR%" ..
-  - cmd: cmake --build . --config Debug
-  - cmd: cmake --build . --config Release
+  - cmd: |
+      echo "image:%APPVEYOR_BUILD_WORKER_IMAGE%. arch:%ARCH%. desc:%DESC%."
+      cmake --version
+      mkdir build
+      cd build
+      set OPTS=-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" cmake %OPTS% -G "Visual Studio 14 2015%ARCH%" ..
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" cmake %OPTS% -G "Visual Studio 15 2017%ARCH%" ..
+      cmake --build . --config Debug
+      cmake --build . --config Release
 
 test_script:
-  - cmd: cd test && ctest -C Debug -V
-  - cmd: cd test && ctest -C Release -V
-
+  - cmd: |
+      cd test
+      ctest -C Debug -V
+      ctest -C Release -V

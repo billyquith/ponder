@@ -52,7 +52,7 @@ struct ValueProviderImpl
 };
 
 /*
- * Specialization for user types: use metaclass to instanciate
+ * Specialization for user types: use metaclass to instantiate
  * so that we get an exception rather than a compile error
  * if the type has no default constructor
  */
@@ -88,7 +88,7 @@ struct ValueProviderImpl<T*, ValueKind::User>
 };
 
 /*
- * Helper structure to instanciate new values based on their type
+ * Helper structure to instantiate new values based on their type
  */
 template <typename T>
 struct ValueProvider : ValueProviderImpl<T, ponder_ext::ValueMapper<T>::kind>
