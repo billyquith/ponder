@@ -183,7 +183,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
         REQUIRE(MyClass::instCount == 0);
         {
             char buff[sizeof(MyClass) + 20];
-            const char c_guard = 0xcd;
+            const char c_guard{ (char)0xcd };
             memset(buff, c_guard, sizeof(buff));
             char *p = buff + 4;
             
@@ -518,7 +518,7 @@ TEST_CASE("Object factory constructors can use placement new")
     SECTION("with no parameters")
     {
         char buff[sizeof(MyClass) + 20];
-        const char c_guard = 0xcd;
+        const char c_guard{ (char)0xcd };
         memset(buff, c_guard, sizeof(buff));
         char *p = buff + 4;
         
