@@ -146,6 +146,7 @@ set(SRC_HEADERS
     include/ponder/uses/detail/lua.hpp
     # Archive
     include/ponder/uses/serialise.hpp
+    include/ponder/uses/serialise.inlcm
     include/ponder/uses/archive/rapidjson.hpp
     include/ponder/uses/archive/rapidxml.hpp
 )
