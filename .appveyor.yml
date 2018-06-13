@@ -29,5 +29,7 @@ build_script:
       cmake --build . --config Release
 
 test_script:
-  - cmd: cd test && ctest -C Debug -V
-  - cmd: cd test && ctest -C Release -V  
+  - cmd: |
+      cd test
+      ctest -C Debug -V
+      ctest -C Release -V
