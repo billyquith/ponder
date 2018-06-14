@@ -127,7 +127,7 @@ TEST_CASE("Can serialise using RapidXML")
             REQUIRE(s2 != nullptr);
             
             rapidxml::xml_document<> doc;
-            doc.parse<0>(const_cast<char*>(serialised.data()));
+            doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(serialised.data()));
             auto rootNode = doc.first_node();
             REQUIRE(rootNode != nullptr);
             
@@ -177,7 +177,7 @@ TEST_CASE("Can serialise using RapidXML")
             REQUIRE(r != nullptr);
 
             rapidxml::xml_document<> doc;
-            doc.parse<0>(const_cast<char*>(serialised.data()));
+            doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(serialised.data()));
             auto rootNode = doc.first_node();
             REQUIRE(rootNode != nullptr);
 

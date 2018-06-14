@@ -285,6 +285,14 @@ struct ValueMapper<const char[N]>
     static ponder::String to(const char source[N]) {return ponder::String(source);}
 };
 
+template <>
+struct ValueMapper<ponder::detail::string_view>
+{
+    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static ponder::String to(const ponder::detail::string_view& sv)
+        {return ponder::String(sv.data(), sv.length());}
+};
+
 /**
  * Specialization of ValueMapper for enum types
  */
