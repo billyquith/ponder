@@ -50,7 +50,7 @@ public:
 
     node_t addChild(node_t parent, const std::string& name)
     {
-        const char* allocatedName = parent->document()->allocate_string(name.c_str(), name.length());
+        const char* allocatedName = parent->document()->allocate_string(name.c_str(), name.length()+1);
         node_t child = parent->document()->allocate_node(rapidxml::node_element, allocatedName);
         parent->append_node(child);
         return child;
@@ -58,7 +58,7 @@ public:
     
     void setText(node_t node, const std::string& text)
     {
-        node->value(node->document()->allocate_string(text.c_str()));
+        node->value(node->document()->allocate_string(text.c_str(), text.length()+1));
     }
 
     node_t findFirstChild(node_t node, const std::string& name)
@@ -75,7 +75,7 @@ public:
     
     detail::string_view getText(node_t node)
     {
-        const auto sv{ detail::string_view(node->value(), node->value_size()) };
+        const auto sv( detail::string_view(node->value(), node->value_size()) );
         std::cout << sv << std::endl;
         return sv;
     }
