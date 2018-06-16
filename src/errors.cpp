@@ -143,4 +143,9 @@ PropertyNotFound::PropertyNotFound(IdRef name, IdRef className)
 {
 }
 
+TypeAmbiguity::TypeAmbiguity(IdRef typeName)
+: Error("type " + String(typeName) + " ambiguity")
+{
+}
+
 } // namespace ponder

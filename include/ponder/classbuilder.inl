@@ -47,7 +47,8 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     // First make sure that the base class is not already a base of the current class
     for (Class::BaseInfo& bi : m_target->m_bases)
     {
-        assert(bi.base->name() != baseName);
+        if (bi.base->name() == baseName)
+            PONDER_ERROR(TypeAmbiguity(bi.base->name()));
     }
 
     // Compute the offset to apply for pointer conversions

@@ -90,5 +90,7 @@
     CLS(CLS const&) = delete; \
     CLS& operator=(CLS const&) = delete
 
+#define PONDER__UNUSED(VAR) ((void)&(VAR))
+
 #endif // PONDER_CONFIG_HPP
 

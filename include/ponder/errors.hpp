@@ -264,7 +264,7 @@ public:
      */
     FunctionNotFound(IdRef name, IdRef className);
 };
-
+    
 /**
  * \brief Error thrown when a declaring a metaclass that already exists
  */
@@ -329,6 +329,21 @@ public:
      * \param className Name of the owner metaclass
      */
     PropertyNotFound(IdRef name, IdRef className);
+};
+
+/**
+ * \brief Error thrown when cannot distinguish between multiple type instance
+ */
+class PONDER_API TypeAmbiguity : public Error
+{
+public:
+    
+    /**
+     * \brief Constructor
+     *
+     * \param tyoeName Name of the type causing problems
+     */
+    TypeAmbiguity(IdRef typeName);
 };
 
 } // namespace ponder
