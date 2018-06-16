@@ -50,8 +50,8 @@ public:
 
     node_t addChild(node_t parent, const std::string& name)
     {
-        const char* allocatedName = parent->document()->allocate_string(name.c_str(), name.length()+1);
-        node_t child = parent->document()->allocate_node(rapidxml::node_element, allocatedName);
+        const char* nodeName = parent->document()->allocate_string(name.c_str(), name.length()+1);
+        node_t child = parent->document()->allocate_node(rapidxml::node_element, nodeName);
         parent->append_node(child);
         return child;
     }
@@ -63,21 +63,17 @@ public:
 
     node_t findFirstChild(node_t node, const std::string& name)
     {
-        std::cout << "FC: " << name << std::endl;
         return node->first_node(name.c_str(), name.length());
     }
     
     node_t findNextSibling(node_t node, const std::string& name)
     {
-        std::cout << "FS: " << name << std::endl;
         return node->next_sibling(name.c_str(), name.length());
     }
     
     detail::string_view getText(node_t node)
     {
-        const auto sv( detail::string_view(node->value(), node->value_size()) );
-        std::cout << sv << std::endl;
-        return sv;
+        return detail::string_view(node->value(), node->value_size());
     }
 
     bool isValid(node_t node)
