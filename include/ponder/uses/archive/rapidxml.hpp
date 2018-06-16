@@ -31,7 +31,6 @@
 #ifndef PONDER_ARCHIVE_RAPIDXML_HPP
 #define PONDER_ARCHIVE_RAPIDXML_HPP
 
-#include <ponder/class.hpp>
 #include <rapidxml/rapidxml.hpp>
 #include <ponder/detail/string_view.hpp>
 
@@ -64,17 +63,21 @@ public:
 
     node_t findFirstChild(node_t node, const std::string& name)
     {
+        std::cout << "FC: " << name << std::endl;
         return node->first_node(name.c_str(), name.length());
     }
     
     node_t findNextSibling(node_t node, const std::string& name)
     {
+        std::cout << "FS: " << name << std::endl;
         return node->next_sibling(name.c_str(), name.length());
     }
     
     detail::string_view getText(node_t node)
     {
-        return detail::string_view(node->value(), node->value_size());
+        const auto sv{ detail::string_view(node->value(), node->value_size()) };
+        std::cout << sv << std::endl;
+        return sv;
     }
 
     bool isValid(node_t node)

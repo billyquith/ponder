@@ -27,6 +27,8 @@
  **
  ****************************************************************************/
 
+#include <iostream>
+
 #include "test.hpp"
 #include <ponder/uses/archive/rapidxml.hpp>
 #include <ponder/uses/serialise.hpp>
@@ -114,7 +116,7 @@ TEST_CASE("Can serialise using RapidXML")
             ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
             writer.write(rootNode, ponder::UserObject::makeRef(*s));
             
-            //std::cout << doc;
+            std::cout << doc;
             
             std::ostringstream ostrm;
             ostrm << doc;
@@ -164,7 +166,7 @@ TEST_CASE("Can serialise using RapidXML")
             ponder::archive::ArchiveWriter<ponder::archive::RapidXmlArchive<>> writer(archive);
             writer.write(rootNode, ponder::UserObject::makeRef(*r));
             
-            //std::cout << doc;
+            std::cout << doc;
             
             std::ostringstream ostrm;
             ostrm << doc;
