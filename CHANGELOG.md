@@ -9,11 +9,13 @@ Ponder Changelog
 - Extensive refactoring of the API.
 - All types have common ancestor: Type.
 - Added UserData per Type. (issue #98)
+- Refactored serialisation. Removed ponder-xml. Refactored into serialisers (issue #43).
+- Added RapidJSON for use by JSON serialiser (issue #43).
+- Added RapidXML for use by XML serialiser (issue #43).
 - Remove dynamic read/write attribute from properties. (issue #91)
 - Remove TagHolder. (issue #92)
 - Removed `ponder::classByIndex()`. Use `ponder::classIterator()` instead.
 - Cmake project name changed to "ponder" to match namespace (issue #95).
-- Add RapidJSON for use by JSON serialiser (issue #43).
 - Removed composed property getter. Use lambdas instead. See property test p14-p17.
 
 ### 2.2
