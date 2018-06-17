@@ -121,7 +121,7 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 /*
  * Specialized version for built-in arrays
  */
-template <typename T, int N>
+template <typename T, std::size_t N>
 struct ObjectTraits<T[N]>
 {
     static constexpr bool isWritable = false;

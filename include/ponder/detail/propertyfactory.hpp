@@ -137,7 +137,7 @@ struct AccessorReturn<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
 /**
  * Specialization of AccessorReturn for built-in array types
  */
-template <typename T, int N>
+template <typename T, std::size_t N>
 struct AccessorReturn<T[N]>
 {
     typedef T (&Type)[N];

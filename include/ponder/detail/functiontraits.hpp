@@ -150,14 +150,14 @@ struct RefDetails<T(C::*)>
     typedef T& RefType;
 };
 
-template <typename C, typename T, int S>
+template <typename C, typename T, std::size_t S>
 struct RefDetails<T(C::*)[S]>
 {
     typedef C ClassType;
     typedef T(&RefType)[S];
 };
 
-template <typename C, typename T, int S>
+template <typename C, typename T, std::size_t S>
 struct RefDetails<std::array<T,S>(C::*)>
 {
     typedef C ClassType;
