@@ -204,8 +204,8 @@ struct FunctionTraits
  * Specialization for native callable types (function and function pointer types)
  */
 template <typename T>
-struct FunctionTraits<T,
-    typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
+struct FunctionTraits<T, typename
+    std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::Function;
     static constexpr bool isFunction = true;
@@ -238,7 +238,8 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
  * TODO - should member be wrapped (in lambda?) so we don't have to include this?
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
+struct FunctionTraits<T, typename
+    std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::MemberObject;
     static constexpr bool isFunction = false;
@@ -250,7 +251,8 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_object_pointer<T
  * Specialization for functors (classes exporting a result_type type, T operator() ).
  */
 template <typename T>
-struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::value>::type>
+struct FunctionTraits<T, typename
+    std::enable_if<std::is_bind_expression<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
     static constexpr bool isFunction = true;

@@ -27,7 +27,6 @@
 **
 ****************************************************************************/
 
-
 #ifndef PONDER_DETAIL_PROPERTYFACTORY_HPP
 #define PONDER_DETAIL_PROPERTYFACTORY_HPP
 
@@ -39,10 +38,9 @@
 #include <ponder/detail/functiontraits.hpp>
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 using namespace std::placeholders;
     
 /*
@@ -376,10 +374,8 @@ struct PropertyFactory2
 
 /*
  * Specialization of PropertyFactory2 with 2 getters (which will produce 1 composed getter)
- *
  *      class Container { Object o; };
- *
- *  Here we assume that for all composed getters type <Container> != type <Object>.
+ *  Here we assume that for all composed getters type Container != type Object.
  */
 template <typename C, typename F1, typename F2>
 struct PropertyFactory2<C, F1, F2,
@@ -405,8 +401,6 @@ struct PropertyFactory2<C, F1, F2,
 };
 
 } // namespace detail
-
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_PROPERTYFACTORY_HPP

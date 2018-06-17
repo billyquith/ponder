@@ -57,7 +57,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     // - Use pointer dummy buffer here as some platforms seem to trap bad memory access even
     //   though not dereferencing the pointer.
     // - U : Base, T : Derived.
-    char dummy[16];
+    char dummy[8];
     T* asDerived = reinterpret_cast<T*>(dummy);
     U* asBase = static_cast<U*>(asDerived);
     const int offset = static_cast<int>(reinterpret_cast<char*>(asBase) -
@@ -86,8 +86,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
 
 template <typename T>
 template <typename F>
-ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
-                                           F accessor)
+ClassBuilder<T>& ClassBuilder<T>::property(IdRef name, F accessor)
 {
     // Find factory able to construct a Property from an accessor of type F
     typedef detail::PropertyFactory1<T, F> Factory;
@@ -98,8 +97,7 @@ ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
 
 template <typename T>
 template <typename F1, typename F2>
-ClassBuilder<T>& ClassBuilder<T>::property(IdRef name,
-                                           F1 accessor1, F2 accessor2)
+ClassBuilder<T>& ClassBuilder<T>::property(IdRef name, F1 accessor1, F2 accessor2)
 {
     // Find factory able to construct a Property from accessors of type F1 and F2
     typedef detail::PropertyFactory2<T, F1, F2> Factory;
