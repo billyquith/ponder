@@ -372,34 +372,6 @@ struct PropertyFactory2
     }
 };
 
-/*
- * Specialization of PropertyFactory2 with 2 getters (which will produce 1 composed getter)
- *      class Container { Object o; };
- *  Here we assume that for all composed getters type Container != type Object.
- */
-template <typename C, typename F1, typename F2>
-struct PropertyFactory2<C, F1, F2,
-    typename std::enable_if<
-            !std::is_void<typename FunctionTraits<F2>::ReturnType>::value &&
-            !std::is_same<C, typename std::remove_reference<
-                                typename FunctionTraits<F2>::ReturnType>::type >::value
-                             >::type >
-{
-    typedef typename FunctionTraits<F1>::ReturnType ReturnType;
-    typedef typename \
-        std::remove_reference<typename FunctionTraits<F2>::ReturnType>::type OtherClassType;
-
-    static Property* get(IdRef name, F1 accessor1, F2 accessor2)
-    {
-        typedef Accessor3<C, OtherClassType, ReturnType> AccessorType;
-
-        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
-
-        return new PropertyType(name, AccessorType(accessor1, accessor2));
-    }
-};
-
 } // namespace detail
 } // namespace ponder
 

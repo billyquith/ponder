@@ -183,15 +183,16 @@ namespace PropertyTest
             .property("p13", &MyClass::getP13, &MyClass::setP13)
         
             // ***** nested functions *****
-             // pointer to read-write member
-            .property("p14", &MyClass::Inner::p14, &MyClass::getInner)
+            // pointer to read-write member
+            .property("p14", [](MyClass& s) -> bool& {return s.inner.p14;})
              // Pointer to read-only member
-            .property("p15", &MyClass::Inner::p15, &MyClass::inner)
+            .property("p15", [](MyClass& s) { return s.inner.p15; })
              // read-only getter
-            .property("p16", &MyClass::Inner::getP16, &MyClass::getInner)
+            .property("p16", [](MyClass& s) { return s.inner.getP16(); })
              // read-only getter + write-only setter
-            .property("p17", [](MyClass& self) -> const MyType& {return self.getInner().getP17();},
-                             [](MyClass& self, const MyType &value){self.getInner().setP17(value);})
+            .property("p17", [](MyClass& self) -> const MyType&
+                                 {return self.getInner().getP17();},  // get
+                             [](MyClass& self, const MyType &value){self.getInner().setP17(value);})    // set
         
             // ***** std::function *****
              // pointer to read-write member

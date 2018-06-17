@@ -14,6 +14,7 @@ Ponder Changelog
 - Removed `ponder::classByIndex()`. Use `ponder::classIterator()` instead.
 - Cmake project name changed to "ponder" to match namespace (issue #95).
 - Add RapidJSON for use by JSON serialiser (issue #43).
+- Removed composed property getter. Use lambdas instead. See property test p14-p17.
 
 ### 2.2
 
