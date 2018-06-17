@@ -137,11 +137,11 @@ T convert(const F& from)
 #else
 #   define PONDER__SEQNS ::ponder::detail
 
-template <size_t... Ints>
+template <std::size_t... Ints>
 struct index_sequence
 {
     using type = index_sequence;
-    using value_type = size_t;
+    using value_type = std::size_t;
     static constexpr std::size_t size() { return sizeof...(Ints); }
 };
 
@@ -176,7 +176,7 @@ template<class T> struct _Unique_if<T[]> {
     typedef std::unique_ptr<T[]> _Unknown_bound;
 };
 
-template<class T, size_t N> struct _Unique_if<T[N]> {
+template<class T, std::size_t N> struct _Unique_if<T[N]> {
     typedef void _Known_bound;
 };
 
@@ -188,7 +188,7 @@ make_unique(Args&&... args) {
 
 template<class T>
 typename _Unique_if<T>::_Unknown_bound
-make_unique(size_t n) {
+make_unique(std::size_t n) {
     typedef typename std::remove_extent<T>::type U;
     return std::unique_ptr<T>(new U[n]());
 }
