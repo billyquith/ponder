@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_DETAIL_VALUEIMPL_HPP
 #define PONDER_DETAIL_VALUEIMPL_HPP
 

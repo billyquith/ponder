@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_OBSERVER_HPP
 #define PONDER_OBSERVER_HPP
 

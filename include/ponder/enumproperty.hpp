@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_ENUMPROPERTY_HPP
 #define PONDER_ENUMPROPERTY_HPP
 

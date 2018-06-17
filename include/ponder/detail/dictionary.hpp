@@ -30,7 +30,7 @@
  **
  ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_DICTIONARY_HPP
 #define PONDER_DICTIONARY_HPP
 

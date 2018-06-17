@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_ARRAYPROPERTY_HPP
 #define PONDER_ARRAYPROPERTY_HPP
 

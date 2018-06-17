@@ -26,6 +26,7 @@
 **
 ****************************************************************************/
 
+#pragma once
 #ifndef PONDER_USES_RUNTIME_IMPL_HPP
 #define PONDER_USES_RUNTIME_IMPL_HPP
 

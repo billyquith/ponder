@@ -29,6 +29,7 @@
 
 //! \file classget.hpp
 
+#pragma once
 #ifndef PONDER_CLASSGET_HPP
 #define PONDER_CLASSGET_HPP
 

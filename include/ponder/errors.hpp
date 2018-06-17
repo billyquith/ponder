@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_ERRORS_HPP
 #define PONDER_ERRORS_HPP
 

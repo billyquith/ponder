@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_CONSTRUCTOR_HPP
 #define PONDER_CONSTRUCTOR_HPP
 

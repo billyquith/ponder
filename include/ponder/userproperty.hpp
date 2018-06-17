@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_USERPROPERTY_HPP
 #define PONDER_USERPROPERTY_HPP
 

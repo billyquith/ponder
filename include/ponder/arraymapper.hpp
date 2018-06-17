@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_ARRAYMAPPER_HPP
 #define PONDER_ARRAYMAPPER_HPP
 

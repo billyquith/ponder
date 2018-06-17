@@ -26,6 +26,7 @@
 **
 ****************************************************************************/
 
+#pragma once
 #ifndef PONDER_USES_LUA_HPP
 #define PONDER_USES_LUA_HPP
 

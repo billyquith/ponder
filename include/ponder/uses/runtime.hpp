@@ -32,6 +32,7 @@
  * \brief Runtime uses for Ponder registered data.
  */
 
+#pragma once
 #ifndef PONDER_USES_RUNTIME_HPP
 #define PONDER_USES_RUNTIME_HPP
 

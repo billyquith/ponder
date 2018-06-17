@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 
+#pragma once
 #ifndef PONDER_CLASS_HPP
 #define PONDER_CLASS_HPP
 

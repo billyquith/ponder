@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 
+#pragma once
 #ifndef PONDER_USES_SERIALISE_HPP
 #define PONDER_USES_SERIALISE_HPP
 

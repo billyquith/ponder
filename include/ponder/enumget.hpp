@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_ENUMGET_HPP
 #define PONDER_ENUMGET_HPP
 

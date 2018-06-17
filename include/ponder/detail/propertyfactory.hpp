@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 
+#pragma once
 #ifndef PONDER_DETAIL_PROPERTYFACTORY_HPP
 #define PONDER_DETAIL_PROPERTYFACTORY_HPP
 

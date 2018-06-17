@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 
-
+#pragma once
 #ifndef PONDER_CLASSVISITOR_HPP
 #define PONDER_CLASSVISITOR_HPP
 
