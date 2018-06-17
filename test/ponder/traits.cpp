@@ -278,6 +278,7 @@ TEST_CASE("Ponder supports different function types")
         struct Members {
             int m;
             float a[5];
+            bool b[8];
         };
 
         static_assert( ! FunctionTraits<int Members::*>::isFunction,
@@ -293,6 +294,11 @@ TEST_CASE("Ponder supports different function types")
         static_assert( ! FunctionTraits<decltype(&Members::a)>::isFunction,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(&Members::a)>::kind == FunctionKind::MemberObject,
+                      "FunctionTraits<>::kind failed");
+        
+        static_assert( ! FunctionTraits<decltype(&Members::b)>::isFunction,
+                      "FunctionTraits<>::isFunction failed");
+        static_assert(FunctionTraits<decltype(&Members::b)>::kind == FunctionKind::MemberObject,
                       "FunctionTraits<>::kind failed");
     }
     
