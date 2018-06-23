@@ -195,7 +195,6 @@ template <typename T, typename E = void>
 struct FunctionTraits
 {
     static constexpr FunctionKind kind = FunctionKind::None;
-    static constexpr bool isFunction = false;
 };
 
 /**
@@ -206,7 +205,6 @@ struct FunctionTraits<T, typename
     std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::Function;
-    static constexpr bool isFunction = true;
     
     typedef typename function::FunctionDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
@@ -221,26 +219,11 @@ template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::MemberFunction;
-    static constexpr bool isFunction = true;
     
     typedef typename function::MethodDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
     typedef typename Details::Typedef Typedef;
     typedef typename Details::ReturnType ReturnType;
-};
-
-/**
- * Specialization for native callable types (member pointer types)
- * This isn't a function, but we include it so that we can genericise member types.
- */
-template <typename T>
-struct FunctionTraits<T, typename
-    std::enable_if<std::is_member_object_pointer<T>::value>::type>
-{
-    static constexpr FunctionKind kind = FunctionKind::MemberObject;
-    static constexpr bool isFunction = false;
-    
-    typedef typename function::RefDetails<T>::RefType ReturnType;
 };
 
 /**
@@ -251,7 +234,6 @@ struct FunctionTraits<T, typename
     std::enable_if<std::is_bind_expression<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
-    static constexpr bool isFunction = true;
     
     typedef typename T::result_type ReturnType;
 };
@@ -265,7 +247,6 @@ struct FunctionTraits<T,
                             && function::IsFunctionWrapper<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
-    static constexpr bool isFunction = true;
     
     typedef function::CallableDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
@@ -282,7 +263,6 @@ struct FunctionTraits<T,
                             && !function::IsFunctionWrapper<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::Lambda;
-    static constexpr bool isFunction = true;
     
     typedef function::CallableDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;

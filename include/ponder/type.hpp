@@ -99,10 +99,20 @@ enum class FunctionKind
     None,               ///< not a function
     Function,           ///< a function
     MemberFunction,     ///< function in a class or struct
-    MemberObject,       ///< object in a class or struct
     FunctionWrapper,    ///< `std::function<>`
     BindExpression,     ///< `std::bind()`
     Lambda              ///< lambda function `[](){}`
+};
+
+/**
+ * \brief Enumeration of the kinds of property exposed
+ *
+ * \sa Property, Function
+ */
+enum class PropertyKind
+{
+    Function,           ///< a function
+    MemberObject        ///< member object in a class or struct
 };
 
 /**

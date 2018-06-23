@@ -45,6 +45,27 @@ namespace detail {
 using namespace std::placeholders;
     
 /*
+ * Map accessed property type to traits.
+ */
+template <typename T, typename E = void>
+struct PropertyTypeMapper
+{
+    static constexpr PropertyKind kind = PropertyKind::Function;
+    typedef FunctionTraits<T> Traits;
+};
+
+template <typename T>
+struct PropertyTypeMapper<T,
+    typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
+{
+    static constexpr PropertyKind kind = PropertyKind::MemberObject;
+    struct Traits
+    {
+        typedef typename function::RefDetails<T>::RefType ReturnType;
+    };
+};
+    
+/*
  * Instantiate simple properties
  */
 template <typename A, ValueKind T>
@@ -171,9 +192,8 @@ public:
     }
 
     bool set(C&, const Value&) const
-    {
-        // Not available
-        return false;
+    {        
+        return false;   // Not available
     }
 
 private:
@@ -260,12 +280,13 @@ private:
 /*
  * Property factory which instantiates the proper type of property from 1 accessor
  */
-template <typename C, typename F>
+template <typename C, typename T>
 struct PropertyFactory1
 {
-    typedef typename FunctionTraits<F>::ReturnType ReturnType;
+    typedef typename PropertyTypeMapper<T>::Traits Traits;
+    typedef typename Traits::ReturnType ReturnType;
 
-    static Property* get(IdRef name, F accessor)
+    static Property* get(IdRef name, T accessor)
     {
         typedef Accessor1<C, ReturnType> AccessorType;
 

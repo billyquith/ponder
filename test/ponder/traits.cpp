@@ -173,16 +173,17 @@ TEST_CASE("Ponder supports different function types")
     SECTION("what is not a function")
     {
         using ponder::detail::FunctionTraits;
-        
-        static_assert( ! FunctionTraits<int>::isFunction,   "FunctionTraits<>::isFunction failed");
-        static_assert( ! FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! FunctionTraits<int*>::isFunction,  "FunctionTraits<>::isFunction failed");
-        static_assert( ! FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
-        static_assert( ! FunctionTraits<ponder::String>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert( ! FunctionTraits<NonCallable>::isFunction,
-                      "FunctionTraits<>::isFunction failed");
+
+        // TODO: Add TypeTraits? Currently
+//        static_assert( ! FunctionTraits<int>::isFunction,   "FunctionTraits<>::isFunction failed");
+//        static_assert( ! FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
+//        static_assert( ! FunctionTraits<int*>::isFunction,  "FunctionTraits<>::isFunction failed");
+//        static_assert( ! FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
+//        static_assert( ! FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
+//        static_assert( ! FunctionTraits<ponder::String>::isFunction,
+//                      "FunctionTraits<>::isFunction failed");
+//        static_assert( ! FunctionTraits<NonCallable>::isFunction,
+//                      "FunctionTraits<>::isFunction failed");
     }
     
     SECTION("what is not a function types")
@@ -209,42 +210,43 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type function")
     {
         using ponder::detail::FunctionTraits;
+        using ponder::PropertyKind;
         using ponder::FunctionKind;
         
-        static_assert(ponder::detail::FunctionTraits<void(void)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<void(void)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(void)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
         
-        static_assert(ponder::detail::FunctionTraits<void(int)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<void(int)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(int)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
         
-        static_assert(ponder::detail::FunctionTraits<int(void)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<int(void)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<int(void)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
         
-        static_assert(ponder::detail::FunctionTraits<int(char*)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<int(char*)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<int(char*)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
         
         // non-class void(void)
-        static_assert(FunctionTraits<decltype(func)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(func)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(func)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
         
         // non-class R(...)
-        static_assert(FunctionTraits<decltype(funcArgReturn)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(funcArgReturn)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(funcArgReturn)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
 
         // class static R(void)
-        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(&Class::staticFunc)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(&Class::staticFunc)>::kind
                                                                      == FunctionKind::Function,
@@ -255,16 +257,17 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type member function")  // T(C::*)()
     {
         using ponder::detail::FunctionTraits;
+        using ponder::PropertyKind;
         using ponder::FunctionKind;
 
         static_assert(std::is_member_function_pointer<void (TraitsTest::Methods::*)()>::value, "MFP");
-        static_assert(FunctionTraits<void(Methods::*)()>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<void(Methods::*)()>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(Methods::*)()>::kind == FunctionKind::MemberFunction,
                       "FunctionTraits<>::kind failed");
         
         void (Methods::*meth_t)() = &Methods::foo;
-        static_assert(FunctionTraits<decltype(meth_t)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(meth_t)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(meth_t)>::kind == FunctionKind::MemberFunction,
                       "FunctionTraits<>::kind failed");
@@ -273,6 +276,7 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type member object")   // T(C::*)
     {
         using ponder::detail::FunctionTraits;
+        using ponder::PropertyKind;
         using ponder::FunctionKind;
         
         struct Members {
@@ -281,45 +285,38 @@ TEST_CASE("Ponder supports different function types")
             bool b[8];
         };
 
-        static_assert( ! FunctionTraits<int Members::*>::isFunction,
+        static_assert( ponder::detail::PropertyTypeMapper<int Members::*>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<int Members::*>::kind == FunctionKind::MemberObject,
-                      "FunctionTraits<>::kind failed");
         
-        static_assert( ! FunctionTraits<float (Members::*)[]>::isFunction,
+        static_assert( ponder::detail::PropertyTypeMapper<float (Members::*)[]>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<float (Members::*)[]>::kind == FunctionKind::MemberObject,
-                      "FunctionTraits<>::kind failed");
         
-        static_assert( ! FunctionTraits<decltype(&Members::a)>::isFunction,
+        static_assert( ponder::detail::PropertyTypeMapper<decltype(&Members::a)>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(&Members::a)>::kind == FunctionKind::MemberObject,
-                      "FunctionTraits<>::kind failed");
         
-        static_assert( ! FunctionTraits<decltype(&Members::b)>::isFunction,
+        static_assert( ponder::detail::PropertyTypeMapper<decltype(&Members::b)>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(&Members::b)>::kind == FunctionKind::MemberObject,
-                      "FunctionTraits<>::kind failed");
     }
     
     SECTION("type function wrapper")  // std::function<>
     {
         using ponder::detail::FunctionTraits;
+        using ponder::PropertyKind;
         using ponder::FunctionKind;
         
-        static_assert(FunctionTraits<std::function<void()>>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<std::function<void()>>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
             FunctionTraits<std::function<void()>>::kind == FunctionKind::FunctionWrapper,
             "FunctionTraits<>::kind failed");
         
-        static_assert(FunctionTraits<std::function<int(float,int)>>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<std::function<int(float,int)>>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
             FunctionTraits<std::function<int(float,int)>>::kind == FunctionKind::FunctionWrapper,
             "FunctionTraits<>::kind failed");
         
-        static_assert(FunctionTraits<std::function<char*(char[])>>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<std::function<char*(char[])>>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
             FunctionTraits<std::function<char*(char[])>>::kind == FunctionKind::FunctionWrapper,
@@ -329,25 +326,26 @@ TEST_CASE("Ponder supports different function types")
     SECTION("type lambda")  // [] () {}
     {
         using ponder::detail::FunctionTraits;
+        using ponder::PropertyKind;
         using ponder::FunctionKind;
         
         auto l1 = [] () {};
         auto l2 = [] (int&) { return "hello"; };
         auto l3 = [] (float, float[]) -> float { return 3.1415927f; };
         
-        static_assert(FunctionTraits<decltype(l1)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(l1)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
                       FunctionTraits<decltype(l1)>::kind == FunctionKind::Lambda,
                       "FunctionTraits<>::kind failed");
         
-        static_assert(FunctionTraits<decltype(l2)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(l2)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
                       FunctionTraits<decltype(l2)>::kind == FunctionKind::Lambda,
                       "FunctionTraits<>::kind failed");
         
-        static_assert(FunctionTraits<decltype(l3)>::isFunction,
+        static_assert(ponder::detail::PropertyTypeMapper<decltype(l3)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
                       FunctionTraits<decltype(l3)>::kind == FunctionKind::Lambda,
@@ -357,10 +355,11 @@ TEST_CASE("Ponder supports different function types")
     SECTION("functions can return values")
     {
         using ponder::detail::FunctionTraits;
+        using ponder::PropertyKind;
         using ponder::FunctionKind;
 
         typedef decltype(&FuncReturn::i) fn;
-        static_assert(FunctionTraits<fn>::isFunction, "");
+        static_assert(ponder::detail::PropertyTypeMapper<fn>::kind == PropertyKind::Function, "");
         static_assert(FunctionTraits<fn>::kind == FunctionKind::MemberFunction, "");
 
         static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::i)>::ReturnType,
