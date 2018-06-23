@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /**
  * \brief Helper structure to construct a UserObject according
  *        to whether a type is a reference type or not
@@ -110,5 +108,4 @@ bool UserPropertyImpl<A>::isWritable() const
 }
 
 } // namespace detail
-
 } // namespace ponder

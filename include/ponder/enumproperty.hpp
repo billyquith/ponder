@@ -31,12 +31,10 @@
 #ifndef PONDER_ENUMPROPERTY_HPP
 #define PONDER_ENUMPROPERTY_HPP
 
-
 #include <ponder/property.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 class Enum;
 
 /**
@@ -80,6 +78,5 @@ private:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_ENUMPROPERTY_HPP

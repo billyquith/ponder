@@ -67,27 +67,27 @@ protected:
     /**
      * \see Property::isReadable
      */
-    bool isReadable() const override;
+    bool isReadable() const final;
 
     /**
      * \see Property::isWritable
      */
-    bool isWritable() const override;
+    bool isWritable() const final;
 
     /**
      * \see Property::getValue
      */
-    Value getValue(const UserObject& object) const override;
+    Value getValue(const UserObject& object) const final;
 
     /**
      * \see Property::setValue
      */
-    void setValue(const UserObject& object, const Value& value) const override;
+    void setValue(const UserObject& object, const Value& value) const final;
 
     /**
     * \see UserProperty::getObject
     */
-    UserObject getObject(const UserObject& parentInstance) const override;
+    UserObject getObject(const UserObject& parentInstance) const final;
 
 private:
 

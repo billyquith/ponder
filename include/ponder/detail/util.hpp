@@ -224,5 +224,4 @@ PONDER_API const char* valueTypeAsString(ValueKind t);
 } // detail
 } // Ponder
 
-
 #endif // PONDER_UTIL_HPP

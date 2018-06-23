@@ -34,7 +34,6 @@
 #include <ponder/type.hpp>
 #include <ponder/valuemapper.hpp>
 
-
 namespace ponder {
 namespace detail {
     
@@ -123,8 +122,6 @@ struct EqualVisitor
 };
 
 } // namespace detail
-
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_VALUEIMPL_HPP

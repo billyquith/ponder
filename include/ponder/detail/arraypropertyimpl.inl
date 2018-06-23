@@ -28,10 +28,9 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 template <typename A>
 ArrayPropertyImpl<A>::ArrayPropertyImpl(IdRef name, const A& accessor)
     : ArrayProperty(name, mapType<ElementType>(), Mapper::dynamic())
@@ -93,5 +92,4 @@ typename ArrayPropertyImpl<A>::ArrayType& ArrayPropertyImpl<A>::array(const User
 }
 
 } // namespace detail
-
 } // namespace ponder

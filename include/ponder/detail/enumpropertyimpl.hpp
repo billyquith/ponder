@@ -31,14 +31,11 @@
 #ifndef PONDER_DETAIL_ENUMPROPERTYIMPL_HPP
 #define PONDER_DETAIL_ENUMPROPERTYIMPL_HPP
 
-
 #include <ponder/enumproperty.hpp>
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /**
  * \brief Typed implementation of EnumProperty
  *
@@ -67,22 +64,22 @@ protected:
     /**
      * \see Property::isReadable
      */
-    bool isReadable() const override;
+    bool isReadable() const final;
 
     /**
      * \see Property::isWritable
      */
-    bool isWritable() const override;
+    bool isWritable() const final;
 
     /**
      * \see Property::getValue
      */
-    Value getValue(const UserObject& object) const override;
+    Value getValue(const UserObject& object) const final;
 
     /**
      * \see Property::setValue
      */
-    void setValue(const UserObject& object, const Value& value) const override;
+    void setValue(const UserObject& object, const Value& value) const final;
 
 private:
 
@@ -90,10 +87,8 @@ private:
 };
 
 } // namespace detail
-
 } // namespace ponder
 
 #include <ponder/detail/enumpropertyimpl.inl>
-
 
 #endif // PONDER_DETAIL_ENUMPROPERTYIMPL_HPP

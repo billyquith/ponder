@@ -39,9 +39,7 @@
 #include <functional>
 
 namespace ponder {
-    
 namespace detail {
-    
 namespace function {
 
 // Function (ex-class)
@@ -234,8 +232,6 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 /**
  * Specialization for native callable types (member pointer types)
  * This isn't a function, but we include it so that we can genericise member types.
- *
- * TODO - should member be wrapped (in lambda?) so we don't have to include this?
  */
 template <typename T>
 struct FunctionTraits<T, typename
@@ -296,6 +292,5 @@ struct FunctionTraits<T,
 
 } // namespace detail
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_FUNCTIONTRAITS_HPP

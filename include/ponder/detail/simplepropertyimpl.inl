@@ -28,10 +28,9 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 template <typename A>
 SimplePropertyImpl<A>::SimplePropertyImpl(IdRef name, const A& accessor)
     : SimpleProperty(name, mapType<typename A::DataType>())
@@ -65,5 +64,4 @@ bool SimplePropertyImpl<A>::isWritable() const
 }
 
 } // namespace detail
-
 } // namespace ponder

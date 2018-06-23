@@ -189,5 +189,4 @@ const char* safeTypeId(const T& object) {return SafeTypeId<T>::get(object);}
 } // namespace detail
 } // namespace ponder
 
-
 #endif // PONDER_DETAIL_TYPEID_HPP

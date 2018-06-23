@@ -28,10 +28,9 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 template <typename A>
 EnumPropertyImpl<A>::EnumPropertyImpl(IdRef name, const A& accessor)
     : EnumProperty(name, enumByType<typename A::DataType>())
@@ -65,5 +64,4 @@ bool EnumPropertyImpl<A>::isWritable() const
 }
 
 } // namespace detail
-
 } // namespace ponder

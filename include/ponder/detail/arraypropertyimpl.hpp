@@ -31,16 +31,13 @@
 #ifndef PONDER_DETAIL_ARRAYPROPERTYIMPL_HPP
 #define PONDER_DETAIL_ARRAYPROPERTYIMPL_HPP
 
-
 #include <ponder/arrayproperty.hpp>
 #include <ponder/arraymapper.hpp>
 #include <ponder/detail/valueprovider.hpp>
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /**
  * \brief Typed implementation of ArrayProperty
  *
@@ -72,32 +69,32 @@ protected:
     /**
      * \see ArrayProperty::getSize
      */
-    std::size_t getSize(const UserObject& object) const override;
+    std::size_t getSize(const UserObject& object) const final;
 
     /**
      * \see ArrayProperty::setSize
      */
-    void setSize(const UserObject& object, std::size_t size) const override;
+    void setSize(const UserObject& object, std::size_t size) const final;
 
     /**
      * \see ArrayProperty::getElement
      */
-    Value getElement(const UserObject& object, std::size_t index) const override;
+    Value getElement(const UserObject& object, std::size_t index) const final;
 
     /**
      * \see ArrayProperty::setElement
      */
-    void setElement(const UserObject& object, std::size_t index, const Value& value) const override;
+    void setElement(const UserObject& object, std::size_t index, const Value& value) const final;
 
     /**
      * \see ArrayProperty::insertElement
      */
-    void insertElement(const UserObject& object, std::size_t before, const Value& value) const override;
+    void insertElement(const UserObject& object, std::size_t before, const Value& value) const final;
 
     /**
      * \see ArrayProperty::removeElement
      */
-    void removeElement(const UserObject& object, std::size_t index) const override;
+    void removeElement(const UserObject& object, std::size_t index) const final;
 
 private:
 
@@ -118,10 +115,8 @@ private:
 };
 
 } // namespace detail
-
 } // namespace ponder
 
 #include <ponder/detail/arraypropertyimpl.inl>
-
 
 #endif // PONDER_DETAIL_ARRAYPROPERTYIMPL_HPP

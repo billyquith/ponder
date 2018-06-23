@@ -31,10 +31,8 @@
 #ifndef PONDER_DETAIL_OBJECTHOLDER_HPP
 #define PONDER_DETAIL_OBJECTHOLDER_HPP
 
-
 #include <ponder/classget.hpp>
 #include <ponder/classcast.hpp>
-
 
 namespace ponder {
 namespace detail {

@@ -28,10 +28,9 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 template <typename T>
 GetterInterface<T>::~GetterInterface()
 {
@@ -76,5 +75,4 @@ T Getter<T>::get(const UserObject& object) const
 }
 
 } // namespace detail
-
 } // namespace ponder
