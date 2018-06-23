@@ -81,12 +81,12 @@ enum class ValueKind
  */
 enum class ObjectKind
 {
-    None,               // not an object
-    Object,             // a raw object, e.g. int
-    Pointer,            // pointer to an object, e.g. T*
-    Reference,          // reference to an object, e.g. T&
-    SmartPointer,       // smart pointer reference
-    BuiltinArray,       // builtin array, e.g. T[N]
+    None,               ///< not an object
+    Object,             ///< a raw object, e.g. int
+    Pointer,            ///< pointer to an object, e.g. T*
+    Reference,          ///< reference to an object, e.g. T&
+    SmartPointer,       ///< smart pointer reference
+    BuiltinArray,       ///< builtin array, e.g. T[N]
 };
     
 /**
@@ -164,8 +164,6 @@ struct ReturnMultiple
 };
     
 } // namespace policy
-
 } // namespace ponder
-
 
 #endif // PONDER_TYPE_HPP
