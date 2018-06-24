@@ -74,6 +74,7 @@ struct FunctionDetails<R(A...)>
 template <typename T>
 struct MethodDetails {};
 
+// Non-const method.
 template <typename C, typename R, typename... A>
 struct MethodDetails<R(C::*)(A...)>
 {
@@ -85,6 +86,7 @@ struct MethodDetails<R(C::*)(A...)>
     typedef std::tuple<ClassType&, A...> FunctionCallTypes;
 };
 
+// Const method.
 template <typename C, typename R, typename... A>
 struct MethodDetails<R(C::*)(A...) const>
 {
@@ -125,55 +127,6 @@ struct CallableDetails<R(C::*)(A...) const>
     typedef R(Typedef)(A...);
     typedef R(FunctionType)(A...);
     typedef std::tuple<A...> FunctionCallTypes;
-};
-
-
-// References
-template <typename T>
-struct RefDetails
-{
-    typedef void ReturnType;
-};
-
-template <typename T>
-struct RefDetails<T*>
-{
-    typedef T RefType;
-};
-
-template <typename C, typename T>
-struct RefDetails<T(C::*)>
-{
-    typedef C ClassType;
-    typedef T& RefType;
-};
-
-template <typename C, typename T, std::size_t S>
-struct RefDetails<T(C::*)[S]>
-{
-    typedef C ClassType;
-    typedef T(&RefType)[S];
-};
-
-template <typename C, typename T, std::size_t S>
-struct RefDetails<std::array<T,S>(C::*)>
-{
-    typedef C ClassType;
-    typedef std::array<T,S>(&RefType);
-};
-
-template <typename C, typename T>
-struct RefDetails<std::vector<T>(C::*)>
-{
-    typedef C ClassType;
-    typedef std::vector<T>(&RefType);
-};
-
-template <typename C, typename T>
-struct RefDetails<std::list<T>(C::*)>
-{
-    typedef C ClassType;
-    typedef std::list<T>(&RefType);
 };
 
 } // namespace function

@@ -32,6 +32,7 @@
 #define PONDER_DETAIL_OBJECTTRAITS_HPP
 
 #include <ponder/detail/rawtype.hpp>
+#include <list>
 
 namespace ponder {
 namespace detail {    
@@ -67,6 +68,56 @@ namespace detail {
  */
 
 /*
+ * Extract details about objects we reference.
+ */
+template <typename T>
+struct ObjectDetails
+{
+    typedef void ReturnType;
+};
+
+template <typename T>
+struct ObjectDetails<T*>
+{
+    typedef T RefType;
+};
+
+template <typename C, typename T>
+struct ObjectDetails<T(C::*)>
+{
+    typedef C ClassType;
+    typedef T& RefType;
+};
+
+template <typename C, typename T, std::size_t S>
+struct ObjectDetails<T(C::*)[S]>
+{
+    typedef C ClassType;
+    typedef T(&RefType)[S];
+};
+
+template <typename C, typename T, std::size_t S>
+struct ObjectDetails<std::array<T,S>(C::*)>
+{
+    typedef C ClassType;
+    typedef std::array<T,S>(&RefType);
+};
+
+template <typename C, typename T>
+struct ObjectDetails<std::vector<T>(C::*)>
+{
+    typedef C ClassType;
+    typedef std::vector<T>(&RefType);
+};
+
+template <typename C, typename T>
+struct ObjectDetails<std::list<T>(C::*)>
+{
+    typedef C ClassType;
+    typedef std::list<T>(&RefType);
+};
+    
+/*
  * Generic version -- raw types
  */
 template <typename T, typename E = void>
@@ -83,7 +134,7 @@ struct ObjectTraits
 };
 
 /*
- * Specialized version for raw pointers
+ * Raw pointers
  */
 template <typename T>
 struct ObjectTraits<T*>
@@ -101,7 +152,7 @@ struct ObjectTraits<T*>
 };
 
 /*
- * Specialized version for smart pointers
+ * Smart pointers
  */
 template <template <typename> class T, typename U>
 struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
@@ -119,7 +170,7 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 };
 
 /*
- * Specialized version for built-in arrays
+ * Built-in arrays
  */
 template <typename T, std::size_t N>
 struct ObjectTraits<T[N]>
@@ -133,7 +184,7 @@ struct ObjectTraits<T[N]>
 };
 
 /*
- * Specialized version for references to non-ref types
+ * References to non-ref types
  */
 template <typename T>
 struct ObjectTraits<T&,
@@ -153,7 +204,7 @@ struct ObjectTraits<T&,
 };
 
 /*
- * Specialized version for references to ref types -- just remove the reference modifier
+ * References to ref types -- just remove the reference modifier
  */
 template <typename T>
 struct ObjectTraits<T&,
@@ -165,7 +216,7 @@ struct ObjectTraits<T&,
 };
 
 /*
- * Specialized version for types with const modifier -- just remove it
+ * Types with const modifier -- just remove it
  */
 template <typename T>
 struct ObjectTraits<const T> : ObjectTraits<T>
@@ -174,8 +225,6 @@ struct ObjectTraits<const T> : ObjectTraits<T>
 };
 
 } // namespace detail
-
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_OBJECTTRAITS_HPP

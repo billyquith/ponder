@@ -31,18 +31,14 @@
 #ifndef PONDER_DETAIL_PROPERTYFACTORY_HPP
 #define PONDER_DETAIL_PROPERTYFACTORY_HPP
 
-
 #include <ponder/detail/simplepropertyimpl.hpp>
 #include <ponder/detail/arraypropertyimpl.hpp>
 #include <ponder/detail/enumpropertyimpl.hpp>
 #include <ponder/detail/userpropertyimpl.hpp>
 #include <ponder/detail/functiontraits.hpp>
 
-
 namespace ponder {
 namespace detail {
-    
-using namespace std::placeholders;
     
 /*
  * Map accessed property type to traits.
@@ -61,7 +57,7 @@ struct PropertyTypeMapper<T,
     static constexpr PropertyKind kind = PropertyKind::MemberObject;
     struct Traits
     {
-        typedef typename function::RefDetails<T>::RefType ReturnType;
+        typedef typename ObjectDetails<T>::RefType ReturnType;
     };
 };
     
@@ -278,40 +274,36 @@ private:
 };
 
 /*
- * Property factory which instantiates the proper type of property from 1 accessor
+ * Property factory which instantiates the proper type of property from 1 accessor.
+ * The accessor can be a member object or a function.
  */
 template <typename C, typename T>
 struct PropertyFactory1
 {
-    typedef typename PropertyTypeMapper<T>::Traits Traits;
-    typedef typename Traits::ReturnType ReturnType;
-
     static Property* get(IdRef name, T accessor)
     {
+        typedef typename PropertyTypeMapper<T>::Traits Traits;
+        typedef typename Traits::ReturnType ReturnType;
         typedef Accessor1<C, ReturnType> AccessorType;
-
-        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
-        
+        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;
+        typedef typename PropertyMapper<AccessorType, ValueType::kind>::Type PropertyType;        
         return new PropertyType(name, AccessorType(accessor));
     }
 };
 
 /*
- * Property factory which instantiates the proper type of property from 2 accessors
+ * Property factory which instantiates the proper type of property from 2 accessors.
+ * Bother getter and setter should be funcions.
  */
 template <typename C, typename F1, typename F2, typename E = void>
 struct PropertyFactory2
 {
-    typedef typename FunctionTraits<F1>::ReturnType ReturnType;
-
     static Property* get(IdRef name, F1 accessor1, F2 accessor2)
     {
+        typedef typename FunctionTraits<F1>::ReturnType ReturnType;
         typedef Accessor2<C, ReturnType> AccessorType;
-
-        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueMapper;
-        typedef typename PropertyMapper<AccessorType, ValueMapper::kind>::Type PropertyType;
-
+        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;
+        typedef typename PropertyMapper<AccessorType, ValueType::kind>::Type PropertyType;
         return new PropertyType(name, AccessorType(accessor1, accessor2));
     }
 };
