@@ -40,7 +40,6 @@
 #include <iosfwd>
 #include <string>
 
-
 namespace ponder
 {
 
@@ -249,6 +248,5 @@ PONDER_API std::ostream& operator<<(std::ostream& stream, const Value& value);
 } // namespace ponder
 
 #include <ponder/value.inl>
-
 
 #endif // PONDER_VALUE_HPP

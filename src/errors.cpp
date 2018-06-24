@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/errors.hpp>
 #include <ponder/class.hpp>
 #include <ponder/detail/util.hpp>
-
 
 namespace ponder {
     

@@ -195,10 +195,8 @@ private:
 };
 
 } // namespace detail
-
 } // namespace ponder
 
 #include <ponder/detail/objectholder.inl>
-
 
 #endif // PONDER_DETAIL_OBJECTHOLDER_HPP

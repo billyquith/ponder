@@ -152,8 +152,8 @@ protected:
 
 private:
 
-    Id m_name; ///< Name of the property
-    ValueKind m_type; ///< Type of the property
+    Id m_name; // Name of the property
+    ValueKind m_type; // Type of the property
 };
 
 } // namespace ponder

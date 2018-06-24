@@ -27,14 +27,11 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/userobject.hpp>
 #include <ponder/userproperty.hpp>
 #include <ponder/class.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 const UserObject UserObject::nothing;
 

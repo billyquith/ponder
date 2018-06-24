@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/enumobject.hpp>
 #include <ponder/enum.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 long EnumObject::value() const
 {

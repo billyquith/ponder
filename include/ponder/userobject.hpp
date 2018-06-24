@@ -38,7 +38,6 @@
 #include <ponder/detail/objectholder.hpp>
 #include <ponder/detail/util.hpp>
 
-
 namespace ponder {
     
 class Property;
@@ -318,10 +317,8 @@ private:
     std::shared_ptr<detail::AbstractObjectHolder> m_holder;
 };
 
-
 } // namespace ponder
 
 #include <ponder/userobject.inl>
-
 
 #endif // PONDER_USEROBJECT_HPP

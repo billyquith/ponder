@@ -55,8 +55,7 @@ namespace ponder_ext
 }
 
 
-namespace ponder
-{
+namespace ponder {
 
 /**
  * \brief Map a C++ type to a Ponder type

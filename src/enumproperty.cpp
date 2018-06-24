@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/enumproperty.hpp>
 #include <ponder/classvisitor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 EnumProperty::EnumProperty(IdRef name, const Enum& propEnum)
     : Property(name, ValueKind::Enum)

@@ -31,14 +31,11 @@
 #ifndef PONDER_ARGS_HPP
 #define PONDER_ARGS_HPP
 
-
 #include <ponder/config.hpp>
 #include <vector>
 #include <initializer_list>
 
-
-namespace ponder
-{
+namespace ponder {
 
 class Value;
 
@@ -147,10 +144,9 @@ public:
 
 private:
 
-    std::vector<Value> m_values; ///< List of the values
+    std::vector<Value> m_values; // List of the values
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_ARGS_HPP

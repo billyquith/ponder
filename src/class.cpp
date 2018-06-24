@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/class.hpp>
 #include <ponder/constructor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
 
 Class::Class(IdRef name)
 : m_sizeof(0)

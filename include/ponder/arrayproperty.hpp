@@ -251,8 +251,8 @@ protected:
 
 private:
 
-    ValueKind m_elementType; ///< Type of the individual elements of the array
-    bool m_dynamic; ///< Is the array dynamic?
+    ValueKind m_elementType; // Type of the individual elements of the array
+    bool m_dynamic; // Is the array dynamic?
 };
 
 } // namespace ponder

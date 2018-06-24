@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/function.hpp>
 #include <ponder/classvisitor.hpp>
 #include <ponder/args.hpp>
-
 
 namespace ponder {
     

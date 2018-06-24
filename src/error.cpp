@@ -27,12 +27,9 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/error.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 Error::~Error() throw()
 {

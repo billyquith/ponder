@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/classcast.hpp>
 #include <ponder/class.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 void* classCast(void* pointer, const Class& sourceClass, const Class& targetClass)
 {

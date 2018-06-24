@@ -27,12 +27,9 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/classvisitor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 ClassVisitor::~ClassVisitor()
 {

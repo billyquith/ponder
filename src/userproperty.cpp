@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/userproperty.hpp>
 #include <ponder/classvisitor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 UserProperty::UserProperty(IdRef name, const Class& propClass)
     : Property(name, ValueKind::User)

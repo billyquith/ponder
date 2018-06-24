@@ -34,9 +34,7 @@
 #include <ponder/config.hpp>
 #include <string>
 
-
-namespace ponder
-{
+namespace ponder {
     
 class Enum;
 
@@ -85,10 +83,9 @@ public:
 
 private:
 
-    Enum* m_target; ///< Target metaenum to construct
+    Enum* m_target; // Target metaenum to construct
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_ENUMBUILDER_HPP

@@ -239,5 +239,4 @@ namespace detail
 
 } // namespace ponder
 
-
 #endif // PONDER_PONDERTYPE_HPP

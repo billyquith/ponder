@@ -27,7 +27,6 @@
  **
  ****************************************************************************/
 
-
 #include <ponder/detail/util.hpp>
 
 #ifdef _MSC_VER
@@ -185,7 +184,7 @@ static const char* c_typeNames[] =
     "array",    // ValueKind::Array,
     "user",     // ValueKind::User
 };
-
+    
 const char* valueTypeAsString(ValueKind t)
 {
     const unsigned int i = static_cast<unsigned int>(t);

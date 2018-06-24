@@ -31,12 +31,10 @@
 #ifndef PONDER_OBSERVER_HPP
 #define PONDER_OBSERVER_HPP
 
-
 #include <ponder/config.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 class Class;
 class Enum;
 
@@ -108,6 +106,5 @@ PONDER_API void addObserver(Observer* observer);
 PONDER_API void removeObserver(Observer* observer);
 
 } // namespace ponder
-
 
 #endif // PONDER_OBSERVER_HPP

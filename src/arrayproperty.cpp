@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/arrayproperty.hpp>
 #include <ponder/classvisitor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 ArrayProperty::ArrayProperty(IdRef name, ValueKind elementType, bool dynamic)
     : Property(name, ValueKind::Array)

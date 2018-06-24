@@ -27,10 +27,8 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/detail/classmanager.hpp>
 #include <ponder/class.hpp>
-
 
 namespace ponder {
 namespace detail {

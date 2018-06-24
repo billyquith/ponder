@@ -31,9 +31,7 @@
 #ifndef PONDER_SIMPLEPROPERTY_HPP
 #define PONDER_SIMPLEPROPERTY_HPP
 
-
 #include <ponder/property.hpp>
-
 
 namespace ponder
 {
@@ -71,6 +69,5 @@ public:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_SIMPLEPROPERTY_HPP

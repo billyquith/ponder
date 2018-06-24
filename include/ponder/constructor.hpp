@@ -31,8 +31,8 @@
 #ifndef PONDER_CONSTRUCTOR_HPP
 #define PONDER_CONSTRUCTOR_HPP
 
-namespace ponder
-{
+namespace ponder {
+    
 class Args;
 class UserObject;
 
@@ -73,6 +73,5 @@ public:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_CONSTRUCTOR_HPP

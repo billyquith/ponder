@@ -27,9 +27,7 @@
 **
 ****************************************************************************/
 
-
-namespace ponder
-{
+namespace ponder {
     
 inline std::size_t classCount()
 {

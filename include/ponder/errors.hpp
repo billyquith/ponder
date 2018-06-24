@@ -31,13 +31,10 @@
 #ifndef PONDER_ERRORS_HPP
 #define PONDER_ERRORS_HPP
 
-
 #include <ponder/error.hpp>
 #include <ponder/type.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 class Class;
 
@@ -347,6 +344,5 @@ public:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_ERRORS_HPP

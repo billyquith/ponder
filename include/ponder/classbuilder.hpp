@@ -31,7 +31,6 @@
 #ifndef PONDER_CLASSBUILDER_HPP
 #define PONDER_CLASSBUILDER_HPP
 
-
 #include <ponder/type.hpp>
 #include <ponder/classget.hpp>
 #include <ponder/class.hpp>
@@ -43,7 +42,6 @@
 #include <ponder/userdata.hpp>
 #include <cassert>
 #include <string>
-
 
 namespace ponder {
         
@@ -254,6 +252,5 @@ private:
 } // namespace ponder
 
 #include <ponder/classbuilder.inl>
-
 
 #endif // PONDER_CLASSBUILDER_HPP

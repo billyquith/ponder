@@ -29,7 +29,6 @@
 
 
 namespace ponder {
-    
 namespace detail {
 
 template <typename T>

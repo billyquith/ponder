@@ -31,7 +31,6 @@
 #ifndef PONDER_ENUM_HPP
 #define PONDER_ENUM_HPP
 
-
 #include <ponder/config.hpp>
 #include <ponder/enumbuilder.hpp>
 #include <ponder/enumget.hpp>
@@ -40,9 +39,8 @@
 #include <ponder/detail/dictionary.hpp>
 #include <string>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief ponder::Enum represents a metaenum composed of <name, value> pairs
  *
@@ -287,6 +285,5 @@ private:
 } // namespace ponder
 
 #include <ponder/enum.inl>
-
 
 #endif // PONDER_ENUM_HPP

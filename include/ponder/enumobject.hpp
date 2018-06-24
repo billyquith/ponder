@@ -31,13 +31,11 @@
 #ifndef PONDER_ENUMOBJECT_HPP
 #define PONDER_ENUMOBJECT_HPP
 
-
 #include <ponder/enumget.hpp>
 #include <string>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief Wrapper to manipulate enumerated values in the Ponder system
  *
@@ -116,6 +114,5 @@ private:
 } // namespace ponder
 
 #include <ponder/enumobject.inl>
-
 
 #endif // PONDER_ENUMOBJECT_HPP

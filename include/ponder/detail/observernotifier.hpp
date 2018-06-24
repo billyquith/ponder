@@ -31,19 +31,17 @@
 #ifndef PONDER_DETAIL_OBSERVERNOTIFIER_HPP
 #define PONDER_DETAIL_OBSERVERNOTIFIER_HPP
 
-
 #include <ponder/config.hpp>
 #include <set>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 class Observer;
 class Class;
 class Enum;
 
-namespace detail
-{
+namespace detail {
+    
 /**
  * \brief Base class for classes that can notify global observers
  */
@@ -115,8 +113,6 @@ private:
 };
 
 } // namespace detail
-
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_OBSERVERNOTIFIER_HPP

@@ -31,9 +31,7 @@
 #ifndef PONDER_USERPROPERTY_HPP
 #define PONDER_USERPROPERTY_HPP
 
-
 #include <ponder/property.hpp>
-
 
 namespace ponder
 {
@@ -89,6 +87,5 @@ private:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_ENUMPROPERTY_HPP

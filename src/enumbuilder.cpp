@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/enumbuilder.hpp>
 #include <ponder/enum.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 EnumBuilder::EnumBuilder(Enum& target)
     : m_target(&target)

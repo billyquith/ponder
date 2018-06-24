@@ -31,7 +31,6 @@
 #ifndef PONDER_FUNCTION_HPP
 #define PONDER_FUNCTION_HPP
 
-
 #include <ponder/config.hpp>
 #include <ponder/detail/getter.hpp>
 #include <ponder/args.hpp>
@@ -39,7 +38,6 @@
 #include <ponder/value.hpp>
 #include <string>
 #include <vector>
-
 
 namespace ponder {
     
@@ -138,6 +136,5 @@ protected:
 };
     
 } // namespace ponder
-
 
 #endif // PONDER_FUNCTION_HPP

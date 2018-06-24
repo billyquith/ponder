@@ -41,8 +41,7 @@
 #include <string>
 #include <map>
 
-namespace ponder
-{
+namespace ponder {
     
 template <typename T> class ClassBuilder;
 class Constructor;
@@ -446,6 +445,5 @@ private:
 } // namespace ponder
 
 #include <ponder/class.inl>
-
 
 #endif // PONDER_CLASS_HPP

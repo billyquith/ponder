@@ -28,8 +28,7 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
+namespace ponder {
 
 template <typename T>
 T Error::prepare(T error, const String& file, int line, const String& function)

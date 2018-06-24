@@ -33,8 +33,7 @@
 
 #include <ponder/config.hpp>
 
-namespace ponder
-{
+namespace ponder {
     
 class Property;
 class SimpleProperty;
@@ -160,6 +159,5 @@ protected:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_VALUEVISITOR_HPP

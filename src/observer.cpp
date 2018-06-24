@@ -27,14 +27,11 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/observer.hpp>
 #include <ponder/detail/classmanager.hpp>
 #include <ponder/detail/enummanager.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 Observer::~Observer()
 {

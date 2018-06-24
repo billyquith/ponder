@@ -28,10 +28,8 @@
 ****************************************************************************/
 
 
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
     
 inline AbstractObjectHolder::~AbstractObjectHolder()
 {
@@ -101,5 +99,4 @@ AbstractObjectHolder* ObjectHolderByCopy<T>::getWritable()
 }
 
 } // namespace detail
-
 } // namespace ponder

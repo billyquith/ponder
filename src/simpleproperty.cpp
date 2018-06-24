@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/simpleproperty.hpp>
 #include <ponder/classvisitor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 SimpleProperty::SimpleProperty(IdRef name, ValueKind type)
     : Property(name, type)

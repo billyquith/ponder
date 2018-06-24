@@ -27,17 +27,12 @@
 **
 ****************************************************************************/
 
-
-
 #include <ponder/pondertype.hpp>
 #include <ponder/detail/classmanager.hpp>
 #include <ponder/detail/enummanager.hpp>
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
     
 void ensureTypeRegistered(const char* id, void (*registerFunc)())
 {
@@ -50,5 +45,4 @@ void ensureTypeRegistered(const char* id, void (*registerFunc)())
 }
 
 } // namespace detail
-
 } // namespace ponder

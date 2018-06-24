@@ -31,14 +31,12 @@
 #ifndef PONDER_ARRAYMAPPER_HPP
 #define PONDER_ARRAYMAPPER_HPP
 
-
 #include <ponder/config.hpp>
 #include <list>
 #include <vector>
 
-
-namespace ponder_ext
-{
+namespace ponder_ext {
+    
 /**
  * \class ArrayMapper
  *
@@ -365,6 +363,5 @@ struct ArrayMapper<std::array<T, N>>
 /** \endcond NoDocumentation */
 
 } // namespace ponder_ext
-
 
 #endif // PONDER_ARRAYMAPPER_HPP

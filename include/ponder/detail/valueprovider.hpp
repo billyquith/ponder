@@ -31,12 +31,10 @@
 #ifndef PONDER_DETAIL_VALUEPROVIDER_HPP
 #define PONDER_DETAIL_VALUEPROVIDER_HPP
 
-
 #include <ponder/args.hpp>
 #include <ponder/class.hpp>
 #include <ponder/classget.hpp>
 #include <ponder/valuemapper.hpp>
-
 
 namespace ponder {
 namespace detail {
@@ -97,6 +95,5 @@ struct ValueProvider : ValueProviderImpl<T, ponder_ext::ValueMapper<T>::kind>
 
 } // namespace detail
 } // namespace ponder
-
 
 #endif // PONDER_DETAIL_VALUEPROVIDER_HPP

@@ -33,7 +33,6 @@
 #ifndef PONDER_CLASSGET_HPP
 #define PONDER_CLASSGET_HPP
 
-
 #include <ponder/config.hpp>
 #include <ponder/error.hpp>
 #include <ponder/detail/typeid.hpp>
@@ -41,9 +40,8 @@
 #include <ponder/detail/util.hpp>
 #include <string>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief Get the total number of existing metaclasses
  *
@@ -119,6 +117,5 @@ const Class* classByTypeSafe();
 } // namespace ponder
 
 #include <ponder/classget.inl>
-
 
 #endif // PONDER_CLASSGET_HPP

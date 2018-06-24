@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/enum.hpp>
 #include <ponder/errors.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
 
 Enum::Enum(IdRef name)
     :   m_name(name)

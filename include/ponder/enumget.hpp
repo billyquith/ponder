@@ -31,15 +31,13 @@
 #ifndef PONDER_ENUMGET_HPP
 #define PONDER_ENUMGET_HPP
 
-
 #include <ponder/error.hpp>
 #include <ponder/detail/typeid.hpp>
 #include <ponder/detail/enummanager.hpp>
 #include <string>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \relates Enum
  *
@@ -119,6 +117,5 @@ const Enum* enumByTypeSafe();
 } // namespace ponder
 
 #include <ponder/enumget.inl>
-
 
 #endif // PONDER_ENUMGET_HPP

@@ -84,5 +84,4 @@ IUserDataStore* userDataStore();
 
 } // namespace ponder
 
-
 #endif // PONDER_USERDATA_HPP

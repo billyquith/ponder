@@ -31,9 +31,8 @@
 #ifndef PONDER_VALUEVISITOR_HPP
 #define PONDER_VALUEVISITOR_HPP
 
-
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief Base class for writing custom Value visitors
  *
@@ -105,6 +104,5 @@ public:
 };
 
 } // namespace ponder
-
 
 #endif // PONDER_VALUEVISITOR_HPP

@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/property.hpp>
 #include <ponder/classvisitor.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 Property::~Property()
 {

@@ -31,15 +31,13 @@
 #ifndef PONDER_ERROR_HPP
 #define PONDER_ERROR_HPP
 
-
 #include <ponder/config.hpp>
 #include <ponder/detail/util.hpp>
 #include <exception>
 #include <string>
 
-
-namespace ponder
-{
+namespace ponder {
+    
 /**
  * \brief Base class for every exception thrown in Ponder.
  */

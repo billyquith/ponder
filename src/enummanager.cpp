@@ -27,16 +27,12 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/detail/enummanager.hpp>
 #include <ponder/enum.hpp>
 #include <ponder/errors.hpp>
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
     
 EnumManager& EnumManager::instance()
 {
@@ -133,5 +129,4 @@ EnumManager::~EnumManager()
 }
 
 } // namespace detail
-
 } // namespace ponder

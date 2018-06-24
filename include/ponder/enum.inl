@@ -27,9 +27,7 @@
 **
 ****************************************************************************/
 
-
-namespace ponder
-{
+namespace ponder {
     
 template <typename T>
 EnumBuilder Enum::declare(IdRef name)

@@ -145,5 +145,4 @@ T* get_pointer(std::shared_ptr<T> const& p)
 
 } // namespace ponder
 
-
 #endif // PONDER_DETAIL_RAWTYPE_HPP

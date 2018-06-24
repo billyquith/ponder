@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-
 #include <ponder/args.hpp>
 #include <ponder/value.hpp>
 
-
-namespace ponder
-{
+namespace ponder {
     
 const Args Args::empty;
 

@@ -102,16 +102,14 @@ private:
     typedef ponder_ext::ArrayMapper<ArrayType> Mapper;
     typedef typename Mapper::ElementType ElementType;
 
-    /**
+    /*
      * \brief Retrieve a reference to the array
-     *
      * \param object Owner object
-     *
      * \return Reference to the underlying array
      */
     ArrayType& array(const UserObject& object) const;
 
-    A m_accessor; ///< Object used to access the actual C++ property
+    A m_accessor; // Object used to access the actual C++ property
 };
 
 } // namespace detail

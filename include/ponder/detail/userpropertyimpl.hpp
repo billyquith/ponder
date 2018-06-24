@@ -31,14 +31,11 @@
 #ifndef PONDER_DETAIL_USERPROPERTYIMPL_HPP
 #define PONDER_DETAIL_USERPROPERTYIMPL_HPP
 
-
 #include <ponder/userproperty.hpp>
 
-
-namespace ponder
-{
-namespace detail
-{
+namespace ponder {
+namespace detail {
+    
 /**
  * \brief Typed implementation of UserProperty
  *
@@ -91,11 +88,10 @@ protected:
 
 private:
 
-    A m_accessor; ///< Object used to access the actual C++ property
+    A m_accessor; // Object used to access the actual C++ property
 };
 
 } // namespace detail
-
 } // namespace ponder
 
 #include <ponder/detail/userpropertyimpl.inl>

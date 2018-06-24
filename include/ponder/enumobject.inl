@@ -27,9 +27,7 @@
 **
 ****************************************************************************/
 
-
-namespace ponder
-{
+namespace ponder {
 
 template <typename T>
 inline EnumObject::EnumObject(T value, typename std::enable_if<std::is_enum<T>::value >::type*)
