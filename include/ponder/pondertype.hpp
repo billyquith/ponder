@@ -76,7 +76,7 @@ namespace detail
             template <> struct StaticTypeId<__VA_ARGS__> \
             { \
                 static const char* get(bool = true) {return #__VA_ARGS__;} \
-                enum {defined = true, copyable = true}; \
+                static constexpr bool defined = true, copyable = true; \
             }; \
         } \
     }
@@ -124,7 +124,7 @@ namespace detail
                         detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
                     return #TYPE; \
                 } \
-                enum {defined = true, copyable = true}; \
+                static constexpr bool defined = true, copyable = true; \
             }; \
         } \
     }
@@ -172,7 +172,7 @@ namespace detail
         namespace detail { \
             template <> struct StaticTypeId<TYPE> { \
                 static const char* get(bool = true) {return #TYPE;} \
-                enum {defined = true, copyable = false}; \
+                static constexpr bool defined = true, copyable = true; \
             }; \
         } \
     }
@@ -200,7 +200,7 @@ namespace detail
                         detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
                     return #TYPE; \
                 } \
-                enum {defined = true, copyable = false}; \
+                static constexpr bool defined = true, copyable = true; \
             }; \
         } \
     }

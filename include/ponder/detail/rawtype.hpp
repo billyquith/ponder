@@ -44,20 +44,19 @@ namespace detail {
 template <typename T, typename U>
 struct IsSmartPointer
 {
-    // enum { value = (!std::is_pointer<T>::value && !std::is_same<T, U>::value) };
-    enum {value = false};
+    static constexpr bool value = false;
 };
 
 template <typename T, typename U>
 struct IsSmartPointer<std::unique_ptr<T>, U>
 {
-    enum {value = true};
+    static constexpr bool value = true;
 };
 
 template <typename T, typename U>
 struct IsSmartPointer<std::shared_ptr<T>, U>
 {
-    enum {value = true};
+    static constexpr bool value = true;
 };
         
 /**

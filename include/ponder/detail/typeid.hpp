@@ -52,12 +52,7 @@ struct StaticTypeId
         return T::PONDER_TYPE_NOT_REGISTERED();
     }
 
-    enum
-    {
-        defined = false,
-        copyable = true
-    };
-    
+    static constexpr bool defined = false, copyable = true;
     typedef T type;
 };
 
@@ -121,10 +116,7 @@ struct DynamicTypeId
 template <typename T>
 struct DynamicTypeId<T, typename std::enable_if<!HasPonderRtti<T>::value >::type>
 {
-    static const char* get(const T&)
-    {
-        return staticTypeId<T>();
-    }
+    static const char* get(const T&) {return staticTypeId<T>();}
 };
 
 /**
@@ -140,15 +132,8 @@ template <typename T> const char* typeId(const T& object) {return DynamicTypeId<
 template <typename T, typename E = void>
 struct SafeTypeId
 {
-    static const char* get()
-    {
-        return typeId<T>();
-    }
-
-    static const char* get(const T& object)
-    {
-        return typeId(object);
-    }
+    static const char* get()                {return typeId<T>();}
+    static const char* get(const T& object) {return typeId(object);}
 };
 
 /**
@@ -157,15 +142,8 @@ struct SafeTypeId
 template <typename T>
 struct SafeTypeId<T, typename std::enable_if<!HasStaticTypeId<T>::value >::type>
 {
-    static const char* get()
-    {
-        return "";
-    }
-
-    static const char* get(const T&)
-    {
-        return "";
-    }
+    static const char* get()            {return "";}
+    static const char* get(const T&)    {return "";}
 };
 
 /**
