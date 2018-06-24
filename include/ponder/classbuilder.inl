@@ -45,7 +45,7 @@ ClassBuilder<T>& ClassBuilder<T>::base()
     IdReturn baseName = baseClass.name();
 
     // First make sure that the base class is not already a base of the current class
-    for (Class::BaseInfo& bi : m_target->m_bases)
+    for (Class::BaseInfo const& bi : m_target->m_bases)
     {
         if (bi.base->name() == baseName)
             PONDER_ERROR(TypeAmbiguity(bi.base->name()));

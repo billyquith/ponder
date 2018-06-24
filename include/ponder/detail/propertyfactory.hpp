@@ -57,12 +57,12 @@ struct PropertyTypeMapper<T,
     static constexpr PropertyKind kind = PropertyKind::MemberObject;
     struct Traits
     {
-        typedef typename ObjectDetails<T>::RefType ReturnType;
+        typedef typename ObjectDetails<T>::ReturnType ReturnType;
     };
 };
     
 /*
- * Instantiate simple properties
+ * Property implementation to be used for the Value kind.
  */
 template <typename A, ValueKind T>
 struct PropertyMapper
@@ -70,27 +70,18 @@ struct PropertyMapper
     typedef SimplePropertyImpl<A> Type;
 };
 
-/*
- * Instantiate array properties
- */
 template <typename A>
 struct PropertyMapper<A, ponder::ValueKind::Array>
 {
     typedef ArrayPropertyImpl<A> Type;
 };
 
-/*
- * Instantiate enum properties
- */
 template <typename A>
 struct PropertyMapper<A, ponder::ValueKind::Enum>
 {
     typedef EnumPropertyImpl<A> Type;
 };
 
-/*
- * Instantiate user properties
- */
 template <typename A>
 struct PropertyMapper<A, ponder::ValueKind::User>
 {
@@ -172,7 +163,6 @@ public:
     typedef ObjectTraits<R> Traits;
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
-
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
@@ -208,7 +198,6 @@ public:
     typedef ObjectTraits<R> Traits;
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
-
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
 
@@ -245,7 +234,6 @@ public:
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
     typedef typename std::remove_reference<R>::type ArgumentType;
-
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
 
@@ -286,7 +274,7 @@ struct PropertyFactory1
         typedef typename Traits::ReturnType ReturnType;
         typedef Accessor1<C, ReturnType> AccessorType;
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;
-        typedef typename PropertyMapper<AccessorType, ValueType::kind>::Type PropertyType;        
+        typedef typename PropertyMapper<AccessorType, ValueType::kind>::Type PropertyType;
         return new PropertyType(name, AccessorType(accessor));
     }
 };

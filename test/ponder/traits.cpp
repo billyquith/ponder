@@ -442,6 +442,24 @@ TEST_CASE("Ponder has object traits")
                       "ObjectTraits<>::isRef failed");
     }
 
+    SECTION("types can be const")
+    {
+        using ponder::detail::ObjectTraits;
+        using ponder::ObjectKind;
+        
+        static_assert(!ObjectTraits<const int*>::isWritable, "ObjectTraits<>::isWritable failed");
+        static_assert(ObjectTraits<int*>::isWritable, "ObjectTraits<>::isWritable failed");
+        
+        static_assert(!ObjectTraits<const int&>::isWritable, "ObjectTraits<>::isWritable failed");
+        static_assert(ObjectTraits<int&>::isWritable, "ObjectTraits<>::isWritable failed");
+        
+        //static_assert(!ObjectTraits<const int[3]>::isWritable, "ObjectTraits<>::isWritable failed");
+        //static_assert(ObjectTraits<int[5]>::isWritable, "ObjectTraits<>::isWritable failed");
+        
+        //static_assert(!ObjectTraits<const std::vector<float>::isWritable, "ObjectTraits<>::isWritable failed");
+        //static_assert(ObjectTraits<std::vector<float>>::isWritable, "ObjectTraits<>::isWritable failed");
+    }
+
     SECTION("types can be converted to reference types")
     {
         using ponder::detail::ObjectTraits;

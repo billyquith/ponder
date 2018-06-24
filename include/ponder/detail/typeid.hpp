@@ -105,12 +105,13 @@ struct HasPonderRtti
 template <typename T, typename E = void>
 struct DynamicTypeId
 {
-    typedef ObjectTraits<const T&> Traits;
-
     static const char* get(const T& object)
     {
+        typedef ObjectTraits<const T&> Traits;
         typename Traits::PointerType pointer = Traits::getPointer(object);
-        return pointer ? pointer->ponderClassId() : staticTypeId<T>();
+        static_assert(Traits::kind != ObjectKind::None, "");
+        static_assert(std::is_pointer<decltype(pointer)>::value, "");
+        return pointer != nullptr ? pointer->ponderClassId() : staticTypeId<T>();
     }
 };
 
