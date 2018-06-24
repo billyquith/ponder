@@ -32,6 +32,7 @@
 #define PONDER_DETAIL_OBJECTTRAITS_HPP
 
 #include <ponder/detail/rawtype.hpp>
+#include <vector>
 #include <list>
 
 namespace ponder {
