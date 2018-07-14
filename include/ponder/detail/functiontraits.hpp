@@ -157,8 +157,7 @@ template <typename T>
 struct FunctionTraits<T, typename
     std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
-    static constexpr FunctionKind kind = FunctionKind::Function;
-    
+    static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
     typedef typename Details::Typedef Typedef;
@@ -172,7 +171,6 @@ template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::MemberFunction;
-    
     typedef typename function::MethodDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
     typedef typename Details::Typedef Typedef;
@@ -187,7 +185,6 @@ struct FunctionTraits<T, typename
     std::enable_if<std::is_bind_expression<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
-    
     typedef typename T::result_type ReturnType;
 };
 
@@ -200,7 +197,6 @@ struct FunctionTraits<T,
                             && function::IsFunctionWrapper<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
-    
     typedef function::CallableDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
     typedef typename Details::Typedef Typedef;
@@ -215,8 +211,7 @@ struct FunctionTraits<T,
     typename std::enable_if<function::IsCallable<T>::value
                             && !function::IsFunctionWrapper<T>::value>::type>
 {
-    static constexpr FunctionKind kind = FunctionKind::Lambda;
-    
+    static constexpr FunctionKind kind = FunctionKind::Lambda;    
     typedef function::CallableDetails<T> Details;
     typedef typename Details::FunctionType FunctionType;
     typedef typename Details::Typedef Typedef;

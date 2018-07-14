@@ -125,9 +125,9 @@ struct ObjectDetails<std::list<T>(C::*)>
 template <typename T, typename E = void>
 struct ObjectTraits
 {
+    static constexpr ObjectKind kind = ObjectKind::Object;
     static constexpr bool isWritable = false;
     static constexpr bool isRef = false;
-    static constexpr ObjectKind kind = ObjectKind::Object;
     typedef T& RefReturnType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
@@ -142,9 +142,9 @@ struct ObjectTraits
 template <typename T>
 struct ObjectTraits<T*>
 {
+    static constexpr ObjectKind kind = ObjectKind::Pointer;
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectKind kind = ObjectKind::Pointer;
     typedef T* RefReturnType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
@@ -159,9 +159,9 @@ struct ObjectTraits<T*>
 template <template <typename> class T, typename U>
 struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
 {
+    static constexpr ObjectKind kind = ObjectKind::SmartPointer;
     static constexpr bool isWritable = !std::is_const<U>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectKind kind = ObjectKind::SmartPointer;
     typedef U* RefReturnType;
     typedef U* PointerType;
     typedef typename RawType<U>::Type DataType;
@@ -176,10 +176,9 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 template <typename T, std::size_t N>
 struct ObjectTraits<T[N]>
 {
+    static constexpr ObjectKind kind = ObjectKind::BuiltinArray;
     static constexpr bool isWritable = false;
     static constexpr bool isRef = true;
-    static constexpr ObjectKind kind = ObjectKind::BuiltinArray;
-
     typedef T(&RefReturnType)[N];
     typedef typename RawType<T>::Type DataType;
 };
@@ -192,9 +191,9 @@ struct ObjectTraits<T&,
             typename std::enable_if<
                 !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
 {
+    static constexpr ObjectKind kind = ObjectKind::Reference;
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    static constexpr ObjectKind kind = ObjectKind::Reference;
     typedef T& RefReturnType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
