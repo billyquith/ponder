@@ -112,6 +112,12 @@ struct RawType<T*>
 {
     typedef typename RawType<T>::Type Type;
 };
+    
+template <typename T, size_t N>
+struct RawType<T[N]>
+{
+    typedef T Type;
+};
 
 /*
  * Specialized version for smart pointers

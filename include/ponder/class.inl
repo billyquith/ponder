@@ -35,9 +35,9 @@ template <typename T>
 void destroy(const UserObject& object, bool destruct)
 {
     if (destruct)
-        object.get<T*>() -> ~T();
+        object.get<T*>().~T();
     else
-        delete object.get<T*>();
+        delete &object.get<T*>();
 }
 
 template <typename T>

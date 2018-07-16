@@ -69,7 +69,7 @@ UserObject& UserObject::operator = (UserObject&& other) noexcept
 
 void* UserObject::pointer() const
 {
-    return m_holder ? m_holder->object() : nullptr;
+    return m_holder != nullptr ? m_holder->object() : nullptr;
 }
 
 const Class& UserObject::getClass() const

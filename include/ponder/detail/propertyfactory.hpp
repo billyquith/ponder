@@ -55,10 +55,7 @@ struct PropertyTypeMapper<T,
     typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
     static constexpr PropertyKind kind = PropertyKind::MemberObject;
-    struct Traits
-    {
-        typedef typename ObjectDetails<T>::ReturnType ReturnType;
-    };
+    typedef ObjectTraits<T> Traits;
 };
     
 /*
@@ -67,7 +64,7 @@ struct PropertyTypeMapper<T,
 template <typename A, ValueKind T>
 struct PropertyMapper
 {
-    typedef SimplePropertyImpl<A> Type;
+    //typedef SimplePropertyImpl<A> Type;
 };
 
 template <typename A>
@@ -76,17 +73,17 @@ struct PropertyMapper<A, ponder::ValueKind::Array>
     typedef ArrayPropertyImpl<A> Type;
 };
 
-template <typename A>
-struct PropertyMapper<A, ponder::ValueKind::Enum>
-{
-    typedef EnumPropertyImpl<A> Type;
-};
-
-template <typename A>
-struct PropertyMapper<A, ponder::ValueKind::User>
-{
-    typedef UserPropertyImpl<A> Type;
-};
+//template <typename A>
+//struct PropertyMapper<A, ponder::ValueKind::Enum>
+//{
+//    typedef EnumPropertyImpl<A> Type;
+//};
+//
+//template <typename A>
+//struct PropertyMapper<A, ponder::ValueKind::User>
+//{
+//    typedef UserPropertyImpl<A> Type;
+//};
 
 /**
  * Helper structure to perform copy and assignment
@@ -153,51 +150,51 @@ struct AccessorReturn<T[N]>
 };
 
 /*
- * Property accessor composed of 1 getter
+ * Read-only accessor wrapper.
  */
-template <typename C, typename R, typename E = void>
-class Accessor1
+template <typename Traits, typename E = void>
+class Accessor1 : public Traits::Access
 {
 public:
 
-    typedef ObjectTraits<R> Traits;
-    typedef typename Traits::DataType DataType;
-    typedef C ClassType;
+    typedef typename Traits::DataType DataType; // raw type
+    typedef DataType ReturnType; // type accessor returns
+    //typedef typename Traits::ClassType ClassType;
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    template <typename F>
-    Accessor1(F getter)
-        : m_getter(getter)
+    Accessor1(typename Traits::Type getter)
+        : Traits::Details::Access(getter)
     {
     }
 
-    typename AccessorReturn<R>::Type get(C& object) const
-    {
-        return AccessorReturn<R>::get(m_getter(object));
-    }
+//    ReturnType get(ClassType& object) const
+//    {
+//        return AccessorReturn<ReturnType>::get(m_getter(object));
+//    }
+//
+//    bool set(ClassType&, const Value&) const
+//    {
+//        return false;   // Not available
+//    }
 
-    bool set(C&, const Value&) const
-    {        
-        return false;   // Not available
-    }
+//private:
 
-private:
-
-    std::function<R (C&)> m_getter;
+    //std::function<ReturnType(ClassType&)> m_getter;
+//    AccessType m_getter;
 };
 
 /*
- * Property accessor composed of 1 read-write accessor
+ * Read-write accessor wrapper.
  */
-template <typename C, typename R>
-class Accessor1<C, R, typename std::enable_if< ObjectTraits<R>::isWritable>::type >
+template <typename Traits>
+class Accessor1<Traits, typename std::enable_if< Traits::isWritable>::type >
 {
 public:
 
-    typedef ObjectTraits<R> Traits;
-    typedef typename Traits::DataType DataType;
-    typedef C ClassType;
+    typedef typename Traits::DataType DataType; // raw type
+    typedef typename Traits::Details::ReturnType ReturnType; // raw type
+    typedef typename Traits::ClassType ClassType;
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
 
@@ -207,19 +204,19 @@ public:
     {
     }
 
-    typename AccessorReturn<R>::Type get(C& object) const
+    typename AccessorReturn<ReturnType>::Type get(ClassType& object) const
     {
-        return AccessorReturn<R>::get(m_getter(object));
+        return AccessorReturn<ReturnType>::get(m_getter(object));
     }
 
-    bool set(C& object, const Value& value) const
+    bool set(ClassType& object, const Value& value) const
     {
         return CopyHelper<DataType>::copy(*Traits::getPointer(m_getter(object)), value);
     }
 
 private:
 
-    std::function<R (C&)> m_getter;
+    std::function<ReturnType(ClassType&)> m_getter;
 };
 
 /*
@@ -230,7 +227,7 @@ class Accessor2
 {
 public:
 
-    typedef ObjectTraits<R> Traits;
+    typedef ReferenceTraits<R> Traits;
     typedef typename Traits::DataType DataType;
     typedef C ClassType;
     typedef typename std::remove_reference<R>::type ArgumentType;
@@ -270,11 +267,17 @@ struct PropertyFactory1
 {
     static Property* get(IdRef name, T accessor)
     {
-        typedef typename PropertyTypeMapper<T>::Traits Traits;
-        typedef typename Traits::ReturnType ReturnType;
-        typedef Accessor1<C, ReturnType> AccessorType;
+        typedef typename PropertyTypeMapper<T>::Traits PropertyTraits; // accessor family
+        typedef typename PropertyTraits::DataType ReturnType; // raw return type
+        
+        typedef Accessor1<PropertyTraits> AccessorType; // accessor wrapper
+        
+        // Value passing of DataType
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;
+        
+        // Property wrapper interface
         typedef typename PropertyMapper<AccessorType, ValueType::kind>::Type PropertyType;
+        
         return new PropertyType(name, AccessorType(accessor));
     }
 };

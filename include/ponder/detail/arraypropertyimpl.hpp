@@ -52,7 +52,7 @@ namespace detail {
  * \sa ArrayProperty, ponder_ext::ArrayMapper
  */
 template <typename A>
-class ArrayPropertyImpl : public ArrayProperty
+class ArrayPropertyImpl final : public ArrayProperty
 {
 public:
 

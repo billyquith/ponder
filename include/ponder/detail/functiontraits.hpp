@@ -165,7 +165,7 @@ struct FunctionTraits<T, typename
 };
 
 /**
- * Specialization for native callable types (method pointer types)
+ * Specialization for native callable types (member function types)
  */
 template <typename T>
 struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer<T>::value>::type>

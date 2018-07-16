@@ -34,14 +34,14 @@ UserObject::UserObject(const T& object)
     : m_class(&classByObject(object))
     , m_holder()
 {
-    typedef detail::ObjectTraits<T&> Traits;
-    typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
+    typedef detail::ReferenceTraits<T&> Traits;
+    typedef detail::ObjectHolderByRef<typename Traits::Type> Holder;
 
     m_holder.reset(new Holder(Traits::getPointer(const_cast<T&>(object))));
 }
 
 template <typename T>
-typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
+typename detail::ReferenceTraits<T>::RefReturnType UserObject::get() const
 {
     // Make sure that we have a valid internal object
     void *ptr = pointer();
@@ -56,13 +56,13 @@ typename detail::ObjectTraits<T>::RefReturnType UserObject::get() const
     // Apply the proper offset to the pointer (solves multiple inheritance issues)
     ptr = classCast(ptr, *m_class, *targetClass);
 
-    return detail::ObjectTraits<T>::get(ptr);
+    return detail::ReferenceTraits<T>::get(ptr);
 }
 
 template <typename T>
 UserObject UserObject::makeRef(T& object)
 {
-    typedef detail::ObjectTraits<T&> Traits;
+    typedef detail::ReferenceTraits<T&> Traits;
     typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
 
     UserObject userObject;
@@ -75,7 +75,7 @@ UserObject UserObject::makeRef(T& object)
 template <typename T>
 UserObject UserObject::makeRef(const T& object)
 {
-    typedef detail::ObjectTraits<const T&> Traits;
+    typedef detail::ReferenceTraits<const T&> Traits;
     typedef detail::ObjectHolderByConstRef<typename Traits::DataType> Holder;
 
     UserObject userObject;
@@ -88,7 +88,7 @@ UserObject UserObject::makeRef(const T& object)
 template <typename T>
 UserObject UserObject::makeCopy(const T& object)
 {
-    typedef detail::ObjectTraits<const T&> Traits;
+    typedef detail::ReferenceTraits<const T&> Traits;
     typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
 
     UserObject userObject;

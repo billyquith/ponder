@@ -39,11 +39,11 @@ namespace ponder {
 namespace detail {    
     
 /**
- * \class ObjectTraits
+ * \class ReferenceTraits
  *
  * \brief Utility class which gives compile-time information about the semantics of a type
  *
- * It is called ObjectTraits as the type is expected to be related to an object, e.g. an
+ * It is called ReferenceTraits as the type is expected to be related to an object, e.g. an
  * instance, or reference to, or pointer to.
  *
  * It provides the following constants:
@@ -72,96 +72,133 @@ namespace detail {
  * Extract details about objects we reference.
  */
 template <typename T>
-struct ObjectDetails
+struct ObjectTraits
 {
     typedef T ReturnType;
 };
 
 template <typename T>
-struct ObjectDetails<T*>
+struct ObjectTraits<T*>
 {
     typedef T ReturnType;
 };
 
 template <typename C, typename T>
-struct ObjectDetails<T(C::*)>
+struct ObjectTraits<T(C::*)>
 {
     typedef C ClassType;
     typedef T& ReturnType;
 };
 
 template <typename C, typename T, std::size_t S>
-struct ObjectDetails<T(C::*)[S]>
+struct ObjectTraits<T(C::*)[S]>
 {
+    typedef T Type[S];
     typedef C ClassType;
-    typedef T(&ReturnType)[S];
+    typedef typename RawType<T>::Type DataType;
+    static constexpr ValueKind valueKind = ValueKind::Array;
+
+    class Access
+    {
+    public:
+        Access(T(C::*d)[S]) : data(d) {}
+        T get(ClassType& c, std::size_t i) const { return (c.*data)[i]; }
+    private:
+        T(C::*data)[S];
+    };
 };
 
 template <typename C, typename T, std::size_t S>
-struct ObjectDetails<std::array<T,S>(C::*)>
+struct ObjectTraits<std::array<T,S>(C::*)>
 {
     typedef C ClassType;
     typedef std::array<T,S>(&ReturnType);
 };
 
 template <typename C, typename T>
-struct ObjectDetails<std::vector<T>(C::*)>
+struct ObjectTraits<std::vector<T>(C::*)>
 {
     typedef C ClassType;
     typedef std::vector<T>(&ReturnType);
 };
 
 template <typename C, typename T>
-struct ObjectDetails<std::list<T>(C::*)>
+struct ObjectTraits<std::list<T>(C::*)>
 {
     typedef C ClassType;
     typedef std::list<T>(&ReturnType);
 };
     
 /*
- * Adapt the type to make the binding work.
- * Generic version -- raw types
+ * Reference traits. Access of type in consistent way.
  */
 template <typename T, typename E = void>
-struct ObjectTraits
+struct ReferenceTraits
 {
-    static constexpr ObjectKind kind = ObjectKind::Object;
-    static constexpr bool isWritable = false;
-    static constexpr bool isRef = false;
-    typedef T& RefReturnType;
-    typedef T* PointerType;
-    typedef typename RawType<T>::Type DataType;
-
-    static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
-    static PointerType getPointer(T& value) {return &value;}
+//    typedef T Type;
+//    typedef ObjectTraits<T> Details;
+//    static constexpr ReferenceKind kind = ReferenceKind::Object;
+//    static constexpr bool isWritable = false;
+//    static constexpr bool isRef = false;
+//    typedef T& RefReturnType;
+//    typedef T* PointerType;
+//    typedef typename RawType<T>::Type DataType;
+//
+//    static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
+//    static PointerType getPointer(T& value) {return &value;}
 };
 
 /*
  * Raw pointers
  */
 template <typename T>
-struct ObjectTraits<T*>
+struct ReferenceTraits<T*>
 {
-    static constexpr ObjectKind kind = ObjectKind::Pointer;
+    typedef T Type;
+    typedef ObjectTraits<T> Details;
+    static constexpr ReferenceKind refKind = ReferenceKind::Pointer;
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    typedef T* RefReturnType;
+    typedef T& RefReturnType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
 
-    static RefReturnType get(void* pointer) {return static_cast<T*>(pointer);}
+    static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
     static PointerType getPointer(T* value) {return value;}
+};
+
+/*
+ * References to non-ref types
+ */
+template <typename T>
+struct ReferenceTraits<T&> //,
+//            typename std::enable_if<
+//                !std::is_pointer<typename ReferenceTraits<T>::RefReturnType>::value >::type>
+{
+    static constexpr ReferenceKind kind = ReferenceKind::Reference;
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = true;
+    typedef T Type;
+    typedef ObjectTraits<T> Details;
+    typedef T& RefReturnType;
+    typedef T* PointerType;
+    typedef typename RawType<T>::Type DataType;
+    
+    static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
+    static PointerType getPointer(T& value) {return &value;}
 };
 
 /*
  * Smart pointers
  */
 template <template <typename> class T, typename U>
-struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
+struct ReferenceTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
 {
-    static constexpr ObjectKind kind = ObjectKind::SmartPointer;
+    static constexpr ReferenceKind kind = ReferenceKind::SmartPointer;
     static constexpr bool isWritable = !std::is_const<U>::value;
     static constexpr bool isRef = true;
+    typedef T<U> Type;
+    typedef ObjectTraits<T<U>> Details;
     typedef U* RefReturnType;
     typedef U* PointerType;
     typedef typename RawType<U>::Type DataType;
@@ -173,51 +210,55 @@ struct ObjectTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value
 /*
  * Built-in arrays
  */
-template <typename T, std::size_t N>
-struct ObjectTraits<T[N]>
-{
-    static constexpr ObjectKind kind = ObjectKind::BuiltinArray;
-    static constexpr bool isWritable = false;
-    static constexpr bool isRef = true;
-    typedef T(&RefReturnType)[N];
-    typedef typename RawType<T>::Type DataType;
-};
+//template <typename T, std::size_t N>
+//struct ReferenceTraits<T(&)[N], typename std::enable_if< std::is_array<T>::value >::type>
+//{
+//    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
+//    static constexpr bool isWritable = false;
+//    static constexpr bool isRef = true;
+//    typedef T Type[N];
+//    typedef ObjectTraits<T> Details;
+//    typedef T(&RefReturnType)[N];
+//    typedef typename RawType<T>::Type DataType;
+//};
 
-/*
- * References to non-ref types
- */
-template <typename T>
-struct ObjectTraits<T&,
-            typename std::enable_if<
-                !std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
-{
-    static constexpr ObjectKind kind = ObjectKind::Reference;
-    static constexpr bool isWritable = !std::is_const<T>::value;
-    static constexpr bool isRef = true;
-    typedef T& RefReturnType;
-    typedef T* PointerType;
-    typedef typename RawType<T>::Type DataType;
-
-    static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
-    static PointerType getPointer(T& value) {return &value;}
-};
+///*
+// * References to non-ref types
+// */
+//template <typename T>
+//struct ReferenceTraits<T&> //,
+////            typename std::enable_if<
+////                !std::is_pointer<typename ReferenceTraits<T>::RefReturnType>::value >::type>
+//{
+//    static constexpr ReferenceKind kind = ReferenceKind::Reference;
+//    static constexpr bool isWritable = !std::is_const<T>::value;
+//    static constexpr bool isRef = true;
+//    typedef T Type;
+//    typedef ObjectTraits<T> Details;
+//    typedef T& RefReturnType;
+//    typedef T* PointerType;
+//    typedef typename RawType<T>::Type DataType;
+//
+//    static RefReturnType get(void* pointer) {return *static_cast<T*>(pointer);}
+//    static PointerType getPointer(T& value) {return &value;}
+//};
 
 /*
  * References to ref types -- just remove the reference modifier
  */
-template <typename T>
-struct ObjectTraits<T&,
-            typename std::enable_if<
-                std::is_pointer<typename ObjectTraits<T>::RefReturnType>::value >::type>
-    : ObjectTraits<T>
-{
-};
+//template <typename T>
+//struct ReferenceTraits<T&,
+//            typename std::enable_if<
+//                std::is_pointer<typename ReferenceTraits<T>::RefReturnType>::value >::type>
+//    : ReferenceTraits<T>
+//{
+//};
 
 /*
  * Types with const modifier -- just remove it
  */
 template <typename T>
-struct ObjectTraits<const T> : ObjectTraits<T>
+struct ReferenceTraits<const T> : ReferenceTraits<T>
 {
 };
 

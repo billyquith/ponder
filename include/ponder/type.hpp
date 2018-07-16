@@ -75,11 +75,11 @@ enum class ValueKind
 };
 
 /**
- * \brief Enumeration of kinds of object
+ * \brief Enumeration of ways to reference an object
  *
  * \sa Value ValueMapper
  */
-enum class ObjectKind
+enum class ReferenceKind
 {
     None,               ///< not an object
     Object,             ///< a raw object, e.g. int

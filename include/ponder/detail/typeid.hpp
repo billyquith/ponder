@@ -102,9 +102,9 @@ struct DynamicTypeId
 {
     static const char* get(const T& object)
     {
-        typedef ObjectTraits<const T&> Traits;
+        typedef ReferenceTraits<const T&> Traits;
         typename Traits::PointerType pointer = Traits::getPointer(object);
-        static_assert(Traits::kind != ObjectKind::None, "");
+        static_assert(Traits::kind != ReferenceKind::None, "");
         static_assert(std::is_pointer<decltype(pointer)>::value, "");
         return pointer != nullptr ? pointer->ponderClassId() : staticTypeId<T>();
     }
