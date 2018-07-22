@@ -32,7 +32,7 @@ namespace ponder {
 namespace detail {
     
 template <typename A>
-SimplePropertyImpl<A>::SimplePropertyImpl(IdRef name, const A& accessor)
+SimplePropertyImpl<A>::SimplePropertyImpl(IdRef name, A accessor)
     : SimpleProperty(name, mapType<typename A::DataType>())
     , m_accessor(accessor)
 {
@@ -47,7 +47,7 @@ Value SimplePropertyImpl<A>::getValue(const UserObject& object) const
 template <typename A>
 void SimplePropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.get<typename A::ClassType>(), value))
+    if (!m_accessor.set(object.get<typename A::ClassType>(), value.to<typename A::AccessType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

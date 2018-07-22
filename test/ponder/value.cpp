@@ -44,6 +44,7 @@ namespace ValueTest
         MyClass(int x_) : x(x_) {}
         int x;
         std::string str_ = "hello";
+        double a[10];
         
         const std::string& str() const {return str_;}
     };

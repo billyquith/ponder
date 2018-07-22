@@ -343,9 +343,7 @@ TEST_CASE("Ponder supports user objects")
         IS_TRUE(ponder::UserObject(object1)  != ponder::UserObject(object2));
 
         IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::makeRef(object1));
-        IS_TRUE(ponder::UserObject(object1) == ponder::UserObject::makeRef(&object1));
         IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::makeCopy(object1));
-        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::makeCopy(&object1));
     }
 
     SECTION("check we can reference non-copyable objects")

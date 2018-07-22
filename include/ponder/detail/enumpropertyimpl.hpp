@@ -57,7 +57,7 @@ public:
      * \param name Name of the property
      * \param accessor Object used to access the actual C++ property
      */
-    EnumPropertyImpl(IdRef name, const A& accessor);
+    EnumPropertyImpl(IdRef name, A const& accessor);
 
 protected:
 
@@ -83,7 +83,7 @@ protected:
 
 private:
 
-    A m_accessor; // Object used to access the actual C++ property
+    A m_accessor;
 };
 
 } // namespace detail

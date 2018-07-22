@@ -57,7 +57,7 @@ public:
      * \param name Name of the property
      * \param accessor Object used to access the actual C++ property
      */
-    SimplePropertyImpl(IdRef name, const A& accessor);
+    SimplePropertyImpl(IdRef name, A accessor);
 
 protected:
 

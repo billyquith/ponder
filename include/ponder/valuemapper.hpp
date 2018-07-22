@@ -406,7 +406,7 @@ struct ValueMapper<T<U>,
 template <typename T>
 struct ValueMapper<const T&> : public ValueMapper<T>
 {
-    static const T& from(const ponder::UserObject& obj) {return obj.get<const T&>();}
+    static const T& from(const ponder::UserObject& obj) {return obj.get<const T>();}
 };
 
 /**

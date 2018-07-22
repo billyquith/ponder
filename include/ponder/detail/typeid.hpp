@@ -85,8 +85,7 @@ struct HasPonderRtti
     template <typename U> static std::true_type check(TestForMember<U, &U::ponderClassId>*);
     template <typename U> static std::false_type check(...);
 
-    static constexpr bool
-        value = std::is_same<decltype(check<typename RawType<T>::Type>(0)), std::true_type>::value;
+    static constexpr bool value = std::is_same<decltype(check<T>(0)), std::true_type>::value;
 };
 
 /**
@@ -105,8 +104,8 @@ struct DynamicTypeId
         typedef ReferenceTraits<const T&> Traits;
         typename Traits::PointerType pointer = Traits::getPointer(object);
         static_assert(Traits::kind != ReferenceKind::None, "");
-        static_assert(std::is_pointer<decltype(pointer)>::value, "");
-        return pointer != nullptr ? pointer->ponderClassId() : staticTypeId<T>();
+        static_assert(std::is_pointer<decltype(pointer)>::value, "Not pointer");
+        return pointer != 0 ? pointer->ponderClassId() : staticTypeId<T>();
     }
 };
 

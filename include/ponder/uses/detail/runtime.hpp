@@ -258,13 +258,13 @@ public:
 private:
 
     typedef typename FTraits::Details::FunctionCallTypes CallTypes;
-    typedef FunctionWrapper<typename FTraits::ReturnType, CallTypes> FunctionType;
+    typedef FunctionWrapper<typename FTraits::AccessType, CallTypes> DispatchType;
     
-    typename FunctionType::Type m_function; // Object containing the actual function to call
+    typename DispatchType::Type m_function; // Object containing the actual function to call
     
     Value execute(const Args& args) const
     {
-        return FunctionType::template
+        return DispatchType::template
             call<decltype(m_function), FTraits, FPolicies>(m_function, args);
     }
 };

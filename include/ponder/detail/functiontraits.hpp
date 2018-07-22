@@ -42,31 +42,29 @@ namespace ponder {
 namespace detail {
 namespace function {
 
-// Function (ex-class)
 template <typename T>
-struct FunctionDetails
+struct FunctionDetails;
+
+template <typename R, typename C, typename... A>
+struct FunctionDetails<R(*)(C&,A...)>
 {
-    typedef void ReturnType;
+    typedef C ClassType;
+    typedef std::tuple<C&,A...> ParamTypes;
+    typedef R ReturnType;
+    typedef ReturnType(*Type)(C&,A...);
+    typedef ReturnType(DispatchType)(C&,A...);
+    typedef std::tuple<C&,A...> FunctionCallTypes;
 };
 
-template <typename R, typename... A>
-struct FunctionDetails<R(*)(A...)>
+template <typename R, typename C, typename... A>
+struct FunctionDetails<R(C&,A...)>
 {
-    typedef std::tuple<A...> ParamTypes;
+    typedef C ClassType;
+    typedef std::tuple<C&,A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(*Typedef)(A...);
-    typedef ReturnType(FunctionType)(A...);
-    typedef std::tuple<A...> FunctionCallTypes;
-};
-
-template <typename R, typename... A>
-struct FunctionDetails<R(A...)>
-{
-    typedef std::tuple<A...> ParamTypes;
-    typedef R ReturnType;
-    typedef ReturnType(Typedef)(A...);
-    typedef ReturnType(FunctionType)(A...);
-    typedef std::tuple<A...> FunctionCallTypes;
+    typedef ReturnType(Type)(C&,A...);
+    typedef ReturnType(DispatchType)(C&,A...);
+    typedef std::tuple<C&,A...> FunctionCallTypes;
 };
     
     
@@ -81,9 +79,10 @@ struct MethodDetails<R(C::*)(A...)>
     typedef C ClassType;
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(ClassType::*Typedef)(A...);
-    typedef ReturnType(FunctionType)(ClassType&, A...);
+    typedef ReturnType(ClassType::*Type)(A...);
+    typedef ReturnType(DispatchType)(ClassType&, A...);
     typedef std::tuple<ClassType&, A...> FunctionCallTypes;
+    static constexpr bool isConst = false;
 };
 
 // Const method.
@@ -92,10 +91,11 @@ struct MethodDetails<R(C::*)(A...) const>
 {
     typedef const C ClassType;
     typedef std::tuple<A...> ParamTypes;
-    typedef const R ReturnType;
-    typedef ReturnType(FunctionType)(ClassType const&, A...);
-    typedef ReturnType(ClassType::*Typedef)(A...) const;
+    typedef R ReturnType;
+    typedef ReturnType(DispatchType)(const ClassType&, A...);
+    typedef ReturnType(ClassType::*Type)(A...) const;
     typedef std::tuple<const ClassType&, A...> FunctionCallTypes;
+    static constexpr bool isConst = true;
 };
 
 
@@ -118,31 +118,25 @@ struct IsFunctionWrapper<std::function<T>> : std::true_type {};
 template <typename T>
 struct CallableDetails : public CallableDetails<decltype(&T::operator())> {};
 
-template <typename C, typename R, typename... A>
-struct CallableDetails<R(C::*)(A...) const>
+template <typename T, typename C, typename R, typename... A>
+    struct CallableDetails<R(T::*)(C&, A...) const>
 {
-    typedef C ClassType;
+    typedef const C ClassType;
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef R(Typedef)(A...);
-    typedef R(FunctionType)(A...);
-    typedef std::tuple<A...> FunctionCallTypes;
+    typedef ReturnType(Type)(A...);
+    typedef ReturnType(DispatchType)(C&, A...);
+    typedef std::tuple<C&, A...> FunctionCallTypes;
 };
 
 } // namespace function
-    
-/**
- * \class FunctionTraits
- *
- * \brief Utility class which gives compile-time informations about function types
- *
- * The FunctionTraits provides two informations about a type T:
- * \li A compile-time constant \c isFunction which tells if T is any callable type
- * \li A type \c ReturnType which is the type returned by T
- */
 
-/**
- * General case for all unspecified types: not a function
+    
+/*
+ * Uniform type declaration to all function types.
+ *  - AccessType - scalar return type. E.g. int.
+ *  - DataType - Stored type, e.g. int[].
+ *  - getter/setter are both const functions but may reference non-const objects.
  */
 template <typename T, typename E = void>
 struct FunctionTraits
@@ -159,9 +153,22 @@ struct FunctionTraits<T, typename
 {
     static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<T> Details;
-    typedef typename Details::FunctionType FunctionType;
-    typedef typename Details::Typedef Typedef;
-    typedef typename Details::ReturnType ReturnType;
+    typedef typename Details::Type Type;
+    typedef typename Details::ClassType ClassType;
+    typedef typename Details::DispatchType DispatchType;
+    typedef typename Details::ReturnType AccessType;
+    typedef typename RawType<typename Details::ReturnType>::Type DataType;
+    static constexpr bool isWritable = !std::is_const<AccessType>::value;
+
+    class Access
+    {
+    public:
+        Access(Type d) : data(d) {}
+        AccessType getter(ClassType& c) const { return (*data)(c); }
+        bool setter(ClassType& c, AccessType v) const { return (*data)(c) = v, true; }
+    private:
+        Type data;
+    };
 };
 
 /**
@@ -172,9 +179,30 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 {
     static constexpr FunctionKind kind = FunctionKind::MemberFunction;
     typedef typename function::MethodDetails<T> Details;
-    typedef typename Details::FunctionType FunctionType;
-    typedef typename Details::Typedef Typedef;
-    typedef typename Details::ReturnType ReturnType;
+    typedef typename Details::Type Type;
+    typedef typename Details::ClassType ClassType;
+    typedef typename Details::DispatchType DispatchType;
+    typedef typename Details::ReturnType AccessType;
+    typedef typename RawType<typename Details::ReturnType>::Type DataType;
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !Details::isConst;
+
+    class Access
+    {
+    public:
+        Access(Type const& d) : data(d) {}
+        // Deal with non-const references. Q: Add non-const getValues?
+        AccessType getter(const ClassType& c) const
+        {
+            return (const_cast<ClassType&>(c).*data)();
+        }
+        bool setter(ClassType& c, AccessType v) const
+        {
+            return (c.*data)() = v, true;
+        }
+    private:
+        Type data;
+    };
+
 };
 
 /**
@@ -185,7 +213,23 @@ struct FunctionTraits<T, typename
     std::enable_if<std::is_bind_expression<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
-    typedef typename T::result_type ReturnType;
+    typedef function::CallableDetails<T> Details;
+    typedef typename Details::Type Type;
+    typedef typename Details::ClassType ClassType;
+    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<typename Details::ReturnType>::Type DataType;
+    typedef typename Details::ReturnType AccessType;
+    static constexpr bool isWritable = !std::is_const<AccessType>::value;
+    
+    class Access
+    {
+    public:
+        Access(Type&& d) : data(d) {}
+        AccessType getter(ClassType& c) const { return data(c); }
+        bool setter(ClassType& c, AccessType v) { return data(c) = v, true; }
+    private:
+        Type data;
+    };
 };
 
 /**
@@ -198,9 +242,22 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
     typedef function::CallableDetails<T> Details;
-    typedef typename Details::FunctionType FunctionType;
-    typedef typename Details::Typedef Typedef;
-    typedef typename Details::ReturnType ReturnType;
+    typedef typename Details::Type Type;
+    typedef typename Details::ClassType ClassType;
+    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<typename Details::ReturnType>::Type DataType;
+    typedef typename Details::ReturnType AccessType;
+    static constexpr bool isWritable = !std::is_const<AccessType>::value;
+    
+    class Access
+    {
+    public:
+        Access(Type&& d) : data(d) {}
+        AccessType getter(ClassType& c) const { return data(c); }
+        bool setter(ClassType& c, AccessType v) const { return data(c) = v, true; }
+    private:
+        Type data;
+    };
 };
 
 /**
@@ -213,9 +270,23 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::Lambda;    
     typedef function::CallableDetails<T> Details;
-    typedef typename Details::FunctionType FunctionType;
-    typedef typename Details::Typedef Typedef;
-    typedef typename Details::ReturnType ReturnType;
+    typedef typename Details::Type Type;
+    typedef typename Details::ClassType ClassType;
+    typedef typename std::remove_const<typename Details::DispatchType>::type DispatchType;
+    typedef typename RawType<typename Details::ReturnType>::Type DataType;
+    typedef typename Details::ReturnType AccessType;
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !std::is_const<AccessType>::value;
+
+    class Access
+    {
+    public:
+        Access(DispatchType d) : data(d) {}
+        AccessType getter(const ClassType& c) const { return data(c); }
+        bool setter(ClassType& c, AccessType v) const { return data(c) = v, true; }
+    private:
+        std::function<DispatchType> data;
+    };
+
 };
 
 } // namespace detail

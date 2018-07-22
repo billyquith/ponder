@@ -32,7 +32,7 @@ namespace ponder {
 namespace detail {
     
 template <typename A>
-EnumPropertyImpl<A>::EnumPropertyImpl(IdRef name, const A& accessor)
+EnumPropertyImpl<A>::EnumPropertyImpl(IdRef name, A const& accessor)
     : EnumProperty(name, enumByType<typename A::DataType>())
     , m_accessor(accessor)
 {
@@ -41,13 +41,13 @@ EnumPropertyImpl<A>::EnumPropertyImpl(IdRef name, const A& accessor)
 template <typename A>
 Value EnumPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return m_accessor.get(object.get<typename A::ClassType>());
+    return m_accessor.get(object.get<const typename A::Traits::ClassType>());
 }
 
 template <typename A>
 void EnumPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.get<typename A::ClassType>(), value))
+    if (!m_accessor.set(object.get<typename A::Traits::ClassType>(), value))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

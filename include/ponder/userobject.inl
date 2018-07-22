@@ -34,14 +34,14 @@ UserObject::UserObject(const T& object)
     : m_class(&classByObject(object))
     , m_holder()
 {
-    typedef detail::ReferenceTraits<T&> Traits;
+    typedef detail::ReferenceTraits<T> Traits;
     typedef detail::ObjectHolderByRef<typename Traits::Type> Holder;
 
     m_holder.reset(new Holder(Traits::getPointer(const_cast<T&>(object))));
 }
 
 template <typename T>
-typename detail::ReferenceTraits<T>::RefReturnType UserObject::get() const
+typename detail::ReferenceTraits<T>::ReferenceType UserObject::get() const
 {
     // Make sure that we have a valid internal object
     void *ptr = pointer();
@@ -62,12 +62,13 @@ typename detail::ReferenceTraits<T>::RefReturnType UserObject::get() const
 template <typename T>
 UserObject UserObject::makeRef(T& object)
 {
-    typedef detail::ReferenceTraits<T&> Traits;
-    typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
+    typedef detail::ReferenceTraits<T> RefTraits;
+    static_assert(!RefTraits::isRef, "Cannot make reference to reference");
+    typedef detail::ObjectHolderByRef<typename RefTraits::DataType> Holder;
 
     UserObject userObject;
     userObject.m_class = &classByObject(object);
-    userObject.m_holder.reset(new Holder(Traits::getPointer(object)));
+    userObject.m_holder.reset(new Holder(RefTraits::getPointer(object)));
 
     return userObject;
 }
@@ -75,12 +76,13 @@ UserObject UserObject::makeRef(T& object)
 template <typename T>
 UserObject UserObject::makeRef(const T& object)
 {
-    typedef detail::ReferenceTraits<const T&> Traits;
-    typedef detail::ObjectHolderByConstRef<typename Traits::DataType> Holder;
+    typedef detail::ReferenceTraits<const T> RefTraits;
+    static_assert(!RefTraits::isRef, "Cannot make reference to reference");
+    typedef detail::ObjectHolderByConstRef<typename RefTraits::DataType> Holder;
 
     UserObject userObject;
     userObject.m_class = &classByObject(object);
-    userObject.m_holder.reset(new Holder(Traits::getPointer(object)));
+    userObject.m_holder.reset(new Holder(RefTraits::getPointer(object)));
 
     return userObject;
 }
@@ -88,8 +90,8 @@ UserObject UserObject::makeRef(const T& object)
 template <typename T>
 UserObject UserObject::makeCopy(const T& object)
 {
-    typedef detail::ReferenceTraits<const T&> Traits;
-    typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
+    typedef detail::ReferenceTraits<const T> Traits;
+    typedef detail::ObjectHolderByCopy<typename Traits::AccessType> Holder;
 
     UserObject userObject;
     userObject.m_class = &classByType<T>();

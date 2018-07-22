@@ -55,6 +55,7 @@ void* ObjectHolderByConstRef<T>::object()
 template <typename T>
 AbstractObjectHolder* ObjectHolderByConstRef<T>::getWritable()
 {
+    // TODO: Dangerous?
     // We hold a read-only object: return a holder which stores a copy of it
     return nullptr; //new ObjectHolderByCopy<T>(m_object); XXXX const ref?!
 }

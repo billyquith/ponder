@@ -88,9 +88,9 @@ namespace ArrayPropertyTest
         
         ponder::Class::declare<MyClass>("ArrayPropertyTest::MyClass")
             .property("bools", &MyClass::bools)
-            //.property("ints", &MyClass::ints)
-            //.property("strings", &MyClass::strings)
-            //.property("objects", &MyClass::objects)
+            .property("ints", &MyClass::ints)
+            .property("strings", &MyClass::strings)
+            .property("objects", &MyClass::objects)
             //.property("smartptrs", &MyClass::smartptrs)
             ;
     }

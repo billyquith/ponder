@@ -69,7 +69,7 @@ struct ToUserObject<true>
 };
 
 template <typename A>
-UserPropertyImpl<A>::UserPropertyImpl(IdRef name, const A& accessor)
+UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
     : UserProperty(name, classByType<typename A::DataType>())
     , m_accessor(accessor)
 {
@@ -78,21 +78,24 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, const A& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return ToUserObject<A::Traits::isRef>::get(m_accessor.get(object.get<typename A::ClassType>()));
+    typedef ReferenceTraits<typename A::DataType> RefTraits;
+    return ToUserObject<RefTraits::isRef>::get(
+                m_accessor.get(object.get<typename A::Traits::ClassType>()));
 }
 
 template <typename A>
 void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.get<typename A::ClassType>(), value))
+    if (!m_accessor.set(object.get<typename A::Traits::ClassType>(), value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 
 template <typename A>
 UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
 {
-    return ToUserObject<A::Traits::isRef>::get(
-                    m_accessor.get(objectInstance.get<typename A::ClassType>()));
+    typedef ReferenceTraits<typename A::AccessType> RefTraits;;
+    return ToUserObject<RefTraits::isRef>::get(
+                m_accessor.get(objectInstance.get<typename A::Traits::ClassType>()));
 }
 
 template <typename A>

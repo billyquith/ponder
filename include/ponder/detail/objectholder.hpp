@@ -71,9 +71,6 @@ public:
 
 protected:
 
-    /**
-     * \brief Default constructor
-     */
     AbstractObjectHolder();
 };
 
@@ -81,7 +78,7 @@ protected:
  * \brief Typed specialization of AbstractObjectHolder for storage by const reference
  */
 template <typename T>
-class ObjectHolderByConstRef : public AbstractObjectHolder
+class ObjectHolderByConstRef final : public AbstractObjectHolder
 {
 public:
 
@@ -97,7 +94,7 @@ public:
      *
      * \return Pointer to the object
      */
-    void* object() override;
+    void* object() final;
 
     /**
      * \brief Return a holder which is able to modify its stored object
@@ -107,13 +104,13 @@ public:
      *
      * \return Holder storing a writable object
      */
-    AbstractObjectHolder* getWritable() override;
+    AbstractObjectHolder* getWritable() final;
 
 private:
 
-    const T* m_object; ///< Pointer to the object
-    /// Pointer to the actual derived part of the object (may be different than
-    /// m_object in case of multiple inheritance with offset).
+    const T* m_object; // Pointer to the object
+    // Pointer to the actual derived part of the object (may be different than
+    // m_object in case of multiple inheritance with offset).
     void* m_alignedPtr;
 };
 
@@ -121,7 +118,7 @@ private:
  * \brief Typed specialization of AbstractObjectHolder for storage by reference
  */
 template <typename T>
-class ObjectHolderByRef : public AbstractObjectHolder
+class ObjectHolderByRef final : public AbstractObjectHolder
 {
 public:
 
@@ -137,7 +134,7 @@ public:
      *
      * \return Pointer to the object
      */
-    void* object() override;
+    void* object() final;
 
     /**
      * \brief Return a holder which is able to modify its stored object
@@ -147,13 +144,13 @@ public:
      *
      * \return Holder storing a writable object
      */
-    AbstractObjectHolder* getWritable() override;
+    AbstractObjectHolder* getWritable() final;
 
 private:
 
-    T* m_object; ///< Pointer to the object
-    /// Pointer to the actual derived part of the object (may be different than m_object
-    /// in case of multiple inheritance with offset)
+    T* m_object; // Pointer to the object
+    // Pointer to the actual derived part of the object (may be different than m_object
+    // in case of multiple inheritance with offset)
     void* m_alignedPtr;
 };
 
@@ -161,7 +158,7 @@ private:
  * \brief Typed specialization of AbstractObjectHolder for storage by copy
  */
 template <typename T>
-class ObjectHolderByCopy : public AbstractObjectHolder
+class ObjectHolderByCopy final : public AbstractObjectHolder
 {
 public:
 
@@ -177,7 +174,7 @@ public:
      *
      * \return Pointer to the object
      */
-    void* object() override;
+    void* object() final;
 
     /**
      * \brief Return a holder which is able to modify its stored object
@@ -187,11 +184,11 @@ public:
      *
      * \return Holder storing a writable object
      */
-    AbstractObjectHolder* getWritable() override;
+    AbstractObjectHolder* getWritable() final;
 
 private:
 
-    T m_object; ///< Copy of the object
+    T m_object; // Copy of the object
 };
 
 } // namespace detail

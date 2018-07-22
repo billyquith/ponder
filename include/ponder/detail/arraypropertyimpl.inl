@@ -88,7 +88,7 @@ void ArrayPropertyImpl<A>::removeElement(const UserObject& object, std::size_t i
 template <typename A>
 typename ArrayPropertyImpl<A>::ArrayType& ArrayPropertyImpl<A>::array(const UserObject& object) const
 {
-    return m_accessor.get(object.get<typename A::ClassType>());
+    return m_accessor.get(object.get<typename A::Traits::Type>());
 }
 
 } // namespace detail
