@@ -61,7 +61,7 @@ set(PONDER_TEST_SRCS
     # userdata.cpp
     # userobject.cpp
     # userproperty.cpp
-    # value.cpp
+    value.cpp
 )
 
 # Ponder, which was CAMP, used to rely on Boost. This is here in case we need to
