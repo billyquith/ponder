@@ -41,7 +41,7 @@ set(PONDER_TEST_SRCS
     # class.cpp
     # classvisitor.cpp
     # constructor.cpp
-    # dictionary.cpp
+    dictionary.cpp
     # enum.cpp
     # enumclass.cpp
     # enumclassobject.cpp
@@ -55,7 +55,7 @@ set(PONDER_TEST_SRCS
     # property.cpp
     # propertyaccess.cpp
     # serialise.cpp
-    # string_view.cpp
+    string_view.cpp
     # tagholder.cpp
     traits.cpp
     # userdata.cpp

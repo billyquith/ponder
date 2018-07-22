@@ -20,8 +20,16 @@ std::shared_ptr<int>(Foo::*)    std::shared_ptr<int>    int
 
 API
 
+Accessor -> AccessType
+
+
+UserObject -> T&
+
 template <typename T>
 typename detail::ReferenceTraits<T>::ReferenceType UserObject::get() const;
+
+
+Property -> Value
 
 template <typename A>
 Value SimplePropertyImpl<A>::getValue(const UserObject& object) const
