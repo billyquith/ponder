@@ -90,34 +90,22 @@ struct RawType
  * Specialized version for const modifier
  */
 template <typename T>
-struct RawType<const T>
-{
-    typedef typename RawType<T>::Type Type;
-};
+struct RawType<const T> : public RawType<T> {};
 
 /*
  * Specialized version for reference modifier
  */
 template <typename T>
-struct RawType<T&>
-{
-    typedef typename RawType<T>::Type Type;
-};
+struct RawType<T&> : public RawType<T> {};
 
 /*
  * Specialized version for raw pointers
  */
 template <typename T>
-struct RawType<T*>
-{
-    typedef typename RawType<T>::Type Type;
-};
+struct RawType<T*> : public RawType<T> {};
     
-//template <typename T, size_t N>
-//struct RawType<T[N]>
-//{
-//    typedef T Type;
-//};
+template <typename T, size_t N>
+struct RawType<T[N]> : public RawType<T> {};
 
 /*
  * Specialized version for smart pointers

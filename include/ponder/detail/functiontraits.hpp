@@ -32,6 +32,7 @@
 #define PONDER_DETAIL_FUNCTIONTRAITS_HPP
 
 #include <ponder/type.hpp>
+#include "rawtype.hpp"
 #include <type_traits>
 #include <array>
 #include <vector>
@@ -43,28 +44,30 @@ namespace detail {
 namespace function {
 
 template <typename T>
-struct FunctionDetails;
-
-template <typename R, typename C, typename... A>
-struct FunctionDetails<R(*)(C&,A...)>
+struct FunctionDetails
 {
-    typedef C ClassType;
-    typedef std::tuple<C&,A...> ParamTypes;
-    typedef R ReturnType;
-    typedef ReturnType(*Type)(C&,A...);
-    typedef ReturnType(DispatchType)(C&,A...);
-    typedef std::tuple<C&,A...> FunctionCallTypes;
+//    typedef int failure[-1];
+    typedef void ReturnType;
 };
 
-template <typename R, typename C, typename... A>
-struct FunctionDetails<R(C&,A...)>
+template <typename R, typename... A>
+struct FunctionDetails<R(*)(A...)>
 {
-    typedef C ClassType;
-    typedef std::tuple<C&,A...> ParamTypes;
+    typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(Type)(C&,A...);
-    typedef ReturnType(DispatchType)(C&,A...);
-    typedef std::tuple<C&,A...> FunctionCallTypes;
+    typedef ReturnType(*Type)(A...);
+    typedef ReturnType(DispatchType)(A...);
+    typedef std::tuple<A...> FunctionCallTypes;
+};
+
+template <typename R, typename... A>
+struct FunctionDetails<R(A...)>
+{
+    typedef std::tuple<A...> ParamTypes;
+    typedef R ReturnType;
+    typedef ReturnType(Type)(A...);
+    typedef ReturnType(DispatchType)(A...);
+    typedef std::tuple<A...> FunctionCallTypes;
 };
     
     
@@ -118,10 +121,10 @@ struct IsFunctionWrapper<std::function<T>> : std::true_type {};
 template <typename T>
 struct CallableDetails : public CallableDetails<decltype(&T::operator())> {};
 
-template <typename T, typename C, typename R, typename... A>
-    struct CallableDetails<R(T::*)(C&, A...) const>
+template <typename C, typename R, typename... A>
+struct CallableDetails<R(C::*)(A...) const>
 {
-    typedef const C ClassType;
+    typedef C ClassType;
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
     typedef ReturnType(Type)(A...);
@@ -148,13 +151,12 @@ struct FunctionTraits
  * Specialization for native callable types (function and function pointer types)
  */
 template <typename T>
-struct FunctionTraits<T, typename
-    std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
+struct FunctionTraits<T,
+    typename std::enable_if<std::is_function<typename std::remove_pointer<T>::type>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<T> Details;
     typedef typename Details::Type Type;
-    typedef typename Details::ClassType ClassType;
     typedef typename Details::DispatchType DispatchType;
     typedef typename Details::ReturnType AccessType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
@@ -164,8 +166,8 @@ struct FunctionTraits<T, typename
     {
     public:
         Access(Type d) : data(d) {}
-        AccessType getter(ClassType& c) const { return (*data)(c); }
-        bool setter(ClassType& c, AccessType v) const { return (*data)(c) = v, true; }
+//        AccessType getter(ClassType& c) const { return (*data)(c); }
+//        bool setter(ClassType& c, AccessType v) const { return (*data)(c) = v, true; }
     private:
         Type data;
     };

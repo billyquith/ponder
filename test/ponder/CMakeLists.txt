@@ -52,12 +52,12 @@ set(PONDER_TEST_SRCS
     # inheritance.cpp
     main.cpp
     # mapper.cpp
-    property.cpp
+    # property.cpp
     # propertyaccess.cpp
     # serialise.cpp
     # string_view.cpp
     # tagholder.cpp
-    # traits.cpp
+    traits.cpp
     # userdata.cpp
     # userobject.cpp
     # userproperty.cpp

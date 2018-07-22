@@ -47,20 +47,20 @@ namespace TraitsTest
     static void func() {}
 
     static int funcArgReturn(float) {return 0;}
-    
+
     struct Class
     {
         float method(float x) const { return x*3; }
         static int staticFunc() { return 77; }
     };
-    
+
     struct Methods
     {
         void foo() {}
         ponder::String arr[10];
         int arri[7];
         std::array<int, 6> arrv;
-    
+
         int v;
         const int& getV() const {return v;}
     };
@@ -68,20 +68,20 @@ namespace TraitsTest
     struct Callable {
         void operator () (void) {}
     };
-    
+
     struct NonCallable {
         int x;
     };
 
     int intArray[10];
-    
+
     template <class T>
     class TemplateClass
     {
     public:
         T x;
     };
-    
+
     enum Enum { RED, GREEN, BLUE };
     enum class EnumCls { TALL, SHORT };
 
@@ -89,16 +89,16 @@ namespace TraitsTest
     {
         int m_i;
         Callable m_c;
-        
+
         int i() const {return 0;}
         float f() {return 2.4f;}
-        
+
         int* ip() {return &m_i;}
-        
+
         std::shared_ptr<Callable> sp() {return std::make_shared<Callable>(m_c);}
-        
+
         std::vector<int> ai() {return std::vector<int>{1,2,3};}
-        
+
         std::vector<std::shared_ptr<Callable>> as()
         {
             return std::vector<std::shared_ptr<Callable>>();
@@ -118,7 +118,7 @@ TEST_CASE("C++11 features and syntax")
     SECTION("function test")
     {
         func(); funcArgReturn(0.f); // to stop unused warning
-        
+
         static_assert(std::is_function<decltype(func)>::value, "std::is_function failed");
         static_assert(std::is_function<void(void)>::value, "std::is_function failed");
         static_assert(std::is_function<
@@ -126,7 +126,7 @@ TEST_CASE("C++11 features and syntax")
                       "std::is_function failed");
         static_assert(std::is_function< std::function<void()>() >::value,
                       "std::is_function failed");
-        
+
         static_assert( ! std::is_function<Callable>::value, "std::is_function failed");
         static_assert( ! std::is_function<NonCallable>::value, "std::is_function failed");
         static_assert( ! std::is_function<decltype(&Class::method)>::value,
@@ -136,7 +136,7 @@ TEST_CASE("C++11 features and syntax")
                             std::remove_pointer<decltype(&Methods::foo)>::type>::value,
                       "std::is_function failed");
     }
-    
+
     SECTION("function result")
     {
         static_assert(std::is_void< std::result_of<decltype(func)& ()>::type >::value,
@@ -170,27 +170,11 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder supports different function types")
 {
-    SECTION("what is not a function")
-    {
-        using ponder::detail::FunctionTraits;
-
-        // TODO: Add TypeTraits? Currently
-//        static_assert( ! FunctionTraits<int>::isFunction,   "FunctionTraits<>::isFunction failed");
-//        static_assert( ! FunctionTraits<float>::isFunction, "FunctionTraits<>::isFunction failed");
-//        static_assert( ! FunctionTraits<int*>::isFunction,  "FunctionTraits<>::isFunction failed");
-//        static_assert( ! FunctionTraits<char*>::isFunction, "FunctionTraits<>::isFunction failed");
-//        static_assert( ! FunctionTraits<int**>::isFunction, "FunctionTraits<>::isFunction failed");
-//        static_assert( ! FunctionTraits<ponder::String>::isFunction,
-//                      "FunctionTraits<>::isFunction failed");
-//        static_assert( ! FunctionTraits<NonCallable>::isFunction,
-//                      "FunctionTraits<>::isFunction failed");
-    }
-    
     SECTION("what is not a function types")
     {
         using ponder::detail::FunctionTraits;
         using ponder::FunctionKind;
-        
+
         static_assert(FunctionTraits<int>::kind == FunctionKind::None,
                       "FunctionTraits<>::kind failed");
         static_assert(FunctionTraits<float>::kind == FunctionKind::None,
@@ -206,50 +190,49 @@ TEST_CASE("Ponder supports different function types")
         static_assert(FunctionTraits<NonCallable>::kind == FunctionKind::None,
                       "FunctionTraits<>::isFunction failed");
     }
-    
+
     SECTION("type function")
     {
         using ponder::detail::FunctionTraits;
         using ponder::PropertyKind;
         using ponder::FunctionKind;
-        
-        static_assert(ponder::detail::PropertyTypeMapper<void(void)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<void(void)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(void)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<void(int)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<void(int)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(int)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<int(void)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<int(void)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<int(void)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<int(char*)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<int(char*)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<int(char*)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
-        
+
         // non-class void(void)
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(func)>::kind == PropertyKind::Function,
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(func)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(func)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
-        
+
         // non-class R(...)
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(funcArgReturn)>::kind == PropertyKind::Function,
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(funcArgReturn)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(funcArgReturn)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
 
         // class static R(void)
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(&Class::staticFunc)>::kind == PropertyKind::Function,
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(&Class::staticFunc)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::kind
-                                                                     == FunctionKind::Function,
+        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::kind == FunctionKind::Function,
                       "FunctionTraits<>::kind failed");
     }
 
@@ -261,13 +244,13 @@ TEST_CASE("Ponder supports different function types")
         using ponder::FunctionKind;
 
         static_assert(std::is_member_function_pointer<void (TraitsTest::Methods::*)()>::value, "MFP");
-        static_assert(ponder::detail::PropertyTypeMapper<void(Methods::*)()>::kind == PropertyKind::Function,
+        static_assert(ponder::detail::PropertyTraitMapper<void(Methods::*)()>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<void(Methods::*)()>::kind == FunctionKind::MemberFunction,
                       "FunctionTraits<>::kind failed");
-        
+
         void (Methods::*meth_t)() = &Methods::foo;
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(meth_t)>::kind == PropertyKind::Function,
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(meth_t)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::isFunction failed");
         static_assert(FunctionTraits<decltype(meth_t)>::kind == FunctionKind::MemberFunction,
                       "FunctionTraits<>::kind failed");
@@ -278,45 +261,45 @@ TEST_CASE("Ponder supports different function types")
         using ponder::detail::FunctionTraits;
         using ponder::PropertyKind;
         using ponder::FunctionKind;
-        
+
         struct Members {
             int m;
             float a[5];
             bool b[8];
         };
 
-        static_assert( ponder::detail::PropertyTypeMapper<int Members::*>::kind == PropertyKind::MemberObject,
+        static_assert( ponder::detail::PropertyTraitMapper<int Members::*>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        
-        static_assert( ponder::detail::PropertyTypeMapper<float (Members::*)[]>::kind == PropertyKind::MemberObject,
+
+        static_assert( ponder::detail::PropertyTraitMapper<float (Members::*)[]>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        
-        static_assert( ponder::detail::PropertyTypeMapper<decltype(&Members::a)>::kind == PropertyKind::MemberObject,
+
+        static_assert( ponder::detail::PropertyTraitMapper<decltype(&Members::a)>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
-        
-        static_assert( ponder::detail::PropertyTypeMapper<decltype(&Members::b)>::kind == PropertyKind::MemberObject,
+
+        static_assert( ponder::detail::PropertyTraitMapper<decltype(&Members::b)>::kind == PropertyKind::MemberObject,
                       "FunctionTraits<>::isFunction failed");
     }
-    
+
     SECTION("type function wrapper")  // std::function<>
     {
         using ponder::detail::FunctionTraits;
         using ponder::PropertyKind;
         using ponder::FunctionKind;
-        
-        static_assert(ponder::detail::PropertyTypeMapper<std::function<void()>>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<std::function<void()>>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
             FunctionTraits<std::function<void()>>::kind == FunctionKind::FunctionWrapper,
             "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<std::function<int(float,int)>>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<std::function<int(float,int)>>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
             FunctionTraits<std::function<int(float,int)>>::kind == FunctionKind::FunctionWrapper,
             "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<std::function<char*(char[])>>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<std::function<char*(char[])>>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
             FunctionTraits<std::function<char*(char[])>>::kind == FunctionKind::FunctionWrapper,
@@ -328,24 +311,24 @@ TEST_CASE("Ponder supports different function types")
         using ponder::detail::FunctionTraits;
         using ponder::PropertyKind;
         using ponder::FunctionKind;
-        
+
         auto l1 = [] () {};
         auto l2 = [] (int&) { return "hello"; };
         auto l3 = [] (float, float[]) -> float { return 3.1415927f; };
-        
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(l1)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(l1)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
                       FunctionTraits<decltype(l1)>::kind == FunctionKind::Lambda,
                       "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(l2)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(l2)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
                       FunctionTraits<decltype(l2)>::kind == FunctionKind::Lambda,
                       "FunctionTraits<>::kind failed");
-        
-        static_assert(ponder::detail::PropertyTypeMapper<decltype(l3)>::kind == PropertyKind::Function,
+
+        static_assert(ponder::detail::PropertyTraitMapper<decltype(l3)>::kind == PropertyKind::Function,
                       "FunctionTraits<>::kind failed");
         static_assert(
                       FunctionTraits<decltype(l3)>::kind == FunctionKind::Lambda,
@@ -359,144 +342,153 @@ TEST_CASE("Ponder supports different function types")
         using ponder::FunctionKind;
 
         typedef decltype(&FuncReturn::i) fn;
-        static_assert(ponder::detail::PropertyTypeMapper<fn>::kind == PropertyKind::Function, "");
+        static_assert(ponder::detail::PropertyTraitMapper<fn>::kind == PropertyKind::Function, "");
         static_assert(FunctionTraits<fn>::kind == FunctionKind::MemberFunction, "");
 
-        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::i)>::ReturnType,
-                                                  const int>::value, "");
-        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::f)>::ReturnType,
-                                                  float>::value, "");
-        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::ip)>::ReturnType,
-                                                  int*>::value, "");
-        
-        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::sp)>::ReturnType,
-                                                  std::shared_ptr<Callable>>::value, "");
+        static_assert(std::is_same<
+                        FunctionTraits<decltype(&FuncReturn::i)>::AccessType, int
+                      >::value, "");
+        static_assert(std::is_same<
+                        FunctionTraits<decltype(&FuncReturn::f)>::AccessType, float
+                      >::value, "");
+//        static_assert(std::is_same<
+//                        FunctionTraits<decltype(&FuncReturn::ip)>::AccessType, int*
+//                      >::value, "");
 
-        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::ai)>::ReturnType,
-                                              std::vector<int>>::value, "");
-        static_assert(std::is_same<FunctionTraits<decltype(&FuncReturn::as)>::ReturnType,
-                                              std::vector<std::shared_ptr<Callable>>>::value, "");
+//        static_assert(std::is_same<
+//                        FunctionTraits<decltype(&FuncReturn::sp)>::AccessType, \
+//                        std::shared_ptr<Callable> \
+//                      >::value, "");
+
+//        static_assert(std::is_same<
+//                        FunctionTraits<decltype(&FuncReturn::ai)>::AccessType,
+//                        std::vector<int>
+//                      >::value, "");
+//        static_assert(std::is_same<
+//                        FunctionTraits<decltype(&FuncReturn::as)>::AccessType,
+//                        std::vector<std::shared_ptr<Callable>>
+//                      >::value, "");
     }
 }
 
 //----------------------------------------------------------------------------------------
 
-TEST_CASE("Ponder has object traits")
+TEST_CASE("Ponder has reference traits")
 {
     SECTION("types can be tested for being writable")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+
         // is writable
-        static_assert(ObjectTraits<int*>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
-        static_assert(ObjectTraits<char**>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
+        static_assert(ReferenceTraits<int>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        static_assert(ReferenceTraits<int*>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        static_assert(ReferenceTraits<char**>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
 
         // is not writable
-        static_assert( ! ObjectTraits<const int>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ObjectTraits<int>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ObjectTraits<const int*>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ObjectTraits<const char * const *>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
-        static_assert( ! ObjectTraits<void(...)>::isRef,
-                      "ObjectTraits<>::isRef failed");
-        static_assert( ! ObjectTraits<decltype(intArray)>::isWritable,
-                      "ObjectTraits<>::isWriteable failed");
+        static_assert( ! ReferenceTraits<const int>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        static_assert( ! ReferenceTraits<const int*>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+//        static_assert( ! ReferenceTraits<const char * const *>::isWritable,
+//                      "ReferenceTraits<>::isWriteable failed");
+//        static_assert( ! ReferenceTraits<void(...)>::isRef,
+//                      "ReferenceTraits<>::isRef failed");
+//        static_assert( ! ReferenceTraits<decltype(intArray)>::isWritable,
+//                      "ReferenceTraits<>::isWriteable failed");
     }
 
     SECTION("types can be references")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
 
         // is ref
-        static_assert(ObjectTraits<int*>::isRef, "ObjectTraits<>::isRef failed");
-        static_assert(ObjectTraits<char**>::isRef, "ObjectTraits<>::isRef failed");
-        static_assert(ObjectTraits<decltype(intArray)>::isRef,
-                      "ObjectTraits<>::isRef failed");
+        static_assert(ReferenceTraits<int*>::isRef, "ReferenceTraits<>::isRef failed");
+        static_assert(ReferenceTraits<char**>::isRef, "ReferenceTraits<>::isRef failed");
 
-        static_assert(ponder::detail::ObjectTraits<int&>::isRef,
-                      "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<int&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<int*&>::isRef,
-                      "ObjectTraits<>::isRef failed");
+        static_assert(ponder::detail::ReferenceTraits<int&>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert(ponder::detail::ReferenceTraits<int&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert(ponder::detail::ReferenceTraits<int*&>::isRef,
+                      "ReferenceTraits<>::isRef failed");
 
         // is not ref
-        static_assert( ! ObjectTraits<int>::isRef,
-                      "ObjectTraits<>::isRef failed");
-        static_assert( ! ObjectTraits<float>::isRef,
-                      "ObjectTraits<>::isRef failed");
-        static_assert( ! ObjectTraits<void(...)>::isRef,
-                      "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<Callable>::isRef,
-                      "ObjectTraits<>::isRef failed");
-        static_assert(ponder::detail::ObjectTraits<Callable>::kind != ObjectKind::Reference,
-                      "ObjectTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ObjectTraits<NonCallable>::isRef,
-                      "ObjectTraits<>::isRef failed");
+        static_assert( ! ReferenceTraits<int>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ReferenceTraits<float>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ReferenceTraits<void(...)>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ReferenceTraits<decltype(intArray)>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ponder::detail::ReferenceTraits<Callable>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert(ponder::detail::ReferenceTraits<Callable>::kind != ReferenceKind::Reference,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ponder::detail::ReferenceTraits<NonCallable>::isRef,
+                      "ReferenceTraits<>::isRef failed");
     }
 
     SECTION("types can be const")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
-        static_assert(!ObjectTraits<const int*>::isWritable, "ObjectTraits<>::isWritable failed");
-        static_assert(ObjectTraits<int*>::isWritable, "ObjectTraits<>::isWritable failed");
-        
-        static_assert(!ObjectTraits<const int&>::isWritable, "ObjectTraits<>::isWritable failed");
-        static_assert(ObjectTraits<int&>::isWritable, "ObjectTraits<>::isWritable failed");
-        
-        //static_assert(!ObjectTraits<const int[3]>::isWritable, "ObjectTraits<>::isWritable failed");
-        //static_assert(ObjectTraits<int[5]>::isWritable, "ObjectTraits<>::isWritable failed");
-        
-        //static_assert(!ObjectTraits<const std::vector<float>::isWritable, "ObjectTraits<>::isWritable failed");
-        //static_assert(ObjectTraits<std::vector<float>>::isWritable, "ObjectTraits<>::isWritable failed");
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+
+        static_assert(!ReferenceTraits<const int*>::isWritable, "ReferenceTraits<>::isWritable failed");
+        static_assert(ReferenceTraits<int*>::isWritable, "ReferenceTraits<>::isWritable failed");
+
+        static_assert(!ReferenceTraits<const int&>::isWritable, "ReferenceTraits<>::isWritable failed");
+        static_assert(ReferenceTraits<int&>::isWritable, "ReferenceTraits<>::isWritable failed");
+
+        static_assert(!ReferenceTraits<const int[3]>::isWritable, "ReferenceTraits<>::isWritable failed");
+        static_assert(ReferenceTraits<int[5]>::isWritable, "ReferenceTraits<>::isWritable failed");
+
+        //static_assert(!ReferenceTraits<const std::vector<float>::isWritable, "ReferenceTraits<>::isWritable failed");
+        //static_assert(ReferenceTraits<std::vector<float>>::isWritable, "ReferenceTraits<>::isWritable failed");
     }
 
     SECTION("types can be converted to reference types")
     {
-        using ponder::detail::ObjectTraits;
+        using ponder::detail::ReferenceTraits;
 
         static_assert(
-            std::is_same<int&, ObjectTraits<int>::RefReturnType>::value,
-            "ObjectTraits<>::RefReturnType failed");
+            std::is_same<int&, ReferenceTraits<int>::ReferenceType>::value,
+            "ReferenceTraits<>::ReferenceType failed");
         static_assert(
-            std::is_same<float&, ObjectTraits<const float>::RefReturnType>::value,
-            "ObjectTraits<>::RefReturnType failed");
-    
+            std::is_same<const float&, ReferenceTraits<const float>::ReferenceType>::value,
+            "ReferenceTraits<>::ReferenceType failed");
+
         // ref return
         static_assert(
-            std::is_same<int*, ObjectTraits<int*>::RefReturnType>::value,
-            "ObjectTraits<>::RefReturnType failed");
+            std::is_same<int*, ReferenceTraits<int*>::ReferenceType>::value,
+            "ReferenceTraits<>::ReferenceType failed");
         static_assert(
             std::is_same<const int*,
-                         ObjectTraits<const int*>::RefReturnType>::value,
-            "ObjectTraits<>::RefReturnType failed");
+                         ReferenceTraits<const int*>::ReferenceType>::value,
+            "ReferenceTraits<>::ReferenceType failed");
     }
 
     SECTION("types can be pointers")
     {
-        using ponder::detail::ObjectTraits;
+        using ponder::detail::ReferenceTraits;
 
         // pointer type
-        static_assert(std::is_same<int*, ObjectTraits<int*>::PointerType>::value,
-                      "ObjectTraits<>::PointerType failed");
+        static_assert(std::is_same<int*, ReferenceTraits<int*>::PointerType>::value,
+                      "ReferenceTraits<>::PointerType failed");
         static_assert(
-            std::is_same<const int*, ObjectTraits<const int*>::PointerType>::value,
-            "ObjectTraits<>::PointerType failed");
+            std::is_same<const int*, ReferenceTraits<const int*>::PointerType>::value,
+            "ReferenceTraits<>::PointerType failed");
     }
 
     SECTION("is a smart pointer")
     {
         using ponder::detail::IsSmartPointer;
-        
+
         static_assert(IsSmartPointer<int, int>::value == false,
                       "IsSmartPointer<> failed");
 
@@ -518,21 +510,21 @@ TEST_CASE("Ponder has object traits")
 
     SECTION("types have a raw data type")
     {
-        using ponder::detail::ObjectTraits;
+        using ponder::detail::ReferenceTraits;
 
-        static_assert(std::is_same<int, ObjectTraits<int>::DataType>::value,
-                      "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ObjectTraits<int*>::DataType>::value,
-                      "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ObjectTraits<const int>::DataType>::value,
-                      "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ObjectTraits<const int*>::DataType>::value,
-                      "ObjectTraits<>::DataType failed");
-        static_assert(std::is_same<int, ObjectTraits<int **>::DataType>::value,
-                      "ObjectTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<int>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<int*>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<const int>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<const int*>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<int **>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
         static_assert(
-            std::is_same<int, ObjectTraits<decltype(intArray)>::DataType>::value,
-            "ObjectTraits<>::DataType failed");
+            std::is_same<int, ReferenceTraits<int[10]>::DataType>::value,
+            "ReferenceTraits<>::DataType failed");
     }
 }
 
@@ -542,87 +534,87 @@ TEST_CASE("Object traits are classfied")
 {
     SECTION("type object")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
-        static_assert(ObjectTraits<int>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
-//        static_assert(ObjectTraits<const int>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
-//        static_assert(ObjectTraits<const float>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
-//        static_assert(ObjectTraits<const Methods>::kind == ObjectKind::Object, "ObjectTraits<>::kind");
-        
-        static_assert(ObjectTraits<int*>::kind != ObjectKind::Object, "ObjectTraits<>::kind");
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+
+        static_assert(ReferenceTraits<int>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<float>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<Methods>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<const int>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<const float>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<const Methods>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+
+        static_assert(ReferenceTraits<int*>::kind != ReferenceKind::Object, "ReferenceTraits<>::kind");
     }
 
     SECTION("type pointer")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
-        static_assert(ObjectTraits<int*>::kind == ObjectKind::Pointer,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float*>::kind == ObjectKind::Pointer,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods*>::kind == ObjectKind::Pointer,
-                      "ObjectTraits<>::kind");
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
 
-        static_assert(ObjectTraits<int**>::kind == ObjectKind::Pointer,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float**>::kind == ObjectKind::Pointer,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods**>::kind == ObjectKind::Pointer,
-                      "ObjectTraits<>::kind");
+        static_assert(ReferenceTraits<int*>::kind == ReferenceKind::Pointer,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<float*>::kind == ReferenceKind::Pointer,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<Methods*>::kind == ReferenceKind::Pointer,
+                      "ReferenceTraits<>::kind");
+
+        static_assert(ReferenceTraits<int**>::kind == ReferenceKind::Pointer,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<float**>::kind == ReferenceKind::Pointer,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<Methods**>::kind == ReferenceKind::Pointer,
+                      "ReferenceTraits<>::kind");
     }
-    
+
     SECTION("type reference")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
-        static_assert(ObjectTraits<int&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::kind");
-        
-        static_assert(ObjectTraits<const int&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<const float&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<const Methods&>::kind == ObjectKind::Reference,
-                      "ObjectTraits<>::kind");
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+
+        static_assert(ReferenceTraits<int&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<float&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<Methods&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::kind");
+
+        static_assert(ReferenceTraits<const int&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<const float&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<const Methods&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::kind");
     }
-    
+
     SECTION("type smart pointer")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
-//        static_assert(ObjectTraits<std::unique_ptr<Methods>>::kind == ObjectKind::SmartPointer,
-//                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<std::shared_ptr<Methods>>::kind == ObjectKind::SmartPointer,
-                      "ObjectTraits<>::kind");
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+
+//        static_assert(ReferenceTraits<std::unique_ptr<Methods>>::kind == ReferenceKind::SmartPointer,
+//                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<std::shared_ptr<Methods>>::kind == ReferenceKind::SmartPointer,
+                      "ReferenceTraits<>::kind");
     }
 
     SECTION("type builtin array")
     {
-        using ponder::detail::ObjectTraits;
-        using ponder::ObjectKind;
-        
-        static_assert(ObjectTraits<int[1]>::kind == ObjectKind::BuiltinArray,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<int[1000]>::kind == ObjectKind::BuiltinArray,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<float[1]>::kind == ObjectKind::BuiltinArray,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<Methods[10]>::kind == ObjectKind::BuiltinArray,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<int[10][10]>::kind == ObjectKind::BuiltinArray,
-                      "ObjectTraits<>::kind");
-        static_assert(ObjectTraits<int[10][20][30]>::kind == ObjectKind::BuiltinArray,
-                      "ObjectTraits<>::kind");
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+
+        static_assert(ReferenceTraits<int[1]>::kind == ReferenceKind::BuiltinArray,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<int[1000]>::kind == ReferenceKind::BuiltinArray,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<float[1]>::kind == ReferenceKind::BuiltinArray,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<Methods[10]>::kind == ReferenceKind::BuiltinArray,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<int[10][10]>::kind == ReferenceKind::BuiltinArray,
+                      "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<int[10][20][30]>::kind == ReferenceKind::BuiltinArray,
+                      "ReferenceTraits<>::kind");
     }
 }
 
@@ -642,7 +634,7 @@ TEST_CASE("Type testing")
 
         static_assert(std::is_same<char, RawType<char>::Type>::value, "RawType<> fail");
         static_assert(std::is_same<float, RawType<float*>::Type>::value, "RawType<> fail");
-        
+
         static_assert(std::is_same<std::string, RawType<std::string>::Type>::value,
                       "RawType<> fail");
         static_assert(std::is_same<std::string, RawType<std::string&>::Type>::value,
@@ -662,14 +654,14 @@ TEST_CASE("Type testing")
     SECTION("which are user types")
     {
         using ponder::detail::IsUserType;
-        
+
         static_assert( ! IsUserType<int>::value, "IsUserType<> fail");
         static_assert( ! IsUserType<char*>::value, "IsUserType<> fail");
         static_assert( ! IsUserType<std::string>::value, "IsUserType<> fail");
         static_assert( ! IsUserType<ponder::Value>::value, "IsUserType<> fail");
         static_assert( ! IsUserType<Enum>::value, "IsUserType<> fail");
         static_assert( ! IsUserType<EnumCls>::value, "IsUserType<> fail");
-        
+
         static_assert(IsUserType<Callable>::value, "IsUserType<> fail");
         static_assert(IsUserType<NonCallable>::value, "IsUserType<> fail");
     }
@@ -677,7 +669,7 @@ TEST_CASE("Type testing")
     SECTION("which are user types")
     {
         using ponder::detail::IsUserObjRef;
-        
+
         static_assert( ! IsUserObjRef<int>::value, "IsUserObjRef<> fail");
         static_assert( ! IsUserObjRef<Callable>::value, "IsUserObjRef<> fail");
         static_assert( ! IsUserObjRef<NonCallable>::value, "IsUserObjRef<> fail");
@@ -741,10 +733,10 @@ TEST_CASE("Lexical cast is used")
     {
         const unsigned int ui = 234;
         REQUIRE(ponder::detail::convert<ponder::String>(ui) == std::to_string(ui));
-    
+
         const int i = -17;
         REQUIRE(ponder::detail::convert<ponder::String>(i) == std::to_string(i));
-    
+
         const float f = 108.75f;
         REQUIRE(ponder::detail::convert<ponder::String>(f) == "108.750000");
 
@@ -779,7 +771,7 @@ TEST_CASE("Lexical cast is used")
                           ponder::detail::bad_conversion);
         REQUIRE_THROWS_AS(ponder::detail::convert<char>(ponder::String("27")),
                           ponder::detail::bad_conversion);
-    
+
         REQUIRE(ponder::detail::convert<unsigned char>(ponder::String("0")) == '0');
         REQUIRE(ponder::detail::convert<unsigned char>(ponder::String("g")) == 'g');
         REQUIRE_THROWS_AS(ponder::detail::convert<unsigned char>(ponder::String()),
@@ -793,7 +785,7 @@ TEST_CASE("Lexical cast is used")
         REQUIRE(ponder::detail::convert<short>(ponder::String("0")) == 0);
         REQUIRE(ponder::detail::convert<short>(ponder::String("2600")) == 2600);
         REQUIRE(ponder::detail::convert<short>(ponder::String("-27")) == -27);
-    
+
         REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("2600")) == 2600u);
         REQUIRE(ponder::detail::convert<unsigned short>(ponder::String("-27"))
@@ -810,7 +802,7 @@ TEST_CASE("Lexical cast is used")
         REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("123456789")) == 123456789u);
         REQUIRE(ponder::detail::convert<unsigned int>(ponder::String("-27"))
                 == static_cast<unsigned int>(-27));
-    
+
         REQUIRE_THROWS_AS(ponder::detail::convert<int>(ponder::String("bad number")),
                           ponder::detail::bad_conversion);
     }
@@ -821,7 +813,7 @@ TEST_CASE("Lexical cast is used")
         REQUIRE(ponder::detail::convert<long long>(ponder::String("1125899906842624"))
                 == 1125899906842624ll);
         REQUIRE(ponder::detail::convert<long long>(ponder::String("-27")) == -27);
-    
+
         REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("0")) == 0);
         REQUIRE(ponder::detail::convert<unsigned long long>(ponder::String("1125899906842624"))
                 == 1125899906842624ull);
@@ -871,12 +863,12 @@ TEST_CASE("Check Ponder utilities work correctly")
         REQUIRE(is.size() == 3);
 
         std::array<int, 4> array {{1,2,3,4}};
-    
+
         // convert an array into a tuple
         auto tuple = a2t<std::tuple<int, int, int, int>>(array);
         static_assert(std::is_same<decltype(tuple), std::tuple<int, int, int, int>>::value, "");
     }
-    
+
     SECTION("allTrue")
     {
         REQUIRE(ponder::detail::allTrue() == true);
@@ -888,7 +880,7 @@ TEST_CASE("Check Ponder utilities work correctly")
         REQUIRE(ponder::detail::allTrue(true, true, true, true, true, true) == true);
         REQUIRE(ponder::detail::allTrue(true, true, true, true, true, true, true) == true);
         REQUIRE(ponder::detail::allTrue(true, true, true, true, true, true, true, true) == true);
-    
+
         REQUIRE(ponder::detail::allTrue(false) == false);
         REQUIRE(ponder::detail::allTrue(true, false) == false);
         REQUIRE(ponder::detail::allTrue(true, false, true) == false);
@@ -898,7 +890,7 @@ TEST_CASE("Check Ponder utilities work correctly")
         REQUIRE(ponder::detail::allTrue(true, true, false, true, true, true, true) == false);
         REQUIRE(ponder::detail::allTrue(true, false, true, true, true, false, true, true) == false);
     }
-    
+
     SECTION("type to string")
     {
         REQUIRE(strcmp(ponder::detail::valueTypeAsString(ponder::ValueKind::None), "none")==0);
@@ -916,7 +908,7 @@ TEST_CASE("Check IdTraits")
         const char *t1 = "flibaddydib";
         ponder::Id id(t1);
         ponder::IdRef ir(id);
-        
+
         REQUIRE(strcmp(ponder::id::c_str(ir), t1) == 0);
     }
 }
@@ -931,37 +923,37 @@ TEST_CASE("Check functionality same as Boost")
     SECTION("check traits same as Boost")
     {
         typedef void (*fn1_t)(void);
-        
+
         static_assert(std::is_same<void(),
                       boost::function_types::function_type<fn1_t>::type>::value,
                       "boost::function_types problem");
-                      
+
         static_assert(std::is_same<void(), ponder::detail::FunctionTraits<fn1_t>::type>::value,
                       "ponder::detail::FunctionTraits problem");
-    
+
         typedef int (*fn2_t)(int,const char*,float&);
-        
+
         static_assert(std::is_same<int(int,const char*,float&),
                       boost::function_types::function_type<fn2_t>::type>::value,
                       "boost::function_types problem");
         static_assert(std::is_same<int(int,const char*,float&),
                       ponder::detail::FunctionTraits<fn2_t>::type>::value,
                       "ponder::detail::FunctionTraits problem");
-    
+
         struct TestClass {
             int foo(float) {return 0;}
         };
 
         typedef int (TestClass::*fn3_t)(float);
-        
+
         static_assert(std::is_same<int(TestClass&,float),
                       boost::function_types::function_type<fn3_t>::type>::value,
                       "boost::function_types problem");
-                      
+
         static_assert(std::is_same<int(TestClass&,float),
                       ponder::detail::MethodDetails<fn3_t>::FunctionKind>::value,
                       "ponder::detail::MethodDetails problem");
-                      
+
         static_assert(std::is_same<int(TestClass&,float),
                       ponder::detail::FunctionTraits<fn3_t>::type>::value,
                       "ponder::detail::FunctionTraits problem");
@@ -973,12 +965,12 @@ TEST_CASE("Check functionality same as Boost")
         static_assert(
             std::is_same<void(), boost::function_types::function_type<fn1_t>::type>::value,
             "boost::function_types problem");
-    
+
         typedef int (*fn2_t)(int,const char*,float&);
         static_assert(std::is_same<int(int,const char*,float&),
              boost::function_types::function_type<fn2_t>::type>::value,
              "boost::function_types problem");
-    
+
         struct TestClass {
             int foo(float) {return 0;}
         };
@@ -997,7 +989,7 @@ TEST_CASE("Check functionality same as Boost")
                       "boost::callable problem");
         static_assert( ! boost::function_types::is_callable_builtin<char*>::value,
                       "boost::callable problem");
-    
+
         struct TestClass {
             int foo(float) {return 0;}
             int i;
@@ -1007,7 +999,7 @@ TEST_CASE("Check functionality same as Boost")
                       "boost::callable problem");
         static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)(float)>::value,
                       "boost::callable problem");
-    
+
         static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)>::value,
                       "boost::callable problem");
         static_assert(boost::function_types::is_callable_builtin<int(TestClass::*)[5]>::value,
@@ -1022,21 +1014,22 @@ TEST_CASE("Check functionality same as Boost")
         static_assert(
                   std::is_same<int, boost::function_types::result_type<int()>::type>::value,
                   "boost::ret result_type");
-        
+
         static_assert(
             std::is_same<int,
                          boost::function_types::result_type<int(TestClass::*)(void)>::type>::value,
                       "boost::ret result_type");
-        
+
         static_assert(
             std::is_same<float,
                     boost::function_types::result_type<float(TestClass::*)(void)>::type>::value,
                     "boost::ret result_type");
-    }    
+    }
 }
 
 #endif // TEST_BOOST
 
 //----------------------------------------------------------------------------------------
+
 
 

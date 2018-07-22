@@ -156,7 +156,7 @@ struct ObjectDetails
     typedef T Type;
     typedef typename RawType<T>::Type DataType;
     typedef T AccessType;
-    static constexpr bool isWritable = !std::is_const<DataType>::value;
+    static constexpr bool isWritable = !std::is_const<AccessType>::value;
     
 //    static_assert(std::is_array<DataType>::value, "Expected array");
 //    static_assert(!std::is_array<AccessType>::value, "Unexpected array");
@@ -278,28 +278,47 @@ struct ReferenceTraits
 {
     static constexpr ReferenceKind kind = ReferenceKind::Object;
     typedef object::ObjectDetails<T> Details;
-    typedef T Type;
     static constexpr bool isWritable = Details::isWritable;
     static constexpr bool isRef = false;
+    typedef T Type;
     typedef T& ReferenceType;
     typedef T* PointerType;
-    typedef T DataType;
+    typedef typename RawType<T>::Type DataType;
 
     static inline ReferenceType get(void* pointer) {return *static_cast<T*>(pointer);}
     static inline PointerType getPointer(T& value) {return &value;}
 };
 
 /*
+ * Raw pointers
+ */
+template <typename T>
+struct ReferenceTraits<T*>
+{
+    static constexpr ReferenceKind kind = ReferenceKind::Pointer;
+    typedef object::ObjectDetails<T> Details;
+    typedef T* Type;
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = true;
+    typedef T* ReferenceType;
+    typedef T* PointerType;
+    typedef typename RawType<T>::Type DataType;
+
+    static ReferenceType get(void* pointer) {return static_cast<T*>(pointer);}
+    static PointerType getPointer(T* value) {return value;}
+};
+
+/*
  * References to non-ref types
  */
 template <typename T>
-struct ReferenceTraits<T&, typename std::enable_if<!std::is_pointer<T>::value>::type>
+struct ReferenceTraits<T&> //, typename std::enable_if<!std::is_pointer<T>::value>::type>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Reference;
     typedef object::ObjectDetails<T> Details;
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
-    typedef T Type;
+    typedef T& Type;
     typedef T& ReferenceType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
@@ -321,30 +340,27 @@ struct ReferenceTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::va
     static constexpr bool isRef = true;
     typedef U& ReferenceType;
     typedef T<U> PointerType;
-    typedef U DataType;
+    typedef typename RawType<U>::Type DataType;
 
     static ReferenceType get(void* pointer)   {return *static_cast<U*>(pointer);}
     static PointerType getPointer(T<U>& value) {return get_pointer(value);}
 };
 
 /*
- * Raw pointers
+ * Built-in arrays
  */
-//template <typename T>
-//struct ReferenceTraits<T*>
-//{
-//    typedef T Type;
-//    typedef MemberTraits<T> Details;
-//    static constexpr ReferenceKind kind = ReferenceKind::Pointer;
-//    static constexpr bool isWritable = !std::is_const<T>::value;
-//    static constexpr bool isRef = true;
-//    typedef T* ReferenceType;
-//    typedef T* PointerType;
-//    typedef typename RawType<T>::Type DataType;
-//
-//    static ReferenceType get(void* pointer) {return static_cast<T*>(pointer);}
-//    static PointerType getPointer(T* value) {return value;}
-//};
+template <typename T, std::size_t N>
+struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
+{
+    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
+    typedef object::ObjectDetails<T[N]> Details;
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = false;
+    typedef T Type[N];
+    typedef typename RawType<T>::Type DataType;
+    typedef T(&ReferenceType)[N];
+    typedef T* PointerType;
+};
 
     
 /*
