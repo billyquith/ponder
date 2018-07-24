@@ -35,7 +35,7 @@ UserObject::UserObject(const T& object)
     , m_holder()
 {
     typedef detail::ReferenceTraits<T> Traits;
-    typedef detail::ObjectHolderByRef<typename Traits::Type> Holder;
+    typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
 
     m_holder.reset(new Holder(Traits::getPointer(const_cast<T&>(object))));
 }
