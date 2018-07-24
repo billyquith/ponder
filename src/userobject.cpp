@@ -50,7 +50,7 @@ UserObject::UserObject(const UserObject& other)
 UserObject::UserObject(UserObject&& other) noexcept
 {
     std::swap(m_class, other.m_class);
-    std::swap(m_holder, other.m_holder);
+    m_holder.swap(other.m_holder);
 }
 
 UserObject& UserObject::operator = (const UserObject& other)
@@ -63,7 +63,7 @@ UserObject& UserObject::operator = (const UserObject& other)
 UserObject& UserObject::operator = (UserObject&& other) noexcept
 {
     std::swap(m_class, other.m_class);
-    std::swap(m_holder, other.m_holder);
+    m_holder.swap(other.m_holder);
     return *this;
 }
 

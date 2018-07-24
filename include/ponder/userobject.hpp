@@ -78,7 +78,10 @@ public:
      */
     template <typename T>
     UserObject(const T& object);
-    
+
+    template <typename T>
+    UserObject(T* object);
+
     /**
      * \brief Construct a user object from a reference to an object
      *
@@ -310,8 +313,11 @@ private:
      * \param value New value to assign
      */
     void set(const Property& property, const Value& value) const;
-
-private:
+    
+    UserObject(const Class* cls, detail::AbstractObjectHolder* h)
+        :   m_class(cls)
+        ,   m_holder(h)
+    {}
 
     /// Metaclass of the stored object
     const Class* m_class;

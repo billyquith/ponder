@@ -89,7 +89,7 @@ ObjectHolderByCopy<T>::ObjectHolderByCopy(const T* object)
 template <typename T>
 void* ObjectHolderByCopy<T>::object()
 {
-    return &m_object;
+    return reinterpret_cast<void*>(&m_object);
 }
 
 template <typename T>

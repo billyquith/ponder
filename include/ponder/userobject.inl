@@ -31,13 +31,25 @@ namespace ponder {
     
 template <typename T>
 UserObject::UserObject(const T& object)
-    : m_class(&classByObject(object))
-    , m_holder()
+    :   m_class(&classByType<T>())
+{
+    typedef detail::ReferenceTraits<const T> Traits;
+    typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
+    m_holder.reset(new Holder(Traits::getPointer(object)));
+}
+
+template <typename T>
+UserObject::UserObject(T* object)
+    :   m_class(&classByType<T>())
 {
     typedef detail::ReferenceTraits<T> Traits;
-    typedef detail::ObjectHolderByRef<typename Traits::DataType> Holder;
-
-    m_holder.reset(new Holder(Traits::getPointer(const_cast<T&>(object))));
+    static_assert(!Traits::isRef, "Cannot make reference to reference");
+    
+    typedef typename std::conditional<std::is_const<T>::value,
+    detail::ObjectHolderByConstRef<typename Traits::DataType>,
+    detail::ObjectHolderByRef<typename Traits::DataType>>::type Holder;
+    
+    m_holder.reset(new Holder(object));
 }
 
 template <typename T>
@@ -69,11 +81,7 @@ UserObject UserObject::makeRef(T& object)
                  detail::ObjectHolderByConstRef<typename RefTraits::DataType>,
                  detail::ObjectHolderByRef<typename RefTraits::DataType>>::type Holder;
 
-    UserObject userObject;
-    userObject.m_class = &classByObject(object);
-    userObject.m_holder.reset(new Holder(RefTraits::getPointer(object)));
-
-    return userObject;
+    return UserObject(&classByObject(object), new Holder(RefTraits::getPointer(object)));
 }
 
 template <typename T>
@@ -87,12 +95,7 @@ UserObject UserObject::makeCopy(const T& object)
 {
     typedef detail::ReferenceTraits<const T> Traits;
     typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
-
-    UserObject userObject;
-    userObject.m_class = &classByType<T>();
-    userObject.m_holder.reset(new Holder(Traits::getPointer(object)));
-
-    return userObject;
+    return UserObject(&classByType<T>(), new Holder(Traits::getPointer(object)));
 }
 
 template <typename T>

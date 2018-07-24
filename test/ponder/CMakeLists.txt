@@ -51,7 +51,7 @@ set(PONDER_TEST_SRCS
     function.cpp
     # inheritance.cpp
     main.cpp
-    # mapper.cpp
+    mapper.cpp
     # property.cpp
     # propertyaccess.cpp
     # serialise.cpp
@@ -59,7 +59,7 @@ set(PONDER_TEST_SRCS
     # tagholder.cpp
     traits.cpp
     # userdata.cpp
-    # userobject.cpp
+    userobject.cpp
     # userproperty.cpp
     value.cpp
 )

@@ -98,9 +98,9 @@ class ConstructorImpl : public Constructor
     static inline UserObject createWithArgs(void* ptr, const Args& args, PONDER__SEQNS::index_sequence<Is...>)
     {
         if (ptr)
-            return UserObject(*new(ptr) T(convertArg<As>(args, Is)...)); // placement new
+            return UserObject::makeRef(new(ptr) T(convertArg<As>(args, Is)...)); // placement new
         else
-            return UserObject(*new T(convertArg<As>(args, Is)...));
+            return UserObject::makeRef(new T(convertArg<As>(args, Is)...));
     }
 
 public:
