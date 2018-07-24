@@ -822,22 +822,20 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
    }
 }
 
-//TODO - where &object passed we make a reference... fix
+TEST_CASE("Functions can modify objects")
+{
+    // modifyData() is called on an object of class A with the intent to modify that object:
+    DataHolder objectA;
 
-//TEST_CASE("Functions can modify objects")
-//{
-//    // modifyData() is called on an object of class A with the intent to modify that object:
-//    DataHolder objectA;
-//
-//    const ponder::Class& metaClassB = ponder::classByType<FunctionTest::DataModifier>();
-//    ponder::runtime::ObjectFactory bfact(metaClassB);
-//    ponder::UserObject wrapperB =  bfact.construct();
-//    ponder::runtime::ObjectCaller functionB(metaClassB.function("modifyData"));
-//
-//    REQUIRE(objectA.TestMember == 0);
-//    functionB.call(wrapperB, objectA);
-//    REQUIRE(objectA.TestMember == 5);
-//
-//    bfact.destroy(wrapperB);
-//}
+    const ponder::Class& metaClassB = ponder::classByType<FunctionTest::DataModifier>();
+    ponder::runtime::ObjectFactory bfact(metaClassB);
+    ponder::UserObject wrapperB =  bfact.construct();
+    ponder::runtime::ObjectCaller functionB(metaClassB.function("modifyData"));
+
+    REQUIRE(objectA.TestMember == 0);
+    functionB.call(wrapperB, objectA);
+    REQUIRE(objectA.TestMember == 5);
+
+    bfact.destroy(wrapperB);
+}
 

@@ -206,7 +206,7 @@ public:
      * \throw BadArgument one of the arguments can't be converted to the requested type
      */
     template <typename... A>
-    Value call(const UserObject &obj, A... args);
+    Value call(const UserObject &obj, A&&... args);
     
 private:
     
@@ -323,12 +323,12 @@ inline UserObject ObjectFactory::create(A... args) const
 }
 
 template <typename... A>
-inline Value ObjectCaller::call(const UserObject &obj, A... vargs)
+inline Value ObjectCaller::call(const UserObject &obj, A&&... vargs)
 {
     if (obj.pointer() == nullptr)
         PONDER_ERROR(NullObject(&obj.getClass()));
 
-    Args args(detail::ArgsBuilder<A...>::makeArgs(vargs...));
+    Args args(detail::ArgsBuilder<A...>::makeArgs(std::forward<A>(vargs)...));
     
     // Check the number of arguments
     if (args.count() < m_func.paramCount())
