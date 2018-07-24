@@ -156,20 +156,16 @@ namespace object {
  *   storage / modifiers (in other words, convert from T to PointerType)
  */
 
-/*
- * How we access an instance of type T.
- */
-//template <typename T, typename E = void>
-//struct ReferenceTraits
-//{
-//    //static_assert(false, "Unhandled reference type");
-//};
-
-/*
- * Object instance.
- */
+// How we access an instance of type T.
 template <typename T, typename E = void>
 struct ReferenceTraits
+{
+    typedef int unhandled_type[-sizeof(T)];
+};
+
+// Object instance.
+template <typename T>
+struct ReferenceTraits<T>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Instance;
     typedef T& ReferenceType;
@@ -182,9 +178,7 @@ struct ReferenceTraits
     static inline PointerType getPointer(T& value) {return &value;}
 };
 
-/*
- * Raw pointers
- */
+// Raw pointers
 template <typename T>
 struct ReferenceTraits<T*>
 {
@@ -200,9 +194,7 @@ struct ReferenceTraits<T*>
     static inline PointerType getPointer(T* value) {return value;}
 };
 
-/*
- * References
- */
+// References
 template <typename T>
 struct ReferenceTraits<T&> //, typename std::enable_if<!std::is_pointer<T>::value>::type>
 {
@@ -217,26 +209,28 @@ struct ReferenceTraits<T&> //, typename std::enable_if<!std::is_pointer<T>::valu
     static inline PointerType getPointer(T& value) {return &value;}
 };
 
-/*
- * Smart pointers
- */
-template <template <typename> class T, typename U>
-struct ReferenceTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value>::type>
+// Base class for smart pointers
+template <class P, typename T>
+struct SmartPointerReferenceTraits
 {
+    typedef P Type;
     static constexpr ReferenceKind kind = ReferenceKind::SmartPointer;
-    typedef U& ReferenceType;
-    typedef T<U> PointerType;
-    typedef typename RawType<U>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<U>::value;
+    typedef T& ReferenceType;
+    typedef P PointerType;
+    typedef typename RawType<T>::Type DataType;
+    static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
 
-    static inline ReferenceType get(void* pointer)   {return *static_cast<U*>(pointer);}
-    static inline PointerType getPointer(T<U>& value) {return get_pointer(value);}
+    static inline ReferenceType get(void* pointer)   {return *static_cast<P*>(pointer);}
+    static inline PointerType getPointer(P& value) {return get_pointer(value);}
 };
 
-/*
- * Built-in arrays
- */
+// std::shared_ptr<>
+template <typename T>
+struct ReferenceTraits<std::shared_ptr<T>>
+    : public SmartPointerReferenceTraits<std::shared_ptr<T>,T> {};
+
+// Built-in arrays []
 template <typename T, std::size_t N>
 struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
 {

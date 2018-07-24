@@ -170,7 +170,7 @@ TEST_CASE("C++11 features and syntax")
 
 TEST_CASE("Ponder supports different function types")
 {
-    SECTION("what is not a function types")
+    SECTION("what is not a function type")
     {
         using ponder::detail::FunctionTraits;
         using ponder::FunctionKind;
@@ -191,7 +191,7 @@ TEST_CASE("Ponder supports different function types")
                       "FunctionTraits<>::isFunction failed");
     }
 
-    SECTION("type function")
+    SECTION("type function")    // T(*)()
     {
         using ponder::detail::FunctionTraits;
         using ponder::PropertyKind;
@@ -334,7 +334,10 @@ TEST_CASE("Ponder supports different function types")
         typedef FunctionTraits<L3Type> L3Traits;
         static_assert(L3Traits::kind == FunctionKind::Lambda, "FunctionTraits<>::kind failed");
     }
+}
 
+TEST_CASE("Functions have access types")
+{
     SECTION("functions can return values")
     {
         using ponder::detail::FunctionTraits;
@@ -351,14 +354,14 @@ TEST_CASE("Ponder supports different function types")
         static_assert(std::is_same<
                         FunctionTraits<decltype(&FuncReturn::f)>::AccessType, float
                       >::value, "");
-//        static_assert(std::is_same<
-//                        FunctionTraits<decltype(&FuncReturn::ip)>::AccessType, int*
-//                      >::value, "");
+        static_assert(std::is_same<
+                        FunctionTraits<decltype(&FuncReturn::ip)>::AccessType, int*
+                      >::value, "");
 
-//        static_assert(std::is_same<
-//                        FunctionTraits<decltype(&FuncReturn::sp)>::AccessType, \
-//                        std::shared_ptr<Callable> \
-//                      >::value, "");
+        static_assert(std::is_same<
+                        FunctionTraits<decltype(&FuncReturn::sp)>::AccessType, \
+                        std::shared_ptr<Callable> \
+                      >::value, "");
 
 //        static_assert(std::is_same<
 //                        FunctionTraits<decltype(&FuncReturn::ai)>::AccessType,
@@ -540,9 +543,9 @@ TEST_CASE("We reference objects in different ways")
         static_assert(ReferenceTraits<int>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
         static_assert(ReferenceTraits<float>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
         static_assert(ReferenceTraits<Methods>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
-//        static_assert(ReferenceTraits<const int>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
-//        static_assert(ReferenceTraits<const float>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
-//        static_assert(ReferenceTraits<const Methods>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<const int>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<const float>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<const Methods>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
 
         static_assert(ReferenceTraits<int*>::kind != ReferenceKind::Instance, "ReferenceTraits<>::kind");
     }
