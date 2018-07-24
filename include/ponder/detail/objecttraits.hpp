@@ -297,14 +297,15 @@ struct ReferenceTraits<T*>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Pointer;
     typedef object::ObjectDetails<T> Details;
-    typedef T* Type;
     static constexpr bool isWritable = !std::is_const<T>::value;
     static constexpr bool isRef = true;
+    typedef T* Type;
     typedef T* ReferenceType;
     typedef T* PointerType;
     typedef typename RawType<T>::Type DataType;
 
     static ReferenceType get(void* pointer) {return static_cast<T*>(pointer);}
+    static PointerType getPointer(T& value) {return &value;}
     static PointerType getPointer(T* value) {return value;}
 };
 
@@ -335,9 +336,9 @@ struct ReferenceTraits<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::va
 {
     static constexpr ReferenceKind kind = ReferenceKind::SmartPointer;
     typedef object::ObjectDetails<T<U>> Details;
-    typedef T<U> Type;
     static constexpr bool isWritable = !std::is_const<U>::value;
     static constexpr bool isRef = true;
+    typedef T<U> Type;
     typedef U& ReferenceType;
     typedef T<U> PointerType;
     typedef typename RawType<U>::Type DataType;

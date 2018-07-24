@@ -86,7 +86,8 @@ Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 template <typename A>
 void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.get<typename A::Traits::ClassType>(), value.to<typename A::DataType>()))
+    if (!m_accessor.set(object.get<typename A::Traits::ClassType>(),
+                        value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

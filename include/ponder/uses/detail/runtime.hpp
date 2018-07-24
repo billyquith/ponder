@@ -231,9 +231,9 @@ class FunctionCaller
 {
 public:
     FunctionCaller(const IdRef name) : m_name(name) {}
-    
-    FunctionCaller(const FunctionCaller&) = delete; // no copying
     virtual ~FunctionCaller() {}
+
+    FunctionCaller(const FunctionCaller&) = delete; // no copying
     
     const IdRef name() const { return m_name; }
     
@@ -246,7 +246,7 @@ private:
 // The FunctionImpl class is a template which is specialized according to the
 // underlying function prototype.
 template <typename F, typename FTraits, typename FPolicies>
-class FunctionCallerImpl : public FunctionCaller
+class FunctionCallerImpl final : public FunctionCaller
 {
 public:
 
@@ -262,7 +262,7 @@ private:
     
     typename DispatchType::Type m_function; // Object containing the actual function to call
     
-    Value execute(const Args& args) const
+    Value execute(const Args& args) const final
     {
         return DispatchType::template
             call<decltype(m_function), FTraits, FPolicies>(m_function, args);

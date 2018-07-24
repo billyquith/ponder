@@ -124,12 +124,12 @@ struct CallableDetails : public CallableDetails<decltype(&T::operator())> {};
 template <typename C, typename R, typename... A>
 struct CallableDetails<R(C::*)(A...) const>
 {
-    typedef C ClassType;
+    typedef C ClassType;    // N.B. Lambda class
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
     typedef ReturnType(Type)(A...);
-    typedef ReturnType(DispatchType)(C&, A...);
-    typedef std::tuple<C&, A...> FunctionCallTypes;
+    typedef ReturnType(DispatchType)(A...);
+    typedef std::tuple<A...> FunctionCallTypes;
 };
 
 } // namespace function
@@ -274,7 +274,7 @@ struct FunctionTraits<T,
     typedef function::CallableDetails<T> Details;
     typedef typename Details::Type Type;
     typedef typename Details::ClassType ClassType;
-    typedef typename std::remove_const<typename Details::DispatchType>::type DispatchType;
+    typedef typename Details::DispatchType DispatchType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
     static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !std::is_const<AccessType>::value;

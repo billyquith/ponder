@@ -41,7 +41,7 @@ EnumPropertyImpl<A>::EnumPropertyImpl(IdRef name, A const& accessor)
 template <typename A>
 Value EnumPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return m_accessor.get(object.get<const typename A::Traits::ClassType>());
+    return m_accessor.get(object.get<typename A::Traits::ClassType>());
 }
 
 template <typename A>

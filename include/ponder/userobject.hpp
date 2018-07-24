@@ -90,7 +90,10 @@ public:
      */
     template <typename T>
     static UserObject makeRef(T& object);
-    
+
+    template <typename T>
+    static UserObject makeRef(T* object);
+
     /**
      * \brief Construct a user object from a const reference to an object
      *
@@ -100,8 +103,8 @@ public:
      *
      * \return UserObject containing a const reference to \a object
      */
-    template <typename T>
-    static UserObject makeRef(const T& object);
+//    template <typename T>
+//    static UserObject makeRef(const T& object);
     
     /**
      * \brief Construct a user object with a copy of an object

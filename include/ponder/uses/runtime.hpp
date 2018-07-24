@@ -52,7 +52,7 @@ static inline void destroy(const UserObject &uo);
 namespace detail {
 
 template <typename... A>
-struct ArgsBuilder { static Args makeArgs(A... args) { return {args...}; } };
+struct ArgsBuilder { static Args makeArgs(A&&... args) { return {std::forward<A>(args)...}; } };
     
 template <>
 struct ArgsBuilder<Args> { static Args makeArgs(const Args& args) { return args; } };
@@ -294,15 +294,16 @@ static inline UniquePtr createUnique(const Class &cls, A... args)
 }
 
 template <typename... A>
-static inline Value call(const Function &fn, const UserObject &obj, A... args)
+static inline Value call(const Function &fn, const UserObject &obj, A&&... args)
 {
-    return ObjectCaller(fn).call(obj, detail::ArgsBuilder<A...>::makeArgs(args...));
+    return ObjectCaller(fn).call(obj,
+                                 detail::ArgsBuilder<A...>::makeArgs(std::forward<A>(args)...));
 }
 
 template <typename... A>
-static inline Value callStatic(const Function &fn, A... args)
+static inline Value callStatic(const Function &fn, A&&... args)
 {
-    return FunctionCaller(fn).call(detail::ArgsBuilder<A...>::makeArgs(args...));
+    return FunctionCaller(fn).call(detail::ArgsBuilder<A...>::makeArgs(std::forward<A>(args)...));
 }
 
 } // namespace runtime

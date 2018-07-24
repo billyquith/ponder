@@ -146,7 +146,6 @@ private:
             Processor::template perFunction<F, T, FuncPolicies>(name, function);
     }
     
-    
     std::size_t paramCount() const override { return c_nParams; }
 
     ValueKind paramType(std::size_t index) const override

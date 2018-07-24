@@ -64,7 +64,10 @@ UserObject UserObject::makeRef(T& object)
 {
     typedef detail::ReferenceTraits<T> RefTraits;
     static_assert(!RefTraits::isRef, "Cannot make reference to reference");
-    typedef detail::ObjectHolderByRef<typename RefTraits::DataType> Holder;
+
+    typedef typename std::conditional<std::is_const<T>::value,
+                 detail::ObjectHolderByConstRef<typename RefTraits::DataType>,
+                 detail::ObjectHolderByRef<typename RefTraits::DataType>>::type Holder;
 
     UserObject userObject;
     userObject.m_class = &classByObject(object);
@@ -74,24 +77,16 @@ UserObject UserObject::makeRef(T& object)
 }
 
 template <typename T>
-UserObject UserObject::makeRef(const T& object)
+UserObject UserObject::makeRef(T* object)
 {
-    typedef detail::ReferenceTraits<const T> RefTraits;
-    static_assert(!RefTraits::isRef, "Cannot make reference to reference");
-    typedef detail::ObjectHolderByConstRef<typename RefTraits::DataType> Holder;
-
-    UserObject userObject;
-    userObject.m_class = &classByObject(object);
-    userObject.m_holder.reset(new Holder(RefTraits::getPointer(object)));
-
-    return userObject;
+    return makeRef(*object);
 }
 
 template <typename T>
 UserObject UserObject::makeCopy(const T& object)
 {
     typedef detail::ReferenceTraits<const T> Traits;
-    typedef detail::ObjectHolderByCopy<typename Traits::AccessType> Holder;
+    typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
 
     UserObject userObject;
     userObject.m_class = &classByType<T>();

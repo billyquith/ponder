@@ -74,9 +74,9 @@ public:
      * \param args Parameter pack to be used.
      */
     template <typename... V>
-    Args(V... args)
+    Args(V&&... args)
     {
-        init<std::initializer_list<Value>>({args...});
+        init<std::initializer_list<Value>>({std::forward<V>(args)...});
     }
     
     /**
