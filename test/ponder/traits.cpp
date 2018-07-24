@@ -530,21 +530,21 @@ TEST_CASE("Ponder has reference traits")
 
 //----------------------------------------------------------------------------------------
 
-TEST_CASE("Object traits are classfied")
+TEST_CASE("We reference objects in different ways")
 {
-    SECTION("type object")
+    SECTION("object instance")
     {
         using ponder::detail::ReferenceTraits;
         using ponder::ReferenceKind;
 
-        static_assert(ReferenceTraits<int>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<float>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<Methods>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
-//        static_assert(ReferenceTraits<const int>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
-//        static_assert(ReferenceTraits<const float>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
-//        static_assert(ReferenceTraits<const Methods>::kind == ReferenceKind::Object, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<int>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<float>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<Methods>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<const int>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<const float>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<const Methods>::kind == ReferenceKind::Instance, "ReferenceTraits<>::kind");
 
-        static_assert(ReferenceTraits<int*>::kind != ReferenceKind::Object, "ReferenceTraits<>::kind");
+        static_assert(ReferenceTraits<int*>::kind != ReferenceKind::Instance, "ReferenceTraits<>::kind");
     }
 
     SECTION("type pointer")

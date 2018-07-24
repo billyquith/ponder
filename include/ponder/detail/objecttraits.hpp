@@ -269,14 +269,21 @@ struct ObjectDetails
  */
 
 /*
- * How we access an instance of type T with different references.
- *
- * An instance:
+ * How we access an instance of type T.
+ */
+//template <typename T, typename E = void>
+//struct ReferenceTraits
+//{
+//    //static_assert(false, "Unhandled reference type");
+//};
+
+/*
+ * Object instance.
  */
 template <typename T, typename E = void>
 struct ReferenceTraits
 {
-    static constexpr ReferenceKind kind = ReferenceKind::Object;
+    static constexpr ReferenceKind kind = ReferenceKind::Instance;
     typedef object::ObjectDetails<T> Details;
     static constexpr bool isWritable = Details::isWritable;
     static constexpr bool isRef = false;
@@ -310,7 +317,7 @@ struct ReferenceTraits<T*>
 };
 
 /*
- * References to non-ref types
+ * References
  */
 template <typename T>
 struct ReferenceTraits<T&> //, typename std::enable_if<!std::is_pointer<T>::value>::type>

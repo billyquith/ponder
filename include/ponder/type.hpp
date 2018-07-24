@@ -82,10 +82,10 @@ enum class ValueKind
 enum class ReferenceKind
 {
     None,               ///< not an object
-    Object,             ///< a raw object, e.g. int
+    Instance,           ///< an object instance, e.g. int, T
     Pointer,            ///< pointer to an object, e.g. T*
     Reference,          ///< reference to an object, e.g. T&
-    SmartPointer,       ///< smart pointer reference
+    SmartPointer,       ///< smart pointer reference, e.g. std::shared_ptr<T>
     BuiltinArray,       ///< builtin array, e.g. T[N]
 };
     
