@@ -52,7 +52,7 @@ set(PONDER_TEST_SRCS
     # inheritance.cpp
     main.cpp
     mapper.cpp
-    # property.cpp
+    property.cpp
     # propertyaccess.cpp
     # serialise.cpp
     string_view.cpp

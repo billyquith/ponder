@@ -41,13 +41,13 @@ EnumPropertyImpl<A>::EnumPropertyImpl(IdRef name, A const& accessor)
 template <typename A>
 Value EnumPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return m_accessor.get(object.get<typename A::Traits::ClassType>());
+    return m_accessor.get(object.get<typename A::ClassType>());
 }
 
 template <typename A>
 void EnumPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.get<typename A::Traits::ClassType>(), value))
+    if (!m_accessor.set(object.get<typename A::ClassType>(), value))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

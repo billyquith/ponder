@@ -55,15 +55,17 @@ template <typename C, typename T>
 struct MemberTraits<T(C::*)>
 {
     typedef T(C::*Type);
-    typedef C ClassType;
+    //typedef C ClassType;
     typedef T AccessType;
     typedef typename RawType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_const<T>::value;
 
-    class Access
+    template <class C>
+    class ClassAccess
     {
+        typedef C ClassType;
     public:
-        Access(Type d) : data(d) {}
+        ClassAccess(Type const& d) : data(d) {}
         AccessType getter(const ClassType& c) const {return c.*data;}
         bool setter(ClassType& c, AccessType v) const {return c.*data = v, isWritable;}
     private:
@@ -160,7 +162,7 @@ namespace object {
 template <typename T, typename E = void>
 struct ReferenceTraits
 {
-    typedef int unhandled_type[-sizeof(T)];
+    typedef int unhandled_type[-(int)sizeof(T)];
 };
 
 // Object instance.

@@ -7,6 +7,7 @@ Ponder Changelog
 ## 3.0 - Develop
 
 - Extensive refactoring of the API.
+	- Changed UserObject reference semantics. Pointer makes a reference.
 - All types have common ancestor: Type.
 - Added UserData per Type. (issue #98)
 - Refactored serialisation. Removed ponder-xml. Refactored into serialisers (issue #43).

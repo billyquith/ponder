@@ -370,7 +370,7 @@ TEST_CASE("User objects reference or contain user data")
     SECTION("objects can be cloned/deep copied")
     {
         MyClass object(4);
-        ponder::UserObject uobj1(object);
+        ponder::UserObject uobj1(&object);
         ponder::UserObject uobj2(ponder::UserObject::makeCopy(object));
         
         IS_TRUE(uobj1 != uobj2);
@@ -413,7 +413,7 @@ TEST_CASE("User objects reference or contain user data")
 
         IS_TRUE(ponder::UserObject(base).getClass() == ponder::classByType<MyBase>());
         IS_TRUE(ponder::UserObject(object).getClass() == ponder::classByType<MyClass>());
-        IS_TRUE(ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyClass>());
+        IS_TRUE(ponder::UserObject(objectAsBase).getClass() == ponder::classByType<MyBase>());
     }
 
     SECTION("we can get property values by name")
@@ -439,7 +439,7 @@ TEST_CASE("User objects reference or contain user data")
     SECTION("we can set property values by name")
     {
         MyClass object(0);
-        ponder::UserObject userObject(object);
+        ponder::UserObject userObject(&object);
         REQUIRE(userObject.get("p") == ponder::Value(0));        
         userObject.set("p", 8);
         REQUIRE(object.x == 8);
@@ -450,7 +450,7 @@ TEST_CASE("User objects reference or contain user data")
     SECTION("we can set property values by index")
     {
         MyClass object(4);
-        ponder::UserObject userObject(object);
+        ponder::UserObject userObject(&object);
         REQUIRE(userObject.get(0) == ponder::Value(4));
         userObject.set(0, 8);
         REQUIRE(object.x == 8);
@@ -462,7 +462,7 @@ TEST_CASE("User objects reference or contain user data")
     SECTION("we can iterate over properties")
     {
         MyClass object(3);
-        ponder::UserObject userObject(object);
+        ponder::UserObject userObject(&object);
         
         int index = 0;
         for (auto&& prop : ponder::classByType<MyClass>().propertyIterator())

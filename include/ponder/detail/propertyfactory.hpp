@@ -153,28 +153,27 @@ struct AccessorReturn<T[N]>
 };
 
 /*
- * - Accessors provide a uniform interface to exosed data.
+ * - Accessors provide a uniform interface to exposed data.
  * - Read-only accessor wrapper.
  */
-template <typename TRAITS, typename E = void>
+template <class C, typename TRAITS, typename E = void>
 class Accessor1
 {
 public:
 
     typedef TRAITS Traits;
     static_assert(!Traits::isWritable, "isWritable wrong or missing");
-    typedef typename Traits::ClassType ClassType;
+    typedef C ClassType;
     typedef typename Traits::DataType DataType; // raw type
     typedef typename Traits::AccessType AccessType; // type accessor exposes
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
-    
-    typename Traits::Access m_access;
+
+    typename Traits::template ClassAccess<ClassType> m_access;
 
     Accessor1(typename Traits::Type getter)
         : m_access(getter)
-    {
-    }
+    {}
 
     AccessType get(const ClassType& object) const
     {
@@ -188,25 +187,24 @@ public:
 /*
  * Read-write accessor wrapper.
  */
-template <typename TRAITS>
-class Accessor1<TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
+template <class C, typename TRAITS>
+class Accessor1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
 {
 public:
 
     typedef TRAITS Traits;
     static_assert(Traits::isWritable, "isWritable expected");
-    typedef typename Traits::ClassType ClassType;
+    typedef C ClassType;
     typedef typename Traits::DataType DataType; // raw type
     typedef typename Traits::AccessType AccessType; // type accessor exposes
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typename TRAITS::Access m_access;
+    typename Traits::template ClassAccess<ClassType> m_access;
 
     Accessor1(typename Traits::Type getter)
         : m_access(getter)
-    {
-    }
+    {}
 
     AccessType get(ClassType& object)
     {
@@ -273,7 +271,7 @@ struct PropertyFactory1
     {
         typedef typename PropertyTraitMapper<T>::Traits PropertyTraits; // accessor family
         
-        typedef Accessor1<PropertyTraits> AccessorType; // accessor wrapper
+        typedef Accessor1<C, PropertyTraits> AccessorType; // accessor wrapper
         
         // Properties return Values. Work out which type the property impl supports.
         typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;

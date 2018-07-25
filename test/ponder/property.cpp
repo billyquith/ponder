@@ -135,16 +135,16 @@ namespace PropertyTest
         MyClass& setWithChain(int i) { p2 = i; return *this; }
     };
     
-//    bool getP1(const MyClass& object) {return object.p1;}
-//    
-//    const int& getP2(MyClass& object) {return object.p2;}
-//    
-//    ponder::String& getP3(MyClass& object) {return object.p3;}
-//    
-//    const MyType& getP4(const MyClass& object) {return object.p4;}
-//    void setP4(MyClass& object, MyType value) {object.p4 = value;}
-//    
-//    int& getP21(MyClass& object) {return object.p21;}
+    bool getP1(const MyClass& object) {return object.p1;}
+    
+    const int& getP2(MyClass& object) {return object.p2;}
+    
+    ponder::String& getP3(MyClass& object) {return object.p3;}
+    
+    const MyType& getP4(const MyClass& object) {return object.p4;}
+    void setP4(MyClass& object, MyType value) {object.p4 = value;}
+    
+    int& getP21(MyClass& object) {return object.p21;}
     
     void declare()
     {
@@ -160,7 +160,7 @@ namespace PropertyTest
         ponder::Class::declare<MyClass>("PropertyTest::MyClass")
         
             // ***** non-member functions *****
-//            .property("p1", &getP1)         // read-only getter (const param)
+            //.property("p1", &getP1)         // read-only getter (const param)
 //            .property("p2", &getP2)         // read-only getter (const return)
 //            .property("p3", &getP3)         // read-write getter
 //            .property("p4", &getP4, &setP4) // getter + setter
