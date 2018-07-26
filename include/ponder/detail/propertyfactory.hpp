@@ -88,7 +88,7 @@ struct PropertyAccessMapper<A, ponder::ValueKind::User>
     typedef UserPropertyImpl<A> Type;
 };
 
-/**
+/*
  * Helper structure to perform copy and assignment
  *
  * The purpose of this structure is to avoid a compiler error when the copied
@@ -105,7 +105,7 @@ struct CopyHelper
     }
 };
 
-/**
+/*
  * Specialization of CopyHelper for non-copyable types
  */
 template <typename T>
@@ -118,7 +118,7 @@ struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type 
     }
 };
 
-/**
+/*
  * Helper structure to return values
  *
  * The purpose of this structure is to provide workarounds for types
@@ -132,7 +132,7 @@ struct AccessorReturn
     static Type get(T value) {return value;}
 };
 
-/**
+/*
  * Specialization of AccessorReturn for smart pointer types
  */
 template <template <typename> class T, typename U>
@@ -142,7 +142,7 @@ struct AccessorReturn<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
     static Type get(T<U> value) {return get_pointer(value);}
 };
 
-/**
+/*
  * Specialization of AccessorReturn for built-in array types
  */
 template <typename T, std::size_t N>
@@ -205,11 +205,6 @@ public:
     Accessor1(typename Traits::Type getter)
         : m_access(getter)
     {}
-
-    AccessType get(ClassType& object)
-    {
-        return m_access.getter(object);
-    }
 
     AccessType get(const ClassType& object) const
     {

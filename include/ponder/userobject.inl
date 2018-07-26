@@ -85,7 +85,7 @@ UserObject UserObject::makeRef(T& object)
 }
 
 template <typename T>
-UserObject UserObject::makeRef(T* object)
+inline UserObject UserObject::makeRef(T* object)
 {
     return makeRef(*object);
 }
@@ -99,13 +99,13 @@ UserObject UserObject::makeCopy(const T& object)
 }
 
 template <typename T>
-T& UserObject::ref()
+inline T& UserObject::ref()
 {
     return *reinterpret_cast<T*>(m_holder->object());
 }
 
 template <typename T>
-const T& UserObject::cref() const
+inline const T& UserObject::cref() const
 {
     return *reinterpret_cast<T*>(m_holder->object());
 }

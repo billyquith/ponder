@@ -164,6 +164,12 @@ TEST_CASE("C++11 features and syntax")
         static_assert( ! std::is_array<int*>::value, "std::is_array failed");
         static_assert( ! std::is_array<int*>::value, "std::is_array failed");
     }
+
+    SECTION("other")
+    {
+        static_assert(std::is_const<const int>::value, "std::is_array failed");
+        static_assert(std::is_const<std::remove_reference<const int&>::type>::value, "std::is_array failed");
+    }
 }
 
 //----------------------------------------------------------------------------------------

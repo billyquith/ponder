@@ -149,6 +149,7 @@ struct FunctionTraits
 
 /*
  * Specialization for native callable types (function and function pointer types)
+ *  - We cannot derive a ClassType from these as they may not have one. e.g. `int get();`
  */
 template <typename T>
 struct FunctionTraits<T,
@@ -157,12 +158,10 @@ struct FunctionTraits<T,
     static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<typename std::remove_pointer<T>::type> Details;
     typedef typename Details::Type Type;
-    //typedef typename Details::ClassType ClassType;
-    //typedef typename std::tuple_element<0, typename Details::ParamTypes>::type ClassType;
     typedef typename Details::DispatchType DispatchType;
     typedef typename Details::ReturnType AccessType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<AccessType>::value;
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !std::is_const<std::remove_reference<AccessType>::type>::value;
 
     template <typename C>
     class ClassAccess
@@ -170,8 +169,9 @@ struct FunctionTraits<T,
         typedef C ClassType;
     public:
         ClassAccess(Type d) : data(d) {}
-        AccessType getter(ClassType& c) const { return (*data)(c); }
-        bool setter(ClassType& c, AccessType v) const { return (*data)(c) = v, true; }
+        // const_cast here to deal with non-const references. e.g. `int&(*)()`
+        AccessType getter(const ClassType& c) const     { return (*data)(const_cast<ClassType&>(c)); }
+        bool setter(ClassType& c, AccessType v) const   { return (*data)(c) = v, true; }
     private:
         Type data;
     };
@@ -197,15 +197,9 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
         typedef C ClassType;
     public:
         ClassAccess(Type d) : data(d) {}
-        // Deal with non-const references. Q: Add non-const getValues?
-        AccessType getter(const ClassType& c) const
-        {
-            return (const_cast<ClassType&>(c).*data)();
-        }
-        bool setter(ClassType& c, AccessType v) const
-        {
-            return (c.*data)() = v, true;
-        }
+        // const_cast here to deal with non-const references. e.g. `int&(C::*)()`
+        AccessType getter(const ClassType& c) const     { return (const_cast<ClassType&>(c).*data)(); }
+        bool setter(ClassType& c, AccessType v) const   { return (c.*data)() = v, true; }
     private:
         Type data;
     };
@@ -233,7 +227,7 @@ struct FunctionTraits<T, typename
         typedef C ClassType;
     public:
         ClassAccess(Type d) : data(d) {}
-        AccessType getter(ClassType& c) const { return data(c); }
+        AccessType getter(ClassType& c) const   { return data(c); }
         bool setter(ClassType& c, AccessType v) { return data(c) = v, true; }
     private:
         Type data;
@@ -251,7 +245,6 @@ struct FunctionTraits<T,
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
     typedef function::CallableDetails<T> Details;
     typedef typename Details::Type Type;
-    //typedef typename Details::ClassType ClassType;
     typedef typename Details::DispatchType DispatchType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
@@ -263,8 +256,8 @@ struct FunctionTraits<T,
         typedef C ClassType;
     public:
         ClassAccess(Type d) : data(d) {}
-        AccessType getter(ClassType& c) const { return data(c); }
-        bool setter(ClassType& c, AccessType v) const { return data(c) = v, true; }
+        AccessType getter(ClassType& c) const           { return data(c); }
+        bool setter(ClassType& c, AccessType v) const   { return data(c) = v, true; }
     private:
         Type data;
     };
@@ -281,7 +274,6 @@ struct FunctionTraits<T,
     static constexpr FunctionKind kind = FunctionKind::Lambda;    
     typedef function::CallableDetails<T> Details;
     typedef typename Details::Type Type;
-    //typedef typename Details::ClassType ClassType;
     typedef typename Details::DispatchType DispatchType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
@@ -293,8 +285,8 @@ struct FunctionTraits<T,
         typedef C ClassType;
     public:
         ClassAccess(DispatchType&& d) : data(d) {}
-        AccessType getter(const ClassType& c) const { return data(c); }
-        bool setter(ClassType& c, AccessType v) const { return data(c) = v, true; }
+        AccessType getter(const ClassType& c) const     { return data(c); }
+        bool setter(ClassType& c, AccessType v) const   { return data(c) = v, true; }
     private:
         std::function<DispatchType> data;
     };

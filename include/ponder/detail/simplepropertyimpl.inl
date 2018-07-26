@@ -47,7 +47,7 @@ Value SimplePropertyImpl<A>::getValue(const UserObject& object) const
 template <typename A>
 void SimplePropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.get<typename A::ClassType>(), value.to<typename A::AccessType>()))
+    if (!m_accessor.set(object.get<typename A::ClassType>(), value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

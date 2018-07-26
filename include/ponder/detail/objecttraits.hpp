@@ -38,13 +38,6 @@
 namespace ponder {
 namespace detail {    
     
-//enum class PropertyAccessKind
-//{
-//    Basic,      // Basic type
-//    Array,      // Array
-//    Enum        // Enumeration
-//};
-    
 /*
  * Uniform access to the member type T.
  */
@@ -55,7 +48,6 @@ template <typename C, typename T>
 struct MemberTraits<T(C::*)>
 {
     typedef T(C::*Type);
-    //typedef C ClassType;
     typedef T AccessType;
     typedef typename RawType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_const<T>::value;
