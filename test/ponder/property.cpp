@@ -121,6 +121,8 @@ namespace PropertyTest
         
         // ***** properties used with std::function *****
         bool p18;
+            int get18() const {return p18;}
+            std::function<bool (MyClass&)> funcGet18{&MyClass::get18};
         int p19; int& getP19() {return p19;}
         double p20; double getP20() const {return p20;} void setP20(double d) {p20 = d;}
         
@@ -160,8 +162,8 @@ namespace PropertyTest
         ponder::Class::declare<MyClass>("PropertyTest::MyClass")
         
             // ***** non-member functions *****
-            .property("p1", &getP1)         // read-only getter (const param)
-            .property("p2", &getP2)         // read-only getter (const return)
+            .property("p1", &getP1)         // read-only getter (value)
+            .property("p2", &getP2)         // read-only getter (const ref)
             .property("p3", &getP3)         // read-write getter
             .property("p4", &getP4, &setP4) // getter + setter
         
@@ -173,30 +175,26 @@ namespace PropertyTest
 //            .property("p9", &MyClass::p9) // pointer to read-write smart pointer member
         
             // ***** members functions *****
-            // read-only getter (return by value)
-            .property("p10", &MyClass::getP10)
-            // read-only getter (const)
-            .property("p11", &MyClass::getP11)
-            // read-write getter
-            .property("p12", &MyClass::getP12)
+            .property("p10", &MyClass::getP10)  // read-only getter (return by value)
+            .property("p11", &MyClass::getP11)  // read-only getter (const)
+            .property("p12", &MyClass::getP12)  // read-write getter
             // read-only getter + write-only setter
             .property("p13", &MyClass::getP13, &MyClass::setP13)
 
             // ***** nested functions *****
             // pointer to read-write member
-//            .property("p14", [](MyClass& s) -> bool& {return s.inner.p14;})
-             // Pointer to read-only member
-//            .property("p15", [](const MyClass& s) { return s.inner.p15; })
-//             // read-only getter
-//            .property("p16", [](MyClass& s) { return s.inner.getP16(); })
-//             // read-only getter + write-only setter
-//            .property("p17", [](MyClass& self) -> const MyType&
+            .property("p14", [](MyClass& s) -> bool& {return s.inner.p14;})
+            // Pointer to read-only member
+            .property("p15", [](const MyClass& s) { return s.inner.p15; })
+            // read-only getter
+            .property("p16", [](MyClass& s) { return s.inner.getP16(); })
+            // read-only getter + write-only setter
+//            .property("p17", [](const MyClass& self) // -> const MyType&
 //                                 {return self.getInner().getP17();},  // get
 //                             [](MyClass& self, const MyType &value){self.getInner().setP17(value);})    // set
         
             // ***** std::function *****
-             // pointer to read-write member
-//            .property("p18", std::function<bool (MyClass&)>(&MyClass::p18))
+//            .property("p18", std::function<int(MyClass&)>(&MyClass::get18))   // function getter
 //              // read-write getter
 //            .property("p19", std::function<int& (MyClass&)>(&MyClass::getP19))
 //              // read-only getter + write-only setter

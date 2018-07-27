@@ -52,14 +52,14 @@ struct MemberTraits<T(C::*)>
     typedef typename RawType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_const<T>::value;
 
-    template <class C>
+    template <class CA>
     class ClassAccess
     {
-        typedef C ClassType;
+        typedef CA ClassType;
     public:
-        ClassAccess(Type const& d) : data(d) {}
+        ClassAccess(const Type& d) : data(d) {}
         AccessType getter(const ClassType& c) const {return c.*data;}
-        bool setter(ClassType& c, AccessType v) const {return c.*data = v, isWritable;}
+        bool setter(ClassType& c, DataType v) const {return c.*data = v, isWritable;}
     private:
         Type data;
     };

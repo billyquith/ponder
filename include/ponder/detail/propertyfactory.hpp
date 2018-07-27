@@ -71,13 +71,13 @@ struct PropertyAccessMapper
 };
 
 template <typename A>
-struct PropertyAccessMapper<A, ValueKind::Array> //T,typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
+struct PropertyAccessMapper<A, ValueKind::Array>
 {
     typedef ArrayPropertyImpl<A> Type;
 };
 
 template <typename A>
-struct PropertyAccessMapper<A, ValueKind::Enum> // T, typename std::enable_if<std::is_enum<T>::value>::type>
+struct PropertyAccessMapper<A, ValueKind::Enum>
 {
     typedef EnumPropertyImpl<A> Type;
 };
@@ -95,28 +95,28 @@ struct PropertyAccessMapper<A, ponder::ValueKind::User>
  * type is not copyable. Instead, we just return an error so that the caller
  * can throw a Ponder exception.
  */
-template <typename T, typename E = void>
-struct CopyHelper
-{
-    static bool copy(T& destination, const Value& source)
-    {
-        destination = source.to<T>();
-        return true;
-    }
-};
-
-/*
- * Specialization of CopyHelper for non-copyable types
- */
-template <typename T>
-struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type >
-{
-    static bool copy(T&, const Value&)
-    {
-        // We don't really return an error, we just skip the assignment
-        return true;
-    }
-};
+//template <typename T, typename E = void>
+//struct CopyHelper
+//{
+//    static bool copy(T& destination, const Value& source)
+//    {
+//        destination = source.to<T>();
+//        return true;
+//    }
+//};
+//
+///*
+// * Specialization of CopyHelper for non-copyable types
+// */
+//template <typename T>
+//struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type >
+//{
+//    static bool copy(T&, const Value&)
+//    {
+//        // We don't really return an error, we just skip the assignment
+//        return true;
+//    }
+//};
 
 /*
  * Helper structure to return values
@@ -125,32 +125,32 @@ struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type 
  * that don't exactly satisfy the compiler when returned. For example,
  * it converts smart pointer types to the corresponding raw pointer types.
  */
-template <typename T, typename E = void>
-struct AccessorReturn
-{
-    typedef T Type;
-    static Type get(T value) {return value;}
-};
-
-/*
- * Specialization of AccessorReturn for smart pointer types
- */
-template <template <typename> class T, typename U>
-struct AccessorReturn<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
-{
-    typedef U* Type;
-    static Type get(T<U> value) {return get_pointer(value);}
-};
-
-/*
- * Specialization of AccessorReturn for built-in array types
- */
-template <typename T, std::size_t N>
-struct AccessorReturn<T[N]>
-{
-    typedef T (&Type)[N];
-    static Type get(T (&value)[N]) {return value;}
-};
+//template <typename T, typename E = void>
+//struct AccessorReturn
+//{
+//    typedef T Type;
+//    static Type get(T value) {return value;}
+//};
+//
+///*
+// * Specialization of AccessorReturn for smart pointer types
+// */
+//template <template <typename> class T, typename U>
+//struct AccessorReturn<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
+//{
+//    typedef U* Type;
+//    static Type get(T<U> value) {return get_pointer(value);}
+//};
+//
+///*
+// * Specialization of AccessorReturn for built-in array types
+// */
+//template <typename T, std::size_t N>
+//struct AccessorReturn<T[N]>
+//{
+//    typedef T (&Type)[N];
+//    static Type get(T (&value)[N]) {return value;}
+//};
 
 /*
  * - Accessors provide a uniform interface to exposed data.
@@ -182,6 +182,8 @@ public:
     
     template <typename... A>
     bool set(A... args) const {return false;}   // read-only
+
+    //bool set(ClassType&, const DataType&) const {return false;} // read-only
 };
 
 /*
@@ -211,9 +213,13 @@ public:
         return m_access.getter(object);
     }
 
-    bool set(ClassType& object, const AccessType& value) const
+    bool set(ClassType& object, const DataType& value) const
     {
         return m_access.setter(object, value);
+    }
+    bool set(ClassType& object, DataType&& value) const
+    {
+        return m_access.setter(object, std::move(value));
     }
 };
 
@@ -252,7 +258,7 @@ public:
 private:
 
     std::function<typename Traits::DispatchType> m_getter;
-    std::function<void(ClassType&, AccessType)> m_setter;
+    std::function<void(ClassType&, DataType)> m_setter;
 };
     
 /*

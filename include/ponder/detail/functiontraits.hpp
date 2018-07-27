@@ -140,6 +140,7 @@ struct CallableDetails<R(L::*)(A...) const>
  *  - AccessType - scalar return type. E.g. int.
  *  - DataType - Stored type, e.g. int[].
  *  - getter/setter are both const functions but may reference non-const objects.
+ *  - getter returns AccessType and is set via DataType, which may be component, e.g. int[]
  */
 template <typename T, typename E = void>
 struct FunctionTraits
@@ -149,7 +150,7 @@ struct FunctionTraits
 
 /*
  * Specialization for native callable types (function and function pointer types)
- *  - We cannot derive a ClassType from these as they may not have one. e.g. `int get();`
+ *  - We cannot derive a ClassType from these as they may not have one. e.g. int get()
  */
 template <typename T>
 struct FunctionTraits<T,
@@ -161,7 +162,8 @@ struct FunctionTraits<T,
     typedef typename Details::DispatchType DispatchType;
     typedef typename Details::ReturnType AccessType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
-    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !std::is_const<std::remove_reference<AccessType>::type>::value;
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value
+                        && !std::is_const<typename std::remove_reference<AccessType>::type>::value;
 
     template <typename C>
     class ClassAccess
@@ -169,9 +171,10 @@ struct FunctionTraits<T,
         typedef C ClassType;
     public:
         ClassAccess(Type d) : data(d) {}
-        // const_cast here to deal with non-const references. e.g. `int&(*)()`
-        AccessType getter(const ClassType& c) const     { return (*data)(const_cast<ClassType&>(c)); }
-        bool setter(ClassType& c, AccessType v) const   { return (*data)(c) = v, true; }
+        // const_cast here to deal with non-const references. e.g. int&(*)()
+        AccessType getter(const ClassType& c) const {return (*data)(const_cast<ClassType&>(c));}
+        bool setter(ClassType& c, DataType const& v) const {return (*data)(c) = v, true;}
+        bool setter(ClassType& c, DataType&& v) const {return (*data)(c) = std::move(v), true;}
     private:
         Type data;
     };
@@ -189,7 +192,8 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     typedef typename Details::DispatchType DispatchType;
     typedef typename Details::ReturnType AccessType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
-    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !Details::isConst;
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value
+                                       && !Details::isConst;
 
     template <typename C>
     class ClassAccess
@@ -197,9 +201,10 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
         typedef C ClassType;
     public:
         ClassAccess(Type d) : data(d) {}
-        // const_cast here to deal with non-const references. e.g. `int&(C::*)()`
-        AccessType getter(const ClassType& c) const     { return (const_cast<ClassType&>(c).*data)(); }
-        bool setter(ClassType& c, AccessType v) const   { return (c.*data)() = v, true; }
+        // const_cast here to deal with non-const references. e.g. int&(C::*)()
+        AccessType getter(const ClassType& c) const   {return (const_cast<ClassType&>(c).*data)();}
+        bool setter(ClassType& c, DataType const& v) const {return (c.*data)() = v, true;}
+        bool setter(ClassType& c, DataType&& v) const {return (c.*data)() = std::move(v), true;}
     private:
         Type data;
     };
@@ -228,7 +233,8 @@ struct FunctionTraits<T, typename
     public:
         ClassAccess(Type d) : data(d) {}
         AccessType getter(ClassType& c) const   { return data(c); }
-        bool setter(ClassType& c, AccessType v) { return data(c) = v, true; }
+        bool setter(ClassType& c, DataType const& v) { return data(c) = v, true; }
+        bool setter(ClassType& c, DataType&& v) { return data(c) = std::move(v), true; }
     private:
         Type data;
     };
@@ -255,9 +261,10 @@ struct FunctionTraits<T,
     {
         typedef C ClassType;
     public:
-        ClassAccess(Type d) : data(d) {}
+        ClassAccess(Type&& d) : data(d) {}
         AccessType getter(ClassType& c) const           { return data(c); }
-        bool setter(ClassType& c, AccessType v) const   { return data(c) = v, true; }
+        bool setter(ClassType& c, DataType const& v) const { return data(c) = v, true; }
+        bool setter(ClassType& c, DataType&& v) const   { return data(c) = std::move(v), true; }
     private:
         Type data;
     };
@@ -273,22 +280,24 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::Lambda;    
     typedef function::CallableDetails<T> Details;
-    typedef typename Details::Type Type;
+    typedef T Type;
     typedef typename Details::DispatchType DispatchType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
-    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value && !std::is_const<AccessType>::value;
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value
+                                       && !std::is_const<AccessType>::value;
 
     template <typename C>
     class ClassAccess
     {
         typedef C ClassType;
     public:
-        ClassAccess(DispatchType&& d) : data(d) {}
-        AccessType getter(const ClassType& c) const     { return data(c); }
-        bool setter(ClassType& c, AccessType v) const   { return data(c) = v, true; }
+        ClassAccess(Type d) : data(d) {}
+        AccessType getter(const ClassType& c) const { return data(const_cast<ClassType&>(c)); }
+        bool setter(ClassType& c, DataType const& v) const { return data(c) = v, true; }
+        bool setter(ClassType& c, DataType&& v) const { return data(c) = std::move(v), true; }
     private:
-        std::function<DispatchType> data;
+        Type data;
     };
 
 };
