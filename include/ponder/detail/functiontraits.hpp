@@ -118,7 +118,10 @@ struct IsFunctionWrapper<std::function<T>> : std::true_type {};
 
 // T::operator() callable
 template <typename T>
-struct CallableDetails : public CallableDetails<decltype(&T::operator())> {};
+struct CallableDetails : public CallableDetails<decltype(&T::operator())>
+{
+    typedef T Type;
+};
 
 template <typename L, typename R, typename... A>
 struct CallableDetails<R(L::*)(A...) const>
@@ -126,7 +129,6 @@ struct CallableDetails<R(L::*)(A...) const>
     typedef L LambdaClassType;    // N.B. Lambda class
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(Type)(A...);
     typedef ReturnType(DispatchType)(A...);
     typedef std::tuple<A...> FunctionCallTypes;
 };
@@ -137,8 +139,8 @@ struct CallableDetails<R(L::*)(A...) const>
 /*
  * Uniform type declaration to all function types.
  *  - Used by property and function declaration, so not class specific.
- *  - AccessType - scalar return type. E.g. int.
- *  - DataType - Stored type, e.g. int[].
+ *  - DataType - scalar return type. E.g. int.
+ *  - AccessType - Stored type, e.g. int[].
  *  - getter/setter are both const functions but may reference non-const objects.
  *  - getter returns AccessType and is set via DataType, which may be component, e.g. int[]
  */
