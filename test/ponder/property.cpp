@@ -71,77 +71,29 @@ namespace PropertyTest
         int i;
         float f;
         std::string s;
+        //     const MyEnum p8;
+        //     std::shared_ptr<MyType> p9;
 
-#define ACCESSORS(T,N) \
+#define MEMBER_ACCESSORS(T,N) \
         T& rw_##N() {return N;} \
         const T& r_##N() const {return N;} \
         void w_##N(const T& v) {N = v;}
 
-        ACCESSORS(bool,b)
-        ACCESSORS(int,i)
-        ACCESSORS(float,f)
-        ACCESSORS(std::string,s)
+        MEMBER_ACCESSORS(bool,b)
+        MEMBER_ACCESSORS(int,i)
+        MEMBER_ACCESSORS(float,f)
+        MEMBER_ACCESSORS(std::string,s)
     };
 
-    //     // ***** properties used as direct pointer to members *****
-    //     bool p5;
-    //     const int p6;
-    //     ponder::String p7;
-    //     const MyEnum p8;
-    //     std::shared_ptr<MyType> p9;
-    //
-    //     // ***** member functions *****
-    //     bool p10; bool getP10() {return p10;}
-    //     int p11; int getP11() const {return p11;}
-    //     ponder::String p12; ponder::String& getP12() {return p12;}
-    //     int p13; int getP13() const {return p13;} void setP13(int v) {p13 = v;}
-    //
-    //     // ***** nested properties *****
-    //     struct Inner
-    //     {
-    //         bool p14;
-    //         const int p15;
-    //         ponder::String p16;
-    //
-    //         Inner() : p14(false), p15(15), p16("16"), p17(MyType(17)) {}
-    //
-    //         ponder::String getP16() const {return p16;}
-    //
-    //         MyType p17;
-    //         const MyType& getP17() const {return p17;}
-    //         void setP17(MyType t) {p17 = t;}
-    //     };
-    //     Inner inner;
-    //     Inner& getInner() {return inner;}
-    //
-    //     // ***** properties used with std::function *****
-    //     bool p18;
-    //         int get18() const {return p18;}
-    //         std::function<bool (MyClass&)> funcGet18{&MyClass::get18};
-    //     int p19; int& getP19() {return p19;}
-    //     double p20; double getP20() const {return p20;} void setP20(double d) {p20 = d;}
-    //
-    //     // ***** properties used with std::bind *****
-    //     int p21;
-    //     MyEnum p22; MyEnum getP22() {return p22;}
-    //     ponder::String getP23(const ponder::String& str) const {return str + "23";}
-    //     MyType p24; const MyType& getP24() const {return p24;} void setP24(MyType t) {p24 = t;}
-    //
-    //     // ***** poperties that support method chaining *****
-    //     int getP2() const { return p2; }
-    //     MyClass& setWithChain(int i) { p2 = i; return *this; }
-    // };
-    //
-    // bool getP1(const MyClass& object) {return object.p1;}
-    //
-    // const int& getP2(const MyClass& object) {return object.p2;}
-    //
-    // ponder::String& getP3(MyClass& object) {return object.p3;}
-    //
-    // const MyType& getP4(const MyClass& object) {return object.p4;}
-    // void setP4(MyClass& object, MyType value) {object.p4 = value;}
-    //
-    // int& getP21(MyClass& object) {return object.p21;}
+#define FUNCTION_ACCESSORS(T,N) \
+    T& rw_##N(MyClass& c) {return c.N;} \
+    const T& r_##N(const MyClass& c) {return c.N;} \
+    void w_##N(MyClass& c, T v) {c.N = v;}
+
+    FUNCTION_ACCESSORS(bool,b)
+    FUNCTION_ACCESSORS(int,i)
+    FUNCTION_ACCESSORS(float,f)
+    FUNCTION_ACCESSORS(std::string,s)
 
     void declare()
     {
@@ -154,51 +106,26 @@ namespace PropertyTest
 
         ponder::Class::declare<MyType>("PropertyTest::MyType");
 
-#define PROPERTY(N) \
-        .property(#N, &MyClass::N) /*member object*/ \
-        .property("r_" #N, &MyClass::r_##N) /* ro member func*/ \
-        .property("rw_" #N, &MyClass::r_##N, &MyClass::w_##N) /* rw member func*/
+#define PROPERTY(T,N) \
+        .property("m_" #N, &MyClass::N) /* member object */ \
+        .property("mf_r_" #N, &MyClass::r_##N) /* ro member func*/ \
+        .property("mf_rw_" #N, &MyClass::rw_##N) /* rw member func*/ \
+        .property("mf_gs_" #N, &MyClass::r_##N, &MyClass::w_##N) /* get/set member func*/ \
+        .property("f_r_" #N, &r_##N) /* ro function */ \
+        .property("f_rw_" #N, &rw_##N) /* rw function */ \
+        .property("f_gs_" #N, &r_##N, &w_##N) /* get/set function */ \
+        .property("l_r_" #N, [](const MyClass& c) {return c.N ;}) /* ro lambda */ \
+        .property("l_rw_" #N, [](MyClass& c) -> T& {return c.N ;}) /* rw lambda */ \
+        .property("l_gs_" #N, [](const MyClass& c) {return c.N ;}, [](MyClass& c, T v) {c.N = v;}) /* g lambda */
 
         ponder::Class::declare<MyClass>("PropertyTest::MyClass")
-            PROPERTY(b)
-            PROPERTY(i)
-            PROPERTY(f)
-            PROPERTY(s)
+            PROPERTY(bool,b)
+            PROPERTY(int,i)
+            PROPERTY(float,f)
+            PROPERTY(std::string,s)
             ;
 
-//             // ***** non-member functions *****
-//             .property("p1", &getP1)         // read-only getter (value)
-//             .property("p2", &getP2)         // read-only getter (const ref)
-//             .property("p3", &getP3)         // read-write getter
-//             .property("p4", &getP4, &setP4) // getter + setter
-//
-//             // ***** pointer to members *****
-//             .property("p5", &MyClass::p5) // pointer to read-write member
-//             .property("p6", &MyClass::p6) // pointer to const member
-//             .property("p7", &MyClass::p7) // pointer to read-write pointer member
-//             .property("p8", &MyClass::p8) // pointer to const pointer member
-// //            .property("p9", &MyClass::p9) // pointer to read-write smart pointer member
-//
-//             // ***** members functions *****
-//             .property("p10", &MyClass::getP10)  // read-only getter (return by value)
-//             .property("p11", &MyClass::getP11)  // read-only getter (const)
-//             .property("p12", &MyClass::getP12)  // read-write getter
-//             // read-only getter + write-only setter
-//             .property("p13", &MyClass::getP13, &MyClass::setP13)
-//
-//             // ***** nested functions *****
-//             // pointer to read-write member
-//             .property("p14", [](MyClass& s) -> bool& {return s.inner.p14;})
-//             // Pointer to read-only member
-//             .property("p15", [](const MyClass& s) { return s.inner.p15; })
-//             // read-only getter
-//             .property("p16", [](MyClass& s) { return s.inner.getP16(); })
-            // read-only getter + write-only setter
-//            .property("p17", [](const MyClass& self) // -> const MyType&
-//                                 {return self.getInner().getP17();},  // get
-//                             [](MyClass& self, const MyType &value){self.getInner().setP17(value);})    // set
-
-            // ***** std::function *****
+        // ***** std::function *****
 //            .property("p18", std::function<int(MyClass&)>(&MyClass::get18))   // function getter
 //              // read-write getter
 //            .property("p19", std::function<int& (MyClass&)>(&MyClass::getP19))
@@ -215,11 +142,6 @@ namespace PropertyTest
 //            .property("p23", std::bind(&MyClass::getP23, _1, "str"))
 //             // read-only getter + write-only setter
 //            .property("p24", std::bind(&MyClass::getP24, _1), std::bind(&MyClass::setP24, _1, _2))
-
-            // ***** with method chaining *****
-             // member, method chaining
-//            .property("p25", &MyClass::getP2, &MyClass::setWithChain)
-            // ;
     }
 }
 
@@ -240,10 +162,17 @@ TEST_CASE("Classes can have properties")
     SECTION("type")
     {
 #define CHECK_PROP_TYPE(N,T) \
-        REQUIRE(metaclass.property(#N).kind() == T); \
-        REQUIRE(metaclass.property("r_" #N).kind() == T); \
-        REQUIRE(metaclass.property("rw_" #N).kind() == T)
-        
+        REQUIRE(metaclass.property("m_" #N).kind() == T); \
+        REQUIRE(metaclass.property("mf_r_" #N).kind() == T); \
+        REQUIRE(metaclass.property("mf_rw_" #N).kind() == T); \
+        REQUIRE(metaclass.property("mf_gs_" #N).kind() == T); \
+        REQUIRE(metaclass.property("f_r_" #N).kind() == T); \
+        REQUIRE(metaclass.property("f_rw_" #N).kind() == T); \
+        REQUIRE(metaclass.property("f_gs_" #N).kind() == T); \
+        REQUIRE(metaclass.property("l_r_" #N).kind() == T); \
+        REQUIRE(metaclass.property("l_rw_" #N).kind() == T); \
+        REQUIRE(metaclass.property("l_gs_" #N).kind() == T)
+
         CHECK_PROP_TYPE(b, ponder::ValueKind::Boolean);
         CHECK_PROP_TYPE(i, ponder::ValueKind::Integer);
         CHECK_PROP_TYPE(f, ponder::ValueKind::Real);
@@ -254,9 +183,16 @@ TEST_CASE("Classes can have properties")
     {
         // all should be readable
 #define CHECK_PROP_READABLE(N) \
-        REQUIRE(metaclass.property(#N).isReadable() == true); \
-        REQUIRE(metaclass.property("r_" #N).isReadable() == true); \
-        REQUIRE(metaclass.property("rw_" #N).isReadable() == true)
+        REQUIRE(metaclass.property("m_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("mf_r_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("mf_rw_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("mf_gs_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("f_r_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("f_rw_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("f_gs_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("l_r_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("l_rw_" #N).isReadable() == true); \
+        REQUIRE(metaclass.property("l_gs_" #N).isReadable() == true);
 
         CHECK_PROP_READABLE(b);
         CHECK_PROP_READABLE(i);
@@ -267,10 +203,17 @@ TEST_CASE("Classes can have properties")
     SECTION("writable")
     {
 #define CHECK_PROP_WRITABLE(N) \
-        REQUIRE(metaclass.property(#N).isWritable() == true); \
-        REQUIRE(metaclass.property("r_" #N).isWritable() == false); \
-        REQUIRE(metaclass.property("rw_" #N).isWritable() == true)
-        
+        REQUIRE(metaclass.property("m_" #N).isWritable() == true); \
+        REQUIRE(metaclass.property("mf_r_" #N).isWritable() == false); \
+        REQUIRE(metaclass.property("mf_rw_" #N).isWritable() == true); \
+        REQUIRE(metaclass.property("mf_gs_" #N).isWritable() == true); \
+        REQUIRE(metaclass.property("f_r_" #N).isWritable() == false); \
+        REQUIRE(metaclass.property("f_rw_" #N).isWritable() == true); \
+        REQUIRE(metaclass.property("f_gs_" #N).isWritable() == true); \
+        REQUIRE(metaclass.property("l_r_" #N).isWritable() == false); \
+        REQUIRE(metaclass.property("l_rw_" #N).isWritable() == true); \
+        REQUIRE(metaclass.property("l_gs_" #N).isWritable() == true);
+
         CHECK_PROP_WRITABLE(b);
         CHECK_PROP_WRITABLE(i);
         CHECK_PROP_WRITABLE(f);
@@ -282,9 +225,16 @@ TEST_CASE("Classes can have properties")
         MyClass object;
 
 #define CHECK_PROP_GET(N) \
-        REQUIRE(metaclass.property(#N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("r_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("rw_" #N).get(object) == ponder::Value(object.N))
+        REQUIRE(metaclass.property("m_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("mf_r_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("mf_rw_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("mf_gs_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("f_r_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("f_rw_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("f_gs_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("l_r_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("l_rw_" #N).get(object) == ponder::Value(object.N)); \
+        REQUIRE(metaclass.property("l_gs_" #N).get(object) == ponder::Value(object.N));
 
         CHECK_PROP_GET(b);
         CHECK_PROP_GET(i);
@@ -294,20 +244,35 @@ TEST_CASE("Classes can have properties")
 
     SECTION("set")
     {
-#define CHECK_PROP_SET(N,V) \
-        { MyClass object; \
-            metaclass.property(#N).set(object, V); \
-            REQUIRE(metaclass.property(#N).get(object) == object.N); } \
-        { MyClass object; \
-            REQUIRE_THROWS_AS(metaclass.property("r_" #N).set(object, V), ponder::ForbiddenWrite); }\
-        { MyClass object; \
-            metaclass.property("rw_" #N).set(object, V); \
-            REQUIRE(metaclass.property(#N).get(object) == object.N); }
+#define CHECK_PROP_SET_PASS(NAME,N,V) \
+    {   MyClass object; \
+        auto const& prop = metaclass.property(NAME); \
+        REQUIRE(object.N != V); \
+        prop.set(&object, V); \
+        REQUIRE(object.N == V); \
+    }
 
-        CHECK_PROP_SET(b,true)
-        CHECK_PROP_SET(i,789)
-        CHECK_PROP_SET(f,345.75f)
-        CHECK_PROP_SET(s, std::string("The Reverend Black Grape"))
+#define CHECK_PROP_SET_FAIL(NAME,N,V) \
+    {   MyClass object; \
+        REQUIRE_THROWS_AS(metaclass.property(NAME).set(object, V), ponder::ForbiddenWrite); \
+    }
+
+#define CHECK_PROP_SET(N,V) \
+        CHECK_PROP_SET_PASS("m_" #N, N, V); \
+        CHECK_PROP_SET_FAIL("mf_r_" #N, N, V); \
+        CHECK_PROP_SET_PASS("mf_rw_" #N, N, V); \
+        CHECK_PROP_SET_PASS("mf_gs_" #N, N, V); \
+        CHECK_PROP_SET_FAIL("f_r_" #N, N, V); \
+        CHECK_PROP_SET_PASS("f_rw_" #N, N, V); \
+        CHECK_PROP_SET_PASS("f_gs_" #N, N, V); \
+        CHECK_PROP_SET_FAIL("l_r_" #N, N, V); \
+        CHECK_PROP_SET_PASS("l_rw_" #N, N, V); \
+        CHECK_PROP_SET_PASS("l_gs_" #N, N, V)
+
+        CHECK_PROP_SET(b,true);
+        CHECK_PROP_SET(i,789);
+        CHECK_PROP_SET(f,345.75f);
+        CHECK_PROP_SET(s, std::string("The Reverend Black Grape"));
     }
 }
 
