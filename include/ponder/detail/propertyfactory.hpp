@@ -271,7 +271,7 @@ public:
     {
     }
 
-    const AccessType& get(const ClassType& object) const
+    AccessType get(const ClassType& object) const
     {
         return m_getter(object);
     }
