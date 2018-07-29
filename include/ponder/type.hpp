@@ -120,7 +120,7 @@ enum class PropertyAccessKind
 {
     Simple,
     Enum,
-    Array,
+    Container,
     User
 };
     

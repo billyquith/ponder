@@ -48,14 +48,14 @@ namespace detail {
  *      - bool setter(...) const
  */
 template <typename T, typename E = void>
-struct PropertyTraitMapper
+struct PropertyKindMapper
 {
     static constexpr PropertyKind kind = PropertyKind::Function;
     typedef FunctionTraits<T> Traits;
 };
 
 template <typename T>
-struct PropertyTraitMapper<T,
+struct PropertyKindMapper<T,
     typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
     static constexpr PropertyKind kind = PropertyKind::MemberObject;
@@ -84,7 +84,7 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 template <typename T, std::size_t N>
 struct AccessTraits<T[N]>
 {
-    static constexpr PropertyAccessKind kind = PropertyAccessKind::Array;
+    static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
 };
 
 template <typename T>
@@ -106,7 +106,7 @@ struct PropertyAccessMapper<A, PropertyAccessKind::Simple>
 };
 
 template <typename A>
-struct PropertyAccessMapper<A, PropertyAccessKind::Array>
+struct PropertyAccessMapper<A, PropertyAccessKind::Container>
 {
     typedef ArrayPropertyImpl<A> Type;
 };
@@ -305,7 +305,7 @@ struct PropertyFactory1
 {
     static Property* get(IdRef name, T accessor)
     {
-        typedef typename PropertyTraitMapper<T>::Traits PropertyTraits; // accessor family
+        typedef typename PropertyKindMapper<T>::Traits PropertyTraits; // accessor family
         
         typedef Accessor1<C, PropertyTraits> AccessorType; // accessor wrapper
         
