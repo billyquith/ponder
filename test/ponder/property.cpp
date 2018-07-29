@@ -114,9 +114,9 @@ namespace PropertyTest
         .property("f_r_" #N, &r_##N) /* ro function */ \
         .property("f_rw_" #N, &rw_##N) /* rw function */ \
         .property("f_gs_" #N, &r_##N, &w_##N) /* get/set function */ \
-        .property("l_r_" #N, [](const MyClass& c) {return c.N ;}) /* ro lambda */ \
-        .property("l_rw_" #N, [](MyClass& c) -> T& {return c.N ;}) /* rw lambda */ \
-        .property("l_gs_" #N, [](const MyClass& c) {return c.N ;}, [](MyClass& c, T v) {c.N = v;}) /* g lambda */
+        .property("l_r_" #N, [](const MyClass& c) -> const T& {return c.N;}) /* ro lambda */ \
+        .property("l_rw_" #N, [](MyClass& c) -> T& {return c.N;}) /* rw lambda */ \
+        .property("l_gs_" #N, [](const MyClass& c) {return c.N;}, [](MyClass& c, T v) {c.N = v;}) /* g lambda */
 
         ponder::Class::declare<MyClass>("PropertyTest::MyClass")
             PROPERTY(bool,b)
@@ -222,24 +222,30 @@ TEST_CASE("Classes can have properties")
 
     SECTION("get")
     {
-        MyClass object;
+        MyClass c;
+        ponder::UserObject object(&c);
 
-#define CHECK_PROP_GET(N) \
-        REQUIRE(metaclass.property("m_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("mf_r_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("mf_rw_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("mf_gs_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("f_r_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("f_rw_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("f_gs_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("l_r_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("l_rw_" #N).get(object) == ponder::Value(object.N)); \
-        REQUIRE(metaclass.property("l_gs_" #N).get(object) == ponder::Value(object.N));
+#define CHECK_PROP_GET(T,N) \
+        REQUIRE(metaclass.property("m_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("mf_r_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("mf_rw_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("mf_gs_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("f_r_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("f_rw_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("f_gs_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("l_r_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("l_rw_" #N).get(object).to<T>() == c.N); \
+        REQUIRE(metaclass.property("l_gs_" #N).get(object).to<T>() == c.N);
 
-        CHECK_PROP_GET(b);
-        CHECK_PROP_GET(i);
-        CHECK_PROP_GET(f);
-        CHECK_PROP_GET(s);
+        c.b = true;
+        c.i = 77;
+        c.f = 34.5f;
+        c.s = "Woo!";
+
+        CHECK_PROP_GET(bool,b);
+        CHECK_PROP_GET(int,i);
+        CHECK_PROP_GET(float,f);
+        CHECK_PROP_GET(std::string,s);
     }
 
     SECTION("set")
@@ -254,7 +260,7 @@ TEST_CASE("Classes can have properties")
 
 #define CHECK_PROP_SET_FAIL(NAME,N,V) \
     {   MyClass object; \
-        REQUIRE_THROWS_AS(metaclass.property(NAME).set(object, V), ponder::ForbiddenWrite); \
+        REQUIRE_THROWS_AS(metaclass.property(NAME).set(&object, V), ponder::ForbiddenWrite); \
     }
 
 #define CHECK_PROP_SET(N,V) \

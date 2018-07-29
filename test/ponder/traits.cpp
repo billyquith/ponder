@@ -104,9 +104,16 @@ namespace TraitsTest
             return std::vector<std::shared_ptr<Callable>>();
         }
     };
+    
+    void declare()
+    {
+        ponder::Class::declare<Class>();
+    }
 }
 
 using namespace TraitsTest;
+
+PONDER_TYPE(TraitsTest::Class);
 
 //-----------------------------------------------------------------------------
 //                         Tests for ponder traits
@@ -169,6 +176,8 @@ TEST_CASE("C++11 features and syntax")
     {
         static_assert(std::is_const<const int>::value, "std::is_array failed");
         static_assert(std::is_const<std::remove_reference<const int&>::type>::value, "std::is_array failed");
+        
+        static_assert(std::is_enum<Enum>::value, "");
     }
 }
 
@@ -382,164 +391,8 @@ TEST_CASE("Functions have access types")
 
 //----------------------------------------------------------------------------------------
 
-TEST_CASE("Ponder has reference traits")
-{
-    SECTION("types can be tested for being writable")
-    {
-        using ponder::detail::ReferenceTraits;
-        using ponder::ReferenceKind;
-
-        // is writable
-        static_assert(ReferenceTraits<int>::isWritable,
-                      "ReferenceTraits<>::isWriteable failed");
-        static_assert(ReferenceTraits<int*>::isWritable,
-                      "ReferenceTraits<>::isWriteable failed");
-        static_assert(ReferenceTraits<char**>::isWritable,
-                      "ReferenceTraits<>::isWriteable failed");
-
-        // is not writable
-        static_assert( ! ReferenceTraits<const int>::isWritable,
-                      "ReferenceTraits<>::isWriteable failed");
-        static_assert( ! ReferenceTraits<const int*>::isWritable,
-                      "ReferenceTraits<>::isWriteable failed");
-//        static_assert( ! ReferenceTraits<const char * const *>::isWritable,
-//                      "ReferenceTraits<>::isWriteable failed");
-//        static_assert( ! ReferenceTraits<void(...)>::isRef,
-//                      "ReferenceTraits<>::isRef failed");
-//        static_assert( ! ReferenceTraits<decltype(intArray)>::isWritable,
-//                      "ReferenceTraits<>::isWriteable failed");
-    }
-
-    SECTION("types can be references")
-    {
-        using ponder::detail::ReferenceTraits;
-        using ponder::ReferenceKind;
-
-        // is ref
-        static_assert(ReferenceTraits<int*>::isRef, "ReferenceTraits<>::isRef failed");
-        static_assert(ReferenceTraits<char**>::isRef, "ReferenceTraits<>::isRef failed");
-
-        static_assert(ponder::detail::ReferenceTraits<int&>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert(ponder::detail::ReferenceTraits<int&>::kind == ReferenceKind::Reference,
-                      "ReferenceTraits<>::isRef failed");
-//        static_assert(ponder::detail::ReferenceTraits<int*&>::isRef,
-//                      "ReferenceTraits<>::isRef failed");
-
-        // is not ref
-        static_assert( ! ReferenceTraits<int>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert( ! ReferenceTraits<float>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert( ! ReferenceTraits<void(...)>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert( ! ReferenceTraits<decltype(intArray)>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ReferenceTraits<Callable>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert(ponder::detail::ReferenceTraits<Callable>::kind != ReferenceKind::Reference,
-                      "ReferenceTraits<>::isRef failed");
-        static_assert( ! ponder::detail::ReferenceTraits<NonCallable>::isRef,
-                      "ReferenceTraits<>::isRef failed");
-    }
-
-    SECTION("types can be const")
-    {
-        using ponder::detail::ReferenceTraits;
-        using ponder::ReferenceKind;
-
-        static_assert(!ReferenceTraits<const int*>::isWritable, "ReferenceTraits<>::isWritable failed");
-        static_assert(ReferenceTraits<int*>::isWritable, "ReferenceTraits<>::isWritable failed");
-
-        static_assert(!ReferenceTraits<const int&>::isWritable, "ReferenceTraits<>::isWritable failed");
-        static_assert(ReferenceTraits<int&>::isWritable, "ReferenceTraits<>::isWritable failed");
-
-        static_assert(!ReferenceTraits<const int[3]>::isWritable, "ReferenceTraits<>::isWritable failed");
-        static_assert(ReferenceTraits<int[5]>::isWritable, "ReferenceTraits<>::isWritable failed");
-
-        //static_assert(!ReferenceTraits<const std::vector<float>::isWritable, "ReferenceTraits<>::isWritable failed");
-        //static_assert(ReferenceTraits<std::vector<float>>::isWritable, "ReferenceTraits<>::isWritable failed");
-    }
-
-    SECTION("types can be converted to reference types")
-    {
-        using ponder::detail::ReferenceTraits;
-
-        static_assert(
-            std::is_same<int&, ReferenceTraits<int>::ReferenceType>::value,
-            "ReferenceTraits<>::ReferenceType failed");
-        static_assert(
-            std::is_same<const float&, ReferenceTraits<const float>::ReferenceType>::value,
-            "ReferenceTraits<>::ReferenceType failed");
-
-        // ref return
-        static_assert(
-            std::is_same<int*, ReferenceTraits<int*>::ReferenceType>::value,
-            "ReferenceTraits<>::ReferenceType failed");
-        static_assert(
-            std::is_same<const int*,
-                         ReferenceTraits<const int*>::ReferenceType>::value,
-            "ReferenceTraits<>::ReferenceType failed");
-    }
-
-    SECTION("types can be pointers")
-    {
-        using ponder::detail::ReferenceTraits;
-
-        // pointer type
-        static_assert(std::is_same<int*, ReferenceTraits<int*>::PointerType>::value,
-                      "ReferenceTraits<>::PointerType failed");
-        static_assert(
-            std::is_same<const int*, ReferenceTraits<const int*>::PointerType>::value,
-            "ReferenceTraits<>::PointerType failed");
-    }
-
-    SECTION("is a smart pointer")
-    {
-        using ponder::detail::IsSmartPointer;
-
-        static_assert(IsSmartPointer<int, int>::value == false,
-                      "IsSmartPointer<> failed");
-
-        static_assert(IsSmartPointer<int*, int>::value == false,
-                      "IsSmartPointer<> failed");
-
-        static_assert(IsSmartPointer<const int*, int>::value == false,
-                      "IsSmartPointer<> failed");
-
-        static_assert(IsSmartPointer<TraitsTest::TemplateClass<int>, int>::value == false,
-                      "IsSmartPointer<> failed");
-
-        static_assert(IsSmartPointer<std::unique_ptr<int>, int>::value == true,
-                      "IsSmartPointer<> failed");
-
-        static_assert(IsSmartPointer<std::shared_ptr<int>, int>::value == true,
-                      "IsSmartPointer<> failed");
-    }
-
-    SECTION("types have a raw data type")
-    {
-        using ponder::detail::ReferenceTraits;
-
-        static_assert(std::is_same<int, ReferenceTraits<int>::DataType>::value,
-                      "ReferenceTraits<>::DataType failed");
-        static_assert(std::is_same<int, ReferenceTraits<int*>::DataType>::value,
-                      "ReferenceTraits<>::DataType failed");
-        static_assert(std::is_same<int, ReferenceTraits<const int>::DataType>::value,
-                      "ReferenceTraits<>::DataType failed");
-        static_assert(std::is_same<int, ReferenceTraits<const int*>::DataType>::value,
-                      "ReferenceTraits<>::DataType failed");
-        static_assert(std::is_same<int, ReferenceTraits<int **>::DataType>::value,
-                      "ReferenceTraits<>::DataType failed");
-        static_assert(
-            std::is_same<int, ReferenceTraits<int[10]>::DataType>::value,
-            "ReferenceTraits<>::DataType failed");
-    }
-}
-
-//----------------------------------------------------------------------------------------
-
-TEST_CASE("We reference objects in different ways")
+// We reference objects in different ways
+TEST_CASE("ReferenceTrait kinds")
 {
     SECTION("object instance")
     {
@@ -607,23 +460,221 @@ TEST_CASE("We reference objects in different ways")
                       "ReferenceTraits<>::kind");
     }
 
-    SECTION("type builtin array")
+//    SECTION("type builtin array")
+//    {
+//        using ponder::detail::ReferenceTraits;
+//        using ponder::ReferenceKind;
+//
+//        static_assert(ReferenceTraits<int[1]>::kind == ReferenceKind::BuiltinArray,
+//                      "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<int[1000]>::kind == ReferenceKind::BuiltinArray,
+//                      "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<float[1]>::kind == ReferenceKind::BuiltinArray,
+//                      "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<Methods[10]>::kind == ReferenceKind::BuiltinArray,
+//                      "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<int[10][10]>::kind == ReferenceKind::BuiltinArray,
+//                      "ReferenceTraits<>::kind");
+//        static_assert(ReferenceTraits<int[10][20][30]>::kind == ReferenceKind::BuiltinArray,
+//                      "ReferenceTraits<>::kind");
+//    }
+}
+
+//----------------------------------------------------------------------------------------
+
+TEST_CASE("Referenced objects have traits")
+{
+    SECTION("types can be tested for being writable")
     {
         using ponder::detail::ReferenceTraits;
         using ponder::ReferenceKind;
+        
+        // is writable
+        static_assert(ReferenceTraits<int>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        static_assert(ReferenceTraits<int*>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        static_assert(ReferenceTraits<char**>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        
+        // is not writable
+        static_assert( ! ReferenceTraits<const int>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        static_assert( ! ReferenceTraits<const int*>::isWritable,
+                      "ReferenceTraits<>::isWriteable failed");
+        //        static_assert( ! ReferenceTraits<const char * const *>::isWritable,
+        //                      "ReferenceTraits<>::isWriteable failed");
+        //        static_assert( ! ReferenceTraits<void(...)>::isRef,
+        //                      "ReferenceTraits<>::isRef failed");
+        //        static_assert( ! ReferenceTraits<decltype(intArray)>::isWritable,
+        //                      "ReferenceTraits<>::isWriteable failed");
+    }
+    
+    SECTION("types can be references")
+    {
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+        
+        // is ref
+        static_assert(ReferenceTraits<int*>::isRef, "ReferenceTraits<>::isRef failed");
+        static_assert(ReferenceTraits<char**>::isRef, "ReferenceTraits<>::isRef failed");
+        
+        static_assert(ponder::detail::ReferenceTraits<int&>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert(ponder::detail::ReferenceTraits<int&>::kind == ReferenceKind::Reference,
+                      "ReferenceTraits<>::isRef failed");
+        //        static_assert(ponder::detail::ReferenceTraits<int*&>::isRef,
+        //                      "ReferenceTraits<>::isRef failed");
+        
+        // is not ref
+        static_assert( ! ReferenceTraits<int>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ReferenceTraits<float>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ReferenceTraits<void(...)>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        //        static_assert( ! ReferenceTraits<decltype(intArray)>::isRef,
+        //                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ponder::detail::ReferenceTraits<Callable>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert(ponder::detail::ReferenceTraits<Callable>::kind != ReferenceKind::Reference,
+                      "ReferenceTraits<>::isRef failed");
+        static_assert( ! ponder::detail::ReferenceTraits<NonCallable>::isRef,
+                      "ReferenceTraits<>::isRef failed");
+    }
+    
+    SECTION("types can be const")
+    {
+        using ponder::detail::ReferenceTraits;
+        using ponder::ReferenceKind;
+        
+        static_assert(!ReferenceTraits<const int*>::isWritable, "ReferenceTraits<>::isWritable failed");
+        static_assert(ReferenceTraits<int*>::isWritable, "ReferenceTraits<>::isWritable failed");
+        
+        static_assert(!ReferenceTraits<const int&>::isWritable, "ReferenceTraits<>::isWritable failed");
+        static_assert(ReferenceTraits<int&>::isWritable, "ReferenceTraits<>::isWritable failed");
+        
+        //        static_assert(!ReferenceTraits<const int[3]>::isWritable, "ReferenceTraits<>::isWritable failed");
+        //        static_assert(ReferenceTraits<int[5]>::isWritable, "ReferenceTraits<>::isWritable failed");
+        
+        //static_assert(!ReferenceTraits<const std::vector<float>::isWritable, "ReferenceTraits<>::isWritable failed");
+        //static_assert(ReferenceTraits<std::vector<float>>::isWritable, "ReferenceTraits<>::isWritable failed");
+    }
+    
+    SECTION("types can be converted to reference types")
+    {
+        using ponder::detail::ReferenceTraits;
+        
+        static_assert(std::is_same<int&, ReferenceTraits<int>::ReferenceType>::value,
+                      "ReferenceTraits<>::ReferenceType failed");
+        static_assert(
+                      std::is_same<const float&, ReferenceTraits<const float>::ReferenceType>::value,
+                      "ReferenceTraits<>::ReferenceType failed");
+        
+        // ref return
+        static_assert(std::is_same<int*, ReferenceTraits<int*>::ReferenceType>::value,
+                      "ReferenceTraits<>::ReferenceType failed");
+        static_assert(std::is_same<const int*,
+                      ReferenceTraits<const int*>::ReferenceType>::value,
+                      "ReferenceTraits<>::ReferenceType failed");
+    }
+    
+    SECTION("types can be pointers")
+    {
+        using ponder::detail::ReferenceTraits;
+        
+        // pointer type
+        static_assert(std::is_same<int*, ReferenceTraits<int*>::PointerType>::value,
+                      "ReferenceTraits<>::PointerType failed");
+        static_assert(
+                      std::is_same<const int*, ReferenceTraits<const int*>::PointerType>::value,
+                      "ReferenceTraits<>::PointerType failed");
+    }
+    
+    SECTION("is a smart pointer")
+    {
+        using ponder::detail::IsSmartPointer;
+        
+        static_assert(IsSmartPointer<int, int>::value == false,
+                      "IsSmartPointer<> failed");
+        
+        static_assert(IsSmartPointer<int*, int>::value == false,
+                      "IsSmartPointer<> failed");
+        
+        static_assert(IsSmartPointer<const int*, int>::value == false,
+                      "IsSmartPointer<> failed");
+        
+        static_assert(IsSmartPointer<TraitsTest::TemplateClass<int>, int>::value == false,
+                      "IsSmartPointer<> failed");
+        
+        static_assert(IsSmartPointer<std::unique_ptr<int>, int>::value == true,
+                      "IsSmartPointer<> failed");
+        
+        static_assert(IsSmartPointer<std::shared_ptr<int>, int>::value == true,
+                      "IsSmartPointer<> failed");
+    }
+    
+    SECTION("types have a raw data type")
+    {
+        using ponder::detail::ReferenceTraits;
+        
+        static_assert(std::is_same<int, ReferenceTraits<int>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<int*>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<const int>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<const int*>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        static_assert(std::is_same<int, ReferenceTraits<int **>::DataType>::value,
+                      "ReferenceTraits<>::DataType failed");
+        //        static_assert(
+        //            std::is_same<int, ReferenceTraits<int[10]>::DataType>::value,
+        //            "ReferenceTraits<>::DataType failed");
+    }
+}
 
-        static_assert(ReferenceTraits<int[1]>::kind == ReferenceKind::BuiltinArray,
-                      "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<int[1000]>::kind == ReferenceKind::BuiltinArray,
-                      "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<float[1]>::kind == ReferenceKind::BuiltinArray,
-                      "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<Methods[10]>::kind == ReferenceKind::BuiltinArray,
-                      "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<int[10][10]>::kind == ReferenceKind::BuiltinArray,
-                      "ReferenceTraits<>::kind");
-        static_assert(ReferenceTraits<int[10][20][30]>::kind == ReferenceKind::BuiltinArray,
-                      "ReferenceTraits<>::kind");
+//----------------------------------------------------------------------------------------
+
+TEST_CASE("AccessTraits")
+{
+    SECTION("Simple")
+    {
+        using ponder::detail::AccessTraits;
+        using ponder::PropertyAccessKind;
+        
+        static_assert(AccessTraits<bool>::kind == PropertyAccessKind::Simple, "");
+        static_assert(AccessTraits<int>::kind == PropertyAccessKind::Simple, "");
+        static_assert(AccessTraits<float>::kind == PropertyAccessKind::Simple, "");
+        static_assert(AccessTraits<std::string>::kind == PropertyAccessKind::Simple, "");
+    }
+    
+    SECTION("Enum")
+    {
+        using ponder::detail::AccessTraits;
+        using ponder::PropertyAccessKind;
+        
+        static_assert(AccessTraits<Enum>::kind == PropertyAccessKind::Enum, "");
+        static_assert(AccessTraits<EnumCls>::kind == PropertyAccessKind::Enum, "");
+    }
+    
+    SECTION("Array")
+    {
+        using ponder::detail::AccessTraits;
+        using ponder::PropertyAccessKind;
+        
+        static_assert(AccessTraits<int[10]>::kind == PropertyAccessKind::Array, "");
+    }
+    
+    SECTION("User")
+    {
+        using ponder::detail::AccessTraits;
+        using ponder::PropertyAccessKind;
+        
+        static_assert(ponder::detail::HasStaticTypeId<Class>::value, "");
+        
+        static_assert(AccessTraits<Class>::kind == PropertyAccessKind::User, "");
+        static_assert(AccessTraits<Class&>::kind == PropertyAccessKind::User, "");
     }
 }
 

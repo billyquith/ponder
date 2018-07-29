@@ -65,12 +65,12 @@ struct NoType
 enum class ValueKind
 {
     None,       ///< No type has been defined yet
-    Boolean,    ///< Boolean type (bool)
-    Integer,    ///< Integer types (unsigned/signed char short int long)
-    Real,       ///< Real types (float, double)
-    String,     ///< String types (char*, ponder::String)
+    Boolean,    ///< Boolean type (`bool`)
+    Integer,    ///< Integer types (`unsigned`,`signed` `char` `short` `int` `long`)
+    Real,       ///< Real types (`float`, `double`)
+    String,     ///< String types (`char*`, `ponder::String`)
     Enum,       ///< Enumerated types
-    Array,      ///< Array types (std::vector, std::list, T[])
+    Array,      ///< Array types (`T[]`, `std::vector`, `std::list`)
     User        ///< User-defined classes
 };
 
@@ -114,6 +114,16 @@ enum class PropertyKind
     Function,           ///< a function
     MemberObject        ///< member object in a class or struct
 };
+
+    
+enum class PropertyAccessKind
+{
+    Simple,
+    Enum,
+    Array,
+    User
+};
+    
 
 /**
  * \brief Base class for all supported types.

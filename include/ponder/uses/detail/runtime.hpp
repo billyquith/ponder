@@ -45,7 +45,7 @@ template <typename R, typename U = void> struct CallReturnCopy;
 template <typename R>
 struct CallReturnCopy<R, typename std::enable_if<!detail::IsUserType<R>::value>::type>
 {
-    static inline Value value(R&& o) {return std::move(Value(o));}
+    static inline Value value(R&& o) {return Value(o);}
 };
 
 template <typename R>
@@ -66,7 +66,7 @@ struct CallReturnInternalRef<R,
         && !std::is_same<typename detail::RawType<R>::Type, UserObject>::value
     >::type>
 {
-    static inline Value value(R&& o) {return std::move(Value(o));}
+    static inline Value value(R&& o) {return Value(o);}
 };
 
 template <typename R>

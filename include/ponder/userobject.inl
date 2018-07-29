@@ -99,7 +99,7 @@ UserObject UserObject::makeCopy(const T& object)
 }
 
 template <typename T>
-inline T& UserObject::ref()
+inline T& UserObject::ref() const
 {
     return *reinterpret_cast<T*>(m_holder->object());
 }

@@ -276,31 +276,22 @@ TEST_CASE("User objects reference or contain user data")
     SECTION("user objects reference objects")
     {
         MyClass object(1);
-        ponder::UserObject userObject(&object); // reference
+        ponder::UserObject userObject(&object);
 
-        REQUIRE(userObject.get<MyClass>() ==         object);
-        REQUIRE(&userObject.get<MyClass>() ==        &object);
-        REQUIRE(userObject.get<MyClass&>() ==        object);
-        REQUIRE(&userObject.get<MyClass&>() ==       &object);
-        REQUIRE(userObject.get<const MyClass&>() ==  object);
-        REQUIRE(&userObject.get<const MyClass&>() == &object);
-        REQUIRE(userObject.get<MyClass*>() ==        &object);
-        REQUIRE(userObject.get<const MyClass*>() ==  &object);
+        REQUIRE(userObject.ref<MyClass>() == object);
+        REQUIRE(&userObject.ref<MyClass>() == &object);
+        
+        REQUIRE(userObject.cref<MyClass>() == object);
+        REQUIRE(&userObject.cref<MyClass>() == &object);
     }
 
-    SECTION("user objects can reference other objects using pointers")
+    SECTION("we can get the value of the user object")
     {
         MyClass object(3);
-        ponder::UserObject userObject(object); // copy
+        ponder::UserObject userObject(&object);
 
-        REQUIRE(userObject.get<MyClass>() ==         object);
-        REQUIRE(&userObject.get<MyClass>() !=        &object);
-        REQUIRE(userObject.get<MyClass&>() ==        object);
-        REQUIRE(&userObject.get<MyClass&>() !=       &object);
-        REQUIRE(userObject.get<const MyClass&>() ==  object);
-        REQUIRE(&userObject.get<const MyClass&>() != &object);
-        REQUIRE(userObject.get<MyClass*>() !=        &object);
-        REQUIRE(userObject.get<const MyClass*>() !=  &object);
+        REQUIRE(userObject.get<MyClass>() == object);
+        REQUIRE(userObject.get<MyClass>().x == 3);
     }
 
     SECTION("user object references should handle inheritance")
@@ -309,41 +300,34 @@ TEST_CASE("User objects reference or contain user data")
         ponder::UserObject userObject(&object);
         MyBase& base = object;
 
-        REQUIRE(userObject.get<MyBase>() ==         base);
-        REQUIRE(&userObject.get<MyBase>() ==        &base);
-        REQUIRE(userObject.get<MyBase&>() ==        base);
-        REQUIRE(&userObject.get<MyBase&>() ==       &base);
-        REQUIRE(userObject.get<const MyBase&>() ==  base);
-        REQUIRE(&userObject.get<const MyBase&>() == &base);
-        REQUIRE(userObject.get<MyBase*>() ==        &base);
-        REQUIRE(userObject.get<const MyBase*>() ==  &base);
+        REQUIRE(userObject.get<MyBase>() == base);
+        REQUIRE(&userObject.get<MyBase>() == &base);
     }
     
     SECTION("user objects can be assigned to")
     {
         MyClass object1(10);
-        ponder::UserObject userObject1(object1);
+        ponder::UserObject userObject1(&object1);
         ponder::UserObject userObject2;
-        
+
+        REQUIRE(userObject2 != userObject1);
+
         userObject2 = userObject1;
 
-        REQUIRE(userObject1.get<MyClass*>() == userObject2.get<MyClass*>());
+        REQUIRE(userObject2 == userObject1);
+        REQUIRE(userObject2.get<MyClass>() == userObject1.get<MyClass>());
     }
 
-    SECTION("objects can be tested for equality")
+    SECTION("user objects referencing the same object are equal")
     {
         // Note: UserObject equality is related to the object referenced.
         
         MyClass object1(11);    // note, same values here
         MyClass object2(11);
 
-        IS_TRUE(ponder::UserObject(object1)  != ponder::UserObject(object1));
-        IS_TRUE(ponder::UserObject(object1)  != ponder::UserObject(&object1));
+        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject(object1)); // copy
         IS_TRUE(ponder::UserObject(&object1) == ponder::UserObject(&object1));
-        IS_TRUE(ponder::UserObject(object1)  != ponder::UserObject(object2));
-
-        IS_TRUE(ponder::UserObject(&object1) == ponder::UserObject::makeRef(object1));
-        IS_TRUE(ponder::UserObject(object1) != ponder::UserObject::makeCopy(object1));
+        IS_TRUE(ponder::UserObject(&object1) != ponder::UserObject(&object2));
     }
 
     SECTION("check we can reference non-copyable objects")
@@ -351,8 +335,8 @@ TEST_CASE("User objects reference or contain user data")
         // This is a compile check
         MyNonCopyableClass object;
         ponder::UserObject userObject(&object);
-        MyNonCopyableClass& ref = userObject.get<MyNonCopyableClass>();
-        (void)ref;
+        const MyNonCopyableClass& ref = userObject.get<MyNonCopyableClass>();
+        (void)&ref;
     }
 
     SECTION("we can refer to concrete objects using abstract base references")
@@ -376,33 +360,35 @@ TEST_CASE("User objects reference or contain user data")
         IS_TRUE(uobj1 != uobj2);
 
         REQUIRE(uobj1.get<MyClass>() == object);   // same value
-        REQUIRE(uobj1.get<MyClass*>() == &object); // same address as ref
-        REQUIRE(uobj2.get<MyClass*>() != &object); // same address as copy
         
         REQUIRE(object.x == 4);
-        REQUIRE(uobj1.get<MyClass*>()->x == 4);
-        REQUIRE(uobj2.get<MyClass*>()->x == 4);
+        CHECK(uobj1.get<MyClass>().x == 4);
+        CHECK(uobj2.get<MyClass>().x == 4);
         
         object.x = 7;
         REQUIRE(object.x == 7);
-        REQUIRE(uobj1.get<MyClass*>()->x == 7);
-        REQUIRE(uobj2.get<MyClass*>()->x == 4); // copy hasn't changed
+        CHECK(uobj1.get<MyClass>().x == 7);
+        CHECK(uobj2.get<MyClass>().x == 4); // copy hasn't changed
     }
 
     SECTION("objects can referenced/shallow copied")
     {
         MyClass object(5);
-        ponder::UserObject userObject = ponder::UserObject::makeRef(object);
-
-        REQUIRE(userObject.get<MyClass>() == object);  // same value
-        REQUIRE(userObject.get<MyClass*>() == &object); // same address
+        ponder::UserObject uobj1(&object);
+        ponder::UserObject uobj2(ponder::UserObject::makeRef(object));
+        
+        IS_TRUE(uobj1 == uobj2);
+        
+        REQUIRE(uobj1.get<MyClass>() == object);   // same value
         
         REQUIRE(object.x == 5);
-        REQUIRE(userObject.get<MyClass*>()->x == 5);
+        CHECK(uobj1.get<MyClass>().x == 5);
+        CHECK(uobj2.get<MyClass>().x == 5);
         
         object.x = 7;
         REQUIRE(object.x == 7);
-        REQUIRE(userObject.get<MyClass*>()->x == 7); // points to same object
+        CHECK(uobj1.get<MyClass>().x == 7);
+        CHECK(uobj2.get<MyClass>().x == 7); // copy has changed
     }
 
     SECTION("object type information can be inspected")

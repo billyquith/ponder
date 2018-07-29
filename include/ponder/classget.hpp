@@ -84,7 +84,7 @@ const Class& classByName(IdRef name);
  *
  * \param object object to get the metaclass of
  *
- * \return Reference to the etaclass bound to type T
+ * \return Reference to the metaclass bound to type T
  *
  * \throw ClassNotFound no metaclass has been declared for T or any of its bases
  */

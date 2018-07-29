@@ -45,6 +45,12 @@ Value::Value(const Value& other)
 {
 }
 
+Value::Value(Value&& other)
+{
+    std::swap(m_value, other.m_value);
+    std::swap(m_type, other.m_type);
+}
+
 void Value::operator = (const Value& other)
 {
     m_value = other.m_value;

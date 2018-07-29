@@ -382,27 +382,23 @@ TEST_CASE("Classes can have hierarchies")
     Base* nortti  = new DerivedNoRtti;
     Base* nortti2 = new Derived2NoRtti;
 
-    REQUIRE(ponder::classByObject(base).name() == "ClassTest::Base");    // base is really a base
     REQUIRE(ponder::classByObject(*base).name() == "ClassTest::Base");
     
     SECTION("with rtti")
     {
         // Ponder finds its real type thanks to PONDER_POLYMORPHIC
-        REQUIRE(ponder::classByObject(derived).name() == "ClassTest::Derived");
-        REQUIRE(ponder::classByObject(*derived).name() == "ClassTest::Derived");        
+        REQUIRE(ponder::classByObject(*derived).name() == "ClassTest::Derived");
     }
     
     SECTION("without rtti")
     {
         // Ponder fails to find its derived type without PONDER_POLYMORPHIC
-        REQUIRE(ponder::classByObject(nortti).name() == "ClassTest::Base");
         REQUIRE(ponder::classByObject(*nortti).name() == "ClassTest::Base");
     }
 
    SECTION("allows polymorphism")
    {
        Base* genericBase = derived;
-       REQUIRE(ponder::classByObject(genericBase).name() == "ClassTest::Derived");
        REQUIRE(ponder::classByObject(*genericBase).name() == "ClassTest::Derived");
    }
     
@@ -410,7 +406,6 @@ TEST_CASE("Classes can have hierarchies")
     {
         Base* nonGenericBase = nortti;
         // Ponder fails to find its derived type without PONDER_POLYMORPHIC
-        REQUIRE(ponder::classByObject(nonGenericBase).name() == "ClassTest::Base");
         REQUIRE(ponder::classByObject(*nonGenericBase).name() == "ClassTest::Base");
     }
 

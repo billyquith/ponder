@@ -92,7 +92,9 @@ public:
      * \param other Value to copy
      */
     Value(const Value& other);
-    
+
+    Value(Value&& other);
+
     /**
      * \brief Assignment operator
      *

@@ -36,6 +36,7 @@
 #include <ponder/detail/enumpropertyimpl.hpp>
 #include <ponder/detail/userpropertyimpl.hpp>
 #include <ponder/detail/functiontraits.hpp>
+#include <ponder/detail/typeid.hpp>
 
 namespace ponder {
 namespace detail {
@@ -60,30 +61,64 @@ struct PropertyTraitMapper<T,
     static constexpr PropertyKind kind = PropertyKind::MemberObject;
     typedef MemberTraits<T> Traits;
 };
+
+/*
+ * Determine type of object(s) we are accessing.
+ *  - object, array, etc.
+ */
+template <typename A, typename E = void>
+struct AccessTraits
+{
+    static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
+};
+
+template <typename T>
+struct AccessTraits<T&> : public AccessTraits<T> {};
+
+template <typename T>
+struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
+{
+    static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
+};
+
+template <typename T, std::size_t N>
+struct AccessTraits<T[N]>
+{
+    static constexpr PropertyAccessKind kind = PropertyAccessKind::Array;
+};
+
+template <typename T>
+struct AccessTraits<T, typename std::enable_if<StaticTypeId<T>::defined>::type>
+{
+    static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
+};
     
 /*
  * Property implementation to be used for the Value kind.
  */
-template <typename A, ValueKind K>
-struct PropertyAccessMapper
+template <typename A, PropertyAccessKind K>
+struct PropertyAccessMapper;
+    
+template <typename A>
+struct PropertyAccessMapper<A, PropertyAccessKind::Simple>
 {
     typedef SimplePropertyImpl<A> Type;
 };
 
 template <typename A>
-struct PropertyAccessMapper<A, ValueKind::Array>
+struct PropertyAccessMapper<A, PropertyAccessKind::Array>
 {
     typedef ArrayPropertyImpl<A> Type;
 };
 
 template <typename A>
-struct PropertyAccessMapper<A, ValueKind::Enum>
+struct PropertyAccessMapper<A, PropertyAccessKind::Enum>
 {
     typedef EnumPropertyImpl<A> Type;
 };
 
 template <typename A>
-struct PropertyAccessMapper<A, ponder::ValueKind::User>
+struct PropertyAccessMapper<A, PropertyAccessKind::User>
 {
     typedef UserPropertyImpl<A> Type;
 };
@@ -175,7 +210,7 @@ public:
         : m_access(getter)
     {}
 
-    AccessType get(const ClassType& object) const
+    const AccessType& get(const ClassType& object) const
     {
         return m_access.getter(object);
     }
@@ -208,7 +243,7 @@ public:
         : m_access(getter)
     {}
 
-    AccessType get(const ClassType& object) const
+    const AccessType& get(const ClassType& object) const
     {
         return m_access.getter(object);
     }
@@ -237,7 +272,7 @@ public:
     typedef C ClassType;
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
-
+    
     template <typename F1, typename F2>
     Accessor2(F1 getter, F2 setter)
         : m_getter(getter)
@@ -245,12 +280,12 @@ public:
     {
     }
 
-    AccessType get(const ClassType& object) const
+    const AccessType& get(const ClassType& object) const
     {
         return m_getter(object);
     }
     
-    bool set(ClassType& object, const AccessType& value) const
+    bool set(ClassType& object, const DataType& value) const
     {
         return m_setter(object, value), true;
     }
@@ -275,10 +310,10 @@ struct PropertyFactory1
         typedef Accessor1<C, PropertyTraits> AccessorType; // accessor wrapper
         
         // Properties return Values. Work out which type the property impl supports.
-        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;
+        typedef AccessTraits<typename AccessorType::AccessType> AccessType;
         
         // Property wrapper interface
-        typedef typename PropertyAccessMapper<AccessorType, ValueType::kind>::Type PropertyType;
+        typedef typename PropertyAccessMapper<AccessorType, AccessType::kind>::Type PropertyType;
         
         return new PropertyType(name, AccessorType(accessor));
     }
@@ -295,8 +330,8 @@ struct PropertyFactory2
     {
         typedef FunctionTraits<F1> Traits;
         typedef Accessor2<C, Traits> AccessorType;
-        typedef ponder_ext::ValueMapper<typename AccessorType::DataType> ValueType;
-        typedef typename PropertyAccessMapper<AccessorType, ValueType::kind>::Type PropertyType;
+        typedef AccessTraits<typename AccessorType::AccessType> AccessType;
+        typedef typename PropertyAccessMapper<AccessorType, AccessType::kind>::Type PropertyType;
         return new PropertyType(name, AccessorType(accessor1, accessor2));
     }
 };

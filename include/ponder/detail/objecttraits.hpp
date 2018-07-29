@@ -58,91 +58,26 @@ struct MemberTraits<T(C::*)>
         typedef CA ClassType;
     public:
         ClassAccess(const Type& d) : data(d) {}
-        AccessType getter(const ClassType& c) const {return c.*data;}
-        bool setter(ClassType& c, DataType v) const {return c.*data = v, isWritable;}
+        const AccessType& getter(const ClassType& c) const {return c.*data;}
+        bool setter(ClassType& c, const DataType& v) const {return const_cast<ClassType&>(c).*data = v, isWritable;}
+        bool setter(ClassType& c, DataType&& v) const {return c.*data = std::move(v), isWritable;}
     private:
         Type data;
     };
 };
 
-namespace object {
-
-//template <typename T>
-//struct ObjectDetails
-//{
-//    typedef T Type;
-//    typedef typename RawType<T>::Type DataType;
-//    typedef T AccessType;
-//    static constexpr bool isWritable = !std::is_const<AccessType>::value;
-//};
-
-    //template <typename C, typename T, std::size_t S>
-    //struct MemberTraits<std::array<T,S>(C::*)>
-    //{
-    //    typedef std::array<T,S>(C::*Type);
-    //    typedef C ClassType;
-    //    typedef std::array<T,S> AccessType;
-    //    typedef typename RawType<T>::Type DataType;
-    //    //static constexpr bool isWritable = !std::is_const<DataType>::value;
-    //
-    //    class Access
-    //    {
-    //    public:
-    //        Access(Type d) : data(d) {}
-    //        AccessType& getter(ClassType& c) const { return c.*data; }
-    //    private:
-    //        Type data;
-    //    };
-    //};
-    //
-    //template <typename C, typename T>
-    //struct MemberTraits<std::vector<T>(C::*)>
-    //{
-    //    typedef std::vector<T>(C::*Type);
-    //    typedef C ClassType;
-    //    typedef std::vector<T> AccessType;
-    //    typedef typename RawType<T>::Type DataType;
-    //
-    //    class Access
-    //    {
-    //    public:
-    //        Access(Type d) : data(d) {}
-    //        AccessType& getter(ClassType& c) const { return c.*data; }
-    //    private:
-    //        Type data;
-    //    };
-    //};
-    //
-    //template <typename C, typename T>
-    //struct MemberTraits<std::list<T>(C::*)>
-    //{
-    //    typedef std::list<T>(C::*Type);
-    //    typedef C ClassType;
-    //    typedef std::list<T> AccessType;
-    //    typedef typename RawType<T>::Type DataType;
-    //
-    //    class Access
-    //    {
-    //    public:
-    //        Access(Type d) : data(d) {}
-    //        AccessType& getter(ClassType& c) const { return c.*data; }
-    //    private:
-    //        Type data;
-    //    };
-    //};
-    
-} // namespace object
     
 /*
- * - isWritable: true if the type allows to modify the object (non-const references and pointers)
- * - isRef: true if the type is a reference type (references and pointers)
- *
  * - ReferenceType: the reference type closest to T which allows to have direct access
  *   to the object (T& for raw types and references, T* for pointer types)
+ *   Note: not T& reference type!
  * - PointerType: the pointer type closest to T which allows to have direct access to
  *   the object (T*)
  * - DataType: the actual raw type of the object (removes all indirections, as well const
  *   and reference modifiers)
+ *
+ * - isWritable: true if the type allows to modify the object (non-const references and pointers)
+ * - isRef: true if the type is a reference type (references and pointers)
  *
  * - get(void*): get a direct access to an object given by a typeless pointer (in other
  *   words, converts from void* to ReferenceType)
@@ -170,6 +105,7 @@ struct ReferenceTraits<T>
 
     static inline ReferenceType get(void* pointer) {return *static_cast<T*>(pointer);}
     static inline PointerType getPointer(T& value) {return &value;}
+    static inline PointerType getPointer(T* value) {return value;}
 };
 
 // Raw pointers
@@ -190,7 +126,7 @@ struct ReferenceTraits<T*>
 
 // References
 template <typename T>
-struct ReferenceTraits<T&> //, typename std::enable_if<!std::is_pointer<T>::value>::type>
+struct ReferenceTraits<T&>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Reference;
     typedef T& ReferenceType;
@@ -201,6 +137,7 @@ struct ReferenceTraits<T&> //, typename std::enable_if<!std::is_pointer<T>::valu
 
     static inline ReferenceType get(void* pointer) {return *static_cast<T*>(pointer);}
     static inline PointerType getPointer(T& value) {return &value;}
+    static inline PointerType getPointer(T* value) {return value;}
 };
 
 // Base class for smart pointers
@@ -225,17 +162,73 @@ struct ReferenceTraits<std::shared_ptr<T>>
     : public SmartPointerReferenceTraits<std::shared_ptr<T>,T> {};
 
 // Built-in arrays []
-template <typename T, std::size_t N>
-struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
-{
-    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
-    typedef typename RawType<T>::Type DataType;
-    typedef T(&ReferenceType)[N];
-    typedef T* PointerType;
-    static constexpr std::size_t Size = N;
-    static constexpr bool isWritable = !std::is_const<T>::value;
-    static constexpr bool isRef = false;
-};
+//template <typename T, std::size_t N>
+//struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
+//{
+//    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
+//    typedef typename RawType<T>::Type DataType;
+//    typedef T(&ReferenceType)[N];
+//    typedef T* PointerType;
+//    static constexpr std::size_t Size = N;
+//    static constexpr bool isWritable = !std::is_const<T>::value;
+//    static constexpr bool isRef = false;
+//};
+
+
+//template <typename C, typename T, std::size_t S>
+//struct MemberTraits<std::array<T,S>(C::*)>
+//{
+//    typedef std::array<T,S>(C::*Type);
+//    typedef C ClassType;
+//    typedef std::array<T,S> AccessType;
+//    typedef typename RawType<T>::Type DataType;
+//    //static constexpr bool isWritable = !std::is_const<DataType>::value;
+//
+//    class Access
+//    {
+//    public:
+//        Access(Type d) : data(d) {}
+//        AccessType& getter(ClassType& c) const { return c.*data; }
+//    private:
+//        Type data;
+//    };
+//};
+//
+//template <typename C, typename T>
+//struct MemberTraits<std::vector<T>(C::*)>
+//{
+//    typedef std::vector<T>(C::*Type);
+//    typedef C ClassType;
+//    typedef std::vector<T> AccessType;
+//    typedef typename RawType<T>::Type DataType;
+//
+//    class Access
+//    {
+//    public:
+//        Access(Type d) : data(d) {}
+//        AccessType& getter(ClassType& c) const { return c.*data; }
+//    private:
+//        Type data;
+//    };
+//};
+//
+//template <typename C, typename T>
+//struct MemberTraits<std::list<T>(C::*)>
+//{
+//    typedef std::list<T>(C::*Type);
+//    typedef C ClassType;
+//    typedef std::list<T> AccessType;
+//    typedef typename RawType<T>::Type DataType;
+//
+//    class Access
+//    {
+//    public:
+//        Access(Type d) : data(d) {}
+//        AccessType& getter(ClassType& c) const { return c.*data; }
+//    private:
+//        Type data;
+//    };
+//};
 
 } // namespace detail
 } // namespace ponder

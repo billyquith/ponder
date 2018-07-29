@@ -38,7 +38,7 @@ project(PONDER_TEST)
 set(PONDER_TEST_SRCS
     test.hpp
     # arrayproperty.cpp
-    # class.cpp
+    class.cpp
     # classvisitor.cpp
     # constructor.cpp
     dictionary.cpp

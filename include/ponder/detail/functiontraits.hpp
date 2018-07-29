@@ -174,7 +174,7 @@ struct FunctionTraits<T,
     public:
         ClassAccess(Type d) : data(d) {}
         // const_cast here to deal with non-const references. e.g. int&(*)()
-        AccessType getter(const ClassType& c) const {return (*data)(const_cast<ClassType&>(c));}
+        AccessType const& getter(const ClassType& c) const {return (*data)(const_cast<ClassType&>(c));}
         bool setter(ClassType& c, DataType const& v) const {return (*data)(c) = v, true;}
         bool setter(ClassType& c, DataType&& v) const {return (*data)(c) = std::move(v), true;}
     private:
@@ -226,8 +226,9 @@ struct FunctionTraits<T, typename
     typedef typename Details::DispatchType DispatchType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
-    static constexpr bool isWritable = !std::is_const<AccessType>::value;
-    
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value
+                        && !std::is_const<typename std::remove_reference<AccessType>::type>::value;
+
     template <typename C>
     class ClassAccess
     {
@@ -256,8 +257,9 @@ struct FunctionTraits<T,
     typedef typename Details::DispatchType DispatchType;
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
-    static constexpr bool isWritable = !std::is_const<AccessType>::value;
-    
+    static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value
+                        && !std::is_const<typename std::remove_reference<AccessType>::type>::value;
+
     template <typename C>
     class ClassAccess
     {
@@ -287,7 +289,7 @@ struct FunctionTraits<T,
     typedef typename RawType<typename Details::ReturnType>::Type DataType;
     typedef typename Details::ReturnType AccessType;
     static constexpr bool isWritable = std::is_lvalue_reference<AccessType>::value
-                                       && !std::is_const<AccessType>::value;
+                        && !std::is_const<typename std::remove_reference<AccessType>::type>::value;
 
     template <typename C>
     class ClassAccess

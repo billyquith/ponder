@@ -198,7 +198,7 @@ public:
     * \return A reference to the contained object.
     */
     template <typename T>
-    T& ref();
+    T& ref() const;
 
     /**
      * \brief Retrieve the metaclass of the stored instance
