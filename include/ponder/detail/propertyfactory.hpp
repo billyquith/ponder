@@ -63,13 +63,19 @@ struct PropertyKindMapper<T,
 };
 
 /*
- * Determine type of object(s) we are accessing.
- *  - object, array, etc.
+ * How to deal with the thing we are accessing.
+ *  - T : the type of the accessed value
+ *  - A : the accessor; what gets the value
  */
-template <typename A, typename E = void>
+template <typename T, typename E = void>
 struct AccessTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
+    
+    template <typename A> struct Impl
+    {
+        typedef SimplePropertyImpl<A> Type;
+    };
 };
 
 template <typename T>
@@ -79,50 +85,35 @@ template <typename T>
 struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
+    
+    template <typename A> struct Impl
+    {
+        typedef EnumPropertyImpl<A> Type;
+    };
 };
 
 template <typename T, std::size_t N>
 struct AccessTraits<T[N]>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
+    
+    template <typename A> struct Impl
+    {
+        typedef ArrayPropertyImpl<A> Type;
+    };
 };
 
 template <typename T>
 struct AccessTraits<T, typename std::enable_if<StaticTypeId<T>::defined>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
+    
+    template <typename A> struct Impl
+    {
+        typedef UserPropertyImpl<A> Type;
+    };
 };
     
-/*
- * Property implementation to be used for the Value kind.
- */
-template <typename A, PropertyAccessKind K>
-struct PropertyAccessMapper;
-    
-template <typename A>
-struct PropertyAccessMapper<A, PropertyAccessKind::Simple>
-{
-    typedef SimplePropertyImpl<A> Type;
-};
-
-template <typename A>
-struct PropertyAccessMapper<A, PropertyAccessKind::Container>
-{
-    typedef ArrayPropertyImpl<A> Type;
-};
-
-template <typename A>
-struct PropertyAccessMapper<A, PropertyAccessKind::Enum>
-{
-    typedef EnumPropertyImpl<A> Type;
-};
-
-template <typename A>
-struct PropertyAccessMapper<A, PropertyAccessKind::User>
-{
-    typedef UserPropertyImpl<A> Type;
-};
-
 /*
  * Helper structure to perform copy and assignment
  *
@@ -305,17 +296,20 @@ struct PropertyFactory1
 {
     static Property* get(IdRef name, T accessor)
     {
-        typedef typename PropertyKindMapper<T>::Traits PropertyTraits; // accessor family
+        // what exposes the value
+        typedef typename PropertyKindMapper<T>::Traits PropertyTraits;
         
-        typedef Accessor1<C, PropertyTraits> AccessorType; // accessor wrapper
+        // unify how we retrive the exposed type
+        typedef Accessor1<C, PropertyTraits> AccessorType;
         
-        // Properties return Values. Work out which type the property impl supports.
+        // which interface do we need to deal with the type?
         typedef AccessTraits<typename AccessorType::AccessType> AccessType;
         
-        // Property wrapper interface
-        typedef typename PropertyAccessMapper<AccessorType, AccessType::kind>::Type PropertyType;
+        // the property wrapper that provides the correct interface for the type
+        typedef typename AccessType::template Impl<AccessorType>::Type PropertyImplType;
         
-        return new PropertyType(name, AccessorType(accessor));
+        // instance the interface for our type
+        return new PropertyImplType(name, AccessorType(accessor));
     }
 };
 
@@ -328,11 +322,20 @@ struct PropertyFactory2
 {
     static Property* get(IdRef name, F1 accessor1, F2 accessor2)
     {
+        // function that will expose the type (setter will mirror)
         typedef FunctionTraits<F1> Traits;
+        
+        // unify how we retrive the exposed type
         typedef Accessor2<C, Traits> AccessorType;
+        
+        // which interface do we need to deal with the type?
         typedef AccessTraits<typename AccessorType::AccessType> AccessType;
-        typedef typename PropertyAccessMapper<AccessorType, AccessType::kind>::Type PropertyType;
-        return new PropertyType(name, AccessorType(accessor1, accessor2));
+        
+        // the property wrapper that provides the correct interface for the type
+        typedef typename AccessType::template Impl<AccessorType>::Type PropertyImplType;
+        
+        // instance the interface for our type
+        return new PropertyImplType(name, AccessorType(accessor1, accessor2));
     }
 };
 
