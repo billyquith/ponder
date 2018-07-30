@@ -48,14 +48,14 @@ namespace detail {
  *      - bool setter(...) const
  */
 template <typename T, typename E = void>
-struct PropertyKindMapper
+struct PropertyTraitMapper
 {
     static constexpr PropertyKind kind = PropertyKind::Function;
     typedef FunctionTraits<T> Traits;
 };
 
 template <typename T>
-struct PropertyKindMapper<T,
+struct PropertyTraitMapper<T,
     typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
 {
     static constexpr PropertyKind kind = PropertyKind::MemberObject;
@@ -188,7 +188,7 @@ class Accessor1
 public:
 
     typedef TRAITS Traits;
-    static_assert(!Traits::isWritable, "isWritable wrong or missing");
+    static_assert(!Traits::isWritable, "!isWritable expected");
     typedef C ClassType;
     typedef typename Traits::DataType DataType; // raw type
     typedef typename Traits::AccessType AccessType; // type accessor exposes
@@ -297,7 +297,7 @@ struct PropertyFactory1
     static Property* get(IdRef name, T accessor)
     {
         // what exposes the value
-        typedef typename PropertyKindMapper<T>::Traits PropertyTraits;
+        typedef typename PropertyTraitMapper<T>::Traits PropertyTraits;
         
         // unify how we retrieve the exposed type
         typedef Accessor1<C, PropertyTraits> AccessorType;
