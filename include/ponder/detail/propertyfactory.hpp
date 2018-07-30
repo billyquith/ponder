@@ -299,7 +299,7 @@ struct PropertyFactory1
         // what exposes the value
         typedef typename PropertyKindMapper<T>::Traits PropertyTraits;
         
-        // unify how we retrive the exposed type
+        // unify how we retrieve the exposed type
         typedef Accessor1<C, PropertyTraits> AccessorType;
         
         // which interface do we need to deal with the type?
@@ -325,7 +325,7 @@ struct PropertyFactory2
         // function that will expose the type (setter will mirror)
         typedef FunctionTraits<F1> Traits;
         
-        // unify how we retrive the exposed type
+        // unify how we retrieve the exposed type
         typedef Accessor2<C, Traits> AccessorType;
         
         // which interface do we need to deal with the type?
