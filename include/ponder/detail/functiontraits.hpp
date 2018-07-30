@@ -174,7 +174,7 @@ struct FunctionTraits<T,
     public:
         ClassAccess(Type d) : data(d) {}
         // const_cast here to deal with non-const references. e.g. int&(*)()
-        AccessType const& getter(const ClassType& c) const {return (*data)(const_cast<ClassType&>(c));}
+        AccessType getter(const ClassType& c) const {return (*data)(const_cast<ClassType&>(c));}
         bool setter(ClassType& c, DataType const& v) const {return (*data)(c) = v, true;}
         bool setter(ClassType& c, DataType&& v) const {return (*data)(c) = std::move(v), true;}
     private:

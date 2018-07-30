@@ -58,7 +58,7 @@ struct MemberTraits<T(C::*)>
         typedef CA ClassType;
     public:
         ClassAccess(const Type& d) : data(d) {}
-        const AccessType& getter(const ClassType& c) const {return c.*data;}
+        AccessType getter(const ClassType& c) const {return c.*data;}
         bool setter(ClassType& c, const DataType& v) const {return const_cast<ClassType&>(c).*data = v, isWritable;}
         bool setter(ClassType& c, DataType&& v) const {return c.*data = std::move(v), isWritable;}
     private:
