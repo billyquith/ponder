@@ -98,7 +98,7 @@ protected:
 
 private:
 
-    typedef typename std::remove_reference<typename A::Traits::AccessType>::type ArrayType;
+    typedef typename A::Traits::AccessType ArrayType;
     typedef ponder_ext::ArrayMapper<ArrayType> Mapper;
     typedef typename Mapper::ElementType ElementType;
 

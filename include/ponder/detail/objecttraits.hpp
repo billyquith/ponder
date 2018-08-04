@@ -31,41 +31,12 @@
 #ifndef PONDER_DETAIL_OBJECTTRAITS_HPP
 #define PONDER_DETAIL_OBJECTTRAITS_HPP
 
-#include <ponder/detail/rawtype.hpp>
+#include "rawtype.hpp"
 #include <vector>
 #include <list>
 
 namespace ponder {
-namespace detail {    
-    
-/*
- * Uniform access to the member type T.
- */
-template <typename T>
-struct MemberTraits;
-
-template <typename C, typename T>
-struct MemberTraits<T(C::*)>
-{
-    typedef T(C::*Type);
-    typedef T AccessType;
-    typedef typename RawType<T>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<T>::value;
-
-    template <class CA>
-    class ClassAccess
-    {
-        typedef CA ClassType;
-    public:
-        ClassAccess(const Type& d) : data(d) {}
-        AccessType getter(const ClassType& c) const {return c.*data;}
-        bool setter(ClassType& c, const DataType& v) const {return const_cast<ClassType&>(c).*data = v, isWritable;}
-        bool setter(ClassType& c, DataType&& v) const {return c.*data = std::move(v), isWritable;}
-    private:
-        Type data;
-    };
-};
-
+namespace detail {
     
 /*
  * - ReferenceType: the reference type closest to T which allows to have direct access
@@ -87,20 +58,21 @@ struct MemberTraits<T(C::*)>
 
 // How we access an instance of type T.
 template <typename T, typename E = void>
-struct ReferenceTraits
+struct ReferenceDetails
 {
     typedef int unhandled_type[-(int)sizeof(T)];
 };
 
 // Object instance.
 template <typename T>
-struct ReferenceTraits<T>
+struct ReferenceDetails<T>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Instance;
     typedef T& ReferenceType;
     typedef T* PointerType;
+    typedef T DereferencedType;
     typedef typename RawType<T>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isWritable = !std::is_void<DereferencedType>::value && !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = false;
 
     static inline ReferenceType get(void* pointer) {return *static_cast<T*>(pointer);}
@@ -110,13 +82,14 @@ struct ReferenceTraits<T>
 
 // Raw pointers
 template <typename T>
-struct ReferenceTraits<T*>
+struct ReferenceDetails<T*>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Pointer;
     typedef T* ReferenceType;
     typedef T* PointerType;
+    typedef T DereferencedType;
     typedef typename RawType<T>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = true;
 
     static inline ReferenceType get(void* pointer) {return static_cast<T*>(pointer);}
@@ -126,13 +99,14 @@ struct ReferenceTraits<T*>
 
 // References
 template <typename T>
-struct ReferenceTraits<T&>
+struct ReferenceDetails<T&>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Reference;
     typedef T& ReferenceType;
     typedef T* PointerType;
+    typedef T DereferencedType;
     typedef typename RawType<T>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = true;
 
     static inline ReferenceType get(void* pointer) {return *static_cast<T*>(pointer);}
@@ -148,8 +122,9 @@ struct SmartPointerReferenceTraits
     static constexpr ReferenceKind kind = ReferenceKind::SmartPointer;
     typedef T& ReferenceType;
     typedef P PointerType;
+    typedef T DereferencedType;
     typedef typename RawType<T>::Type DataType;
-    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = true;
 
     static inline ReferenceType get(void* pointer)   {return *static_cast<P*>(pointer);}
@@ -158,9 +133,31 @@ struct SmartPointerReferenceTraits
 
 // std::shared_ptr<>
 template <typename T>
-struct ReferenceTraits<std::shared_ptr<T>>
+struct ReferenceDetails<std::shared_ptr<T>>
     : public SmartPointerReferenceTraits<std::shared_ptr<T>,T> {};
 
+
+template <typename T>
+struct ReferenceTraits : public ReferenceDetails<T> {};
+
+// void
+template <>
+struct ReferenceTraits<void>
+{
+    static constexpr ReferenceKind kind = ReferenceKind::None;
+    typedef void T;
+    typedef T* ReferenceType;
+    typedef T* PointerType;
+    typedef T DereferencedType;
+    typedef typename RawType<T>::Type DataType;
+    static constexpr bool isWritable = false;
+    static constexpr bool isRef = false;
+
+    static inline ReferenceType get(void* pointer) {return 0;}
+    static inline PointerType getPointer(T* value) {return value;}
+};
+
+    
 // Built-in arrays []
 //template <typename T, std::size_t N>
 //struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
@@ -180,7 +177,7 @@ struct ReferenceTraits<std::shared_ptr<T>>
 //{
 //    typedef std::array<T,S>(C::*Type);
 //    typedef C ClassType;
-//    typedef std::array<T,S> AccessType;
+//    typedef std::array<T,S> ExposedType;
 //    typedef typename RawType<T>::Type DataType;
 //    //static constexpr bool isWritable = !std::is_const<DataType>::value;
 //
@@ -188,7 +185,7 @@ struct ReferenceTraits<std::shared_ptr<T>>
 //    {
 //    public:
 //        Access(Type d) : data(d) {}
-//        AccessType& getter(ClassType& c) const { return c.*data; }
+//        ExposedType& getter(ClassType& c) const { return c.*data; }
 //    private:
 //        Type data;
 //    };
@@ -199,14 +196,14 @@ struct ReferenceTraits<std::shared_ptr<T>>
 //{
 //    typedef std::vector<T>(C::*Type);
 //    typedef C ClassType;
-//    typedef std::vector<T> AccessType;
+//    typedef std::vector<T> ExposedType;
 //    typedef typename RawType<T>::Type DataType;
 //
 //    class Access
 //    {
 //    public:
 //        Access(Type d) : data(d) {}
-//        AccessType& getter(ClassType& c) const { return c.*data; }
+//        ExposedType& getter(ClassType& c) const { return c.*data; }
 //    private:
 //        Type data;
 //    };
@@ -217,19 +214,19 @@ struct ReferenceTraits<std::shared_ptr<T>>
 //{
 //    typedef std::list<T>(C::*Type);
 //    typedef C ClassType;
-//    typedef std::list<T> AccessType;
+//    typedef std::list<T> ExposedType;
 //    typedef typename RawType<T>::Type DataType;
 //
 //    class Access
 //    {
 //    public:
 //        Access(Type d) : data(d) {}
-//        AccessType& getter(ClassType& c) const { return c.*data; }
+//        ExposedType& getter(ClassType& c) const { return c.*data; }
 //    private:
 //        Type data;
 //    };
 //};
-
+    
 } // namespace detail
 } // namespace ponder
 

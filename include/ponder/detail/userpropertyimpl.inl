@@ -41,7 +41,7 @@ template <bool IsRef>
 struct ToUserObject
 {
     template <typename T>
-    static UserObject get(const T& value)
+    static inline UserObject get(const T& value)
     {
         return UserObject::makeCopy(value);
     }
@@ -56,13 +56,13 @@ template <>
 struct ToUserObject<true>
 {
     template <typename T>
-    static UserObject get(const T& value)
+    static inline UserObject get(const T& value)
     {
         return UserObject::makeRef(value);
     }
 
     template <typename T>
-    static UserObject get(T& value)
+    static inline UserObject get(T& value)
     {
         return UserObject::makeRef(value);
     }
@@ -78,8 +78,7 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    typedef ReferenceTraits<typename A::AccessType> RefTraits;
-    return ToUserObject<RefTraits::isRef>::get(
+    return ToUserObject<A::RefTraits::isRef>::get(
                 m_accessor.get(object.get<typename A::ClassType>()));
 }
 
@@ -94,8 +93,7 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
 template <typename A>
 UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
 {
-    typedef ReferenceTraits<typename A::AccessType> RefTraits;;
-    return ToUserObject<RefTraits::isRef>::get(
+    return ToUserObject<A::RefTraits::isRef>::get(
                 m_accessor.get(objectInstance.get<typename A::ClassType>()));
 }
 

@@ -43,9 +43,11 @@ namespace detail {
     
 /*
  * Map accessed property type to traits.
- *  - Traits::Access: access to exposed type T
- *      - const T& getter() const
- *      - bool setter(...) const
+ *  - PropertyTrait::Traits supplies:
+ *      - Type : accessor type (member object/function pointer).
+ *      - ExposedType : The type T referenced.
+ *      - DataType : The dereferenced, raw type.
+ *      - isWritable : Boolean; is ExposedType writable?
  */
 template <typename T, typename E = void>
 struct PropertyTraitMapper
@@ -63,7 +65,7 @@ struct PropertyTraitMapper<T,
 };
 
 /*
- * How to deal with the thing we are accessing.
+ * How to deal with the thing we are accessing. Type interface traits.
  *  - T : the type of the accessed value
  *  - A : the accessor; what gets the value
  */
@@ -79,7 +81,16 @@ struct AccessTraits
 };
 
 template <typename T>
-struct AccessTraits<T&> : public AccessTraits<T> {};
+struct AccessTraits<T&> : public AccessTraits<T>
+{
+    typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
+};
+
+template <typename T>
+struct AccessTraits<T*> : public AccessTraits<T>
+{
+    typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
+};
 
 template <typename T>
 struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
@@ -190,8 +201,10 @@ public:
     typedef TRAITS Traits;
     static_assert(!Traits::isWritable, "!isWritable expected");
     typedef C ClassType;
+    typedef typename Traits::ExposedType ExposedType;
+    typedef ReferenceTraits<ExposedType> RefTraits;
+    typedef typename RefTraits::DereferencedType AccessType;
     typedef typename Traits::DataType DataType; // raw type
-    typedef typename Traits::AccessType AccessType; // type accessor exposes
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
@@ -201,7 +214,7 @@ public:
         : m_access(getter)
     {}
 
-    AccessType get(const ClassType& object) const
+    ExposedType get(const ClassType& object) const
     {
         return m_access.getter(object);
     }
@@ -223,8 +236,10 @@ public:
     typedef TRAITS Traits;
     static_assert(Traits::isWritable, "isWritable expected");
     typedef C ClassType;
+    typedef typename Traits::ExposedType ExposedType;
+    typedef ReferenceTraits<ExposedType> RefTraits;
+    typedef typename RefTraits::DereferencedType AccessType;
     typedef typename Traits::DataType DataType; // raw type
-    typedef typename Traits::AccessType AccessType; // type accessor exposes
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
@@ -234,7 +249,7 @@ public:
         : m_access(getter)
     {}
 
-    AccessType get(const ClassType& object) const
+    ExposedType get(const ClassType& object) const
     {
         return m_access.getter(object);
     }
@@ -258,9 +273,11 @@ class Accessor2
 public:
 
     typedef FUNCTRAITS Traits;
-    typedef typename Traits::AccessType AccessType;
-    typedef typename Traits::DataType DataType;
     typedef C ClassType;
+    typedef typename Traits::ExposedType ExposedType;
+    typedef ReferenceTraits<ExposedType> RefTraits;
+    typedef typename RefTraits::DereferencedType AccessType;
+    typedef typename Traits::DataType DataType; // raw type
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
@@ -271,7 +288,7 @@ public:
     {
     }
 
-    AccessType get(const ClassType& object) const
+    ExposedType get(const ClassType& object) const
     {
         return m_getter(object);
     }
@@ -303,10 +320,10 @@ struct PropertyFactory1
         typedef Accessor1<C, PropertyTraits> AccessorType;
         
         // which interface do we need to deal with the type?
-        typedef AccessTraits<typename AccessorType::AccessType> AccessType;
+        typedef AccessTraits<typename AccessorType::AccessType> ExposedType;
         
         // the property wrapper that provides the correct interface for the type
-        typedef typename AccessType::template Impl<AccessorType>::Type PropertyImplType;
+        typedef typename ExposedType::template Impl<AccessorType>::Type PropertyImplType;
         
         // instance the interface for our type
         return new PropertyImplType(name, AccessorType(accessor));
@@ -329,10 +346,10 @@ struct PropertyFactory2
         typedef Accessor2<C, Traits> AccessorType;
         
         // which interface do we need to deal with the type?
-        typedef AccessTraits<typename AccessorType::AccessType> AccessType;
+        typedef AccessTraits<typename AccessorType::AccessType> ExposedType;
         
         // the property wrapper that provides the correct interface for the type
-        typedef typename AccessType::template Impl<AccessorType>::Type PropertyImplType;
+        typedef typename ExposedType::template Impl<AccessorType>::Type PropertyImplType;
         
         // instance the interface for our type
         return new PropertyImplType(name, AccessorType(accessor1, accessor2));

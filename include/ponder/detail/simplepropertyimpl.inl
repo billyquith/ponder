@@ -48,7 +48,7 @@ template <typename A>
 void SimplePropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
     static_assert(!std::is_const<typename A::ClassType>::value, "Const class");
-    static_assert(!std::is_reference<typename A::DataType>::value, "Refs not allowed");
+    static_assert(!std::is_reference<typename A::AccessType>::value, "Refs not allowed");
     if (!m_accessor.set(object.ref<typename A::ClassType>(), value.to<const typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }

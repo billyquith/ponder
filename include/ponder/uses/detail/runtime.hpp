@@ -258,7 +258,7 @@ public:
 private:
 
     typedef typename FTraits::Details::FunctionCallTypes CallTypes;
-    typedef FunctionWrapper<typename FTraits::AccessType, CallTypes> DispatchType;
+    typedef FunctionWrapper<typename FTraits::ExposedType, CallTypes> DispatchType;
     
     typename DispatchType::Type m_function; // Object containing the actual function to call
     
