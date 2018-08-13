@@ -738,7 +738,6 @@ TEST_CASE("Values have their type determined")
     static_assert(ponder_ext::ValueMapper<MyClass>::kind == ponder::ValueKind::User, "");
     
     static_assert(ponder_ext::ValueMapper<std::string>::kind == ponder::ValueKind::String, "");
-    static_assert(ponder_ext::ValueMapper<const std::string&>::kind == ponder::ValueKind::String, "");
     static_assert(ponder_ext::ValueMapper<const std::string>::kind == ponder::ValueKind::String, "");
     static_assert(ponder_ext::ValueMapper<const char*>::kind == ponder::ValueKind::String, "");
 }
