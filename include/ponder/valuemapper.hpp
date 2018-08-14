@@ -54,7 +54,6 @@ namespace ponder_ext
     template <typename T, typename C = void> struct ValueMapper;
 }
 
-
 namespace ponder {
 
 /**
@@ -65,7 +64,7 @@ namespace ponder {
  * \return Ponder type which T maps to
  */
 template <typename T>
-ValueKind mapType()
+inline ValueKind mapType()
 {
     return ponder_ext::ValueMapper<typename detail::RawType<T>::Type>::kind;
 }
@@ -313,11 +312,7 @@ struct ValueMapper<ponder::detail::string_view>
  * Specialization of ValueMapper for enum types
  */
 template <typename T>
-struct ValueMapper<T,
-    typename std::enable_if<
-                std::is_enum<T>::value
-                && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
-            >::type>
+struct ValueMapper<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static const ponder::ValueKind kind = ponder::ValueKind::Enum;
     static ponder::EnumObject to(T source) {return ponder::EnumObject(source);}
@@ -440,7 +435,7 @@ struct ValueMapper<const T> : public ValueMapper<T> {};
 template <typename T>
 struct ValueMapper<const T&>
 {
-    typedef int ReferencesNotAllowed[-sizeof(T)];
+    typedef int ReferencesNotAllowed[-(int)sizeof(T)];
 };
 
 /**
@@ -450,7 +445,7 @@ template <template <typename> class T, typename U>
 struct ValueMapper<T<U>,
     typename std::enable_if< ponder::detail::IsSmartPointer<T<U>,U>::value>::type>
 {
-    typedef int ReferencesNotAllowed[-sizeof(U)];
+    typedef int ReferencesNotAllowed[-(int)sizeof(U)];
 };
 
 /** \endcond NoDocumentation */

@@ -49,7 +49,7 @@ void SimplePropertyImpl<A>::setValue(const UserObject& object, const Value& valu
 {
     static_assert(!std::is_const<typename A::ClassType>::value, "Const class");
     static_assert(!std::is_reference<typename A::AccessType>::value, "Refs not allowed");
-    if (!m_accessor.set(object.ref<typename A::ClassType>(), value.to<const typename A::DataType>()))
+    if (!m_accessor.set(object.ref<typename A::ClassType>(), value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

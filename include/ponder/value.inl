@@ -67,7 +67,7 @@ struct ValueTo<Value>
 template <typename T>
 Value::Value(const T& val)
     : m_value(ponder_ext::ValueMapper<T>::to(val))
-    , m_type(ponder_ext::ValueMapper<T>::kind)
+    , m_type(ponder_ext::ValueMapper<T>::kind) // mapType<T> NOT used so get same kind as to()
 {
 }
 
