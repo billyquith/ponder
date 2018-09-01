@@ -103,10 +103,22 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
     };
 };
 
-template <typename T, std::size_t N>
-struct AccessTraits<T[N]>
+//template <typename T, std::size_t N>
+//struct AccessTraits<T[N]>
+//{
+//    static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
+//
+//    template <typename A> struct Impl
+//    {
+//        typedef ArrayPropertyImpl<A> Type;
+//    };
+//};
+
+template <typename T>
+struct AccessTraits<T, typename std::enable_if_t<ponder_ext::ArrayMapper<T>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
+    typedef ponder_ext::ArrayMapper<T> TypeTraits;
     
     template <typename A> struct Impl
     {

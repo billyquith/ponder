@@ -109,7 +109,7 @@ namespace ponder_ext {
 /** \cond NoDocumentation */
 
 /*
- * Generic version -- doesn't define anything
+ * Default. Not an array type.
  */
 template <typename T>
 struct ArrayMapper
@@ -136,12 +136,12 @@ struct ArrayMapper<T[N]>
         return N;
     }
 
-    static const T& get(T (& arr)[N], std::size_t index)
+    static const T& get(T (&arr)[N], std::size_t index)
     {
         return arr[index];
     }
 
-    static void set(T (& arr)[N], std::size_t index, const T& value)
+    static void set(T (&arr)[N], std::size_t index, const T& value)
     {
         arr[index] = value;
     }
@@ -159,7 +159,7 @@ struct ArrayMapper<T[N]>
  * Specialization of ArrayMapper for std::array
  */
 template <typename T, std::size_t N>
-struct ArrayMapper<std::array<T, N>>
+struct ArrayMapper<std::array<T,N>>
 {
     static constexpr bool isArray = true;
     typedef T ElementType;
@@ -169,26 +169,26 @@ struct ArrayMapper<std::array<T, N>>
         return false;
     }
 
-    static std::size_t size(const std::array<T, N>&)
+    static std::size_t size(const std::array<T,N>&)
     {
         return N;
     }
 
-    static const T& get(const std::array<T, N>& arr, std::size_t index)
+    static const T& get(const std::array<T,N>& arr, std::size_t index)
     {
         return arr[index];
     }
 
-    static void set(std::array<T, N>& arr, std::size_t index, const T& value)
+    static void set(std::array<T,N>& arr, std::size_t index, const T& value)
     {
         arr[index] = value;
     }
 
-    static void insert(std::array<T, N>&, std::size_t, const T&)
+    static void insert(std::array<T,N>&, std::size_t, const T&)
     {
     }
 
-    static void remove(std::array<T, N>&, std::size_t)
+    static void remove(std::array<T,N>&, std::size_t)
     {
     }
 };
