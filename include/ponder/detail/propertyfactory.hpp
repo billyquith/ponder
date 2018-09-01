@@ -81,18 +81,6 @@ struct AccessTraits
 };
 
 template <typename T>
-struct AccessTraits<T&> : public AccessTraits<T>
-{
-    typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
-};
-
-template <typename T>
-struct AccessTraits<T*> : public AccessTraits<T>
-{
-    typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
-};
-
-template <typename T>
 struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
@@ -103,19 +91,8 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
     };
 };
 
-//template <typename T, std::size_t N>
-//struct AccessTraits<T[N]>
-//{
-//    static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
-//
-//    template <typename A> struct Impl
-//    {
-//        typedef ArrayPropertyImpl<A> Type;
-//    };
-//};
-
 template <typename T>
-struct AccessTraits<T, typename std::enable_if_t<ponder_ext::ArrayMapper<T>::isArray>::type>
+struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
     typedef ponder_ext::ArrayMapper<T> TypeTraits;
@@ -136,70 +113,18 @@ struct AccessTraits<T, typename std::enable_if<StaticTypeId<T>::defined>::type>
         typedef UserPropertyImpl<A> Type;
     };
 };
-    
-/*
- * Helper structure to perform copy and assignment
- *
- * The purpose of this structure is to avoid a compiler error when the copied
- * type is not copyable. Instead, we just return an error so that the caller
- * can throw a Ponder exception.
- */
-//template <typename T, typename E = void>
-//struct CopyHelper
-//{
-//    static bool copy(T& destination, const Value& source)
-//    {
-//        destination = source.to<T>();
-//        return true;
-//    }
-//};
-//
-///*
-// * Specialization of CopyHelper for non-copyable types
-// */
-//template <typename T>
-//struct CopyHelper<T, typename std::enable_if< !StaticTypeId<T>::copyable>::type >
-//{
-//    static bool copy(T&, const Value&)
-//    {
-//        // We don't really return an error, we just skip the assignment
-//        return true;
-//    }
-//};
 
-/*
- * Helper structure to return values
- *
- * The purpose of this structure is to provide workarounds for types
- * that don't exactly satisfy the compiler when returned. For example,
- * it converts smart pointer types to the corresponding raw pointer types.
- */
-//template <typename T, typename E = void>
-//struct AccessorReturn
-//{
-//    typedef T Type;
-//    static Type get(T value) {return value;}
-//};
-//
-///*
-// * Specialization of AccessorReturn for smart pointer types
-// */
-//template <template <typename> class T, typename U>
-//struct AccessorReturn<T<U>, std::enable_if< IsSmartPointer<T<U>, U>::value > >
-//{
-//    typedef U* Type;
-//    static Type get(T<U> value) {return get_pointer(value);}
-//};
-//
-///*
-// * Specialization of AccessorReturn for built-in array types
-// */
-//template <typename T, std::size_t N>
-//struct AccessorReturn<T[N]>
-//{
-//    typedef T (&Type)[N];
-//    static Type get(T (&value)[N]) {return value;}
-//};
+template <typename T>
+struct AccessTraits<T&>
+{
+    typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
+};
+
+template <typename T>
+struct AccessTraits<T*>
+{
+    typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
+};    
 
 /*
  * - Accessors provide a uniform interface to exposed data.
