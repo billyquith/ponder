@@ -62,7 +62,7 @@ public:
      * \param name Name of the property
      * \param accessor Object used to access the actual C++ property
      */
-    ArrayPropertyImpl(IdRef name, const A& accessor);
+    ArrayPropertyImpl(IdRef name, A&& accessor);
 
 protected:
 
@@ -98,8 +98,8 @@ protected:
 
 private:
 
-    typedef typename A::Traits::AccessType ArrayType;
-    typedef ponder_ext::ArrayMapper<ArrayType> Mapper;
+    typedef typename A::ExposedType ArrayType;
+    typedef typename A::InterfaceType Mapper;
     typedef typename Mapper::ElementType ElementType;
 
     /*

@@ -129,10 +129,30 @@ struct CallableDetails<R(L::*)(A...) const>
     typedef ReturnType(DispatchType)(A...);
     typedef std::tuple<A...> FunctionCallTypes;
 };
+    
+/*
+ * For functions, if they return an rvalue, we cannot return by reference.
+ */
+template <typename T, bool W = true>
+struct ReturnType
+{
+    typedef T& Type; // Not a rvalue so we can reference
+};
+
+template <>
+struct ReturnType<void>
+{
+    typedef void Type;
+};
+
+template <typename T>
+struct ReturnType<T, false> //typename std::enable_if<!std::is_reference<T>::value>::type>
+{
+    typedef T Type; // T is an rvalue so return by value
+};
 
 } // namespace function
 
-    
 /*
  * Uniform type declaration to all function types.
  *  - Used by property and function declaration, so not class specific.
@@ -160,22 +180,24 @@ struct FunctionTraits<T,
     typedef typename Details::Type Type;
     typedef typename Details::ReturnType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
+    static constexpr bool isWritable =
+        std::is_lvalue_reference<ExposedType>::value
+        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
-    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<AccessType>::value;
 
     template <typename C>
-    class ClassAccess
+    class TypeAccess
     {
-        typedef C ClassType;
     public:
-        ClassAccess(Type d) : data(d) {}
-        // const_cast here to deal with non-const references. e.g. int&(*)()
-        ExposedType getter(const ClassType& c) const {return (*data)(const_cast<ClassType&>(c));}
-        bool setter(ClassType& c, DataType const& v) const {return (*data)(c) = v, true;}
-        bool setter(ClassType& c, DataType&& v) const {return (*data)(c) = std::move(v), true;}
+        typedef C ClassType;
+        typedef AccessType AccessType;
+        static constexpr bool isWritable = isWritable;
+        
+        TypeAccess(Type d) : data(d) {}
+        
+        AccessType access(ClassType& c) const {return (*data)(c);}
     private:
         Type data;
     };
@@ -192,26 +214,26 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     typedef typename Details::Type Type;
     typedef typename Details::ReturnType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
+    static constexpr bool isWritable =
+        std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
+    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
-    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !Details::isConst;
 
     template <typename C>
-    class ClassAccess
+    class TypeAccess
     {
-        typedef C ClassType;
     public:
-        ClassAccess(Type d) : data(d) {}
-        // const_cast here to deal with non-const references. e.g. int&(C::*)()
-        ExposedType getter(const ClassType& c) const   {return (const_cast<ClassType&>(c).*data)();}
-        bool setter(ClassType& c, DataType const& v) const {return (c.*data)() = v, true;}
-        bool setter(ClassType& c, DataType&& v) const {return (c.*data)() = std::move(v), true;}
+        typedef C ClassType;
+        typedef AccessType AccessType;
+        static constexpr bool isWritable = isWritable;
+        
+        TypeAccess(Type d) : data(d) {}
+        
+        AccessType access(ClassType& c) const {return (c.*data)();}
     private:
         Type data;
     };
-
 };
 
 /**
@@ -226,21 +248,25 @@ struct FunctionTraits<T, typename
     typedef typename Details::Type Type;
     typedef typename Details::ReturnType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
+    static constexpr bool isWritable =
+        std::is_lvalue_reference<ExposedType>::value
+        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
-    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<AccessType>::value;
-
+    
     template <typename C>
-    class ClassAccess
+    class TypeAccess
     {
-        typedef C ClassType;
     public:
-        ClassAccess(Type d) : data(d) {}
-        ExposedType getter(ClassType& c) const   { return data(c); }
-        bool setter(ClassType& c, DataType const& v) { return data(c) = v, true; }
-        bool setter(ClassType& c, DataType&& v) { return data(c) = std::move(v), true; }
+        typedef C ClassType;
+        typedef AccessType AccessType;
+        static constexpr bool isWritable = isWritable;
+        
+        TypeAccess(Type d) : data(d) {}
+        
+        AccessType& access(ClassType& c) const {return data(c);}
+        const AccessType& access(const ClassType& c) const {return data(c);}
     private:
         Type data;
     };
@@ -259,21 +285,25 @@ struct FunctionTraits<T,
     typedef typename Details::Type Type;
     typedef typename Details::ReturnType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
+    static constexpr bool isWritable =
+        std::is_lvalue_reference<ExposedType>::value
+        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
-    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<AccessType>::value;
 
     template <typename C>
-    class ClassAccess
+    class TypeAccess
     {
-        typedef C ClassType;
     public:
-        ClassAccess(Type&& d) : data(d) {}
-        ExposedType getter(ClassType& c) const           { return data(c); }
-        bool setter(ClassType& c, DataType const& v) const { return data(c) = v, true; }
-        bool setter(ClassType& c, DataType&& v) const   { return data(c) = std::move(v), true; }
+        typedef C ClassType;
+        typedef AccessType AccessType;
+        static constexpr bool isWritable = isWritable;
+        
+        TypeAccess(Type d) : data(d) {}
+        
+        AccessType& access(ClassType& c) const {return data(c);}
+        const AccessType& access(const ClassType& c) const {return data(c);}
     private:
         Type data;
     };
@@ -292,25 +322,27 @@ struct FunctionTraits<T,
     typedef T Type;
     typedef typename Details::ReturnType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
+    static constexpr bool isWritable =
+        std::is_lvalue_reference<ExposedType>::value
+        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
-    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<AccessType>::value;
 
     template <typename C>
-    class ClassAccess
+    class TypeAccess
     {
-        typedef C ClassType;
     public:
-        ClassAccess(Type d) : data(d) {}
-        ExposedType getter(const ClassType& c) const { return data(const_cast<ClassType&>(c)); }
-        bool setter(ClassType& c, DataType const& v) const { return data(c) = v, true; }
-        bool setter(ClassType& c, DataType&& v) const { return data(c) = std::move(v), true; }
+        typedef C ClassType;
+        typedef AccessType AccessType;
+        enum { isWritable = isWritable }; // use enum to avoid internal linkage issues
+
+        TypeAccess(Type d) : data(d) {}
+        
+        AccessType& access(ClassType& c) const {return data(c);}
     private:
         Type data;
     };
-
 };
 
 /*
@@ -322,22 +354,24 @@ struct MemberTraits;
 template <typename C, typename T>
 struct MemberTraits<T(C::*)>
 {
-    typedef T(C::*Type);
-    typedef T ExposedType;
+    typedef T(C::*Type);    // full type inc ref
+    typedef T ExposedType;  // the type exposed inc refs
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
-    typedef typename RawType<AccessType>::Type DataType;
+    typedef typename RefTraits::DereferencedType AccessType; // deferenced type
+    typedef typename RawType<AccessType>::Type DataType; // raw type or container
     static constexpr bool isWritable = !std::is_const<AccessType>::value;
-    
-    template <class CA>
-    class ClassAccess
+
+    template <class CLASS>
+    class TypeAccess
     {
-        typedef CA ClassType;
     public:
-        ClassAccess(const Type& d) : data(d) {}
-        ExposedType getter(const ClassType& c) const {return c.*data;}
-        bool setter(ClassType& c, const DataType& v) const {return const_cast<ClassType&>(c).*data = v, isWritable;}
-        bool setter(ClassType& c, DataType&& v) const {return c.*data = std::move(v), isWritable;}
+        typedef CLASS ClassType;
+        typedef AccessType AccessType;
+        static constexpr bool isWritable = isWritable;
+
+        TypeAccess(const Type& d) : data(d) {}
+        
+        AccessType& access(ClassType& c) const {return c.*data;}
     private:
         Type data;
     };

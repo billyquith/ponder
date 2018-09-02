@@ -79,14 +79,13 @@ template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
     return ToUserObject<A::RefTraits::isRef>::get(
-                m_accessor.get(object.get<typename A::ClassType>()));
+                m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 
 template <typename A>
 void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.set(object.ref<typename A::ClassType>(),
-                        value.to<typename A::DataType>()))
+    if (!m_accessor.m_interface.setter(object.ref<typename A::ClassType>(), value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 
@@ -94,7 +93,7 @@ template <typename A>
 UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
 {
     return ToUserObject<A::RefTraits::isRef>::get(
-                m_accessor.get(objectInstance.get<typename A::ClassType>()));
+                m_accessor.m_interface.getter(objectInstance.get<typename A::ClassType>()));
 }
 
 template <typename A>

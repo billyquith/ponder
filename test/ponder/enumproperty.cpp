@@ -99,7 +99,7 @@ TEST_CASE("Enum properties")
     SECTION("allow setting of values")
     {
         MyClass object(Zero);
-        property->set(object, One);
+        property->set(&object, One);
 
         IS_TRUE( property->get(object) == ponder::Value(One) );
     }    

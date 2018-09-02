@@ -74,7 +74,7 @@ public:
 
 private:
 
-    const Enum* m_enum; ///< Owner enum of the property
+    const Enum* m_enum; // Owner enum of the property
 };
 
 } // namespace ponder

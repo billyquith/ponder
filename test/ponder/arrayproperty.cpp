@@ -181,43 +181,48 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be read")
     REQUIRE(strings->get(object, 3) == ponder::Value(object.strings[3]));
     REQUIRE_THROWS_AS(strings->get(object, 4), ponder::OutOfRange);
     
+    // Test objects in the list. Note, these test check different things.
     std::list<MyType>::const_iterator it = object.objects.begin();
-    IS_TRUE( objects->get(object, 0) == ponder::Value(*std::next(it, 0)) );
-    IS_TRUE( objects->get(object, 1) == ponder::Value(*std::next(it, 1)) );
-    IS_TRUE( objects->get(object, 2) == ponder::Value(*std::next(it, 2)) );
-    IS_TRUE( objects->get(object, 3) == ponder::Value(*std::next(it, 3)) );
-    IS_TRUE( objects->get(object, 4) == ponder::Value(*std::next(it, 4)) );
+    // test values equivalent explicitly
+    REQUIRE(objects->get(object, 0).to<MyType>().x == 0);
+    REQUIRE(ponder::Value(*std::next(it, 0)).to<MyType>().x == 0);
+    // Note, these are *not* equivalent as both create copies of Values and use Value ==
+    IS_TRUE(objects->get(object, 1) != ponder::Value(*std::next(it, 1)));
+    // convert and test: uses MyType operator ==
+    IS_TRUE(objects->get(object, 2).to<MyType>() == ponder::Value(*std::next(it, 2)).to<MyType>());
+    IS_TRUE(objects->get(object, 3).to<MyType>() == ponder::Value(*std::next(it, 3)).to<MyType>());
+    IS_TRUE(objects->get(object, 4).to<MyType>() == ponder::Value(*std::next(it, 4)).to<MyType>());
     REQUIRE_THROWS_AS(objects->get(object, 5), ponder::OutOfRange);
 }
 
 TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be written to")
 {
-    bools->set(object, 1, true);
-    ints->set(object, 1, 20);
-    strings->set(object, 1, "hello");
-    objects->set(object, 1, MyType(8));
+    bools->set(&object, 1, true);
+    ints->set(&object, 1, 20);
+    strings->set(&object, 1, "hello");
+    objects->set(&object, 1, MyType(8));
     
     REQUIRE(object.bools[1] == true);
     REQUIRE(object.ints[1] == 20);
     REQUIRE(object.strings[1] == "hello");
     REQUIRE(*std::next(object.objects.begin(), 1) == MyType(8));
     
-    REQUIRE_THROWS_AS(bools->set(object, 10, true),        ponder::OutOfRange);
-    REQUIRE_THROWS_AS(ints->set(object, 10, 1),            ponder::OutOfRange);
-    REQUIRE_THROWS_AS(strings->set(object, 10, "hi"),      ponder::OutOfRange);
-    REQUIRE_THROWS_AS(objects->set(object, 10, MyType(9)), ponder::OutOfRange);
+    REQUIRE_THROWS_AS(bools->set(&object, 10, true),        ponder::OutOfRange);
+    REQUIRE_THROWS_AS(ints->set(&object, 10, 1),            ponder::OutOfRange);
+    REQUIRE_THROWS_AS(strings->set(&object, 10, "hi"),      ponder::OutOfRange);
+    REQUIRE_THROWS_AS(objects->set(&object, 10, MyType(9)), ponder::OutOfRange);
 }
 
 TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be inserted into")
 {
-    REQUIRE_THROWS_AS(bools->insert(object, 0, true), ponder::ForbiddenWrite);
-    REQUIRE_THROWS_AS(ints->insert(object, 0, true),  ponder::ForbiddenWrite);
+    REQUIRE_THROWS_AS(bools->insert(&object, 0, true), ponder::ForbiddenWrite);
+    REQUIRE_THROWS_AS(ints->insert(&object, 0, true),  ponder::ForbiddenWrite);
     
     const std::size_t stringsSize = object.strings.size();
     const std::size_t objectsSize = object.objects.size();
     
-    strings->insert(object, 1, "bonjour");
-    objects->insert(object, 1, MyType(10));
+    strings->insert(&object, 1, "bonjour");
+    objects->insert(&object, 1, MyType(10));
     
     REQUIRE(object.strings.size() == stringsSize + 1);
     REQUIRE(object.objects.size() == objectsSize + 1);
@@ -229,8 +234,8 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be inserted into")
 
 TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be removed from")
 {
-    REQUIRE_THROWS_AS(bools->remove(object, 0), ponder::ForbiddenWrite);
-    REQUIRE_THROWS_AS(ints->remove(object, 0),  ponder::ForbiddenWrite);
+    REQUIRE_THROWS_AS(bools->remove(&object, 0), ponder::ForbiddenWrite);
+    REQUIRE_THROWS_AS(ints->remove(&object, 0),  ponder::ForbiddenWrite);
     
     const ponder::String string1 = object.strings[1];
     const MyType      object1 = *std::next(object.objects.begin(), 1);
@@ -238,8 +243,8 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be removed from")
     const std::size_t stringsSize = object.strings.size();
     const std::size_t objectsSize = object.objects.size();
     
-    strings->remove(object, 0);
-    objects->remove(object, 0);
+    strings->remove(&object, 0);
+    objects->remove(&object, 0);
     
     REQUIRE(object.strings.size() == stringsSize - 1);
     REQUIRE(object.objects.size() == objectsSize - 1);

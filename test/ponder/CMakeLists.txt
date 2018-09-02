@@ -37,30 +37,30 @@ project(PONDER_TEST)
 # all source files
 set(PONDER_TEST_SRCS
     test.hpp
-    # arrayproperty.cpp
+    arrayproperty.cpp
     class.cpp
-    # classvisitor.cpp
-    # constructor.cpp
+    classvisitor.cpp
+    constructor.cpp
     dictionary.cpp
-    # enum.cpp
-    # enumclass.cpp
-    # enumclassobject.cpp
-    # enumclassproperty.cpp
-    # enumobject.cpp
-    # enumproperty.cpp
+    enum.cpp
+    enumclass.cpp
+    enumclassobject.cpp
+    enumclassproperty.cpp
+    enumobject.cpp
+    enumproperty.cpp
     function.cpp
-    # inheritance.cpp
+    inheritance.cpp
     main.cpp
     mapper.cpp
     property.cpp
-    # propertyaccess.cpp
+    propertyaccess.cpp
     # serialise.cpp
     string_view.cpp
-    # tagholder.cpp
+    tagholder.cpp
     traits.cpp
-    # userdata.cpp
+    userdata.cpp
     userobject.cpp
-    # userproperty.cpp
+    userproperty.cpp
     value.cpp
 )
 

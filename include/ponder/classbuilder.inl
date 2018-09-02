@@ -92,7 +92,7 @@ ClassBuilder<T>& ClassBuilder<T>::property(IdRef name, F accessor)
     typedef detail::PropertyFactory1<T, F> Factory;
 
     // Construct and add the metaproperty
-    return addProperty(Factory::get(name, accessor));
+    return addProperty(Factory::create(name, accessor));
 }
 
 template <typename T>
@@ -103,7 +103,7 @@ ClassBuilder<T>& ClassBuilder<T>::property(IdRef name, F1 accessor1, F2 accessor
     typedef detail::PropertyFactory2<T, F1, F2> Factory;
 
     // Construct and add the metaproperty
-    return addProperty(Factory::get(name, accessor1, accessor2));
+    return addProperty(Factory::create(name, accessor1, accessor2));
 }
 
 template <typename T>

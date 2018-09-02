@@ -83,7 +83,7 @@ protected:
 
 private:
 
-    A m_accessor; // Object used to access the actual C++ property
+    A m_accessor; // Accessor used to access the actual C++ property
 };
 
 } // namespace detail

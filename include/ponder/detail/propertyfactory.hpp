@@ -74,44 +74,173 @@ struct AccessTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
     
-    template <typename A> struct Impl
+    template <class TA>
+    class ReadOnlyInterface
     {
-        typedef SimplePropertyImpl<A> Type;
+    public:
+        typedef TA TypeAccess;
+        typedef typename TypeAccess::ClassType ClassType;
+        typedef typename RawType<typename TypeAccess::AccessType>::Type DataType;
+
+        ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
+        
+        typename TypeAccess::AccessType getter(ClassType& c) const {return m_access.access(c);}
+//        const typename TypeAccess::AccessType getter(const ClassType& c) const {return m_access.access(c);}
+        
+        bool setter(ClassType&, const DataType&) const {return false;}
+        bool setter(ClassType&, DataType&&) const {return false;}
+    protected:
+        TypeAccess m_access;
     };
+
+    template <class TA>
+    class WritableInterface : public ReadOnlyInterface<TA>
+    {
+    public:
+        typedef ReadOnlyInterface<TA> Base;
+        
+        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        
+        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
+        {return this->m_access.access(c) = v, true;}
+        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const
+        {return this->m_access.access(c) = std::move(v), true;}
+    };
+
+    template <typename A>
+    using Impl = SimplePropertyImpl<A>;
 };
 
+/*
+ * Enums.
+ */
 template <typename T>
 struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
-    
-    template <typename A> struct Impl
+
+    template <class TA>
+    class ReadOnlyInterface
     {
-        typedef EnumPropertyImpl<A> Type;
+    public:
+        typedef TA TypeAccess;
+        typedef typename TypeAccess::ClassType ClassType;
+        typedef typename RawType<typename TypeAccess::AccessType>::Type DataType;
+        
+        ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
+        
+        T& getter(ClassType& c) const {return m_access.access(c);}
+        const T& getter(const ClassType& c) const {return m_access.access(c);}
+        
+        bool setter(ClassType&, const DataType&) const {return false;}
+        bool setter(ClassType&, DataType&&) const {return false;}
+    protected:
+        TypeAccess m_access;
     };
+    
+    template <class TA>
+    class WritableInterface : public ReadOnlyInterface<TA>
+    {
+    public:
+        typedef ReadOnlyInterface<TA> Base;
+        
+        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        
+        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
+        {return this->m_access.access(c) = v, true;}
+        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const
+        {return this->m_access.access(c) = std::move(v), true;}
+    };
+
+    template <typename A>
+    using Impl = EnumPropertyImpl<A>;
 };
 
+/*
+ * Array types.
+ */
 template <typename T>
 struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
-    typedef ponder_ext::ArrayMapper<T> TypeTraits;
-    
-    template <typename A> struct Impl
+    typedef ponder_ext::ArrayMapper<T> ArrayTraits;
+
+    template <typename TA>
+    class ReadOnlyInterface : public ArrayTraits
     {
-        typedef ArrayPropertyImpl<A> Type;
+    public:
+        typedef TA TypeAccess;
+        typedef T ArrayType;
+        typedef typename TypeAccess::ClassType ClassType;
+        typedef typename ArrayTraits::ElementType DataType;
+
+        ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
+        
+        ArrayType& array(ClassType& c) const {return m_access.access(c);}
+        const ArrayType& array(const ClassType& c) const {return m_access.access(c);}
+    protected:
+        TypeAccess m_access;
     };
+    
+    template <class TA>
+    class WritableInterface : public ReadOnlyInterface<TA>
+    {
+    public:
+        typedef ReadOnlyInterface<TA> Base;
+        
+        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+    };
+    
+    template <typename A>
+    using Impl = ArrayPropertyImpl<A>;
 };
 
+/*
+ * User objects.
+ *  - I.e. Registered classes.
+ *  - Enums also use registration so must differentiate.
+ */
 template <typename T>
-struct AccessTraits<T, typename std::enable_if<StaticTypeId<T>::defined>::type>
+struct AccessTraits<T,
+    typename std::enable_if<StaticTypeId<T>::defined && !std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
-    
-    template <typename A> struct Impl
+
+    template <class TA>
+    class ReadOnlyInterface
     {
-        typedef UserPropertyImpl<A> Type;
+    public:
+        typedef TA TypeAccess;
+        typedef typename TypeAccess::ClassType ClassType;
+        typedef typename RawType<typename TypeAccess::AccessType>::Type DataType;
+        
+        ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
+        
+        T& getter(ClassType& c) const {return m_access.access(c);}
+        const T& getter(const ClassType& c) const {return m_access.access(c);}
+        
+        bool setter(ClassType&, const DataType&) const {return false;}
+        bool setter(ClassType&, DataType&&) const {return false;}
+    protected:
+        TypeAccess m_access;
     };
+    
+    template <class TA>
+    class WritableInterface : public ReadOnlyInterface<TA>
+    {
+    public:
+        typedef ReadOnlyInterface<TA> Base;
+        
+        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        
+        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
+        {return this->m_access.access(c) = v, true;}
+        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const
+        {return this->m_access.access(c) = std::move(v), true;}
+    };
+
+    template <typename A>
+    using Impl = UserPropertyImpl<A>;
 };
 
 template <typename T>
@@ -130,36 +259,28 @@ struct AccessTraits<T*>
  * - Accessors provide a uniform interface to exposed data.
  * - Read-only accessor wrapper.
  */
-template <class C, typename TRAITS, typename E = void>
+template <class C, typename PT, typename E = void>
 class Accessor1
 {
 public:
 
-    typedef TRAITS Traits;
-    static_assert(!Traits::isWritable, "!isWritable expected");
-    typedef C ClassType;
-    typedef typename Traits::ExposedType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
-    typedef typename Traits::DataType DataType; // raw type
+    typedef PT PropertyTraits;
+    static_assert(!PropertyTraits::isWritable, "!isWritable expected");
+    typedef const C ClassType;
+    typedef typename PropertyTraits::ExposedType ExposedType;
+    typedef typename PropertyTraits::RefTraits RefTraits;
+    typedef typename PropertyTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    typename Traits::template ClassAccess<ClassType> m_access;
+    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+    typedef typename PropAccessTraits::template
+        ReadOnlyInterface<typename PropertyTraits::template TypeAccess<ClassType>> InterfaceType;
+    InterfaceType m_interface;
 
-    Accessor1(typename Traits::Type getter)
-        : m_access(getter)
+    Accessor1(typename PropertyTraits::Type getter)
+        : m_interface(typename PropertyTraits::template TypeAccess<ClassType>(getter))
     {}
-
-    ExposedType get(const ClassType& object) const
-    {
-        return m_access.getter(object);
-    }
-    
-    template <typename... A>
-    bool set(A... args) const {return false;}   // read-only
-
-    //bool set(ClassType&, const DataType&) const {return false;} // read-only
 };
 
 /*
@@ -170,35 +291,23 @@ class Accessor1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
 {
 public:
 
-    typedef TRAITS Traits;
-    static_assert(Traits::isWritable, "isWritable expected");
+    typedef TRAITS PropertyTraits;
+    static_assert(PropertyTraits::isWritable, "isWritable expected");
     typedef C ClassType;
-    typedef typename Traits::ExposedType ExposedType;
+    typedef typename PropertyTraits::ExposedType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
-    typedef typename Traits::DataType DataType; // raw type
+    typedef typename PropertyTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typename Traits::template ClassAccess<ClassType> m_access;
+    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+    typedef typename PropAccessTraits::template
+        WritableInterface<typename PropertyTraits::template TypeAccess<ClassType>> InterfaceType;
+    InterfaceType m_interface;
 
-    Accessor1(typename Traits::Type getter)
-        : m_access(getter)
+    Accessor1(typename PropertyTraits::Type getter)
+        : m_interface(typename PropertyTraits::template TypeAccess<ClassType>(getter))
     {}
-
-    ExposedType get(const ClassType& object) const
-    {
-        return m_access.getter(object);
-    }
-
-    bool set(ClassType& object, const DataType& value) const
-    {
-        return m_access.setter(object, value);
-    }
-    bool set(ClassType& object, DataType&& value) const
-    {
-        return m_access.setter(object, std::move(value));
-    }
 };
 
 /*
@@ -213,32 +322,27 @@ public:
     typedef C ClassType;
     typedef typename Traits::ExposedType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType;
     typedef typename Traits::DataType DataType; // raw type
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
+    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+
+    struct InterfaceType
+    {
+        template <typename F1, typename F2>
+        InterfaceType(F1 get, F2 set) : getter(get), m_setter(set) {}
+        
+        std::function<typename Traits::DispatchType> getter;
+        std::function<void(ClassType&, DataType)> m_setter;
+        // setter returns writable status, so wrap it
+        bool setter(ClassType& c, DataType v) const {return m_setter(c,v), true;}
+    } m_interface;
+
     template <typename F1, typename F2>
     Accessor2(F1 getter, F2 setter)
-        : m_getter(getter)
-        , m_setter(setter)
-    {
-    }
-
-    ExposedType get(const ClassType& object) const
-    {
-        return m_getter(object);
-    }
-    
-    bool set(ClassType& object, const DataType& value) const
-    {
-        return m_setter(object, value), true;
-    }
-
-private:
-
-    std::function<typename Traits::DispatchType> m_getter;
-    std::function<void(ClassType&, DataType)> m_setter;
+        : m_interface(getter, setter)
+    {}
 };
     
 /*
@@ -248,19 +352,16 @@ private:
 template <typename C, typename T>
 struct PropertyFactory1
 {
-    static Property* get(IdRef name, T accessor)
+    static Property* create(IdRef name, T accessor)
     {
         // what exposes the value
         typedef typename PropertyTraitMapper<T>::Traits PropertyTraits;
-        
-        // unify how we retrieve the exposed type
+
+        // what type of access, read-only?
         typedef Accessor1<C, PropertyTraits> AccessorType;
         
-        // which interface do we need to deal with the type?
-        typedef AccessTraits<typename AccessorType::AccessType> ExposedType;
-        
         // the property wrapper that provides the correct interface for the type
-        typedef typename ExposedType::template Impl<AccessorType>::Type PropertyImplType;
+        typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
         
         // instance the interface for our type
         return new PropertyImplType(name, AccessorType(accessor));
@@ -269,12 +370,12 @@ struct PropertyFactory1
 
 /*
  * Property factory which instantiates the proper type of property from 2 accessors.
- * Bother getter and setter should be functions.
+ * Both getter and setter should be functions.
  */
 template <typename C, typename F1, typename F2, typename E = void>
 struct PropertyFactory2
 {
-    static Property* get(IdRef name, F1 accessor1, F2 accessor2)
+    static Property* create(IdRef name, F1 accessor1, F2 accessor2)
     {
         // function that will expose the type (setter will mirror)
         typedef FunctionTraits<F1> Traits;
@@ -282,12 +383,9 @@ struct PropertyFactory2
         // unify how we retrieve the exposed type
         typedef Accessor2<C, Traits> AccessorType;
         
-        // which interface do we need to deal with the type?
-        typedef AccessTraits<typename AccessorType::AccessType> ExposedType;
-        
         // the property wrapper that provides the correct interface for the type
-        typedef typename ExposedType::template Impl<AccessorType>::Type PropertyImplType;
-        
+        typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
+
         // instance the interface for our type
         return new PropertyImplType(name, AccessorType(accessor1, accessor2));
     }

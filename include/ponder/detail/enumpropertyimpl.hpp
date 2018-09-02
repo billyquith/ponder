@@ -57,7 +57,7 @@ public:
      * \param name Name of the property
      * \param accessor Object used to access the actual C++ property
      */
-    EnumPropertyImpl(IdRef name, A const& accessor);
+    EnumPropertyImpl(IdRef name, A&& accessor);
 
 protected:
 

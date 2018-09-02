@@ -278,7 +278,7 @@ TEST_CASE("Classes can have properties")
         CHECK_PROP_SET(b,true);
         CHECK_PROP_SET(i,789);
         CHECK_PROP_SET(f,345.75f);
-        CHECK_PROP_SET(s, std::string("The Reverend Black Grape"));
+        CHECK_PROP_SET(s,std::string("The Reverend Black Grape"));
     }
 }
 
