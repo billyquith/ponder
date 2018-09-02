@@ -133,7 +133,7 @@ struct CallableDetails<R(L::*)(A...) const>
 /*
  * For functions, if they return an rvalue, we cannot return by reference.
  */
-template <typename T, bool W = true>
+template <typename T, bool isWritable = true>
 struct ReturnType
 {
     typedef T& Type; // Not a rvalue so we can reference
@@ -146,7 +146,7 @@ struct ReturnType<void>
 };
 
 template <typename T>
-struct ReturnType<T, false> //typename std::enable_if<!std::is_reference<T>::value>::type>
+struct ReturnType<T, false>
 {
     typedef T Type; // T is an rvalue so return by value
 };
@@ -187,13 +187,12 @@ struct FunctionTraits<T,
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
 
-    template <typename C>
+    template <typename C, typename A>
     class TypeAccess
     {
     public:
         typedef C ClassType;
-        typedef AccessType AccessType;
-        static constexpr bool isWritable = isWritable;
+        typedef A AccessType;
         
         TypeAccess(Type d) : data(d) {}
         
@@ -220,13 +219,12 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
 
-    template <typename C>
+    template <typename C, typename A>
     class TypeAccess
     {
     public:
         typedef C ClassType;
-        typedef AccessType AccessType;
-        static constexpr bool isWritable = isWritable;
+        typedef A AccessType;
         
         TypeAccess(Type d) : data(d) {}
         
@@ -255,18 +253,16 @@ struct FunctionTraits<T, typename
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
     
-    template <typename C>
+    template <typename C, typename A>
     class TypeAccess
     {
     public:
         typedef C ClassType;
-        typedef AccessType AccessType;
-        static constexpr bool isWritable = isWritable;
+        typedef A AccessType;
         
         TypeAccess(Type d) : data(d) {}
         
-        AccessType& access(ClassType& c) const {return data(c);}
-        const AccessType& access(const ClassType& c) const {return data(c);}
+        AccessType access(ClassType& c) const {return data(c);}
     private:
         Type data;
     };
@@ -292,18 +288,16 @@ struct FunctionTraits<T,
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
 
-    template <typename C>
+    template <typename C, typename A>
     class TypeAccess
     {
     public:
         typedef C ClassType;
-        typedef AccessType AccessType;
-        static constexpr bool isWritable = isWritable;
+        typedef A AccessType;
         
         TypeAccess(Type d) : data(d) {}
         
-        AccessType& access(ClassType& c) const {return data(c);}
-        const AccessType& access(const ClassType& c) const {return data(c);}
+        AccessType access(ClassType& c) const {return data(c);}
     private:
         Type data;
     };
@@ -329,17 +323,16 @@ struct FunctionTraits<T,
     typedef typename RawType<AccessType>::Type DataType;
     typedef typename Details::DispatchType DispatchType;
 
-    template <typename C>
+    template <typename C, typename A>
     class TypeAccess
     {
     public:
         typedef C ClassType;
-        typedef AccessType AccessType;
-        enum { isWritable = isWritable }; // use enum to avoid internal linkage issues
+        typedef A AccessType;
 
         TypeAccess(Type d) : data(d) {}
         
-        AccessType& access(ClassType& c) const {return data(c);}
+        AccessType access(ClassType& c) const {return data(c);}
     private:
         Type data;
     };
@@ -361,13 +354,12 @@ struct MemberTraits<T(C::*)>
     typedef typename RawType<AccessType>::Type DataType; // raw type or container
     static constexpr bool isWritable = !std::is_const<AccessType>::value;
 
-    template <class CLASS>
+    template <typename CLASS, typename A>
     class TypeAccess
     {
     public:
         typedef CLASS ClassType;
-        typedef AccessType AccessType;
-        static constexpr bool isWritable = isWritable;
+        typedef A AccessType;
 
         TypeAccess(const Type& d) : data(d) {}
         

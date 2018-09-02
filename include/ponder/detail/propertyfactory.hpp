@@ -85,7 +85,6 @@ struct AccessTraits
         ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
         
         typename TypeAccess::AccessType getter(ClassType& c) const {return m_access.access(c);}
-//        const typename TypeAccess::AccessType getter(const ClassType& c) const {return m_access.access(c);}
         
         bool setter(ClassType&, const DataType&) const {return false;}
         bool setter(ClassType&, DataType&&) const {return false;}
@@ -275,11 +274,13 @@ public:
 
     typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
     typedef typename PropAccessTraits::template
-        ReadOnlyInterface<typename PropertyTraits::template TypeAccess<ClassType>> InterfaceType;
+        ReadOnlyInterface<typename PropertyTraits::template TypeAccess<ClassType,
+                          typename PropertyTraits::AccessType>> InterfaceType;
     InterfaceType m_interface;
 
     Accessor1(typename PropertyTraits::Type getter)
-        : m_interface(typename PropertyTraits::template TypeAccess<ClassType>(getter))
+        : m_interface(typename PropertyTraits::template TypeAccess<ClassType,
+                      typename PropertyTraits::AccessType>(getter))
     {}
 };
 
@@ -302,11 +303,13 @@ public:
     
     typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
     typedef typename PropAccessTraits::template
-        WritableInterface<typename PropertyTraits::template TypeAccess<ClassType>> InterfaceType;
+        WritableInterface<typename PropertyTraits::template TypeAccess<ClassType,
+                          typename PropertyTraits::AccessType>> InterfaceType;
     InterfaceType m_interface;
 
     Accessor1(typename PropertyTraits::Type getter)
-        : m_interface(typename PropertyTraits::template TypeAccess<ClassType>(getter))
+        : m_interface(typename PropertyTraits::template TypeAccess<ClassType,
+                      typename PropertyTraits::AccessType>(getter))
     {}
 };
 
