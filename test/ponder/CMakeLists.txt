@@ -54,7 +54,7 @@ set(PONDER_TEST_SRCS
     mapper.cpp
     property.cpp
     propertyaccess.cpp
-    # serialise.cpp
+    serialise.cpp
     string_view.cpp
     tagholder.cpp
     traits.cpp

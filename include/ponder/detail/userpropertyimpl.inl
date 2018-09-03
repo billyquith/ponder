@@ -30,14 +30,10 @@
 namespace ponder {
 namespace detail {
     
-/**
- * \brief Helper structure to construct a UserObject according
- *        to whether a type is a reference type or not
- *
- * The generic version assumes a non-reference type and stores
- * the object by copy.
+/*
+ * Only copy user object if it is not
  */
-template <bool IsRef>
+template <bool ReadOnly> // = false
 struct ToUserObject
 {
     template <typename T>
@@ -47,13 +43,8 @@ struct ToUserObject
     }
 };
 
-/**
- * \brief Specialization of ToUserObject for reference types
- *
- * This version stores the object by reference (no copy).
- */
 template <>
-struct ToUserObject<true>
+struct ToUserObject<true> // writable
 {
     template <typename T>
     static inline UserObject get(const T& value)
@@ -78,7 +69,7 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return ToUserObject<A::RefTraits::isRef>::get(
+    return ToUserObject<A::canWrite>::get(
                 m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 

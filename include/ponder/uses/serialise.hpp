@@ -43,9 +43,9 @@ namespace archive {
     class Archive
     {
     public:
-        node_t addChild(node_t parent, const std::string& name);
-        void setText(node_t node, const std::string& text);
-        bool isValid(node_t node);
+        NodeType addChild(NodeType parent, const std::string& name);
+        void setText(NodeType node, const std::string& text);
+        bool isValid(NodeType node);
     };
  
  */
@@ -54,18 +54,18 @@ class ArchiveWriter
 {
 public:
     
-    using archive_t = ARCHIVE;
-    using node_t = typename archive_t::node_t;
+    using ArchiveType = ARCHIVE;
+    using NodeType = typename ArchiveType::node_t;
     
-    ArchiveWriter(archive_t& archive)
+    ArchiveWriter(ArchiveType& archive)
     :   m_archive(archive)
     {}
     
-    void write(node_t parent, const UserObject& object);
+    void write(NodeType parent, const UserObject& object);
     
 private:
     
-    archive_t& m_archive;
+    ArchiveType& m_archive;
 };
 
 /*!
@@ -74,9 +74,9 @@ private:
  class Archive
  {
  public:
-     node_t findFirstChild(node_t node, const std::string& name);
-     node_t findNextSibling(node_t node, const std::string& name);
-     std::string getText(node_t node)
+     NodeType findFirstChild(NodeType node, const std::string& name);
+     NodeType findNextSibling(NodeType node, const std::string& name);
+     std::string getText(NodeType node)
      bool isValid(node_t node);
  };
  
@@ -86,18 +86,18 @@ class ArchiveReader
 {
 public:
     
-    using archive_t = ARCHIVE;
-    using node_t = typename archive_t::node_t;
+    using ArchiveType = ARCHIVE;
+    using NodeType = typename ArchiveType::node_t;
     
-    ArchiveReader(archive_t& archive)
+    ArchiveReader(ArchiveType& archive)
     :   m_archive(archive)
     {}
     
-    void read(node_t node, const UserObject& object);
+    void read(NodeType node, const UserObject& object);
     
 private:
     
-    archive_t& m_archive;
+    ArchiveType& m_archive;
 };
 
 } // namespace archive

@@ -31,7 +31,7 @@ namespace ponder {
 namespace archive {
 
 template <class ARCHIVE>
-void ArchiveWriter<ARCHIVE>::write(typename ARCHIVE::node_t parent, const UserObject& object)
+void ArchiveWriter<ARCHIVE>::write(NodeType parent, const UserObject& object)
 {
     // Iterate over the object's properties using its metaclass
     const Class& metaclass = object.getClass();
@@ -44,7 +44,7 @@ void ArchiveWriter<ARCHIVE>::write(typename ARCHIVE::node_t parent, const UserOb
         //                    continue;
         
         // Create a child node for the new property
-        node_t child = m_archive.addChild(parent, property.name());
+        NodeType child = m_archive.addChild(parent, property.name());
         if (!m_archive.isValid(child))
             continue;
         
@@ -61,7 +61,7 @@ void ArchiveWriter<ARCHIVE>::write(typename ARCHIVE::node_t parent, const UserOb
             std::size_t count = arrayProperty.size(object);
             for (std::size_t j = 0; j < count; ++j)
             {
-                node_t item = m_archive.addChild(child, "item");
+                NodeType item = m_archive.addChild(child, "item");
                 if (m_archive.isValid(item))
                 {
                     if (arrayProperty.elementType() == ValueKind::User)
@@ -83,7 +83,7 @@ void ArchiveWriter<ARCHIVE>::write(typename ARCHIVE::node_t parent, const UserOb
 }
 
 template <class ARCHIVE>
-void ArchiveReader<ARCHIVE>::read(typename ARCHIVE::node_t node, const UserObject& object)
+void ArchiveReader<ARCHIVE>::read(NodeType node, const UserObject& object)
 {
     // Iterate over the object's properties using its metaclass
     const Class& metaclass = object.getClass();
@@ -96,7 +96,7 @@ void ArchiveReader<ARCHIVE>::read(typename ARCHIVE::node_t node, const UserObjec
         //                    continue;
         
         // Find the child node corresponding to the new property
-        node_t child = m_archive.findFirstChild(node, property.name());
+        NodeType child = m_archive.findFirstChild(node, property.name());
         if (!m_archive.isValid(child))
             continue;
         
@@ -110,18 +110,17 @@ void ArchiveReader<ARCHIVE>::read(typename ARCHIVE::node_t node, const UserObjec
             auto const& arrayProperty = static_cast<const ArrayProperty&>(property);
             
             std::size_t index = 0;
-            for (node_t item = m_archive.findFirstChild(child, "item")
-                 ; m_archive.isValid(item)
-                 ; item = m_archive.findNextSibling(item, "item"))
+            for (NodeType item = m_archive.findFirstChild(child, "item");
+                 m_archive.isValid(item);
+                 item = m_archive.findNextSibling(item, "item"))
             {
                 // Make sure that there are enough elements in the array
                 std::size_t count = arrayProperty.size(object);
                 if (index >= count)
                 {
-                    if (arrayProperty.dynamic())
-                        arrayProperty.resize(object, index + 1);
-                        else
-                            break;
+                    if (!arrayProperty.dynamic())
+                        break;
+                    arrayProperty.resize(object, index + 1);
                 }
                 
                 if (arrayProperty.elementType() == ValueKind::User)
