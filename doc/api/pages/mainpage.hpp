@@ -27,9 +27,10 @@ and consistent interface for manipulating your objects outside C++ code.
 
 \section blog News
 
- - \ref blog_ponder1
- - \ref blog_ponder_1
+ - \ref blog_ponder_3
  - \ref blog_ponder_2
+ - \ref blog_ponder_1
+ - \ref blog_ponder1
 
 \section links Useful links
 

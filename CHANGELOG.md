@@ -4,7 +4,7 @@ Ponder Changelog
 
 - [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
 
-## 3.0 - Develop
+## 3.0
 
 - Extensive refactoring of the API.
 	- Changed UserObject reference semantics. Pointer makes a reference.
