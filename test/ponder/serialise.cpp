@@ -150,7 +150,7 @@ TEST_CASE("Can serialise using RapidXML")
         std::string serialised;
         
         {
-            std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
+            std::unique_ptr<Ref> r{ new Ref };
             REQUIRE(r != nullptr);
             
             r->m_instance.m_i = 89;
