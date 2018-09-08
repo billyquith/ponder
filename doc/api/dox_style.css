@@ -1,7 +1,7 @@
 /* The standard CSS for doxygen 1.8.10 */
 
 body, table, div, p, dl {
-	font: 200 14px/1.75em Arial,sans-serif;
+	font: 200 14px/1.75em 'Roboto Slab',Arial,sans-serif;
 	color: #444;
 }
 
@@ -12,7 +12,7 @@ h1.groupheader {
 }
 
 .title {
-	font: 400 14px/28px;
+	font: 400 14px/28px 'Roboto Slab',Arial,sans-serif;
 	font-size: 150%;
 	margin: 10px 2px;
 }
@@ -110,7 +110,7 @@ div.navtab {
 
 /* override glass look */
 .tabs, .tab2, .tabs3, .tabs4 {
-	font-family: 'Arial', sans-serif;
+	font-family: 'Roboto Slab','Arial', sans-serif;
 	/*background-image: none;*/
 }
 
@@ -124,6 +124,10 @@ a {
 
 .contents a:visited {
 	color: #224f24;
+}
+
+.contents a.qindexHL:visited {
+        color: #ffffff;
 }
 
 a:hover {
@@ -141,24 +145,20 @@ a.qindexHL {
 	border: 1px double #869DCA;
 }
 
-.contents a.qindexHL:visited {
-        color: #ffffff;
-}
-
 a.el {
 	color: #227f24;
-	/*font-weight: bold;*/
+	font-weight: normal;
 }
 
 a.elRef {
 }
 
 a.code, a.code:visited, a.line, a.line:visited {
-	color: #226f24; 
+	color: #226f24;
 }
 
 a.codeRef, a.codeRef:visited, a.lineRef, a.lineRef:visited {
-	color: #226f24; 
+	color: #226f24;
 }
 
 /* @end */
@@ -169,40 +169,40 @@ dl.el {
 
 /*quoted*/
 pre.fragment {
-  border-radius: 7px;
-	border-color: #e1e2ff;
-	border-width: 2px;
-	border-style: dotted;
-	box-shadow: -3px 3px 8px #d2d6dd;
-	background-color: #f5f6f9;
-	color: #474747;
-	padding: 8px;
-	margin: 4px;
-	overflow: auto;
-	word-wrap: break-word;
-	font-size:  0.9em;
-	font-family: 'Menlo', monospace, fixed;
-  line-height: 1.3;
+    border-radius: 9px;
+    border-color: #e1e2ff;
+    border-width: 2px;
+    border-style: solid;
+    box-shadow: -3px 3px 8px #d2d6dd;
+    background-color: #f9f9f9
+    color: #474747;
+    padding: 8px;
+    margin: 4px;
+    overflow: auto;
+    word-wrap: break-word;
+    font-size:  0.9em;
+    font-family: 'Courier',monospace,fixed;
+    line-height: 1.3;
 }
 
 /*code*/
-div.fragment { 
+div.fragment {
 	padding: 1em;
 	margin: 1em 0 1em 0;
 	color: #474747;
-	background-color: #f5f6f9;
-  border-radius: 7px;
+	background-color: #f9f9f9;
+    border-radius: 9px;
 	border-color: #e1e2ff;
 	border-width: 2px;
-	border-style: dotted;
+	border-style: solid;
 	box-shadow: -3px 3px 8px #d2d6dd;
 }
 
 div.line {
-	font-family: 'Menlo', monospace, fixed;
-  font-size: 12px;
+	font-family: 'Courier',monospace,fixed;
+    font-size: 12px;
 	color: #474747;
-  line-height: 1.2;
+    line-height: 1.2;
 	text-wrap: unrestricted;
 	white-space: -moz-pre-wrap; /* Moz */
 	white-space: -pre-wrap;     /* Opera 4-6 */
@@ -322,7 +322,7 @@ p.formulaDsp {
 }
 
 img.formulaDsp {
-	
+
 }
 
 img.formulaInl {
@@ -490,13 +490,13 @@ table.memberdecls {
 	border: none;
 	margin: 4px;
 	padding: 1px 0 0 8px;
-  font-family: monospace;
+    font-family: monospace;
 }
 
 .mdescLeft, .mdescRight {
 	padding: 0px 8px 4px 8px;
 	color: #777;
-  font-family: Arial, sans-serif;
+/*  font-family: 'Roboto',Arial, sans-serif;*/
 }
 
 .memSeparator {
@@ -680,14 +680,14 @@ dl.reflist dd {
   font-weight: bold;
   vertical-align: top;
 }
-        
+
 .params .paramtype {
   font-style: italic;
   vertical-align: top;
 }
-        
+
 .params .paramdir {
-  font-family: "courier new",courier,monospace;
+  font-family: 'Courier',courier,monospace;
   vertical-align: top;
 }
 
@@ -861,7 +861,7 @@ div.directory {
 }
 
 table.directory {
-    font: 400 14px Roboto,sans-serif;
+    font: 400 14px 'Roboto Slab',sans-serif;
 }
 
 /* @end */
@@ -935,8 +935,8 @@ table.fieldtable {
 
 .fieldtable td.fielddoc p:first-child {
         margin-top: 0px;
-}       
-        
+}
+
 .fieldtable td.fielddoc p:last-child {
         margin-bottom: 2px;
 }
@@ -1008,9 +1008,9 @@ table.fieldtable {
 	text-decoration: none;
 	outline: none;
 	color: #283A5D;
-	font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
+	font-family: 'Lato',Helvetica,Arial,sans-serif;
 	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
-	text-decoration: none;        
+	text-decoration: none;
 }
 
 .navpath li.navelem a:hover
@@ -1038,7 +1038,7 @@ div.summary
 	padding-right: 5px;
 	width: 50%;
 	text-align: right;
-}       
+}
 
 div.summary a
 {
@@ -1088,7 +1088,7 @@ dl.note
         margin-left:-7px;
         padding-left: 3px;
         border-left:4px solid;
-        border-color: #D0C000;
+        border-color: #79b8d0;
 }
 
 dl.warning, dl.attention
@@ -1150,12 +1150,12 @@ dl.section dd {
 	vertical-align: bottom;
 	border-collapse: separate;
 }
- 
+
 #projectlogo img
-{ 
+{
 	border: 0px none;
 }
- 
+
 #projectalign
 {
     vertical-align: middle;
@@ -1168,7 +1168,7 @@ dl.section dd {
 	padding: 1px 8px 1px 8px;
 	background-color: #eee;
 }
-    
+
 #projectbrief
 {
 	font: 100% Arial,sans-serif;
@@ -1253,15 +1253,15 @@ div.toc {
 }
 
 div.toc li {
-	background: url("bdwn.png") no-repeat scroll 0 5px transparent;
-	font: 10px/1.2 Verdana,DejaVu Sans,Geneva,sans-serif;
+    background: url("bdwn.png") no-repeat scroll 0 5px transparent;
+    font-family: 'Roboto Slab';
 	margin-top: 5px;
 	padding-left: 10px;
 	padding-top: 2px;
 }
 
 div.toc h3 {
-	font: bold 12px/1.2 Arial,FreeSans,sans-serif;
+/*    font: bold 12px/1.2 Arial,FreeSans,sans-serif;*/
 	color: #4665A2;
 	border-bottom: 0 none;
 	margin: 0;
@@ -1271,7 +1271,7 @@ div.toc ul {
 	list-style: none outside none;
 	border: medium none;
 	padding: 0px;
-}       
+}
 
 div.toc li.level1 {
         margin-left: 0px;
@@ -1315,10 +1315,15 @@ tr.heading h2 {
 }
 
 #nav-tree .label {
-	font-family: 'Arial', sans-serif;
+	font-family: 'Roboto Slab', 'Arial', sans-serif;
 }
 
 #powerTip div.ttdeci {
   color: gold;
+}
+
+/* Menu bar */
+.sm-dox a, .sm-dox a:focus, .sm-dox a:hover, .sm-dox a:active {
+    font-family: 'Roboto Slab', monospace;
 }
 
