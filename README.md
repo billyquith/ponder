@@ -5,6 +5,14 @@ Ponder
 Linux & OSX: [![Build Status](https://travis-ci.org/billyquith/ponder.svg?branch=master)](https://travis-ci.org/billyquith/ponder) -
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/spskn9y93e8osve2/branch/master?svg=true)](https://ci.appveyor.com/project/billyquith/ponder/branch/master)
 
+### Version 3 Alpha
+
+_This is an alpha release of Ponder V3. It is still in development, and the API is
+unstable/changing. The older, stable versions are tagged and there are zips of these._
+
+_Please feel free to download and try, but, be warned: features and the API may change until the
+full version released._
+
 ### About
 
 Ponder is a C++ multi-purpose reflection library. It provides an abstraction for most
@@ -13,7 +21,7 @@ of the high-level concepts of C++: classes, enumerations, functions, properties.
 C++1x supplies better support for compile-time reflection. Runtime reflection involves
 baking compile-time reflection into the executable so this can be used at runtime. Ponder
 presents a simple API for baking your objects so that they can be used at runtime. The baking
-can also, optionally, include support for scripting (Lua).
+can also, optionally, userdata and support for Lua scripting.
 
 Features:
 
@@ -23,10 +31,9 @@ Features:
 
 ### Links
 
- - [Ponder website](http://billyquith.github.io/ponder/).
- - [Online documentation](http://billyquith.github.io/ponder/docs/).
- - [Project blog](http://billyquith.github.io/ponder/blog/).
  - [GitHub project](https://github.com/billyquith/ponder).
+ - [Online documentation](http://billyquith.github.io/ponder/docs/).
+ - [Maintainer blog](https://chinbilly.blogspot.com/search/label/ponder)
 
 ### Build
 

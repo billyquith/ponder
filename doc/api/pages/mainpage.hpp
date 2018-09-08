@@ -4,17 +4,14 @@
 
 \section overview Overview
 
-Ponder is a C++ library which provides runtime reflection for types.
-It provides an abstraction for most of the high-level concepts of C++:
+\note **3.0 Alpha Version**. API is still in development. Feel free to download and try. This is an
+effect to evolve the API and fix past issues. It is a hobby project so please be patient!
 
-\li Classes
-\li Enumerations
-\li Properties
-\li Functions
-\li Objects
-\li Variables
+\image html ponder1.jpg "Ponder"
 
-By wrapping all these concepts into abstract structures, Ponder provides an extra layer of
+Ponder is a C++ library which provides runtime reflection for types. It provides an abstraction for
+most of the high-level concepts of C++ like classes, enumerations, properties, functions, and
+objects. By wrapping all these concepts into abstract structures, Ponder provides an extra layer of
 flexibility to programs, and allow them to fully expose their data structures at runtime.
 
 Many applications can take advantage of Ponder, in order to automate tasks which would
