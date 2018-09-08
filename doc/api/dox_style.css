@@ -483,31 +483,30 @@ table.memberdecls {
 	box-shadow: 0 0 15px cyan;
 }
 
-.mdescLeft, .mdescRight,
+/*  .memItemLeft,   .memItemRight   - function
+    > IdReturn 	    name () const
+*/
 .memItemLeft, .memItemRight,
 .memTemplItemLeft, .memTemplItemRight, .memTemplParams {
-	background-color: #F9FAFC;
+	font-family: 'Courier', monospace;
+    font-weight: 800;
+	background-color: #f0f0f0
 	border: none;
 	margin: 4px;
 	padding: 1px 0 0 8px;
-    font-family: monospace;
 }
 
+/*  .mdescLeft, .mdescRight     - description of function
+    >           Get the name of the property. More...
+*/
 .mdescLeft, .mdescRight {
 	padding: 0px 8px 4px 8px;
 	color: #777;
-/*  font-family: 'Roboto',Arial, sans-serif;*/
-}
-
-.memSeparator {
-        border-bottom: 1px solid #DEE4F0;
-        line-height: 1px;
-        margin: 0px;
-        padding: 0px;
+    font-size: .9em;
 }
 
 .memItemLeft, .memTemplItemLeft {
-        white-space: nowrap;
+    white-space: nowrap;
 }
 
 .memItemRight {
@@ -515,14 +514,15 @@ table.memberdecls {
 }
 
 .memTemplParams {
-	color: #4665A2;
+    color: #4665A2;
     white-space: nowrap;
-	font-size: 80%;
 }
 
-.memItemLeft, .memItemRight, .memTemplItemLeft, .memTemplItemRight, .memTemplParams {
-	/*font-family: 'Courier New', monospace;	*/
-	background-color: #f0f0f0;
+.memSeparator {
+    border-bottom: 1px solid #DEE4F0;
+    line-height: 1px;
+    margin: 0px;
+    padding: 0px;
 }
 
 /* @end */
@@ -532,10 +532,13 @@ table.memberdecls {
 /* Styles for detailed member documentation */
 
 .memtemplate {
-	font-size: 80%;
-	color: #4665A2;
-	font-weight: normal;
+    font-family: 'Courier',monospace;
+    color: #4665A2;
 	margin-left: 9px;
+}
+
+.memTemplParams {
+    font-size: 1em;
 }
 
 .memnav {
@@ -594,6 +597,10 @@ table.memberdecls {
 
 .memname td {
 	vertical-align: bottom;
+}
+
+.memtitle {
+    font-family: 'Courier',monospace;
 }
 
 .memproto, dl.reflist dt {
@@ -1020,15 +1027,15 @@ table.fieldtable {
 
 .navpath li.footer
 {
-        list-style-type:none;
-        float:right;
-        padding-left:10px;
-        padding-right:15px;
-        background-image:none;
-        background-repeat:no-repeat;
-        background-position:right;
-        color:#364D7C;
-        font-size: 8pt;
+    list-style-type:none;
+    float:right;
+    padding-left:10px;
+    padding-right:15px;
+    background-image:none;
+    background-repeat:no-repeat;
+    background-position:right;
+    color:#364D7C;
+    font-size: 8pt;
 }
 
 div.summary
@@ -1085,58 +1092,58 @@ dl
 */
 dl.note
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #79b8d0;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #79b8d0;
 }
 
 dl.warning, dl.attention
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #FF0000;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #FF0000;
 }
 
 dl.pre, dl.post, dl.invariant
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #00D000;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #00D000;
 }
 
 dl.deprecated
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #505050;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #505050;
 }
 
 dl.todo
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #00C0E0;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #00C0E0;
 }
 
 dl.test
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #3030E0;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #3030E0;
 }
 
 dl.bug
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #C08050;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #C08050;
 }
 
 dl.section dd {
