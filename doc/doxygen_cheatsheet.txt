@@ -1,0 +1,102 @@
+
+Doxygen notes
+-------------
+
+------------------------------------------------------------
+Page
+    - https://www.stack.nl/~dimitri/doxygen/manual/commands.html
+------------------------------------------------------------
+
+/**
+
+\page page_tag Title
+
+\section section_tag Section Title
+
+\subsection subsection_tag Subsection Title
+
+\snippet file.cpp snippet_tag
+
+\tableofcontents - Create TOC at top of page
+
+\par Indented paragraph
+
+\note Indented note, with highligting
+
+*/
+
+------------------------------------------------------------
+Markdown
+------------------------------------------------------------
+
+- Markdown support: https://www.stack.nl/~dimitri/doxygen/manual/markdown.html
+
+======== Quote block ========
+
+> This is a block quote
+> spanning multiple lines
+
+======== List ========
+
+- Item 1
+
+  More text for this item.
+
+- Item 2
+  + nested list item.
+  + another nested item.
+- Item 3
+
+======== Horizontal Rulers ========
+
+- - -
+______
+
+======== Emphasis ========
+
+*italic* _italic_ **bold** __bold__
+
+======== Link ========
+
+<a href="URL">link</a>.
+
+[The link text](@ref MyClass) - Doxygen link
+
+[text](URL) - text link
+
+![Caption text](/path/to/img.jpg) - image, use !
+
+[text][link_tag]
+
+[link_tag]: URL "Optional Title"
+
+<http://www.example.com> - Auto linking (no square brackets)
+
+======== Code Block ========
+
+This a normal paragraph
+
+    This is a code block
+
+We continue with a normal paragraph again. `printf()` code span.
+
+```{.py}
+# A class
+class Dummy:
+    pass
+```
+
+======== Emphasis ========
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+
+| Right | Center | Left  |      w/ column alignment
+| ----: | :----: | :---- |
+| 10    | 10     | 10    |
+| ^     | 1000   | 1000  |      ^ merge rows
+| 100   |||                     ||| Merge columns
+
+
