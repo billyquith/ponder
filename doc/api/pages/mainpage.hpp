@@ -5,7 +5,7 @@
 \section overview Overview
 
 \note **3.0 Alpha Version**. API is still in development. Feel free to download and try. This is an
-effect to evolve the API and fix past issues. It is a hobby project so please be patient!
+effort to evolve the API and fix past issues.
 
 \image html ponder1.jpg "Ponder"
 

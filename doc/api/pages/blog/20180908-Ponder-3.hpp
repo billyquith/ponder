@@ -10,11 +10,15 @@ _date: 2018-09-08_
 
 \subsection refactor3 Extensive refactoring of the API.
 
-internal refactoring
+The API has be refactored internally to address some hacks from V1 when Boost was removed. Some
+of the API has been simplified and removed.
 
-\subsection userobj_ref_semantics Changed UserObject reference semantics. Pointer makes a reference.
+\subsection userobj_ref_semantics Changed UserObject reference semantics.
 
-ref/pointer different
+When we construct a UserObject we can use a reference or a pointer. A reference will _copy_ the
+object, and a pointer will make reference to the object. This is important because if you modify
+the copied object, the change will be lost when the UserObject is destroyed. This may not be the
+behaviour that you want.
 
 \subsection common_ancestor_type All types have common ancestor: Type.
 
