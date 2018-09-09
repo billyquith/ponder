@@ -52,7 +52,7 @@ class Value;
  * ponder::Args args(1, true, "hello", 5.24, myObject);
  * \endcode
  *
- * ... or appended one by one using the + and += operators:
+ * or appended one by one using the + and += operators:
  *
  * \code
  * ponder::Args args;

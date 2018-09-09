@@ -128,8 +128,8 @@ protected:
     // FunctionImpl inherits from this and constructs.
     Function(IdRef name) : m_name(name) {}
 
-    Id m_name;                  // Name of the function
-    FunctionKind m_funcType;    // Kind of function
+    Id m_name;                          // Name of the function
+    FunctionKind m_funcType;            // Kind of function
     ValueKind m_returnType;             // Runtime return type
     policy::ReturnKind m_returnPolicy;  // Return policy
     const void *m_usesData;

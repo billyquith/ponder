@@ -28,83 +28,77 @@
 
 #include "test.hpp"
 
-//#include <ponder/uses/report.hpp>
-
-//! [simple_example]
+//! [eg_simple]
 
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/runtime.hpp>
 #include <iostream>
 
-// An example class for defining a person.
+//! [eg_simple_class]
 class Person
 {
 public:
-
-    // Constructor
+     // constructor
     Person(const std::string& name)
         : m_name(name)
-        , m_age(0)
     {}
     
-    // getter for name
-    std::string name() const {return m_name;}
+    // accessors for private members
+    std::string name() const { return m_name; }
+    void setName(const std::string& name) { m_name = name; }
     
-    // getter/setter for age
-    unsigned int age() const {return m_age;}
-    void setAge(unsigned int age) {m_age = age;}
+    // public members
+    float height;
+    unsigned int shoeSize;
     
-    // dump info about the person
-    void dump()
-    {
-        std::cout << "Name: " << m_name << ", age: " << m_age << " years old." << std::endl;
-    }
-    
+    // member function
+    bool hasBigFeet() const { return shoeSize > 10; } // U.K.!
+
 private:
     std::string m_name;
-    unsigned int m_age;
 };
+//! [eg_simple_class]
 
-// Declare the type to Ponder
-PONDER_TYPE(Person)
+//! [eg_simple_declare]
+PONDER_TYPE(Person)     // declare the type to Ponder
 
-static void declare()
+static void declare()   // declare the class members to Ponder
 {
-    // Declare the class members to Ponder
     ponder::Class::declare<Person>("Person")
         .constructor<std::string>()
-        .property("name", &Person::name)
-        .property("age", &Person::age, &Person::setAge)
-        .function("dump", &Person::dump)
+        .property("name", &Person::name, &Person::setName)
+        .property("height", &Person::height)
+        .property("shoeSize", &Person::shoeSize)
+        .function("hasBigFeet", &Person::hasBigFeet)
         ;
 }
+//! [eg_simple_declare]
 
+//! [eg_simple_use]
 // An example of how you might use Ponder:
 static void use()
 {
-    // Retrieve the metaclass (containing the member data)
+    // retrieve the metaclass (containing the member data)
     const ponder::Class& metaclass = ponder::classByType<Person>();
     
-    // Use the metaclass to construct a new person named John
+    // construct a new person
     ponder::runtime::ObjectFactory factory(metaclass);
-    ponder::UserObject john = factory.create("John");
     
-    // Set John's age
-    john.set("age", 97);
+    ponder::UserObject person = factory.create("Bozo");
     
-    // Dump John's info
-    ponder::runtime::call(metaclass.function("dump"), john);
+    // set attributes
+    person.set("height", 1.62f);
+    person.set("shoeSize", 28);
     
-    // Kill John (not really)
-    factory.destroy(john);
+    const bool bigFeet = ponder::runtime::call(metaclass.function("hasBigFeet"),
+                                               person).to<bool>();
+    
+    // dark Satanic mills!
+    factory.destroy(person);
 }
+//! [eg_simple_use]
 
-//! [simple_example]
-
-//static void reportAll()
-//{
-//    ponder::uses::reportAll();
-//}
+//! [eg_simple]
 
 TEST_CASE("simple tests")
 {
@@ -114,12 +108,6 @@ TEST_CASE("simple tests")
         declare();
         use();
     }
-    
-//    SECTION("report")
-//    {
-//        std::printf("------------------------------------------------------------\n");
-//        reportAll();
-//    }
 }
 
 

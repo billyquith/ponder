@@ -27,4 +27,7 @@
  THE SOFTWARE.
 \endverbatim
 
+\note Ponder was forked from CAMP that was originally released released under LGPL. The license
+changed to MIT in 2015.
+
  */
