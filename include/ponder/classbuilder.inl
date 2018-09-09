@@ -137,9 +137,9 @@ ClassBuilder<T>& ClassBuilder<T>::external()
         addProperty(mapper.property(i));
 
     // Retrieve the functions
-//    std::size_t functionCount = mapper.functionCount();
-//    for (std::size_t i = 0; i < functionCount; ++i)
-//        addFunction(mapper.function(i));
+    std::size_t functionCount = mapper.functionCount();
+    for (std::size_t i = 0; i < functionCount; ++i)
+        addFunction(mapper.function(i));
 
     return *this;
 }

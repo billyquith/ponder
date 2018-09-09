@@ -273,120 +273,138 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
     
     REQUIRE(metaclass != nullptr);
 
-//    SECTION("with no parameters")
-//    {
-//        ponder::UserObject object;
-//        
-//        IS_TRUE( object == ponder::UserObject::nothing );
-//        
-//        object = metaclass->construct();
-//        
-//        IS_TRUE( object != ponder::UserObject::nothing );
-//
-//        MyClass* instance = object.get<MyClass*>();
-//
-//        REQUIRE(instance->l == 0);
-//        REQUIRE(instance->r == Approx(0.).epsilon(1E-5));
-//        REQUIRE(instance->s == "0");
-//        REQUIRE(instance->e == zero);
-//        REQUIRE(instance->u.x == 0);
-//
-//        metaclass->destroy(object);
-//    }
-//
-//    SECTION("with one parameter")
-//    {
-//        ponder::UserObject object = metaclass->construct(ponder::Args(1));
-//
-//        IS_TRUE( object != ponder::UserObject::nothing );
-//
-//        MyClass* instance = object.get<MyClass*>();
-//
-//        REQUIRE(instance->l == 1);
-//        REQUIRE(instance->r == Approx(1.).epsilon(1E-5));
-//        REQUIRE(instance->s == "1");
-//        REQUIRE(instance->e == one);
-//        REQUIRE(instance->u.x == 1);
-//
-//        metaclass->destroy(object);
-//    }
-//
-//    SECTION("with two parameters")
-//    {
-//        ponder::UserObject object = metaclass->construct(ponder::Args(2, 2.));
-//
-//        IS_TRUE( object != ponder::UserObject::nothing );
-//
-//        MyClass* instance = object.get<MyClass*>();
-//
-//        REQUIRE(instance->l == 2);
-//        REQUIRE(instance->r == Approx(2.).epsilon(1E-5));
-//        REQUIRE(instance->s == "2");
-//        REQUIRE(instance->e == two);
-//        REQUIRE(instance->u.x == 2);
-//
-//        metaclass->destroy(object);
-//    }
-//
-//
-//    SECTION("with three parameters")
-//    {
-//        ponder::UserObject object = metaclass->construct(ponder::Args(3, 3., "3"));
-//
-//        IS_TRUE( object != ponder::UserObject::nothing );
-//
-//        MyClass* instance = object.get<MyClass*>();
-//
-//        REQUIRE(instance->l == 3);
-//        REQUIRE(instance->r == Approx(3.).epsilon(1E-5));
-//        REQUIRE(instance->s == "3");
-//        REQUIRE(instance->e == three);
-//        REQUIRE(instance->u.x == 3);
-//
-//        metaclass->destroy(object);
-//    }
-//
-//    SECTION("with four parameters")
-//    {
-//        ponder::UserObject object = metaclass->construct(ponder::Args(4, 4., "4", four));
-//
-//        IS_TRUE( object != ponder::UserObject::nothing );
-//
-//        MyClass* instance = object.get<MyClass*>();
-//
-//        REQUIRE(instance->l == 4);
-//        REQUIRE(instance->r == Approx(4.).epsilon(1E-5));
-//        REQUIRE(instance->s == "4");
-//        REQUIRE(instance->e == four);
-//        REQUIRE(instance->u.x == 4);
-//
-//        metaclass->destroy(object);
-//    }
-//
-//    SECTION("with five parameters")
-//    {
-//        ponder::UserObject object = metaclass->construct(ponder::Args(5, 5., "5", five, 5));
-//
-//        IS_TRUE( object != ponder::UserObject::nothing );
-//
-//        MyClass* instance = object.get<MyClass*>();
-//
-//        REQUIRE(instance->l == 5);
-//        REQUIRE(instance->r == Approx(5.).epsilon(1E-5));
-//        REQUIRE(instance->s == "5");
-//        REQUIRE(instance->e == five);
-//        REQUIRE(instance->u.x == 5);
-//
-//        metaclass->destroy(object);
-//    }
-//
-//    SECTION("with invalid parameters")
-//    {
-//        IS_TRUE( metaclass->construct(ponder::Args("hello")) == ponder::UserObject::nothing );
-//        IS_TRUE( metaclass->construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing );
-//        IS_TRUE( metaclass->construct(ponder::Args(two, MyType(10))) == ponder::UserObject::nothing );
-//        IS_TRUE( metaclass->construct(ponder::Args(5., "hello")) == ponder::UserObject::nothing );
-//    }    
+    SECTION("with no parameters")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        object = fact.construct();
+        
+        IS_TRUE( object != ponder::UserObject::nothing );
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 0);
+        REQUIRE(instance->r == Approx(0.).epsilon(1E-5));
+        REQUIRE(instance->s == "0");
+        REQUIRE(instance->e == zero);
+        REQUIRE(instance->u.x == 0);
+
+        fact.destroy(object);
+    }
+
+    SECTION("with one parameter")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        object = fact.construct(ponder::Args(1));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 1);
+        REQUIRE(instance->r == Approx(1.).epsilon(1E-5));
+        REQUIRE(instance->s == "1");
+        REQUIRE(instance->e == one);
+        REQUIRE(instance->u.x == 1);
+
+        fact.destroy(object);
+    }
+
+    SECTION("with two parameters")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        object = fact.construct(ponder::Args(2, 2.));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 2);
+        REQUIRE(instance->r == Approx(2.).epsilon(1E-5));
+        REQUIRE(instance->s == "2");
+        REQUIRE(instance->e == two);
+        REQUIRE(instance->u.x == 2);
+
+        fact.destroy(object);
+    }
+
+
+    SECTION("with three parameters")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        object = fact.construct(ponder::Args(3, 3., "3"));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 3);
+        REQUIRE(instance->r == Approx(3.).epsilon(1E-5));
+        REQUIRE(instance->s == "3");
+        REQUIRE(instance->e == three);
+        REQUIRE(instance->u.x == 3);
+
+        fact.destroy(object);
+    }
+
+    SECTION("with four parameters")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        object = fact.construct(ponder::Args(4, 4., "4", four));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 4);
+        REQUIRE(instance->r == Approx(4.).epsilon(1E-5));
+        REQUIRE(instance->s == "4");
+        REQUIRE(instance->e == four);
+        REQUIRE(instance->u.x == 4);
+
+        fact.destroy(object);
+    }
+
+    SECTION("with five parameters")
+    {
+        ponder::UserObject object;
+        
+        IS_TRUE( object == ponder::UserObject::nothing );
+        
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        object = fact.construct(ponder::Args(5, 5., "5", five, 5));
+
+        MyClass* instance = object.get<MyClass*>();
+
+        REQUIRE(instance->l == 5);
+        REQUIRE(instance->r == Approx(5.).epsilon(1E-5));
+        REQUIRE(instance->s == "5");
+        REQUIRE(instance->e == five);
+        REQUIRE(instance->u.x == 5);
+
+        fact.destroy(object);
+    }
+
+    SECTION("with invalid parameters")
+    {
+        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+
+        IS_TRUE( fact.construct(ponder::Args("hello")) == ponder::UserObject::nothing );
+        IS_TRUE( fact.construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing );
+        IS_TRUE( fact.construct(ponder::Args(two, MyType(10))) == ponder::UserObject::nothing );
+        IS_TRUE( fact.construct(ponder::Args(5., "hello")) == ponder::UserObject::nothing );
+    }
 }
 
 

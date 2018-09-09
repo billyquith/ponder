@@ -36,6 +36,8 @@
 #include <map>
 #include <string>
 
+// TODO: Fix this
+
 //namespace MapperTest
 //{
 //    struct MyClass
@@ -45,19 +47,19 @@
 //            propertyCount = 5,
 //            functionCount = 3
 //        };
-//        
+//
 //        static ponder::String property(std::size_t index)
 //        {
 //            const char* names[] = {"prop0", "prop1", "prop2", "prop3", "prop4"};
 //            return names[index];
 //        }
-//        
+//
 //        static ponder::String function(std::size_t index)
 //        {
 //            const char* names[] = {"func0", "func1", "func2"};
 //            return names[index];
 //        }
-//        
+//
 //        MyClass()
 //        {
 //            m_props[property(0)] = 0;
@@ -66,20 +68,20 @@
 //            m_props[property(3)] = 30;
 //            m_props[property(4)] = 40;
 //        }
-//        
+//
 //        int& prop(const ponder::String& name)
 //        {
 //            return m_props[name];
 //        }
-//        
+//
 //        ponder::String func(const ponder::String& name)
 //        {
 //            return name + "_called";
 //        }
-//        
+//
 //        std::map<ponder::String, int> m_props;
 //    };
-//    
+//
 //    template <typename T>
 //    struct MyMapper
 //    {
@@ -87,54 +89,54 @@
 //        {
 //            return T::propertyCount;
 //        }
-//        
+//
 //        ponder::Property* property(std::size_t index)
 //        {
 //            return new MyProperty(T::property(index));
 //        }
-//        
+//
 //        std::size_t functionCount()
 //        {
 //            return T::functionCount;
 //        }
-//        
-////        ponder::Function* function(std::size_t index)
-////        {
-////            return new MyFunction(T::function(index));
-////        }
-//        
-//        struct MyProperty : public ponder::SimpleProperty
+//
+//        ponder::Function* function(std::size_t index)
+//        {
+//            return new MyFunction(T::function(index));
+//        }
+//
+//        struct MyProperty final : public ponder::SimpleProperty
 //        {
 //        public:
-//            
+//
 //            MyProperty(const ponder::String& name)
 //            : ponder::SimpleProperty(name, ponder::ValueKind::Integer)
 //            {
 //            }
-//            
-//            virtual ponder::Value getValue(const ponder::UserObject& object) const
+//
+//            ponder::Value getValue(const ponder::UserObject& object) const final
 //            {
 //                T& t = object.get<T>();
 //                return t.prop(name());
 //            }
-//            
-//            virtual void setValue(const ponder::UserObject& object,
-//                                  const ponder::Value& value) const
+//
+//            void setValue(const ponder::UserObject& object,
+//                          const ponder::Value& value) const final
 //            {
 //                T& t = object.get<T>();
 //                t.prop(name()) = value.to<int>();
 //            }
 //        };
-//        
-////        class MyFunction : public ponder::Function // XXXX - custom function. Allow?
+//
+////        class MyFunction : public ponder::Function
 ////        {
 ////        public:
-////            
+////
 ////            MyFunction(const ponder::String& name)
 ////            : ponder::Function(name, ponder::ValueKind::String)
 ////            {
 ////            }
-////            
+////
 ////            virtual ponder::Value execute(const ponder::UserObject& object,
 ////                                          const ponder::Args&) const
 ////            {
@@ -143,7 +145,7 @@
 ////            }
 ////        };
 //    };
-//    
+//
 //    void declare()
 //    {
 //        ponder::Class::declare<MyClass>("MapperTest::MyClass")
@@ -154,17 +156,17 @@
 //PONDER_AUTO_TYPE(MapperTest::MyClass, &MapperTest::declare)
 //
 //using namespace MapperTest;
-//
-////-----------------------------------------------------------------------------
-////                         Tests for mappers
-////-----------------------------------------------------------------------------
-//
+
+//-----------------------------------------------------------------------------
+//                         Tests for mappers
+//-----------------------------------------------------------------------------
+
 //TEST_CASE("Mapper test data checks")
 //{
 //    const ponder::Class* metaclass = &ponder::classByType<MyClass>();
 //
 //    REQUIRE(metaclass != nullptr);
-//    
+//
 //    SECTION("count")
 //    {
 //        REQUIRE(metaclass->propertyCount() == static_cast<std::size_t>(MyClass::propertyCount));
@@ -181,7 +183,7 @@
 //    {
 //        REQUIRE(metaclass->function(0).paramCount() == 0);
 //    }
-//    
+//
 //    SECTION("propertyGet")
 //    {
 //        MyClass object;
