@@ -78,14 +78,17 @@ static void declare()   // declare the class members to Ponder
 // An example of how you might use Ponder:
 static void use()
 {
+    //! [eg_simple_metaclass]
     // retrieve the metaclass (containing the member data)
     const ponder::Class& metaclass = ponder::classByType<Person>();
-    
+    //! [eg_simple_metaclass]
+
+    //! [eg_simple_construct]
     // construct a new person
     ponder::runtime::ObjectFactory factory(metaclass);
-    
     ponder::UserObject person = factory.create("Bozo");
-    
+    //! [eg_simple_construct]
+
     // set attributes
     person.set("height", 1.62f);
     person.set("shoeSize", 28);

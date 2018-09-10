@@ -39,7 +39,6 @@ namespace ponder
 {
 /**
  * \brief Specialized type of property for arrays
- *
  */
 class PONDER_API ArrayProperty : public Property
 {
@@ -80,7 +79,6 @@ public:
      * \brief Get the current size of the array
      *
      * \param object Object
-     *
      * \return Number of elements in the array
      *
      * \throw NullObject object is invalid
@@ -112,7 +110,6 @@ public:
      *
      * \param object Object
      * \param index Index of the element to get
-     *
      * \return Value of the index-th element
      *
      * \throw NullObject object is invalid
@@ -188,7 +185,6 @@ protected:
      * \brief Do the actual retrieval of the size
      *
      * \param object Object
-     *
      * \return Size of the array
      */
     virtual std::size_t getSize(const UserObject& object) const = 0;
@@ -208,7 +204,6 @@ protected:
      *
      * \param object Object
      * \param index Index of the element to get
-     *
      * \return Value of the index-th element
      */
     virtual Value getElement(const UserObject& object, std::size_t index) const = 0;

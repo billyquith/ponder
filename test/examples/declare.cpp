@@ -28,45 +28,30 @@
 
 #include "test.hpp"
 
-//#include <ponder/uses/report.hpp>
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/runtime.hpp>
 #include <iostream>
 
-//! [inspect_example]
+PONDER_TYPE(doc::Class)
 
-class A
-{
-public:
-    A(int v) : m_value(v) {}
-    
-    int getValue() const { return m_value; }
-        
-private:
-    int m_value;
-};
-
-PONDER_TYPE(A)
-
-static void declare()
-{
-    ponder::Class::declare<A>("A")
-        .constructor<int>()
-        .property("value", &A::getValue)
-        ;
-}
-
-static void inspect()
-{
-    //! [classIterator]
-    for (auto&& cls : ponder::classIterator())
-    {
-        std::cout << "Class " << cls.first << std::endl;
-    }
-    //! [classIterator]
-}
-
-//! [inspect_example]
+// static void declare()
+// {
+//     ponder::Class::declare<A>("A")
+//         .constructor<int>()
+//         .property("value", &A::getValue)
+//         ;
+// }
+//
+// static void inspect()
+// {
+//     //! [classIterator]
+//     for (auto&& cls : ponder::classIterator())
+//     {
+//         std::cout << "Class " << cls.first << std::endl;
+//     }
+//     //! [classIterator]
+// }
+//
 
 // static void reportAll()
 // {
@@ -75,17 +60,18 @@ static void inspect()
 
 TEST_CASE("declare types")
 {
-    SECTION("intro")
-    {
-        ponder::Args args(1, true, "hello", 5.24, myObject);
-    }
-
-    SECTION("intro")
-    {
-        std::printf("------------------------------------------------------------\n");
-        declare();
-        inspect();
-    }
+//    SECTION("args")
+//    {
+//        doc::Class obj;
+//
+//        //! [doc_args1]
+//        ponder::Args args(1, true, "string", 5.24, &obj);
+//        //! [doc_args1]
+//
+//        //! [doc_args2]
+//        ponder::Args args;
+//        //! [doc_args2]
+//    }
 }
 
 

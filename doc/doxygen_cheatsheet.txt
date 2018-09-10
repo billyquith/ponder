@@ -11,19 +11,22 @@ Page
 
 \page page_tag Title
 
+\tableofcontents - Create TOC at top of page
+
 \section section_tag Section Title
 
 \subsection subsection_tag Subsection Title
 
-\snippet file.cpp snippet_tag
-
-\tableofcontents - Create TOC at top of page
+\snippet file.cpp snippet_tag   - snipper from example file
+\snippet this snippet_tag       - snippet from same file
 
 \par Indented paragraph
 
 \note Indented note, with highligting
 
 */
+
+------------------------------------------------------------
 
 ------------------------------------------------------------
 Markdown

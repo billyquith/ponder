@@ -32,6 +32,7 @@ project(exampletest)
 # all source files
 set(TEST_SRCS
     main.cpp
+    declare.cpp
     inspect.cpp
     simple.cpp
     userdata.cpp

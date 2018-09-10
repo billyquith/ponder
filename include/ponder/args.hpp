@@ -43,13 +43,13 @@ class Value;
  * \brief Wrapper for packing an arbitrary number of arguments into a single object
  *
  * ponder::Args is defined as a list of arguments of any type (wrapped in ponder::Value
- * instances), which can conveniently be passed to all the Ponder entities which may need
+ * instances), which can be passed to all the Ponder entities which may need
  * an arbitrary number of arguments in a uniform way.
  *
  * Arguments lists can be constructed on the fly:
  *
  * \code
- * ponder::Args args(1, true, "hello", 5.24, myObject);
+ * ponder::Args args(1, true, "hello", 5.24, &myObject);
  * \endcode
  *
  * or appended one by one using the + and += operators:
@@ -101,9 +101,7 @@ public:
      * \brief Overload of operator [] to access an argument from its index
      *
      * \param index Index of the argument to get
-     *
      * \return Value of the index-th argument
-     *
      * \throw OutOfRange index is out of range
      */
     const Value& operator [] (std::size_t index) const;
@@ -112,7 +110,6 @@ public:
      * \brief Overload of operator + to concatenate a list and a new argument
      *
      * \param arg Argument to concatenate to the list
-     *
      * \return New list
      */
     Args operator + (const Value& arg) const;
@@ -121,16 +118,15 @@ public:
      * \brief Overload of operator += to append a new argument to the list
      *
      * \param arg Argument to append to the list
-     *
      * \return Reference to this
      */
     Args& operator += (const Value& arg);
     
     /**
-     * \brief Overload of operator += to append a new argument to the list
+     * \brief Insert an argument into the list at a given index
      *
+     * \param index Index at which to insert the argument
      * \param arg Argument to append to the list
-     *
      * \return Reference to this
      */
     Args& insert(std::size_t index, const Value& v);

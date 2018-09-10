@@ -55,34 +55,15 @@ class ClassVisitor;
  * is an abstract representation of a C++ class with its own properties,
  * functions, constructors, base classes, etc.
  *
- * Classes are declared, bound to a C++ type and filled with the \c declare
- * template function.
+ * Classes are declared, bound to a C++ type and filled with the Class::declare()
+ * function.
  *
- * \code
- * class MyClass
- * {
- * public:
- *     MyClass();
- *     int getProp() const;
- *     void setProp(int);
- *     std::string func();
- * };
+ * \snippet simple.cpp eg_simple_class
  *
- * ponder::Class::declare<MyClass>("MyClass")
- *     .tag("help", "this is my class")
- *     .constructor()
- *     .property("prop", &MyClass::getProp, &MyClass::setProp)
- *     .function("func", &MyClass::func);
- * \endcode
+ * \snippet simple.cpp eg_simple_declare
  *
- * It then provides a set of accessors to retrieve its member functions and properties.
- *
- * \code
- * const ponder::Class& metaclass = ponder::classByType<MyClass>();
- *
- * const ponder::Property& prop = metaclass.property("prop");
- * const ponder::Function& func = metaclass.function("func");
- * \endcode
+ * It then provides a set of accessors to retrieve its member functions and
+ * properties. See Class::function() and Class::property().
  *
  * Another way to inspect a class, which is more type-safe, is to use a ClassVisitor.
  *
@@ -93,14 +74,11 @@ class ClassVisitor;
  *
  * It also allows to create and destroy instances of the bound C++ class.
  *
- * \code
- * MyClass* obj = metaclass.construct<MyClass>();
- * metaclass.destroy(obj);
- * \endcode
+ * \snippet simple.cpp eg_simple_construct
  *
  * \remark All function and property names are unique within the metaclass.
  *
- * \sa Enum, TagHolder, ClassBuilder, Function, Property
+ * \sa ClassBuilder, Function, Property, Enum
  */
 class PONDER_API Class : public Type
 {    
