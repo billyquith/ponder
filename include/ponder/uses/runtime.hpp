@@ -266,13 +266,24 @@ private:
 
 //--------------------------------------------------------------------------------------
 // Helpers
-
-static inline void destroy(const UserObject &uo)
-{
-    ObjectFactory(uo.getClass()).destroy(uo);
-}
     
 typedef std::unique_ptr<UserObject, detail::UserObjectDeleter> UniquePtr;
+
+/**
+ * \brief Create instance of metaclass as a UserObject
+ *
+ * \param cls The metaclass to make an instance of
+ * \return A UserObject which owns an instance of the metaclass.
+ *
+ * \snippet simple.cpp eg_simple_create
+ *
+ * \sa ponder::runtime::destroy()
+ */
+template <typename... A>
+static inline UserObject create(const Class &cls, A... args)
+{
+    return ObjectFactory(cls).create(args...);
+}
 
 inline UniquePtr makeUniquePtr(UserObject *uo)
 {
@@ -280,17 +291,25 @@ inline UniquePtr makeUniquePtr(UserObject *uo)
 }
 
 template <typename... A>
-static inline UserObject create(const Class &cls, A... args)
-{
-    return ObjectFactory(cls).create(args...);
-}
-    
-template <typename... A>
 static inline UniquePtr createUnique(const Class &cls, A... args)
 {
     auto p = new UserObject;
     *p = create(cls, args...);
     return makeUniquePtr(p);
+}
+
+/**
+ * \brief Destroy a UserObject instance
+ *
+ * \param uo Reference to UserObject instance to destroy
+ *
+ * \snippet simple.cpp eg_simple_destroy
+ *
+ * \sa ponder::runtime::create()
+ */
+static inline void destroy(const UserObject &uo)
+{
+    ObjectFactory(uo.getClass()).destroy(uo);
 }
 
 template <typename... A>
@@ -361,7 +380,6 @@ inline Value FunctionCaller::call(A... vargs)
 
 namespace ponder {
 namespace runtime {
-
     
 UserObject ObjectFactory::construct(const Args& args, void* ptr) const
 {

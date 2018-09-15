@@ -74,7 +74,7 @@ class ClassVisitor;
  *
  * It also allows to create and destroy instances of the bound C++ class.
  *
- * \snippet simple.cpp eg_simple_construct
+ * \snippet simple.cpp eg_simple_create
  *
  * \remark All function and property names are unique within the metaclass.
  *

@@ -12,10 +12,10 @@
 ** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ** copies of the Software, and to permit persons to whom the Software is
 ** furnished to do so, subject to the following conditions:
-** 
+**
 ** The above copyright notice and this permission notice shall be included in
 ** all copies or substantial portions of the Software.
-** 
+**
 ** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,15 +42,15 @@ public:
     Person(const std::string& name)
         : m_name(name)
     {}
-    
+
     // accessors for private members
     std::string name() const { return m_name; }
     void setName(const std::string& name) { m_name = name; }
-    
+
     // public members
     float height;
     unsigned int shoeSize;
-    
+
     // member function
     bool hasBigFeet() const { return shoeSize > 10; } // U.K.!
 
@@ -83,21 +83,22 @@ static void use()
     const ponder::Class& metaclass = ponder::classByType<Person>();
     //! [eg_simple_metaclass]
 
-    //! [eg_simple_construct]
+    //! [eg_simple_create]
     // construct a new person
-    ponder::runtime::ObjectFactory factory(metaclass);
-    ponder::UserObject person = factory.create("Bozo");
-    //! [eg_simple_construct]
+    ponder::UserObject person = ponder::runtime::create(metaclass, "Bozo");
+    //! [eg_simple_create]
 
     // set attributes
     person.set("height", 1.62f);
     person.set("shoeSize", 28);
-    
+
     const bool bigFeet = ponder::runtime::call(metaclass.function("hasBigFeet"),
                                                person).to<bool>();
-    
+
     // dark Satanic mills!
-    factory.destroy(person);
+    //! [eg_simple_destroy]
+    ponder::runtime::destroy(person);
+    //! [eg_simple_destroy]
 }
 //! [eg_simple_use]
 
