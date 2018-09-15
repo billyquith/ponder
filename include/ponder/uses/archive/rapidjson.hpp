@@ -36,26 +36,23 @@
 namespace ponder {
 namespace archive {
 
-namespace detail {
-} // namespace detail
-
+/**
+ * \brief An archive that uses JSON format as storage.
+ *
+ * The [RapidJSON](http://rapidjson.org/) library is used for JSON parsing and formatting.
+ */
 class RapidJsonArchive
 {
 public:
-
-   struct Node
-   {
-   };
-
-   using node_t = Node;
-
-   node_t beginNode(node_t parent, ValueKind vk)
-   {
-       return Node();
-   }
-
-private:
-
+    
+    struct Node {};
+    
+    using node_t = Node;
+    
+    node_t beginNode(node_t parent, ValueKind vk)
+    {
+        return Node();
+    }
 };
 
 } // namespace archive

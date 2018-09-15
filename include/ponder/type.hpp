@@ -114,8 +114,12 @@ enum class PropertyKind
     Function,           ///< a function
     MemberObject        ///< member object in a class or struct
 };
-
     
+/**
+ * \brief Enumeration of the kinds of Property accessors use
+ *
+ * \sa Property
+ */
 enum class PropertyAccessKind
 {
     Simple,

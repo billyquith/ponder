@@ -338,7 +338,7 @@ public:
     /**
      * \brief Constructor
      *
-     * \param tyoeName Name of the type causing problems
+     * \param typeName Name of the type causing problems
      */
     TypeAmbiguity(IdRef typeName);
 };

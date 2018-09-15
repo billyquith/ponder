@@ -37,7 +37,7 @@
 namespace ponder {
 namespace archive {
     
-/*!
+/**
  For writing archive requires the following concepts:
  
     class Archive
@@ -68,7 +68,7 @@ private:
     ArchiveType& m_archive;
 };
 
-/*!
+/**
  For reading an archive requires the following concepts:
  
  class Archive

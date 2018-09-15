@@ -38,7 +38,10 @@ namespace ponder {
 namespace archive {
 
 /**
- * \brief Archive used to read/write using RapidXML.
+ * \brief Archive used to read/write using XML.
+ *
+ * The [RapidXML](http://rapidxml.sourceforge.net) library is used to parse and
+ * create and XML DOM.
  */
 template <typename CH = char>
 class RapidXmlArchive

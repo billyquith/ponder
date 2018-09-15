@@ -118,15 +118,16 @@ public:     // declaration
     /**
      * \brief Declare a new metaclass
      *
-     * This is the function to call to create a new metaclass. The template
-     * parameter T is the C++ class that will be bound to the metaclass.
+     * Call this to create a new metaclass. The template parameter T is the
+     * C++ class that will be bound to the metaclass.
      *
      * \param id Name of the metaclass in Ponder. This name identifies
      *           the metaclass and thus has to be unique. If not specified, the C++ type
      *           id is used.
-     *
      * \return A ClassBuilder<T> object that will provide functions
      *         to fill the new metaclass with properties, functions, etc.
+     *
+     * \remark It is best to leave the name blank and use the default class name.
      */
     template <typename T>
     static ClassBuilder<T> declare(IdRef id = ponder::Id());
@@ -167,7 +168,6 @@ public:     // reflection
      * \brief Return a base metaclass from its index
      *
      * \param index Index of the base to get
-     *
      * \return Reference to the index-th base metaclass of this metaclass
      *
      * \throw OutOfRange index is out of range
@@ -253,7 +253,6 @@ public:     // reflection
      *
      * \param name Name of the function to get (case sensitive)
      * \param funcRet Function returned, if return was true
-     *
      * \return Boolean. True if function found, else if not, false
      *
      * \code
@@ -275,7 +274,6 @@ public:     // reflection
      * \brief Check if this metaclass contains the given property
      *
      * \param name Name of the property to check
-     *
      * \return True if the property is in the metaclass, false otherwise
      */
     bool hasProperty(IdRef name) const;
@@ -284,7 +282,6 @@ public:     // reflection
      * \brief Get a property from its index in this metaclass
      *
      * \param index Index of the property to get
-     *
      * \return Reference to the property
      *
      * \throw OutOfRange index is out of range
@@ -295,7 +292,6 @@ public:     // reflection
      * \brief Get a property from its name
      *
      * \param name Name of the property to get (case sensitive)
-     *
      * \return Reference to the property
      *
      * \throw PropertyNotFound \a name is not a property of the metaclass
@@ -319,7 +315,6 @@ public:     // reflection
      *
      * \param name Name of the property to get (case sensitive)
      * \param propRet Property returned, if return was true
-     *
      * \return Boolean. True if property found, else if not, false
      *
      * \code
@@ -361,7 +356,7 @@ public:     // reflection
     void visit(ClassVisitor& visitor) const;
 
     /**
-     * \brief Convert a pointer to an object to be compatible with a base or derived metaclass
+     * \brief Convert a pointer to an object compatible with a base or derived metaclass
      *
      * The target metaclass may be a base or a derived of this, both cases are properly handled.
      *
@@ -370,7 +365,6 @@ public:     // reflection
      *
      * \param pointer Pointer to convert
      * \param target Target metaclass to convert to
-     *
      * \return Converted pointer
      *
      * \throw ClassUnrelated \a target is not a base nor a derived class of this
