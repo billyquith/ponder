@@ -1150,7 +1150,6 @@ dl.section dd {
 	margin-bottom: 6px;
 }
 
-
 #projectlogo
 {
 	text-align: center;
@@ -1166,21 +1165,23 @@ dl.section dd {
 #projectalign
 {
     vertical-align: middle;
+    padding-left: 0.5em;
 }
 
 #projectname
 {
-	font: 1em Arial,sans-serif;
-	margin-left: 1em;
-	padding: 1px 8px 1px 8px;
-	background-color: #eee;
+	font: 2em monospace;
+    color: white;
+	margin-left: 0.7em;
+    display: inline-block;
 }
 
 #projectbrief
 {
-	font: 100% Arial,sans-serif;
-	margin: 0px;
-	padding: 0px;
+	font: 1em sans-serif;
+    color: gray;
+    display: inline-block;
+    padding-left: 0.8em;
 }
 
 #projectnumber

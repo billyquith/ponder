@@ -31,10 +31,11 @@ project(exampletest)
 
 # all source files
 set(TEST_SRCS
+    test.hpp
     main.cpp
-    declare.cpp
     inspect.cpp
     simple.cpp
+    shapes.cpp
     userdata.cpp
 )
 

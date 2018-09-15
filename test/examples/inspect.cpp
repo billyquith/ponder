@@ -35,57 +35,57 @@
 
 //! [inspect_example]
 
-class A
-{
-public:
-    A(int v) : m_value(v) {}
-    
-    int getValue() const { return m_value; }
-        
-private:
-    int m_value;
-};
-
-PONDER_TYPE(A)
-
-static void declare()
-{
-    ponder::Class::declare<A>("A")
-        .constructor<int>()
-        .property("value", &A::getValue)
-        ;
-}
-
-static void inspect()
-{
-    //! [classIterator]
-    for (auto&& cls : ponder::classIterator())
-    {
-        std::cout << "Class " << cls.first << std::endl;
-    }
-    //! [classIterator]
-}
-
-//! [inspect_example]
-
-// static void reportAll()
-// {
-//     ponder::uses::reportAll();
-// }
-
-TEST_CASE("declare types")
-{
-    SECTION("intro")
-    {
-        ponder::Args args(1, true, "hello", 5.24, myObject);
-    }
-
-    SECTION("intro")
-    {
-        std::printf("------------------------------------------------------------\n");
-        declare();
-        inspect();
-    }
-}
+//class A
+//{
+//public:
+//    A(int v) : m_value(v) {}
+//    
+//    int getValue() const { return m_value; }
+//        
+//private:
+//    int m_value;
+//};
+//
+//PONDER_TYPE(A)
+//
+//static void declare()
+//{
+//    ponder::Class::declare<A>("A")
+//        .constructor<int>()
+//        .property("value", &A::getValue)
+//        ;
+//}
+//
+//static void inspect()
+//{
+//    //! [classIterator]
+//    for (auto&& cls : ponder::classIterator())
+//    {
+//        std::cout << "Class " << cls.first << std::endl;
+//    }
+//    //! [classIterator]
+//}
+//
+////! [inspect_example]
+//
+//// static void reportAll()
+//// {
+////     ponder::uses::reportAll();
+//// }
+//
+//TEST_CASE("declare types")
+//{
+//    SECTION("intro")
+//    {
+//        ponder::Args args(1, true, "hello", 5.24, myObject);
+//    }
+//
+//    SECTION("intro")
+//    {
+//        std::printf("------------------------------------------------------------\n");
+//        declare();
+//        inspect();
+//    }
+//}
 
 
