@@ -104,15 +104,13 @@ namespace ClassVisitorTest
     
     void declare()
     {
-        ponder::Enum::declare<MyEnum>("ClassVisitorTest::MyEnum");
+        ponder::Enum::declare<MyEnum>();
         
-        ponder::Class::declare<MyType>("ClassVisitorTest::MyType");
+        ponder::Class::declare<MyType>();
         
-        ponder::Class::declare<MyClass>("ClassVisitorTest::MyClass")
+        ponder::Class::declare<MyClass>()
             .property("simple", &MyClass::simpleProp)
-#if !defined(_MSC_VER) // TODO - This causes a compiler crash on MSVC 2015
-            .property("array", &MyClass::arrayProp) 
-#endif
+            .property("array", &MyClass::arrayProp)
             .property("enum", &MyClass::enumProp)
             .property("user", &MyClass::userProp)
             .function("function", &MyClass::function)
@@ -137,9 +135,7 @@ TEST_CASE("Classes can have visitors")
     ponder::classByType<MyClass>().visit(visitor);
 
     REQUIRE(visitor.simpleVisited);
-#if !defined(_MSC_VER) // TODO - This causes a compiler crash on MSVC 2015
     REQUIRE(visitor.arrayVisited);
-#endif
     REQUIRE(visitor.enumVisited);
     REQUIRE(visitor.userVisited);
     REQUIRE(visitor.functionVisited);

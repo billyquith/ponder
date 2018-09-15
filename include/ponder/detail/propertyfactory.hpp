@@ -128,8 +128,7 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
         
         ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
         
-        T& getter(ClassType& c) const {return m_access.access(c);}
-        const T& getter(const ClassType& c) const {return m_access.access(c);}
+        T getter(ClassType& c) const {return m_access.access(c);}
         
         bool setter(ClassType&, const DataType&) const {return false;}
         bool setter(ClassType&, DataType&&) const {return false;}
