@@ -122,15 +122,22 @@ a {
 	text-decoration: none;
 }
 
+.contents a {
+/*    color: #04b112;*/
+/*    color: #47a64c;*/
+}
+
 .contents a:visited {
-	color: #224f24;
+    text-decoration: none;
+/*    color: #47a64c;*/
 }
 
 .contents a.qindexHL:visited {
-        color: #ffffff;
+    color: #ffffff;
 }
 
 a:hover {
+    color: #1abc58;
 	text-decoration: underline;
 }
 
@@ -686,6 +693,7 @@ dl.reflist dd {
 .params .paramname, .retval .paramname {
   font-weight: bold;
   vertical-align: top;
+  padding-right: 2em;
 }
 
 .params .paramtype {

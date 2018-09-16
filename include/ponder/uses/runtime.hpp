@@ -267,17 +267,18 @@ private:
 //--------------------------------------------------------------------------------------
 // Helpers
     
-typedef std::unique_ptr<UserObject, detail::UserObjectDeleter> UniquePtr;
-
 /**
  * \brief Create instance of metaclass as a UserObject
  *
+ * This is a helper function which uses ObjectFactory to create the instance.
+ *
  * \param cls The metaclass to make an instance of
+ * \param args The constructor arguments for the class instance
  * \return A UserObject which owns an instance of the metaclass.
  *
  * \snippet simple.cpp eg_simple_create
  *
- * \sa ponder::runtime::destroy()
+ * \sa destroy()
  */
 template <typename... A>
 static inline UserObject create(const Class &cls, A... args)
@@ -285,9 +286,11 @@ static inline UserObject create(const Class &cls, A... args)
     return ObjectFactory(cls).create(args...);
 }
 
-inline UniquePtr makeUniquePtr(UserObject *uo)
+typedef std::unique_ptr<UserObject, detail::UserObjectDeleter> UniquePtr;
+
+inline UniquePtr makeUniquePtr(UserObject *obj)
 {
-    return UniquePtr(uo);
+    return UniquePtr(obj);
 }
 
 template <typename... A>
@@ -301,17 +304,33 @@ static inline UniquePtr createUnique(const Class &cls, A... args)
 /**
  * \brief Destroy a UserObject instance
  *
- * \param uo Reference to UserObject instance to destroy
+ * This is a helper function which uses ObjectFactory to destroy the instance.
+ *
+ * \param obj Reference to UserObject instance to destroy
  *
  * \snippet simple.cpp eg_simple_destroy
  *
- * \sa ponder::runtime::create()
+ * \sa create()
  */
-static inline void destroy(const UserObject &uo)
+static inline void destroy(const UserObject &obj)
 {
-    ObjectFactory(uo.getClass()).destroy(uo);
+    ObjectFactory(obj.getClass()).destroy(obj);
 }
 
+/**
+ * \brief Call a member function
+ *
+ * This is a helper function which uses ObjectCaller to call the member function.
+ *
+ * \param fn The Function to call
+ * \param obj Reference to UserObject instance to destroy
+ * \param args Arguments for the function
+ * \return The return value. This is NoType if function return type return is `void`.
+ *
+ * \snippet simple.cpp eg_simple_destroy
+ *
+ * \sa callStatic(), Class::function()
+ */
 template <typename... A>
 static inline Value call(const Function &fn, const UserObject &obj, A&&... args)
 {
@@ -319,6 +338,19 @@ static inline Value call(const Function &fn, const UserObject &obj, A&&... args)
                                  detail::ArgsBuilder<A...>::makeArgs(std::forward<A>(args)...));
 }
 
+/**
+ * \brief Call a non-member function
+ *
+ * This is a helper function which uses FunctionCaller to call the function.
+ *
+ * \param fn The Function to call
+ * \param args Arguments for the function
+ * \return The return value. This is NoType if function return type return is `void`.
+ *
+ * \snippet simple.cpp eg_simple_destroy
+ *
+ * \sa call(), Class::function()
+ */
 template <typename... A>
 static inline Value callStatic(const Function &fn, A&&... args)
 {

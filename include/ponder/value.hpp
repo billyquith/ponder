@@ -93,6 +93,11 @@ public:
      */
     Value(const Value& other);
 
+    /**
+     * \brief Move constructor
+     *
+     * \param other Value to move
+     */
     Value(Value&& other);
 
     /**

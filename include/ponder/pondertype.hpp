@@ -28,8 +28,10 @@
 ****************************************************************************/
 
 #pragma once
+/** \cond NoDocumentation */
 #ifndef PONDER_PONDERTYPE_HPP
 #define PONDER_PONDERTYPE_HPP
+/** \endcond NoDocumentation */
 
 #include <ponder/config.hpp>
 
@@ -239,4 +241,6 @@ namespace detail
 
 } // namespace ponder
 
+/** \cond NoDocumentation */
 #endif // PONDER_PONDERTYPE_HPP
+/** \endcond NoDocumentation */

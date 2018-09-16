@@ -92,10 +92,13 @@ static void use()
     person.set("height", 1.62f);
     person.set("shoeSize", 28);
 
-    const bool bigFeet = ponder::runtime::call(metaclass.function("hasBigFeet"),
-                                               person).to<bool>();
+    // retrieve a function we would like to call
+    const auto& func = metaclass.function("hasBigFeet");
+    
+    // call the function and get the result
+    const bool bigFeet = ponder::runtime::call(func, person).to<bool>();
 
-    // dark Satanic mills!
+    // nasty
     //! [eg_simple_destroy]
     ponder::runtime::destroy(person);
     //! [eg_simple_destroy]

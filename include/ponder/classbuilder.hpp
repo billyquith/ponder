@@ -150,7 +150,6 @@ public:
      * \param accessor1 First accessor to the C++ implementation of the property (getter)
      * \param accessor2 Second accessor to the C++ implementation of the property (setter or 
      *        getter to compose)
-     *
      * \return Reference to this, in order to chain other calls
      */
     template <typename F1, typename F2>
@@ -160,12 +159,15 @@ public:
      * \brief Declare a new function from any bindable type
      *
      * The function parameter can be any valid type: a non-member function,
-     * a member function, const, non-const, etc.
+     * member function, const, non-const, lambda, etc. Polices can be applied to the
+     * function to affect things like the way objects are returned. See \ref ponder::policy.
      *
      * \param name Name of the function (must be unique within the metaclass)
      * \param function C++ callable entity to bind to the function
-     *
+     * \param policies Optional policies applied to function exposer
      * \return Reference to this, in order to chain other calls
+     *
+     * \sa property(), ponder::policy, \ref eg_page_shapes
      */
     template <typename F, typename... P>
     ClassBuilder<T>& function(IdRef name, F function, P... policies);

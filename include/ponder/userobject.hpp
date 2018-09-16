@@ -70,45 +70,47 @@ public:
     UserObject();
 
     /**
-     * \brief Construct the user object from an instance
-     *
-     * User objects. Also see UserObject::makeRef() and UserObject::makeCopy().
+     * \brief Construct the user object from an instance copy
      *
      * \param object Instance to store in the user object
+     *
+     * \sa makeRef(), makeCopy()
      */
     template <typename T>
     UserObject(const T& object);
 
+    /**
+     * \brief Construct the user object from an instance reference
+     *
+     * \param object Pointer to the object to reference in the user object
+     *
+     * \sa makeRef(), makeCopy()
+     */
     template <typename T>
     UserObject(T* object);
 
     /**
      * \brief Construct a user object from a reference to an object
      *
-     * This functions is equivalent to calling UserObject(object).
+     * This functions is equivalent to calling `UserObject(&object)`.
      *
      * \param object Instance to store in the user object
-     *
-     * \return UserObject containing a reference to \a  object
+     * \return UserObject containing a reference to \a object
      */
     template <typename T>
     static UserObject makeRef(T& object);
 
-    template <typename T>
-    static UserObject makeRef(T* object);
-
     /**
      * \brief Construct a user object from a const reference to an object
      *
-     * This functions is *not* equivalent to calling UserObject(object).
+     * This functions is equivalent to calling `UserObject(&object)`.
      *
      * \param object Instance to store in the user object
-     *
      * \return UserObject containing a const reference to \a object
      */
-//    template <typename T>
-//    static UserObject makeRef(const T& object);
-    
+    template <typename T>
+    static UserObject makeRef(T* object);
+
     /**
      * \brief Construct a user object with a copy of an object
      *
