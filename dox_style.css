@@ -1179,6 +1179,7 @@ dl.section dd {
 #projectname
 {
 	font: 2em monospace;
+	text-transform: capitalize;	
     color: white;
 	margin-left: 0.7em;
     display: inline-block;
