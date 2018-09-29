@@ -9,5 +9,6 @@
 *.in text
 *.txt text
 *.cmake text
+*.sh text eol=lf
 
 *.png binary
