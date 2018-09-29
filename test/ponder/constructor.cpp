@@ -301,7 +301,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         
         IS_TRUE( object == ponder::UserObject::nothing );
         
-        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        ponder::runtime::ObjectFactory fact(*metaclass);
         object = fact.construct(ponder::Args(1));
 
         MyClass* instance = object.get<MyClass*>();
@@ -321,7 +321,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         
         IS_TRUE( object == ponder::UserObject::nothing );
         
-        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        ponder::runtime::ObjectFactory fact(*metaclass);
         object = fact.construct(ponder::Args(2, 2.));
 
         MyClass* instance = object.get<MyClass*>();
@@ -342,7 +342,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         
         IS_TRUE( object == ponder::UserObject::nothing );
         
-        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        ponder::runtime::ObjectFactory fact(*metaclass);
         object = fact.construct(ponder::Args(3, 3., "3"));
 
         MyClass* instance = object.get<MyClass*>();
@@ -362,7 +362,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         
         IS_TRUE( object == ponder::UserObject::nothing );
         
-        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        ponder::runtime::ObjectFactory fact(*metaclass);
         object = fact.construct(ponder::Args(4, 4., "4", four));
 
         MyClass* instance = object.get<MyClass*>();
@@ -382,7 +382,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         
         IS_TRUE( object == ponder::UserObject::nothing );
         
-        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        ponder::runtime::ObjectFactory fact(*metaclass);
         object = fact.construct(ponder::Args(5, 5., "5", five, 5));
 
         MyClass* instance = object.get<MyClass*>();
@@ -398,7 +398,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 
     SECTION("with invalid parameters")
     {
-        auto fact{ ponder::runtime::ObjectFactory(*metaclass) };
+        ponder::runtime::ObjectFactory fact(*metaclass);
 
         IS_TRUE( fact.construct(ponder::Args("hello")) == ponder::UserObject::nothing );
         IS_TRUE( fact.construct(ponder::Args(MyType(10))) == ponder::UserObject::nothing );
