@@ -5,13 +5,10 @@ Ponder
 Linux & OSX: [![Build Status](https://travis-ci.org/billyquith/ponder.svg?branch=master)](https://travis-ci.org/billyquith/ponder) -
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/spskn9y93e8osve2/branch/master?svg=true)](https://ci.appveyor.com/project/billyquith/ponder/branch/master)
 
-### Version 3 Alpha
+### New: Version 3
 
-_This is an alpha release of Ponder V3. It is still in development, and the API is
-unstable/changing. The older, stable versions are tagged and there are zips of these._
-
-_Please feel free to download and try, but, be warned: features and the API may change until the
-full version released._
+V1 replaced Boost with C++11. V2 added Lua bindings. V3 refactored to remove some warts,
+ease future development, and re-add serialisation. API is evolving.
 
 ### About
 
