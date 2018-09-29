@@ -1,5 +1,11 @@
 var namespaceponder =
 [
+    [ "archive", null, [
+      [ "ArchiveReader", "classponder_1_1archive_1_1_archive_reader.html", "classponder_1_1archive_1_1_archive_reader" ],
+      [ "ArchiveWriter", "classponder_1_1archive_1_1_archive_writer.html", "classponder_1_1archive_1_1_archive_writer" ],
+      [ "RapidJsonArchive", "classponder_1_1archive_1_1_rapid_json_archive.html", "classponder_1_1archive_1_1_rapid_json_archive" ],
+      [ "RapidXmlArchive", "classponder_1_1archive_1_1_rapid_xml_archive.html", "classponder_1_1archive_1_1_rapid_xml_archive" ]
+    ] ],
     [ "lua", "namespaceponder_1_1lua.html", null ],
     [ "policy", "namespaceponder_1_1policy.html", "namespaceponder_1_1policy" ],
     [ "runtime", "namespaceponder_1_1runtime.html", "namespaceponder_1_1runtime" ],
@@ -29,6 +35,7 @@ var namespaceponder =
     [ "ForbiddenWrite", "classponder_1_1_forbidden_write.html", "classponder_1_1_forbidden_write" ],
     [ "Function", "classponder_1_1_function.html", "classponder_1_1_function" ],
     [ "FunctionNotFound", "classponder_1_1_function_not_found.html", "classponder_1_1_function_not_found" ],
+    [ "IUserDataStore", "classponder_1_1_i_user_data_store.html", "classponder_1_1_i_user_data_store" ],
     [ "NotEnoughArguments", "classponder_1_1_not_enough_arguments.html", "classponder_1_1_not_enough_arguments" ],
     [ "NoType", "structponder_1_1_no_type.html", null ],
     [ "NullObject", "classponder_1_1_null_object.html", "classponder_1_1_null_object" ],
@@ -37,7 +44,9 @@ var namespaceponder =
     [ "Property", "classponder_1_1_property.html", "classponder_1_1_property" ],
     [ "PropertyNotFound", "classponder_1_1_property_not_found.html", "classponder_1_1_property_not_found" ],
     [ "SimpleProperty", "classponder_1_1_simple_property.html", "classponder_1_1_simple_property" ],
-    [ "TagHolder", "classponder_1_1_tag_holder.html", "classponder_1_1_tag_holder" ],
+    [ "Type", "classponder_1_1_type.html", "classponder_1_1_type" ],
+    [ "TypeAmbiguity", "classponder_1_1_type_ambiguity.html", "classponder_1_1_type_ambiguity" ],
+    [ "UserData", "classponder_1_1_user_data.html", "classponder_1_1_user_data" ],
     [ "UserObject", "classponder_1_1_user_object.html", "classponder_1_1_user_object" ],
     [ "UserProperty", "classponder_1_1_user_property.html", "classponder_1_1_user_property" ],
     [ "Value", "classponder_1_1_value.html", "classponder_1_1_value" ],

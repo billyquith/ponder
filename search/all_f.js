@@ -1,7 +1,22 @@
 var searchData=
 [
-  ['qtfunction',['QtFunction',['../classponder__ext_1_1_qt_function.html',1,'ponder_ext::QtFunction&lt; T &gt;'],['../classponder__ext_1_1_qt_function.html#aab13af8a646c8ea31905edc0c83ef36d',1,'ponder_ext::QtFunction::QtFunction()']]],
-  ['qthelper',['QtHelper',['../classponder__ext_1_1_qt_helper.html',1,'ponder_ext']]],
-  ['qtmapper',['QtMapper',['../classponder__ext_1_1_qt_mapper.html',1,'ponder_ext']]],
-  ['qtsimpleproperty',['QtSimpleProperty',['../classponder__ext_1_1_qt_simple_property.html',1,'ponder_ext::QtSimpleProperty&lt; T &gt;'],['../classponder__ext_1_1_qt_simple_property.html#ae2af1263ae5ae955c33817e4f682fdac',1,'ponder_ext::QtSimpleProperty::QtSimpleProperty()']]]
+  ['rapidjsonarchive',['RapidJsonArchive',['../classponder_1_1archive_1_1_rapid_json_archive.html',1,'ponder::archive']]],
+  ['rapidxmlarchive',['RapidXmlArchive',['../classponder_1_1archive_1_1_rapid_xml_archive.html',1,'ponder::archive']]],
+  ['real',['Real',['../namespaceponder.html#a70733c0387bfaf658c5ded607c30d473a7f80fcc452c2f1ed2bb51b39d0864df1',1,'ponder']]],
+  ['ref',['ref',['../classponder_1_1_user_object.html#a989bcc4074c644a6d80c4faf2b8ecc91',1,'ponder::UserObject::ref()'],['../classponder_1_1_value.html#a7b1eb739e610ce21185180b6c9afa518',1,'ponder::Value::ref()']]],
+  ['reference',['Reference',['../namespaceponder.html#a140a0b0dadf12571c590414f46e593f9a63d5049791d9d79d86e9a108b0a999ca',1,'ponder']]],
+  ['referencekind',['ReferenceKind',['../namespaceponder.html#a140a0b0dadf12571c590414f46e593f9',1,'ponder']]],
+  ['remove',['remove',['../classponder_1_1_array_property.html#ad0d69d0129ec9971c2420963756af77d',1,'ponder::ArrayProperty']]],
+  ['removeobserver',['removeObserver',['../namespaceponder.html#a5fcd2de1556bb55b08f0fd6e1149012c',1,'ponder']]],
+  ['resize',['resize',['../classponder_1_1_array_property.html#a150fc2ebd74506e265f0142d124bd3f2',1,'ponder::ArrayProperty']]],
+  ['result_5ftype',['result_type',['../classponder_1_1_value_visitor.html#a9e3747df5714af5feaee952552f4db30',1,'ponder::ValueVisitor']]],
+  ['returncopy',['ReturnCopy',['../structponder_1_1policy_1_1_return_copy.html',1,'ponder::policy']]],
+  ['returninternalref',['ReturnInternalRef',['../structponder_1_1policy_1_1_return_internal_ref.html',1,'ponder::policy']]],
+  ['returnkind',['ReturnKind',['../namespaceponder_1_1policy.html#ac59994dbb4e464d33992242c9ac3fd1f',1,'ponder::policy']]],
+  ['returnmultiple',['ReturnMultiple',['../structponder_1_1policy_1_1_return_multiple.html',1,'ponder::policy']]],
+  ['returnpolicy',['returnPolicy',['../classponder_1_1_function.html#a0ba04692c585e9d8eb4027ba2f8bc44a',1,'ponder::Function']]],
+  ['returntype',['returnType',['../classponder_1_1_function.html#a6740b8e20ebb10a5e79748fb44e465d1',1,'ponder::Function']]],
+  ['runstring',['runString',['../namespaceponder_1_1lua.html#aec7ee52f7759757f764fb2d4b44f9763',1,'ponder::lua']]],
+  ['runtime_2ehpp',['runtime.hpp',['../runtime_8hpp.html',1,'']]],
+  ['runtimemodule',['RuntimeModule',['../structponder_1_1uses_1_1_runtime_module.html',1,'ponder::uses']]]
 ];

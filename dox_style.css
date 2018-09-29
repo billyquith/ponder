@@ -1,7 +1,7 @@
 /* The standard CSS for doxygen 1.8.10 */
 
 body, table, div, p, dl {
-	font: 200 14px/1.75em Arial,sans-serif;
+	font: 200 14px/1.75em 'Roboto Slab',Arial,sans-serif;
 	color: #444;
 }
 
@@ -12,7 +12,7 @@ h1.groupheader {
 }
 
 .title {
-	font: 400 14px/28px;
+	font: 400 14px/28px 'Roboto Slab',Arial,sans-serif;
 	font-size: 150%;
 	margin: 10px 2px;
 }
@@ -110,7 +110,7 @@ div.navtab {
 
 /* override glass look */
 .tabs, .tab2, .tabs3, .tabs4 {
-	font-family: 'Arial', sans-serif;
+	font-family: 'Roboto Slab','Arial', sans-serif;
 	/*background-image: none;*/
 }
 
@@ -122,11 +122,22 @@ a {
 	text-decoration: none;
 }
 
+.contents a {
+/*    color: #04b112;*/
+/*    color: #47a64c;*/
+}
+
 .contents a:visited {
-	color: #224f24;
+    text-decoration: none;
+/*    color: #47a64c;*/
+}
+
+.contents a.qindexHL:visited {
+    color: #ffffff;
 }
 
 a:hover {
+    color: #1abc58;
 	text-decoration: underline;
 }
 
@@ -141,24 +152,20 @@ a.qindexHL {
 	border: 1px double #869DCA;
 }
 
-.contents a.qindexHL:visited {
-        color: #ffffff;
-}
-
 a.el {
 	color: #227f24;
-	/*font-weight: bold;*/
+	font-weight: normal;
 }
 
 a.elRef {
 }
 
 a.code, a.code:visited, a.line, a.line:visited {
-	color: #226f24; 
+	color: #226f24;
 }
 
 a.codeRef, a.codeRef:visited, a.lineRef, a.lineRef:visited {
-	color: #226f24; 
+	color: #226f24;
 }
 
 /* @end */
@@ -169,40 +176,40 @@ dl.el {
 
 /*quoted*/
 pre.fragment {
-  border-radius: 7px;
-	border-color: #e1e2ff;
-	border-width: 2px;
-	border-style: dotted;
-	box-shadow: -3px 3px 8px #d2d6dd;
-	background-color: #f5f6f9;
-	color: #474747;
-	padding: 8px;
-	margin: 4px;
-	overflow: auto;
-	word-wrap: break-word;
-	font-size:  0.9em;
-	font-family: 'Menlo', monospace, fixed;
-  line-height: 1.3;
+    border-radius: 9px;
+    border-color: #e1e2ff;
+    border-width: 2px;
+    border-style: solid;
+    box-shadow: -3px 3px 8px #d2d6dd;
+    background-color: #f9f9f9
+    color: #474747;
+    padding: 8px;
+    margin: 4px;
+    overflow: auto;
+    word-wrap: break-word;
+    font-size:  0.9em;
+    font-family: 'Ubuntu Mono',monospace,fixed;
+    line-height: 1.3;
 }
 
 /*code*/
-div.fragment { 
+div.fragment {
 	padding: 1em;
 	margin: 1em 0 1em 0;
 	color: #474747;
-	background-color: #f5f6f9;
-  border-radius: 7px;
+	background-color: #f9f9f9;
+    border-radius: 9px;
 	border-color: #e1e2ff;
 	border-width: 2px;
-	border-style: dotted;
+	border-style: solid;
 	box-shadow: -3px 3px 8px #d2d6dd;
 }
 
 div.line {
-	font-family: 'Menlo', monospace, fixed;
-  font-size: 12px;
+	font-family: 'Ubuntu Mono',monospace,fixed;
+    /*font-size: 12px;*/
 	color: #474747;
-  line-height: 1.2;
+    line-height: 1.2;
 	text-wrap: unrestricted;
 	white-space: -moz-pre-wrap; /* Moz */
 	white-space: -pre-wrap;     /* Opera 4-6 */
@@ -322,7 +329,7 @@ p.formulaDsp {
 }
 
 img.formulaDsp {
-	
+
 }
 
 img.formulaInl {
@@ -483,31 +490,30 @@ table.memberdecls {
 	box-shadow: 0 0 15px cyan;
 }
 
-.mdescLeft, .mdescRight,
+/*  .memItemLeft,   .memItemRight   - function
+    > IdReturn 	    name () const
+*/
 .memItemLeft, .memItemRight,
 .memTemplItemLeft, .memTemplItemRight, .memTemplParams {
-	background-color: #F9FAFC;
+	font-family: 'Ubuntu Mono', monospace;
+    font-weight: 800;
+	background-color: #f0f0f0
 	border: none;
 	margin: 4px;
 	padding: 1px 0 0 8px;
-  font-family: monospace;
 }
 
+/*  .mdescLeft, .mdescRight     - description of function
+    >           Get the name of the property. More...
+*/
 .mdescLeft, .mdescRight {
 	padding: 0px 8px 4px 8px;
 	color: #777;
-  font-family: Arial, sans-serif;
-}
-
-.memSeparator {
-        border-bottom: 1px solid #DEE4F0;
-        line-height: 1px;
-        margin: 0px;
-        padding: 0px;
+    font-size: .9em;
 }
 
 .memItemLeft, .memTemplItemLeft {
-        white-space: nowrap;
+    white-space: nowrap;
 }
 
 .memItemRight {
@@ -515,14 +521,15 @@ table.memberdecls {
 }
 
 .memTemplParams {
-	color: #4665A2;
+    color: #4665A2;
     white-space: nowrap;
-	font-size: 80%;
 }
 
-.memItemLeft, .memItemRight, .memTemplItemLeft, .memTemplItemRight, .memTemplParams {
-	/*font-family: 'Courier New', monospace;	*/
-	background-color: #f0f0f0;
+.memSeparator {
+    border-bottom: 1px solid #DEE4F0;
+    line-height: 1px;
+    margin: 0px;
+    padding: 0px;
 }
 
 /* @end */
@@ -532,10 +539,13 @@ table.memberdecls {
 /* Styles for detailed member documentation */
 
 .memtemplate {
-	font-size: 80%;
-	color: #4665A2;
-	font-weight: normal;
+    font-family: 'Ubuntu Mono',monospace;
+    color: #4665A2;
 	margin-left: 9px;
+}
+
+.memTemplParams {
+    font-size: 1em;
 }
 
 .memnav {
@@ -594,6 +604,10 @@ table.memberdecls {
 
 .memname td {
 	vertical-align: bottom;
+}
+
+.memtitle {
+    font-family: 'Ubuntu Mono',monospace;
 }
 
 .memproto, dl.reflist dt {
@@ -679,15 +693,16 @@ dl.reflist dd {
 .params .paramname, .retval .paramname {
   font-weight: bold;
   vertical-align: top;
+  padding-right: 2em;
 }
-        
+
 .params .paramtype {
   font-style: italic;
   vertical-align: top;
 }
-        
+
 .params .paramdir {
-  font-family: "courier new",courier,monospace;
+  font-family: 'Ubuntu Mono',Ubuntu Mono,monospace;
   vertical-align: top;
 }
 
@@ -861,7 +876,7 @@ div.directory {
 }
 
 table.directory {
-    font: 400 14px Roboto,sans-serif;
+    font: 400 14px 'Roboto Slab',sans-serif;
 }
 
 /* @end */
@@ -935,8 +950,8 @@ table.fieldtable {
 
 .fieldtable td.fielddoc p:first-child {
         margin-top: 0px;
-}       
-        
+}
+
 .fieldtable td.fielddoc p:last-child {
         margin-bottom: 2px;
 }
@@ -1008,9 +1023,9 @@ table.fieldtable {
 	text-decoration: none;
 	outline: none;
 	color: #283A5D;
-	font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
+	font-family: 'Lato',Helvetica,Arial,sans-serif;
 	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
-	text-decoration: none;        
+	text-decoration: none;
 }
 
 .navpath li.navelem a:hover
@@ -1020,15 +1035,15 @@ table.fieldtable {
 
 .navpath li.footer
 {
-        list-style-type:none;
-        float:right;
-        padding-left:10px;
-        padding-right:15px;
-        background-image:none;
-        background-repeat:no-repeat;
-        background-position:right;
-        color:#364D7C;
-        font-size: 8pt;
+    list-style-type:none;
+    float:right;
+    padding-left:10px;
+    padding-right:15px;
+    background-image:none;
+    background-repeat:no-repeat;
+    background-position:right;
+    color:#364D7C;
+    font-size: 8pt;
 }
 
 div.summary
@@ -1038,7 +1053,7 @@ div.summary
 	padding-right: 5px;
 	width: 50%;
 	text-align: right;
-}       
+}
 
 div.summary a
 {
@@ -1085,64 +1100,63 @@ dl
 */
 dl.note
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #D0C000;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #79b8d0;
 }
 
 dl.warning, dl.attention
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #FF0000;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #FF0000;
 }
 
 dl.pre, dl.post, dl.invariant
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #00D000;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #00D000;
 }
 
 dl.deprecated
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #505050;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #505050;
 }
 
 dl.todo
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #00C0E0;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #00C0E0;
 }
 
 dl.test
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #3030E0;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #3030E0;
 }
 
 dl.bug
 {
-        margin-left:-7px;
-        padding-left: 3px;
-        border-left:4px solid;
-        border-color: #C08050;
+    margin-left:-7px;
+    padding-left: 3px;
+    border-left:4px solid;
+    border-color: #C08050;
 }
 
 dl.section dd {
 	margin-bottom: 6px;
 }
-
 
 #projectlogo
 {
@@ -1150,30 +1164,32 @@ dl.section dd {
 	vertical-align: bottom;
 	border-collapse: separate;
 }
- 
+
 #projectlogo img
-{ 
+{
 	border: 0px none;
 }
- 
+
 #projectalign
 {
     vertical-align: middle;
+    padding-left: 0.5em;
 }
 
 #projectname
 {
-	font: 1em Arial,sans-serif;
-	margin-left: 1em;
-	padding: 1px 8px 1px 8px;
-	background-color: #eee;
+	font: 2em monospace;
+    color: white;
+	margin-left: 0.7em;
+    display: inline-block;
 }
-    
+
 #projectbrief
 {
-	font: 100% Arial,sans-serif;
-	margin: 0px;
-	padding: 0px;
+	font: 1em sans-serif;
+    color: gray;
+    display: inline-block;
+    padding-left: 0.8em;
 }
 
 #projectnumber
@@ -1253,15 +1269,15 @@ div.toc {
 }
 
 div.toc li {
-	background: url("bdwn.png") no-repeat scroll 0 5px transparent;
-	font: 10px/1.2 Verdana,DejaVu Sans,Geneva,sans-serif;
+    background: url("bdwn.png") no-repeat scroll 0 5px transparent;
+    font-family: 'Roboto Slab';
 	margin-top: 5px;
 	padding-left: 10px;
 	padding-top: 2px;
 }
 
 div.toc h3 {
-	font: bold 12px/1.2 Arial,FreeSans,sans-serif;
+/*    font: bold 12px/1.2 Arial,FreeSans,sans-serif;*/
 	color: #4665A2;
 	border-bottom: 0 none;
 	margin: 0;
@@ -1271,7 +1287,7 @@ div.toc ul {
 	list-style: none outside none;
 	border: medium none;
 	padding: 0px;
-}       
+}
 
 div.toc li.level1 {
         margin-left: 0px;
@@ -1315,10 +1331,20 @@ tr.heading h2 {
 }
 
 #nav-tree .label {
-	font-family: 'Arial', sans-serif;
+	font-family: 'Roboto Slab', 'Arial', sans-serif;
 }
 
 #powerTip div.ttdeci {
   color: gold;
+}
+
+/* Menu bar */
+.sm-dox a, .sm-dox a:focus, .sm-dox a:hover, .sm-dox a:active {
+    font-family: 'Roboto Slab', monospace;
+}
+
+/* Splitter */
+.ui-resizable-handle {
+    background-repeat: repeat-y;
 }
 

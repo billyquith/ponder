@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['detail',['detail',['../namespaceponder_1_1detail.html',1,'ponder::detail'],['../namespaceponder_1_1lua_1_1detail.html',1,'ponder::lua::detail']]],
   ['impl',['impl',['../namespaceponder_1_1lua_1_1impl.html',1,'ponder::lua']]],
   ['lua',['lua',['../namespaceponder_1_1lua.html',1,'ponder']]],
   ['policy',['policy',['../namespaceponder_1_1policy.html',1,'ponder']]],
