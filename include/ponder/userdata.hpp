@@ -80,7 +80,7 @@ public:
     virtual void removeValue(const Type& t, IdRef name) = 0;
 };
 
-IUserDataStore* userDataStore();
+PONDER_API IUserDataStore* userDataStore();
 
 } // namespace ponder
 
