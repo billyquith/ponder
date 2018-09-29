@@ -188,7 +188,7 @@ pre.fragment {
     overflow: auto;
     word-wrap: break-word;
     font-size:  0.9em;
-    font-family: 'Courier',monospace,fixed;
+    font-family: 'Ubuntu Mono',monospace,fixed;
     line-height: 1.3;
 }
 
@@ -206,8 +206,8 @@ div.fragment {
 }
 
 div.line {
-	font-family: 'Courier',monospace,fixed;
-    font-size: 12px;
+	font-family: 'Ubuntu Mono',monospace,fixed;
+    /*font-size: 12px;*/
 	color: #474747;
     line-height: 1.2;
 	text-wrap: unrestricted;
@@ -495,7 +495,7 @@ table.memberdecls {
 */
 .memItemLeft, .memItemRight,
 .memTemplItemLeft, .memTemplItemRight, .memTemplParams {
-	font-family: 'Courier', monospace;
+	font-family: 'Ubuntu Mono', monospace;
     font-weight: 800;
 	background-color: #f0f0f0
 	border: none;
@@ -539,7 +539,7 @@ table.memberdecls {
 /* Styles for detailed member documentation */
 
 .memtemplate {
-    font-family: 'Courier',monospace;
+    font-family: 'Ubuntu Mono',monospace;
     color: #4665A2;
 	margin-left: 9px;
 }
@@ -607,7 +607,7 @@ table.memberdecls {
 }
 
 .memtitle {
-    font-family: 'Courier',monospace;
+    font-family: 'Ubuntu Mono',monospace;
 }
 
 .memproto, dl.reflist dt {
@@ -702,7 +702,7 @@ dl.reflist dd {
 }
 
 .params .paramdir {
-  font-family: 'Courier',courier,monospace;
+  font-family: 'Ubuntu Mono',Ubuntu Mono,monospace;
   vertical-align: top;
 }
 
@@ -1179,6 +1179,7 @@ dl.section dd {
 #projectname
 {
 	font: 2em monospace;
+	text-transform: capitalize;	
     color: white;
 	margin-left: 0.7em;
     display: inline-block;

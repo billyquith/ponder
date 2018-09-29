@@ -22,25 +22,38 @@ behaviour that you want.
 
 \subsection common_ancestor_type All types have common ancestor: Type.
 
+See ponder::Type.
+
 \subsection userdata_added Added UserData per Type. (#98)
+
+See ponder::UserData. 
 
 \subsection serialisation_refactor Refactored serialisation. Removed ponder-xml. (#43).
 
 - Added RapidJSON for use by JSON serialiser (#43).
 - Added RapidXML for use by XML serialiser (#43).
 
+Note, in Ponder 3.0 we only have XML serialisation support.
+
 \subsection  Remove dynamic read/write attribute from properties. (#91)
+
+This was a simplification of the API. Similar functionality might be implemented by wrapping a
+property, perhaps with a lambda function
 
 \subsection tagholder_removed Remove TagHolder. (#92)
 
-\subsection classbyindex_removed Removed `ponder::classByIndex()`.
+Tagholder removed. This could now be implemented with Userdata.
 
-Use `ponder::classIterator()` instead.
+\subsection classbyindex_removed Removed ponder::classByIndex().
+
+Use ponder::classIterator() instead.
 
 \subsection cmake_project_rename Cmake project name changed to "ponder" to match namespace (#95).
 
+Following convention.
+
 \subsection composed_prop_getter_removed Removed composed property getter
 
-Use lambdas instead. See property test p14-p17.
+Use lambdas instead.
 
 */
