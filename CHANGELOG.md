@@ -2,7 +2,7 @@
 Ponder Changelog
 ----------------
 
-- [Notes with examples on blog](http://billyquith.github.io/ponder/blog/).
+- See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
 
 ## 3.0
 
@@ -87,4 +87,4 @@ Ponder Changelog
 
 ## 1.0
 
-- Boost dependency removed.
+- Boost dependency removed. C++11 features used instead.
