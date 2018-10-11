@@ -3,38 +3,18 @@
 
 set -e
 
-PROJDIR=tmp-proj
-DOCDIR=tmp-docs
-DOCOUT=$PROJDIR/build/doc/api/html
+if [ ! -f ../build/doc/api/html/index.html ]; then
+	echo "Please build docs"
+	exit 1
+fi
 
-[ -d $PROJDIR ] && rm -rf $PROJDIR
+DOCDIR=tmp-docs
+DOCOUT=../build/doc/api/html
+
 [ -d $DOCDIR ] && rm -rf $DOCDIR
 
 # document what is comitted
-git clone https://github.com/billyquith/ponder.git $PROJDIR -b master --depth=1
 git clone https://github.com/billyquith/ponder.git $DOCDIR -b gh-pages --depth=1
-
-pushd $PROJDIR
-mkdir build && cd build
-
-# OS specifc project creation
-case $(uname -s) in
-CYGWIN*)
-	if [ ! -z "$(ninja --version)" ]; then
-		echo "Use Ninja"
-		cmake .. -G Ninja
-	else
-		"Use make"
-		cmake .. -G "Unix Makefiles"
-	fi
-	;;
-*)	cmake .. -G Ninja
-	;;
-esac
-
-cmake --build . --target doc
-cd ..
-popd
 
 # reset and copy Doxygen docs
 [ -d $DOCDIR ] && rm -r $DOCDIR/*
@@ -49,5 +29,4 @@ git commit -m "${MESSAGE:-"Update docs"}"
 git push
 popd
 
-[ -d $PROJDIR ] && rm -rf $PROJDIR
 [ -d $DOCDIR ] && rm -rf $DOCDIR
