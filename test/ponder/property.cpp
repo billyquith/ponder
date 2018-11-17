@@ -71,7 +71,7 @@ namespace PropertyTest
         int i;
         float f;
         std::string s;
-        //     const MyEnum p8;
+        MyEnum e;
         //     std::shared_ptr<MyType> p9;
 
 #define MEMBER_ACCESSORS(T,N) \
@@ -83,6 +83,7 @@ namespace PropertyTest
         MEMBER_ACCESSORS(int,i)
         MEMBER_ACCESSORS(float,f)
         MEMBER_ACCESSORS(std::string,s)
+        MEMBER_ACCESSORS(MyEnum,e)
     };
 
 #define FUNCTION_ACCESSORS(T,N) \
@@ -94,6 +95,7 @@ namespace PropertyTest
     FUNCTION_ACCESSORS(int,i)
     FUNCTION_ACCESSORS(float,f)
     FUNCTION_ACCESSORS(std::string,s)
+    FUNCTION_ACCESSORS(MyEnum,e)
 
     void declare()
     {
@@ -123,6 +125,7 @@ namespace PropertyTest
             PROPERTY(int,i)
             PROPERTY(float,f)
             PROPERTY(std::string,s)
+            PROPERTY(MyEnum,e)
             ;
 
         // ***** std::function *****
@@ -177,6 +180,7 @@ TEST_CASE("Classes can have properties")
         CHECK_PROP_TYPE(i, ponder::ValueKind::Integer);
         CHECK_PROP_TYPE(f, ponder::ValueKind::Real);
         CHECK_PROP_TYPE(s, ponder::ValueKind::String);
+        CHECK_PROP_TYPE(e, ponder::ValueKind::Enum);
     }
 
     SECTION("readable")
@@ -198,6 +202,7 @@ TEST_CASE("Classes can have properties")
         CHECK_PROP_READABLE(i);
         CHECK_PROP_READABLE(f);
         CHECK_PROP_READABLE(s);
+        CHECK_PROP_READABLE(e);
     }
 
     SECTION("writable")
@@ -218,6 +223,7 @@ TEST_CASE("Classes can have properties")
         CHECK_PROP_WRITABLE(i);
         CHECK_PROP_WRITABLE(f);
         CHECK_PROP_WRITABLE(s);
+        CHECK_PROP_WRITABLE(e);
     }
 
     SECTION("get")
@@ -241,11 +247,13 @@ TEST_CASE("Classes can have properties")
         c.i = 77;
         c.f = 34.5f;
         c.s = "Woo!";
+        c.e = One;
 
         CHECK_PROP_GET(bool,b);
         CHECK_PROP_GET(int,i);
         CHECK_PROP_GET(float,f);
         CHECK_PROP_GET(std::string,s);
+        CHECK_PROP_GET(MyEnum,e);
     }
 
     SECTION("set")
@@ -279,6 +287,7 @@ TEST_CASE("Classes can have properties")
         CHECK_PROP_SET(i,789);
         CHECK_PROP_SET(f,345.75f);
         CHECK_PROP_SET(s,std::string("The Reverend Black Grape"));
+        CHECK_PROP_SET(e,Two);
     }
 }
 
