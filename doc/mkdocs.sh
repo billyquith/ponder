@@ -7,7 +7,7 @@ case `uname -s` in
 CYGWIN*)
 	cygstart doc/api/html/index.html
 	;;
-darwin*)
+Darwin*)
 	open doc/api/html/index.html
 	;;
 esac
