@@ -44,28 +44,6 @@ static_assert(LUA_VERSION_NUM==503, "Expecting Lua 5.3");
 #define PLDB(X) X
 #define PASSERT(X) if(!(X)) __builtin_trap()
 
-namespace ponder_ext
-{
-    template <>
-    struct ValueMapper<ponder::detail::string_view>
-    {
-        static const ponder::ValueKind kind = ponder::ValueKind::String;
-        
-        // convert to ponder::String
-        static ponder::String to(const ponder::detail::string_view& source)
-        {
-            return ponder::String(source);
-        }
-
-        // convert to string_view from ponder type
-        template <typename T>
-        static ponder::detail::string_view from(const T& source)
-        {
-            return ponder::detail::string_view(ValueMapper<ponder::String>::from(source));
-        }
-    };
-}
-
 namespace lib
 {
     static constexpr float FLOAT_EPSILON = 1e-5f;

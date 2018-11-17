@@ -247,6 +247,18 @@ struct ValueMapper<ponder::String>
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User, ponder::ValueKind::String));}
 };
 
+template <>
+struct ValueMapper<ponder::detail::string_view>
+{
+    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    
+    static ponder::String to(const ponder::detail::string_view& sv)
+        {return ponder::String(sv.data(), sv.length());}
+    template <typename T>
+    static ponder::detail::string_view from(const T& source)
+        {return ponder::detail::string_view(ValueMapper<ponder::String>::from(source));}
+};
+
 /**
  * Specialization of ValueMapper for const char*.
  * Conversions to const char* are disabled (can't return a pointer to a temporary)
@@ -298,14 +310,6 @@ struct ValueMapper<const char[N]>
 {
     static const ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(const char (&source)[N]) {return ponder::String(source);}
-};
-
-template <>
-struct ValueMapper<ponder::detail::string_view>
-{
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
-    static ponder::String to(const ponder::detail::string_view& sv)
-        {return ponder::String(sv.data(), sv.length());}
 };
 
 /**
