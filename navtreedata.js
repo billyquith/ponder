@@ -25,6 +25,7 @@ var NAVTREE =
 [
   [ "ponder", "index.html", [
     [ "Ponder C++ library documentation", "index.html", "index" ],
+    [ "Building Ponder", "building_ponder.html", null ],
     [ "Ponder License", "license_page.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -59,7 +60,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classponder_1_1_user_data.html"
+"classponder_1_1_type_ambiguity.html#a20358dc41175ebfa688cd3243cc4e612"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
