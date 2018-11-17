@@ -208,10 +208,11 @@ public:
     size_type copy(CharT* dest, size_type count, size_type pos = 0) const
     {
         if (pos >= size()) { throw std::out_of_range("basic_string_view::copy out of range"); }
-        for (int i = 0; i < size();++i)
+        for (int i = 0, sz = size(); i < sz; ++i)
         {
             dest[i] = operator[](i + pos);
         }
+        return size();
     }
     CONSTEXPR basic_string_view
     substr(size_type pos = 0, size_type count = npos) const

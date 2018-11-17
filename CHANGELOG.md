@@ -4,6 +4,12 @@ Ponder Changelog
 
 - See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
 
+### 3.0.1
+
+- Fix Lua binding (#104).
+- Fix `string_view` no return value (#106).
+- Added docs on building Ponder.
+
 ## 3.0
 
 - Extensive refactoring of the API.
