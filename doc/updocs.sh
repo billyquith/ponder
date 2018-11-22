@@ -32,7 +32,7 @@ CYGWIN*)
 	;;
 esac
 
-cmake --build . --target doc
+cmake --build . --target ponder_docs
 cd ..
 popd
 
