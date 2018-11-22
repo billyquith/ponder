@@ -64,6 +64,7 @@ namespace PropertyTest
         : b(false)
         , i(0)
         , f(0.f)
+        , e(Zero)
         {}
 
         // members
