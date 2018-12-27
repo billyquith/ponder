@@ -38,14 +38,13 @@ template <typename T> struct IsUserType {
     static constexpr bool value = std::is_class<RawType>::value
         && !std::is_same<RawType, Value>::value
         && !std::is_same<RawType, UserObject>::value
-        && !std::is_same<RawType, std::string>::value;
+        && !std::is_same<RawType, ponder::String>::value;
 };
 
 // Decide whether the UserObject holder should be ref (true) or copy (false).
 template <typename T> struct IsUserObjRef {
     static constexpr bool value = std::is_pointer<T>::value || std::is_reference<T>::value;
 };
-
 
 /**
  * \brief Helper structure allowing a shortcut when converting a ponder::Value to type

@@ -136,6 +136,7 @@ template <typename T, typename C>
 struct ValueMapper
 {
     static const ponder::ValueKind kind = ponder::ValueKind::User;
+    
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
 
     static T from(bool)
@@ -232,7 +233,7 @@ struct ValueMapper<ponder::String>
 {
     static const ponder::ValueKind kind = ponder::ValueKind::String;
     static const ponder::String& to(const ponder::String& source) {return source;}
-
+    
     static ponder::String from(bool source)
         {return ponder::detail::convert<ponder::String>(source);}
     static ponder::String from(long source)
@@ -426,6 +427,11 @@ struct ValueMapper<ponder::NoType>
 {
     static const ponder::ValueKind kind = ponder::ValueKind::None;
 };
+
+/*----------------------------------------------------------------------
+ * Modifiers.
+ *  - Modify type to avoid supporting every variation above, e.g. const.
+ */
     
 /**
  * Specialization of ValueMapper for const T -- just forward to ValueMapper<T>
