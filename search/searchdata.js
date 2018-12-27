@@ -10,7 +10,7 @@ var indexSectionsWithContent =
   7: "fprv",
   8: "abefilmnprsu",
   9: "p",
-  10: "bps"
+  10: "bdps"
 };
 
 var indexSectionNames =

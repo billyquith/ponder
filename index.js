@@ -7,6 +7,7 @@ var index =
     [ "Articles", "index.html#blog", null ],
     [ "License", "index.html#license", null ],
     [ "Shapes Example", "eg_page_shapes.html", null ],
+    [ "Declaration Example", "eg_page_declare.html", null ],
     [ "Ponder 1.x Release Notes", "blog_ponder_1.html", [
       [ "1.0 Release Notes", "blog_ponder_1.html#ponder_1_0", null ],
       [ "1.1 Release Notes", "blog_ponder_1.html#ponder_1_1", [
