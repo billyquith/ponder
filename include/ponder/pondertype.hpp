@@ -70,7 +70,7 @@ namespace detail
  *
  * \note This macro handles types that contain commas, e.g. `Data<float,int,int>`.
  *
- * \sa PONDER_TYPE(), PONDER_AUTO_TYPE()
+ * \sa PONDER_TYPE(), PONDER_AUTO_TYPE(), \ref eg_page_declare
  */
 #define PONDER_TYPE(...) \
     namespace ponder { \
@@ -84,7 +84,7 @@ namespace detail
     }
 
 /**
- * \brief Macro used to register a C++ type to Ponder with automatic metaclass creation
+ * \brief Macro used to register a C++ type to Ponder with automatic, on-demand metaclass creation
  *
  * Using this macro rather than PONDER_TYPE() will make Ponder automatically call
  * the provided registration function the first time the metaclass is requested.
@@ -115,7 +115,7 @@ namespace detail
  * }
  * \endcode
  *
- * \sa PONDER_TYPE(), \ref eg_page_shapes
+ * \sa PONDER_TYPE(), \ref eg_page_declare, \ref eg_page_shapes
  */
 #define PONDER_AUTO_TYPE(TYPE, REGISTER_FN) \
     namespace ponder { \
@@ -215,6 +215,7 @@ namespace detail
  *
  * \note This macro does not need to be inserted into all Ponder classes being declared,
  *       only ones which would like to support features like downcasting via polymorphism.
+ *       See \ref eg_page_shapes for an example.
  *
  * Example:
  *
@@ -233,6 +234,8 @@ namespace detail
  * const ponder::Class& mc = ponder::classByObject(b);
  * // mc == metaclass of MyDerived
  * \endcode
+ *
+ * \sa \ref eg_page_shapes
  */
 #define PONDER_POLYMORPHIC() \
     public: \

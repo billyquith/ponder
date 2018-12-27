@@ -55,7 +55,9 @@ struct Vec2
 //! [doc_class_Shape]
 class Shape
 {
+    PONDER_POLYMORPHIC()
 public:
+    
     virtual ~Shape() {}
 
     ShapeType getType() const { return m_type; }
@@ -70,12 +72,16 @@ private:
 
 class Circle : public Shape
 {
+    PONDER_POLYMORPHIC()
 public:
+
     Circle(Vec2 pos, float radius)
     :   Shape(ShapeType::Circle)
     ,   m_pos(pos)
     ,   m_radius(radius)
     {}
+
+    float getRadius() const { return m_radius; }
 private:
     Vec2 m_pos;
     float m_radius;
@@ -106,7 +112,8 @@ static void declare()
     ponder::Class::declare<Circle>()
         .base<Shape>()
         //.constructor<Vec2,float>()
-        .property("type", &Shape::getType)      // expose getter member function
+        .property("type", &Shape::getType)
+        .property("radius", &Circle::getRadius)
         ;
 }
 

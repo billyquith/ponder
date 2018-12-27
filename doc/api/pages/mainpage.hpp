@@ -49,6 +49,7 @@ We can then create and manipulate instances of the class using the API:
 \section examples Examples
 
  - \subpage eg_page_shapes
+ - \subpage eg_page_declare
 
 \section links Useful links
 
@@ -67,5 +68,15 @@ We can then create and manipulate instances of the class using the API:
 Ponder is distributed under the terms of the \ref license_page "MIT license".
 
 \ref license_page
+
+
+\page eg_page_shapes Shapes Example
+
+\snippet shapes.cpp eg_shapes
+
+
+\page eg_page_declare Declaration Example
+
+\snippet declare.cpp eg_declare
 
  */

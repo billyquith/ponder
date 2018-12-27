@@ -109,12 +109,10 @@ static void use()
 
 TEST_CASE("simple tests")
 {
-    SECTION("intro")
+    SECTION("declare and use")
     {
         std::printf("------------------------------------------------------------\n");
         declare();
         use();
     }
 }
-
-
