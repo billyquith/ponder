@@ -29,6 +29,12 @@
 
 #include <ponder/detail/util.hpp>
 
+#if defined(__GNUWIN32__) and __cplusplus >= 201103L
+    // MinGW support using C++11 defines __STRICT_ANSI__ which removes strcasecmp
+    // used below. As a fix, undefine __STRICT_ANSI__ before including strings.h.
+#undef __STRICT_ANSI__
+#endif
+
 #ifdef _MSC_VER
 #   include <string.h>
 #else
@@ -54,7 +60,7 @@ static inline int stricmp(const char* a, const char* b)
 }
 
 // parse string
-    
+
 template <typename T>
 static bool parse_integer(const String& from, T& to)
 {
@@ -135,7 +141,7 @@ bool conv(const String& from, unsigned long long& to)
     }
     return true;
 }
-    
+
 bool conv(const String& from, bool& to)
 {
     const char *s = from.c_str();
@@ -184,7 +190,7 @@ static const char* c_typeNames[] =
     "array",    // ValueKind::Array,
     "user",     // ValueKind::User
 };
-    
+
 const char* valueTypeAsString(ValueKind t)
 {
     const unsigned int i = static_cast<unsigned int>(t);
