@@ -27,6 +27,8 @@
  **
  ****************************************************************************/
 
+// Tests for detail::Dictionary.
+
 #include <ponder/config.hpp>
 #include <ponder/detail/dictionary.hpp>
 #include "test.hpp"

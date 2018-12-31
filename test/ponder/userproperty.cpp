@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/userproperty.hpp>
+// Tests for UserProperty, an exposed UserObject.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 

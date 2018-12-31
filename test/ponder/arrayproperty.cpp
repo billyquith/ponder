@@ -27,10 +27,9 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/errors.hpp>
-#include <ponder/arrayproperty.hpp>
-#include <ponder/class.hpp>
+// Tests for ArrayProperty:
+//  - Exposed objects that have elements that can be accessed via indices.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <list>

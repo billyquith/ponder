@@ -27,13 +27,11 @@
 **
 ****************************************************************************/
 
-#include <ponder/value.hpp>
-#include <ponder/class.hpp>
-#include <ponder/enum.hpp>
-#include <ponder/type.hpp>
-#include <ponder/valuevisitor.hpp>
-#include <ponder/enumobject.hpp>
-#include <ponder/userobject.hpp>
+// Tests for Value.
+//  - Get/set.
+//  - Type visitor.
+//  - Type coercion.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 

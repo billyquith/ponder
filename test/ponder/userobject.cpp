@@ -27,9 +27,9 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/userobject.hpp>
-#include <ponder/class.hpp>
+// Test UserObject: an instance of a user type.
+//  - creation, deletion, assignment, etc.
+
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/runtime.hpp>
 #include "test.hpp"

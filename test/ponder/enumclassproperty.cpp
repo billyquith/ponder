@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-#include "test.hpp"
-#include <ponder/classget.hpp>
-#include <ponder/enumget.hpp>
-#include <ponder/enumproperty.hpp>
-#include <ponder/enum.hpp>
-#include <ponder/class.hpp>
+// Tests for EnumProperty, used to exposed EnumObject.
+
 #include <ponder/classbuilder.hpp>
+#include "test.hpp"
 #include <list>
 #include <vector>
 

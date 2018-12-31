@@ -27,15 +27,10 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/class.hpp>
-#include <ponder/enum.hpp>
+// Test ClassVisitor API.
+//  - Can we use for all Property types.
+
 #include <ponder/classvisitor.hpp>
-#include <ponder/simpleproperty.hpp>
-#include <ponder/arrayproperty.hpp>
-#include <ponder/enumproperty.hpp>
-#include <ponder/userproperty.hpp>
-#include <ponder/function.hpp>
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 

@@ -26,6 +26,9 @@
 **
 ****************************************************************************/
 
+// Tests for UserData.
+//  - Test per-member UserData: properties, functions.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 

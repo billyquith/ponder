@@ -27,12 +27,13 @@
  **
  ****************************************************************************/
 
-#include <iostream>
+// Test object serialisation.
 
-#include "test.hpp"
 #include <ponder/uses/archive/rapidxml.hpp>
 #include <ponder/uses/serialise.hpp>
 #include <ponder/classbuilder.hpp>
+#include "test.hpp"
+
 #include <rapidxml/rapidxml_print.hpp>
 #include <iostream>
 #include <sstream>

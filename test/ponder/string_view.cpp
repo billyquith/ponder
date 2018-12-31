@@ -26,9 +26,11 @@
  **
  ****************************************************************************/
 
+// Test local implementation of string_view.
+
+#include <ponder/detail/string_view.hpp>
 #include "test.hpp"
 #include <iostream>
-#include <ponder/detail/string_view.hpp>
 
 using ponder::detail::string_view;
 

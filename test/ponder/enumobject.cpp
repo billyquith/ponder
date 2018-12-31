@@ -27,9 +27,8 @@
 **
 ****************************************************************************/
 
-#include <ponder/errors.hpp>
-#include <ponder/enumget.hpp>
-#include <ponder/enumobject.hpp>
+// Tests for EnumObject, where an instance of an enum (not enum class).
+
 #include <ponder/enum.hpp>
 #include "test.hpp"
 

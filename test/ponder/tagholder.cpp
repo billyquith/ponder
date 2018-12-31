@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/class.hpp>
+// Tags are deprecated. TODO: reimplement using UserData?
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <string>

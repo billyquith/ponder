@@ -27,9 +27,8 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/property.hpp>
-#include <ponder/class.hpp>
+// Test Property access.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 
@@ -57,8 +56,6 @@ namespace PropertyAccessTest
         using namespace std::placeholders;
         
         ponder::Class::declare<MyClass>("PropertyAccessTest::MyClass")
-        
-            // ***** implicit - based on the availability of a getter/setter *****
             .property("p8",  &MyClass::get)
             .property("p9",  &MyClass::ref)
             .property("p10", &MyClass::get, &MyClass::set)

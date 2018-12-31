@@ -27,8 +27,13 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/class.hpp>
+// Tests for exposing different class variations:
+//  - Solo class/struct, static and dynamic inheritance.
+//  - Downcasting, polymorphism.
+//  - Property accessing.
+//  - Get class by name/type.
+//  - Undeclare types.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 
@@ -138,7 +143,7 @@ namespace ClassTest
         ponder::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
             .base<Derived>();
         
-        ponder::Class::declare< TemplateClass<int> >()
+        ponder::Class::declare<TemplateClass<int>>()
             .constructor()
             .property("TestMember", &TemplateClass<int>::testMember_);
 
@@ -458,7 +463,7 @@ TEST_CASE("Classes can be templates")
 
 // Classes declared using Ponder *can declare* virtually inherited base classes,
 // but the casting of these is unreliable due to the compiler specific nature of their
-// compiler implementation. This test is therefore optional as it fails on some
+// implementation. This test is therefore optional as it fails on some
 // platforms, even depending on config, e.g. Windows debug.
 #if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")

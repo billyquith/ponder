@@ -27,11 +27,10 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/enumget.hpp>
-#include <ponder/property.hpp>
-#include <ponder/class.hpp>
-#include <ponder/enum.hpp>
+// Tests for Property:
+//  - Test different value types handled by Properties.
+//  - Test different property getter/setter implementations.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <string>
@@ -53,6 +52,7 @@ namespace PropertyTest
 
     bool operator == (const MyType& left, const MyType& right) {return left.x == right.x;}
     bool operator < (const MyType& left, const MyType& right) {return left.x < right.x;}
+    
     std::ostream& operator << (std::ostream& stream, const MyType& object)
     {
         return stream << object.x;

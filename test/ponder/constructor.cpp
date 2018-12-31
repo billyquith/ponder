@@ -27,9 +27,9 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/class.hpp>
-#include <ponder/enum.hpp>
+// Tests for class object constructors:
+//  - Constructor overloading.
+
 #include <ponder/classbuilder.hpp>
 #include <ponder/uses/runtime.hpp>
 #include "test.hpp"
@@ -183,11 +183,11 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
         REQUIRE(MyClass::instCount == 0);
         {
             char buff[sizeof(MyClass) + 20];
-            const char c_guard{ (char)0xcd };
+            constexpr char c_guard{ (char)0xcd };
             memset(buff, c_guard, sizeof(buff));
             char *p = buff + 4;
             
-            REQUIRE(buff[0] == c_guard);
+            REQUIRE(*(p-1) == c_guard);
             REQUIRE(*p == c_guard);
             REQUIRE(p[sz] == c_guard);
             
@@ -197,7 +197,7 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             IS_TRUE( object != ponder::UserObject::nothing );
             REQUIRE(MyClass::instCount == 1);
             
-            REQUIRE(buff[0] == c_guard);
+            REQUIRE(*(p-1) == c_guard);
             REQUIRE(*p != c_guard);
             REQUIRE(p[sz] == c_guard);
             

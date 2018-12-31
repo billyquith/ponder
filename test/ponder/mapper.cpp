@@ -27,10 +27,6 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/class.hpp>
-#include <ponder/simpleproperty.hpp>
-#include <ponder/function.hpp>
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <map>

@@ -27,8 +27,9 @@
 **
 ****************************************************************************/
 
-#include <ponder/enumget.hpp>
-#include <ponder/errors.hpp>
+// Test for Enum (enum, not enum class).
+//  - Can we declare, undeclare, and access enums.
+
 #include <ponder/enum.hpp>
 #include "test.hpp"
 
