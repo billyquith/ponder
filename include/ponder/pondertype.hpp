@@ -40,7 +40,7 @@ namespace ponder {
 namespace detail
 {
     template <typename T> struct StaticTypeId;
-    template <typename T> const char* staticTypeId(const T&);
+    template <typename T> constexpr const char* staticTypeId(T&);
     PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
 }
 
@@ -75,9 +75,9 @@ namespace detail
 #define PONDER_TYPE(...) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<__VA_ARGS__> \
+            template<> struct StaticTypeId<__VA_ARGS__> \
             { \
-                static const char* get(bool = true) {return #__VA_ARGS__;} \
+                static constexpr const char* name(bool = true) {return #__VA_ARGS__;} \
                 static constexpr bool defined = true, copyable = true; \
             }; \
         } \
@@ -120,10 +120,9 @@ namespace detail
 #define PONDER_AUTO_TYPE(TYPE, REGISTER_FN) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<TYPE> { \
-                static const char* get(bool checkRegister = true) { \
-                    if (checkRegister) \
-                        detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
+            template<> struct StaticTypeId<TYPE> { \
+                static const char* name(bool checkRegister = true) { \
+                    if (checkRegister) detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
                     return #TYPE; \
                 } \
                 static constexpr bool defined = true, copyable = true; \
@@ -173,7 +172,7 @@ namespace detail
     namespace ponder { \
         namespace detail { \
             template <> struct StaticTypeId<TYPE> { \
-                static const char* get(bool = true) {return #TYPE;} \
+                static const char* name(bool = true) {return #TYPE;} \
                 static constexpr bool defined = true, copyable = true; \
             }; \
         } \
@@ -197,7 +196,7 @@ namespace detail
     namespace ponder { \
         namespace detail { \
             template <> struct StaticTypeId<TYPE> { \
-                static const char* get(bool checkRegister = true) { \
+                static const char* name(bool checkRegister = true) { \
                     if (checkRegister) \
                         detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
                     return #TYPE; \
@@ -239,7 +238,7 @@ namespace detail
  */
 #define PONDER_POLYMORPHIC() \
     public: \
-        virtual const char* ponderClassId() const {return ponder::detail::staticTypeId(this);} \
+        virtual const char* ponderClassId() const {return ponder::detail::staticTypeId(*this);} \
     private:
 
 } // namespace ponder

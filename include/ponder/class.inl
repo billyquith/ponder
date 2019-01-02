@@ -53,7 +53,7 @@ inline ClassBuilder<T> Class::declare(IdRef id)
 {
     Class& newClass =
         detail::ClassManager::instance().addClass(
-            id.empty() ? detail::StaticTypeId<T>::get(false) : id);
+            id.empty() ? detail::StaticTypeId<T>::name(false) : id);
     newClass.m_sizeof = sizeof(T);
     newClass.m_destructor = &detail::destroy<T>;
     newClass.m_userObjectCreator = &detail::userObjectCreator<T>;
@@ -64,7 +64,7 @@ template <typename T>
 inline void Class::undeclare(IdRef id)
 {
     detail::ClassManager::instance().removeClass(
-        id.empty() ? detail::StaticTypeId<T>::get(false) : id);
+        id.empty() ? detail::StaticTypeId<T>::name(false) : id);
 }
 
 inline Class::FunctionTable::Iterator Class::functionIterator() const
