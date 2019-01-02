@@ -670,7 +670,7 @@ TEST_CASE("AccessTraits")
         using ponder::detail::AccessTraits;
         using ponder::PropertyAccessKind;
         
-        static_assert(ponder::detail::HasStaticTypeId<Class>::value, "");
+        static_assert(ponder::detail::hasStaticTypeId<Class>(), "");
         
         static_assert(AccessTraits<Class>::kind == PropertyAccessKind::User, "");
         //static_assert(AccessTraits<Class&>::kind == PropertyAccessKind::User, "");

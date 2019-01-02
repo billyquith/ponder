@@ -61,10 +61,7 @@ struct StaticTypeId
  *        with PONDER_TYPE)
  */
 template <typename T>
-struct HasStaticTypeId
-{
-    static constexpr bool value = StaticTypeId<typename RawType<T>::Type>::defined;
-};
+constexpr bool hasStaticTypeId() {return StaticTypeId<typename RawType<T>::Type>::defined;}
 
 /**
  * \brief Return the static type identifier of a C++ type T
@@ -139,7 +136,7 @@ struct SafeTypeId
  * Specialization of SafeTypeId for types that have no Ponder id
  */
 template <typename T>
-struct SafeTypeId<T, typename std::enable_if<!HasStaticTypeId<T>::value >::type>
+struct SafeTypeId<T, typename std::enable_if<!hasStaticTypeId<T>()>::type>
 {
     static const char* get()            {return "";}
     static const char* get(const T&)    {return "";}
