@@ -3,6 +3,12 @@ Ponder Changelog
 ----------------
 
 - See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
+- See Github project issues (#nnn) for discussion on an issue.
+
+### 3.0.2
+
+- Make detail::string_view more C++14.
+- Tidy unit tests.
 
 ### 3.0.1
 
