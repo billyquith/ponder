@@ -199,20 +199,24 @@ public:
         const int r = traits_type::compare(data(), v.data(), std::min(size(), v.size()));
         return r==0 ? static_cast<int>(size()-v.size()) : r;
     }
-    constexpr int compare(size_type pos1, size_type count1,
-                                basic_string_view v) const
-    {return substr(pos1, count1).compare(v);}
+    constexpr int compare(size_type pos1, size_type count1, basic_string_view v) const
+    {
+        return substr(pos1, count1).compare(v);
+    }
     constexpr int compare(size_type pos1, size_type count1, basic_string_view v,
-                                size_type pos2, size_type count2) const
-    {return substr(pos1, count1).compare(v.substr(pos2, count2));}
+                          size_type pos2, size_type count2) const
+    {
+        return substr(pos1, count1).compare(v.substr(pos2, count2));
+    }
     constexpr int compare(const CharT* s) const
-    { return compare(basic_string_view(s)); }
+    {
+        return compare(basic_string_view(s));
+    }
     constexpr int compare(size_type pos1, size_type count1,const CharT* s) const
     {
         return substr(pos1, count1).compare(basic_string_view(s));
     }
-    constexpr int compare(size_type pos1, size_type count1,
-                                const CharT* s, size_type count2) const
+    constexpr int compare(size_type pos1, size_type count1, const CharT* s, size_type count2) const
     {
         return substr(pos1, count1).compare(basic_string_view(s, count2));
     }
