@@ -5,8 +5,9 @@ Ponder Changelog
 - See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
 - See Github project issues (#nnn) for discussion on an issue.
 
-### 3.0.2
+## 3.1
 
+- MSVC 2017 required. MSVC 2015 does not fully support C++14 (#113).
 - Make detail::string_view more C++14.
 - Tidy unit tests.
 
