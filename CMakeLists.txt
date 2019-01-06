@@ -35,8 +35,8 @@ cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 set(VERSION_MAJOR 3)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 2)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 0)
 set(VERSION_NOTE "") # e.g. "-alpha", "-beta".
 
 set(PONDER_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
