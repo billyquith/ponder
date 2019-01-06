@@ -39,8 +39,8 @@ namespace ponder {
 
 namespace detail
 {
-    template <typename T> struct StaticTypeId;
-    template <typename T> constexpr const char* staticTypeId(T&);
+    template <typename T> struct StaticTypeDecl;
+    template <typename T> constexpr const char* staticTypeName(T&);
     PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
 }
 
@@ -75,7 +75,7 @@ namespace detail
 #define PONDER_TYPE(...) \
     namespace ponder { \
         namespace detail { \
-            template<> struct StaticTypeId<__VA_ARGS__> \
+            template<> struct StaticTypeDecl<__VA_ARGS__> \
             { \
                 static constexpr const char* name(bool = true) {return #__VA_ARGS__;} \
                 static constexpr bool defined = true, copyable = true; \
@@ -120,7 +120,7 @@ namespace detail
 #define PONDER_AUTO_TYPE(TYPE, REGISTER_FN) \
     namespace ponder { \
         namespace detail { \
-            template<> struct StaticTypeId<TYPE> { \
+            template<> struct StaticTypeDecl<TYPE> { \
                 static const char* name(bool checkRegister = true) { \
                     if (checkRegister) detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
                     return #TYPE; \
@@ -171,7 +171,7 @@ namespace detail
 #define PONDER_TYPE_NONCOPYABLE(TYPE) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<TYPE> { \
+            template <> struct StaticTypeDecl<TYPE> { \
                 static const char* name(bool = true) {return #TYPE;} \
                 static constexpr bool defined = true, copyable = true; \
             }; \
@@ -195,7 +195,7 @@ namespace detail
 #define PONDER_AUTO_TYPE_NONCOPYABLE(TYPE, REGISTER_FN) \
     namespace ponder { \
         namespace detail { \
-            template <> struct StaticTypeId<TYPE> { \
+            template <> struct StaticTypeDecl<TYPE> { \
                 static const char* name(bool checkRegister = true) { \
                     if (checkRegister) \
                         detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
@@ -238,7 +238,7 @@ namespace detail
  */
 #define PONDER_POLYMORPHIC() \
     public: \
-        virtual const char* ponderClassId() const {return ponder::detail::staticTypeId(*this);} \
+        virtual const char* ponderClassId() const {return ponder::detail::staticTypeName(*this);} \
     private:
 
 } // namespace ponder

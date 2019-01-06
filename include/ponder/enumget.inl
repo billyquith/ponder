@@ -48,19 +48,19 @@ inline const Enum& enumByName(IdRef name)
 template <typename T>
 const Enum& enumByObject(T)
 {
-    return detail::EnumManager::instance().getById(detail::typeId<T>());
+    return detail::EnumManager::instance().getById(detail::typeName<T>());
 }
 
 template <typename T>
 const Enum& enumByType()
 {
-    return detail::EnumManager::instance().getById(detail::typeId<T>());
+    return detail::EnumManager::instance().getById(detail::typeName<T>());
 }
 
 template <typename T>
 const Enum* enumByTypeSafe()
 {
-    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeId<T>());
+    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeName<T>());
 }
 
 } // namespace ponder

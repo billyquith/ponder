@@ -76,8 +76,8 @@ ClassUnrelated::ClassUnrelated(IdRef sourceClass, IdRef requestedClass)
 {
 }
 
-EnumAlreadyCreated::EnumAlreadyCreated(IdRef typeId)
-    : Error("enum named " + String(typeId) + " already exists")
+EnumAlreadyCreated::EnumAlreadyCreated(IdRef typeName)
+    : Error("enum named " + String(typeName) + " already exists")
 {
 }
 

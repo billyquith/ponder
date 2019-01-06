@@ -200,7 +200,7 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
  */
 template <typename T>
 struct AccessTraits<T,
-    typename std::enable_if<StaticTypeId<T>::defined && !std::is_enum<T>::value>::type>
+    typename std::enable_if<StaticTypeDecl<T>::defined && !std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
 

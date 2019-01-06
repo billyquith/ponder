@@ -149,9 +149,9 @@ public:
     /**
      * \brief Constructor
      *
-     * \param typeId Name of the enum
+     * \param typeName Name of the enum
      */
-    EnumAlreadyCreated(IdRef typeId);
+    EnumAlreadyCreated(IdRef typeName);
 };
 
 /**
