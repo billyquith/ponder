@@ -26,7 +26,7 @@ See ponder::Type.
 
 \subsection userdata_added Added UserData per Type. (#98)
 
-See ponder::UserData. 
+See ponder::UserData.
 
 \subsection serialisation_refactor Refactored serialisation. Removed ponder-xml. (#43).
 
@@ -55,5 +55,16 @@ Following convention.
 \subsection composed_prop_getter_removed Removed composed property getter
 
 Use lambdas instead.
+
+\section ponder_3_1 3.1 Release Notes
+
+_date: 2018-01-06_
+
+\subsection drop_msvc2015 Drop support for MSVC 2015.
+
+Ponder requires full C++14 support. MSVC 2015 lacks this as it does not support
+[N3652](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3652.html): "Relaxing constraints
+on constexpr functions constexpr member functions and implicit const". We could work around this
+but time is limited and it is just a complication when the latest compilers all support it.
 
 */
