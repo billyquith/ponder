@@ -1,7 +1,7 @@
 language: cpp
 
 sudo: required
-dist: trusty
+dist: xenial
 
 matrix:
   include:
@@ -12,29 +12,29 @@ matrix:
     - os: osx
       osx_image: xcode9.4   # OS X 10.13
     - os: osx
-      osx_image: xcode10    # OS X 10.13
+      osx_image: xcode10.1  # OS X 10.13
     - os: linux
       compiler: clang
     - os: linux
       compiler: gcc
-      
+
 install:
   - echo Lang:$LANG. OS:$TRAVIS_OS_NAME. CC:$CC.
   - uname -a
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      brew update
-      if [ -z `brew list | grep cmake` ]; then brew install cmake; fi
-      brew outdated cmake || brew upgrade cmake
-      #if [ -z `which ninja` ]; then brew install ninja; fi
-    fi
+    # if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    #   brew update
+    #   if [ -z `brew list | grep cmake` ]; then brew install cmake; fi
+    #   brew outdated cmake || brew upgrade cmake
+    #   if [ -z `which ninja` ]; then brew install ninja; fi
+    # fi
   - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo apt-get -qq update
-      sudo apt-get install -y cmake ninja
-    fi
+    # if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    #   sudo apt-get -qq update
+    #   sudo apt-get install -y cmake ninja
+    # fi
   - ./ci/lua_local.sh
-  
+
 script:
   - ./ci/build.sh
 
