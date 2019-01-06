@@ -35,6 +35,13 @@ Features:
 
 ### Build
 
+Compilers supported. Requires C++14 support.
+
+- MSVC 2017+
+- Xcode 8+
+- GCC 4.9+
+- Clang 3.4+
+
 Ponder uses CMake to generate project files which are then used to build the project ([Build
 docs][build]). E.g. Use `make` to build Ponder (but you can use any build system CMake supports):
 
