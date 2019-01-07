@@ -32,21 +32,16 @@
 #define PONDER_DETAIL_TYPEID_HPP
 
 #include <ponder/detail/objecttraits.hpp>
+#include <ponder/type.hpp>
 #include <typeindex>
 
 namespace ponder {
 namespace detail {
-
-typedef std::type_index TypeId;
     
+// Calculate TypeId for T
 template <typename T>
-struct UniqueTypeId
-{
-    typedef T Type;
-    
-    static TypeId Calculate() { return TypeId(typeid(T)); }
-};
-    
+inline TypeId calcTypeId() {return TypeId(typeid(T)); }
+
 /**
  * \brief Utility class to get the Ponder identifier associated to a C++ type
  *
@@ -59,6 +54,13 @@ struct StaticTypeDecl
     static constexpr bool defined = false, copyable = true;
     typedef T type;
 
+    static TypeId id(bool = true)
+    {
+        // If you get this error, it means you didn't register your class/enum T with
+        // the PONDER_TYPE macro
+        return T::PONDER_TYPE_NOT_REGISTERED();
+    }
+
     static const char* name(bool = true)
     {
         // If you get this error, it means you didn't register your class/enum T with
@@ -67,9 +69,15 @@ struct StaticTypeDecl
     }
 };
 
-
+// Test if T is declared
 template <typename T>
 constexpr bool hasStaticTypeDecl() {return StaticTypeDecl<typename RawType<T>::Type>::defined;}
+
+template <typename T>
+static inline TypeId staticTypeId() {return StaticTypeDecl<typename RawType<T>::Type>::id();}
+
+template <typename T>
+static inline TypeId staticTypeId(const T&) {return StaticTypeDecl<typename RawType<T>::Type>::id();}
 
 template <typename T>
 static inline const char* staticTypeName() {return StaticTypeDecl<typename RawType<T>::Type>::name();}
@@ -82,7 +90,7 @@ static inline const char* staticTypeName(const T&) {return StaticTypeDecl<typena
 template <typename T>
 struct HasPonderRtti
 {
-    template <typename U, const char* (U::*)() const> struct TestForMember {};
+    template <typename U, TypeId (U::*)() const> struct TestForMember {};
     template <typename U> static std::true_type check(TestForMember<U, &U::ponderClassId>*);
     template <typename U> static std::false_type check(...);
 
@@ -100,40 +108,55 @@ struct HasPonderRtti
 template <typename T, typename E = void>
 struct DynamicTypeDecl
 {
-    static const char* name(const T& object)
+    static TypeId id(const T& object)
     {
         typedef ReferenceTraits<const T&> Traits;
         typename Traits::PointerType pointer = Traits::getPointer(object);
         static_assert(Traits::kind != ReferenceKind::None, "");
         static_assert(std::is_pointer<decltype(pointer)>::value, "Not pointer");
-        return pointer != 0 ? pointer->ponderClassId() : staticTypeName<T>();
+        return pointer != nullptr ? pointer->ponderClassId() : staticTypeId<T>();
     }
 };
 
-/**
- * Specialization of DynamicTypeDecl for types that don't implement Ponder RTTI
+/* Specialization of DynamicTypeDecl for types that don't implement Ponder RTTI
  */
 template <typename T>
 struct DynamicTypeDecl<T, typename std::enable_if<!HasPonderRtti<T>::value>::type>
 {
-    static const char* name(const T&) {return staticTypeName<T>();}
+    static TypeId id(const T&) {return staticTypeId<T>();}
 };
 
-/**
- * \brief Return the dynamic type identifier of a C++ object
- */
-template <typename T> const char* typeName()                {return staticTypeName<T>();}
-template <typename T> const char* typeName(const T& object) {return DynamicTypeDecl<T>::name(object);}
+template <typename T>
+inline TypeId getTypeId() {return staticTypeId<T>();}
 
-/**
- * \brief Utility class to get a valid Ponder identifier from a C++ type even if the 
- *        type wasn't declared
+template <typename T>
+inline TypeId getTypeId(T& object) {return DynamicTypeDecl<T>::id(object);}
+
+/* Utility class to get a valid Ponder identifier from a C++ type even if the type wasn't declared
+ */
+template <typename T, typename E = void>
+struct SafeTypeId
+{
+    static TypeId id() {return staticTypeId<T>();}
+    static TypeId name(T& object) {return DynamicTypeDecl<T>::id(object);}
+};
+
+/* Return the dynamic type identifier of a C++ object even if it doesn't exist (i.e. it can't fail)
+ */
+template <typename T>
+inline TypeId safeTypeId() {return SafeTypeId<typename RawType<T>::Type>::id();}
+
+template <typename T>
+inline TypeId safeTypeId(const T& object) {return SafeTypeId<T>::get(object);}
+    
+    
+/* Utility class to get a valid Ponder identifier from a C++ type even if the type wasn't declared
  */
 template <typename T, typename E = void>
 struct SafeTypeName
 {
-    static const char* name()           {return typeName<T>();}
-    static const char* name(T& object)  {return typeName(object);}
+    static const char* name()           {return staticTypeName<T>();}
+    static const char* name(T& object)  {return DynamicTypeDecl<T>::name(object);}
 };
 
 /**

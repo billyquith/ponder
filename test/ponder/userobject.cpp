@@ -192,29 +192,32 @@ namespace UserObjectTest
         }
     };
     
+    struct Renamed {};
+    
     void declare()
     {
-        ponder::Class::declare<MyBase>("UserObjectTest::MyBase");
-        ponder::Class::declare<MyClass>("UserObjectTest::MyClass")
+        ponder::Class::declare<MyBase>();
+        ponder::Class::declare<MyClass>()
             .base<MyBase>()
             .constructor<int>()
             .property("p", &MyClass::x)
             .function("f", &MyClass::f);
         
-        ponder::Class::declare<MyNonCopyableClass>("UserObjectTest::MyNonCopyableClass");
+        ponder::Class::declare<MyNonCopyableClass>();
         
-        ponder::Class::declare<MyAbstractClass>("UserObjectTest::MyAbstractClass");
-        ponder::Class::declare<MyConcreteClass>("UserObjectTest::MyConcreteClass")
+        ponder::Class::declare<MyAbstractClass>();
+        ponder::Class::declare<MyConcreteClass>()
+            .constructor()
             .base<MyAbstractClass>();
         
-        ponder::Class::declare<Composed3>("UserObjectTest::Composed3")
+        ponder::Class::declare<Composed3>()
             .property("x", &Composed3::x);
-        ponder::Class::declare<Composed2>("UserObjectTest::Composed2")
+        ponder::Class::declare<Composed2>()
             .property("p", &Composed2::get, &Composed2::set);
-        ponder::Class::declare<Composed1>("UserObjectTest::Composed1")
+        ponder::Class::declare<Composed1>()
             .property("p", &Composed1::get, &Composed1::set);
         
-        ponder::Class::declare<Call>("UserObjectTest::Call")
+        ponder::Class::declare<Call>()
             .function("meth1", &Call::meth1)
             .function("meth2", &Call::meth2)
             .function("meth3", &Call::meth3)
@@ -222,13 +225,17 @@ namespace UserObjectTest
             .function("concat", &Call::concat)
             .function("meth8", &Call::meth8);
         
-        ponder::Class::declare<Data>("UserObjectTest::Data")
+        ponder::Class::declare<Data>()
             .constructor()
             .constructor<int>()
             .property("value", &Data::x)
             .function("getValue", &Data::value)
             .function("addCopy", &Data::addCopy)
             .function("addRef", &Data::addRef);
+        
+        ponder::Class::declare<Renamed>("EggSandwich")
+            .constructor()
+            ;
     }
 }
 
@@ -242,6 +249,7 @@ PONDER_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Data, &UserObjectTest::declare)
+PONDER_AUTO_TYPE(UserObjectTest::Renamed, &UserObjectTest::declare)
 
 using namespace UserObjectTest;
 
@@ -350,7 +358,10 @@ TEST_CASE("User objects reference or contain user data")
         ponder::UserObject userObject2(static_cast<MyAbstractClass*>(&object));
         userObject2.get<MyConcreteClass>();
     }    
+}
 
+TEST_CASE("User objects can be copied")
+{
     SECTION("objects can be cloned/deep copied")
     {
         MyClass object(4);
@@ -390,7 +401,10 @@ TEST_CASE("User objects reference or contain user data")
         CHECK(uobj1.get<MyClass>().x == 7);
         CHECK(uobj2.get<MyClass>().x == 7); // copy has changed
     }
+}
 
+TEST_CASE("User objects can be inspected and modified")
+{
     SECTION("object type information can be inspected")
     {
         MyClass object(6);
@@ -560,6 +574,29 @@ TEST_CASE("User objects reference or contain user data")
     }
 }
 
+TEST_CASE("User objects can be created")
+{
+    SECTION("create by type")
+    {
+        auto const& metacls{ ponder::classByType<MyConcreteClass>() };
+        ponder::UserObject uo{ ponder::runtime::create(metacls) };
+        REQUIRE(uo != ponder::UserObject::nothing);
+    }
+    
+    SECTION("create by name")
+    {
+        auto const& metacls{ ponder::classByName("UserObjectTest::MyConcreteClass") };
+        ponder::UserObject uo{ ponder::runtime::create(metacls) };
+        REQUIRE(uo != ponder::UserObject::nothing);
+    }
+    
+//    SECTION("create by name if renamed")
+//    {
+//        auto const& metacls{ ponder::classByName("EggSandwich") };
+//        ponder::UserObject uo{ ponder::runtime::create(metacls) };
+//        REQUIRE(uo != ponder::UserObject::nothing);
+//    }
+}
 
 TEST_CASE("User objects wrap C++ objects")
 {

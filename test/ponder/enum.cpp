@@ -114,7 +114,7 @@ TEST_CASE("Enums need to be declared")
         REQUIRE_THROWS_AS(ponder::Enum::declare<MyEnum>(), ponder::EnumAlreadyCreated);
         
         // duplicate by name
-        REQUIRE_THROWS_AS(ponder::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"),
+        REQUIRE_THROWS_AS(ponder::Enum::declare<MyEnum>("EnumTest::MyEnum"),
                           ponder::EnumAlreadyCreated);
     }
     

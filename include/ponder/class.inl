@@ -49,11 +49,12 @@ static inline UserObject userObjectCreator(void* ptr)
 } // namespace detail
 
 template <typename T>
-inline ClassBuilder<T> Class::declare(IdRef id)
+inline ClassBuilder<T> Class::declare(IdRef name)
 {
+    typedef detail::StaticTypeDecl<T> typeDecl;
     Class& newClass =
-        detail::ClassManager::instance().addClass(
-            id.empty() ? detail::StaticTypeDecl<T>::name(false) : id);
+        detail::ClassManager::instance()
+            .addClass(typeDecl::id(false), name.empty() ? typeDecl::name(false) : name);
     newClass.m_sizeof = sizeof(T);
     newClass.m_destructor = &detail::destroy<T>;
     newClass.m_userObjectCreator = &detail::userObjectCreator<T>;
@@ -61,10 +62,9 @@ inline ClassBuilder<T> Class::declare(IdRef id)
 }
 
 template <typename T>
-inline void Class::undeclare(IdRef id)
+inline void Class::undeclare()
 {
-    detail::ClassManager::instance().removeClass(
-        id.empty() ? detail::StaticTypeDecl<T>::name(false) : id);
+    detail::ClassManager::instance().removeClass(detail::getTypeId<T>());
 }
 
 inline Class::FunctionTable::Iterator Class::functionIterator() const

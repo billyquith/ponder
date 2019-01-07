@@ -50,22 +50,6 @@ std::size_t enumCount();
 /**
  * \relates Enum
  *
- * \brief Get a metaenum from its global index
- *
- * The purpose of this function is to provide a way to iterate through
- * all existing metaenums. \sa enumCount
- *
- * \param index Index of the metaenum to get
- *
- * \return Reference to the index-th metaenum
- *
- * \throw OutOfRange index is out of range
- */
-const Enum& enumByIndex(std::size_t index);
-
-/**
- * \relates Enum
- *
  * \brief Get a metaenum from its name
  *
  * \param name Name of the metaenum to retrieve (case sensitive)

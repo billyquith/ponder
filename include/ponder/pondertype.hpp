@@ -34,6 +34,7 @@
 /** \endcond NoDocumentation */
 
 #include <ponder/config.hpp>
+#include "type.hpp"
 
 namespace ponder {
 
@@ -41,7 +42,7 @@ namespace detail
 {
     template <typename T> struct StaticTypeDecl;
     template <typename T> constexpr const char* staticTypeName(T&);
-    PONDER_API void ensureTypeRegistered(const char* id, void (*registerFunc)());
+    PONDER_API void ensureTypeRegistered(TypeId const& id, void (*registerFunc)());
 }
 
 /**
@@ -73,15 +74,14 @@ namespace detail
  * \sa PONDER_TYPE(), PONDER_AUTO_TYPE(), \ref eg_page_declare
  */
 #define PONDER_TYPE(...) \
-    namespace ponder { \
-        namespace detail { \
-            template<> struct StaticTypeDecl<__VA_ARGS__> \
-            { \
-                static constexpr const char* name(bool = true) {return #__VA_ARGS__;} \
-                static constexpr bool defined = true, copyable = true; \
-            }; \
-        } \
-    }
+    namespace ponder { namespace detail { \
+        template<> struct StaticTypeDecl<__VA_ARGS__> \
+        { \
+            static TypeId id(bool = true) {return calcTypeId<__VA_ARGS__>();} \
+            static constexpr const char* name(bool = true) {return #__VA_ARGS__;} \
+            static constexpr bool defined = true, copyable = true; \
+        }; \
+    }}
 
 /**
  * \brief Macro used to register a C++ type to Ponder with automatic, on-demand metaclass creation
@@ -118,17 +118,19 @@ namespace detail
  * \sa PONDER_TYPE(), \ref eg_page_declare, \ref eg_page_shapes
  */
 #define PONDER_AUTO_TYPE(TYPE, REGISTER_FN) \
-    namespace ponder { \
-        namespace detail { \
-            template<> struct StaticTypeDecl<TYPE> { \
-                static const char* name(bool checkRegister = true) { \
-                    if (checkRegister) detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
-                    return #TYPE; \
-                } \
-                static constexpr bool defined = true, copyable = true; \
-            }; \
-        } \
-    }
+    namespace ponder { namespace detail { \
+        template<> struct StaticTypeDecl<TYPE> { \
+            static TypeId id(bool checkRegister = true) { \
+                if (checkRegister) detail::ensureTypeRegistered(calcTypeId<TYPE>(), REGISTER_FN); \
+                return calcTypeId<TYPE>(); \
+            } \
+            static const char* name(bool checkRegister = true) { \
+                if (checkRegister) detail::ensureTypeRegistered(calcTypeId<TYPE>(), REGISTER_FN); \
+                return #TYPE; \
+            } \
+            static constexpr bool defined = true, copyable = true; \
+        }; \
+    }}
     // TODO - ensureTypeRegistered() called every time referenced!
 
 /**
@@ -169,14 +171,12 @@ namespace detail
  * \sa PONDER_TYPE()
  */
 #define PONDER_TYPE_NONCOPYABLE(TYPE) \
-    namespace ponder { \
-        namespace detail { \
-            template <> struct StaticTypeDecl<TYPE> { \
-                static const char* name(bool = true) {return #TYPE;} \
-                static constexpr bool defined = true, copyable = true; \
-            }; \
-        } \
-    }
+    namespace ponder { namespace detail { \
+        template <> struct StaticTypeDecl<TYPE> { \
+            static const char* name(bool = true) {return #TYPE;} \
+            static constexpr bool defined = true, copyable = true; \
+        }; \
+    }}
 
 /**
  * \brief Macro used to register a non-copyable C++ type to Ponder with automatic
@@ -193,18 +193,19 @@ namespace detail
  * \sa PONDER_AUTO_TYPE(), PONDER_TYPE_NONCOPYABLE()
  */
 #define PONDER_AUTO_TYPE_NONCOPYABLE(TYPE, REGISTER_FN) \
-    namespace ponder { \
-        namespace detail { \
-            template <> struct StaticTypeDecl<TYPE> { \
-                static const char* name(bool checkRegister = true) { \
-                    if (checkRegister) \
-                        detail::ensureTypeRegistered(#TYPE, REGISTER_FN); \
-                    return #TYPE; \
-                } \
-                static constexpr bool defined = true, copyable = true; \
-            }; \
-        } \
-    }
+    namespace ponder { namespace detail { \
+        template <> struct StaticTypeDecl<TYPE> { \
+            static TypeId id(bool checkRegister = true) { \
+                if (checkRegister) detail::ensureTypeRegistered(calcTypeId<TYPE>(), REGISTER_FN); \
+                return calcTypeId<TYPE>(); \
+            } \
+            static const char* name(bool checkRegister = true) { \
+                if (checkRegister) detail::ensureTypeRegistered(calcTypeId<TYPE>(), REGISTER_FN); \
+                return #TYPE; \
+            } \
+            static constexpr bool defined = true, copyable = true; \
+        }; \
+    }}
 
 /**
  * \brief Macro used to activate the Ponder RTTI system into a hierarchy of classes
@@ -238,7 +239,7 @@ namespace detail
  */
 #define PONDER_POLYMORPHIC() \
     public: \
-        virtual const char* ponderClassId() const {return ponder::detail::staticTypeName(*this);} \
+        virtual ponder::TypeId ponderClassId() const {return ponder::detail::staticTypeId(*this);} \
     private:
 
 } // namespace ponder

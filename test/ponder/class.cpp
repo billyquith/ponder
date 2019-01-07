@@ -273,10 +273,10 @@ TEST_CASE("Class metadata can be retrieved")
     {
         // lookup by static name fails
         REQUIRE_THROWS_AS(ponder::classByName("ClassTest::DifferentName"), ponder::ClassNotFound);
-        REQUIRE_THROWS_AS(ponder::classByType<ClassTest::DifferentName>(), ponder::ClassNotFound);
 
         // Lookup by declared name passes
         REQUIRE(ponder::classByName(c_differentName).name() == c_differentName);
+        REQUIRE(ponder::classByType<ClassTest::DifferentName>().name() == c_differentName);
     }
 
     SECTION("by type")

@@ -119,7 +119,7 @@ public:
      *         to fill the new metaenum with values.
      */
     template <typename T>
-    static EnumBuilder declare(IdRef name = Id());
+    static EnumBuilder declare(IdRef name = IdRef());
 
     /**
      * \brief Undeclare an existing metaenum
@@ -133,7 +133,7 @@ public:
      * \see Class::undeclare
      */
     template <typename T>
-    static void undeclare(IdRef name = Id());
+    static void undeclare();
     
 public:
 
@@ -278,8 +278,8 @@ private:
     
     typedef detail::Dictionary<Id, IdRef, EnumValue> EnumTable;
     
-    Id m_name;     ///< Name of the metaenum
-    EnumTable m_enums;      ///< Table of enums
+    Id m_name;              // Name of the metaenum
+    EnumTable m_enums;      // Table of enums
 };
 
 } // namespace ponder

@@ -32,19 +32,17 @@ namespace ponder {
 template <typename T>
 EnumBuilder Enum::declare(IdRef name)
 {
+    typedef detail::StaticTypeDecl<T> typeDecl;
     Enum& newEnum =
-        detail::EnumManager::instance().addClass(name.empty()
-                                                 ? detail::StaticTypeDecl<T>::name(false)
-                                                 : name);
+        detail::EnumManager::instance()
+            .addClass(typeDecl::id(false), name.empty() ? typeDecl::name(false) : name);
     return EnumBuilder(newEnum);
 }
 
 template <typename T>
-void Enum::undeclare(IdRef name)
+void Enum::undeclare()
 {
-    detail::EnumManager::instance().removeClass(name.empty()
-                                            ? detail::StaticTypeDecl<T>::name(false)
-                                            : name);
+    detail::EnumManager::instance().removeClass(detail::getTypeId<T>());
 }
 
 } // namespace ponder

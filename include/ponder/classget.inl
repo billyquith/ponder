@@ -42,25 +42,25 @@ inline const detail::ClassManager& classIterator()
 inline const Class& classByName(IdRef name)
 {
     // Note: detail::typeName() not used here so no automated registration.
-    return detail::ClassManager::instance().getById(name);
+    return detail::ClassManager::instance().getByName(name);
 }
 
 template <typename T>
 const Class& classByObject(const T& object)
 {
-    return detail::ClassManager::instance().getById(detail::typeName(object));
+    return detail::ClassManager::instance().getById(detail::getTypeId(object));
 }
 
 template <typename T>
 const Class& classByType()
 {
-    return detail::ClassManager::instance().getById(detail::typeName<T>());
+    return detail::ClassManager::instance().getById(detail::getTypeId<T>());
 }
 
 template <typename T>
 const Class* classByTypeSafe()
 {
-    return detail::ClassManager::instance().getByIdSafe(detail::safeTypeName<T>());
+    return detail::ClassManager::instance().getByIdSafe(detail::calcTypeId<typename detail::RawType<T>::Type>());
 }
 
 } // namespace ponder

@@ -35,32 +35,27 @@ inline std::size_t enumCount()
     return detail::EnumManager::instance().count();
 }
 
-inline const Enum& enumByIndex(std::size_t index)
-{
-    return detail::EnumManager::instance().getByIndex(index);
-}
-
 inline const Enum& enumByName(IdRef name)
 {
-    return detail::EnumManager::instance().getById(name);
+    return detail::EnumManager::instance().getByName(name);
 }
 
 template <typename T>
 const Enum& enumByObject(T)
 {
-    return detail::EnumManager::instance().getById(detail::typeName<T>());
+    return detail::EnumManager::instance().getById(detail::getTypeId<T>());
 }
 
 template <typename T>
 const Enum& enumByType()
 {
-    return detail::EnumManager::instance().getById(detail::typeName<T>());
+    return detail::EnumManager::instance().getById(detail::getTypeId<T>());
 }
 
 template <typename T>
 const Enum* enumByTypeSafe()
 {
-    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeName<T>());
+    return detail::EnumManager::instance().getByIdSafe(detail::calcTypeId<T>());
 }
 
 } // namespace ponder

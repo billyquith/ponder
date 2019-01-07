@@ -31,11 +31,10 @@
 #ifndef PONDER_DETAIL_ENUMMANAGER_HPP
 #define PONDER_DETAIL_ENUMMANAGER_HPP
 
-
 #include <ponder/detail/observernotifier.hpp>
 #include <ponder/detail/util.hpp>
-#include <ponder/detail/dictionary.hpp>
 #include <string>
+#include <map>
 
 namespace ponder
 {
@@ -73,7 +72,7 @@ public:
      *
      * \return Reference to the new metaenum
      */
-    Enum& addClass(IdRef id);
+    Enum& addClass(TypeId const& id, IdRef name);
     
     /**
      * \brief Unregister a metaenum
@@ -82,7 +81,7 @@ public:
      *
      * \param id Identifier of the C++ enum bound to the metaenum (unique).
      */
-    void removeClass(IdRef id);
+    void removeClass(TypeId const& id);
 
     /**
      * \brief Get the total number of metaenums
@@ -90,20 +89,6 @@ public:
      * \return Number of metaenums that have been registered
      */
     std::size_t count() const;
-
-    /**
-     * \brief Get a metaenum from its global index
-     *
-     * This function, together with EnumManager::count, provides a way to iterate through
-     * all the metaenums that have been declared.
-     *
-     * \param index Global index of the metaenum to get
-     *
-     * \return Reference to the index-th metaenum
-     *
-     * \throw OutOfRange index is out of range
-     */
-    const Enum& getByIndex(std::size_t index) const;
 
     /**
      * \brief Get a metaenum from a C++ type
@@ -114,7 +99,9 @@ public:
      *
      * \throw EnumNotFound id is not the name of an existing metaenum
      */
-    const Enum& getById(IdRef id) const;
+    const Enum& getById(TypeId const& id) const;
+
+    const Enum& getByName(IdRef id) const;
 
     /**
      * \brief Get a metaenum from a C++ type
@@ -126,7 +113,7 @@ public:
      *
      * \return Pointer to the requested metaenum, or null pointer if not found
      */
-    const Enum* getByIdSafe(IdRef id) const;
+    const Enum* getByIdSafe(TypeId const& id) const;
 
     /**
      * \brief Check if a given type has a metaenum
@@ -135,7 +122,7 @@ public:
      *
      * \return True if the enum exists, false otherwise
      */
-    bool enumExists(IdRef id) const;
+    bool enumExists(TypeId const& id) const;
 
 private:
 
@@ -151,8 +138,10 @@ private:
      */
     ~EnumManager();
 
-    typedef detail::Dictionary<Id, IdRef, Enum*> EnumTable;
-    EnumTable m_enums; ///< Table storing enums indexed by their ID
+    typedef std::map<TypeId, Enum*> EnumTable;
+    typedef std::map<Id, Enum*> NameTable;
+    EnumTable m_enums; // Table storing enums indexed by their TypeId
+    NameTable m_names; // Table storing enums indexed by their name
 };
 
 } // namespace detail

@@ -40,19 +40,20 @@ EnumManager& EnumManager::instance()
     return manager;
 }
 
-Enum& EnumManager::addClass(IdRef id)
+Enum& EnumManager::addClass(TypeId const& id, IdRef name)
 {
     // First make sure that the enum doesn't already exist
-    if (enumExists(id))
+    if (enumExists(id) || (!name.empty() && m_names.find(name) != m_names.end()))
     {
-        PONDER_ERROR(EnumAlreadyCreated(id));
+        PONDER_ERROR(EnumAlreadyCreated(name));
     }
 
     // Create the new class
-    Enum* newEnum = new Enum(id);
+    Enum* newEnum = new Enum(name);
 
     // Insert it into the table
-    m_enums.insert(id, newEnum);
+    m_enums.insert(std::make_pair(id, newEnum));
+    m_names.insert(std::make_pair(name, newEnum));
 
     // Notify observers
     notifyEnumAdded(*newEnum);
@@ -61,13 +62,13 @@ Enum& EnumManager::addClass(IdRef id)
     return *newEnum;
 }
     
-void EnumManager::removeClass(IdRef id)
+void EnumManager::removeClass(TypeId const& id)
 {
-    auto it = m_enums.findKey(id);
+    auto it = m_enums.find(id);
     if (it == m_enums.end())
-        PONDER_ERROR(EnumNotFound(id));
+        return; //PONDER_ERROR(EnumNotFound(id));
     
-    Enum *en = (*it).value();
+    Enum *en{ it->second };
     
     // Notify observers
     notifyEnumRemoved(*en);
@@ -81,36 +82,33 @@ std::size_t EnumManager::count() const
     return m_enums.size();
 }
 
-const Enum& EnumManager::getByIndex(std::size_t index) const
+const Enum& EnumManager::getById(TypeId const& id) const
 {
-    // Make sure that the index is not out of range
-    if (index >= m_enums.size())
-        PONDER_ERROR(OutOfRange(index, m_enums.size()));
-
-    EnumTable::const_iterator it = m_enums.begin();
-    std::advance(it, index);
-
-    return *it->second;
-}
-
-const Enum& EnumManager::getById(IdRef id) const
-{
-    auto it = m_enums.findKey(id);
+    auto it = m_enums.find(id);
     if (it == m_enums.end())
-        PONDER_ERROR(EnumNotFound(id));
+        PONDER_ERROR(EnumNotFound("?"));
 
     return *it->second;
 }
 
-const Enum* EnumManager::getByIdSafe(IdRef id) const
+const Enum& EnumManager::getByName(IdRef name) const
 {
-    auto it = m_enums.findKey(id);
+    auto it = m_names.find(name);
+    if (it == m_names.end())
+        PONDER_ERROR(EnumNotFound(name));
+    
+    return *it->second;
+}
+
+const Enum* EnumManager::getByIdSafe(TypeId const& id) const
+{
+    auto it = m_enums.find(id);
     return it == m_enums.end() ? nullptr : it->second;
 }
 
-bool EnumManager::enumExists(IdRef id) const
+bool EnumManager::enumExists(TypeId const& id) const
 {
-    return m_enums.findKey(id) != m_enums.end();
+    return m_enums.find(id) != m_enums.end();
 }
 
 EnumManager::EnumManager()

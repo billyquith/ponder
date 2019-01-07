@@ -32,6 +32,7 @@
 #define PONDER_TYPE_HPP
 
 #include <ponder/config.hpp>
+#include <typeindex>
 
 /**
  * \namespace ponder
@@ -47,7 +48,10 @@
 namespace ponder {
     
 class Value;
-    
+
+// Note: This may have issues with DLLs?
+typedef std::type_index TypeId; // Used to uniquely identify a type.
+
 /**
  * \brief Special empty type associated to \c noType
  *

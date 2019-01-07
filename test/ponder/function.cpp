@@ -198,16 +198,16 @@ namespace FunctionTest
     
     void declare()
     {
-        ponder::Enum::declare<MyEnum>("FunctionTest::MyEnum")
+        ponder::Enum::declare<MyEnum>()
             .value("Zero", Zero)
             .value("One",  One)
             .value("Two",  Two);
 
-        ponder::Class::declare<MyType>("FunctionTest::MyType");
+        ponder::Class::declare<MyType>();
 
         ponder::Class::declare<NonCopyable>();
 
-        ponder::Class::declare<MyBase>("FunctionTest::MyBase");
+        ponder::Class::declare<MyBase>();
 
         ponder::Class::declare<MyClass>()
             .base<MyBase>()

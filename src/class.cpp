@@ -32,15 +32,16 @@
 
 namespace ponder {
 
-Class::Class(IdRef name)
+Class::Class(TypeId const& id, IdRef name)
 : m_sizeof(0)
-, m_id(name)
+, m_id(id)
+, m_name(name)
 {
-}    
-    
+}
+
 IdReturn Class::name() const
 {
-    return m_id;
+    return m_name;
 }
 
 std::size_t Class::sizeOf() const

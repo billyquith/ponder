@@ -34,7 +34,7 @@
 namespace ponder {
 namespace detail {
     
-void ensureTypeRegistered(const char* id, void (*registerFunc)())
+void ensureTypeRegistered(TypeId const& id, void (*registerFunc)())
 {
     if (registerFunc
         && !ClassManager::instance().classExists(id)
