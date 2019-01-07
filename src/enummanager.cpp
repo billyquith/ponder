@@ -73,6 +73,7 @@ void EnumManager::removeClass(TypeId const& id)
     // Notify observers
     notifyEnumRemoved(*en);
 
+    m_names.erase(en->name());
     delete en;
     m_enums.erase(id);
 }
