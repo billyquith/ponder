@@ -590,12 +590,12 @@ TEST_CASE("User objects can be created")
         REQUIRE(uo != ponder::UserObject::nothing);
     }
     
-//    SECTION("create by name if renamed")
-//    {
-//        auto const& metacls{ ponder::classByName("EggSandwich") };
-//        ponder::UserObject uo{ ponder::runtime::create(metacls) };
-//        REQUIRE(uo != ponder::UserObject::nothing);
-//    }
+    SECTION("create by name if renamed")
+    {
+        auto const& metacls{ ponder::classByName("EggSandwich") };
+        ponder::UserObject uo{ ponder::runtime::create(metacls) };
+        REQUIRE(uo != ponder::UserObject::nothing);
+    }
 }
 
 TEST_CASE("User objects wrap C++ objects")
