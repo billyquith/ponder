@@ -29,7 +29,7 @@
 
 #include <ponder/detail/util.hpp>
 
-#if defined(__GNUWIN32__) and __cplusplus >= 201103L
+#if defined(__GNUWIN32__) && __cplusplus >= 201103L
     // MinGW support using C++11 defines __STRICT_ANSI__ which removes strcasecmp
     // used below. As a fix, undefine __STRICT_ANSI__ before including strings.h.
 #undef __STRICT_ANSI__
