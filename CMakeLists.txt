@@ -171,13 +171,11 @@ set(SRC_SOURCE
     src/pondertype.cpp
     src/property.cpp
     src/simpleproperty.cpp
-    src/type.cpp
     src/userdata.cpp
     src/userobject.cpp
     src/userproperty.cpp
     src/util.cpp
     src/value.cpp
-    # Uses
 )
 
 source_group("Headers"
