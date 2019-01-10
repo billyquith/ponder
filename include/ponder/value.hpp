@@ -219,6 +219,42 @@ public:
     bool operator < (const Value& other) const;
 
     /**
+     * \brief Operator > to compare two values
+     *
+     * \param other Value to compare with this
+     *
+     * \return True if this > other
+     */
+    bool operator > (const Value& other) const 
+    { 
+      return !(*this < other || *this == other); 
+    }
+
+    /**
+     * \brief Operator <= to compare two values
+     *
+     * \param other Value to compare with this
+     *
+     * \return True if this <= other
+     */
+    bool operator <= (const Value& other) const
+    { 
+      return (*this < other || *this == other); 
+    }
+
+    /**
+     * \brief Operator >= to compare two values
+     *
+     * \param other Value to compare with this
+     *
+     * \return True if this >= other
+     */
+    bool operator >= (const Value& other) const
+    { 
+      return !(*this < other); 
+    }
+
+    /**
      * \brief Special Value instance representing an empty value
      */
     static const Value nothing;
