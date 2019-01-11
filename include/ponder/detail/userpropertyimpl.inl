@@ -69,7 +69,7 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return ToUserObject<A::canWrite>::get(
+    return ToUserObject<A::RefTraits::isRef>::get(
                 m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 
