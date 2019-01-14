@@ -166,6 +166,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a05195ebf03c57a1f55f8d14b89d1d861"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_value.html#a05195ebf03c57a1f55f8d14b89d1d861">operator&lt;</a> (const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;other) const</td></tr>
 <tr class="memdesc:a05195ebf03c57a1f55f8d14b89d1d861"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator &lt; to compare two values.  <a href="#a05195ebf03c57a1f55f8d14b89d1d861">More...</a><br /></td></tr>
 <tr class="separator:a05195ebf03c57a1f55f8d14b89d1d861"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95303654f4c0e92f919b2ce97280b5a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_value.html#a95303654f4c0e92f919b2ce97280b5a4">operator&gt;</a> (const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;other) const</td></tr>
+<tr class="memdesc:a95303654f4c0e92f919b2ce97280b5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator &gt; to compare two values.  <a href="#a95303654f4c0e92f919b2ce97280b5a4">More...</a><br /></td></tr>
+<tr class="separator:a95303654f4c0e92f919b2ce97280b5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fadf0eae20be7d719ee9f763597f44c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_value.html#a3fadf0eae20be7d719ee9f763597f44c">operator&lt;=</a> (const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;other) const</td></tr>
+<tr class="memdesc:a3fadf0eae20be7d719ee9f763597f44c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator &lt;= to compare two values.  <a href="#a3fadf0eae20be7d719ee9f763597f44c">More...</a><br /></td></tr>
+<tr class="separator:a3fadf0eae20be7d719ee9f763597f44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a151d764151650c726d9e118a420a648f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classponder_1_1_value.html#a151d764151650c726d9e118a420a648f">operator&gt;=</a> (const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;other) const</td></tr>
+<tr class="memdesc:a151d764151650c726d9e118a420a648f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator &gt;= to compare two values.  <a href="#a151d764151650c726d9e118a420a648f">More...</a><br /></td></tr>
+<tr class="separator:a151d764151650c726d9e118a420a648f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -385,6 +394,41 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a3fadf0eae20be7d719ee9f763597f44c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fadf0eae20be7d719ee9f763597f44c">&#9670;&nbsp;</a></span>operator&lt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ponder::Value::operator&lt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Operator &lt;= to compare two values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td><a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">Value</a> to compare with this</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if this &lt;= other </dd></dl>
+
+</div>
+</div>
 <a id="ac72bc2fe9b33d0217adf338e5f3be8fa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac72bc2fe9b33d0217adf338e5f3be8fa">&#9670;&nbsp;</a></span>operator=()</h2>
 
@@ -436,6 +480,76 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both values are the same, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a95303654f4c0e92f919b2ce97280b5a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95303654f4c0e92f919b2ce97280b5a4">&#9670;&nbsp;</a></span>operator&gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ponder::Value::operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Operator &gt; to compare two values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td><a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">Value</a> to compare with this</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if this &gt; other </dd></dl>
+
+</div>
+</div>
+<a id="a151d764151650c726d9e118a420a648f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a151d764151650c726d9e118a420a648f">&#9670;&nbsp;</a></span>operator&gt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ponder::Value::operator&gt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classponder_1_1_value.html">Value</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Operator &gt;= to compare two values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td><a class="el" href="classponder_1_1_value.html" title="Variant class which is used to wrap values in the Ponder system. ">Value</a> to compare with this</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if this &gt;= other </dd></dl>
 
 </div>
 </div>
