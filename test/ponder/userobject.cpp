@@ -127,45 +127,6 @@ namespace UserObjectTest
         Composed2 composed;
     };
     
-    struct Call
-    {
-        ponder::String lastCalled;
-        int sum;
-        
-        Call() : lastCalled("unset"), sum(0) {}
-        
-        void meth1(int a0)
-        {
-            lastCalled = "meth1";
-            sum += a0;
-        }
-        void meth2(int a0, int a1)
-        {
-            lastCalled = "meth2";
-            sum += a0 + a1;
-        }
-        void meth3(int a0,int a1, int a2)
-        {
-            lastCalled = "meth3";
-            sum += a0 + a1 + a2;
-        }
-        void meth8(int a0,int a1, int a2, int a3, int a4, int a5, int a6, int a7)
-        {
-            lastCalled = "meth8";
-            sum += a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7;
-        }
-        
-        double cos(double rad)
-        {
-            return std::cos(rad);
-        }
-        
-        ponder::String concat(const ponder::String &a, const ponder::String &b)
-        {
-            return a+b;
-        }
-    };
-    
     struct Data
     {
         int x;
@@ -214,14 +175,6 @@ namespace UserObjectTest
         ponder::Class::declare<Composed1>("UserObjectTest::Composed1")
             .property("p", &Composed1::get, &Composed1::set);
         
-        ponder::Class::declare<Call>("UserObjectTest::Call")
-            .function("meth1", &Call::meth1)
-            .function("meth2", &Call::meth2)
-            .function("meth3", &Call::meth3)
-            .function("cos", &Call::cos)
-            .function("concat", &Call::concat)
-            .function("meth8", &Call::meth8);
-        
         ponder::Class::declare<Data>("UserObjectTest::Data")
             .constructor()
             .constructor<int>()
@@ -240,7 +193,6 @@ PONDER_AUTO_TYPE_NONCOPYABLE(UserObjectTest::MyConcreteClass, &UserObjectTest::d
 PONDER_AUTO_TYPE(UserObjectTest::Composed3, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
-PONDER_AUTO_TYPE(UserObjectTest::Call, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Data, &UserObjectTest::declare)
 
 using namespace UserObjectTest;
@@ -463,87 +415,6 @@ TEST_CASE("User objects reference or contain user data")
         }
     }
 
-//    SECTION("object methods can have one parameter")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//
-//        REQUIRE_THROWS_AS(userObject.call("meth1"), std::exception); // TODO - wrong num args.
-//    
-//        userObject.call("meth1", ponder::Args(7));
-//        REQUIRE(object.lastCalled == "meth1");
-//        REQUIRE(object.sum == 7);
-//    }
-
-//    SECTION("object methods can have two parameter")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("meth2"), std::exception);
-//        REQUIRE_THROWS_AS(userObject.call("meth2", ponder::Args(11)), std::exception);
-////        REQUIRE_THROWS_AS(userObject.call("meth2", ponder::Args(11,2,333)), std::exception); TODO - fix?
-//    
-//        userObject.call("meth2", ponder::Args(7, 8));
-//        REQUIRE(object.lastCalled == "meth2");
-//        REQUIRE(object.sum == 7+8);
-//    }
-//
-//    SECTION("object methods can have three parameter")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("meth3"), std::exception);
-//    
-//        userObject.call("meth3", ponder::Args(7, 8, -99));
-//        REQUIRE(object.lastCalled == "meth3");
-//        REQUIRE(object.sum == 7+8-99);
-//    }
-//
-//    SECTION("callMultiArgs8")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//        
-//        REQUIRE_THROWS_AS(userObject.call("meth8"), std::exception);
-//        
-//        userObject.call("meth8", ponder::Args(7, 8, -99, 77, 12, 76, 45, 3));
-//        REQUIRE(object.lastCalled == "meth8");
-//        REQUIRE(object.sum == 7+8-99+77+12+76+45+3);
-//    }
-//
-//    SECTION("objects methods can return values")
-//    {
-//        MyClass object(9);
-//        ponder::UserObject userObject(object);
-//
-//        REQUIRE(userObject.call("f") == ponder::Value(9));
-//    }
-//
-//    SECTION("objects methods with parameter can return values")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("cos"), std::exception);
-//    
-//        REQUIRE(userObject.call("cos", ponder::Args(0.0)) == ponder::Value(std::cos(0.0)));
-//        REQUIRE(userObject.call("cos", ponder::Args(1.0)) == ponder::Value(std::cos(1.0)));
-//    //    REQUIRE(userObject.call("cos", 0.0), ponder::Value(std::cos(0.0)));
-//    }
-//
-//    SECTION("objects methods can return user objects")
-//    {
-//        Call object;
-//        ponder::UserObject userObject(object);
-//    
-//        REQUIRE_THROWS_AS(userObject.call("concat"), std::exception);
-//    
-//        REQUIRE(userObject.call("concat", ponder::Args("one", "two")) == ponder::Value("onetwo"));
-//    //    REQUIRE(userObject.call("concat", "one", "two"), ponder::Value("onetwo")); TODO - Args optional
-//    }
-    
     SECTION("objects can created from existing user data")
     {
         MyClass object(77);

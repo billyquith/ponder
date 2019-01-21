@@ -30,10 +30,7 @@
 namespace ponder {
 namespace detail {
     
-/*
- * Only copy user object if it is not
- */
-template <bool ReadOnly> // = false
+template <bool isRef> // false
 struct ToUserObject
 {
     template <typename T>
@@ -44,7 +41,7 @@ struct ToUserObject
 };
 
 template <>
-struct ToUserObject<true> // writable
+struct ToUserObject<true>
 {
     template <typename T>
     static inline UserObject get(const T& value)
@@ -69,7 +66,7 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return ToUserObject<A::RefTraits::isRef>::get(
+    return ToUserObject<A::canWrite>::get(
                 m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 
@@ -78,13 +75,6 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
 {
     if (!m_accessor.m_interface.setter(object.ref<typename A::ClassType>(), value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
-}
-
-template <typename A>
-UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
-{
-    return ToUserObject<A::RefTraits::isRef>::get(
-                m_accessor.m_interface.getter(objectInstance.get<typename A::ClassType>()));
 }
 
 template <typename A>

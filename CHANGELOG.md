@@ -4,6 +4,11 @@ Ponder Changelog
 
 - See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
 
+### 3.0.2
+
+- Fix UserProperty creation (#110).
+- Tidy UserProperty and tests.
+
 ### 3.0.1
 
 - Fix Lua binding (#104).
