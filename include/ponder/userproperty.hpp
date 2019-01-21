@@ -65,16 +65,6 @@ public:
     const Class& getClass() const;
 
     /**
-    * \brief Get a property user object from a user object instance
-    *
-    * This user property is a member of a metaclass. To get the property
-    * value we pass the metaclass object instance, which contains the property.
-    *
-    * \return User object represented by the user property
-    */
-    virtual UserObject getObject(const UserObject& objectInstance) const = 0;
-
-    /**
      * \brief Accept the visitation of a ClassVisitor
      *
      * \param visitor Visitor to accept

@@ -13,6 +13,11 @@ Ponder Changelog
 - Make detail::string_view more C++14.
 - Tidy unit tests.
 
+### 3.0.2
+
+- Fix UserProperty creation (#110).
+- Tidy UserProperty and tests.
+
 ### 3.0.1
 
 - Fix Lua binding (#104).

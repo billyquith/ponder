@@ -157,7 +157,7 @@ TEST_CASE("Can serialise using RapidXML")
             r->m_instance.m_i = 89;
             r->m_instance.setF(0.75f);
             r->m_instance.m_s = "stringy";
-
+            
             rapidxml::xml_document<> doc;
             auto rootNode = doc.allocate_node(rapidxml::node_element, "ref");
             REQUIRE(rootNode != nullptr);
@@ -178,22 +178,28 @@ TEST_CASE("Can serialise using RapidXML")
         {
             std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
             REQUIRE(r != nullptr);
-
+            
+            {
+                auto& metacls = ponder::classByType<Ref>();
+                auto& inst = metacls.property("instance");
+                CHECK(inst.isReadable());
+                CHECK(inst.isWritable());
+            }
+            
             rapidxml::xml_document<> doc;
             doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(serialised.data()));
             auto rootNode = doc.first_node();
             REQUIRE(rootNode != nullptr);
-
+            
             ponder::archive::RapidXmlArchive<> archive;
             ponder::archive::ArchiveReader<ponder::archive::RapidXmlArchive<>> reader(archive);
             reader.read(rootNode, ponder::UserObject::makeRef(*r));
-
+            
             CHECK(r->m_instance.m_i == 89);
             CHECK(r->m_instance.getF() == 0.75f);
             CHECK(r->m_instance.m_s == std::string("stringy"));
         }
     }
-
 }
 
 
