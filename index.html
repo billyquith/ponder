@@ -108,7 +108,11 @@ ponder: to reflect on</div></div>
 <ul>
 <li><b>TL;DR</b> - Expose C++ classes and objects so they can be more easily used as data. Serialisation and Lua scripting supported.</li>
 </ul>
-<h1><a class="anchor" id="overview"></a>
+<div class="image">
+<img src="Lua-Logo-128.png" alt="Lua-Logo-128.png"/>
+<div class="caption">
+Lua binding</div></div>
+ <h1><a class="anchor" id="overview"></a>
 Overview</h1>
 <p>Ponder is a C++ library which provides runtime reflection for types. It provides an abstraction for most of the high-level concepts of C++ like classes, enumerations, properties, functions, and objects. By wrapping all these concepts into abstract structures, Ponder provides an extra layer of flexibility to programs, and allow them to expose and manipulate their data structures at runtime.</p>
 <p>Many applications can take advantage of Ponder, in order to automate tasks which would otherwise require a huge amount of work. For example, Ponder can be used to expose and edit objects' attributes into a graphical user interface. It can also be used to do automatic binding of C++ classes to script languages such as Python or Lua. Another possible application would be the serialization of objects to XML, text or binary formats. Or you can even combine all these examples to provide a powerful and consistent interface for manipulating your objects outside C++ code.</p>
@@ -119,7 +123,7 @@ Overview</h1>
 <li>Get and set properties on member variables.</li>
 <li>Call member and static functions.</li>
 <li>Save class instance data as JSON or XML.</li>
-<li>Automatic Lua binding generation.</li>
+<li>Automatic <a href="https://www.lua.org/about.html">Lua</a> binding generation.</li>
 </ul>
 <h1><a class="anchor" id="intro_example"></a>
 Quick example</h1>
