@@ -262,24 +262,24 @@ class Accessor1
 {
 public:
 
-    typedef PT PropertyTraits;
-    static_assert(!PropertyTraits::isWritable, "!isWritable expected");
+    typedef PT Traits;
+    static_assert(!Traits::isWritable, "!isWritable expected");
     typedef const C ClassType;
-    typedef typename PropertyTraits::ExposedType ExposedType;
-    typedef typename PropertyTraits::RefTraits RefTraits;
-    typedef typename PropertyTraits::DataType DataType; // raw type or container
+    typedef typename Traits::ExposedType ExposedType;
+    typedef typename Traits::RefTraits RefTraits;
+    typedef typename Traits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
     typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
     typedef typename PropAccessTraits::template
-        ReadOnlyInterface<typename PropertyTraits::template TypeAccess<ClassType,
-                          typename PropertyTraits::AccessType>> InterfaceType;
+        ReadOnlyInterface<typename Traits::template TypeAccess<ClassType,
+                          typename Traits::AccessType>> InterfaceType;
     InterfaceType m_interface;
 
-    Accessor1(typename PropertyTraits::Type getter)
-        : m_interface(typename PropertyTraits::template TypeAccess<ClassType,
-                      typename PropertyTraits::AccessType>(getter))
+    Accessor1(typename Traits::Type getter)
+        : m_interface(typename Traits::template TypeAccess<ClassType,
+                      typename Traits::AccessType>(getter))
     {}
 };
 
@@ -291,24 +291,24 @@ class Accessor1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
 {
 public:
 
-    typedef TRAITS PropertyTraits;
-    static_assert(PropertyTraits::isWritable, "isWritable expected");
+    typedef TRAITS Traits;
+    static_assert(Traits::isWritable, "isWritable expected");
     typedef C ClassType;
-    typedef typename PropertyTraits::ExposedType ExposedType;
+    typedef typename Traits::ExposedType ExposedType;
     typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename PropertyTraits::DataType DataType; // raw type or container
+    typedef typename Traits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
     typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
     typedef typename PropAccessTraits::template
-        WritableInterface<typename PropertyTraits::template TypeAccess<ClassType,
-                          typename PropertyTraits::AccessType>> InterfaceType;
+        WritableInterface<typename Traits::template TypeAccess<ClassType,
+                          typename Traits::AccessType>> InterfaceType;
     InterfaceType m_interface;
 
-    Accessor1(typename PropertyTraits::Type getter)
-        : m_interface(typename PropertyTraits::template TypeAccess<ClassType,
-                      typename PropertyTraits::AccessType>(getter))
+    Accessor1(typename Traits::Type getter)
+        : m_interface(typename Traits::template TypeAccess<ClassType,
+                      typename Traits::AccessType>(getter))
     {}
 };
 

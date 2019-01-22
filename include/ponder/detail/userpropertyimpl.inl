@@ -30,7 +30,8 @@
 namespace ponder {
 namespace detail {
     
-template <bool isRef> // false
+// Policy for returned user object
+template <bool copyObject>
 struct ToUserObject
 {
     template <typename T>
@@ -41,14 +42,8 @@ struct ToUserObject
 };
 
 template <>
-struct ToUserObject<true>
+struct ToUserObject<false>
 {
-    template <typename T>
-    static inline UserObject get(const T& value)
-    {
-        return UserObject::makeRef(value);
-    }
-
     template <typename T>
     static inline UserObject get(T& value)
     {
@@ -66,7 +61,8 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return ToUserObject<A::canWrite>::get(
+    // We copy the returned object based on the return type of the getter: (copy) T, const T&, (ref) T&.
+    return ToUserObject<!A::Traits::isWritable>::get(
                 m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 
