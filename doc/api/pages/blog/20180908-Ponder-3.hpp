@@ -58,7 +58,16 @@ Use lambdas instead.
 
 \section ponder_3_1 3.1 Release Notes
 
-_date: 2018-01-06_
+_date: 2018-01-22_
+
+\subsection obj_reg_by_typeid Change internal class registration to by type instead of by name
+
+Objects are now registered interally using their
+[`typeid`](https://en.cppreference.com/w/cpp/language/typeid). They were previously registered via
+a string name, however, if we only have a type we could not always get the metaclass information if
+the metaclass had been renamed. This was a problem for the object factory. This is now fixed. There
+is also a mapping of string name to `typeid` so that you can rename metaclasses, however, you must
+always use the new name. This fixes issue #108.
 
 \subsection drop_msvc2015 Drop support for MSVC 2015.
 
