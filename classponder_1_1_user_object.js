@@ -13,7 +13,7 @@ var classponder_1_1_user_object =
     [ "makeCopy", "classponder_1_1_user_object.html#af5d3e4d21b133ebb2f03bfe1f78c1e59", null ],
     [ "makeRef", "classponder_1_1_user_object.html#a28a2c36fc3cf77cf1edc68721a10d392", null ],
     [ "makeRef", "classponder_1_1_user_object.html#af6111f211762fdb024b10c26d7f932c8", null ],
-    [ "operator!=", "classponder_1_1_user_object.html#a7d1bb3c2bce8e537d4c0319d6700d847", null ],
+    [ "operator !=", "classponder_1_1_user_object.html#ae8dac23a050bab45aaa86d2000a41382", null ],
     [ "operator<", "classponder_1_1_user_object.html#adc66f5adb7781595618d60816a792f96", null ],
     [ "operator=", "classponder_1_1_user_object.html#ac69b4f63ee0d9c71ad21215b5ce7c64b", null ],
     [ "operator=", "classponder_1_1_user_object.html#abd0947809aead3c183033bdcd0528868", null ],

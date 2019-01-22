@@ -63,6 +63,10 @@ var index =
         [ "Removed ponder::classByIndex().", "blog_ponder_3.html#classbyindex_removed", null ],
         [ "Cmake project name changed to \"ponder\" to match namespace (#95).", "blog_ponder_3.html#cmake_project_rename", null ],
         [ "Removed composed property getter", "blog_ponder_3.html#composed_prop_getter_removed", null ]
+      ] ],
+      [ "3.1 Release Notes", "blog_ponder_3.html#ponder_3_1", [
+        [ "Change internal class registration to by type instead of by name", "blog_ponder_3.html#obj_reg_by_typeid", null ],
+        [ "Drop support for MSVC 2015.", "blog_ponder_3.html#drop_msvc2015", null ]
       ] ]
     ] ]
 ];

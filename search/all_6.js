@@ -4,7 +4,6 @@ var searchData=
   ['getclass',['getClass',['../classponder_1_1_user_object.html#af4a215a18e61bfe86438eaf92a812981',1,'ponder::UserObject::getClass()'],['../classponder_1_1_user_property.html#ae5e6ae0c12260d41270654b05ebf2018',1,'ponder::UserProperty::getClass()'],['../classponder_1_1runtime_1_1_object_factory.html#a63d68cb70f4e1fe534f76ec57333d191',1,'ponder::runtime::ObjectFactory::getClass()']]],
   ['getenum',['getEnum',['../classponder_1_1_enum_object.html#a9de8ac38a3d344c425d94a44ee506e1b',1,'ponder::EnumObject::getEnum()'],['../classponder_1_1_enum_property.html#ab37fb8f4a6031784a0b6545396fbf6c2',1,'ponder::EnumProperty::getEnum()']]],
   ['getname',['getName',['../classponder_1_1_user_data.html#a84315f4a81dcb5fba7f13a85039e6921',1,'ponder::UserData']]],
-  ['getobject',['getObject',['../classponder_1_1_user_property.html#aaab97d0bcfeacdae2291e1fc61b103a4',1,'ponder::UserProperty']]],
   ['getuserobjectfrompointer',['getUserObjectFromPointer',['../classponder_1_1_class.html#a7df3ad7b49e64e842ca2095e1d23d519',1,'ponder::Class']]],
   ['getusesdata',['getUsesData',['../classponder_1_1_function.html#aa678223a04de9a101c65b4ec2bc36032',1,'ponder::Function']]],
   ['getvalue',['getValue',['../classponder_1_1_user_data.html#a9b13b23697be69076897145e4ab5e8fb',1,'ponder::UserData']]]
