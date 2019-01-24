@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,13 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/class.hpp>
+// Tests for exposing different class variations:
+//  - Solo class/struct, static and dynamic inheritance.
+//  - Downcasting, polymorphism.
+//  - Property accessing.
+//  - Get class by name/type.
+//  - Undeclare types.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 
@@ -79,6 +84,11 @@ namespace ClassTest
         int a, b;
     };
     
+    struct DifferentName
+    {
+    };
+    static constexpr char c_differentName[] = "HatstandEscalator";
+    
     template <class T>
     class TemplateClass
     {
@@ -121,31 +131,33 @@ namespace ClassTest
     
     void declare()
     {
-        ponder::Class::declare<MyClass>("ClassTest::MyClass")
+        ponder::Class::declare<MyClass>()
             .property("prop", &MyClass::prop)
             .function("func", &MyClass::func);
         
-        ponder::Class::declare<MyClass2>("ClassTest::MyClass2");
+        ponder::Class::declare<MyClass2>();
         
-        ponder::Class::declare<Base>("ClassTest::Base");
+        ponder::Class::declare<Base>();
         
-        ponder::Class::declare<Derived>("ClassTest::Derived")
+        ponder::Class::declare<Derived>()
             .base<Base>();
         
-        ponder::Class::declare<DerivedNoRtti>("ClassTest::DerivedNoRtti")
+        ponder::Class::declare<DerivedNoRtti>()
             .base<Base>();
         
-        ponder::Class::declare<Derived2NoRtti>("ClassTest::Derived2NoRtti")
+        ponder::Class::declare<Derived2NoRtti>()
             .base<Derived>();
         
-        ponder::Class::declare< TemplateClass<int> >()
+        ponder::Class::declare<TemplateClass<int>>()
             .constructor()
             .property("TestMember", &TemplateClass<int>::testMember_);
 
         ponder::Class::declare< DataTemplate<float,5,5> >()
             .function("get", &DataTemplate<float,5,5>::get)
             .function("set", &DataTemplate<float,5,5>::set);
-        
+
+        ponder::Class::declare<DifferentName>(c_differentName);
+
 #if TEST_VIRTUAL
         ponder::Class::declare< VirtualBase >()
             ;
@@ -182,11 +194,13 @@ namespace ClassTest
     {
         ponder::Class::undeclare<TemporaryRegistration>();
     }
-}
+    
+} // namespace ClassTest
 
 PONDER_TYPE(ClassTest::MyExplicityDeclaredClass /* never declared */)
 PONDER_TYPE(ClassTest::MyUndeclaredClass /* never declared */)
 PONDER_TYPE(ClassTest::DataTemplate<float,5,5>)
+PONDER_TYPE(ClassTest::DifferentName)
 
 //
 // ClassTest::declare() is called to declared registered classes in it. Note,
@@ -220,8 +234,9 @@ TEST_CASE("Classes need to be declared")
     SECTION("explicit declaration")
     {
         const std::size_t count = ponder::classCount();    
-        ponder::Class::declare<MyExplicityDeclaredClass>("ClassTest::MyExplicityDeclaredClass");
-        REQUIRE(ponder::classCount() == count + 1);        
+        ponder::Class::declare<MyExplicityDeclaredClass>();
+        REQUIRE(ponder::classCount() == count + 1);
+        REQUIRE(ponder::classByTypeSafe<MyExplicityDeclaredClass>() != nullptr);
     }
     
     SECTION("duplicates are errors")
@@ -235,22 +250,6 @@ TEST_CASE("Classes need to be declared")
         REQUIRE_THROWS_AS(ponder::Class::declare<MyUndeclaredClass>("ClassTest::MyClass"),
                           ponder::ClassAlreadyCreated);        
     }
-    
-    SECTION("metadata can be compared")
-    {
-        const ponder::Class& class1 = ponder::classByType<MyClass>();
-        const ponder::Class& class2 = ponder::classByType<MyClass2>();
-        
-        REQUIRE( (class1 == class1) );
-        REQUIRE( (class1 != class2) );
-        REQUIRE( (class2 != class1) );
-    }
-    
-    SECTION("can retrieve memory size")
-    {
-        REQUIRE(ponder::classByType<MyClass>().sizeOf() == sizeof(MyClass));
-        REQUIRE(ponder::classByName("ClassTest::MyClass").sizeOf() == sizeof(MyClass));
-    }
 }
 
 
@@ -259,22 +258,34 @@ TEST_CASE("Class metadata can be retrieved")
     MyClass object;
     MyUndeclaredClass object2;    
 
-    SECTION("by name")
+    SECTION("by name that matches type")
     {
-        REQUIRE(ponder::classByName("ClassTest::MyClass").name() == "ClassTest::MyClass");        
-        
-        REQUIRE_THROWS_AS(ponder::classByName("ClassTest::MyUndeclaredClass"), 
-                          ponder::ClassNotFound);
+        REQUIRE(ponder::classByName("ClassTest::MyClass").name() == "ClassTest::MyClass");
+        REQUIRE((ponder::classByName("ClassTest::MyClass") == ponder::classByType<ClassTest::MyClass>()));
+    }
+
+    SECTION("unfound names are errors")
+    {
+        REQUIRE_THROWS_AS(ponder::classByName("xThisWillNotBeFoundx"), ponder::ClassNotFound);
+    }
+
+    SECTION("by name that does not match type")
+    {
+        // lookup by static name fails
+        REQUIRE_THROWS_AS(ponder::classByName("ClassTest::DifferentName"), ponder::ClassNotFound);
+
+        // Lookup by declared name passes
+        REQUIRE(ponder::classByName(c_differentName).name() == c_differentName);
+        REQUIRE(ponder::classByType<ClassTest::DifferentName>().name() == c_differentName);
     }
 
     SECTION("by type")
     {
         REQUIRE(ponder::classByType<MyClass>().name() == "ClassTest::MyClass");
         
-        REQUIRE(ponder::classByTypeSafe<MyUndeclaredClass>() == static_cast<ponder::Class*>(0));    
+        REQUIRE(ponder::classByTypeSafe<MyUndeclaredClass>() == nullptr);
         
-        REQUIRE_THROWS_AS(ponder::classByType<MyUndeclaredClass>(),            
-                          ponder::ClassNotFound);
+        REQUIRE_THROWS_AS(ponder::classByType<MyUndeclaredClass>(), ponder::ClassNotFound);
     }
 
     SECTION("by instance")
@@ -295,6 +306,21 @@ TEST_CASE("Class metadata can be retrieved")
             ++count;
         }
         REQUIRE(count == ponder::classCount());
+    }
+    
+    SECTION("metadata can be compared")
+    {
+        const ponder::Class& class1 = ponder::classByType<MyClass>();
+        const ponder::Class& class2 = ponder::classByType<MyClass2>();
+        
+        REQUIRE( (class1 == class1) );
+        REQUIRE( (class1 != class2) );
+        REQUIRE( (class2 != class1) );
+    }
+    
+    SECTION("can retrieve memory size")
+    {
+        REQUIRE(ponder::classByType<MyClass>().sizeOf() == sizeof(MyClass));
     }
 }
 
@@ -458,7 +484,7 @@ TEST_CASE("Classes can be templates")
 
 // Classes declared using Ponder *can declare* virtually inherited base classes,
 // but the casting of these is unreliable due to the compiler specific nature of their
-// compiler implementation. This test is therefore optional as it fails on some
+// implementation. This test is therefore optional as it fails on some
 // platforms, even depending on config, e.g. Windows debug.
 #if TEST_VIRTUAL
 TEST_CASE("Classes can have virtual inhertitance")

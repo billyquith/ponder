@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@
 #define PONDER_TYPE_HPP
 
 #include <ponder/config.hpp>
+#include <typeindex>
 
 /**
  * \namespace ponder
@@ -47,7 +48,10 @@
 namespace ponder {
     
 class Value;
-    
+
+// Note: This may have issues with DLLs?
+typedef std::type_index TypeId; // Used to uniquely identify a type.
+
 /**
  * \brief Special empty type associated to \c noType
  *

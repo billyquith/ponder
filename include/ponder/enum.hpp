@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -119,7 +119,7 @@ public:
      *         to fill the new metaenum with values.
      */
     template <typename T>
-    static EnumBuilder declare(IdRef name = Id());
+    static EnumBuilder declare(IdRef name = IdRef());
 
     /**
      * \brief Undeclare an existing metaenum
@@ -133,7 +133,7 @@ public:
      * \see Class::undeclare
      */
     template <typename T>
-    static void undeclare(IdRef name = Id());
+    static void undeclare();
     
 public:
 
@@ -278,8 +278,8 @@ private:
     
     typedef detail::Dictionary<Id, IdRef, EnumValue> EnumTable;
     
-    Id m_name;     ///< Name of the metaenum
-    EnumTable m_enums;      ///< Table of enums
+    Id m_name;              // Name of the metaenum
+    EnumTable m_enums;      // Table of enums
 };
 
 } // namespace ponder

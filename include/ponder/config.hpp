@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -31,31 +31,24 @@
 #ifndef PONDER_CONFIG_HPP
 #define PONDER_CONFIG_HPP
 
-// Earlier MSVC compilers have C++0x bugs which cause problems for Ponder.
+// Check we have C++14 support. Report issues to Github project.
 #if defined(_MSC_VER)
-    static_assert(_MSC_VER >= 1900, "MSVC 2015 is required.");
-    static_assert(_MSC_FULL_VER >= 190023918, "MSVC 2015 Update 2 required.");
+    // Earlier MSVC compilers lack features or have C++14 bugs.
+    static_assert(_MSC_VER >= 1911, "MSVC 2017 required");
 #endif
 
-// We define the PONDER_API macro according to the
-// current operating system and build mode
+// We define the PONDER_API macro according to the current operating system and build mode
 #if defined(_WIN32) || defined(__WIN32__)
-
 #   ifndef PONDER_STATIC
-        // Windows platforms need specific keywords for import / export
 #       ifdef PONDER_EXPORTS
-            // From DLL side, we must export
 #           define PONDER_API __declspec(dllexport)
 #       else
-            // From client application side, we must import
 #           define PONDER_API __declspec(dllimport)
 #       endif
 #   else
-        // No specific directive needed for static build
 #       define PONDER_API
 #   endif
 #else
-    // Other platforms don't need to define anything
 #   define PONDER_API
 #endif
 

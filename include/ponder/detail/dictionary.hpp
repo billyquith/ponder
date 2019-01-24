@@ -1,14 +1,11 @@
 /****************************************************************************
  **
- ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
- ** Copyright (C) 2015-2018 Nick Trout.
- **
  ** This file is part of the Ponder library, formerly CAMP.
  **
  ** The MIT License (MIT)
  **
  ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
- ** Copyright (C) 2015-2018 Nick Trout.
+ ** Copyright (C) 2015-2019 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +66,7 @@ public:
     };
 
 private:
-    
+
     struct KeyCmp {
         bool operator () (const pair_t& a, KEY_REF b) const {
             return CMP() (a.first, b);
@@ -78,15 +75,15 @@ private:
 
     typedef std::vector<pair_t> container_t;
     container_t m_contents;
-    
+
 public:
-    
+
     typedef pair_t value_type;
     typedef typename container_t::const_iterator const_iterator;
-    
+
     const_iterator begin() const    { return m_contents.begin(); }
     const_iterator end() const      { return m_contents.end(); }
-    
+
     class Iterator {
         const_iterator m_begin, m_end;
     public:
@@ -94,7 +91,7 @@ public:
         const_iterator begin() const    { return m_begin; }
         const_iterator end() const      { return m_end; }
     };
-    
+
     // Allow iteration of dictionary without exposing the API.
     Iterator getIterator() const { return Iterator(begin(), end()); }
 
@@ -127,17 +124,17 @@ public:
         }
         return false; // not found
     }
-    
+
     bool containsKey(KEY_REF key) const
     {
         return findKey(key) != m_contents.end();
     }
-    
+
     bool containsValue(const VALUE& value) const
     {
         return findValue(value) != m_contents.end();
     }
-    
+
     std::size_t size() const { return m_contents.size(); }
 
     void insert(KEY_REF key, const VALUE &value)
@@ -146,12 +143,12 @@ public:
         auto it = std::lower_bound(m_contents.begin(), m_contents.end(), key, KeyCmp());
         m_contents.insert(it, pair_t(key, value));
     }
-    
+
     void insert(const_iterator it)
     {
         insert(it->first, it->second);
     }
-    
+
     void erase(KEY_REF key)
     {
         const_iterator it = findKey(key);
@@ -169,7 +166,7 @@ public:
 #endif
         }
     }
-    
+
     const_iterator at(std::size_t index) const
     {
         const_iterator it(begin());

@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -36,55 +36,20 @@
 namespace ponder {
 namespace detail {
     
-/**
- * \brief Typed implementation of UserProperty
- *
- * UserPropertyImpl is a template implementation of UserProperty, which is strongly typed
- * in order to keep track of the true underlying C++ types involved in the property.
- *
- * The template parameter A is an abstract helper to access the actual C++ property.
- *
- * \sa UserProperty
- */
 template <typename A>
 class UserPropertyImpl : public UserProperty
 {
 public:
 
-    /**
-     * \brief Construct the property from its accessors
-     *
-     * \param name Name of the property
-     * \param accessor Object used to access the actual C++ property
-     */
     UserPropertyImpl(IdRef name, A&& accessor);
 
 protected:
 
-    /**
-     * \see Property::isReadable
-     */
     bool isReadable() const final;
-
-    /**
-     * \see Property::isWritable
-     */
     bool isWritable() const final;
 
-    /**
-     * \see Property::getValue
-     */
     Value getValue(const UserObject& object) const final;
-
-    /**
-     * \see Property::setValue
-     */
     void setValue(const UserObject& object, const Value& value) const final;
-
-    /**
-    * \see UserProperty::getObject
-    */
-    UserObject getObject(const UserObject& parentInstance) const final;
 
 private:
 

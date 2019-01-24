@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -41,26 +41,26 @@ inline const detail::ClassManager& classIterator()
 
 inline const Class& classByName(IdRef name)
 {
-    // Note: detail::typeId() not used here so no automated registration.
-    return detail::ClassManager::instance().getById(name);
+    // Note: detail::typeName() not used here so no automated registration.
+    return detail::ClassManager::instance().getByName(name);
 }
 
 template <typename T>
 const Class& classByObject(const T& object)
 {
-    return detail::ClassManager::instance().getById(detail::typeId(object));
+    return detail::ClassManager::instance().getById(detail::getTypeId(object));
 }
 
 template <typename T>
 const Class& classByType()
 {
-    return detail::ClassManager::instance().getById(detail::typeId<T>());
+    return detail::ClassManager::instance().getById(detail::getTypeId<T>());
 }
 
 template <typename T>
 const Class* classByTypeSafe()
 {
-    return detail::ClassManager::instance().getByIdSafe(detail::safeTypeId<T>());
+    return detail::ClassManager::instance().getByIdSafe(detail::calcTypeId<typename detail::RawType<T>::Type>());
 }
 
 } // namespace ponder

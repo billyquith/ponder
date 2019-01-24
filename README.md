@@ -35,14 +35,22 @@ Features:
 
 ### Build
 
-Ponder uses CMake to generate project files. E.g. Use Ninja to build Ponder:
+Compilers supported. Requires C++14 support.
+
+- MSVC 2017+
+- Xcode 8+
+- GCC 4.9+
+- Clang 3.4+
+
+Ponder uses CMake to generate project files which are then used to build the project ([Build
+docs][build]). E.g. Use `make` to build Ponder (but you can use any build system CMake supports):
 
 ```bash
 git clone https://github.com/billyquith/ponder.git
 cd ponder
 mkdir build && cd build
-cmake -G Ninja ..
-ninja
+cmake -G "Unix Makefiles" ..
+make
 ```
 
 ### History
@@ -55,5 +63,6 @@ See [CHANGELOG.md](CHANGELOG.md) and [release notes][rel] for more details on Po
 
 [rel]: https://billyquith.github.io/ponder/blog_ponder_3.html
 [cl]: https://github.com/billyquith/ponder/CHANGELOG.md
+[build]: https://billyquith.github.io/ponder/building_ponder.html
 [tege]: http://www.tegesoft.com
 [camp]: https://github.com/tegesoft/camp

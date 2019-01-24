@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -105,7 +105,8 @@ class PONDER_API Class : public Type
     typedef UserObject (*UserObjectCreator)(void*);
     
     std::size_t m_sizeof;           // Size of the class in bytes.
-    Id m_id;                        // Name of the metaclass
+    TypeId m_id;                    // Unique type id of the metaclass.
+    Id m_name;                      // Name of the metaclass
     FunctionTable m_functions;      // Table of metafunctions indexed by ID
     PropertyTable m_properties;     // Table of metaproperties indexed by ID
     BaseList m_bases;               // List of base metaclasses
@@ -130,7 +131,7 @@ public:     // declaration
      * \remark It is best to leave the name blank and use the default class name.
      */
     template <typename T>
-    static ClassBuilder<T> declare(IdRef id = ponder::Id());
+    static ClassBuilder<T> declare(IdRef id = ponder::IdRef());
 
     /**
      * \brief Undeclare an existing metaclass
@@ -141,12 +142,10 @@ public:     // declaration
      * \note Do *not* use automatic metaclass declaration (PONDER_AUTO_TYPE) for the class 
      *       or it will keep being recreated by Ponder.
      *
-     * \param id Name identifier of a previously declared class
-     *
      * \see Class::declare, Enum::undeclare
      */
     template <typename T>
-    static void undeclare(IdRef id = ponder::Id());
+    static void undeclare();
 
 public:     // reflection
 
@@ -396,19 +395,10 @@ private:
     template <typename T> friend class ClassBuilder;
     friend class detail::ClassManager;
 
-    /**
-     * \brief Construct the metaclass from its name
-     *
-     * \param name Name of the metaclass
-     */
-    Class(IdRef name);
+    Class(TypeId const& id, IdRef name);
 
-    /**
-     * \brief Get the offset of a base metaclass
-     *
-     * \param base Base metaclass to check
-     *
-     * \return offset between this and base, or -1 if both classes are unrelated
+    /* Get the offset of a base metaclass
+     * - offset between this and base, or -1 if both classes are unrelated
      */
     int baseOffset(const Class& base) const;
     

@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -46,22 +46,6 @@ namespace ponder {
  * \return Global metaenum count
  */
 std::size_t enumCount();
-
-/**
- * \relates Enum
- *
- * \brief Get a metaenum from its global index
- *
- * The purpose of this function is to provide a way to iterate through
- * all existing metaenums. \sa enumCount
- *
- * \param index Index of the metaenum to get
- *
- * \return Reference to the index-th metaenum
- *
- * \throw OutOfRange index is out of range
- */
-const Enum& enumByIndex(std::size_t index);
 
 /**
  * \relates Enum

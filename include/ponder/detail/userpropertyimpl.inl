@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -30,10 +30,8 @@
 namespace ponder {
 namespace detail {
     
-/*
- * Only copy user object if it is not
- */
-template <bool ReadOnly> // = false
+// Policy for returned user object
+template <bool copyObject>
 struct ToUserObject
 {
     template <typename T>
@@ -44,14 +42,8 @@ struct ToUserObject
 };
 
 template <>
-struct ToUserObject<true> // writable
+struct ToUserObject<false>
 {
-    template <typename T>
-    static inline UserObject get(const T& value)
-    {
-        return UserObject::makeRef(value);
-    }
-
     template <typename T>
     static inline UserObject get(T& value)
     {
@@ -69,7 +61,8 @@ UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
-    return ToUserObject<A::RefTraits::isRef>::get(
+    // We copy the returned object based on the return type of the getter: (copy) T, const T&, (ref) T&.
+    return ToUserObject<!A::Traits::isWritable>::get(
                 m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 
@@ -78,13 +71,6 @@ void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value)
 {
     if (!m_accessor.m_interface.setter(object.ref<typename A::ClassType>(), value.to<typename A::DataType>()))
         PONDER_ERROR(ForbiddenWrite(name()));
-}
-
-template <typename A>
-UserObject UserPropertyImpl<A>::getObject(const UserObject& objectInstance) const
-{
-    return ToUserObject<A::RefTraits::isRef>::get(
-                m_accessor.m_interface.getter(objectInstance.get<typename A::ClassType>()));
 }
 
 template <typename A>

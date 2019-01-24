@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -35,32 +35,27 @@ inline std::size_t enumCount()
     return detail::EnumManager::instance().count();
 }
 
-inline const Enum& enumByIndex(std::size_t index)
-{
-    return detail::EnumManager::instance().getByIndex(index);
-}
-
 inline const Enum& enumByName(IdRef name)
 {
-    return detail::EnumManager::instance().getById(name);
+    return detail::EnumManager::instance().getByName(name);
 }
 
 template <typename T>
 const Enum& enumByObject(T)
 {
-    return detail::EnumManager::instance().getById(detail::typeId<T>());
+    return detail::EnumManager::instance().getById(detail::getTypeId<T>());
 }
 
 template <typename T>
 const Enum& enumByType()
 {
-    return detail::EnumManager::instance().getById(detail::typeId<T>());
+    return detail::EnumManager::instance().getById(detail::getTypeId<T>());
 }
 
 template <typename T>
 const Enum* enumByTypeSafe()
 {
-    return detail::EnumManager::instance().getByIdSafe(detail::safeTypeId<T>());
+    return detail::EnumManager::instance().getByIdSafe(detail::calcTypeId<T>());
 }
 
 } // namespace ponder

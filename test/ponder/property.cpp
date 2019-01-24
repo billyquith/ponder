@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,10 @@
 **
 ****************************************************************************/
 
-#include <ponder/classget.hpp>
-#include <ponder/enumget.hpp>
-#include <ponder/property.hpp>
-#include <ponder/class.hpp>
-#include <ponder/enum.hpp>
+// Tests for Property:
+//  - Test different value types handled by Properties.
+//  - Test different property getter/setter implementations.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <string>
@@ -53,6 +52,7 @@ namespace PropertyTest
 
     bool operator == (const MyType& left, const MyType& right) {return left.x == right.x;}
     bool operator < (const MyType& left, const MyType& right) {return left.x < right.x;}
+    
     std::ostream& operator << (std::ostream& stream, const MyType& object)
     {
         return stream << object.x;

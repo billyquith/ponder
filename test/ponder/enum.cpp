@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,9 @@
 **
 ****************************************************************************/
 
-#include <ponder/enumget.hpp>
-#include <ponder/errors.hpp>
+// Test for Enum (enum, not enum class).
+//  - Can we declare, undeclare, and access enums.
+
 #include <ponder/enum.hpp>
 #include "test.hpp"
 
@@ -113,7 +114,7 @@ TEST_CASE("Enums need to be declared")
         REQUIRE_THROWS_AS(ponder::Enum::declare<MyEnum>(), ponder::EnumAlreadyCreated);
         
         // duplicate by name
-        REQUIRE_THROWS_AS(ponder::Enum::declare<MyUndeclaredEnum>("EnumTest::MyEnum"),
+        REQUIRE_THROWS_AS(ponder::Enum::declare<MyEnum>("EnumTest::MyEnum"),
                           ponder::EnumAlreadyCreated);
     }
     

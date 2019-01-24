@@ -4,7 +4,7 @@
 **
 ** The MIT License (MIT)
 **
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy

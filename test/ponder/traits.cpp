@@ -4,8 +4,8 @@
  **
  ** The MIT License (MIT)
  **
- ** Copyright (C) 2009-2010 TECHNOGERMA Systems France and/or its subsidiary(-ies).
- ** Contact: Technogerma Systems France Information (contact@technogerma.fr)
+ ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
+ ** Copyright (C) 2015-2019 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,10 @@
  **
  ****************************************************************************/
 
-#include <ponder/detail/functiontraits.hpp>
-#include <ponder/detail/objecttraits.hpp>
-#include <ponder/detail/util.hpp>
-#include <ponder/arraymapper.hpp>
-#include <ponder/function.hpp>
+// Test std and ponder traits, on which this whole API is based.
+//  - Makes sure compiler and std implementation are as expected.
+//  - Test Ponder traits work as expected.
+
 #include <ponder/classbuilder.hpp>
 #include "test.hpp"
 #include <array>
@@ -671,7 +670,7 @@ TEST_CASE("AccessTraits")
         using ponder::detail::AccessTraits;
         using ponder::PropertyAccessKind;
         
-        static_assert(ponder::detail::HasStaticTypeId<Class>::value, "");
+        static_assert(ponder::detail::hasStaticTypeDecl<Class>(), "");
         
         static_assert(AccessTraits<Class>::kind == PropertyAccessKind::User, "");
         //static_assert(AccessTraits<Class&>::kind == PropertyAccessKind::User, "");

@@ -4,7 +4,7 @@
  **
  ** The MIT License (MIT)
  **
- ** Copyright (C) 2015-2018 Nick Trout.
+ ** Copyright (C) 2015-2019 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,11 @@
  **
  ****************************************************************************/
 
+// Test local implementation of string_view.
+
+#include <ponder/detail/string_view.hpp>
 #include "test.hpp"
 #include <iostream>
-#include <ponder/detail/string_view.hpp>
 
 using ponder::detail::string_view;
 

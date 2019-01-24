@@ -3,6 +3,20 @@ Ponder Changelog
 ----------------
 
 - See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
+- See Github project issues (#nnn) for discussion on an issue.
+
+## 3.1
+
+- MSVC 2017 required. MSVC 2015 does not fully support C++14 (#113).
+- Fix object create with renamed classes (#108).
+- Change internal class registration to by type instead of by name.
+- Make detail::string_view more C++14.
+- Tidy unit tests.
+
+### 3.0.2
+
+- Fix UserProperty creation (#110).
+- Tidy UserProperty and tests.
 
 ### 3.0.1
 

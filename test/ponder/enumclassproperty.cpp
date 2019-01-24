@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +27,10 @@
 **
 ****************************************************************************/
 
-#include "test.hpp"
-#include <ponder/classget.hpp>
-#include <ponder/enumget.hpp>
-#include <ponder/enumproperty.hpp>
-#include <ponder/enum.hpp>
-#include <ponder/class.hpp>
+// Tests for EnumProperty, used to exposed EnumObject.
+
 #include <ponder/classbuilder.hpp>
+#include "test.hpp"
 #include <list>
 #include <vector>
 

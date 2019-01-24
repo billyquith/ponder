@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2018 Nick Trout.
+** Copyright (C) 2015-2019 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -32,19 +32,17 @@ namespace ponder {
 template <typename T>
 EnumBuilder Enum::declare(IdRef name)
 {
+    typedef detail::StaticTypeDecl<T> typeDecl;
     Enum& newEnum =
-        detail::EnumManager::instance().addClass(name.empty()
-                                                 ? detail::StaticTypeId<T>::get(false)
-                                                 : name);
+        detail::EnumManager::instance()
+            .addClass(typeDecl::id(false), name.empty() ? typeDecl::name(false) : name);
     return EnumBuilder(newEnum);
 }
 
 template <typename T>
-void Enum::undeclare(IdRef name)
+void Enum::undeclare()
 {
-    detail::EnumManager::instance().removeClass(name.empty()
-                                            ? detail::StaticTypeId<T>::get(false)
-                                            : name);
+    detail::EnumManager::instance().removeClass(detail::getTypeId<T>());
 }
 
 } // namespace ponder

@@ -7,6 +7,8 @@
  - **TL;DR** - Expose C++ classes and objects so they can be more easily used as data. Serialisation
     and Lua scripting supported.
 
+\image html Lua-Logo-128.png "Lua binding"
+
 \section overview Overview
 
 
@@ -30,7 +32,7 @@ Features:
  - Get and set properties on member variables.
  - Call member and static functions.
  - Save class instance data as JSON or XML.
- - Automatic Lua binding generation.
+ - Automatic [Lua][lua] binding generation.
 
 \section intro_example Quick example
 
@@ -78,5 +80,7 @@ Ponder is distributed under the terms of the \ref license_page "MIT license".
 \page eg_page_declare Declaration Example
 
 \snippet declare.cpp eg_declare
+
+[lua]: https://www.lua.org/about.html
 
  */
