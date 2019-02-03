@@ -7,6 +7,7 @@ Ponder Changelog
 
 ## 3.1
 
+- Ponder now requires full C++14 support.
 - MSVC 2017 required. MSVC 2015 does not fully support C++14 (#113).
 - Fix object create with renamed classes (#108).
 - Change internal class registration to by type instead of by name.

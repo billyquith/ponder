@@ -60,6 +60,9 @@ Use lambdas instead.
 
 _date: 2018-01-22_
 
+\note Ponder now requires full C++14 support. We'd like to use the `constexpr` extensions.
+    See \ref drop_msvc2015
+
 \subsection obj_reg_by_typeid Change internal class registration to by type instead of by name
 
 Objects are now registered interally using their
