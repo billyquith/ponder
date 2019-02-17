@@ -140,7 +140,7 @@ private:
     template <int M>
     void processUses(IdRef name, F function)
     {
-        typedef typename std::tuple_element<M, uses::Uses::Modules>::type Processor;
+        typedef typename std::tuple_element<M, uses::Uses::Users>::type Processor;
         
         std::get<M>(m_userData) =
             Processor::template perFunction<F, T, FuncPolicies>(name, function);

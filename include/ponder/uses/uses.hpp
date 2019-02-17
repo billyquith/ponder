@@ -43,7 +43,7 @@ namespace ponder {
 namespace uses {
 
 /**
- *  The "uses" modules are a way for Uses of the compile-time types to store
+ *  The "uses" are a way for users of the compile-time types to store
  *  information. For example, this may be templated code that uses the types only
  *  available during compilation. These may then be used at runtime. The idea is
  *  to decouple modules from the metaclass data to avoid complexity.
@@ -51,7 +51,7 @@ namespace uses {
  *  Each module supplies (pseudo-code):
  *      
  *  \code
- *  struct Module_name {
+ *  struct Use_name {
  *      static module_ns::detail::PerConstructor_t* perConstructor(IdRef name, C constructor)
  *      static module_ns::detail::PerFunc_t* perFunction(IdRef name, F function)
  *  }
@@ -64,7 +64,7 @@ namespace uses {
  *  This module provides runtime behaviour like creation of UserObjects and calling 
  *  functions
  */
-struct RuntimeModule
+struct RuntimeUse
 {
     /// Factory for per-function runtime data
     template <typename F, typename FTraits, typename Policies_t>
@@ -80,7 +80,7 @@ struct RuntimeModule
  *  This module provides Lua support.
  */
 #if PONDER_USING_LUA
-struct LuaModule
+struct LuaUse
 {
     /// Factory for per-function runtime data
     template <typename F, typename FTraits, typename Policies_t>
@@ -99,13 +99,15 @@ struct LuaModule
 struct Uses
 {
     enum {
-        eRuntimeModule,             ///< Runtime module enumeration
-        PONDER_IF_LUA(eLuaModule)   ///< Lua module enumeration
+        eRuntimeModule,                 ///< Runtime module enumeration
+        PONDER_IF_LUA(eLuaModule,)      ///< Lua module enumeration
+        eUseCount
     };
     
-     /// Modules we would like to use.
-    typedef std::tuple<RuntimeModule
-                       PONDER_IF_LUA(,LuaModule)> Modules;
+     /// Metadata uses we are using.
+    typedef std::tuple<RuntimeUse
+                       PONDER_IF_LUA(,LuaUse)
+                      > Users;
 
     /// Type that stores the per-function uses data
     typedef std::tuple<
@@ -118,6 +120,9 @@ struct Uses
     //  PerFunc_t* std::get<I>(getUsesData());
 };
     
+static_assert(Uses::eUseCount==std::tuple_size<Uses::Users>::value, "Size mismatch");
+static_assert(Uses::eUseCount==std::tuple_size<Uses::PerFunctionUserData>::value, "Size mismatch");
+
 } // namespace uses
 } // namespace ponder
 
