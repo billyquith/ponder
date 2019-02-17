@@ -51,7 +51,7 @@ extern "C" {
  * \namespace ponder::lua::detail
  * \brief Ponder Lua support hidden implementation details.
  *
- * \namespace ponder::lua::impl
+ * \namespace ponder::lua::detail
  * \brief Ponder Lua support hidden implementation details.
  */
 
@@ -153,7 +153,7 @@ PONDER_API bool runString(lua_State *L, const char *luaCode);
 
 namespace ponder {
 namespace lua {
-namespace impl {
+namespace detail {
 
 // push a Ponder value onto the Lua state stack
 static int pushValue(lua_State *L, const ponder::Value& val,
@@ -285,7 +285,7 @@ static int l_inst_index(lua_State *L)
     const Function *fp = nullptr;
     if (cls->tryFunction(key, fp))
     {
-        lua::impl::FunctionCaller *caller =
+        lua::detail::FunctionCaller *caller =
             std::get<uses::Uses::eLuaModule>(
                 *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(fp->getUsesData()));
 
@@ -362,7 +362,7 @@ static int l_get_class_static(lua_State *L)
     const Function *func = nullptr;
     if (cls->tryFunction(key, func))
     {
-        lua::impl::FunctionCaller *caller =
+        lua::detail::FunctionCaller *caller =
             std::get<uses::Uses::eLuaModule>(
                 *reinterpret_cast<const uses::Uses::PerFunctionUserData*>(func->getUsesData()));
 
@@ -399,11 +399,11 @@ static void createInstanceMetatable(lua_State *L, const Class& cls)
     lua_pop(L, 2);                              // -1 _G, _G.METAS
 }
 
-} // namespace impl
+} // namespace detail
 
 void expose(lua_State *L, const Class& cls, const IdRef name)
 {
-    using namespace impl;
+    using namespace detail;
 
     // ensure _G.META
     lua_pushglobaltable(L);                     // +1

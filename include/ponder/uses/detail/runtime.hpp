@@ -35,7 +35,7 @@
 
 namespace ponder {
 namespace runtime {
-namespace impl {
+namespace detail {
 
 //-----------------------------------------------------------------------------
 // Handle returning copies
@@ -43,13 +43,13 @@ namespace impl {
 template <typename R, typename U = void> struct CallReturnCopy;
 
 template <typename R>
-struct CallReturnCopy<R, typename std::enable_if<!detail::IsUserType<R>::value>::type>
+struct CallReturnCopy<R, typename std::enable_if<!ponder::detail::IsUserType<R>::value>::type>
 {
     static inline Value value(R&& o) {return Value(o);}
 };
 
 template <typename R>
-struct CallReturnCopy<R, typename std::enable_if<detail::IsUserType<R>::value>::type>
+struct CallReturnCopy<R, typename std::enable_if<ponder::detail::IsUserType<R>::value>::type>
 {
     static inline Value value(R&& o) {return Value(UserObject::makeCopy(std::forward<R>(o)));}
 };
@@ -62,8 +62,8 @@ template <typename R, typename U = void> struct CallReturnInternalRef;
 template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
-        !detail::IsUserType<R>::value
-        && !std::is_same<typename detail::RawType<R>::Type, UserObject>::value
+        !ponder::detail::IsUserType<R>::value
+        && !std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
     >::type>
 {
     static inline Value value(R&& o) {return Value(o);}
@@ -72,8 +72,8 @@ struct CallReturnInternalRef<R,
 template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
-        detail::IsUserType<R>::value
-        || std::is_same<typename detail::RawType<R>::Type, UserObject>::value
+        ponder::detail::IsUserType<R>::value
+        || std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
     >::type>
 {
     static inline Value value(R&& o) {return Value(UserObject::makeRef(std::forward<R>(o)));}
@@ -169,7 +169,7 @@ struct ConvertArg<(int)ValueKind::User, const TTo&>
 template <typename A>
 struct ConvertArgs
 {
-    typedef typename ::ponder::detail::RawType<A>::Type Raw;
+    typedef typename ponder::detail::RawType<A>::Type Raw;
     static constexpr ValueKind kind = ponder_ext::ValueMapper<Raw>::kind;
     typedef ConvertArg<(int)kind, A> Convertor;
     
@@ -269,7 +269,7 @@ private:
     }
 };
 
-} // namespace impl
+} // namespace detail
 } // namespace runtime
 } // namespace ponder
 

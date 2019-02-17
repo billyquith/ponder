@@ -211,9 +211,8 @@ public:
 private:
     
     const Function &m_func;
-    runtime::impl::FunctionCaller *m_caller;
+    runtime::detail::FunctionCaller *m_caller;
 };
-    
     
 /**
  * \brief This object is used to invoke a function
@@ -261,7 +260,7 @@ public:
 private:
     
     const Function &m_func;
-    runtime::impl::FunctionCaller *m_caller;
+    runtime::detail::FunctionCaller *m_caller;
 };
 
 //--------------------------------------------------------------------------------------

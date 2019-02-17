@@ -52,8 +52,8 @@ namespace uses {
  *      
  *  \code
  *  struct Module_name {
- *      static module_ns::impl::PerConstructor_t* perConstructor(IdRef name, C constructor)
- *      static module_ns::impl::PerFunc_t* perFunction(IdRef name, F function)
+ *      static module_ns::detail::PerConstructor_t* perConstructor(IdRef name, C constructor)
+ *      static module_ns::detail::PerFunc_t* perFunction(IdRef name, F function)
  *  }
  *  \endcode
  */
@@ -68,9 +68,9 @@ struct RuntimeModule
 {
     /// Factory for per-function runtime data
     template <typename F, typename FTraits, typename Policies_t>
-    static runtime::impl::FunctionCaller* perFunction(IdRef name, F function)
+    static runtime::detail::FunctionCaller* perFunction(IdRef name, F function)
     {
-        return new runtime::impl::FunctionCallerImpl<F, FTraits, Policies_t>(name, function);
+        return new runtime::detail::FunctionCallerImpl<F, FTraits, Policies_t>(name, function);
     }
 };
 
@@ -84,9 +84,9 @@ struct LuaModule
 {
     /// Factory for per-function runtime data
     template <typename F, typename FTraits, typename Policies_t>
-    static lua::impl::FunctionCaller* perFunction(IdRef name, F function)
+    static lua::detail::FunctionCaller* perFunction(IdRef name, F function)
     {
-        return new lua::impl::FunctionCallerImpl<F, FTraits, Policies_t>(name, function);
+        return new lua::detail::FunctionCallerImpl<F, FTraits, Policies_t>(name, function);
     }
 };
 #endif // PONDER_USING_LUA
@@ -99,8 +99,8 @@ struct LuaModule
 struct Uses
 {
     enum {
-        eRuntimeModule,                 ///< Runtime module enumeration
-        PONDER_IF_LUA(eLuaModule)    ///< Lua module enumeration
+        eRuntimeModule,             ///< Runtime module enumeration
+        PONDER_IF_LUA(eLuaModule)   ///< Lua module enumeration
     };
     
      /// Modules we would like to use.
@@ -109,8 +109,8 @@ struct Uses
 
     /// Type that stores the per-function uses data
     typedef std::tuple<
-            runtime::impl::FunctionCaller*
-            PONDER_IF_LUA(,lua::impl::FunctionCaller*)
+            runtime::detail::FunctionCaller*
+            PONDER_IF_LUA(,lua::detail::FunctionCaller*)
         > PerFunctionUserData;
     
     // Access note:

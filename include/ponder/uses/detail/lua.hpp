@@ -261,7 +261,7 @@ struct LuaValueWriter<std::tuple<R...>> : public LuaValueWriter<const std::tuple
 
 namespace ponder {
 namespace lua {
-namespace impl {
+namespace detail {
     
 using namespace ponder_ext;
 
@@ -477,7 +477,7 @@ private:
     }
 };
     
-} // namespace impl
+} // namespace detail
 } // namespace lua
 } // namespace ponder
 
