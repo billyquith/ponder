@@ -98,7 +98,7 @@ struct ChooseCallReturner<std::tuple<policy::ReturnInternalRef, Ps...>, R>
 };
 
 template <typename R>
-    struct ChooseCallReturner<std::tuple<>, R> // default
+struct ChooseCallReturner<std::tuple<>, R> // default
 {
     typedef CallReturnCopy<R> type;
 };

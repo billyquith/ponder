@@ -79,7 +79,7 @@ namespace ponder_ext {
  *
  * \brief Template providing a mapping between C++ types/values and Ponder types/values
  *
- * ValueMapper<T> defines a mapping to and from type T. It defines three things in 
+ * ValueMapper<T> defines a mapping to and from type T to a Value. It defines three things in
  * order to make T fully compliant with the system:
  *
  * \li The abstract Ponder type that T is mapped to
@@ -157,10 +157,60 @@ struct ValueMapper
  * Specialization of ValueMapper for abstract types
  */
 template <typename T>
-struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value >::type>
+struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value>::type>
 {
     static const ponder::ValueKind kind = ponder::ValueKind::User;
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
+};
+
+/**
+ * Specialization of ValueMapper for pointers to basic types
+ *  - Used for pass by-reference parameters that are non-registered types.
+ */
+template <typename T>
+struct ValueMapper<T*, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
+{
+    static const ponder::ValueKind kind = ponder::ValueKind::User;
+
+    static ponder::UserObject to(T* source) {return ponder::UserObject::makeRef(source);}
+    
+    static T* from(const ponder::UserObject& source) {return static_cast<T*>(source.pointer());}
+    
+    static T from(bool)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean,ponder::mapType<T>()));}
+    static T from(long)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Integer,ponder::mapType<T>()));}
+    static T from(double)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Real,   ponder::mapType<T>()));}
+    static T from(const ponder::String&)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::mapType<T>()));}
+    static T from(const ponder::EnumObject&)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::mapType<T>()));}
+};
+
+/**
+ * Specialization of ValueMapper for pointers to basic types
+ *  - Used for pass by-reference parameters that are non-registered types.
+ */
+template <typename T>
+struct ValueMapper<T&, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
+{
+    static const ponder::ValueKind kind = ponder::ValueKind::User;
+    
+    static ponder::UserObject to(T& source) {return ponder::UserObject::makeRef(source);}
+    
+    static T from(const ponder::UserObject& source) {return *static_cast<T*>(source.pointer());}
+    
+    static T from(bool)
+    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean,ponder::mapType<T>()));}
+    static T from(long)
+    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Integer,ponder::mapType<T>()));}
+    static T from(double)
+    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Real,   ponder::mapType<T>()));}
+    static T from(const ponder::String&)
+    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::mapType<T>()));}
+    static T from(const ponder::EnumObject&)
+    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::mapType<T>()));}
 };
 
 /**
@@ -197,8 +247,7 @@ struct ValueMapper<T,
     static T from(long source)                    {return static_cast<T>(source);}
     static T from(double source)                  {return static_cast<T>(source);}
     static T from(const ponder::String& source)   {return ponder::detail::convert<T>(source);}
-    static T from(const ponder::EnumObject& source)
-        {return static_cast<T>(source.value());}
+    static T from(const ponder::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User, ponder::ValueKind::Integer));}
 };
@@ -453,7 +502,7 @@ struct ValueMapper<const T&>
  */
 template <template <typename> class T, typename U>
 struct ValueMapper<T<U>,
-    typename std::enable_if< ponder::detail::IsSmartPointer<T<U>,U>::value>::type>
+    typename std::enable_if<ponder::detail::IsSmartPointer<T<U>,U>::value>::type>
 {
     typedef int ReferencesNotAllowed[-(int)sizeof(U)];
 };

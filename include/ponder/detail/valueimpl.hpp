@@ -52,10 +52,14 @@ struct ConvertVisitor
         return ponder_ext::ValueMapper<T>::from(value);
     }
 
+    // Optimization when source type is the same as requested type
     T operator()(const T& value) const
     {
-        // Optimization when source type is the same as requested type
         return value;
+    }
+    T operator()(T&& value) const
+    {
+        return std::move(value);
     }
 
     T operator()(NoType) const

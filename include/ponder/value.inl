@@ -46,19 +46,40 @@ template <typename T> struct IsUserObjRef {
     static constexpr bool value = std::is_pointer<T>::value || std::is_reference<T>::value;
 };
 
-/**
- * \brief Helper structure allowing a shortcut when converting a ponder::Value to type
- */
-template <typename T>
+
+// Convert ponder::Value to type
+template <typename T, typename E = void>
 struct ValueTo
 {
     static T convert(const Value& value) {return value.visit(ConvertVisitor<T>());}
 };
 
+// Don't need to convert, we're returning a Value
 template <>
 struct ValueTo<Value>
 {
     static Value convert(const Value& value) {return value;}
+    static Value convert(Value&& value) {return std::move(value);}
+};
+
+// Convert Values to pointers for basic types
+template <typename T>
+struct ValueTo<T*, typename std::enable_if<!hasStaticTypeDecl<T>()>::type>
+{
+    static T* convert(const Value& value)
+    {
+        return static_cast<T*>(value.to<UserObject>().pointer());
+    }
+};
+
+// Convert Values to references for basic types
+template <typename T>
+struct ValueTo<T&, typename std::enable_if<!hasStaticTypeDecl<T>()>::type>
+{
+    static T convert(const Value& value)
+    {
+        return *static_cast<T*>(value.to<UserObject>().pointer());
+    }
 };
 
 } // namespace detail
