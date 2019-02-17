@@ -52,6 +52,9 @@
 #   define PONDER_API
 #endif
 
+// Debug build config?
+#define PONDER_DEBUG (!defined(NDEBUG))
+
 #ifndef PONDER_USING_LUA
 #   define PONDER_USING_LUA 0
 #endif
