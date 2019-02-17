@@ -76,7 +76,7 @@ public:
     template <typename... V>
     Args(V&&... args)
     {
-        init<std::initializer_list<Value>>({std::forward<V>(args)...});
+        Args({Value(std::forward<V>(args))...});
     }
     
     /**
@@ -84,8 +84,7 @@ public:
      *
      * \param il Arguments to put in the list.
      */
-    template <typename T>
-    void init(std::initializer_list<Value> il)
+    Args(std::initializer_list<Value> il)
     {
         m_values = il;
     }
