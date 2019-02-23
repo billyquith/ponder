@@ -183,11 +183,12 @@ static const char* c_typeNames[] =
 {
     "none",     // ValueKind::None
     "bool",     // ValueKind::Boolean
-    "int",      // ValueKind::Integer,
-    "real",     // ValueKind::Real,
-    "string",   // ValueKind::String,
-    "enum",     // ValueKind::Enum,
-    "array",    // ValueKind::Array,
+    "int",      // ValueKind::Integer
+    "real",     // ValueKind::Real
+    "string",   // ValueKind::String
+    "enum",     // ValueKind::Enum
+    "array",    // ValueKind::Array
+    "reference",// ValueKind::Reference
     "user",     // ValueKind::User
 };
 

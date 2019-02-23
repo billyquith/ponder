@@ -38,6 +38,7 @@ template <typename T> struct IsUserType {
     static constexpr bool value = std::is_class<RawType>::value
         && !std::is_same<RawType, Value>::value
         && !std::is_same<RawType, UserObject>::value
+        && !std::is_same<RawType, detail::ValueRef>::value
         && !std::is_same<RawType, ponder::String>::value;
 };
 
@@ -68,19 +69,19 @@ struct ValueTo<T*, typename std::enable_if<!hasStaticTypeDecl<T>()>::type>
 {
     static T* convert(const Value& value)
     {
-        return static_cast<T*>(value.to<UserObject>().pointer());
+        return value.to<detail::ValueRef>().getRef<T>();
     }
 };
 
 // Convert Values to references for basic types
-template <typename T>
-struct ValueTo<T&, typename std::enable_if<!hasStaticTypeDecl<T>()>::type>
-{
-    static T convert(const Value& value)
-    {
-        return *static_cast<T*>(value.to<UserObject>().pointer());
-    }
-};
+//template <typename T>
+//struct ValueTo<T&, typename std::enable_if<!hasStaticTypeDecl<T>()>::type>
+//{
+//    static T convert(const Value& value)
+//    {
+//        return *static_cast<T*>(value.to<UserObject>().pointer());
+//    }
+//};
 
 } // namespace detail
 

@@ -104,6 +104,11 @@ namespace ValueTest
         {
             return ponder::ValueKind::User;
         }
+        
+        ponder::ValueKind operator()(const ponder::detail::ValueRef&)
+        {
+            return ponder::ValueKind::Reference;
+        }
     };
     
     void declare()
@@ -144,8 +149,10 @@ TEST_CASE("Ponder has variant values")
     ponder::Value cstringValue = "1";
     ponder::Value stringValue  = ponder::String("1");
     ponder::Value enumValue    = One;
+    int ri{ 5 };
+    ponder::Value refValue  = ponder::Value(&ri);
     ponder::Value objectValue  = ponder::UserObject::makeRef(&object1);
-    
+
     SECTION("values have type")
     {
         IS_TRUE(noValue.kind() ==      ponder::ValueKind::None);
@@ -163,6 +170,7 @@ TEST_CASE("Ponder has variant values")
         IS_TRUE(cstringValue.kind() == ponder::ValueKind::String);
         IS_TRUE(stringValue.kind() ==  ponder::ValueKind::String);
         IS_TRUE(enumValue.kind() ==    ponder::ValueKind::Enum);
+        IS_TRUE(refValue.kind() ==     ponder::ValueKind::Reference);
         IS_TRUE(objectValue.kind() ==  ponder::ValueKind::User);
     }
 

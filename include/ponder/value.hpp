@@ -262,8 +262,9 @@ public:
 private:
 
     typedef mapbox::util::variant<
-                NoType, bool, long, double, ponder::String, EnumObject, UserObject
-            > Variant;
+            NoType, bool, long, double, ponder::String,
+            EnumObject, UserObject, detail::ValueRef
+        > Variant;
 
     Variant m_value; // Stored value
     ValueKind m_type; // Ponder type of the value

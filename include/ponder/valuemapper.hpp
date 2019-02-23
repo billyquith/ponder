@@ -38,6 +38,7 @@
 #include <ponder/arraymapper.hpp>
 #include <ponder/errors.hpp>
 #include <ponder/detail/util.hpp>
+#include <ponder/detail/valueref.hpp>
 
 /**
  * \namespace ponder_ext
@@ -149,6 +150,8 @@ struct ValueMapper
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::mapType<T>()));}
     static T from(const ponder::EnumObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::mapType<T>()));}
+    static T from(const ponder::detail::ValueRef&)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Reference, ponder::mapType<T>()));}
     static T from(const ponder::UserObject& source)
         {return source.get<T>();}
 };
@@ -170,12 +173,12 @@ struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value>::type>
 template <typename T>
 struct ValueMapper<T*, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::User;
+    static const ponder::ValueKind kind = ponder::ValueKind::Reference;
 
-    static ponder::UserObject to(T* source) {return ponder::UserObject::makeRef(source);}
-    
-    static T* from(const ponder::UserObject& source) {return static_cast<T*>(source.pointer());}
-    
+    static ponder::detail::ValueRef to(T* source) {return ponder::detail::ValueRef::make(source);}
+
+    static T* from(const ponder::detail::ValueRef& source) {return source.getRef<T>();}
+
     static T from(bool)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean,ponder::mapType<T>()));}
     static T from(long)
@@ -186,32 +189,34 @@ struct ValueMapper<T*, typename std::enable_if<!ponder::detail::hasStaticTypeDec
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::mapType<T>()));}
     static T from(const ponder::EnumObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::mapType<T>()));}
+    static T from(const ponder::UserObject&)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User,   ponder::mapType<T>()));}
 };
 
-/**
- * Specialization of ValueMapper for pointers to basic types
- *  - Used for pass by-reference parameters that are non-registered types.
- */
-template <typename T>
-struct ValueMapper<T&, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
-{
-    static const ponder::ValueKind kind = ponder::ValueKind::User;
-    
-    static ponder::UserObject to(T& source) {return ponder::UserObject::makeRef(source);}
-    
-    static T from(const ponder::UserObject& source) {return *static_cast<T*>(source.pointer());}
-    
-    static T from(bool)
-    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean,ponder::mapType<T>()));}
-    static T from(long)
-    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Integer,ponder::mapType<T>()));}
-    static T from(double)
-    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Real,   ponder::mapType<T>()));}
-    static T from(const ponder::String&)
-    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::mapType<T>()));}
-    static T from(const ponder::EnumObject&)
-    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::mapType<T>()));}
-};
+///**
+// * Specialization of ValueMapper for pointers to basic types
+// *  - Used for pass by-reference parameters that are non-registered types.
+// */
+//template <typename T>
+//struct ValueMapper<T&, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
+//{
+//    static const ponder::ValueKind kind = ponder::ValueKind::User;
+//
+//    static ponder::UserObject to(T& source) {return ponder::UserObject::makeRef(source);}
+//
+//    static T from(const ponder::UserObject& source) {return *static_cast<T*>(source.pointer());}
+//
+//    static T from(bool)
+//    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean,ponder::mapType<T>()));}
+//    static T from(long)
+//    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Integer,ponder::mapType<T>()));}
+//    static T from(double)
+//    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Real,   ponder::mapType<T>()));}
+//    static T from(const ponder::String&)
+//    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::mapType<T>()));}
+//    static T from(const ponder::EnumObject&)
+//    {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::mapType<T>()));}
+//};
 
 /**
  * Specialization of ValueMapper for booleans
@@ -228,6 +233,7 @@ struct ValueMapper<bool>
     static bool from(const ponder::String& source) {return ponder::detail::convert<bool>(source);}
     static bool from(const ponder::EnumObject& source) {return source.value() != 0;}
     static bool from(const ponder::UserObject& source) {return source.pointer() != nullptr;}
+    static bool from(const ponder::detail::ValueRef& source) {return source.getRef<bool>();}
 };
 
 /**
@@ -250,6 +256,7 @@ struct ValueMapper<T,
     static T from(const ponder::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User, ponder::ValueKind::Integer));}
+    static T from(const ponder::detail::ValueRef& source) {return *source.getRef<T>();}
 };
 
 /*
@@ -272,6 +279,7 @@ struct ValueMapper<T,
     static T from(const ponder::EnumObject& source) {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User, ponder::ValueKind::Real));}
+    static T from(const ponder::detail::ValueRef& source) {return *source.getRef<T>();}
 };
 
 /**
@@ -295,6 +303,8 @@ struct ValueMapper<ponder::String>
         {return ponder::String(source.name());}
     static ponder::String from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User, ponder::ValueKind::String));}
+    static ponder::String from(const ponder::detail::ValueRef& source)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Reference, ponder::ValueKind::String));}
 };
 
 template <>
@@ -378,6 +388,8 @@ struct ValueMapper<T, typename std::enable_if<std::is_enum<T>::value>::type>
         {return static_cast<T>(source.value());}
     static T from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::User, ponder::ValueKind::Enum));}
+    static T from(const ponder::detail::ValueRef& source)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Reference, ponder::ValueKind::Enum));}
 
     // The string -> enum conversion involves a little more work:
     // we try two different conversions (as a name and as a value)
@@ -410,16 +422,18 @@ struct ValueMapper<ponder::EnumObject>
     static const ponder::EnumObject& to(const ponder::EnumObject& source) {return source;}
     static const ponder::EnumObject& from(const ponder::EnumObject& source) {return source;}
 
-    static ponder::UserObject from(bool)
+    static ponder::EnumObject from(bool)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Boolean, ponder::ValueKind::Enum));}
-    static ponder::UserObject from(long)
+    static ponder::EnumObject from(long)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Integer, ponder::ValueKind::Enum));}
-    static ponder::UserObject from(double)
+    static ponder::EnumObject from(double)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Real,   ponder::ValueKind::Enum));}
-    static ponder::UserObject from(const ponder::String&)
+    static ponder::EnumObject from(const ponder::String&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::ValueKind::Enum));}
-    static ponder::UserObject from(const ponder::UserObject&)
+    static ponder::EnumObject from(const ponder::UserObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::ValueKind::Enum));}
+    static ponder::EnumObject from(const ponder::detail::ValueRef& source)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Reference, ponder::ValueKind::Enum));}
 };
 
 /**
@@ -453,6 +467,8 @@ struct ValueMapper<ponder::UserObject>
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::String, ponder::ValueKind::User));}
     static ponder::UserObject from(const ponder::EnumObject&)
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Enum,   ponder::ValueKind::User));}
+    static ponder::UserObject from(const ponder::detail::ValueRef& source)
+        {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Reference, ponder::ValueKind::User));}
 };
 
 /**
