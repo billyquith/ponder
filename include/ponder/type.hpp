@@ -70,7 +70,7 @@ enum class ValueKind
 {
     None,       ///< No type has been defined yet
     Boolean,    ///< Boolean type (`bool`)
-    Integer,    ///< Integer types (`unsigned`,`signed` `char` `short` `int` `long`)
+    Integer,    ///< Integer types (`unsigned`,`signed`, `char`, `short`, `int`, `long`)
     Real,       ///< Real types (`float`, `double`)
     String,     ///< String types (`char*`, `ponder::String`)
     Enum,       ///< Enumerated types
@@ -87,11 +87,11 @@ enum class ValueKind
 enum class ReferenceKind
 {
     None,               ///< not an object
-    Instance,           ///< an object instance, e.g. int, T
-    Pointer,            ///< pointer to an object, e.g. T*
+    Instance,           ///< an object instance, e.g. `int`, `T`
+    Pointer,            ///< pointer to an object, e.g. `T*`
     Reference,          ///< reference to an object, e.g. T&
-    SmartPointer,       ///< smart pointer reference, e.g. std::shared_ptr<T>
-    BuiltinArray,       ///< builtin array, e.g. T[N]
+    SmartPointer,       ///< smart pointer reference, e.g. `std::shared_ptr<T>`
+    BuiltinArray,       ///< builtin array, e.g. `T[N]`
 };
     
 /**
@@ -150,12 +150,24 @@ namespace policy {
  */
 enum class ReturnKind
 {
-    NoReturn,       // void, returns nothing
+    NoReturn,           // void, returns nothing
     Copy,
     InternalRef,
     Multiple
 };
-    
+
+/**
+ * \brief Enumeration of the kinds of parameter type
+ *
+ * Parameters are the types in a function definition. Arguments are what you pass to them.
+ */
+enum class ParameterKind
+{
+    PassByValue,        ///< Pass by value, e.g. `foo(T)`
+    PassByReference,    ///< Pass by reference, e.g. `foo(const T*, const U&)`
+//    ReturnObject        ///< Return object, e.g. `foo(T**, T*&)`
+};
+
 /**
  * \brief Call return copy policy
  *
@@ -191,6 +203,21 @@ struct ReturnMultiple
 {
     static constexpr ReturnKind kind = ReturnKind::Multiple; ///< The policy enum kind.
 };
+    
+struct Parameter
+{
+    
+};
+    
+//struct PassByValue
+//{
+//    static constexpr ParameterKind kind = ParameterKind::PassByValue; ///< The policy enum kind.
+//};
+//
+//struct PassByReference
+//{
+//    static constexpr ParameterKind kind = ParameterKind::PassByReference; ///< The policy enum kind.
+//};
     
 } // namespace policy
 } // namespace ponder
