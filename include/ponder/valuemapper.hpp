@@ -108,7 +108,7 @@ namespace ponder_ext {
  *     struct ValueMapper<MyStringClass>
  *     {
  *         // The corresponding Ponder type is "string"
- *         static const ponder::ValueKind kind = ponder::ValueKind::String;
+ *         static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
  *  
  *         // Convert from MyStringClass to ponder::String
  *         static ponder::String to(const MyStringClass& source)
@@ -136,7 +136,7 @@ namespace ponder_ext {
 template <typename T, typename C>
 struct ValueMapper
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::User;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::User;
     
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
 
@@ -162,7 +162,8 @@ struct ValueMapper
 template <typename T>
 struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value>::type>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::User;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::User;
+    
     static ponder::UserObject to(const T& source) {return ponder::UserObject(source);}
 };
 
@@ -173,7 +174,7 @@ struct ValueMapper<T, typename std::enable_if<std::is_abstract<T>::value>::type>
 template <typename T>
 struct ValueMapper<T*, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Reference;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Reference;
 
     static ponder::detail::ValueRef to(T* source) {return ponder::detail::ValueRef::make(source);}
 
@@ -200,7 +201,7 @@ struct ValueMapper<T*, typename std::enable_if<!ponder::detail::hasStaticTypeDec
 //template <typename T>
 //struct ValueMapper<T&, typename std::enable_if<!ponder::detail::hasStaticTypeDecl<T>()>::type>
 //{
-//    static const ponder::ValueKind kind = ponder::ValueKind::User;
+//    static constexpr ponder::ValueKind kind = ponder::ValueKind::User;
 //
 //    static ponder::UserObject to(T& source) {return ponder::UserObject::makeRef(source);}
 //
@@ -224,7 +225,8 @@ struct ValueMapper<T*, typename std::enable_if<!ponder::detail::hasStaticTypeDec
 template <>
 struct ValueMapper<bool>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Boolean;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Boolean;
+    
     static bool to(bool source) {return source;}
 
     static bool from(bool source)                  {return source;}
@@ -246,7 +248,7 @@ struct ValueMapper<T,
                  && !std::is_const<T>::value     // to avoid conflict with ValueMapper<const T>
              >::type >
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Integer;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Integer;
     static long to(T source) {return static_cast<long>(source);}
 
     static T from(bool source)                    {return static_cast<T>(source);}
@@ -269,7 +271,7 @@ struct ValueMapper<T,
                  && !std::is_const<T>::value // to avoid conflict with ValueMapper<const T>
              >::type >
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Real;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Real;
     static double to(T source) {return static_cast<double>(source);}
 
     static T from(bool source)                    {return static_cast<T>(source);}
@@ -288,7 +290,7 @@ struct ValueMapper<T,
 template <>
 struct ValueMapper<ponder::String>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static const ponder::String& to(const ponder::String& source) {return source;}
     
     static ponder::String from(bool source)
@@ -310,7 +312,7 @@ struct ValueMapper<ponder::String>
 template <>
 struct ValueMapper<ponder::detail::string_view>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     
     static ponder::String to(const ponder::detail::string_view& sv)
         {return ponder::String(sv.data(), sv.length());}
@@ -326,7 +328,7 @@ struct ValueMapper<ponder::detail::string_view>
 template <>
 struct ValueMapper<const char*>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(const char* source) {return ponder::String(source);}
     
     template <typename T>
@@ -352,7 +354,7 @@ struct ValueMapper<T,
             && !std::is_same<typename ponder_ext::ArrayMapper<T>::ElementType, const char>::value
         >::type >
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Array;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Array;
 };
 
 /**
@@ -362,13 +364,13 @@ struct ValueMapper<T,
 template <std::size_t N>
 struct ValueMapper<char[N]>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(const char (&source)[N]) {return ponder::String(source);}
 };
 template <std::size_t N>
 struct ValueMapper<const char[N]>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(const char (&source)[N]) {return ponder::String(source);}
 };
 
@@ -378,7 +380,7 @@ struct ValueMapper<const char[N]>
 template <typename T>
 struct ValueMapper<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Enum;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Enum;
     static ponder::EnumObject to(T source) {return ponder::EnumObject(source);}
 
     static T from(bool source)      {return static_cast<T>(static_cast<long>(source));}
@@ -418,7 +420,7 @@ struct ValueMapper<T, typename std::enable_if<std::is_enum<T>::value>::type>
 template <>
 struct ValueMapper<ponder::EnumObject>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::Enum;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::Enum;
     static const ponder::EnumObject& to(const ponder::EnumObject& source) {return source;}
     static const ponder::EnumObject& from(const ponder::EnumObject& source) {return source;}
 
@@ -442,7 +444,7 @@ struct ValueMapper<ponder::EnumObject>
 template <>
 struct ValueMapper<ponder::ValueKind>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::String;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(ponder::ValueKind source)
         {return ponder::String(ponder::detail::valueTypeAsString(source));}
 };
@@ -453,7 +455,7 @@ struct ValueMapper<ponder::ValueKind>
 template <>
 struct ValueMapper<ponder::UserObject>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::User;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::User;
     static const ponder::UserObject& to(const ponder::UserObject& source) {return source;}
     static const ponder::UserObject& from(const ponder::UserObject& source) {return source;}
 
@@ -479,7 +481,7 @@ struct ValueMapper<ponder::UserObject>
 template <>
 struct ValueMapper<void>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::None;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::None;
 };
 
 /**
@@ -490,7 +492,7 @@ struct ValueMapper<void>
 template <>
 struct ValueMapper<ponder::NoType>
 {
-    static const ponder::ValueKind kind = ponder::ValueKind::None;
+    static constexpr ponder::ValueKind kind = ponder::ValueKind::None;
 };
 
 /*----------------------------------------------------------------------
