@@ -26,14 +26,12 @@
 ##
 ###############################################################################
 
-# set project's name
 project(luatest)
 
 # Use local Lua for testing to avoid find_package(Lua 5.3 REQUIRED) OS install inconsistencies
-set(LUA_INCLUDE_DIR "${PONDER_SOURCE_DIR}/deps/include")
-set(LUA_LIBRARIES "-L${PONDER_SOURCE_DIR}/deps/lib -llua")
+set(LUA_INCLUDE_DIR "${PONDER_SOURCE_DIR}/deps/lua-5.3.4/src")
+set(LUA_LIBRARIES liblua)
 
-# all source files
 set(TEST_SRCS
     main.cpp
 )

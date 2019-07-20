@@ -208,6 +208,10 @@ set(PONDER_SRCS
 set(PONDER_DEPS_INCLUDES)
 set(PONDER_DEPS_LIBRARIES)
 
+if(USES_LUA)
+    add_subdirectory(deps/lua-5.3.4)
+endif()
+
 if(USES_RAPIDJSON)
     set(RAPIDJSON_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidjson/include)
     message(STATUS "Including RapidJSON from ${RAPIDJSON_INCLUDES}")
