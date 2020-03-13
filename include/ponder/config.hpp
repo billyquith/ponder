@@ -60,6 +60,7 @@
 #if defined(_MSC_VER)
     #pragma warning(disable: 4275) // non dll-interface class 'X' used as base for dll-interface class 'Y'
     #pragma warning(disable: 4251) // class 'X' needs to have dll-interface to be used by clients of class 'Y'
+    #include <ostream> //In future MSVC, <string> doesn't transitively <ostream>, ponder will  compile failed with error C2027 and C2065, so add <ostream> for fixing these issues.
 #endif
 
 #if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
