@@ -197,10 +197,16 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
  * User objects.
  *  - I.e. Registered classes.
  *  - Enums also use registration so must differentiate.
+ *  - Pointer to basic types, such as std::string, integers and floats
+ *    also use registration. They must differentiate also.
  */
 template <typename T>
 struct AccessTraits<T,
-    typename std::enable_if<hasStaticTypeDecl<T>() && !std::is_enum<T>::value>::type>
+  typename std::enable_if<hasStaticTypeDecl<T>() && 
+                          !std::is_same<T, std::string>::value && 
+                          !std::is_integral<T>::value &&
+                          !std::is_floating_point<T>::value &&
+                          !std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
 
