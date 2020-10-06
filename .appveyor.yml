@@ -15,7 +15,7 @@ environment:
     - ARCH: 64-bit
       VS17GEN: "Visual Studio 15 2017 Win64"
       VS19GEN: "Visual Studio 16 2019"
-      VS19ARCH: "-A AMD64"
+      VS19ARCH: "-A x64"
 
 build:
   parallel: true
