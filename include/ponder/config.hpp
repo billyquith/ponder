@@ -66,14 +66,6 @@
     #include <ostream> //In future MSVC, <string> doesn't transitively <ostream>, ponder will  compile failed with error C2027 and C2065, so add <ostream> for fixing these issues.
 #endif
 
-#if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
-    // Workaround a bug in libstdc++ where erase() should accept const iterator
-    // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577
-    #define PONDER__WORKAROUND_GCC_N2350 1
-#else
-    #define PONDER__WORKAROUND_GCC_N2350 0
-#endif
-
 // If user doesn't define traits use the default:
 #ifndef PONDER_ID_TRAITS_USER
 //# define PONDER_ID_TRAITS_STD_STRING      // Use std::string and const std::string&
