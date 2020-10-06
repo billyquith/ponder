@@ -4,6 +4,7 @@ shallow_clone: true
 
 image:
   - Visual Studio 2017
+  - Visual Studio 2019
 
 environment:
   matrix:
@@ -23,6 +24,7 @@ build_script:
       cd build
       set OPTS=-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF
       if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" cmake %OPTS% -G "Visual Studio 15 2017%ARCH%" ..
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" cmake %OPTS% -G "Visual Studio 16 2019%ARCH%" ..
       cmake --build . --config Debug
       cmake --build . --config Release
 

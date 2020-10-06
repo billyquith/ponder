@@ -8,11 +8,9 @@ matrix:
     - os: osx
       osx_image: xcode8.3   # OS X 10.12
     - os: osx
-      osx_image: xcode9.3   # OS X 10.12
+      osx_image: xcode11    # OS X 10.14.6
     - os: osx
-      osx_image: xcode9.4   # OS X 10.13
-    - os: osx
-      osx_image: xcode10.1  # OS X 10.13
+      osx_image: xcode12    # OS X 10.15.5
     - os: linux
       compiler: clang
     - os: linux
