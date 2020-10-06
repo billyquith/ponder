@@ -13,6 +13,8 @@
 #define IS_FALSE(T)     REQUIRE_FALSE((T))
 #define IS_EQUAL(X,Y)   REQUIRE(X == Y)
 
+#define STATIC_ASSERT(T) static_assert((T), "static_assert failure: " #T)
+
 inline std::ostream& operator << (std::ostream& stream, const ponder::Value& value)
 {
     return stream << value.to<std::string>();

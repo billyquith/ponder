@@ -145,22 +145,14 @@ TEST_CASE("C++11 features and syntax")
 
     SECTION("function result")
     {
-        static_assert(std::is_void< std::result_of<decltype(func)& ()>::type >::value,
-                      "std::result_of failed");
-        static_assert(std::is_void< std::result_of<decltype(&func) ()>::type >::value,
-                      "std::result_of failed");
-        typedef void (*foo_t)();
-        static_assert(std::is_void< std::result_of<foo_t ()>::type >::value,
-                      "std::result_of failed");
-        static_assert(std::is_pointer<foo_t>::value, "std::is_pointer failed");
+        STATIC_ASSERT((std::is_void<typename std::invoke_result_t<void()>>::value));
 
-        typedef int (*bar_t)(float);
-        static_assert(std::is_same< std::result_of<decltype(funcArgReturn)& (float)>::type,
-                                    int >::value, "std::result_of failed");
-        static_assert(std::is_same< std::result_of<decltype(&funcArgReturn) (float)>::type,
-                                    int >::value, "std::result_of failed");
-        static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value,
-                      "std::result_of failed");
+        STATIC_ASSERT(std::is_void< typename std::invoke_result_t<decltype(func)> >::value);
+        STATIC_ASSERT(std::is_void< typename std::invoke_result_t<decltype(&func)> >::value);
+
+        typedef void (foo_t)();
+        STATIC_ASSERT(std::is_void< typename std::invoke_result_t<foo_t> >::value);
+        STATIC_ASSERT(!std::is_pointer<foo_t>::value);
     }
 
     SECTION("arrays")
