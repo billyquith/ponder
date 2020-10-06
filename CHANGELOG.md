@@ -5,8 +5,9 @@ Ponder Changelog
 - See [release notes](https://billyquith.github.io/ponder/blog_ponder_3.html) in documentation for more details.
 - See Github project issues (#nnn) for discussion on an issue.
 
-### 3.1.1
+### 3.2
 
+- Ponder requires C++17.
 - Add pass-by-reference parameters (#109).
 
 ## 3.1

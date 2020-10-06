@@ -48,7 +48,7 @@ project(ponder
         LANGUAGES C CXX)
 message("Project version: ${PONDER_VERSION_STR}")
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -234,6 +234,10 @@ endif()
 message("Generate version.hpp")
 configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
                ${PONDER_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
+
+if(MSVC)
+  add_definitions(/MP) # Use multiprocessor compilation
+endif()
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
