@@ -453,7 +453,7 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
 void expose(lua_State *L, const Enum& enm, const IdRef name)
 {
     const auto nb = enm.size();
-    lua_createtable(L, 0, nb);
+    lua_createtable(L, 0, (int) nb);
     for (std::size_t i=0; i < nb; ++i)
     {
         auto const& p = enm.pair(i);
