@@ -175,9 +175,8 @@ TEST_CASE("String views make std::string more efficient")
 
     SECTION("conversion")
     {
-        string_view sv1("a string view");
+        std::string_view sv1("a string view");
         std::string s1(sv1);
-        std::string s2 = sv1;   // this is not allowed if *explicit* operator std::string()
     }
 }
 

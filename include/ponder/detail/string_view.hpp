@@ -29,6 +29,19 @@
  DEALINGS IN THE SOFTWARE.
  */
 
+#if 1
+
+#include <string_view>
+
+namespace ponder {
+namespace detail {
+
+    using string_view = std::string_view;
+}
+}
+
+#else
+
 #include <cstddef> // ptrdiff_t
 #include <string>
 #include <limits>
@@ -338,5 +351,7 @@ static inline std::ostream& operator << (std::ostream& os, string_view const& va
     
 } // namespace detail
 } // namespace ponder
+
+#endif // use string_view
 
 #endif // PONDER_STRING_VIEW_HPP

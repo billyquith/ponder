@@ -101,8 +101,6 @@ public:
      */
     const Enum& getById(TypeId const& id) const;
 
-    const Enum& getByName(IdRef id) const;
-
     /**
      * \brief Get a metaenum from a C++ type
      *
@@ -114,6 +112,29 @@ public:
      * \return Pointer to the requested metaenum, or null pointer if not found
      */
     const Enum* getByIdSafe(TypeId const& id) const;
+
+    /**
+     * \brief Get a metaenum by name
+     *
+     * \param name Name of the metaenum to retrieve
+     *
+     * \return Reference to the requested metaenum
+     *
+     * \throw EnumNotFound id is not the name of an existing metaenum
+     */
+    const Enum& getByName(const IdRef id) const;
+
+    /**
+     * \brief Get a metaenum by name
+     *
+     * This version returns a null pointer if no metaenum is found, instead
+     * of throwing an exception.
+     *
+     * \param name Name of the metaenum to retrieve
+     *
+     * \return Pointer to the requested metaenum, or null pointer if not found
+     */
+    const Enum* getByNameSafe(const IdRef id) const;
 
     /**
      * \brief Check if a given type has a metaenum
