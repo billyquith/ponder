@@ -6,12 +6,12 @@ dist: xenial
 matrix:
   include:
     - os: osx
-      osx_image: xcode8.3   # OS X 10.12
+      osx_image: xcode9.2   # OS X 10.12 (oldest Xcode/macOS we support)
     - os: osx
       osx_image: xcode11    # OS X 10.14.6
     - os: osx
       osx_image: xcode12    # OS X 10.15.5
-    - os: linux
+    - os: linux             # see dist above
       compiler: clang
     - os: linux
       compiler: gcc
@@ -29,7 +29,7 @@ install:
   - |
     # if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     #   sudo apt-get -qq update
-    #   sudo apt-get install -y cmake ninja
+    #   sudo apt-get install -y libc++-dev cmake ninja
     # fi
   - ./ci/lua_local.sh
 
