@@ -4,7 +4,7 @@
 
 \image html ponder1.jpg "ponder: to reflect on"
 
- - **TL;DR** - Expose C++ classes and objects so they can be more easily used as data. Serialisation
+ - **TL;DR** - Expose C++ classes and objects so they can used as data. Serialisation
     and Lua scripting supported.
 
 \image html Lua-Logo-128.png "Lua binding"

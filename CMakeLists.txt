@@ -8,7 +8,7 @@
 ## The MIT License (MIT)
 ##
 ## Copyright (c) 2009-2014 TEGESO/TEGESOFT
-## Copyright (C) 2015-2019 Nick Trout.
+## Copyright (C) 2015-2020 Nick Trout.
 ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 set(VERSION_MAJOR 3)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 2)
 set(VERSION_PATCH 0)
 set(VERSION_NOTE "") # e.g. "-alpha", "-beta".
 

@@ -9,6 +9,7 @@ Ponder Changelog
 
 - Ponder requires C++17.
 - Add pass-by-reference parameters (#109).
+- MSVC: Visual Studio 2019 support.
 
 ## 3.1
 
