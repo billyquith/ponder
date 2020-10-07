@@ -19,9 +19,7 @@ include/ponder/version.hpp
 test/Debug
 test/Release
 
-deps/bin
-deps/include
-deps/lib
+deps/lua-*/install
 deps/lua-*/src/lua
 deps/lua-*/src/luac
 bd_*/

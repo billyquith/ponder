@@ -2,16 +2,7 @@
 #project(lua C)
 #cmake_minimum_required(VERSION 3.4)
 
-if(UNIX)
-
-    add_custom_command(
-        OUTPUT src/lua src/luac src/liblua.a
-        COMMAND make all
-        WORKING_DIRECTORY ${PONDER_SOURCE_DIR}/deps/lua-5.3
-        COMMENT "Building Lua"
-    )
-
-else(UNIX)
+if(NOT UNIX)
 
 include_directories(src ${CMAKE_CURRENT_BINARY_DIR})
 

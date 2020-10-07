@@ -66,3 +66,4 @@ endif()
 # setup MacOSX build environment if necessary
 include(${PONDER_SOURCE_DIR}/cmake/MacOSX.cmake)
 
+set(PONDER_LUA_VERSION lua-5.3)

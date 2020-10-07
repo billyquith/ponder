@@ -42,8 +42,8 @@ function run # dirname, configs, opts
     build_test "$2"
 }
 
-run static "Debug Release" "-DBUILD_SHARED_LIBS=OFF"
-run shared "Debug Release" "-DBUILD_SHARED_LIBS=ON"
+run static "Debug" "-DBUILD_SHARED_LIBS=OFF"
+#run shared "Debug Release" "-DBUILD_SHARED_LIBS=ON"
 
-run static_lua "Debug Release" "-DBUILD_SHARED_LIBS=OFF -DUSES_LUA=ON -DBUILD_TEST_LUA=ON"
-run shared_lua "Debug Release" "-DBUILD_SHARED_LIBS=ON -DUSES_LUA=ON -DBUILD_TEST_LUA=ON"
+run static_lua "Release" "-DBUILD_SHARED_LIBS=OFF -DUSES_LUA=ON -DBUILD_TEST_LUA=ON"
+#run shared_lua "Debug Release" "-DBUILD_SHARED_LIBS=ON -DUSES_LUA=ON -DBUILD_TEST_LUA=ON"

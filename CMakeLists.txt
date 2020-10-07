@@ -208,11 +208,6 @@ set(PONDER_SRCS
 set(PONDER_DEPS_INCLUDES)
 set(PONDER_DEPS_LIBRARIES)
 
-if(BUILD_TEST_LUA)
-    set(USES_LUA ON)                # Can't test otherwise
-    add_subdirectory(deps/lua-5.3)  # Use this for testing
-endif()
-
 if(USES_RAPIDJSON)
     set(RAPIDJSON_INCLUDES ${PONDER_SOURCE_DIR}/deps/rapidjson/include)
     message(STATUS "Including RapidJSON from ${RAPIDJSON_INCLUDES}")
@@ -242,6 +237,24 @@ endif()
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})
+
+# Use local Lua for testing to avoid find_package(Lua 5.3 REQUIRED) OS install inconsistencies
+if(BUILD_TEST_LUA)
+    if(UNIX)
+        add_custom_command(
+            TARGET ponder
+            PRE_BUILD
+            BYPRODUCTS deps/${PONDER_LUA_VERSION}/install/lib/liblua.a
+            COMMAND make local
+            WORKING_DIRECTORY ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}
+            COMMENT "Building Lua"
+        )
+        include_directories(BEFORE ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}/install/include)
+        link_directories(BEFORE ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}/install/lib)
+    else(UNIX)
+        #add_subdirectory(deps/${PONDER_LUA_VERSION})
+    endif(UNIX)
+endif()
 
 # include files search paths
 target_include_directories(ponder PUBLIC
