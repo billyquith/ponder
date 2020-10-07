@@ -143,6 +143,7 @@ TEST_CASE("C++11 features and syntax")
                       "std::is_function failed");
     }
 
+#if defined(__cpp_lib_constexpr_invoke)
     SECTION("function result")
     {
         STATIC_ASSERT((std::is_void<typename std::invoke_result_t<void()>>::value));
@@ -154,6 +155,7 @@ TEST_CASE("C++11 features and syntax")
         STATIC_ASSERT(std::is_void< typename std::invoke_result_t<foo_t> >::value);
         STATIC_ASSERT(!std::is_pointer<foo_t>::value);
     }
+#endif // __cpp_lib_constexpr_invoke
 
     SECTION("arrays")
     {
