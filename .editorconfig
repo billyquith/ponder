@@ -10,3 +10,5 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
+guidelines = 120
+guidelines_style = 1px dashed 808080
