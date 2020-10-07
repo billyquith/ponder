@@ -32,17 +32,23 @@
 #define PONDER_CONFIG_HPP
 
 // Get <version> file, if implemented (P0754R2).
-#if (defined(__clang__) && __clang_major__>=8) ||\
-    (defined(__GNUC__) && __GNUC___>=9) ||\
-    (defined(__APPLE__) && __clang_major__>=10) ||\
+#if (defined(__APPLE__) && __clang_major__>=10) ||\
+    (!defined(__APPLE__) && (\
+        (defined(__clang__) && __clang_major__>=8) ||\
+        (defined(__GNUC__) && __GNUC___>=9) )) ||\
     (defined(_MSC_VER) && _MSC_VER >= 1922)
 #   include <version> // C++ version & features
 #endif
 
-// Check we have C++14 support. Report issues to Github project.
+// Check we have C++17 support. Report issues to Github project.
 #if defined(_MSC_VER)
-    // Earlier MSVC compilers lack features or have C++14 bugs.
+    // Earlier MSVC compilers lack features or have C++17 bugs.
     static_assert(_MSC_VER >= 1911, "MSVC 2017 required");
+    // We disable some annoying warnings of VC++
+#   pragma warning(disable: 4275) // non dll-interface class 'X' used as base for dll-interface class 'Y'
+#   pragma warning(disable: 4251) // class 'X' needs to have dll-interface to be used by clients of class 'Y'
+#   include <ostream> // In future MSVC, <string> doesn't transitively <ostream>, ponder will
+                      // compile failed with error C2027 and C2065, so add <ostream>.
 #endif
 
 // We define the PONDER_API macro according to the current operating system and build mode
@@ -65,13 +71,6 @@
 
 #ifndef PONDER_USING_LUA
 #   define PONDER_USING_LUA 0
-#endif
-    
-// We disable some annoying warnings of VC++
-#if defined(_MSC_VER)
-    #pragma warning(disable: 4275) // non dll-interface class 'X' used as base for dll-interface class 'Y'
-    #pragma warning(disable: 4251) // class 'X' needs to have dll-interface to be used by clients of class 'Y'
-    #include <ostream> //In future MSVC, <string> doesn't transitively <ostream>, ponder will  compile failed with error C2027 and C2065, so add <ostream> for fixing these issues.
 #endif
 
 // If user doesn't define traits use the default:
