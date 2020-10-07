@@ -31,6 +31,8 @@
 #ifndef PONDER_CONFIG_HPP
 #define PONDER_CONFIG_HPP
 
+#include <version> // C++ version & features
+
 // Check we have C++14 support. Report issues to Github project.
 #if defined(_MSC_VER)
     // Earlier MSVC compilers lack features or have C++14 bugs.
