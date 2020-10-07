@@ -209,7 +209,8 @@ set(PONDER_DEPS_INCLUDES)
 set(PONDER_DEPS_LIBRARIES)
 
 if(BUILD_TEST_LUA)
-    add_subdirectory(deps/lua-5.3)
+    set(USES_LUA ON)                # Can't test otherwise
+    add_subdirectory(deps/lua-5.3)  # Use this for testing
 endif()
 
 if(USES_RAPIDJSON)

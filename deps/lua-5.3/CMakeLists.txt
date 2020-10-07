@@ -49,12 +49,16 @@ set(SRC_LUAC src/luac.c)
 add_library(liblua ${SRC_LUA} ${SRC_LIB})
 set_target_properties(liblua PROPERTIES OUTPUT_NAME lua)
 
+if(UNIX)
+    set(LINK_LIBS m)
+endif()
+
 # add_library(libluadll SHARED ${SRC_LUA} ${SRC_LIB})
 # target_compile_definitions(libluadll PRIVATE _CRT_SECURE_NO_WARNINGS LUA_BUILD_AS_DLL)
 # set_target_properties(libluadll PROPERTIES OUTPUT_NAME lua53)
 
 add_executable(lua ${SRC_LUACL})
-target_link_libraries(lua liblua)
+target_link_libraries(lua liblua ${LINK_LIBS})
 
 add_executable(luac ${SRC_LUAC})
-target_link_libraries(luac liblua)
+target_link_libraries(luac liblua ${LINK_LIBS})

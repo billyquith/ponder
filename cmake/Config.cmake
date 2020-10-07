@@ -1,22 +1,4 @@
 
-if(NOT USES_LUA)
-    set(USES_LUA FALSE
-        CACHE BOOL "TRUE to include Lua support (requires Lua), FALSE otherwise."
-    )
-endif()
-
-if(NOT USES_RAPIDJSON)
-    set(USES_RAPIDJSON TRUE
-        CACHE BOOL "TRUE to include RapidJSON support, FALSE otherwise."
-    )
-endif()
-
-if(NOT USES_RAPIDXML)
-    set(USES_RAPIDXML TRUE
-        CACHE BOOL "TRUE to include RapidXML support, FALSE otherwise."
-    )
-endif()
-
 # Set the default build type to release with debug info
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo
@@ -53,6 +35,24 @@ endif()
 if(NOT BUILD_TEST_QT)
     set(BUILD_TEST_QT FALSE
         CACHE BOOL "TRUE to build the Qt-specific unit tests (requires Qt 4.5), FALSE otherwise."
+    )
+endif()
+
+if(NOT USES_LUA)
+    set(USES_LUA ${BUILD_TEST_LUA}
+        CACHE BOOL "TRUE to include Lua support (requires Lua), FALSE otherwise."
+    )
+endif()
+
+if(NOT USES_RAPIDJSON)
+    set(USES_RAPIDJSON TRUE
+        CACHE BOOL "TRUE to include RapidJSON support, FALSE otherwise."
+    )
+endif()
+
+if(NOT USES_RAPIDXML)
+    set(USES_RAPIDXML TRUE
+        CACHE BOOL "TRUE to include RapidXML support, FALSE otherwise."
     )
 endif()
 
