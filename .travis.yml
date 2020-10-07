@@ -30,7 +30,7 @@ install:
     #   sudo apt-get -qq update
     #   sudo apt-get install -y libc++-dev cmake ninja
     # fi
-  - ./ci/lua_local.sh
+  - #./ci/lua_local.sh
 
 script:
   - ./ci/build.sh

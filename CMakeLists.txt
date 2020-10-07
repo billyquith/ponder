@@ -208,7 +208,7 @@ set(PONDER_SRCS
 set(PONDER_DEPS_INCLUDES)
 set(PONDER_DEPS_LIBRARIES)
 
-if(USES_LUA)
+if(BUILD_TEST_LUA)
     add_subdirectory(deps/lua-5.3)
 endif()
 
