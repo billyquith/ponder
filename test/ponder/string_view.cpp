@@ -175,7 +175,7 @@ TEST_CASE("String views make std::string more efficient")
 
     SECTION("conversion")
     {
-        std::string_view sv1("a string view");
+        ponder::detail::string_view sv1("a string view");
         std::string s1(sv1);
     }
 }
