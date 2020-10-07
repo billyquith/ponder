@@ -1,7 +1,17 @@
 
-project(lua C)
+#project(lua C)
+#cmake_minimum_required(VERSION 3.4)
 
-cmake_minimum_required(VERSION 3.4)
+if(UNIX)
+
+    add_custom_command(
+        OUTPUT src/lua src/luac src/liblua.a
+        COMMAND make all
+        WORKING_DIRECTORY ${PONDER_SOURCE_DIR}/deps/lua-5.3
+        COMMENT "Building Lua"
+    )
+
+else(UNIX)
 
 include_directories(src ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -49,10 +59,6 @@ set(SRC_LUAC src/luac.c)
 add_library(liblua ${SRC_LUA} ${SRC_LIB})
 set_target_properties(liblua PROPERTIES OUTPUT_NAME lua)
 
-if(UNIX)
-    set(LINK_LIBS m)
-endif()
-
 # add_library(libluadll SHARED ${SRC_LUA} ${SRC_LIB})
 # target_compile_definitions(libluadll PRIVATE _CRT_SECURE_NO_WARNINGS LUA_BUILD_AS_DLL)
 # set_target_properties(libluadll PROPERTIES OUTPUT_NAME lua53)
@@ -62,3 +68,5 @@ target_link_libraries(lua liblua ${LINK_LIBS})
 
 add_executable(luac ${SRC_LUAC})
 target_link_libraries(luac liblua ${LINK_LIBS})
+
+endif(UNIX)

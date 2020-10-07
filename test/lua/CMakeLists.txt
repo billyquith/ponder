@@ -30,7 +30,7 @@ project(luatest)
 
 # Use local Lua for testing to avoid find_package(Lua 5.3 REQUIRED) OS install inconsistencies
 set(LUA_INCLUDE_DIR "${PONDER_SOURCE_DIR}/deps/lua-5.3/src")
-set(LUA_LIBRARIES liblua)
+set(LUA_LIBRARIES lua)
 
 set(TEST_SRCS
     main.cpp
@@ -42,6 +42,7 @@ include_directories(
 
 link_directories(
     ${PONDER_BINARY_DIR}
+    ${PONDER_SOURCE_DIR}/deps/lua-5.3/src
 )
 
 add_executable(luatest ${TEST_SRCS})

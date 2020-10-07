@@ -8,7 +8,7 @@ endif()
 
 # Add an option for choosing the build type (shared or static)
 if(NOT BUILD_SHARED_LIBS)
-    set(BUILD_SHARED_LIBS TRUE
+    set(BUILD_SHARED_LIBS FALSE
         CACHE BOOL "TRUE to build Ponder as a shared library, FALSE to build it as a static library."
     )
 endif()
