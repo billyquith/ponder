@@ -34,7 +34,7 @@
 // Get <version> file, if implemented (P0754R2).
 #if (defined(__clang__) && __clang_major__>=8) ||\
     (defined(__GNUC__) && __GNUC___>=9) ||\
-    (defined(__APPLE__) && __clang_major__>=8) ||\
+    (defined(__APPLE__) && __clang_major__>=10) ||\
     (defined(_MSC_VER) && _MSC_VER >= 1922)
 #   include <version> // C++ version & features
 #endif
