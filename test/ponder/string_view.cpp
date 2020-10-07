@@ -4,7 +4,7 @@
  **
  ** The MIT License (MIT)
  **
- ** Copyright (C) 2015-2019 Nick Trout.
+ ** Copyright (C) 2015-2020 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +28,8 @@
 
 // Test local implementation of string_view.
 
-#include <ponder/detail/string_view.hpp>
 #include "test.hpp"
+#include <ponder/detail/string_view.hpp>
 #include <iostream>
 
 using ponder::detail::string_view;
@@ -175,9 +175,8 @@ TEST_CASE("String views make std::string more efficient")
 
     SECTION("conversion")
     {
-        string_view sv1("a string view");
+        std::string_view sv1("a string view");
         std::string s1(sv1);
-        std::string s2 = sv1;   // this is not allowed if *explicit* operator std::string()
     }
 }
 

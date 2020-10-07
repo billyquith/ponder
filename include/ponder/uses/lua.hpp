@@ -4,7 +4,7 @@
 **
 ** The MIT License (MIT)
 **
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -453,7 +453,7 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
 void expose(lua_State *L, const Enum& enm, const IdRef name)
 {
     const auto nb = enm.size();
-    lua_createtable(L, 0, nb);
+    lua_createtable(L, 0, (int) nb);
     for (std::size_t i=0; i < nb; ++i)
     {
         auto const& p = enm.pair(i);

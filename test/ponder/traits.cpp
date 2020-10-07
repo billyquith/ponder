@@ -5,7 +5,7 @@
  ** The MIT License (MIT)
  **
  ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
- ** Copyright (C) 2015-2019 Nick Trout.
+ ** Copyright (C) 2015-2020 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -145,22 +145,14 @@ TEST_CASE("C++11 features and syntax")
 
     SECTION("function result")
     {
-        static_assert(std::is_void< std::result_of<decltype(func)& ()>::type >::value,
-                      "std::result_of failed");
-        static_assert(std::is_void< std::result_of<decltype(&func) ()>::type >::value,
-                      "std::result_of failed");
-        typedef void (*foo_t)();
-        static_assert(std::is_void< std::result_of<foo_t ()>::type >::value,
-                      "std::result_of failed");
-        static_assert(std::is_pointer<foo_t>::value, "std::is_pointer failed");
+        STATIC_ASSERT((std::is_void<typename std::invoke_result_t<void()>>::value));
 
-        typedef int (*bar_t)(float);
-        static_assert(std::is_same< std::result_of<decltype(funcArgReturn)& (float)>::type,
-                                    int >::value, "std::result_of failed");
-        static_assert(std::is_same< std::result_of<decltype(&funcArgReturn) (float)>::type,
-                                    int >::value, "std::result_of failed");
-        static_assert(std::is_same< std::result_of<bar_t (float)>::type, int >::value,
-                      "std::result_of failed");
+        STATIC_ASSERT(std::is_void< typename std::invoke_result_t<decltype(func)> >::value);
+        STATIC_ASSERT(std::is_void< typename std::invoke_result_t<decltype(&func)> >::value);
+
+        typedef void (foo_t)();
+        STATIC_ASSERT(std::is_void< typename std::invoke_result_t<foo_t> >::value);
+        STATIC_ASSERT(!std::is_pointer<foo_t>::value);
     }
 
     SECTION("arrays")

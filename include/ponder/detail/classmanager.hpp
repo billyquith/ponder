@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -126,8 +126,6 @@ public:
      */
     const Class& getById(TypeId const& id) const;
 
-    const Class& getByName(IdRef name) const;
-
     /**
      * \brief Get a metaclass from a C++ type
      *
@@ -139,6 +137,29 @@ public:
      * \return Pointer to the requested metaclass, or null pointer if not found
      */
     const Class* getByIdSafe(TypeId const& id) const;
+
+    /**
+     * \brief Get a metaclass by name
+     *
+     * \param name Name of the metaclass
+     *
+     * \return Reference to the requested metaclass
+     *
+     * \throw ClassNotFound id is not the name of an existing metaclass
+     */
+    const Class& getByName(const IdRef name) const;
+
+    /**
+     * \brief Get a metaclass by name
+     *
+     * This version returns a null pointer if no metaclass is found, instead
+     * of throwing an exception.
+     *
+     * \param name Name of the metaclass
+     *
+     * \return Pointer to the requested metaclass, or null pointer if not found
+     */
+    const Class* getByNameSafe(const IdRef name) const;
 
     /**
      * \brief Check if a given type has a metaclass

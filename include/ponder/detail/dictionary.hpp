@@ -5,7 +5,7 @@
  ** The MIT License (MIT)
  **
  ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
- ** Copyright (C) 2015-2019 Nick Trout.
+ ** Copyright (C) 2015-2020 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -154,8 +154,9 @@ public:
         const_iterator it = findKey(key);
         if (it != m_contents.end())
         {
-            // Avoid std::vector.erase here due to bug in libstdc++ < v4.9
-#if PONDER__WORKAROUND_GCC_N2350
+#if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
+            // Workaround a bug in libstdc++ where erase() should accept const iterator
+            // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577
             std::size_t pos = it - m_contents.begin();
             const std::size_t sz = m_contents.size() - 1;
             while (pos < sz)

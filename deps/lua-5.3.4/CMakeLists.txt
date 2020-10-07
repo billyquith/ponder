@@ -54,7 +54,7 @@ set_target_properties(liblua PROPERTIES OUTPUT_NAME lua)
 # set_target_properties(libluadll PROPERTIES OUTPUT_NAME lua53)
 
 add_executable(lua ${SRC_LUACL})
-target_link_libraries(lua libluadll)
+target_link_libraries(lua liblua)
 
 add_executable(luac ${SRC_LUAC})
 target_link_libraries(luac liblua)

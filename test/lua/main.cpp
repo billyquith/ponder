@@ -4,7 +4,7 @@
  **
  ** The MIT License (MIT)
  **
- ** Copyright (C) 2015-2019 Nick Trout.
+ ** Copyright (C) 2015-2020 Nick Trout.
  **
  ** Permission is hereby granted, free of charge, to any person obtaining a copy
  ** of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,8 @@
 #define PONDER_USES_RUNTIME_IMPL
 #include <ponder/class.hpp>
 #include <ponder/classbuilder.hpp>
+#include <ponder/value.hpp>             // TODO: should this be in lua.hpp?
+#include <ponder/detail/rawtype.hpp>    // TODO: should this be in lua.hpp?
 #include <ponder/uses/lua.hpp>
 #include <list>
 #include <cstdio>
@@ -97,7 +99,7 @@ namespace lib
             Obj(const Obj&) = delete;
         } o;
         
-        static int len(const ponder::detail::string_view str) { return str.length(); }
+        static int len(const ponder::detail::string_view str) { return (int) str.length(); }
         
         Obj* retPtr() { return &o; }
         void passPtr(Obj *po) {}

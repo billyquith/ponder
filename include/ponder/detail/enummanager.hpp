@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -101,8 +101,6 @@ public:
      */
     const Enum& getById(TypeId const& id) const;
 
-    const Enum& getByName(IdRef id) const;
-
     /**
      * \brief Get a metaenum from a C++ type
      *
@@ -114,6 +112,29 @@ public:
      * \return Pointer to the requested metaenum, or null pointer if not found
      */
     const Enum* getByIdSafe(TypeId const& id) const;
+
+    /**
+     * \brief Get a metaenum by name
+     *
+     * \param name Name of the metaenum to retrieve
+     *
+     * \return Reference to the requested metaenum
+     *
+     * \throw EnumNotFound id is not the name of an existing metaenum
+     */
+    const Enum& getByName(const IdRef id) const;
+
+    /**
+     * \brief Get a metaenum by name
+     *
+     * This version returns a null pointer if no metaenum is found, instead
+     * of throwing an exception.
+     *
+     * \param name Name of the metaenum to retrieve
+     *
+     * \return Pointer to the requested metaenum, or null pointer if not found
+     */
+    const Enum* getByNameSafe(const IdRef id) const;
 
     /**
      * \brief Check if a given type has a metaenum

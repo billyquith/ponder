@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ Class& ClassManager::addClass(TypeId const& id, IdRef name)
 {
     // First make sure that the class doesn't already exist
     // Note, we check by id and name. Neither should be registered.
-    if (classExists(id) || (!name.empty() && m_names.find(name) != m_names.end()))
+    if (classExists(id) || (!name.empty() && getByNameSafe(name) != nullptr))
     {
         PONDER_ERROR(ClassAlreadyCreated(name));
     }
@@ -102,22 +102,29 @@ const Class* ClassManager::getByIdSafe(TypeId const& id) const
     return (it == m_classes.end()) ? nullptr : it->second;
 }
 
-const Class& ClassManager::getByName(IdRef name) const
-{
-    NameTable::const_iterator it = m_names.find(name);
-    if (it == m_names.end())
-        PONDER_ERROR(ClassNotFound(name));
-
-    return *it->second;
-}
-
 const Class& ClassManager::getById(TypeId const& id) const
 {
-    ClassTable::const_iterator it = m_classes.find(id);
-    if (it == m_classes.end())
+    const Class* cls{ getByIdSafe(id) };
+    if (!cls)
         PONDER_ERROR(ClassNotFound("?"));
-        
-    return *it->second;
+
+    return *cls;
+}
+
+const Class* ClassManager::getByNameSafe(const IdRef name) const
+{
+    NameTable::const_iterator it{ std::find_if(m_names.begin(), m_names.end(),
+        [=](const std::pair<Id, Class*>& a) { return a.first.compare(name) == 0; } ) };
+    return (it == m_names.end()) ? nullptr : it->second;
+}
+
+const Class& ClassManager::getByName(const IdRef name) const
+{
+    const Class* cls{ getByNameSafe(name) };
+    if (!cls)
+        PONDER_ERROR(ClassNotFound(name));
+
+    return *cls;
 }
 
 bool ClassManager::classExists(TypeId const& id) const

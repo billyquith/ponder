@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ EnumManager& EnumManager::instance()
 Enum& EnumManager::addClass(TypeId const& id, IdRef name)
 {
     // First make sure that the enum doesn't already exist
-    if (enumExists(id) || (!name.empty() && m_names.find(name) != m_names.end()))
+    if (enumExists(id) || (!name.empty() && getByNameSafe(name) != nullptr))
     {
         PONDER_ERROR(EnumAlreadyCreated(name));
     }
@@ -83,28 +83,36 @@ std::size_t EnumManager::count() const
     return m_enums.size();
 }
 
-const Enum& EnumManager::getById(TypeId const& id) const
-{
-    auto it = m_enums.find(id);
-    if (it == m_enums.end())
-        PONDER_ERROR(EnumNotFound("?"));
-
-    return *it->second;
-}
-
-const Enum& EnumManager::getByName(IdRef name) const
-{
-    auto it = m_names.find(name);
-    if (it == m_names.end())
-        PONDER_ERROR(EnumNotFound(name));
-    
-    return *it->second;
-}
-
 const Enum* EnumManager::getByIdSafe(TypeId const& id) const
 {
-    auto it = m_enums.find(id);
+    const auto it = m_enums.find(id);
     return it == m_enums.end() ? nullptr : it->second;
+}
+
+const Enum& EnumManager::getById(TypeId const& id) const
+{
+    const Enum* e{ getByIdSafe(id) };
+    if (!e)
+        PONDER_ERROR(EnumNotFound("?"));
+
+    return *e;
+}
+
+const Enum* EnumManager::getByNameSafe(const IdRef name) const 
+{
+    const auto it{ std::find_if(m_names.begin(), m_names.end(),
+        [&name](const auto& a) { return a.first.compare(name.data()) == 0; } ) };
+
+    return it == m_names.end() ? nullptr : it->second;
+}
+
+const Enum& EnumManager::getByName(const IdRef name) const
+{
+    const Enum* e{ getByNameSafe(name) };
+    if (!e)
+        PONDER_ERROR(EnumNotFound(name));
+
+    return *e;
 }
 
 bool EnumManager::enumExists(TypeId const& id) const

@@ -5,7 +5,7 @@
 ** The MIT License (MIT)
 **
 ** Copyright (C) 2009-2014 TEGESO/TEGESOFT and/or its subsidiary(-ies) and mother company.
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,14 @@
 #pragma once
 #ifndef PONDER_CONFIG_HPP
 #define PONDER_CONFIG_HPP
+
+// Get <version> file, if implemented (P0754R2).
+#if (defined(__clang__) && __clang_major__>=8) ||\
+    (defined(__GNUC__) && __GNUC___>=9) ||\
+    (defined(__APPLE__) && __clang_major__>=10) ||\
+    (defined(_MSC_VER) && _MSC_VER >= 1922)
+#   include <version> // C++ version & features
+#endif
 
 // Check we have C++14 support. Report issues to Github project.
 #if defined(_MSC_VER)
@@ -63,14 +71,7 @@
 #if defined(_MSC_VER)
     #pragma warning(disable: 4275) // non dll-interface class 'X' used as base for dll-interface class 'Y'
     #pragma warning(disable: 4251) // class 'X' needs to have dll-interface to be used by clients of class 'Y'
-#endif
-
-#if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
-    // Workaround a bug in libstdc++ where erase() should accept const iterator
-    // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577
-    #define PONDER__WORKAROUND_GCC_N2350 1
-#else
-    #define PONDER__WORKAROUND_GCC_N2350 0
+    #include <ostream> //In future MSVC, <string> doesn't transitively <ostream>, ponder will  compile failed with error C2027 and C2065, so add <ostream> for fixing these issues.
 #endif
 
 // If user doesn't define traits use the default:

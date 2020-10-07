@@ -79,4 +79,10 @@ Ponder requires full C++14 support. MSVC 2015 lacks this as it does not support
 on constexpr functions constexpr member functions and implicit const". We could work around this
 but time is limited and it is just a complication when the latest compilers all support it.
 
+\section ponder_3_2 3.2 Release Notes
+
+_date: 2020-10-10_
+
+\note Ponder now requires full C++17 support.
+
 */

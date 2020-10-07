@@ -4,25 +4,31 @@ shallow_clone: true
 
 image:
   - Visual Studio 2017
+  - Visual Studio 2019
 
 environment:
   matrix:
-    - DESC: VS 32-bit
-      ARCH: ""
-    - DESC: VS 64-bit
-      ARCH: " Win64"
+    - ARCH: 32-bit
+      VS17GEN: "Visual Studio 15 2017"
+      VS19GEN: "Visual Studio 16 2019"
+      VS19ARCH: "-A Win32"
+    - ARCH: 64-bit
+      VS17GEN: "Visual Studio 15 2017 Win64"
+      VS19GEN: "Visual Studio 16 2019"
+      VS19ARCH: "-A x64"
 
 build:
   parallel: true
 
 build_script:
   - cmd: |
-      echo "image:%APPVEYOR_BUILD_WORKER_IMAGE%. arch:%ARCH%. desc:%DESC%."
+      echo "image:%APPVEYOR_BUILD_WORKER_IMAGE%. arch:%ARCH%."
       cmake --version
       mkdir build
       cd build
       set OPTS=-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF
-      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" cmake %OPTS% -G "Visual Studio 15 2017%ARCH%" ..
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" cmake %OPTS% -G "%VS17GEN%" ..
+      if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" cmake %OPTS% -G "%VS19GEN%" %VS19ARCH% ..
       cmake --build . --config Debug
       cmake --build . --config Release
 

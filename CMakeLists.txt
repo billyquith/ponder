@@ -8,7 +8,7 @@
 ## The MIT License (MIT)
 ##
 ## Copyright (c) 2009-2014 TEGESO/TEGESOFT
-## Copyright (C) 2015-2019 Nick Trout.
+## Copyright (C) 2015-2020 Nick Trout.
 ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 set(VERSION_MAJOR 3)
-set(VERSION_MINOR 1)
+set(VERSION_MINOR 2)
 set(VERSION_PATCH 0)
 set(VERSION_NOTE "") # e.g. "-alpha", "-beta".
 
@@ -48,7 +48,7 @@ project(ponder
         LANGUAGES C CXX)
 message("Project version: ${PONDER_VERSION_STR}")
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PONDER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -234,6 +234,10 @@ endif()
 message("Generate version.hpp")
 configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
                ${PONDER_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
+
+if(MSVC)
+  add_definitions(/MP) # Use multiprocessor compilation
+endif()
 
 # instruct CMake to build a shared library from all of the source files
 add_library(ponder ${PONDER_SRCS})

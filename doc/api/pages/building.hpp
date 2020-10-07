@@ -16,19 +16,18 @@ git clone https://github.com/billyquith/ponder.git
 
 ## Compiler Notes
 
-Ponder requires a C++ compiler that handles a minimum of **C++14**. Note that this may be increased
-to C++17 support as a minimum in the future, without backwards compatibility. These are some notes
+Ponder requires a C++ compiler that handles a minimum of **C++17**. These are some notes
 on compilers used in testing:
 
-- Compiler [C++ compatibility][compat].
-- Clang has full support for C++14 since version 3.4.
-- GCC has good C++14 support from version 4.9 onwards.
+- Compiler [C++ compatibility][compat] notes.
+- Clang has full support for C++17 since version 4.
+- GCC has good C++17 support from version 7 onwards.
 - Apple Xcode:
     - Apple Clang is a modified version of Clang with different version numbers.
     - [Version information](https://trac.macports.org/wiki/XcodeVersionInfo)
-    - In theory all versions since Xcode 5.1 should work (untested).
-- Microsoft MSVC 2017 32/64 bit - supported
-    - MSVC started to have full C++14 support in 2017.
+    - Versions since Xcode 9.2 should work.
+- Microsoft MSVC 2017 & 2019 32/64 bit - supported
+    - MSVC started to have full C++17 support in 2019. Please prefer this version.
     - Best to use the most recent patched version.
 
 ## Generate Build Files

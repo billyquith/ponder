@@ -4,7 +4,7 @@
 **
 ** The MIT License (MIT)
 **
-** Copyright (C) 2015-2019 Nick Trout.
+** Copyright (C) 2015-2020 Nick Trout.
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
 ** of this software and associated documentation files (the "Software"), to deal
@@ -282,14 +282,14 @@ struct CallReturnMultiple<R>
 template <typename R, typename U = void> struct CallReturnCopy;
 
 template <typename R>
-struct CallReturnCopy<R, typename std::enable_if<!detail::IsUserType<R>::value>::type>
+struct CallReturnCopy<R, typename std::enable_if<!ponder::detail::IsUserType<R>::value>::type>
 {
     // "no member named push" error here means the type returned is not covered.
     static inline int value(lua_State *L, R&& o) {return LuaValueWriter<R>::push(L, o);}
 };
 
 template <typename R>
-struct CallReturnCopy<R, typename std::enable_if<detail::IsUserType<R>::value>::type>
+struct CallReturnCopy<R, typename std::enable_if<ponder::detail::IsUserType<R>::value>::type>
 {
     static inline int value(lua_State *L, R&& o)
     {return LuaValueWriter<UserObject>::push(L, UserObject::makeCopy(std::forward<R>(o)));}
@@ -303,8 +303,8 @@ template <typename R, typename U = void> struct CallReturnInternalRef;
 template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
-        !detail::IsUserType<R>::value
-        && !std::is_same<typename detail::RawType<R>::Type, UserObject>::value
+        !ponder::detail::IsUserType<R>::value
+        && !std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
     >::type>
 {
     static inline int value(lua_State *L, R&& o) {return LuaValueWriter<R>::push(L, o);}
@@ -313,8 +313,8 @@ struct CallReturnInternalRef<R,
 template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
-        detail::IsUserType<R>::value
-        || std::is_same<typename detail::RawType<R>::Type, UserObject>::value
+        ponder::detail::IsUserType<R>::value
+        || std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
     >::type>
 {
     static inline int value(lua_State *L, R&& o)
