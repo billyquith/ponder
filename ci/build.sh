@@ -21,7 +21,7 @@ function proj # opts
 {
     [[ -d $BDIR ]] || mkdir $BDIR
     cd $BDIR
-    if ! cmake .. -G"$GEN" "$1"; then exit 1; fi
+    if ! cmake .. -G"$GEN" $1; then exit 1; fi
 }
 
 function build_test # configs
