@@ -28,8 +28,8 @@
 
 // Test local implementation of string_view.
 
-#include <ponder/detail/string_view.hpp>
 #include "test.hpp"
+#include <ponder/detail/string_view.hpp>
 #include <iostream>
 
 using ponder::detail::string_view;
