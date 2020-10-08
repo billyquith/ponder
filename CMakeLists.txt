@@ -245,7 +245,7 @@ if(BUILD_TEST_LUA)
             TARGET ponder
             PRE_BUILD
             BYPRODUCTS deps/${PONDER_LUA_VERSION}/install/lib/liblua.a
-            COMMAND make local
+            COMMAND make generic && make local
             WORKING_DIRECTORY ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}
             COMMENT "Building Lua"
         )
