@@ -7,8 +7,6 @@ jobs:
     - os: osx
       osx_image: xcode9.2   # OS X 10.12 (oldest Xcode/macOS we support)
     - os: osx
-      osx_image: xcode11    # OS X 10.14.6
-    - os: osx
       osx_image: xcode12    # OS X 10.15.5
     - os: linux             # see dist above
       compiler: clang
