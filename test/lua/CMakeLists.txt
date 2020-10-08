@@ -28,20 +28,17 @@
 
 project(luatest)
 
-set(TEST_SRCS
-    main.cpp
-)
+link_directories(${PONDER_BINARY_DIR})
 
-link_directories(
-    ${PONDER_BINARY_DIR}
-)
-
-add_executable(luatest ${TEST_SRCS})
+add_executable(luatest main.cpp)
 
 target_compile_definitions(luatest PUBLIC PONDER_USING_LUA=1)
 
-target_link_libraries(luatest ponder lua)
+if(UNIX)
+	target_link_libraries(luatest ponder lua)
+else(UNIX)
+	target_link_libraries(luatest ponder liblua)
+endif(UNIX)
 
-# Add the executable as a CTest
-add_test(luatest luatest)
+add_test(luatest luatest) # Add the executable as a CTest
 

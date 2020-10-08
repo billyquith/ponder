@@ -241,6 +241,7 @@ add_library(ponder ${PONDER_SRCS})
 # Use local Lua for testing to avoid find_package(Lua 5.3 REQUIRED) OS install inconsistencies
 if(BUILD_TEST_LUA)
     if(UNIX)
+        # Use Lua makefile
         add_custom_command(
             TARGET ponder
             PRE_BUILD
@@ -252,7 +253,9 @@ if(BUILD_TEST_LUA)
         include_directories(BEFORE ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}/install/include)
         link_directories(BEFORE ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}/install/lib)
     else(UNIX)
-        #add_subdirectory(deps/${PONDER_LUA_VERSION})
+        # Lua has no Windows build solution (as POSIX) so build using cmake project.
+        add_subdirectory(deps/${PONDER_LUA_VERSION})
+        include_directories(BEFORE ${PONDER_SOURCE_DIR}/deps/${PONDER_LUA_VERSION}/src)
     endif(UNIX)
 endif()
 
