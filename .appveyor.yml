@@ -17,7 +17,7 @@ environment:
       VS17GEN: "Visual Studio 15 2017 Win64"
       VS19GEN: "Visual Studio 16 2019"
       VS19ARCH: "-A x64"
-      CMOPTS: "-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_LUA_TEST=ON"
+      CMOPTS: "-DBUILD_TEST=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_TEST_LUA=ON"
 
 build:
   parallel: true
