@@ -11,6 +11,7 @@ Ponder Changelog
 - Add pass-by-reference parameters (#109).
 - Tests: Catch2 updated to 2.13.1
 - MSVC: Visual Studio 2019 support.
+- Serialisation: JSON support added (#43).
 
 ## 3.1
 

@@ -227,7 +227,7 @@ TEST_CASE("Can serialise using RapidJSON")
 
             jwriter.EndObject();
 
-            std::cout << sb.GetString();
+            std::cout << sb.GetString() << std::endl;
 
             storage = sb.GetString();
         }
@@ -279,7 +279,7 @@ TEST_CASE("Can serialise using RapidJSON")
 
             jwriter.EndObject();
 
-            std::cout << sb.GetString();
+            std::cout << sb.GetString() << std::endl;
 
             storage = sb.GetString();
         }

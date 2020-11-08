@@ -108,7 +108,8 @@ class RapidJsonArchiveReader
 
 public:
 
-    struct Node {
+    struct Node
+    {
         const rapidjson::Value& m_value;
         Node(const rapidjson::Value& value) : m_value(value) {}
     };
@@ -143,7 +144,7 @@ public:
 
     bool isValid(Node node)
     {
-        return true;
+        return !node.m_value.IsNull();
     }
 };
 
