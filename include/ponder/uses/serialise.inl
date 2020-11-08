@@ -33,8 +33,9 @@ namespace archive {
 template <class ARCHIVE>
 void ArchiveWriter<ARCHIVE>::write(NodeType parent, const UserObject& object)
 {
-    // Iterate over the object's properties using its metaclass
     const Class& metaclass = object.getClass();
+
+    // Iterate over the object's properties using its metaclass
     for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
     {
         const Property& property = metaclass.property(i);
@@ -43,41 +44,41 @@ void ArchiveWriter<ARCHIVE>::write(NodeType parent, const UserObject& object)
         //                if ((exclude != Value::nothing) && property.hasTag(exclude))
         //                    continue;
         
-        // Create a child node for the new property
-        NodeType child = m_archive.addChild(parent, property.name());
-        if (!m_archive.isValid(child))
-            continue;
-        
         if (property.kind() == ValueKind::User)
         {
+            NodeType child = m_archive.beginChild(parent, property.name());
+
             // recurse
             write(child, property.get(object).to<UserObject>());
+
+            m_archive.endChild(parent, child);
         }
         else if (property.kind() == ValueKind::Array)
         {
             auto const& arrayProperty = static_cast<const ArrayProperty&>(property);
-            
+
+            NodeType arrayNode = m_archive.beginArray(parent, property.name());
+
             // Iterate over the array elements
-            std::size_t count = arrayProperty.size(object);
+            const std::size_t count = arrayProperty.size(object);
+            const std::string itemName("item");
             for (std::size_t j = 0; j < count; ++j)
             {
-                NodeType item = m_archive.addChild(child, "item");
-                if (m_archive.isValid(item))
+                if (arrayProperty.elementType() == ValueKind::User)
                 {
-                    if (arrayProperty.elementType() == ValueKind::User)
-                    {
-                        write(item, arrayProperty.get(object, j).to<UserObject>());
-                    }
-                    else
-                    {
-                        m_archive.setText(item, arrayProperty.get(object, j).to<std::string>());
-                    }
+                    write(arrayNode, arrayProperty.get(object, j).to<UserObject>());
+                }
+                else
+                {
+                    m_archive.setProperty(arrayNode, itemName, arrayProperty.get(object, j).to<std::string>());
                 }
             }
+
+            m_archive.endArray(parent, arrayNode);
         }
         else
         {
-            m_archive.setText(child, property.get(object).to<std::string>());
+            m_archive.setProperty(parent, property.name(), property.get(object).to<std::string>());
         }
     }
 }
@@ -96,7 +97,7 @@ void ArchiveReader<ARCHIVE>::read(NodeType node, const UserObject& object)
         //                    continue;
         
         // Find the child node corresponding to the new property
-        NodeType child = m_archive.findFirstChild(node, property.name());
+        NodeType child = m_archive.findProperty(node, property.name());
         if (!m_archive.isValid(child))
             continue;
         
@@ -108,11 +109,10 @@ void ArchiveReader<ARCHIVE>::read(NodeType node, const UserObject& object)
         else if (property.kind() == ValueKind::Array)
         {
             auto const& arrayProperty = static_cast<const ArrayProperty&>(property);
-            
+
             std::size_t index = 0;
-            for (NodeType item = m_archive.findFirstChild(child, "item");
-                 m_archive.isValid(item);
-                 item = m_archive.findNextSibling(item, "item"))
+            const std::string itemName("item");
+            for (ArrayIterator it{ m_archive.createArrayIterator(child, itemName) }; !it.isEnd(); it.next())
             {
                 // Make sure that there are enough elements in the array
                 std::size_t count = arrayProperty.size(object);
@@ -125,19 +125,19 @@ void ArchiveReader<ARCHIVE>::read(NodeType node, const UserObject& object)
                 
                 if (arrayProperty.elementType() == ValueKind::User)
                 {
-                    read(item, arrayProperty.get(object, index).to<UserObject>());
+                    read(it.getItem(), arrayProperty.get(object, index).to<UserObject>());
                 }
                 else
                 {
-                    arrayProperty.set(object, index, m_archive.getText(item));
+                    arrayProperty.set(object, index, m_archive.getValue(it.getItem()));
                 }
                 
-                index++;
+                ++index;
             }
         }
         else
         {
-            property.set(object, m_archive.getText(child));
+            property.set(object, m_archive.getValue(child));
         }
     }
 }
