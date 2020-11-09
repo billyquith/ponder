@@ -70,9 +70,20 @@ namespace UserObjectTest
         return stream << b.b;
     }
 
+    static int gMyClassConstructCount{ 0 }, gMyClassDestructCount{ 0 };
+
     struct MyClass : MyBaseWithPadding, MyBase
     {
-        MyClass(int x_) : MyBase(x_ + 1), x(x_) {}
+        MyClass(int x_) : MyBase(x_ + 1), x(x_)
+        {
+            ++gMyClassConstructCount;
+        }
+
+        virtual ~MyClass()
+        {
+            ++gMyClassDestructCount;
+        }
+
         int x;
         int f() const {return x;}
         PONDER_POLYMORPHIC();
@@ -227,10 +238,14 @@ TEST_CASE("User objects reference or contain user data")
         auto const& metaclass = ponder::classByType<MyClass>();
         ponder::runtime::ObjectFactory fact(metaclass);
         obj = fact.construct(ponder::Args(1));
-        IS_TRUE(obj != ponder::UserObject::nothing);
+        REQUIRE(obj != ponder::UserObject::nothing);
+        REQUIRE(gMyClassConstructCount == 1);
+        REQUIRE(gMyClassDestructCount == 0);
 
         fact.destroy(obj);
         IS_TRUE(obj == ponder::UserObject::nothing);
+        REQUIRE(gMyClassConstructCount == 1);
+        REQUIRE(gMyClassDestructCount == 1);
     }
 
     SECTION("user objects reference objects")
