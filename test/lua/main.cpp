@@ -53,10 +53,12 @@ namespace lib
     struct Vec
     {
         float   x,y;
+        static int instanceCount;
         
-        Vec()                       : x(0), y(0) {}
-        Vec(float x_, float y_)     : x(x_), y(y_) {}
-        Vec(const Vec& o)           : x(o.x), y(o.y) {}
+        Vec()                       : x(0), y(0) { ++instanceCount; }
+        Vec(float x_, float y_)     : x(x_), y(y_) { ++instanceCount; }
+        Vec(const Vec& o)           : x(o.x), y(o.y) { ++instanceCount; }
+        ~Vec() { --instanceCount; }
         
         bool operator == (const Vec& o) const {
             const float dx = x - o.x, dy = y - o.y;
@@ -80,7 +82,8 @@ namespace lib
         
         Vec& ref() { return *this; }                // return ref
     };
-    
+
+    int Vec::instanceCount = 0;
     
     struct Holder
     {
@@ -107,7 +110,7 @@ namespace lib
         static const char* getString() { return "blah"; }
     };
     
-    struct Dummy
+    struct Static
     {
         static int halve(int x) { return x/2; }
     };
@@ -125,7 +128,7 @@ namespace lib
             assert(lua_istable(lt.L, -1)); // should be guaranteed by conversion
             
             lua_getfield(lt.L, -1, "a");
-            a = luaL_checknumber(lt.L, -1);
+            a = (int) luaL_checknumber(lt.L, -1);
             lua_pop(lt.L, 1);
             
             lua_getfield(lt.L, -1, "b");
@@ -173,8 +176,8 @@ namespace lib
             .function("getStr", &Types::getString)
             ;
 
-        ponder::Class::declare<Dummy>()
-            .function("halve", &Dummy::halve)
+        ponder::Class::declare<Static>()
+            .function("halve", &Static::halve)
             .function("twice", &twice)
             ;
 
@@ -199,7 +202,7 @@ PONDER_TYPE(std::tuple<float,float>)
 PONDER_TYPE(lib::Holder)
 PONDER_TYPE(lib::Types)
 PONDER_TYPE(lib::Types::Obj)
-PONDER_TYPE(lib::Dummy)
+PONDER_TYPE(lib::Static)
 PONDER_TYPE(lib::Colour)
 PONDER_TYPE(lib::Parsing)
 
@@ -221,6 +224,14 @@ static bool luaTest(lua_State *L, const char *source, int lineNb, bool success =
 #define LUA_PASS(SRC) luaTest(L,SRC,__LINE__,true)
 #define LUA_FAIL(SRC) luaTest(L,SRC,__LINE__,false)
 
+static bool Test(bool test, const char msg[])
+{
+    std::printf("Test: %s : %s\n", msg, test ? "PASSED" : "FAILED");
+    return test;
+}
+
+#define TEST(T) if (!Test((T), #T)) return EXIT_FAILURE
+
 int main()
 {
     std::printf("Lua version %s\n", LUA_VERSION);
@@ -232,7 +243,7 @@ int main()
     ponder::lua::expose<lib::Vec>(L, "Vec2");
     ponder::lua::expose<lib::Holder>(L, "Holder");
     ponder::lua::expose<lib::Types>(L, "Types");
-    ponder::lua::expose<lib::Dummy>(L, "Dummy");
+    ponder::lua::expose<lib::Static>(L, "Static");
     ponder::lua::expose<lib::Colour>(L, "Colour");
     ponder::lua::expose<lib::Parsing>(L, "Parsing");
     
@@ -313,14 +324,14 @@ int main()
     //------------------------------------------------------------------
 
     // Class static function
-    LUA_PASS("assert(type(Dummy) == 'userdata')");
-    LUA_PASS("assert(type(Dummy.halve) == 'function')");
-    LUA_PASS("x = Dummy.halve(16); assert(x == 8)");
+    LUA_PASS("assert(type(Static) == 'userdata')");
+    LUA_PASS("assert(type(Static.halve) == 'function')");
+    LUA_PASS("x = Static.halve(16); assert(x == 8)");
 
     // Non-class function
-    LUA_PASS("assert(type(Dummy) == 'userdata')");
-    LUA_PASS("assert(type(Dummy.twice) == 'function')");
-    LUA_PASS("x = Dummy.twice(7); assert(x == 14)");
+    LUA_PASS("assert(type(Static) == 'userdata')");
+    LUA_PASS("assert(type(Static.twice) == 'function')");
+    LUA_PASS("x = Static.twice(7); assert(x == 14)");
 
     //------------------------------------------------------------------
     
@@ -335,6 +346,10 @@ int main()
     // Parsing
     LUA_PASS("p = Parsing(); assert(type(p)=='userdata')");
     LUA_PASS("p:init{a=77, b='w00t'}; assert(p.a == 77 and p.b == 'w00t')");
+
+    lua_close(L);
+
+    TEST(lib::Vec::instanceCount == 0);
 
     return EXIT_SUCCESS;
 }

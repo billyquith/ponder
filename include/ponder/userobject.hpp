@@ -308,12 +308,7 @@ private:
 
     friend class Property;
 
-    /**
-     * \brief Assign a new value to a property of the object
-     *
-     * \param property Property to modify
-     * \param value New value to assign
-     */
+     // Assign a new value to a property of the object
     void set(const Property& property, const Value& value) const;
     
     UserObject(const Class* cls, detail::AbstractObjectHolder* h)
@@ -321,10 +316,10 @@ private:
         ,   m_holder(h)
     {}
 
-    /// Metaclass of the stored object
+    // Metaclass of the stored object
     const Class* m_class;
     
-    /// Optional abstract holder storing the object
+    // Optional abstract holder storing the object
     std::shared_ptr<detail::AbstractObjectHolder> m_holder;
 };
 

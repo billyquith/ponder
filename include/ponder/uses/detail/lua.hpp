@@ -63,7 +63,7 @@ struct LuaTable { lua_State *L; };
 template <typename P, typename U = void> struct LuaValueReader {};
 
 template <typename P>
-struct  LuaValueReader<P, typename std::enable_if<std::is_integral<P>::value>::type>
+struct LuaValueReader<P, typename std::enable_if<std::is_integral<P>::value>::type>
 {
     typedef P ParamType;
     static inline ParamType convert(lua_State* L, std::size_t index)
