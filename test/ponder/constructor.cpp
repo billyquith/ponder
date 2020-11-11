@@ -50,10 +50,14 @@ namespace ConstructorTest
     
     struct MyType
     {
+        static int instCount;
+
         MyType(int x_) : x(x_) {}
         int x;
     };
-    
+
+    int MyType::instCount = 0;
+
     struct MyBase1
     {
         MyBase1() : base1("base1") {}
@@ -70,27 +74,25 @@ namespace ConstructorTest
     
     struct MyClass : MyBase1, MyBase2
     {
-        static int instCount;
-        
         MyClass()
-            : l(0), r(0.), s("0"), e(zero), u(0) {++instCount;}
+            : l(0), r(0.), s("0"), e(zero), u(0) {}
         
         MyClass(long l_)
-            : l(l_), r(1.), s("1"), e(one), u(1) {++instCount;}
+            : l(l_), r(1.), s("1"), e(one), u(1) {}
         
         MyClass(long l_, double r_)
-            : l(l_), r(r_), s("2"), e(two), u(2) {++instCount;}
+            : l(l_), r(r_), s("2"), e(two), u(2) {}
         
         MyClass(long l_, double r_, ponder::String s_)
-            : l(l_), r(r_), s(s_), e(three), u(3) {++instCount;}
+            : l(l_), r(r_), s(s_), e(three), u(3) {}
         
         MyClass(long l_, double r_, ponder::String s_, MyEnum e_)
-            : l(l_), r(r_), s(s_), e(e_), u(4) {++instCount;}
+            : l(l_), r(r_), s(s_), e(e_), u(4) {}
         
         MyClass(long l_, double r_, ponder::String s_, MyEnum e_, MyType t_)
-            : l(l_), r(r_), s(s_), e(e_), u(t_) {++instCount;}
+            : l(l_), r(r_), s(s_), e(e_), u(t_) {}
         
-        ~MyClass() {--instCount;}
+        ~MyClass() {}
         
         long l;
         double r;
@@ -98,9 +100,7 @@ namespace ConstructorTest
         MyEnum e;
         MyType u;
     };
-    
-    int MyClass::instCount = 0;
-    
+        
     void declare()
     {
         ponder::Enum::declare<MyEnum>("ConstructorTest::MyEnum")
@@ -152,17 +152,14 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
 
     SECTION("using constuct/destroy")
     {
-        REQUIRE(MyClass::instCount == 0);
         {
             ponder::UserObject object;
             
-            REQUIRE(MyClass::instCount == 0);
             IS_TRUE( object == ponder::UserObject::nothing );
             
             ponder::runtime::ObjectFactory fact(metaclass);
             object = fact.construct(ponder::Args(777, 99.05f, "wow"));
             
-            REQUIRE(MyClass::instCount == 1);
             IS_TRUE( object != ponder::UserObject::nothing );
             
             MyClass* instance = object.get<MyClass*>();
@@ -172,15 +169,11 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             REQUIRE(instance->s == "wow");
             REQUIRE(instance->e == three);
             REQUIRE(instance->u.x == 3);
-            
-            fact.destroy(object);
         }
-        REQUIRE(MyClass::instCount == 0);        
     }
     
     SECTION("using placement new")
     {
-        REQUIRE(MyClass::instCount == 0);
         {
             char buff[sizeof(MyClass) + 20];
             constexpr char c_guard{ (char)0xcd };
@@ -195,7 +188,6 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             ponder::UserObject object = fact.construct(ponder::Args(), p); // placement new
             
             IS_TRUE( object != ponder::UserObject::nothing );
-            REQUIRE(MyClass::instCount == 1);
             
             REQUIRE(*(p-1) == c_guard);
             REQUIRE(*p != c_guard);
@@ -210,15 +202,11 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             REQUIRE(instance->s == "0");
             REQUIRE(instance->e == zero);
             REQUIRE(instance->u.x == 0);
-            
-            fact.destruct(object); // not destroy()
         }
-        REQUIRE(MyClass::instCount == 0);
     }
     
     SECTION("using create/destroy")
     {
-        REQUIRE(MyClass::instCount == 0);
         {
             ponder::UserObject object;
             
@@ -228,7 +216,6 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             object = fact.create(777, 99.05f, "wow");
             
             IS_TRUE( object != ponder::UserObject::nothing );
-            REQUIRE(MyClass::instCount == 1);
             
             MyClass* instance = object.get<MyClass*>();
             
@@ -237,15 +224,11 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             REQUIRE(instance->s == "wow");
             REQUIRE(instance->e == three);
             REQUIRE(instance->u.x == 3);
-            
-            fact.destroy(object);
         }
-        REQUIRE(MyClass::instCount == 0);
     }
     
     SECTION("using create & auto pointer")
     {
-        REQUIRE(MyClass::instCount == 0);
         {
             auto object = ponder::runtime::createUnique(metaclass, 777, 99.05f, "wow");
             
@@ -259,7 +242,6 @@ TEST_CASE("Object factories can be used to create class instances") // and alloc
             REQUIRE(instance->e == three);
             REQUIRE(instance->u.x == 3);
         }
-        REQUIRE(MyClass::instCount == 0);
     }
 }
 
@@ -291,8 +273,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         REQUIRE(instance->s == "0");
         REQUIRE(instance->e == zero);
         REQUIRE(instance->u.x == 0);
-
-        fact.destroy(object);
     }
 
     SECTION("with one parameter")
@@ -311,8 +291,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         REQUIRE(instance->s == "1");
         REQUIRE(instance->e == one);
         REQUIRE(instance->u.x == 1);
-
-        fact.destroy(object);
     }
 
     SECTION("with two parameters")
@@ -331,8 +309,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         REQUIRE(instance->s == "2");
         REQUIRE(instance->e == two);
         REQUIRE(instance->u.x == 2);
-
-        fact.destroy(object);
     }
 
 
@@ -352,8 +328,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         REQUIRE(instance->s == "3");
         REQUIRE(instance->e == three);
         REQUIRE(instance->u.x == 3);
-
-        fact.destroy(object);
     }
 
     SECTION("with four parameters")
@@ -372,8 +346,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         REQUIRE(instance->s == "4");
         REQUIRE(instance->e == four);
         REQUIRE(instance->u.x == 4);
-
-        fact.destroy(object);
     }
 
     SECTION("with five parameters")
@@ -392,8 +364,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
         REQUIRE(instance->s == "5");
         REQUIRE(instance->e == five);
         REQUIRE(instance->u.x == 5);
-
-        fact.destroy(object);
     }
 
     SECTION("with invalid parameters")
@@ -431,8 +401,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        REQUIRE(instance->s == "0");
 //        REQUIRE(instance->e == zero);
 //        REQUIRE(instance->u.x == 0);
-//        
-//        fact.destroy(object);
 //    }
 //    
 //    SECTION("with one parameter")
@@ -449,8 +417,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        REQUIRE(instance->s == "1");
 //        REQUIRE(instance->e == one);
 //        REQUIRE(instance->u.x == 1);
-//        
-//        fact.destroy(object);
 //    }
 
 //    SECTION("with two parameters")
@@ -466,8 +432,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        REQUIRE(instance->s == "2");
 //        REQUIRE(instance->e == two);
 //        REQUIRE(instance->u.x == 2);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    
@@ -484,8 +448,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        REQUIRE(instance->s == "3");
 //        REQUIRE(instance->e == three);
 //        REQUIRE(instance->u.x == 3);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with four parameters")
@@ -501,8 +463,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        REQUIRE(instance->s == "4");
 //        REQUIRE(instance->e == four);
 //        REQUIRE(instance->u.x == 4);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with five parameters")
@@ -518,8 +478,6 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 //        REQUIRE(instance->s == "5");
 //        REQUIRE(instance->e == five);
 //        REQUIRE(instance->u.x == 5);
-//        
-//        metaclass->destroy(object);
 //    }
     
 //}
@@ -594,8 +552,6 @@ TEST_CASE("Object factory constructors can use placement new")
 //        REQUIRE(instance->s == "0");
 //        REQUIRE(instance->e == zero);
 //        REQUIRE(instance->u.x == 0);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with one parameter")
@@ -611,8 +567,6 @@ TEST_CASE("Object factory constructors can use placement new")
 //        REQUIRE(instance->s == "1");
 //        REQUIRE(instance->e == one);
 //        REQUIRE(instance->u.x == 1);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with two parameters")
@@ -628,8 +582,6 @@ TEST_CASE("Object factory constructors can use placement new")
 //        REQUIRE(instance->s == "2");
 //        REQUIRE(instance->e == two);
 //        REQUIRE(instance->u.x == 2);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    
@@ -646,8 +598,6 @@ TEST_CASE("Object factory constructors can use placement new")
 //        REQUIRE(instance->s == "3");
 //        REQUIRE(instance->e == three);
 //        REQUIRE(instance->u.x == 3);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with four parameters")
@@ -663,8 +613,6 @@ TEST_CASE("Object factory constructors can use placement new")
 //        REQUIRE(instance->s == "4");
 //        REQUIRE(instance->e == four);
 //        REQUIRE(instance->u.x == 4);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with five parameters")
@@ -680,8 +628,6 @@ TEST_CASE("Object factory constructors can use placement new")
 //        REQUIRE(instance->s == "5");
 //        REQUIRE(instance->e == five);
 //        REQUIRE(instance->u.x == 5);
-//        
-//        metaclass->destroy(object);
 //    }
 //    
 //    SECTION("with invalid parameters")

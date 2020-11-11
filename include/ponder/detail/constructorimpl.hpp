@@ -100,7 +100,7 @@ class ConstructorImpl : public Constructor
         if (ptr)
             return UserObject::makeRef(new(ptr) T(convertArg<As>(args, Is)...)); // placement new
         else
-            return UserObject::makeRef(new T(convertArg<As>(args, Is)...));
+            return UserObject::makeOwned(T(convertArg<As>(args, Is)...));
     }
 
 public:

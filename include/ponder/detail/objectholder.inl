@@ -87,6 +87,12 @@ ObjectHolderByCopy<T>::ObjectHolderByCopy(const T* object)
 }
 
 template <typename T>
+ObjectHolderByCopy<T>::ObjectHolderByCopy(T&& object)
+    : m_object(std::forward<T>(object))
+{
+}
+
+template <typename T>
 void* ObjectHolderByCopy<T>::object()
 {
     return reinterpret_cast<void*>(&m_object);

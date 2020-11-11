@@ -58,8 +58,10 @@ namespace lib
         Vec()                       : x(0), y(0) { ++instanceCount; }
         Vec(float x_, float y_)     : x(x_), y(y_) { ++instanceCount; }
         Vec(const Vec& o)           : x(o.x), y(o.y) { ++instanceCount; }
+        Vec(Vec&& o)                : x(o.x), y(o.y) { ++instanceCount; }
         ~Vec() { --instanceCount; }
-        
+        Vec& operator=(const Vec& o) { x = o.x; y = o.y; return *this; }
+
         bool operator == (const Vec& o) const {
             const float dx = x - o.x, dy = y - o.y;
             return std::abs(dx) < FLOAT_EPSILON && std::abs(dy) < FLOAT_EPSILON;
@@ -89,7 +91,8 @@ namespace lib
     {
         Holder() = default;
         Holder(const Holder&) = delete;              
-        
+        Holder(Holder&&) = default;
+
         Vec vec;
         
         Holder* ptrRef() { return this; }
@@ -249,13 +252,15 @@ int main()
     
     //------------------------------------------------------------------
 
+    TEST(lib::Vec::instanceCount == 0);
+
     // class defined
     LUA_PASS("print(Vec2); assert(Vec2 ~= nil)");
 
     // instance
     LUA_PASS("v = Vec2(); assert(v ~= nil)");
     LUA_PASS("assert(type(v) == 'userdata')");
-    
+
     // property read
     LUA_PASS("assert(v.x == 0)");
     LUA_PASS("assert(v.y == 0)");
@@ -307,7 +312,6 @@ int main()
     LUA_PASS("t = Vec2(11,22); x,y = t:get(); print(x,y); assert(x == 11); assert(y == 22)");
 
     //------------------------------------------------------------------
-
     // Non-copyable return ref
     LUA_PASS("h = Holder()");
     LUA_PASS("h:rref().vec.x = 9; assert(h:rref().vec.x == 9)");
@@ -349,6 +353,7 @@ int main()
 
     lua_close(L);
 
+    //printf("lib::Vec::instanceCount = %d\n", lib::Vec::instanceCount);
     TEST(lib::Vec::instanceCount == 0);
 
     return EXIT_SUCCESS;
