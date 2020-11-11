@@ -835,7 +835,5 @@ TEST_CASE("Functions can modify objects")
     REQUIRE(objectA.TestMember == 0);
     functionB.call(wrapperB, &objectA);
     REQUIRE(objectA.TestMember == 5);
-
-    bfact.destroy(wrapperB);
 }
 

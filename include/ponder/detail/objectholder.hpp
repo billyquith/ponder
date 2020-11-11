@@ -164,14 +164,16 @@ public:
 
     /**
      * \brief Construct the holder from an object
-     *
      * \param object Object to store
      */
     ObjectHolderByCopy(const T* object);
 
+    ObjectHolderByCopy(T&& object);
+
+    ~ObjectHolderByCopy() {}
+
     /**
      * \brief Return a typeless pointer to the stored object
-     *
      * \return Pointer to the object
      */
     void* object() final;
