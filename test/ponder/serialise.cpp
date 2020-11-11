@@ -238,10 +238,11 @@ TEST_CASE("Can serialise using RapidJSON")
 
             rapidjson::Document jdoc;
             REQUIRE(!jdoc.Parse(storage.data()).HasParseError());
+            REQUIRE(jdoc.IsObject());
 
             using Archive = ponder::archive::RapidJsonArchiveReader;
             Archive archive(jdoc);
-            Archive::Node rootNode{ jdoc.GetObject() };
+            Archive::Node rootNode{ jdoc };
             REQUIRE(archive.isValid(rootNode));
 
             ponder::archive::ArchiveReader<Archive> reader(archive);
@@ -300,7 +301,7 @@ TEST_CASE("Can serialise using RapidJSON")
 
             using Archive = ponder::archive::RapidJsonArchiveReader;
             Archive archive(jdoc);
-            Archive::Node rootNode{ jdoc.GetObject() };
+            Archive::Node rootNode{ jdoc };
             REQUIRE(archive.isValid(rootNode));
 
             ponder::archive::ArchiveReader<Archive> reader(archive);
