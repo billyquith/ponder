@@ -73,6 +73,9 @@ namespace UserObjectTest
     struct MyClass : MyBaseWithPadding, MyBase
     {
         MyClass(int x_) : MyBase(x_ + 1), x(x_) {}
+
+        virtual ~MyClass() {}
+
         int x;
         int f() const {return x;}
         PONDER_POLYMORPHIC();
@@ -155,6 +158,46 @@ namespace UserObjectTest
 
     struct Renamed {};
 
+    // When created with ObjectFactory, will copy construct because no move semantics.
+    class DefaultClass
+    {
+        int i;
+    public:
+        static int construct, copy, assign, destruct;
+
+        DefaultClass(int i_) : i(i_) { ++construct; }
+        DefaultClass(const DefaultClass& o) { i = o.i; ++copy; }
+        DefaultClass& operator=(const DefaultClass& o) { i = o.i; }
+        ~DefaultClass() { ++destruct; }
+    };
+
+    int DefaultClass::construct{};
+    int DefaultClass::copy{};
+    int DefaultClass::assign{};
+    int DefaultClass::destruct{};
+
+    // Will not copy when constructed with ObjectFactory.
+    class MoveableClass
+    {
+        int i;
+    public:
+        static int construct, copy, move, assign, assignMove, destruct;
+
+        MoveableClass(int i_) : i(i_) { ++construct; }
+        MoveableClass(const MoveableClass& o) { i = o.i; ++copy; }
+        MoveableClass& operator=(const MoveableClass& o) { i = o.i; ++move; }
+        MoveableClass(MoveableClass&& o) { i = o.i; ++move; }
+        MoveableClass& operator=(MoveableClass&& o) { i = o.i; ++assignMove; }
+        ~MoveableClass() { ++destruct; }
+    };
+
+    int MoveableClass::construct{};
+    int MoveableClass::copy{};
+    int MoveableClass::move{};
+    int MoveableClass::assign{};
+    int MoveableClass::assignMove{};
+    int MoveableClass::destruct{};
+
     void declare()
     {
         ponder::Class::declare<MyBase>();
@@ -187,8 +230,13 @@ namespace UserObjectTest
             .function("addRef", &Data::addRef);
 
         ponder::Class::declare<Renamed>("EggSandwich")
-            .constructor()
-            ;
+            .constructor();
+
+        ponder::Class::declare<DefaultClass>()
+            .constructor<int>();
+
+        ponder::Class::declare<MoveableClass>()
+            .constructor<int>();
     }
 }
 
@@ -202,6 +250,8 @@ PONDER_AUTO_TYPE(UserObjectTest::Composed2, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Composed1, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Data, &UserObjectTest::declare)
 PONDER_AUTO_TYPE(UserObjectTest::Renamed, &UserObjectTest::declare)
+PONDER_TYPE(UserObjectTest::DefaultClass);
+PONDER_TYPE(UserObjectTest::MoveableClass);
 
 using namespace UserObjectTest;
 
@@ -227,10 +277,7 @@ TEST_CASE("User objects reference or contain user data")
         auto const& metaclass = ponder::classByType<MyClass>();
         ponder::runtime::ObjectFactory fact(metaclass);
         obj = fact.construct(ponder::Args(1));
-        IS_TRUE(obj != ponder::UserObject::nothing);
-
-        fact.destroy(obj);
-        IS_TRUE(obj == ponder::UserObject::nothing);
+        REQUIRE(obj != ponder::UserObject::nothing);
     }
 
     SECTION("user objects reference objects")
@@ -467,6 +514,55 @@ TEST_CASE("User objects can be created")
         ponder::UserObject uo{ ponder::runtime::create(metacls) };
         REQUIRE(uo != ponder::UserObject::nothing);
     }
+
+    SECTION("are automatically deleted (copy)")
+    {
+        {
+            ponder::UserObject obj;
+            auto const& metaclass = ponder::classByType<DefaultClass>();
+            ponder::runtime::ObjectFactory fact(metaclass);
+            obj = fact.construct(ponder::Args(17));
+            REQUIRE(obj != ponder::UserObject::nothing);
+            // Check that copy occured (because DefaultClass does not have move)
+            REQUIRE(DefaultClass::construct == 1);
+            REQUIRE(DefaultClass::copy == 1);
+            REQUIRE(DefaultClass::assign == 0);
+            REQUIRE(DefaultClass::destruct == 1);
+        }
+
+        // Object out of scope is deleted
+        REQUIRE(DefaultClass::construct == 1);
+        REQUIRE(DefaultClass::copy == 1);
+        REQUIRE(DefaultClass::assign == 0);
+        REQUIRE(DefaultClass::destruct == 2);
+    }
+
+    SECTION("are automatically deleted (move)")
+    {
+        {
+            ponder::UserObject obj;
+            auto const& metaclass = ponder::classByType<MoveableClass>();
+            ponder::runtime::ObjectFactory fact(metaclass);
+            obj = fact.construct(ponder::Args(17));
+            REQUIRE(obj != ponder::UserObject::nothing);
+            // Check that move occured
+            REQUIRE(MoveableClass::construct == 1);
+            REQUIRE(MoveableClass::copy == 0);
+            REQUIRE(MoveableClass::move == 1);
+            REQUIRE(MoveableClass::assign == 0);
+            REQUIRE(MoveableClass::assignMove == 0);
+            REQUIRE(MoveableClass::destruct == 1);
+        }
+
+        // Object out of scope is deleted
+        REQUIRE(MoveableClass::construct == 1);
+        REQUIRE(MoveableClass::copy == 0);
+        REQUIRE(MoveableClass::move == 1);
+        REQUIRE(MoveableClass::assign == 0);
+        REQUIRE(MoveableClass::assignMove == 0);
+        REQUIRE(MoveableClass::destruct == 2);
+    }
+
 }
 
 TEST_CASE("User objects wrap C++ objects")

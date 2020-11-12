@@ -343,12 +343,20 @@ static int l_instance_create(lua_State *L)
 
     // set instance metatable
     lua_getmetatable(L, 1);             // +1
-    lua_pushliteral(L, PONDER__LUA_INSTTBLS);       // +1
+    lua_pushliteral(L, PONDER__LUA_INSTTBLS); // +1
     lua_rawget(L, -2);                  // -1+1 -> mt
     lua_setmetatable(L, -3);            // -1
     lua_pop(L, 1);
 
     return 1;
+}
+
+static int l_finalise(lua_State* L)
+{
+    ponder::UserObject * const uo = (ponder::UserObject*) lua_touserdata(L, 1); // userobj
+    *uo = UserObject::nothing;
+
+    return 0;
 }
 
 // Type.__index(key)
@@ -388,6 +396,10 @@ static void createInstanceMetatable(lua_State *L, const Class& cls)
     lua_pushliteral(L, "__newindex");           // +1
     lua_pushlightuserdata(L, (void*) &cls);     // +1
     lua_pushcclosure(L, l_inst_newindex, 1);    // 0 +-
+    lua_rawset(L, -3);                          // -2
+
+    lua_pushliteral(L, "__gc");                 // +1
+    lua_pushcfunction(L, l_finalise);           // 0 +-
     lua_rawset(L, -3);                          // -2
 
     lua_pushglobaltable(L);                     // +1

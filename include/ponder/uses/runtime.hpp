@@ -296,7 +296,7 @@ static inline UserObject create(const Class &cls, A... args)
     return ObjectFactory(cls).create(args...);
 }
 
-typedef std::unique_ptr<UserObject, detail::UserObjectDeleter> UniquePtr;
+typedef std::unique_ptr<UserObject> UniquePtr;
 
 inline UniquePtr makeUniquePtr(UserObject *obj)
 {
@@ -318,8 +318,6 @@ static inline UniquePtr createUnique(const Class &cls, A... args)
  *
  * \param obj Reference to UserObject instance to destroy
  *
- * \snippet simple.cpp eg_simple_destroy
- *
  * \sa create()
  */
 static inline void destroy(const UserObject &obj)
@@ -336,8 +334,6 @@ static inline void destroy(const UserObject &obj)
  * \param obj Reference to UserObject instance to destroy
  * \param args Arguments for the function
  * \return The return value. This is NoType if function return type return is `void`.
- *
- * \snippet simple.cpp eg_simple_destroy
  *
  * \sa callStatic(), Class::function()
  */
@@ -356,8 +352,6 @@ static inline Value call(const Function &fn, const UserObject &obj, A&&... args)
  * \param fn The Function to call
  * \param args Arguments for the function
  * \return The return value. This is NoType if function return type return is `void`.
- *
- * \snippet simple.cpp eg_simple_destroy
  *
  * \sa call(), Class::function()
  */

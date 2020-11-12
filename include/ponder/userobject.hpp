@@ -63,33 +63,6 @@ class PONDER_API UserObject
 public:
 
     /**
-     * \brief Default constructor
-     *
-     * Constructs an empty/invalid object
-     */
-    UserObject();
-
-    /**
-     * \brief Construct the user object from an instance copy
-     *
-     * \param object Instance to store in the user object
-     *
-     * \sa makeRef(), makeCopy()
-     */
-    template <typename T>
-    UserObject(const T& object);
-
-    /**
-     * \brief Construct the user object from an instance reference
-     *
-     * \param object Pointer to the object to reference in the user object
-     *
-     * \sa makeRef(), makeCopy()
-     */
-    template <typename T>
-    UserObject(T* object);
-
-    /**
      * \brief Construct a user object from a reference to an object
      *
      * This functions is equivalent to calling `UserObject(&object)`.
@@ -123,6 +96,16 @@ public:
     template <typename T>
     static UserObject makeCopy(const T& object);
 
+    template <typename T>
+    static UserObject makeOwned(T&& object);
+
+    /**
+     * \brief Default constructor
+     *
+     * Constructs an empty/invalid object
+     */
+    UserObject();
+
     /**
      * \brief Copy constructor
      *
@@ -136,7 +119,27 @@ public:
      * \param other instance to move
      */
     UserObject(UserObject&& other) noexcept;
-    
+
+    /**
+     * \brief Construct the user object from an instance copy
+     *
+     * \param object Instance to store in the user object
+     *
+     * \sa makeRef(), makeCopy()
+     */
+     template <typename T>
+     UserObject(const T& object);
+
+     /**
+      * \brief Construct the user object from an instance reference
+      *
+      * \param object Pointer to the object to reference in the user object
+      *
+      * \sa makeRef(), makeCopy()
+      */
+     template <typename T>
+     UserObject(T* object);
+
     /**
      * \brief Copy assignment operator
      *
@@ -308,23 +311,18 @@ private:
 
     friend class Property;
 
-    /**
-     * \brief Assign a new value to a property of the object
-     *
-     * \param property Property to modify
-     * \param value New value to assign
-     */
+     // Assign a new value to a property of the object
     void set(const Property& property, const Value& value) const;
-    
+
     UserObject(const Class* cls, detail::AbstractObjectHolder* h)
         :   m_class(cls)
         ,   m_holder(h)
     {}
-
-    /// Metaclass of the stored object
+ 
+    // Metaclass of the stored object
     const Class* m_class;
     
-    /// Optional abstract holder storing the object
+    // Optional abstract holder storing the object
     std::shared_ptr<detail::AbstractObjectHolder> m_holder;
 };
 
