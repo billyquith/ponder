@@ -65,6 +65,7 @@ namespace PropertyTest
         , i(0)
         , f(0.f)
         , e(Zero)
+        , mt(11)
         {}
 
         // members
@@ -73,6 +74,7 @@ namespace PropertyTest
         float f;
         std::string s;
         MyEnum e;
+        MyType mt;
         //     std::shared_ptr<MyType> p9;
 
 #define MEMBER_ACCESSORS(T,N) \
@@ -85,6 +87,7 @@ namespace PropertyTest
         MEMBER_ACCESSORS(float,f)
         MEMBER_ACCESSORS(std::string,s)
         MEMBER_ACCESSORS(MyEnum,e)
+        MEMBER_ACCESSORS(MyType, mt)
     };
 
 #define FUNCTION_ACCESSORS(T,N) \
@@ -97,6 +100,7 @@ namespace PropertyTest
     FUNCTION_ACCESSORS(float,f)
     FUNCTION_ACCESSORS(std::string,s)
     FUNCTION_ACCESSORS(MyEnum,e)
+    FUNCTION_ACCESSORS(MyType, mt)
 
     void declare()
     {
