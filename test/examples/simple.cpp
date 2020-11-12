@@ -98,10 +98,7 @@ static void use()
     // call the function and get the result
     const bool bigFeet = ponder::runtime::call(func, person).to<bool>();
 
-    // nasty
-    //! [eg_simple_destroy]
-    ponder::runtime::destroy(person);
-    //! [eg_simple_destroy]
+    // UserObject person is dereferenced and deleted here as scope ends.
 }
 //! [eg_simple_use]
 
