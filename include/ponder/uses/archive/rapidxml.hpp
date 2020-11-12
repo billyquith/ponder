@@ -49,37 +49,74 @@ class RapidXmlArchive
 public:
 
     using ch_t = CH;
-    using node_t = rapidxml::xml_node<ch_t> *;
+    using Node = rapidxml::xml_node<ch_t>*;
 
-    node_t addChild(node_t parent, const std::string& name)
+    class ArrayIterator
+    {
+        Node m_node{};
+        detail::string_view m_name;
+
+    public:
+
+        ArrayIterator(Node arrayNode, detail::string_view name)
+            : m_name(name)
+        {
+            m_node = arrayNode->first_node(name.data(), name.length());
+        }
+
+        bool isEnd() const { return m_node == nullptr; }
+        void next()
+        {
+            m_node = m_node->next_sibling(m_name.data(), m_name.length());
+        }
+        Node getItem() { return m_node; }
+    };
+
+    // Write
+
+    Node beginChild(Node parent, const std::string& name)
     {
         const char* nodeName = parent->document()->allocate_string(name.c_str(), name.length()+1);
-        node_t child = parent->document()->allocate_node(rapidxml::node_element, nodeName);
+        Node child = parent->document()->allocate_node(rapidxml::node_element, nodeName);
         parent->append_node(child);
         return child;
     }
-    
-    void setText(node_t node, const std::string& text)
+
+    void endChild(Node /*parent*/, Node /*child*/) {}
+
+    void setProperty(Node parent, const std::string& name, const std::string& text)
     {
-        node->value(node->document()->allocate_string(text.c_str(), text.length()+1));
+        const char* nodeName = parent->document()->allocate_string(name.c_str(), name.length() + 1);
+        Node child = parent->document()->allocate_node(rapidxml::node_element, nodeName);
+        parent->append_node(child);
+        child->value(child->document()->allocate_string(text.c_str(), text.length() + 1));
     }
 
-    node_t findFirstChild(node_t node, const std::string& name)
+    Node beginArray(Node parent, const std::string& name)
+    {
+        return beginChild(parent, name);
+    }
+
+    void endArray(Node /*parent*/, Node /*child*/) {}
+
+    // Read
+
+    Node findProperty(Node node, const std::string& name)
     {
         return node->first_node(name.c_str(), name.length());
     }
-    
-    node_t findNextSibling(node_t node, const std::string& name)
+
+    ArrayIterator createArrayIterator(Node node, const std::string& name)
     {
-        return node->next_sibling(name.c_str(), name.length());
+        return ArrayIterator(node, detail::string_view(name.c_str(), name.length()));
     }
     
-    detail::string_view getText(node_t node)
+    detail::string_view getValue(Node node)
     {
         return detail::string_view(node->value(), node->value_size());
     }
 
-    bool isValid(node_t node)
+    bool isValid(Node node)
     {
         return node != nullptr;
     }

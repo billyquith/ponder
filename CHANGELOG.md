@@ -8,9 +8,11 @@ Ponder Changelog
 ### 3.2
 
 - Ponder requires C++17.
-- Add pass-by-reference parameters (#109).
-- Tests: Catch2 updated to 2.13.1
 - MSVC: Visual Studio 2019 support.
+- Add pass-by-reference parameters (#109).
+- Serialisation: JSON support added (#43).
+- UserObject automatically destructs (#50).
+- Tests: Catch2 updated to 2.13.1
 
 ## 3.1
 

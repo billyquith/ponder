@@ -43,7 +43,7 @@ namespace archive {
     class Archive
     {
     public:
-        NodeType addChild(NodeType parent, const std::string& name);
+        NodeType beginChild(NodeType parent, const std::string& name);
         void setText(NodeType node, const std::string& text);
         bool isValid(NodeType node);
     };
@@ -55,7 +55,7 @@ class ArchiveWriter
 public:
     
     using ArchiveType = ARCHIVE;
-    using NodeType = typename ArchiveType::node_t;
+    using NodeType = typename ArchiveType::Node;
     
     ArchiveWriter(ArchiveType& archive)
     :   m_archive(archive)
@@ -74,10 +74,10 @@ private:
  class Archive
  {
  public:
-     NodeType findFirstChild(NodeType node, const std::string& name);
-     NodeType findNextSibling(NodeType node, const std::string& name);
+     NodeType findArray(NodeType node, const std::string& name);
+     NodeType arrayNextItem(NodeType node, const std::string& name);
      std::string getText(NodeType node)
-     bool isValid(node_t node);
+     bool isValid(Node node);
  };
  
  */
@@ -87,8 +87,9 @@ class ArchiveReader
 public:
     
     using ArchiveType = ARCHIVE;
-    using NodeType = typename ArchiveType::node_t;
-    
+    using NodeType = typename ArchiveType::Node;
+    using ArrayIterator = typename ArchiveType::ArrayIterator;
+
     ArchiveReader(ArchiveType& archive)
     :   m_archive(archive)
     {}

@@ -232,7 +232,7 @@ configure_file(${PONDER_SOURCE_DIR}/cmake/version.in
                ${PONDER_SOURCE_DIR}/include/ponder/version.hpp @ONLY)
 
 if(MSVC)
-  add_definitions(/MP) # Use multiprocessor compilation
+    add_definitions(/MP) # Use multiprocessor compilation
 endif()
 
 # instruct CMake to build a shared library from all of the source files

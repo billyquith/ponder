@@ -31,7 +31,11 @@
 #define PONDER_ARCHIVE_RAPIDJSON_HPP
 
 #include <ponder/class.hpp>
-#include <rapidjson/rapidjson.hpp>
+#define RAPIDJSON_HAS_STDSTRING 1
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/document.h>
 
 namespace ponder {
 namespace archive {
@@ -41,17 +45,106 @@ namespace archive {
  *
  * The [RapidJSON](http://rapidjson.org/) library is used for JSON parsing and formatting.
  */
-class RapidJsonArchive
+template <typename ARCHIVE>
+class RapidJsonArchiveWriter
 {
+    ARCHIVE& m_archive;
+    int m_arrayLevel{ 0 };
+
 public:
     
-    struct Node {};
+    struct JsonNode {};    
+    using Node = JsonNode*;
+
+    RapidJsonArchiveWriter(ARCHIVE& archive) : m_archive(archive) {}
     
-    using node_t = Node;
-    
-    node_t beginNode(node_t parent, ValueKind vk)
+    Node beginChild(Node parent, const std::string& name)
     {
+        m_archive.Key(name);
+        m_archive.StartObject();
         return Node();
+    }
+
+    void endChild(Node parent, Node child)
+    {
+        m_archive.EndObject();
+    }
+
+    void setProperty(Node node, const std::string& name, const std::string& text)
+    {
+        if (m_arrayLevel == 0)
+            m_archive.Key(name);
+        m_archive.String(text);
+    }
+
+    Node beginArray(Node parent, const std::string& name)
+    {
+        m_archive.Key(name);
+        m_archive.StartArray();
+        ++m_arrayLevel;
+        return parent;
+    }
+
+    void endArray(Node /*parent*/, Node /*child*/)
+    {
+        m_archive.EndArray();
+        --m_arrayLevel;
+    }
+
+    detail::string_view getValue(Node node)
+    {
+        return detail::string_view();
+    }
+
+    bool isValid(Node node)
+    {
+        return node != nullptr;
+    }
+};
+
+class RapidJsonArchiveReader
+{
+    rapidjson::Document& m_archive;
+
+public:
+
+    struct Node
+    {
+        const rapidjson::Value& m_value;
+        Node(const rapidjson::Value& value) : m_value(value) {}
+    };
+
+    struct ArrayIterator
+    {
+        const rapidjson::Value& m_value;
+        rapidjson::Value::ConstValueIterator m_iter;
+
+        bool isEnd() const { return m_iter == m_value.End(); }
+        void next() { ++m_iter; }
+        Node getItem() { return Node(*m_iter); }
+    };
+
+    RapidJsonArchiveReader(rapidjson::Document& archive) : m_archive(archive) {}
+
+    Node findProperty(Node node, const std::string& name)
+    {
+        const rapidjson::Value& val{ node.m_value[name] };
+        return Node(val);
+    }
+
+    ArrayIterator createArrayIterator(Node node, const std::string& name)
+    {
+        return ArrayIterator({ node.m_value, node.m_value.Begin() });
+    }
+
+    detail::string_view getValue(Node node)
+    {
+        return detail::string_view(node.m_value.GetString(), node.m_value.GetStringLength());
+    }
+
+    bool isValid(Node node)
+    {
+        return !node.m_value.IsNull();
     }
 };
 

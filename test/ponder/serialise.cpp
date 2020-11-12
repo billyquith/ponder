@@ -31,6 +31,7 @@
 
 #include "test.hpp"
 #include <ponder/uses/archive/rapidxml.hpp>
+#include <ponder/uses/archive/rapidjson.hpp>
 #include <ponder/uses/serialise.hpp>
 #include <ponder/classbuilder.hpp>
 
@@ -101,8 +102,8 @@ TEST_CASE("Can serialise using RapidXML")
 {
     SECTION("Member values")
     {
-        std::string serialised;
-        
+        std::string storage;
+
         {
             std::unique_ptr<Simple> s = ponder::detail::make_unique<Simple>(78, std::string("yadda"), 99.25f);
             REQUIRE(s != nullptr);
@@ -121,7 +122,7 @@ TEST_CASE("Can serialise using RapidXML")
             
             std::ostringstream ostrm;
             ostrm << doc;
-            serialised = ostrm.str();
+            storage = ostrm.str();
             doc.clear();
         }
         
@@ -130,7 +131,7 @@ TEST_CASE("Can serialise using RapidXML")
             REQUIRE(s2 != nullptr);
             
             rapidxml::xml_document<> doc;
-            doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(serialised.data()));
+            doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(storage.data()));
             auto rootNode = doc.first_node();
             REQUIRE(rootNode != nullptr);
             
@@ -148,7 +149,7 @@ TEST_CASE("Can serialise using RapidXML")
     // Simple nested object
     SECTION("Nested object")
     {
-        std::string serialised;
+        std::string storage;
         
         {
             std::unique_ptr<Ref> r{ new Ref };
@@ -171,7 +172,7 @@ TEST_CASE("Can serialise using RapidXML")
             
             std::ostringstream ostrm;
             ostrm << doc;
-            serialised = ostrm.str();
+            storage = ostrm.str();
             doc.clear();
         }
         
@@ -187,7 +188,7 @@ TEST_CASE("Can serialise using RapidXML")
             }
             
             rapidxml::xml_document<> doc;
-            doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(serialised.data()));
+            doc.parse<rapidxml::parse_non_destructive>(const_cast<char*>(storage.data()));
             auto rootNode = doc.first_node();
             REQUIRE(rootNode != nullptr);
             
@@ -202,6 +203,116 @@ TEST_CASE("Can serialise using RapidXML")
     }
 }
 
+
+TEST_CASE("Can serialise using RapidJSON")
+{
+    SECTION("Member values")
+    {
+        std::string storage;
+
+        {
+            std::unique_ptr<Simple> s = ponder::detail::make_unique<Simple>(78, std::string("yadda"), 99.25f);
+            REQUIRE(s != nullptr);
+            s->m_v = { 3,6,9 };
+
+            rapidjson::StringBuffer sb;
+            rapidjson::Writer<rapidjson::StringBuffer> jwriter(sb);
+            jwriter.StartObject();
+
+            using Archive = ponder::archive::RapidJsonArchiveWriter<rapidjson::Writer<rapidjson::StringBuffer>>;
+            Archive archive(jwriter);
+            Archive::Node rootNode{};
+            ponder::archive::ArchiveWriter<Archive> writer(archive);
+            writer.write(rootNode, ponder::UserObject::makeRef(*s));
+
+            jwriter.EndObject();
+
+            std::cout << sb.GetString() << std::endl;
+
+            storage = sb.GetString();
+        }
+
+        {
+            std::unique_ptr<Simple> s2 = ponder::detail::make_unique<Simple>(0, "", 0.f);
+            REQUIRE(s2 != nullptr);
+
+            rapidjson::Document jdoc;
+            REQUIRE(!jdoc.Parse(storage.data()).HasParseError());
+            REQUIRE(jdoc.IsObject());
+
+            using Archive = ponder::archive::RapidJsonArchiveReader;
+            Archive archive(jdoc);
+            Archive::Node rootNode{ jdoc };
+            REQUIRE(archive.isValid(rootNode));
+
+            ponder::archive::ArchiveReader<Archive> reader(archive);
+            reader.read(rootNode, ponder::UserObject::makeRef(*s2));
+
+            CHECK(s2->m_i == 78);
+            CHECK(s2->getF() == 99.25f);
+            CHECK(s2->m_s == std::string("yadda"));
+            CHECK(s2->m_v == std::vector<int>({ 3,6,9 }));
+        }
+    }
+
+    // Simple nested object
+    SECTION("Nested object")
+    {
+        std::string storage;
+
+        {
+            std::unique_ptr<Ref> r{ new Ref };
+            REQUIRE(r != nullptr);
+
+            r->m_instance.m_i = 89;
+            r->m_instance.setF(0.75f);
+            r->m_instance.m_s = "stringy";
+
+            rapidjson::StringBuffer sb;
+            rapidjson::Writer<rapidjson::StringBuffer> jwriter(sb);
+            jwriter.StartObject();
+
+            using Archive = ponder::archive::RapidJsonArchiveWriter<rapidjson::Writer<rapidjson::StringBuffer>>;
+            Archive archive(jwriter);
+            Archive::Node rootNode{};
+            ponder::archive::ArchiveWriter<Archive> writer(archive);
+            writer.write(rootNode, ponder::UserObject::makeRef(*r));
+
+            jwriter.EndObject();
+
+            std::cout << sb.GetString() << std::endl;
+
+            storage = sb.GetString();
+        }
+
+        {
+            std::unique_ptr<Ref> r = ponder::detail::make_unique<Ref>();
+            REQUIRE(r != nullptr);
+
+            {
+                auto& metacls = ponder::classByType<Ref>();
+                auto& inst = metacls.property("instance");
+                CHECK(inst.isReadable());
+                CHECK(inst.isWritable());
+            }
+
+            rapidjson::Document jdoc;
+            REQUIRE(!jdoc.Parse(storage.data()).HasParseError());
+
+            using Archive = ponder::archive::RapidJsonArchiveReader;
+            Archive archive(jdoc);
+            Archive::Node rootNode{ jdoc };
+            REQUIRE(archive.isValid(rootNode));
+
+            ponder::archive::ArchiveReader<Archive> reader(archive);
+            reader.read(rootNode, ponder::UserObject::makeRef(*r));
+
+            CHECK(r->m_instance.m_i == 89);
+            CHECK(r->m_instance.getF() == 0.75f);
+            CHECK(r->m_instance.m_s == std::string("stringy"));
+        }
+    }
+}
 
 
 
