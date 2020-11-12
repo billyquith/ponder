@@ -52,7 +52,7 @@ using namespace ponder;
 
 inline UserObject* toUserObject(lua_State *L, int index)
 {
-    return reinterpret_cast<UserObject*>(lua_touserdata(L, index));
+    return reinterpret_cast<UserObject*>(lua_touserdata(L, (int)index));
 }
     
 struct LuaTable { lua_State *L; };
@@ -68,7 +68,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_integral<P>::value>::ty
     typedef P ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        return luaL_checkinteger(L, index);
+        return luaL_checkinteger(L, (int)index);
     }
 };
 
@@ -78,7 +78,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_floating_point<P>::valu
     typedef P ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        return luaL_checknumber(L, index);
+        return luaL_checknumber(L, (int)index);
     }
 };
 
@@ -88,7 +88,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_enum<P>::value>::type>
     typedef P ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        const lua_Integer i = luaL_checkinteger(L, index);
+        const lua_Integer i = luaL_checkinteger(L, (int)index);
         return static_cast<P>(i);
     }
 };
@@ -101,7 +101,7 @@ struct LuaValueReader<P,
     typedef std::string ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        return ParamType(luaL_checkstring(L, index));
+        return ParamType(luaL_checkstring(L, (int)index));
     }
 };
 
@@ -111,7 +111,7 @@ struct LuaValueReader<ponder::detail::string_view>
     typedef ponder::detail::string_view ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        return ParamType(luaL_checkstring(L, index));
+        return ParamType(luaL_checkstring(L, (int)index));
     }
 };
 
@@ -123,12 +123,12 @@ struct LuaValueReader<P&, typename std::enable_if<detail::IsUserType<P>::value>:
     
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        if (!lua_isuserdata(L, index))
+        if (!lua_isuserdata(L, (int)index))
         {
-            luaL_error(L, "Argument %d: expecting user data", index);
+            luaL_error(L, "Argument %d: expecting user data", (int)index);
         }
         
-        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, index));        
+        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, (int)index));        
         return uobj->ref<RawType>();
     }
 };
@@ -141,12 +141,12 @@ struct LuaValueReader<P*, typename std::enable_if<ponder::detail::IsUserType<P>:
     
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        if (!lua_isuserdata(L, index))
+        if (!lua_isuserdata(L, (int)index))
         {
-            luaL_error(L, "Argument %d: expecting user data", index);
+            luaL_error(L, "Argument %d: expecting user data", (int)index);
         }
         
-        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, index));        
+        UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, (int)index));        
         return &uobj->ref<RawType>();
     }
 };
@@ -158,7 +158,7 @@ struct LuaValueReader<LuaTable>
     typedef LuaTable ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        luaL_checktype(L, index, LUA_TTABLE);
+        luaL_checktype(L, (int)index, LUA_TTABLE);
         LuaTable t = {L};
         return t;
     }
