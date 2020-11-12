@@ -105,6 +105,8 @@ namespace FunctionTest
         void memberParams5(const ponder::String&, ponder::String,
                            const ponder::String&, ponder::String) {}
         void memberParams6(MyEnum, MyEnum, MyEnum, MyEnum, MyEnum) {}
+
+        void ref(int& r) { r = p2; }
         
         struct Inner
         {
@@ -230,6 +232,8 @@ namespace FunctionTest
             .function("memberParams4", &MyClass::memberParams4)     // 3 parameters
             .function("memberParams5", &MyClass::memberParams5)     // 4 parameters
             .function("memberParams6", &MyClass::memberParams6)     // 5 parameters
+
+            //.function("refParam", &MyClass::ref)  TODO - reference parameters
 
             // ***** nested functions *****
             .function("lambdaFunc1", [](MyClass& self){ self.inner.nested1(); })

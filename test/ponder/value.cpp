@@ -594,6 +594,13 @@ TEST_CASE("Ponder has variant values")
         
 #undef equivalent
     }
+
+    //SECTION("Values can be references")
+    //{
+    //    REQUIRE(ri == 5);
+    //    refValue = 7;
+    //    REQUIRE(ri == 7);
+    //}
 }
 
 TEST_CASE("We can convert values from strings")
