@@ -49,7 +49,7 @@ namespace ponder {
  *
  * \return Global metaclass count
  */
-std::size_t classCount();
+size_t classCount();
     
 /**
  * \brief Get an iterator that can be used to iterate over all registered classes

@@ -81,7 +81,7 @@ struct ArrayMapper
 /*
  * Specialization of ArrayMapper for built-in static arrays
  */
-template <typename T, std::size_t N>
+template <typename T, size_t N>
 struct ArrayMapper<T[N]>
 {
     static constexpr bool isArray = true;
@@ -92,26 +92,26 @@ struct ArrayMapper<T[N]>
         return false;
     }
 
-    static std::size_t size(T (&)[N])
+    static size_t size(T (&)[N])
     {
         return N;
     }
 
-    static const T& get(T (&arr)[N], std::size_t index)
+    static const T& get(T (&arr)[N], size_t index)
     {
         return arr[index];
     }
 
-    static void set(T (&arr)[N], std::size_t index, const T& value)
+    static void set(T (&arr)[N], size_t index, const T& value)
     {
         arr[index] = value;
     }
 
-    static void insert(T (&)[N], std::size_t, const T&)
+    static void insert(T (&)[N], size_t, const T&)
     {
     }
 
-    static void remove(T (&)[N], std::size_t)
+    static void remove(T (&)[N], size_t)
     {
     }
 };
@@ -119,7 +119,7 @@ struct ArrayMapper<T[N]>
 /*
  * Specialization of ArrayMapper for std::array
  */
-template <typename T, std::size_t N>
+template <typename T, size_t N>
 struct ArrayMapper<std::array<T,N>>
 {
     static constexpr bool isArray = true;
@@ -130,26 +130,26 @@ struct ArrayMapper<std::array<T,N>>
         return false;
     }
 
-    static std::size_t size(const std::array<T,N>&)
+    static size_t size(const std::array<T,N>&)
     {
         return N;
     }
 
-    static const T& get(const std::array<T,N>& arr, std::size_t index)
+    static const T& get(const std::array<T,N>& arr, size_t index)
     {
         return arr[index];
     }
 
-    static void set(std::array<T,N>& arr, std::size_t index, const T& value)
+    static void set(std::array<T,N>& arr, size_t index, const T& value)
     {
         arr[index] = value;
     }
 
-    static void insert(std::array<T,N>&, std::size_t, const T&)
+    static void insert(std::array<T,N>&, size_t, const T&)
     {
     }
 
-    static void remove(std::array<T,N>&, std::size_t)
+    static void remove(std::array<T,N>&, size_t)
     {
     }
 };
@@ -157,7 +157,7 @@ struct ArrayMapper<std::array<T,N>>
 /*
  * Specialization of ArrayMapper for boost::array
  */
-//template <typename T, std::size_t N>
+//template <typename T, size_t N>
 //struct ArrayMapper<boost::array<T, N> >
 //{
 //    static constexpr bool isArray = true;
@@ -168,26 +168,26 @@ struct ArrayMapper<std::array<T,N>>
 //        return false;
 //    }
 //
-//    static std::size_t size(const boost::array<T, N>&)
+//    static size_t size(const boost::array<T, N>&)
 //    {
 //        return N;
 //    }
 //
-//    static const T& get(const boost::array<T, N>& arr, std::size_t index)
+//    static const T& get(const boost::array<T, N>& arr, size_t index)
 //    {
 //        return arr[index];
 //    }
 //
-//    static void set(boost::array<T, N>& arr, std::size_t index, const T& value)
+//    static void set(boost::array<T, N>& arr, size_t index, const T& value)
 //    {
 //        arr[index] = value;
 //    }
 //
-//    static void insert(boost::array<T, N>&, std::size_t, const T&)
+//    static void insert(boost::array<T, N>&, size_t, const T&)
 //    {
 //    }
 //
-//    static void remove(boost::array<T, N>&, std::size_t)
+//    static void remove(boost::array<T, N>&, size_t)
 //    {
 //    }
 //};
@@ -207,27 +207,27 @@ struct ArrayMapper<std::vector<T> >
         return true;
     }
     
-    static std::size_t size(const std::vector<T>& arr)
+    static size_t size(const std::vector<T>& arr)
     {
         return arr.size();
     }
     
-    static const T& get(const std::vector<T>& arr, std::size_t index)
+    static const T& get(const std::vector<T>& arr, size_t index)
     {
         return arr[index];
     }
     
-    static void set(std::vector<T>& arr, std::size_t index, const T& value)
+    static void set(std::vector<T>& arr, size_t index, const T& value)
     {
         arr[index] = value;
     }
     
-    static void insert(std::vector<T>& arr, std::size_t before, const T& value)
+    static void insert(std::vector<T>& arr, size_t before, const T& value)
     {
         arr.insert(arr.begin() + before, value);
     }
     
-    static void remove(std::vector<T>& arr, std::size_t index)
+    static void remove(std::vector<T>& arr, size_t index)
     {
         arr.erase(arr.begin() + index);
     }
@@ -249,27 +249,27 @@ struct ArrayMapper<std::vector<bool>>
         return true;
     }
     
-    static std::size_t size(const std::vector<bool>& arr)
+    static size_t size(const std::vector<bool>& arr)
     {
         return arr.size();
     }
     
-    static bool get(const std::vector<bool>& arr, std::size_t index)
+    static bool get(const std::vector<bool>& arr, size_t index)
     {
         return arr[index];
     }
     
-    static void set(std::vector<bool>& arr, std::size_t index, const bool& value)
+    static void set(std::vector<bool>& arr, size_t index, const bool& value)
     {
         arr[index] = value;
     }
     
-    static void insert(std::vector<bool>& arr, std::size_t before, const bool& value)
+    static void insert(std::vector<bool>& arr, size_t before, const bool& value)
     {
         arr.insert(arr.begin() + before, value);
     }
     
-    static void remove(std::vector<bool>& arr, std::size_t index)
+    static void remove(std::vector<bool>& arr, size_t index)
     {
         arr.erase(arr.begin() + index);
     }
@@ -289,33 +289,33 @@ struct ArrayMapper<std::list<T>>
         return true;
     }
     
-    static std::size_t size(const std::list<T>& arr)
+    static size_t size(const std::list<T>& arr)
     {
         return arr.size();
     }
     
-    static const T& get(const std::list<T>& arr, std::size_t index)
+    static const T& get(const std::list<T>& arr, size_t index)
     {
         typename std::list<T>::const_iterator it = arr.begin();
         std::advance(it, index);
         return *it;
     }
     
-    static void set(std::list<T>& arr, std::size_t index, const T& value)
+    static void set(std::list<T>& arr, size_t index, const T& value)
     {
         typename std::list<T>::iterator it = arr.begin();
         std::advance(it, index);
         *it = value;
     }
     
-    static void insert(std::list<T>& arr, std::size_t before, const T& value)
+    static void insert(std::list<T>& arr, size_t before, const T& value)
     {
         typename std::list<T>::iterator it = arr.begin();
         std::advance(it, before);
         arr.insert(it, value);
     }
     
-    static void remove(std::list<T>& arr, std::size_t index)
+    static void remove(std::list<T>& arr, size_t index)
     {
         typename std::list<T>::iterator it = arr.begin();
         std::advance(it, index);

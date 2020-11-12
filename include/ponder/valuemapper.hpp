@@ -361,13 +361,13 @@ struct ValueMapper<T,
  * Specializations of ValueMapper for char arrays.
  * Conversion to char[N] is disabled (can't return an array).
  */
-template <std::size_t N>
+template <size_t N>
 struct ValueMapper<char[N]>
 {
     static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(const char (&source)[N]) {return ponder::String(source);}
 };
-template <std::size_t N>
+template <size_t N>
 struct ValueMapper<const char[N]>
 {
     static constexpr ponder::ValueKind kind = ponder::ValueKind::String;

@@ -57,7 +57,7 @@ namespace detail
  * \thrown BadArgument conversion triggered a BadType error
  */
 template <typename T>
-inline typename std::remove_reference<T>::type convertArg(const Args& args, std::size_t index)
+inline typename std::remove_reference<T>::type convertArg(const Args& args, size_t index)
 {
     try
     {
@@ -88,13 +88,13 @@ bool checkArg(const Value& value);
 template <typename T, typename... A>
 class ConstructorImpl : public Constructor
 {
-    template <typename... As, std::size_t... Is>
+    template <typename... As, size_t... Is>
     static inline bool checkArgs(const Args& args, PONDER__SEQNS::index_sequence<Is...>)
     {
         return allTrue(checkArg<As>(args[Is])...);
     }
 
-    template <typename... As, std::size_t... Is>
+    template <typename... As, size_t... Is>
     static inline UserObject createWithArgs(void* ptr, const Args& args, PONDER__SEQNS::index_sequence<Is...>)
     {
         if (ptr)

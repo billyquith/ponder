@@ -94,7 +94,7 @@ public:
      *
      * \return Size of the arguments list
      */
-    std::size_t count() const;
+    size_t count() const;
 
     /**
      * \brief Overload of operator [] to access an argument from its index
@@ -103,7 +103,7 @@ public:
      * \return Value of the index-th argument
      * \throw OutOfRange index is out of range
      */
-    const Value& operator [] (std::size_t index) const;
+    const Value& operator [] (size_t index) const;
 
     /**
      * \brief Overload of operator + to concatenate a list and a new argument
@@ -128,7 +128,7 @@ public:
      * \param arg Argument to append to the list
      * \return Reference to this
      */
-    Args& insert(std::size_t index, const Value& arg);
+    Args& insert(size_t index, const Value& arg);
 
 public:
 

@@ -78,7 +78,7 @@ void EnumManager::removeClass(TypeId const& id)
     m_enums.erase(id);
 }
 
-std::size_t EnumManager::count() const
+size_t EnumManager::count() const
 {
     return m_enums.size();
 }

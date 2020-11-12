@@ -44,17 +44,17 @@ IdReturn Class::name() const
     return m_name;
 }
 
-std::size_t Class::sizeOf() const
+size_t Class::sizeOf() const
 {
     return m_sizeof;
 }
 
-std::size_t Class::constructorCount() const
+size_t Class::constructorCount() const
 {
     return m_constructors.size();
 }
 
-const Constructor* Class::constructor(std::size_t index) const
+const Constructor* Class::constructor(size_t index) const
 {
     return m_constructors[index].get();
 }
@@ -64,12 +64,12 @@ void Class::destruct(const UserObject &uobj, bool destruct) const
     m_destructor(uobj, destruct);
 }
 
-std::size_t Class::baseCount() const
+size_t Class::baseCount() const
 {
     return m_bases.size();
 }
 
-const Class& Class::base(std::size_t index) const
+const Class& Class::base(size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_bases.size())
@@ -78,7 +78,7 @@ const Class& Class::base(std::size_t index) const
     return *m_bases[index].base;
 }
 
-std::size_t Class::functionCount() const
+size_t Class::functionCount() const
 {
     return m_functions.size();
 }
@@ -88,7 +88,7 @@ bool Class::hasFunction(IdRef id) const
     return m_functions.containsKey(id);
 }
 
-const Function& Class::function(std::size_t index) const
+const Function& Class::function(size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_functions.size())
@@ -111,7 +111,7 @@ const Function& Class::function(IdRef id) const
     return *it->second;
 }
 
-std::size_t Class::propertyCount() const
+size_t Class::propertyCount() const
 {
     return m_properties.size();
 }
@@ -121,7 +121,7 @@ bool Class::hasProperty(IdRef id) const
     return m_properties.containsKey(id);
 }
 
-const Property& Class::property(std::size_t index) const
+const Property& Class::property(size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_properties.size())

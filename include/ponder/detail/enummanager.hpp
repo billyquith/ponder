@@ -88,7 +88,7 @@ public:
      *
      * \return Number of metaenums that have been registered
      */
-    std::size_t count() const;
+    size_t count() const;
 
     /**
      * \brief Get a metaenum from a C++ type

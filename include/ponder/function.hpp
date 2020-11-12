@@ -94,7 +94,7 @@ public:
      *
      * \return Total number of parameters taken by the function
      */
-    virtual std::size_t paramCount() const = 0;
+    virtual size_t paramCount() const = 0;
 
     /**
      * \brief Get the type of an parameter given by its index
@@ -105,7 +105,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    virtual ValueKind paramType(std::size_t index) const = 0;
+    virtual ValueKind paramType(size_t index) const = 0;
 
     /**
      * \brief Accept the visitation of a ClassVisitor

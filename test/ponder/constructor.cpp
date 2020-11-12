@@ -145,7 +145,7 @@ using namespace ConstructorTest;
 TEST_CASE("Object factories can be used to create class instances") // and allocate dynamically
 {
     const ponder::Class& metaclass = ponder::classByType<MyClass>();
-    const std::size_t sz = metaclass.sizeOf();
+    const size_t sz = metaclass.sizeOf();
     
     REQUIRE(sz > 0);
     REQUIRE(sz == sizeof(MyClass));
@@ -528,7 +528,7 @@ TEST_CASE("Classes can have constructors") // and allocate dynamically
 TEST_CASE("Object factory constructors can use placement new")
 {
     const ponder::Class &metaclass = ponder::classByType<MyClass>();
-    const std::size_t sz = metaclass.sizeOf();
+    const size_t sz = metaclass.sizeOf();
     
     REQUIRE(sz > 0);
     REQUIRE(sz == sizeof(MyClass));

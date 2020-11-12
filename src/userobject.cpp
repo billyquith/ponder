@@ -89,7 +89,7 @@ Value UserObject::get(IdRef property) const
     return getClass().property(property).get(*this);
 }
 
-Value UserObject::get(std::size_t index) const
+Value UserObject::get(size_t index) const
 {
     return getClass().property(index).get(*this);
 }
@@ -99,7 +99,7 @@ void UserObject::set(IdRef property, const Value& value) const
     getClass().property(property).set(*this, value);
 }
 
-void UserObject::set(std::size_t index, const Value& value) const
+void UserObject::set(size_t index, const Value& value) const
 {
     getClass().property(index).set(*this, value);
 }

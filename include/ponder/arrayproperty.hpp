@@ -84,7 +84,7 @@ public:
      * \throw NullObject object is invalid
      * \throw ForbiddenRead property is not readable
      */
-    std::size_t size(const UserObject& object) const;
+    size_t size(const UserObject& object) const;
 
     /**
      * \brief Resize the array
@@ -103,7 +103,7 @@ public:
      * \throw InvalidAccess array is not writable or not dynamic
      * \throw InvalidIndex index is out of range
      */
-    void resize(const UserObject& object, std::size_t newSize) const;
+    void resize(const UserObject& object, size_t newSize) const;
 
     /**
      * \brief Get an element of the array for a given object
@@ -116,7 +116,7 @@ public:
      * \throw ForbiddenRead property is not readable
      * \throw OutOfRange index is out of range
      */
-    Value get(const UserObject& object, std::size_t index) const;
+    Value get(const UserObject& object, size_t index) const;
 
     /**
      * \brief Set an element of the array for a given object
@@ -130,7 +130,7 @@ public:
      * \throw BadType \a value can't be converted to the property's type
      * \throw OutOfRange index is out of range
      */
-    void set(const UserObject& object, std::size_t index, const Value& value) const;
+    void set(const UserObject& object, size_t index, const Value& value) const;
 
     /**
      * \brief Insert a new element into the array
@@ -146,7 +146,7 @@ public:
      * \throw BadType \a value can't be converted to the property's type
      * \throw OutOfRange index is out of range
      */
-    void insert(const UserObject& object, std::size_t before, const Value& value) const;
+    void insert(const UserObject& object, size_t before, const Value& value) const;
 
     /**
      * \brief Remove an element from the array
@@ -160,7 +160,7 @@ public:
      * \throw ForbiddenWrite array is not writable or not dynamic
      * \throw OutOfRange index is out of range
      */
-    void remove(const UserObject& object, std::size_t index) const;
+    void remove(const UserObject& object, size_t index) const;
 
     /**
      * \brief Accept the visitation of a ClassVisitor
@@ -187,7 +187,7 @@ protected:
      * \param object Object
      * \return Size of the array
      */
-    virtual std::size_t getSize(const UserObject& object) const = 0;
+    virtual size_t getSize(const UserObject& object) const = 0;
 
     /**
      * \brief Do the actual resize of the array
@@ -195,7 +195,7 @@ protected:
      * \param object Object
      * \param size New size of the array
      */
-    virtual void setSize(const UserObject& object, std::size_t size) const = 0;
+    virtual void setSize(const UserObject& object, size_t size) const = 0;
 
     /**
      * \brief Do the actual reading of an element
@@ -206,7 +206,7 @@ protected:
      * \param index Index of the element to get
      * \return Value of the index-th element
      */
-    virtual Value getElement(const UserObject& object, std::size_t index) const = 0;
+    virtual Value getElement(const UserObject& object, size_t index) const = 0;
 
     /**
      * \brief Do the actual writing of an element
@@ -218,7 +218,7 @@ protected:
      * \param value New value to assign to the element
      */
     virtual void setElement(const UserObject& object,
-                            std::size_t index,
+                            size_t index,
                             const Value& value) const = 0;
 
     /**
@@ -231,7 +231,7 @@ protected:
      * \param value Value of the element to insert
      */
     virtual void insertElement(const UserObject& object,
-                               std::size_t before,
+                               size_t before,
                                const Value& value) const = 0;
 
     /**
@@ -242,7 +242,7 @@ protected:
      * \param object Object
      * \param index Index of the element to remove
      */
-    virtual void removeElement(const UserObject& object, std::size_t index) const = 0;
+    virtual void removeElement(const UserObject& object, size_t index) const = 0;
 
 private:
 

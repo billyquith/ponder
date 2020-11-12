@@ -31,6 +31,10 @@
 #ifndef PONDER_ID_TRAITS_HPP
 #define PONDER_ID_TRAITS_HPP
 
+namespace ponder {
+    typedef std::size_t size_t;
+}
+
 #ifdef PONDER_ID_TRAITS_STD_STRING
 
 #include <string>

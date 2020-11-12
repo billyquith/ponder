@@ -131,13 +131,13 @@ ClassBuilder<T>& ClassBuilder<T>::external()
     U<T> mapper;
 
     // Retrieve the properties
-    std::size_t propertyCount = mapper.propertyCount();
-    for (std::size_t i = 0; i < propertyCount; ++i)
+    size_t propertyCount = mapper.propertyCount();
+    for (size_t i = 0; i < propertyCount; ++i)
         addProperty(mapper.property(i));
 
     // Retrieve the functions
-    std::size_t functionCount = mapper.functionCount();
-    for (std::size_t i = 0; i < functionCount; ++i)
+    size_t functionCount = mapper.functionCount();
+    for (size_t i = 0; i < functionCount; ++i)
         addFunction(mapper.function(i));
 
     return *this;

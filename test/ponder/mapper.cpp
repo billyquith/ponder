@@ -44,13 +44,13 @@
 //            functionCount = 3
 //        };
 //
-//        static ponder::String property(std::size_t index)
+//        static ponder::String property(size_t index)
 //        {
 //            const char* names[] = {"prop0", "prop1", "prop2", "prop3", "prop4"};
 //            return names[index];
 //        }
 //
-//        static ponder::String function(std::size_t index)
+//        static ponder::String function(size_t index)
 //        {
 //            const char* names[] = {"func0", "func1", "func2"};
 //            return names[index];
@@ -81,22 +81,22 @@
 //    template <typename T>
 //    struct MyMapper
 //    {
-//        std::size_t propertyCount()
+//        size_t propertyCount()
 //        {
 //            return T::propertyCount;
 //        }
 //
-//        ponder::Property* property(std::size_t index)
+//        ponder::Property* property(size_t index)
 //        {
 //            return new MyProperty(T::property(index));
 //        }
 //
-//        std::size_t functionCount()
+//        size_t functionCount()
 //        {
 //            return T::functionCount;
 //        }
 //
-//        ponder::Function* function(std::size_t index)
+//        ponder::Function* function(size_t index)
 //        {
 //            return new MyFunction(T::function(index));
 //        }
@@ -165,8 +165,8 @@
 //
 //    SECTION("count")
 //    {
-//        REQUIRE(metaclass->propertyCount() == static_cast<std::size_t>(MyClass::propertyCount));
-//        REQUIRE(metaclass->functionCount() == static_cast<std::size_t>(MyClass::functionCount));
+//        REQUIRE(metaclass->propertyCount() == static_cast<size_t>(MyClass::propertyCount));
+//        REQUIRE(metaclass->functionCount() == static_cast<size_t>(MyClass::functionCount));
 //    }
 //
 //    SECTION("check types")

@@ -239,7 +239,7 @@ public:
      * \throw OutOfRange index is invalid
      * \throw ForbiddenRead \a property is not readable
      */
-    Value get(std::size_t index) const;
+    Value get(size_t index) const;
 
     /**
      * \brief Set the value of an object's property by name
@@ -269,7 +269,7 @@ public:
      * \throw ForbiddenWrite \a property is not writable
      * \throw BadType \a value can't be converted to the property's type
      */
-    void set(std::size_t index, const Value& value) const;
+    void set(size_t index, const Value& value) const;
 
     /**
      * \brief Operator == to compare equality between two user objects

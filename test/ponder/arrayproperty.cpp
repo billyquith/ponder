@@ -217,8 +217,8 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be inserted into")
     REQUIRE_THROWS_AS(bools->insert(&object, 0, true), ponder::ForbiddenWrite);
     REQUIRE_THROWS_AS(ints->insert(&object, 0, true),  ponder::ForbiddenWrite);
     
-    const std::size_t stringsSize = object.strings.size();
-    const std::size_t objectsSize = object.objects.size();
+    const size_t stringsSize = object.strings.size();
+    const size_t objectsSize = object.objects.size();
     
     strings->insert(&object, 1, "bonjour");
     objects->insert(&object, 1, MyType(10));
@@ -239,8 +239,8 @@ TEST_CASE_METHOD(ArrayPropertyFixture, "Property arrays can be removed from")
     const ponder::String string1 = object.strings[1];
     const MyType      object1 = *std::next(object.objects.begin(), 1);
     
-    const std::size_t stringsSize = object.strings.size();
-    const std::size_t objectsSize = object.objects.size();
+    const size_t stringsSize = object.strings.size();
+    const size_t objectsSize = object.objects.size();
     
     strings->remove(&object, 0);
     objects->remove(&object, 0);

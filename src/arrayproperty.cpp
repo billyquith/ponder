@@ -53,7 +53,7 @@ bool ArrayProperty::dynamic() const
     return m_dynamic;
 }
 
-std::size_t ArrayProperty::size(const UserObject& object) const
+size_t ArrayProperty::size(const UserObject& object) const
 {
     // Check if the property is readable
     if (!isReadable())
@@ -62,7 +62,7 @@ std::size_t ArrayProperty::size(const UserObject& object) const
     return getSize(object);
 }
 
-void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
+void ArrayProperty::resize(const UserObject& object, size_t newSize) const
 {
     // Check if the array is dynamic
     if (!dynamic())
@@ -75,35 +75,35 @@ void ArrayProperty::resize(const UserObject& object, std::size_t newSize) const
     setSize(object, newSize);
 }
 
-Value ArrayProperty::get(const UserObject& object, std::size_t index) const
+Value ArrayProperty::get(const UserObject& object, size_t index) const
 {
     // Check if the property is readable
     if (!isReadable())
         PONDER_ERROR(ForbiddenRead(name()));
 
     // Make sure that the index is not out of range
-    const std::size_t range = size(object);
+    const size_t range = size(object);
     if (index >= range)
         PONDER_ERROR(OutOfRange(index, range));
 
     return getElement(object, index);
 }
 
-void ArrayProperty::set(const UserObject& object, std::size_t index, const Value& value) const
+void ArrayProperty::set(const UserObject& object, size_t index, const Value& value) const
 {
     // Check if the property is writable
     if (!isWritable())
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
-    const std::size_t range = size(object);
+    const size_t range = size(object);
     if (index >= range)
         PONDER_ERROR(OutOfRange(index, range));
 
     return setElement(object, index, value);
 }
 
-void ArrayProperty::insert(const UserObject& object, std::size_t before, const Value& value) const
+void ArrayProperty::insert(const UserObject& object, size_t before, const Value& value) const
 {
     // Check if the array is dynamic
     if (!dynamic())
@@ -114,14 +114,14 @@ void ArrayProperty::insert(const UserObject& object, std::size_t before, const V
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
-    const std::size_t range = size(object) + 1;
+    const size_t range = size(object) + 1;
     if (before >= range)
         PONDER_ERROR(OutOfRange(before, range));
 
     return insertElement(object, before, value);
 }
 
-void ArrayProperty::remove(const UserObject& object, std::size_t index) const
+void ArrayProperty::remove(const UserObject& object, size_t index) const
 {
     // Check if the array is dynamic
     if (!dynamic())
@@ -132,7 +132,7 @@ void ArrayProperty::remove(const UserObject& object, std::size_t index) const
         PONDER_ERROR(ForbiddenWrite(name()));
 
     // Check if the index is in range
-    const std::size_t range = size(object);
+    const size_t range = size(object);
     if (index >= range)
         PONDER_ERROR(OutOfRange(index, range));
 

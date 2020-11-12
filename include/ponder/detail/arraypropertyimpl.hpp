@@ -69,32 +69,32 @@ protected:
     /**
      * \see ArrayProperty::getSize
      */
-    std::size_t getSize(const UserObject& object) const final;
+    size_t getSize(const UserObject& object) const final;
 
     /**
      * \see ArrayProperty::setSize
      */
-    void setSize(const UserObject& object, std::size_t size) const final;
+    void setSize(const UserObject& object, size_t size) const final;
 
     /**
      * \see ArrayProperty::getElement
      */
-    Value getElement(const UserObject& object, std::size_t index) const final;
+    Value getElement(const UserObject& object, size_t index) const final;
 
     /**
      * \see ArrayProperty::setElement
      */
-    void setElement(const UserObject& object, std::size_t index, const Value& value) const final;
+    void setElement(const UserObject& object, size_t index, const Value& value) const final;
 
     /**
      * \see ArrayProperty::insertElement
      */
-    void insertElement(const UserObject& object, std::size_t before, const Value& value) const final;
+    void insertElement(const UserObject& object, size_t before, const Value& value) const final;
 
     /**
      * \see ArrayProperty::removeElement
      */
-    void removeElement(const UserObject& object, std::size_t index) const final;
+    void removeElement(const UserObject& object, size_t index) const final;
 
 private:
 

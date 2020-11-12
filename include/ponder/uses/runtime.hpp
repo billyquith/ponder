@@ -426,7 +426,7 @@ namespace runtime {
 UserObject ObjectFactory::construct(const Args& args, void* ptr) const
 {
     // Search an arguments match among the list of available constructors
-    for (std::size_t nb = m_class.constructorCount(), i = 0; i < nb; ++i)
+    for (size_t nb = m_class.constructorCount(), i = 0; i < nb; ++i)
     {
         const Constructor& constructor = *m_class.constructor(i);
         if (constructor.matches(args))

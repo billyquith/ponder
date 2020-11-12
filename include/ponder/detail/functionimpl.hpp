@@ -110,7 +110,7 @@ class FunctionImpl : public Function
     typedef T FuncTraits;
     typedef std::tuple<P...> FuncPolicies;
     
-    static constexpr std::size_t c_nParams =
+    static constexpr size_t c_nParams =
         std::tuple_size<typename FuncTraits::Details::ParamTypes>::value;
     
     std::array<FunctionParamInfo, c_nParams> m_paramInfo;
@@ -146,9 +146,9 @@ private:
             Processor::template perFunction<F, T, FuncPolicies>(name, function);
     }
     
-    std::size_t paramCount() const override { return c_nParams; }
+    size_t paramCount() const override { return c_nParams; }
 
-    ValueKind paramType(std::size_t index) const override
+    ValueKind paramType(size_t index) const override
     {
         // Make sure that the index is not out of range
         if (index >= c_nParams)

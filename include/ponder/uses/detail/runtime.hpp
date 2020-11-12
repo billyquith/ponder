@@ -139,7 +139,7 @@ struct ConvertArg<(int)ValueKind::User, TTo&>
 {
     typedef TTo& ReturnType;
     static ReturnType
-    convert(const Args& args, std::size_t index)
+    convert(const Args& args, size_t index)
     {
         auto&& uobj = const_cast<Value&>(args[index]).ref<UserObject>();
         if (uobj.pointer() == nullptr)
@@ -154,7 +154,7 @@ struct ConvertArg<(int)ValueKind::User, const TTo&>
 {
     typedef const TTo& ReturnType;
     static ReturnType
-    convert(const Args& args, std::size_t index)
+    convert(const Args& args, size_t index)
     {
         auto&& uobj = args[index].cref<UserObject>();
         if (uobj.pointer() == nullptr)
@@ -173,7 +173,7 @@ struct ConvertArgs
     static constexpr ValueKind kind = ponder_ext::ValueMapper<Raw>::kind;
     typedef ConvertArg<(int)kind, A> Convertor;
     
-    static typename Convertor::ReturnType convert(const Args& args, std::size_t index)
+    static typename Convertor::ReturnType convert(const Args& args, size_t index)
     {
         return Convertor::convert(args, index);
     }

@@ -30,7 +30,7 @@
 
 namespace ponder {
     
-inline std::size_t enumCount()
+inline size_t enumCount()
 {
     return detail::EnumManager::instance().count();
 }

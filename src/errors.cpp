@@ -51,7 +51,7 @@ ponder::String BadType::typeName(ValueKind type)
 
 BadArgument::BadArgument(ValueKind provided,
                          ValueKind expected,
-                         std::size_t index,
+                         size_t index,
                          IdRef functionName)
 : BadType("argument #" + str(index) +
           " of function " + String(functionName) +
@@ -117,8 +117,8 @@ FunctionNotFound::FunctionNotFound(IdRef name, IdRef className)
 }
 
 NotEnoughArguments::NotEnoughArguments(IdRef functionName,
-                                       std::size_t provided,
-                                       std::size_t expected)
+                                       size_t provided,
+                                       size_t expected)
     : Error("not enough arguments for calling " + String(functionName) + " - provided " +
             str(provided) + ", expected " + str(expected))
 {
@@ -130,7 +130,7 @@ NullObject::NullObject(const Class* objectClass)
 {
 }
 
-OutOfRange::OutOfRange(std::size_t index, std::size_t size)
+OutOfRange::OutOfRange(size_t index, size_t size)
     : Error("the index (" + str(index) + ") is out of the allowed range [0, "
             + str(size - 1) + "]")
 {

@@ -100,7 +100,7 @@ TEST_CASE("Enums need to be declared")
 {
     SECTION("explicit declaration")
     {
-        const std::size_t count = ponder::enumCount();
+        const size_t count = ponder::enumCount();
         ponder::Enum::declare<MyExplicitylyDeclaredEnum>("EnumTest::MyExplicitylyDeclaredEnum");
 
         REQUIRE(ponder::enumCount() == count + 1);        

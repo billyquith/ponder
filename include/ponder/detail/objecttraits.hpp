@@ -159,20 +159,20 @@ struct ReferenceTraits<void>
 
     
 // Built-in arrays []
-//template <typename T, std::size_t N>
+//template <typename T, size_t N>
 //struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
 //{
 //    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
 //    typedef typename RawType<T>::Type DataType;
 //    typedef T(&ReferenceType)[N];
 //    typedef T* PointerType;
-//    static constexpr std::size_t Size = N;
+//    static constexpr size_t Size = N;
 //    static constexpr bool isWritable = !std::is_const<T>::value;
 //    static constexpr bool isRef = false;
 //};
 
 
-//template <typename C, typename T, std::size_t S>
+//template <typename C, typename T, size_t S>
 //struct MemberTraits<std::array<T,S>(C::*)>
 //{
 //    typedef std::array<T,S>(C::*Type);

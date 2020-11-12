@@ -135,7 +135,7 @@ public:
         return findValue(value) != m_contents.end();
     }
 
-    std::size_t size() const { return m_contents.size(); }
+    size_t size() const { return m_contents.size(); }
 
     void insert(KEY_REF key, const VALUE &value)
     {
@@ -157,8 +157,8 @@ public:
 #if defined(__GNUC__) && __GNUC__ <= 4 && __GNUC_MINOR__ < 9
             // Workaround a bug in libstdc++ where erase() should accept const iterator
             // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577
-            std::size_t pos = it - m_contents.begin();
-            const std::size_t sz = m_contents.size() - 1;
+            size_t pos = it - m_contents.begin();
+            const size_t sz = m_contents.size() - 1;
             while (pos < sz)
                 m_contents[pos] = m_contents[pos + 1], ++pos;
             m_contents.resize(sz);
@@ -168,7 +168,7 @@ public:
         }
     }
 
-    const_iterator at(std::size_t index) const
+    const_iterator at(size_t index) const
     {
         const_iterator it(begin());
         std::advance(it, index);

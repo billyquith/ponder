@@ -81,7 +81,7 @@ void ClassManager::removeClass(TypeId const& id)
     m_classes.erase(it);
 }
     
-std::size_t ClassManager::count() const
+size_t ClassManager::count() const
 {
     return m_classes.size();
 }

@@ -61,7 +61,7 @@ public:
      *
      * \return Number of properties
      */
-    static std::size_t propertyCount()
+    static size_t propertyCount()
     {
         int count = 0;
         for (int i = 0; i < T::staticMetaObject.propertyCount(); ++i)
@@ -81,7 +81,7 @@ public:
      *
      * \return index-th property mapped to a ponder::Property
      */
-    static ponder::Property* property(std::size_t index)
+    static ponder::Property* property(size_t index)
     {
         int prop = 0;
         int count = 0;
@@ -100,7 +100,7 @@ public:
      *
      * \return Number of functions
      */
-    static std::size_t functionCount()
+    static size_t functionCount()
     {
         int count = 0;
         for (int i = 0; i < T::staticMetaObject.methodCount(); ++i)
@@ -120,7 +120,7 @@ public:
      *
      * \return index-th function mapped to a ponder::function
      */
-    static ponder::Function* function(std::size_t index)
+    static ponder::Function* function(size_t index)
     {
         int func = 0;
         int count = 0;

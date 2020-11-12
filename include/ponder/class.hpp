@@ -104,7 +104,7 @@ class PONDER_API Class : public Type
     typedef void (*Destructor)(const UserObject&, bool);
     typedef UserObject (*UserObjectCreator)(void*);
     
-    std::size_t m_sizeof;           // Size of the class in bytes.
+    size_t m_sizeof;                // Size of the class in bytes.
     TypeId m_id;                    // Unique type id of the metaclass.
     Id m_name;                      // Name of the metaclass
     FunctionTable m_functions;      // Table of metafunctions indexed by ID
@@ -161,7 +161,7 @@ public:     // reflection
      *
      * \return Number of base metaclasses
      */
-    std::size_t baseCount() const;
+    size_t baseCount() const;
     
     /**
      * \brief Return a base metaclass from its index
@@ -171,14 +171,14 @@ public:     // reflection
      *
      * \throw OutOfRange index is out of range
      */
-    const Class& base(std::size_t index) const;
+    const Class& base(size_t index) const;
 
     /**
      * \brief Return the total number of constructors of this metaclass
      *
      * \return Number of constructors
      */
-    std::size_t constructorCount() const;
+    size_t constructorCount() const;
     
     /**
      * \brief Access constructors by index
@@ -187,7 +187,7 @@ public:     // reflection
      *
      * \return Constructor
      */
-    const Constructor* constructor(std::size_t index) const;
+    const Constructor* constructor(size_t index) const;
     
     /**
      * \brief Destroy a UserObject instance
@@ -202,7 +202,7 @@ public:     // reflection
      *
      * \return Number of functions
      */
-    std::size_t functionCount() const;
+    size_t functionCount() const;
 
     /**
      * \brief Check if this metaclass contains the given function
@@ -222,7 +222,7 @@ public:     // reflection
      *
      * \throw OutOfRange index is out of range
      */
-    const Function& function(std::size_t index) const;
+    const Function& function(size_t index) const;
 
     /**
      * \brief Get a function from its name
@@ -267,7 +267,7 @@ public:     // reflection
      *
      * \return Number of properties
      */
-    std::size_t propertyCount() const;
+    size_t propertyCount() const;
 
     /**
      * \brief Check if this metaclass contains the given property
@@ -285,7 +285,7 @@ public:     // reflection
      *
      * \throw OutOfRange index is out of range
      */
-    const Property& property(std::size_t index) const;
+    const Property& property(size_t index) const;
 
     /**
      * \brief Get a property from its name
@@ -329,7 +329,7 @@ public:     // reflection
      *
      * \return Size in bytes
      */
-    std::size_t sizeOf() const;
+    size_t sizeOf() const;
 
     /**
      * \brief Create a UserObject from an opaque user pointer

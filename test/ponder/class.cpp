@@ -233,7 +233,7 @@ TEST_CASE("Classes need to be declared")
 {
     SECTION("explicit declaration")
     {
-        const std::size_t count = ponder::classCount();    
+        const size_t count = ponder::classCount();    
         ponder::Class::declare<MyExplicityDeclaredClass>();
         REQUIRE(ponder::classCount() == count + 1);
         REQUIRE(ponder::classByTypeSafe<MyExplicityDeclaredClass>() != nullptr);

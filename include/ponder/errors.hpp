@@ -89,7 +89,7 @@ public:
      * \param functionName Name of the function
      */
     BadArgument(ValueKind provided, ValueKind expected,
-                std::size_t index, IdRef functionName);
+                size_t index, IdRef functionName);
 };
 
 /**
@@ -277,8 +277,8 @@ public:
      * \param expected Number of arguments expected
      */
     NotEnoughArguments(IdRef functionName,
-                       std::size_t provided,
-                       std::size_t expected);
+                       size_t provided,
+                       size_t expected);
 };
 
 /**
@@ -309,7 +309,7 @@ public:
      * \param index Invalid index
      * \param size Allowed size
      */
-    OutOfRange(std::size_t index, std::size_t size);
+    OutOfRange(size_t index, size_t size);
 };
 
 /**

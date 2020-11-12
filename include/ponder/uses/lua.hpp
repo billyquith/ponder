@@ -454,7 +454,7 @@ void expose(lua_State *L, const Enum& enm, const IdRef name)
 {
     const auto nb = enm.size();
     lua_createtable(L, 0, (int) nb);
-    for (std::size_t i=0; i < nb; ++i)
+    for (size_t i=0; i < nb; ++i)
     {
         auto const& p = enm.pair(i);
         lua_pushstring(L, id::c_str(p.name));

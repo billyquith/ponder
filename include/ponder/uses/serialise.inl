@@ -35,7 +35,7 @@ void ArchiveWriter<ARCHIVE>::write(NodeType parent, const UserObject& object)
 {
     // Iterate over the object's properties using its metaclass
     const Class& metaclass = object.getClass();
-    for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
+    for (size_t i = 0; i < metaclass.propertyCount(); ++i)
     {
         const Property& property = metaclass.property(i);
         
@@ -58,8 +58,8 @@ void ArchiveWriter<ARCHIVE>::write(NodeType parent, const UserObject& object)
             auto const& arrayProperty = static_cast<const ArrayProperty&>(property);
             
             // Iterate over the array elements
-            std::size_t count = arrayProperty.size(object);
-            for (std::size_t j = 0; j < count; ++j)
+            size_t count = arrayProperty.size(object);
+            for (size_t j = 0; j < count; ++j)
             {
                 NodeType item = m_archive.addChild(child, "item");
                 if (m_archive.isValid(item))
@@ -87,7 +87,7 @@ void ArchiveReader<ARCHIVE>::read(NodeType node, const UserObject& object)
 {
     // Iterate over the object's properties using its metaclass
     const Class& metaclass = object.getClass();
-    for (std::size_t i = 0; i < metaclass.propertyCount(); ++i)
+    for (size_t i = 0; i < metaclass.propertyCount(); ++i)
     {
         const Property& property = metaclass.property(i);
         
@@ -109,13 +109,13 @@ void ArchiveReader<ARCHIVE>::read(NodeType node, const UserObject& object)
         {
             auto const& arrayProperty = static_cast<const ArrayProperty&>(property);
             
-            std::size_t index = 0;
+            size_t index = 0;
             for (NodeType item = m_archive.findFirstChild(child, "item");
                  m_archive.isValid(item);
                  item = m_archive.findNextSibling(item, "item"))
             {
                 // Make sure that there are enough elements in the array
-                std::size_t count = arrayProperty.size(object);
+                size_t count = arrayProperty.size(object);
                 if (index >= count)
                 {
                     if (!arrayProperty.dynamic())

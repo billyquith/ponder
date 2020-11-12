@@ -29,7 +29,7 @@
 
 namespace ponder {
     
-inline std::size_t classCount()
+inline size_t classCount()
 {
     return detail::ClassManager::instance().count();
 }

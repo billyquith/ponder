@@ -45,7 +45,7 @@ namespace ponder {
  *
  * \return Global metaenum count
  */
-std::size_t enumCount();
+size_t enumCount();
 
 /**
  * \relates Enum

@@ -95,7 +95,7 @@ public:
      *
      * \return Number of metaclasses that have been registered
      */
-    std::size_t count() const;
+    size_t count() const;
     
     /**
      * \brief Begin iterator for iterating over contained classes

@@ -149,7 +149,7 @@ public:
      *
      * \return Total number of values contained in the metaenum
      */
-    std::size_t size() const;
+    size_t size() const;
 
     /**
      * \brief Get a pair by its index
@@ -160,7 +160,7 @@ public:
      *
      * \throw OutOfRange index is out of range
      */
-    Pair pair(std::size_t index) const;
+    Pair pair(size_t index) const;
 
     /**
      * \brief Check if the enum contains a name

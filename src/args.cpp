@@ -34,12 +34,12 @@ namespace ponder {
     
 const Args Args::empty;
 
-std::size_t Args::count() const
+size_t Args::count() const
 {
     return m_values.size();
 }
 
-const Value& Args::operator[](std::size_t index) const
+const Value& Args::operator[](size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_values.size())
@@ -63,7 +63,7 @@ Args& Args::operator+=(const Value& arg)
     return *this;
 }
 
-Args& Args::insert(std::size_t index, const Value& v)
+Args& Args::insert(size_t index, const Value& v)
 {
     m_values.insert(m_values.begin() + index, v);
     return *this;

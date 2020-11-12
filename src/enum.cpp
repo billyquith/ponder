@@ -42,12 +42,12 @@ IdReturn Enum::name() const
     return m_name;
 }
 
-std::size_t Enum::size() const
+size_t Enum::size() const
 {
     return m_enums.size();
 }
 
-Enum::Pair Enum::pair(std::size_t index) const
+Enum::Pair Enum::pair(size_t index) const
 {
     // Make sure that the index is not out of range
     if (index >= m_enums.size())
