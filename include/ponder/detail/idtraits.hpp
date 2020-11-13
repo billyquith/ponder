@@ -31,15 +31,14 @@
 #ifndef PONDER_ID_TRAITS_HPP
 #define PONDER_ID_TRAITS_HPP
 
-namespace ponder {
-    typedef std::size_t size_t;
-}
-
 #ifdef PONDER_ID_TRAITS_STD_STRING
 
 #include <string>
 
 namespace ponder {
+
+    typedef std::size_t size_t;
+
 namespace detail {
     
 struct IdTraits
@@ -61,6 +60,9 @@ struct IdTraits
 #include <ponder/detail/string_view.hpp>
 
 namespace ponder {
+
+    typedef std::size_t size_t;
+
 namespace detail {
 
 struct IdTraits
