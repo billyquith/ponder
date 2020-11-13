@@ -51,6 +51,7 @@ struct CallReturnCopy<R, typename std::enable_if<!ponder::detail::IsUserType<R>:
 template <typename R>
 struct CallReturnCopy<R, typename std::enable_if<ponder::detail::IsUserType<R>::value>::type>
 {
+    static_assert(!std::is_pointer<R>::value, "Cannot return unowned pointer. Use ponder::policy::ReturnInternalRef?");
     static inline Value value(R&& o) {return Value(UserObject::makeCopy(std::forward<R>(o)));}
 };
 
