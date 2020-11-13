@@ -231,12 +231,9 @@ struct AccessTraits<T*>
     typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
 };    
 
-/*
- * - Accessors provide a uniform interface to exposed data.
- * - Read-only accessor wrapper.
- */
+// Read-only accessor wrapper.
 template <class C, typename PT, typename E = void>
-class Accessor1
+class GetSet1
 {
 public:
 
@@ -255,17 +252,15 @@ public:
                           typename Traits::AccessType>> InterfaceType;
     InterfaceType m_interface;
 
-    Accessor1(typename Traits::Type getter)
+    GetSet1(typename Traits::Type getter)
         : m_interface(typename Traits::template TypeAccess<ClassType,
                       typename Traits::AccessType>(getter))
     {}
 };
 
-/*
- * Read-write accessor wrapper.
- */
+// Read-write accessor wrapper.
 template <class C, typename TRAITS>
-class Accessor1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
+class GetSet1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
 {
 public:
 
@@ -284,7 +279,7 @@ public:
                           typename Traits::AccessType>> InterfaceType;
     InterfaceType m_interface;
 
-    Accessor1(typename Traits::Type getter)
+    GetSet1(typename Traits::Type getter)
         : m_interface(typename Traits::template TypeAccess<ClassType,
                       typename Traits::AccessType>(getter))
     {}
@@ -294,7 +289,7 @@ public:
  * Property accessor composed of 1 getter and 1 setter
  */
 template <typename C, typename FUNCTRAITS>
-class Accessor2
+class GetSet2
 {
 public:
 
@@ -320,7 +315,7 @@ public:
     } m_interface;
 
     template <typename F1, typename F2>
-    Accessor2(F1 getter, F2 setter)
+    GetSet2(F1 getter, F2 setter)
         : m_interface(getter, setter)
     {}
 };
@@ -341,10 +336,7 @@ struct PropertyFactory1
 
     static Property* create(IdRef name, T accessor)
     {
-        typedef FunctionTraits<T> PropertyTraits;
-
-        // what type of access, read-only?
-        typedef Accessor1<C, PropertyTraits> AccessorType;
+        typedef GetSet1<C, FunctionTraits<T>> AccessorType; // read-only?
         
         // the property wrapper that provides the correct interface for the type
         typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
@@ -361,10 +353,7 @@ struct PropertyFactory1<C, T, typename std::enable_if<std::is_member_object_poin
 
     static Property* create(IdRef name, T accessor)
     {
-        typedef MemberTraits<T> PropertyTraits;
-
-        // what type of access, read-only?
-        typedef Accessor1<C, PropertyTraits> AccessorType;
+        typedef GetSet1<C, MemberTraits<T>> AccessorType; // read-only?
 
         // the property wrapper that provides the correct interface for the type
         typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
@@ -387,7 +376,7 @@ struct PropertyFactory2
         typedef FunctionTraits<F1> Traits;
         
         // unify how we retrieve the exposed type
-        typedef Accessor2<C, Traits> AccessorType;
+        typedef GetSet2<C, Traits> AccessorType;
         
         // the property wrapper that provides the correct interface for the type
         typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
