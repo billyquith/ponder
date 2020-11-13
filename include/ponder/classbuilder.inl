@@ -88,22 +88,14 @@ template <typename T>
 template <typename F>
 ClassBuilder<T>& ClassBuilder<T>::property(IdRef name, F accessor)
 {
-    // Find factory able to construct a Property from an accessor of type F
-    typedef detail::PropertyFactory1<T, F> Factory;
-
-    // Construct and add the metaproperty
-    return addProperty(Factory::create(name, accessor));
+    return addProperty(detail::PropertyFactory1<T, F>::create(name, accessor));
 }
 
 template <typename T>
 template <typename F1, typename F2>
 ClassBuilder<T>& ClassBuilder<T>::property(IdRef name, F1 accessor1, F2 accessor2)
 {
-    // Find factory able to construct a Property from accessors of type F1 and F2
-    typedef detail::PropertyFactory2<T, F1, F2> Factory;
-
-    // Construct and add the metaproperty
-    return addProperty(Factory::create(name, accessor1, accessor2));
+    return addProperty(detail::PropertyFactory2<T, F1, F2>::create(name, accessor1, accessor2));
 }
 
 template <typename T>

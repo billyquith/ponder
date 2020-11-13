@@ -103,6 +103,8 @@ namespace TraitsTest
             return std::vector<std::shared_ptr<Callable>>();
         }
     };
+
+    class Dummy {};
     
     void declare()
     {
@@ -183,20 +185,13 @@ TEST_CASE("Ponder supports different function types")
         using ponder::detail::FunctionTraits;
         using ponder::FunctionKind;
 
-        static_assert(FunctionTraits<int>::kind == FunctionKind::None,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<float>::kind == FunctionKind::None,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<int*>::kind == FunctionKind::None,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<char*>::kind == FunctionKind::None,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<int**>::kind == FunctionKind::None,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<ponder::String>::kind == FunctionKind::None,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<NonCallable>::kind == FunctionKind::None,
-                      "FunctionTraits<>::isFunction failed");
+        STATIC_ASSERT(FunctionTraits<int>::kind == FunctionKind::None);
+        STATIC_ASSERT(FunctionTraits<float>::kind == FunctionKind::None);
+        STATIC_ASSERT(FunctionTraits<int*>::kind == FunctionKind::None);
+        STATIC_ASSERT(FunctionTraits<char*>::kind == FunctionKind::None);
+        STATIC_ASSERT(FunctionTraits<int**>::kind == FunctionKind::None);
+        STATIC_ASSERT(FunctionTraits<ponder::String>::kind == FunctionKind::None);
+        STATIC_ASSERT(FunctionTraits<NonCallable>::kind == FunctionKind::None);
     }
 
     SECTION("type function")    // T(*)()
@@ -205,43 +200,29 @@ TEST_CASE("Ponder supports different function types")
         using ponder::PropertyKind;
         using ponder::FunctionKind;
 
-        static_assert(ponder::detail::PropertyTraitMapper<void(void)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<void(void)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, void(void)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<void(void)>::kind == FunctionKind::Function);
 
-        static_assert(ponder::detail::PropertyTraitMapper<void(int)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<void(int)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, void(int)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<void(int)>::kind == FunctionKind::Function);
 
-        static_assert(ponder::detail::PropertyTraitMapper<int(void)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<int(void)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, int(void)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<int(void)>::kind == FunctionKind::Function);
 
-        static_assert(ponder::detail::PropertyTraitMapper<int(char*)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<int(char*)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, int(char*)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<int(char*)>::kind == FunctionKind::Function);
 
         // non-class void(void)
-        static_assert(ponder::detail::PropertyTraitMapper<decltype(func)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(func)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(func)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<decltype(func)>::kind == FunctionKind::Function);
 
         // non-class R(...)
-        static_assert(ponder::detail::PropertyTraitMapper<decltype(funcArgReturn)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(funcArgReturn)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(funcArgReturn)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<decltype(funcArgReturn)>::kind == FunctionKind::Function);
 
         // class static R(void)
-        static_assert(ponder::detail::PropertyTraitMapper<decltype(&Class::staticFunc)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(&Class::staticFunc)>::kind == FunctionKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(&Class::staticFunc)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<decltype(&Class::staticFunc)>::kind == FunctionKind::Function);
     }
 
 
@@ -251,17 +232,13 @@ TEST_CASE("Ponder supports different function types")
         using ponder::PropertyKind;
         using ponder::FunctionKind;
 
-        static_assert(std::is_member_function_pointer<void (TraitsTest::Methods::*)()>::value, "MFP");
-        static_assert(ponder::detail::PropertyTraitMapper<void(Methods::*)()>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<void(Methods::*)()>::kind == FunctionKind::MemberFunction,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT(std::is_member_function_pointer<void (TraitsTest::Methods::*)()>::value);
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Methods, void(Methods::*)()>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<void(Methods::*)()>::kind == FunctionKind::MemberFunction);
 
         void (Methods::*meth_t)() = &Methods::foo;
-        static_assert(ponder::detail::PropertyTraitMapper<decltype(meth_t)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::isFunction failed");
-        static_assert(FunctionTraits<decltype(meth_t)>::kind == FunctionKind::MemberFunction,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Methods, decltype(meth_t)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<decltype(meth_t)>::kind == FunctionKind::MemberFunction);
     }
 
     SECTION("type member object")   // T(C::*)
@@ -276,17 +253,13 @@ TEST_CASE("Ponder supports different function types")
             bool b[8];
         };
 
-        static_assert( ponder::detail::PropertyTraitMapper<int Members::*>::kind == PropertyKind::MemberObject,
-                      "FunctionTraits<>::isFunction failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, int Members::*>::kind == PropertyKind::MemberObject));
 
-        static_assert( ponder::detail::PropertyTraitMapper<float (Members::*)[]>::kind == PropertyKind::MemberObject,
-                      "FunctionTraits<>::isFunction failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, float (Members::*)[]>::kind == PropertyKind::MemberObject));
 
-        static_assert( ponder::detail::PropertyTraitMapper<decltype(&Members::a)>::kind == PropertyKind::MemberObject,
-                      "FunctionTraits<>::isFunction failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(&Members::a)>::kind == PropertyKind::MemberObject));
 
-        static_assert( ponder::detail::PropertyTraitMapper<decltype(&Members::b)>::kind == PropertyKind::MemberObject,
-                      "FunctionTraits<>::isFunction failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(&Members::b)>::kind == PropertyKind::MemberObject));
     }
 
     SECTION("type function wrapper")  // std::function<>
@@ -295,23 +268,14 @@ TEST_CASE("Ponder supports different function types")
         using ponder::PropertyKind;
         using ponder::FunctionKind;
 
-        static_assert(ponder::detail::PropertyTraitMapper<std::function<void()>>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::kind failed");
-        static_assert(
-            FunctionTraits<std::function<void()>>::kind == FunctionKind::FunctionWrapper,
-            "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, std::function<void()>>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<std::function<void()>>::kind == FunctionKind::FunctionWrapper);
 
-        static_assert(ponder::detail::PropertyTraitMapper<std::function<int(float,int)>>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::kind failed");
-        static_assert(
-            FunctionTraits<std::function<int(float,int)>>::kind == FunctionKind::FunctionWrapper,
-            "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, std::function<int(float,int)>>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<std::function<int(float,int)>>::kind == FunctionKind::FunctionWrapper);
 
-        static_assert(ponder::detail::PropertyTraitMapper<std::function<char*(char[])>>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::kind failed");
-        static_assert(
-            FunctionTraits<std::function<char*(char[])>>::kind == FunctionKind::FunctionWrapper,
-            "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, std::function<char*(char[])>>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<std::function<char*(char[])>>::kind == FunctionKind::FunctionWrapper);
     }
 
     SECTION("type lambda")  // [] () {}
@@ -326,21 +290,16 @@ TEST_CASE("Ponder supports different function types")
         
         std::function<void()> f1(l1);
 
-        static_assert(ponder::detail::PropertyTraitMapper<decltype(l1)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<decltype(l1)>::kind == FunctionKind::Lambda,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(l1)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<decltype(l1)>::kind == FunctionKind::Lambda);
 
-        static_assert(ponder::detail::PropertyTraitMapper<decltype(l2)>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::kind failed");
-        static_assert(FunctionTraits<decltype(l2)>::kind == FunctionKind::Lambda,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, decltype(l2)>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<decltype(l2)>::kind == FunctionKind::Lambda);
 
         typedef decltype(l3) L3Type;
-        static_assert(ponder::detail::PropertyTraitMapper<L3Type>::kind == PropertyKind::Function,
-                      "FunctionTraits<>::kind failed");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, L3Type>::kind == PropertyKind::Function));
         typedef FunctionTraits<L3Type> L3Traits;
-        static_assert(L3Traits::kind == FunctionKind::Lambda, "FunctionTraits<>::kind failed");
+        STATIC_ASSERT(L3Traits::kind == FunctionKind::Lambda);
     }
 }
 
@@ -353,29 +312,29 @@ TEST_CASE("Functions have access types")
         using ponder::FunctionKind;
 
         typedef decltype(&FuncReturn::i) fn;
-        static_assert(ponder::detail::PropertyTraitMapper<fn>::kind == PropertyKind::Function, "");
-        static_assert(FunctionTraits<fn>::kind == FunctionKind::MemberFunction, "");
+        STATIC_ASSERT((ponder::detail::PropertyFactory1<Dummy, fn>::kind == PropertyKind::Function));
+        STATIC_ASSERT(FunctionTraits<fn>::kind == FunctionKind::MemberFunction);
 
-        static_assert(std::is_same<
-                        FunctionTraits<decltype(&FuncReturn::i)>::ExposedType, int
-                      >::value, "");
-        static_assert(std::is_same<
-                        FunctionTraits<decltype(&FuncReturn::f)>::ExposedType, float
-                      >::value, "");
-        static_assert(std::is_same<
-                        FunctionTraits<decltype(&FuncReturn::ip)>::ExposedType, int*
-                      >::value, "");
+        STATIC_ASSERT((std::is_same<
+                         FunctionTraits<decltype(&FuncReturn::i)>::ExposedType, int
+                       >::value));
+        STATIC_ASSERT((std::is_same<
+                         FunctionTraits<decltype(&FuncReturn::f)>::ExposedType, float
+                       >::value));
+        STATIC_ASSERT((std::is_same<
+                         FunctionTraits<decltype(&FuncReturn::ip)>::ExposedType, int*
+                       >::value));
 
-        static_assert(std::is_same<
-                        FunctionTraits<decltype(&FuncReturn::sp)>::ExposedType, \
-                        std::shared_ptr<Callable> \
-                      >::value, "");
+        STATIC_ASSERT((std::is_same<
+                         FunctionTraits<decltype(&FuncReturn::sp)>::ExposedType, \
+                         std::shared_ptr<Callable> \
+                       >::value));
 
-//        static_assert(std::is_same<
+//        STATIC_ASSERT(std::is_same<
 //                        FunctionTraits<decltype(&FuncReturn::ai)>::ExposedType,
 //                        std::vector<int>
 //                      >::value, "");
-//        static_assert(std::is_same<
+//        STATIC_ASSERT(std::is_same<
 //                        FunctionTraits<decltype(&FuncReturn::as)>::ExposedType,
 //                        std::vector<std::shared_ptr<Callable>>
 //                      >::value, "");

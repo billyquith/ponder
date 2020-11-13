@@ -41,28 +41,6 @@
 namespace ponder {
 namespace detail {
     
-/*
- * Map accessed property type to traits.
- *  - PropertyTrait::Traits supplies:
- *      - Type : accessor type (member object/function pointer).
- *      - ExposedType : The type T referenced.
- *      - DataType : The dereferenced, raw type.
- *      - isWritable : Boolean; is ExposedType writable?
- */
-template <typename T, typename E = void>
-struct PropertyTraitMapper
-{
-    static constexpr PropertyKind kind = PropertyKind::Function;
-    typedef FunctionTraits<T> Traits;
-};
-
-template <typename T>
-struct PropertyTraitMapper<T,
-    typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
-{
-    static constexpr PropertyKind kind = PropertyKind::MemberObject;
-    typedef MemberTraits<T> Traits;
-};
 
 /*
  * How to deal with the thing we are accessing. Type interface traits.
@@ -346,18 +324,24 @@ public:
         : m_interface(getter, setter)
     {}
 };
-    
+
 /*
  * Property factory which instantiates the proper type of property from 1 accessor.
  * The accessor can be a member object or a function.
+ *  - PropertyTrait::Traits supplies:
+ *      - Type : accessor type (member object/function pointer).
+ *      - ExposedType : The type T referenced.
+ *      - DataType : The dereferenced, raw type.
+ *      - isWritable : Boolean; is ExposedType writable?
  */
-template <typename C, typename T>
+template <typename C, typename T, typename E = void>
 struct PropertyFactory1
 {
+    static constexpr PropertyKind kind = PropertyKind::Function;
+
     static Property* create(IdRef name, T accessor)
     {
-        // what exposes the value
-        typedef typename PropertyTraitMapper<T>::Traits PropertyTraits;
+        typedef FunctionTraits<T> PropertyTraits;
 
         // what type of access, read-only?
         typedef Accessor1<C, PropertyTraits> AccessorType;
@@ -365,6 +349,26 @@ struct PropertyFactory1
         // the property wrapper that provides the correct interface for the type
         typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
         
+        // instance the interface for our type
+        return new PropertyImplType(name, AccessorType(accessor));
+    }
+};
+
+template <typename C, typename T>
+struct PropertyFactory1<C, T, typename std::enable_if<std::is_member_object_pointer<T>::value>::type>
+{
+    static constexpr PropertyKind kind = PropertyKind::MemberObject;
+
+    static Property* create(IdRef name, T accessor)
+    {
+        typedef MemberTraits<T> PropertyTraits;
+
+        // what type of access, read-only?
+        typedef Accessor1<C, PropertyTraits> AccessorType;
+
+        // the property wrapper that provides the correct interface for the type
+        typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
+
         // instance the interface for our type
         return new PropertyImplType(name, AccessorType(accessor));
     }
