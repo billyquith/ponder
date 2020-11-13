@@ -177,15 +177,14 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<typename std::remove_pointer<T>::type> Details;
-    typedef typename Details::Type Type;
-    typedef typename Details::ReturnType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    static constexpr bool isWritable =
-        std::is_lvalue_reference<ExposedType>::value
-        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef typename Details::Type              Type;
+    typedef typename Details::ReturnType        ExposedType;
+    typedef ReferenceTraits<ExposedType>        RefTraits;
+    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
+                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename RawType<AccessType>::Type DataType;
-    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<AccessType>::Type  DataType;
+    typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
     class TypeAccess
@@ -210,14 +209,13 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 {
     static constexpr FunctionKind kind = FunctionKind::MemberFunction;
     typedef typename function::MethodDetails<T> Details;
-    typedef typename Details::Type Type;
-    typedef typename Details::ReturnType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    static constexpr bool isWritable =
-        std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
+    typedef typename Details::Type              Type;
+    typedef typename Details::ReturnType        ExposedType;
+    typedef ReferenceTraits<ExposedType>        RefTraits;
+    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename RawType<AccessType>::Type DataType;
-    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<AccessType>::Type  DataType;
+    typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
     class TypeAccess
@@ -242,16 +240,15 @@ struct FunctionTraits<T, typename
     std::enable_if<std::is_bind_expression<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
-    typedef function::CallableDetails<T> Details;
-    typedef typename Details::Type Type;
-    typedef typename Details::ReturnType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    static constexpr bool isWritable =
-        std::is_lvalue_reference<ExposedType>::value
-        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef function::CallableDetails<T>        Details;
+    typedef typename Details::Type              Type;
+    typedef typename Details::ReturnType        ExposedType;
+    typedef ReferenceTraits<ExposedType>        RefTraits;
+    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
+                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename RawType<AccessType>::Type DataType;
-    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<AccessType>::Type  DataType;
+    typedef typename Details::DispatchType      DispatchType;
     
     template <typename C, typename A>
     class TypeAccess
@@ -277,16 +274,15 @@ struct FunctionTraits<T,
                             && function::IsFunctionWrapper<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
-    typedef function::CallableDetails<T> Details;
-    typedef typename Details::Type Type;
-    typedef typename Details::ReturnType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    static constexpr bool isWritable =
-        std::is_lvalue_reference<ExposedType>::value
-        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef function::CallableDetails<T>        Details;
+    typedef typename Details::Type              Type;
+    typedef typename Details::ReturnType        ExposedType;
+    typedef ReferenceTraits<ExposedType>        RefTraits;
+    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
+                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename RawType<AccessType>::Type DataType;
-    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<AccessType>::Type  DataType;
+    typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
     class TypeAccess
@@ -312,16 +308,15 @@ struct FunctionTraits<T,
                             && !function::IsFunctionWrapper<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::Lambda;    
-    typedef function::CallableDetails<T> Details;
-    typedef T Type;
-    typedef typename Details::ReturnType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    static constexpr bool isWritable =
-        std::is_lvalue_reference<ExposedType>::value
-        && !std::is_const<typename RefTraits::DereferencedType>::value;
+    typedef function::CallableDetails<T>        Details;
+    typedef T                                   Type;
+    typedef typename Details::ReturnType        ExposedType;
+    typedef ReferenceTraits<ExposedType>        RefTraits;
+    static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
+                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename RawType<AccessType>::Type DataType;
-    typedef typename Details::DispatchType DispatchType;
+    typedef typename RawType<AccessType>::Type  DataType;
+    typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
     class TypeAccess
@@ -347,11 +342,11 @@ struct MemberTraits;
 template <typename C, typename T>
 struct MemberTraits<T(C::*)>
 {
-    typedef T(C::*Type);    // full type inc ref
-    typedef T ExposedType;  // the type exposed inc refs
-    typedef ReferenceTraits<ExposedType> RefTraits;
-    typedef typename RefTraits::DereferencedType AccessType; // deferenced type
-    typedef typename RawType<AccessType>::Type DataType; // raw type or container
+    typedef T(C::*Type);                                            // full type inc ref
+    typedef T                                       ExposedType;    // the type exposed inc refs
+    typedef ReferenceTraits<ExposedType>            RefTraits;
+    typedef typename RefTraits::DereferencedType    AccessType;     // deferenced type
+    typedef typename RawType<AccessType>::Type      DataType;       // raw type or container
     static constexpr bool isWritable = !std::is_const<AccessType>::value;
 
     template <typename CLASS, typename A>

@@ -246,10 +246,12 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits; // RW / impl
+
     typedef typename PropAccessTraits::template
         ReadOnlyInterface<typename Traits::template TypeAccess<ClassType,
                           typename Traits::AccessType>> InterfaceType;
+
     InterfaceType m_interface;
 
     GetSet1(typename Traits::Type getter)
@@ -268,15 +270,17 @@ public:
     static_assert(Traits::isWritable, "isWritable expected");
     typedef C ClassType;
     typedef typename Traits::ExposedType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
+    typedef ReferenceTraits<typename Traits::ExposedType> RefTraits;
     typedef typename Traits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
     typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+
     typedef typename PropAccessTraits::template
         WritableInterface<typename Traits::template TypeAccess<ClassType,
                           typename Traits::AccessType>> InterfaceType;
+
     InterfaceType m_interface;
 
     GetSet1(typename Traits::Type getter)
@@ -336,13 +340,13 @@ struct PropertyFactory1
 
     static Property* create(IdRef name, T accessor)
     {
-        typedef GetSet1<C, FunctionTraits<T>> AccessorType; // read-only?
+        typedef GetSet1<C, FunctionTraits<T>> Accessor; // read-only?
         
         // the property wrapper that provides the correct interface for the type
-        typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
+        typedef typename Accessor::PropAccessTraits::template Impl<Accessor> PropertyImplType;
         
         // instance the interface for our type
-        return new PropertyImplType(name, AccessorType(accessor));
+        return new PropertyImplType(name, Accessor(accessor));
     }
 };
 
@@ -353,13 +357,13 @@ struct PropertyFactory1<C, T, typename std::enable_if<std::is_member_object_poin
 
     static Property* create(IdRef name, T accessor)
     {
-        typedef GetSet1<C, MemberTraits<T>> AccessorType; // read-only?
+        typedef GetSet1<C, MemberTraits<T>> Accessor; // read-only?
 
         // the property wrapper that provides the correct interface for the type
-        typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
+        typedef typename Accessor::PropAccessTraits::template Impl<Accessor> PropertyImplType;
 
         // instance the interface for our type
-        return new PropertyImplType(name, AccessorType(accessor));
+        return new PropertyImplType(name, Accessor(accessor));
     }
 };
 
@@ -376,13 +380,13 @@ struct PropertyFactory2
         typedef FunctionTraits<F1> Traits;
         
         // unify how we retrieve the exposed type
-        typedef GetSet2<C, Traits> AccessorType;
+        typedef GetSet2<C, Traits> Accessor;
         
         // the property wrapper that provides the correct interface for the type
-        typedef typename AccessorType::PropAccessTraits::template Impl<AccessorType> PropertyImplType;
+        typedef typename Accessor::PropAccessTraits::template Impl<Accessor> PropertyImplType;
 
         // instance the interface for our type
-        return new PropertyImplType(name, AccessorType(accessor1, accessor2));
+        return new PropertyImplType(name, Accessor(accessor1, accessor2));
     }
 };
 
