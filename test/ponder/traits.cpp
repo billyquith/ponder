@@ -592,41 +592,41 @@ TEST_CASE("AccessTraits")
 {
     SECTION("Simple")
     {
-        using ponder::detail::AccessTraits;
+        using ponder::detail::InterfaceTraits;
         using ponder::PropertyAccessKind;
         
-        static_assert(AccessTraits<bool>::kind == PropertyAccessKind::Simple, "");
-        static_assert(AccessTraits<int>::kind == PropertyAccessKind::Simple, "");
-        static_assert(AccessTraits<float>::kind == PropertyAccessKind::Simple, "");
-        static_assert(AccessTraits<std::string>::kind == PropertyAccessKind::Simple, "");
+        static_assert(InterfaceTraits<bool>::kind == PropertyAccessKind::Simple, "");
+        static_assert(InterfaceTraits<int>::kind == PropertyAccessKind::Simple, "");
+        static_assert(InterfaceTraits<float>::kind == PropertyAccessKind::Simple, "");
+        static_assert(InterfaceTraits<std::string>::kind == PropertyAccessKind::Simple, "");
     }
     
     SECTION("Enum")
     {
-        using ponder::detail::AccessTraits;
+        using ponder::detail::InterfaceTraits;
         using ponder::PropertyAccessKind;
         
-        static_assert(AccessTraits<Enum>::kind == PropertyAccessKind::Enum, "");
-        static_assert(AccessTraits<EnumCls>::kind == PropertyAccessKind::Enum, "");
+        static_assert(InterfaceTraits<Enum>::kind == PropertyAccessKind::Enum, "");
+        static_assert(InterfaceTraits<EnumCls>::kind == PropertyAccessKind::Enum, "");
     }
     
     SECTION("Array")
     {
-        using ponder::detail::AccessTraits;
+        using ponder::detail::InterfaceTraits;
         using ponder::PropertyAccessKind;
         
-        static_assert(AccessTraits<int[10]>::kind == PropertyAccessKind::Container, "");
+        static_assert(InterfaceTraits<int[10]>::kind == PropertyAccessKind::Container, "");
     }
     
     SECTION("User")
     {
-        using ponder::detail::AccessTraits;
+        using ponder::detail::InterfaceTraits;
         using ponder::PropertyAccessKind;
         
         static_assert(ponder::detail::hasStaticTypeDecl<Class>(), "");
         
-        static_assert(AccessTraits<Class>::kind == PropertyAccessKind::User, "");
-        //static_assert(AccessTraits<Class&>::kind == PropertyAccessKind::User, "");
+        static_assert(InterfaceTraits<Class>::kind == PropertyAccessKind::User, "");
+        //static_assert(InterfaceTraits<Class&>::kind == PropertyAccessKind::User, "");
     }
 }
 

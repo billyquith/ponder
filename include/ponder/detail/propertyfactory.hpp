@@ -48,7 +48,7 @@ namespace detail {
  *  - A : the accessor; what gets the value
  */
 template <typename T, typename E = void>
-struct AccessTraits
+struct InterfaceTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
     
@@ -71,12 +71,12 @@ struct AccessTraits
     };
 
     template <class TA>
-    class WritableInterface : public ReadOnlyInterface<TA>
+    class ReadWriteInterface : public ReadOnlyInterface<TA>
     {
     public:
         typedef ReadOnlyInterface<TA> Base;
         
-        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        ReadWriteInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
         
         bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
         {return this->m_access.access(c) = v, true;}
@@ -92,7 +92,7 @@ struct AccessTraits
  * Enums.
  */
 template <typename T>
-struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
+struct InterfaceTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
 
@@ -115,12 +115,12 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
     };
     
     template <class TA>
-    class WritableInterface : public ReadOnlyInterface<TA>
+    class ReadWriteInterface : public ReadOnlyInterface<TA>
     {
     public:
         typedef ReadOnlyInterface<TA> Base;
         
-        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        ReadWriteInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
         
         bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
         {return this->m_access.access(c) = v, true;}
@@ -136,7 +136,7 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
  * Array types.
  */
 template <typename T>
-struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
+struct InterfaceTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
     typedef ponder_ext::ArrayMapper<T> ArrayTraits;
@@ -159,12 +159,12 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
     };
     
     template <class TA>
-    class WritableInterface : public ReadOnlyInterface<TA>
+    class ReadWriteInterface : public ReadOnlyInterface<TA>
     {
     public:
         typedef ReadOnlyInterface<TA> Base;
         
-        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        ReadWriteInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
     };
     
     template <typename A>
@@ -177,7 +177,7 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
  *  - Enums also use registration so must differentiate.
  */
 template <typename T>
-struct AccessTraits<T,
+struct InterfaceTraits<T,
     typename std::enable_if<hasStaticTypeDecl<T>() && !std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
@@ -202,12 +202,12 @@ struct AccessTraits<T,
     };
     
     template <class TA>
-    class WritableInterface : public ReadOnlyInterface<TA>
+    class ReadWriteInterface : public ReadOnlyInterface<TA>
     {
     public:
         typedef ReadOnlyInterface<TA> Base;
         
-        WritableInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
+        ReadWriteInterface(const typename Base::TypeAccess& a) : ReadOnlyInterface<TA>(a) {}
         
         bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
         {return this->m_access.access(c) = v, true;}
@@ -220,13 +220,13 @@ struct AccessTraits<T,
 };
 
 template <typename T>
-struct AccessTraits<T&>
+struct InterfaceTraits<T&>
 {
     typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
 };
 
 template <typename T>
-struct AccessTraits<T*>
+struct InterfaceTraits<T*>
 {
     typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
 };    
@@ -246,11 +246,11 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits; // RW / impl
+    typedef InterfaceTraits<typename RefTraits::DereferencedType> Interface; // property interface specialisation
 
-    typedef typename PropAccessTraits::template
-        ReadOnlyInterface<typename Traits::template TypeAccess<ClassType,
-                          typename Traits::AccessType>> InterfaceType;
+    typedef typename Interface::template
+        ReadOnlyInterface<typename Traits::template TypeAccess<ClassType, typename Traits::AccessType>>
+            InterfaceType;
 
     InterfaceType m_interface;
 
@@ -275,11 +275,11 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+    typedef InterfaceTraits<typename RefTraits::DereferencedType> Interface; // property interface specialisation
 
-    typedef typename PropAccessTraits::template
-        WritableInterface<typename Traits::template TypeAccess<ClassType,
-                          typename Traits::AccessType>> InterfaceType;
+    typedef typename Interface::template
+        ReadWriteInterface<typename Traits::template TypeAccess<ClassType, typename Traits::AccessType>>
+            InterfaceType;
 
     InterfaceType m_interface;
 
@@ -305,7 +305,7 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef AccessTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+    typedef InterfaceTraits<typename RefTraits::DereferencedType> PropAccessTraits;
 
     struct InterfaceType
     {
@@ -314,6 +314,7 @@ public:
         
         std::function<typename Traits::DispatchType> getter;
         std::function<void(ClassType&, DataType)> m_setter;
+
         // setter returns writable status, so wrap it
         bool setter(ClassType& c, DataType v) const {return m_setter(c,v), true;}
     } m_interface;
@@ -342,10 +343,8 @@ struct PropertyFactory1
     {
         typedef GetSet1<C, FunctionTraits<T>> Accessor; // read-only?
         
-        // the property wrapper that provides the correct interface for the type
-        typedef typename Accessor::PropAccessTraits::template Impl<Accessor> PropertyImplType;
+        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType; // interface
         
-        // instance the interface for our type
         return new PropertyImplType(name, Accessor(accessor));
     }
 };
@@ -359,10 +358,8 @@ struct PropertyFactory1<C, T, typename std::enable_if<std::is_member_object_poin
     {
         typedef GetSet1<C, MemberTraits<T>> Accessor; // read-only?
 
-        // the property wrapper that provides the correct interface for the type
-        typedef typename Accessor::PropAccessTraits::template Impl<Accessor> PropertyImplType;
+        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType; // interface
 
-        // instance the interface for our type
         return new PropertyImplType(name, Accessor(accessor));
     }
 };
