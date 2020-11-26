@@ -71,7 +71,7 @@ struct ReferenceDetails<T>
     typedef T& ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
-    typedef typename RawType<T>::Type DataType;
+    typedef typename DataType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_void<DereferencedType>::value && !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = false;
 
@@ -88,7 +88,7 @@ struct ReferenceDetails<T*>
     typedef T* ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
-    typedef typename RawType<T>::Type DataType;
+    typedef typename DataType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = true;
 
@@ -105,7 +105,7 @@ struct ReferenceDetails<T&>
     typedef T& ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
-    typedef typename RawType<T>::Type DataType;
+    typedef typename DataType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = true;
 
@@ -123,7 +123,7 @@ struct SmartPointerReferenceTraits
     typedef T& ReferenceType;
     typedef P PointerType;
     typedef T DereferencedType;
-    typedef typename RawType<T>::Type DataType;
+    typedef typename DataType<T>::Type DataType;
     static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = true;
 
@@ -149,7 +149,7 @@ struct ReferenceTraits<void>
     typedef T* ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
-    typedef typename RawType<T>::Type DataType;
+    typedef typename DataType<T>::Type DataType;
     static constexpr bool isWritable = false;
     static constexpr bool isRef = false;
 
@@ -163,7 +163,7 @@ struct ReferenceTraits<void>
 //struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
 //{
 //    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
-//    typedef typename RawType<T>::Type DataType;
+//    typedef typename DataType<T>::Type DataType;
 //    typedef T(&ReferenceType)[N];
 //    typedef T* PointerType;
 //    static constexpr size_t Size = N;
@@ -178,7 +178,7 @@ struct ReferenceTraits<void>
 //    typedef std::array<T,S>(C::*Type);
 //    typedef C ClassType;
 //    typedef std::array<T,S> ExposedType;
-//    typedef typename RawType<T>::Type DataType;
+//    typedef typename DataType<T>::Type DataType;
 //    //static constexpr bool isWritable = !std::is_const<DataType>::value;
 //
 //    class Access
@@ -197,7 +197,7 @@ struct ReferenceTraits<void>
 //    typedef std::vector<T>(C::*Type);
 //    typedef C ClassType;
 //    typedef std::vector<T> ExposedType;
-//    typedef typename RawType<T>::Type DataType;
+//    typedef typename DataType<T>::Type DataType;
 //
 //    class Access
 //    {
@@ -215,7 +215,7 @@ struct ReferenceTraits<void>
 //    typedef std::list<T>(C::*Type);
 //    typedef C ClassType;
 //    typedef std::list<T> ExposedType;
-//    typedef typename RawType<T>::Type DataType;
+//    typedef typename DataType<T>::Type DataType;
 //
 //    class Access
 //    {

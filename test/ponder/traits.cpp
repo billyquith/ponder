@@ -636,31 +636,31 @@ TEST_CASE("Type testing")
 {
     SECTION("find raw type of any type")
     {
-        using ponder::detail::RawType;
+        using ponder::detail::DataType;
 
-        static_assert(std::is_same<int, RawType<int>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, RawType<int*>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, RawType<int**>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, RawType<int***>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, RawType<int&>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, DataType<int>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, DataType<int*>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, DataType<int**>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, DataType<int***>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<int, DataType<int&>::Type>::value, "RawType<> fail");
 
-        static_assert(std::is_same<char, RawType<char>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<float, RawType<float*>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<char, DataType<char>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<float, DataType<float*>::Type>::value, "RawType<> fail");
 
-        static_assert(std::is_same<std::string, RawType<std::string>::Type>::value,
+        static_assert(std::is_same<std::string, DataType<std::string>::Type>::value,
                       "RawType<> fail");
-        static_assert(std::is_same<std::string, RawType<std::string&>::Type>::value,
+        static_assert(std::is_same<std::string, DataType<std::string&>::Type>::value,
                       "RawType<> fail");
-        static_assert(std::is_same<std::string, RawType<const std::string&>::Type>::value,
+        static_assert(std::is_same<std::string, DataType<const std::string&>::Type>::value,
                       "RawType<> fail");
-        static_assert(std::is_same<std::string, RawType<std::string*>::Type>::value,
+        static_assert(std::is_same<std::string, DataType<std::string*>::Type>::value,
                       "RawType<> fail");
-        static_assert(std::is_same<std::string, RawType<const std::string*>::Type>::value,
+        static_assert(std::is_same<std::string, DataType<const std::string*>::Type>::value,
                       "RawType<> fail");
 
-        static_assert(std::is_same<Callable, RawType<Callable>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<Callable, RawType<Callable*>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<Callable, RawType<Callable&>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<Callable, DataType<Callable>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<Callable, DataType<Callable*>::Type>::value, "RawType<> fail");
+        static_assert(std::is_same<Callable, DataType<Callable&>::Type>::value, "RawType<> fail");
     }
 
     SECTION("which are user types")

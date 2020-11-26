@@ -34,12 +34,12 @@ namespace detail {
 
 // Is T a user type.
 template <typename T> struct IsUserType {
-    typedef typename detail::RawType<T>::Type RawType;
-    static constexpr bool value = std::is_class<RawType>::value
-        && !std::is_same<RawType, Value>::value
-        && !std::is_same<RawType, UserObject>::value
-        && !std::is_same<RawType, detail::ValueRef>::value
-        && !std::is_same<RawType, ponder::String>::value;
+    typedef typename detail::DataType<T>::Type DataType;
+    static constexpr bool value = std::is_class<DataType>::value
+        && !std::is_same<DataType, Value>::value
+        && !std::is_same<DataType, UserObject>::value
+        && !std::is_same<DataType, detail::ValueRef>::value
+        && !std::is_same<DataType, ponder::String>::value;
 };
 
 // Decide whether the UserObject holder should be ref (true) or copy (false).

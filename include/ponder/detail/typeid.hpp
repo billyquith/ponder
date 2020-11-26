@@ -71,19 +71,19 @@ struct StaticTypeDecl
 
 // Test if T is declared
 template <typename T>
-constexpr bool hasStaticTypeDecl() {return StaticTypeDecl<typename RawType<T>::Type>::defined;}
+constexpr bool hasStaticTypeDecl() {return StaticTypeDecl<typename DataType<T>::Type>::defined;}
 
 template <typename T>
-static inline TypeId staticTypeId() {return StaticTypeDecl<typename RawType<T>::Type>::id();}
+static inline TypeId staticTypeId() {return StaticTypeDecl<typename DataType<T>::Type>::id();}
 
 template <typename T>
-static inline TypeId staticTypeId(const T&) {return StaticTypeDecl<typename RawType<T>::Type>::id();}
+static inline TypeId staticTypeId(const T&) {return StaticTypeDecl<typename DataType<T>::Type>::id();}
 
 template <typename T>
-static inline const char* staticTypeName() {return StaticTypeDecl<typename RawType<T>::Type>::name();}
+static inline const char* staticTypeName() {return StaticTypeDecl<typename DataType<T>::Type>::name();}
 
 template <typename T>
-static inline const char* staticTypeName(const T&) {return StaticTypeDecl<typename RawType<T>::Type>::name();}
+static inline const char* staticTypeName(const T&) {return StaticTypeDecl<typename DataType<T>::Type>::name();}
 
 /* Utility class used to check at compile-time if a type T implements the Ponder RTTI
  */
@@ -144,7 +144,7 @@ struct SafeTypeId
 /* Return the dynamic type identifier of a C++ object even if it doesn't exist (i.e. it can't fail)
  */
 template <typename T>
-inline TypeId safeTypeId() {return SafeTypeId<typename RawType<T>::Type>::id();}
+inline TypeId safeTypeId() {return SafeTypeId<typename DataType<T>::Type>::id();}
 
 template <typename T>
 inline TypeId safeTypeId(const T& object) {return SafeTypeId<T>::get(object);}
@@ -183,7 +183,7 @@ struct SafeTypeName<void>
  *        (i.e. it can't fail)
  */
 template <typename T>
-const char* safeTypeName() {return SafeTypeName<typename RawType<T>::Type>::name();}
+const char* safeTypeName() {return SafeTypeName<typename DataType<T>::Type>::name();}
     
 template <typename T>
 const char* safeTypeName(const T& object) {return SafeTypeName<T>::get(object);}

@@ -88,6 +88,8 @@ namespace PropertyTest
         MEMBER_ACCESSORS(std::string,s)
         MEMBER_ACCESSORS(MyEnum,e)
         MEMBER_ACCESSORS(MyType, mt)
+
+        MyType* getT() {return &mt;}
     };
 
 #define FUNCTION_ACCESSORS(T,N) \
@@ -131,6 +133,7 @@ namespace PropertyTest
             PROPERTY(float,f)
             PROPERTY(std::string,s)
             PROPERTY(MyEnum,e)
+            //.property("getT", &MyClass::getT)
             ;
 
         // ***** std::function *****
@@ -259,6 +262,9 @@ TEST_CASE("Classes can have properties")
         CHECK_PROP_GET(float,f);
         CHECK_PROP_GET(std::string,s);
         CHECK_PROP_GET(MyEnum,e);
+
+        //ponder::Value ret{ metaclass.property("getT").get(object) };
+        //REQUIRE(ret != ponder::Value::nothing);
     }
 
     SECTION("set")

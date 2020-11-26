@@ -67,7 +67,7 @@ namespace ponder {
 template <typename T>
 inline ValueKind mapType()
 {
-    return ponder_ext::ValueMapper<typename detail::RawType<T>::Type>::kind;
+    return ponder_ext::ValueMapper<typename detail::DataType<T>::Type>::kind;
 }
 
 } // namespace ponder

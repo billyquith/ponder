@@ -60,7 +60,7 @@ const Class& classByType()
 template <typename T>
 const Class* classByTypeSafe()
 {
-    return detail::ClassManager::instance().getByIdSafe(detail::calcTypeId<typename detail::RawType<T>::Type>());
+    return detail::ClassManager::instance().getByIdSafe(detail::calcTypeId<typename detail::DataType<T>::Type>());
 }
 
 } // namespace ponder

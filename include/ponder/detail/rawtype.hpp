@@ -60,60 +60,49 @@ struct IsSmartPointer<std::shared_ptr<T>, U>
 };
         
 /**
- * \class RawType
+ * \class DataType
  *
  * \brief Helper structure used to extract the raw type of a composed type
  *
- * RawType<T> recursively removes const, reference and pointer modifiers from the given type.
+ * DataType<T> recursively removes const, reference and pointer modifiers from the given type.
  * In other words:
  *
- * \li RawType<T>::Type == T
- * \li RawType<const T>::Type == RawType<T>::Type
- * \li RawType<T&>::Type == RawType<T>::Type
- * \li RawType<const T&>::Type == RawType<T>::Type
- * \li RawType<T*>::Type == RawType<T>::Type
- * \li RawType<const T*>::Type == RawType<T>::Type
+ * \li DataType<T>::Type == T
+ * \li DataType<const T>::Type == DataType<T>::Type
+ * \li DataType<T&>::Type == DataType<T>::Type
+ * \li DataType<const T&>::Type == DataType<T>::Type
+ * \li DataType<T*>::Type == DataType<T>::Type
+ * \li DataType<const T*>::Type == DataType<T>::Type
  *
- * \remark RawType is able to detect smart pointers and properly extract the stored type
+ * \remark DataType is able to detect smart pointers and properly extract the stored type
  */
 
-/*
- * Generic version -- T doesn't match with any of our specialization, and is thus considered a raw type
- */
-template <typename T, typename E = void>
-struct RawType
+// Generic version -- T doesn't match with any of our specialization, and is thus considered a raw data type
+//  - int -> int, int[] -> int, int* -> int.
+ template <typename T, typename E = void>
+struct DataType
 {
     typedef T Type;
 };
 
-/*
- * Specialized version for const modifier
- */
+// const
 template <typename T>
-struct RawType<const T> : public RawType<T> {};
+struct DataType<const T> : public DataType<T> {};
 
-/*
- * Specialized version for reference modifier
- */
 template <typename T>
-struct RawType<T&> : public RawType<T> {};
+struct DataType<T&> : public DataType<T> {};
 
-/*
- * Specialized version for raw pointers
- */
 template <typename T>
-struct RawType<T*> : public RawType<T> {};
+struct DataType<T*> : public DataType<T> {};
     
 template <typename T, size_t N>
-struct RawType<T[N]> : public RawType<T> {};
+struct DataType<T[N]> : public DataType<T> {};
 
-/*
- * Specialized version for smart pointers
- */
+// smart pointer
 template <template <typename> class T, typename U>
-struct RawType<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value >::type>
+struct DataType<T<U>, typename std::enable_if<IsSmartPointer<T<U>, U>::value >::type>
 {
-    typedef typename RawType<U>::Type Type;
+    typedef typename DataType<U>::Type Type;
 };
 
 } // namespace detail

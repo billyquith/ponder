@@ -64,7 +64,7 @@ template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
         !ponder::detail::IsUserType<R>::value
-        && !std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
+        && !std::is_same<typename ponder::detail::DataType<R>::Type, UserObject>::value
     >::type>
 {
     static inline Value value(R&& o) {return Value(o);}
@@ -74,7 +74,7 @@ template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
         ponder::detail::IsUserType<R>::value
-        || std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
+        || std::is_same<typename ponder::detail::DataType<R>::Type, UserObject>::value
     >::type>
 {
     static inline Value value(R&& o) {return Value(UserObject::makeRef(std::forward<R>(o)));}
@@ -170,7 +170,7 @@ struct ConvertArg<(int)ValueKind::User, const TTo&>
 template <typename A>
 struct ConvertArgs
 {
-    typedef typename ponder::detail::RawType<A>::Type Raw;
+    typedef typename ponder::detail::DataType<A>::Type Raw;
     static constexpr ValueKind kind = ponder_ext::ValueMapper<Raw>::kind;
     typedef ConvertArg<(int)kind, A> Convertor;
     
