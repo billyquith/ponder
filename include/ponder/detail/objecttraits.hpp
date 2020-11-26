@@ -58,14 +58,14 @@ namespace detail {
 
 // How we access an instance of type T.
 template <typename T, typename E = void>
-struct ReferenceDetails
+struct TypeDetails
 {
     typedef int unhandled_type[-(int)sizeof(T)];
 };
 
 // Object instance.
 template <typename T>
-struct ReferenceDetails<T>
+struct TypeDetails<T>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Instance;
     typedef T& ReferenceType;
@@ -82,7 +82,7 @@ struct ReferenceDetails<T>
 
 // Raw pointers
 template <typename T>
-struct ReferenceDetails<T*>
+struct TypeDetails<T*>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Pointer;
     typedef T* ReferenceType;
@@ -99,7 +99,7 @@ struct ReferenceDetails<T*>
 
 // References
 template <typename T>
-struct ReferenceDetails<T&>
+struct TypeDetails<T&>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Reference;
     typedef T& ReferenceType;
@@ -133,16 +133,16 @@ struct SmartPointerReferenceTraits
 
 // std::shared_ptr<>
 template <typename T>
-struct ReferenceDetails<std::shared_ptr<T>>
+struct TypeDetails<std::shared_ptr<T>>
     : public SmartPointerReferenceTraits<std::shared_ptr<T>,T> {};
 
 
 template <typename T>
-struct ReferenceTraits : public ReferenceDetails<T> {};
+struct TypeTraits : public TypeDetails<T> {};
 
 // void
 template <>
-struct ReferenceTraits<void>
+struct TypeTraits<void>
 {
     static constexpr ReferenceKind kind = ReferenceKind::None;
     typedef void T;
@@ -160,7 +160,7 @@ struct ReferenceTraits<void>
     
 // Built-in arrays []
 //template <typename T, size_t N>
-//struct ReferenceTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
+//struct TypeTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
 //{
 //    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
 //    typedef typename DataType<T>::Type DataType;

@@ -33,7 +33,7 @@ template <typename T>
 UserObject::UserObject(const T& object)
     :   m_class(&classByType<T>())
 {
-    typedef detail::ReferenceTraits<const T> Traits;
+    typedef detail::TypeTraits<const T> Traits;
     typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
     m_holder.reset(new Holder(Traits::getPointer(object)));
 }
@@ -42,7 +42,7 @@ template <typename T>
 UserObject::UserObject(T* object)
     :   m_class(&classByType<T>())
 {
-    typedef detail::ReferenceTraits<T> Traits;
+    typedef detail::TypeTraits<T> Traits;
     static_assert(!Traits::isRef, "Cannot make reference to reference");
     
     typedef typename std::conditional<std::is_const<T>::value,
@@ -52,7 +52,7 @@ UserObject::UserObject(T* object)
 }
 
 template <typename T>
-typename detail::ReferenceTraits<T>::ReferenceType UserObject::get() const
+typename detail::TypeTraits<T>::ReferenceType UserObject::get() const
 {
     // Make sure that we have a valid internal object
     void *ptr = pointer();
@@ -67,13 +67,13 @@ typename detail::ReferenceTraits<T>::ReferenceType UserObject::get() const
     // Apply the proper offset to the pointer (solves multiple inheritance issues)
     ptr = classCast(ptr, *m_class, *targetClass);
 
-    return detail::ReferenceTraits<T>::get(ptr);
+    return detail::TypeTraits<T>::get(ptr);
 }
 
 template <typename T>
 inline UserObject UserObject::makeRef(T& object)
 {
-    typedef detail::ReferenceTraits<T> RefTraits;
+    typedef detail::TypeTraits<T> RefTraits;
     static_assert(!RefTraits::isRef, "Cannot make reference to reference");
 
     typedef typename std::conditional<std::is_const<T>::value,
@@ -92,7 +92,7 @@ inline UserObject UserObject::makeRef(T* object)
 template <typename T>
 inline UserObject UserObject::makeCopy(const T& object)
 {
-    typedef detail::ReferenceTraits<const T> Traits;
+    typedef detail::TypeTraits<const T> Traits;
     typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
     return UserObject(&classByType<T>(), new Holder(Traits::getPointer(object)));
 }
@@ -100,7 +100,7 @@ inline UserObject UserObject::makeCopy(const T& object)
 template <typename T>
 inline UserObject UserObject::makeOwned(T&& object)
 {
-    typedef detail::ReferenceTraits<const T> Traits;
+    typedef detail::TypeTraits<const T> Traits;
     typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
     return UserObject(&classByType<T>(), new Holder(std::forward<T>(object)));
 }

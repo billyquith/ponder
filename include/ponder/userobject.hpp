@@ -171,7 +171,7 @@ public:
      * \throw ClassUnrelated the type of the object is not compatible with T
      */
     template <typename T>
-    typename detail::ReferenceTraits<T>::ReferenceType get() const;
+    typename detail::TypeTraits<T>::ReferenceType get() const;
 
     /**
      * \brief Retrieve the address of the stored object

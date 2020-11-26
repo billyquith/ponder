@@ -240,7 +240,7 @@ public:
 
     static_assert(RefTraits::kind != ReferenceKind::Pointer, "Ponder: Cannot return pointer");
 
-    typedef InterfaceTraits<typename RefTraits::DereferencedType> Interface; // property interface specialisation
+    typedef InterfaceTraits<Traits> Interface; // property interface specialisation
 
     typedef typename Interface::template
         ReadOnlyInterface<typename Traits::template Binding<ClassType, typename Traits::AccessType>>
@@ -263,7 +263,7 @@ public:
     static_assert(Traits::isWritable, "isWritable expected");
     typedef C ClassType;
     typedef typename Traits::ExposedType ExposedType;
-    typedef ReferenceTraits<typename Traits::ExposedType> RefTraits;
+    typedef typename Traits::RefTraits RefTraits;
     typedef typename Traits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
@@ -322,7 +322,7 @@ public:
 //    typedef TRAITS Traits;
 //    typedef C ClassType;
 //    typedef typename Traits::ExposedType ExposedType;
-//    typedef ReferenceTraits<typename Traits::ExposedType> RefTraits;
+//    typedef typename Traits::RefTraits RefTraits;
 //    typedef typename Traits::DataType DataType; // raw type or container
 //    static constexpr bool canRead = true;
 //    static constexpr bool canWrite = false;
@@ -351,7 +351,7 @@ public:
     typedef FUNCTRAITS Traits;
     typedef C ClassType;
     typedef typename Traits::ExposedType ExposedType;
-    typedef ReferenceTraits<ExposedType> RefTraits;
+    typedef typename Traits::RefTraits RefTraits;
     typedef typename Traits::DataType DataType; // raw type
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;

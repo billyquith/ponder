@@ -179,7 +179,7 @@ struct FunctionTraits<T,
     typedef typename function::FunctionDetails<typename std::remove_pointer<T>::type> Details;
     typedef typename Details::Type              Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef ReferenceTraits<ExposedType>        RefTraits;
+    typedef TypeTraits<ExposedType>             RefTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
@@ -211,7 +211,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     typedef typename function::MethodDetails<T> Details;
     typedef typename Details::Type              Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef ReferenceTraits<ExposedType>        RefTraits;
+    typedef TypeTraits<ExposedType>             RefTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename DataType<AccessType>::Type DataType;
@@ -243,7 +243,7 @@ struct FunctionTraits<T, typename
     typedef function::CallableDetails<T>        Details;
     typedef typename Details::Type              Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef ReferenceTraits<ExposedType>        RefTraits;
+    typedef TypeTraits<ExposedType>             RefTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
@@ -277,7 +277,7 @@ struct FunctionTraits<T,
     typedef function::CallableDetails<T>        Details;
     typedef typename Details::Type              Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef ReferenceTraits<ExposedType>        RefTraits;
+    typedef TypeTraits<ExposedType>             RefTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
@@ -311,7 +311,7 @@ struct FunctionTraits<T,
     typedef function::CallableDetails<T>        Details;
     typedef T                                   Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef ReferenceTraits<ExposedType>        RefTraits;
+    typedef TypeTraits<ExposedType>             RefTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename RefTraits::DereferencedType>::value;
     typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
@@ -344,7 +344,7 @@ struct MemberTraits<T(C::*)>
 {
     typedef T(C::*Type);                                            // full type inc ref
     typedef T                                       ExposedType;    // the type exposed inc refs
-    typedef ReferenceTraits<ExposedType>            RefTraits;
+    typedef TypeTraits<ExposedType>                 RefTraits;
     typedef typename RefTraits::DereferencedType    AccessType;     // deferenced type
     typedef typename DataType<AccessType>::Type     DataType;       // raw type or container
     static constexpr bool isWritable = !std::is_const<AccessType>::value;
