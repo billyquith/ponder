@@ -233,12 +233,12 @@ public:
     static_assert(!Traits::isWritable, "!isWritable expected");
     typedef const C ClassType;
     typedef typename Traits::ExposedType ExposedType;
-    typedef typename Traits::RefTraits RefTraits;
+    typedef typename Traits::TypeTraits TypeTraits;
     typedef typename Traits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    static_assert(RefTraits::kind != ReferenceKind::Pointer, "Ponder: Cannot return pointer");
+    static_assert(TypeTraits::kind != ReferenceKind::Pointer, "Ponder: Cannot return pointer");
 
     typedef InterfaceTraits<Traits> Interface; // property interface specialisation
 
@@ -263,12 +263,12 @@ public:
     static_assert(Traits::isWritable, "isWritable expected");
     typedef C ClassType;
     typedef typename Traits::ExposedType ExposedType;
-    typedef typename Traits::RefTraits RefTraits;
+    typedef typename Traits::TypeTraits TypeTraits;
     typedef typename Traits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef InterfaceTraits<typename RefTraits::DereferencedType> Interface; // property interface specialisation
+    typedef InterfaceTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
 
     typedef typename Interface::template
         ReadWriteInterface<typename Traits::template Binding<ClassType, typename Traits::AccessType>>
@@ -315,14 +315,14 @@ public:
 //
 //// Returns pointer (internal reference).
 //template <class C, typename TRAITS>
-//class GetSet1<C, TRAITS, typename std::enable_if<TRAITS::RefTraits::kind == ReferenceKind::Pointer>::type>
+//class GetSet1<C, TRAITS, typename std::enable_if<TRAITS::TypeTraits::kind == ReferenceKind::Pointer>::type>
 //{
 //public:
 //
 //    typedef TRAITS Traits;
 //    typedef C ClassType;
 //    typedef typename Traits::ExposedType ExposedType;
-//    typedef typename Traits::RefTraits RefTraits;
+//    typedef typename Traits::TypeTraits TypeTraits;
 //    typedef typename Traits::DataType DataType; // raw type or container
 //    static constexpr bool canRead = true;
 //    static constexpr bool canWrite = false;
@@ -351,12 +351,12 @@ public:
     typedef FUNCTRAITS Traits;
     typedef C ClassType;
     typedef typename Traits::ExposedType ExposedType;
-    typedef typename Traits::RefTraits RefTraits;
+    typedef typename Traits::TypeTraits TypeTraits;
     typedef typename Traits::DataType DataType; // raw type
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef InterfaceTraits<typename RefTraits::DereferencedType> PropAccessTraits;
+    typedef InterfaceTraits<typename TypeTraits::DereferencedType> PropAccessTraits;
 
     struct InterfaceType
     {

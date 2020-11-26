@@ -73,14 +73,14 @@ typename detail::TypeTraits<T>::ReferenceType UserObject::get() const
 template <typename T>
 inline UserObject UserObject::makeRef(T& object)
 {
-    typedef detail::TypeTraits<T> RefTraits;
-    static_assert(!RefTraits::isRef, "Cannot make reference to reference");
+    typedef detail::TypeTraits<T> TypeTraits;
+    static_assert(!TypeTraits::isRef, "Cannot make reference to reference");
 
     typedef typename std::conditional<std::is_const<T>::value,
-                 detail::ObjectHolderByConstRef<typename RefTraits::DataType>,
-                 detail::ObjectHolderByRef<typename RefTraits::DataType>>::type Holder;
+                 detail::ObjectHolderByConstRef<typename TypeTraits::DataType>,
+                 detail::ObjectHolderByRef<typename TypeTraits::DataType>>::type Holder;
 
-    return UserObject(&classByObject(object), new Holder(RefTraits::getPointer(object)));
+    return UserObject(&classByObject(object), new Holder(TypeTraits::getPointer(object)));
 }
 
 template <typename T>

@@ -51,7 +51,7 @@ struct FunctionDetails<R(*)(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(*Type)(A...);
+    typedef ReturnType(*FuncType)(A...);
     typedef ReturnType(DispatchType)(A...);
     typedef std::tuple<A...> FunctionCallTypes;
 };
@@ -61,7 +61,7 @@ struct FunctionDetails<R(A...)>
 {
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(*Type)(A...);
+    typedef ReturnType(*FuncType)(A...);
     typedef ReturnType(DispatchType)(A...);
     typedef std::tuple<A...> FunctionCallTypes;
 };
@@ -78,7 +78,7 @@ struct MethodDetails<R(C::*)(A...)>
     typedef C ClassType;
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
-    typedef ReturnType(ClassType::*Type)(A...);
+    typedef ReturnType(ClassType::*FuncType)(A...);
     typedef ReturnType(DispatchType)(ClassType&, A...);
     typedef std::tuple<ClassType&, A...> FunctionCallTypes;
     static constexpr bool isConst = false;
@@ -92,7 +92,7 @@ struct MethodDetails<R(C::*)(A...) const>
     typedef std::tuple<A...> ParamTypes;
     typedef R ReturnType;
     typedef ReturnType(DispatchType)(const ClassType&, A...);
-    typedef ReturnType(ClassType::*Type)(A...) const;
+    typedef ReturnType(ClassType::*FuncType)(A...) const;
     typedef std::tuple<const ClassType&, A...> FunctionCallTypes;
     static constexpr bool isConst = true;
 };
@@ -117,7 +117,7 @@ struct IsFunctionWrapper<std::function<T>> : std::true_type {};
 template <typename T>
 struct CallableDetails : public CallableDetails<decltype(&T::operator())>
 {
-    typedef T Type;
+    typedef T FuncType;
 };
 
 template <typename L, typename R, typename... A>
@@ -177,12 +177,12 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<typename std::remove_pointer<T>::type> Details;
-    typedef typename Details::Type              Type;
+    typedef typename Details::FuncType          Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             RefTraits;
+    typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
+                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename DataType<AccessType>::Type DataType;
     typedef typename Details::DispatchType      DispatchType;
 
@@ -209,11 +209,11 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 {
     static constexpr FunctionKind kind = FunctionKind::MemberFunction;
     typedef typename function::MethodDetails<T> Details;
-    typedef typename Details::Type              Type;
+    typedef typename Details::FuncType          Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             RefTraits;
+    typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
-    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
+    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename DataType<AccessType>::Type DataType;
     typedef typename Details::DispatchType      DispatchType;
 
@@ -241,12 +241,12 @@ struct FunctionTraits<T, typename
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
     typedef function::CallableDetails<T>        Details;
-    typedef typename Details::Type              Type;
+    typedef typename Details::FuncType          Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             RefTraits;
+    typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
+                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename DataType<AccessType>::Type DataType;
     typedef typename Details::DispatchType      DispatchType;
     
@@ -275,12 +275,12 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
     typedef function::CallableDetails<T>        Details;
-    typedef typename Details::Type              Type;
+    typedef typename Details::FuncType          Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             RefTraits;
+    typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
+                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename DataType<AccessType>::Type DataType;
     typedef typename Details::DispatchType      DispatchType;
 
@@ -311,10 +311,10 @@ struct FunctionTraits<T,
     typedef function::CallableDetails<T>        Details;
     typedef T                                   Type;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             RefTraits;
+    typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename RefTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename RefTraits::DereferencedType, isWritable>::Type AccessType;
+                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
     typedef typename DataType<AccessType>::Type DataType;
     typedef typename Details::DispatchType      DispatchType;
 
@@ -344,8 +344,8 @@ struct MemberTraits<T(C::*)>
 {
     typedef T(C::*Type);                                            // full type inc ref
     typedef T                                       ExposedType;    // the type exposed inc refs
-    typedef TypeTraits<ExposedType>                 RefTraits;
-    typedef typename RefTraits::DereferencedType    AccessType;     // deferenced type
+    typedef TypeTraits<ExposedType>                 TypeTraits;
+    typedef typename TypeTraits::DereferencedType    AccessType;     // deferenced type
     typedef typename DataType<AccessType>::Type     DataType;       // raw type or container
     static constexpr bool isWritable = !std::is_const<AccessType>::value;
 
