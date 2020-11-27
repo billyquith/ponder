@@ -33,21 +33,21 @@ template <typename T>
 UserObject::UserObject(const T& object)
     :   m_class(&classByType<T>())
 {
-    typedef detail::TypeTraits<const T> Traits;
-    typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
-    m_holder.reset(new Holder(Traits::getPointer(object)));
+    typedef detail::TypeTraits<const T> PropTraits;
+    typedef detail::ObjectHolderByCopy<typename PropTraits::DataType> Holder;
+    m_holder.reset(new Holder(PropTraits::getPointer(object)));
 }
 
 template <typename T>
 UserObject::UserObject(T* object)
     :   m_class(&classByType<T>())
 {
-    typedef detail::TypeTraits<T> Traits;
-    static_assert(!Traits::isRef, "Cannot make reference to reference");
+    typedef detail::TypeTraits<T> PropTraits;
+    static_assert(!PropTraits::isRef, "Cannot make reference to reference");
     
     typedef typename std::conditional<std::is_const<T>::value,
-    detail::ObjectHolderByConstRef<typename Traits::DataType>,
-    detail::ObjectHolderByRef<typename Traits::DataType>>::type Holder;    
+    detail::ObjectHolderByConstRef<typename PropTraits::DataType>,
+    detail::ObjectHolderByRef<typename PropTraits::DataType>>::type Holder;    
     m_holder.reset(new Holder(object));
 }
 
@@ -92,16 +92,16 @@ inline UserObject UserObject::makeRef(T* object)
 template <typename T>
 inline UserObject UserObject::makeCopy(const T& object)
 {
-    typedef detail::TypeTraits<const T> Traits;
-    typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
-    return UserObject(&classByType<T>(), new Holder(Traits::getPointer(object)));
+    typedef detail::TypeTraits<const T> PropTraits;
+    typedef detail::ObjectHolderByCopy<typename PropTraits::DataType> Holder;
+    return UserObject(&classByType<T>(), new Holder(PropTraits::getPointer(object)));
 }
 
 template <typename T>
 inline UserObject UserObject::makeOwned(T&& object)
 {
-    typedef detail::TypeTraits<const T> Traits;
-    typedef detail::ObjectHolderByCopy<typename Traits::DataType> Holder;
+    typedef detail::TypeTraits<const T> PropTraits;
+    typedef detail::ObjectHolderByCopy<typename PropTraits::DataType> Holder;
     return UserObject(&classByType<T>(), new Holder(std::forward<T>(object)));
 }
 

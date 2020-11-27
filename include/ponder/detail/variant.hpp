@@ -620,12 +620,12 @@ namespace mapbox {
                 : type_index(detail::invalid_value) {}
 
             // http://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers
-            template <typename T, typename Traits = detail::value_traits<T, Types...>,
-                typename Enable = typename std::enable_if<Traits::is_valid && !std::is_same<variant<Types...>, typename Traits::value_type>::value>::type >
-                VARIANT_INLINE variant(T&& val) noexcept(std::is_nothrow_constructible<typename Traits::target_type, T&&>::value)
-                : type_index(Traits::index)
+            template <typename T, typename PropTraits = detail::value_traits<T, Types...>,
+                typename Enable = typename std::enable_if<PropTraits::is_valid && !std::is_same<variant<Types...>, typename PropTraits::value_type>::value>::type >
+                VARIANT_INLINE variant(T&& val) noexcept(std::is_nothrow_constructible<typename PropTraits::target_type, T&&>::value)
+                : type_index(PropTraits::index)
             {
-                new (&data) typename Traits::target_type(std::forward<T>(val));
+                new (&data) typename PropTraits::target_type(std::forward<T>(val));
             }
 
             VARIANT_INLINE variant(variant<Types...> const& old)
@@ -681,12 +681,12 @@ namespace mapbox {
 
             // conversions
             // move-assign
-            template <typename T, typename Traits = detail::value_traits<T, Types...>,
-                typename Enable = typename std::enable_if<Traits::is_valid && !std::is_same<variant<Types...>, typename Traits::value_type>::value>::type >
+            template <typename T, typename PropTraits = detail::value_traits<T, Types...>,
+                typename Enable = typename std::enable_if<PropTraits::is_valid && !std::is_same<variant<Types...>, typename PropTraits::value_type>::value>::type >
                 VARIANT_INLINE variant<Types...>& operator=(T&& rhs)
                 // not that we check is_nothrow_constructible<T>, not is_nothrow_move_assignable<T>,
                 // since we construct a temporary
-                noexcept(std::is_nothrow_constructible<typename Traits::target_type, T&&>::value
+                noexcept(std::is_nothrow_constructible<typename PropTraits::target_type, T&&>::value
                     && std::is_nothrow_move_assignable<variant<Types...>>::value)
             {
                 variant<Types...> temp(std::forward<T>(rhs));

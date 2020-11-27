@@ -41,13 +41,15 @@
 namespace ponder {
 namespace detail {
     
-
 /*
- * The interface uses the binding to access the data according to the data type.
- *  - T : the type of the accessed value
+ *  Access traits for an exposed type T.
+ *    - I.e. how we use an instance to access the bound property data using the correct interface.
+ *  Traits:
+ *    - ReadOnlyInterface & ReadWriteInterface : RO (const) or RW data.
+ *    - Impl : which specialise property impl to use.
  */
 template <typename T, typename E = void>
-struct InterfaceTraits
+struct AccessTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
     
@@ -91,7 +93,7 @@ struct InterfaceTraits
  * Enums.
  */
 template <typename T>
-struct InterfaceTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
+struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
 
@@ -135,7 +137,7 @@ struct InterfaceTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
  * Array types.
  */
 template <typename T>
-struct InterfaceTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
+struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
     typedef ponder_ext::ArrayMapper<T> ArrayTraits;
@@ -176,7 +178,7 @@ struct InterfaceTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::is
  *  - Enums also use registration so must differentiate.
  */
 template <typename T>
-struct InterfaceTraits<T,
+struct AccessTraits<T,
     typename std::enable_if<hasStaticTypeDecl<T>() && !std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
@@ -220,37 +222,37 @@ struct InterfaceTraits<T,
 
 // Sanity checks.
 template <typename T>
-struct InterfaceTraits<T&> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
+struct AccessTraits<T&> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
 template <typename T>
-struct InterfaceTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };    
+struct AccessTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };    
 
 // Read-only accessor wrapper. Not RW, not a pointer.
 template <class C, typename TRAITS, typename E = void>
 class GetSet1
 {
 public:
-    typedef TRAITS Traits;
-    static_assert(!Traits::isWritable, "!isWritable expected");
+    typedef TRAITS PropTraits;
+    static_assert(!PropTraits::isWritable, "!isWritable expected");
     typedef const C ClassType;
-    typedef typename Traits::ExposedType ExposedType;
-    typedef typename Traits::TypeTraits TypeTraits;
-    typedef typename Traits::DataType DataType; // raw type or container
+    typedef typename PropTraits::ExposedType ExposedType;
+    typedef typename PropTraits::TypeTraits TypeTraits;
+    typedef typename PropTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
     static_assert(TypeTraits::kind != ReferenceKind::Pointer, "Ponder: Cannot return pointer");
 
-    typedef InterfaceTraits<Traits> Interface; // property interface specialisation
+    typedef typename AccessTraits<typename TypeTraits::DereferencedType> Interface;
 
     typedef typename Interface::template
-        ReadOnlyInterface<typename Traits::template Binding<ClassType, typename Traits::AccessType>>
+        ReadOnlyInterface<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>>
             InterfaceType;
 
     InterfaceType m_interface;
 
-    GetSet1(typename Traits::Type getter)
-        : m_interface(typename Traits::template Binding<ClassType,
-                      typename Traits::AccessType>(getter))
+    GetSet1(typename PropTraits::Type getter)
+        : m_interface(typename PropTraits::template Binding<ClassType,
+                      typename PropTraits::AccessType>(getter))
     {}
 };
 
@@ -259,86 +261,27 @@ template <class C, typename TRAITS>
 class GetSet1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
 {
 public:
-    typedef TRAITS Traits;
-    static_assert(Traits::isWritable, "isWritable expected");
+    typedef TRAITS PropTraits;
+    static_assert(PropTraits::isWritable, "isWritable expected");
     typedef C ClassType;
-    typedef typename Traits::ExposedType ExposedType;
-    typedef typename Traits::TypeTraits TypeTraits;
-    typedef typename Traits::DataType DataType; // raw type or container
+    typedef typename PropTraits::ExposedType ExposedType;
+    typedef typename PropTraits::TypeTraits TypeTraits;
+    typedef typename PropTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef InterfaceTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
+    typedef AccessTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
 
     typedef typename Interface::template
-        ReadWriteInterface<typename Traits::template Binding<ClassType, typename Traits::AccessType>>
+        ReadWriteInterface<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>>
             InterfaceType;
 
     InterfaceType m_interface;
 
-    GetSet1(typename Traits::Type getter)
-        : m_interface(typename Traits::template Binding<ClassType, typename Traits::AccessType>(getter))
+    GetSet1(typename PropTraits::Type getter)
+        : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>(getter))
     {}
 };
-
-//template <typename T>
-//struct InterfaceTraitsInternalRef
-//{
-//    static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
-//
-//    static_assert(std::is_pointer<T>::value, "Should be ptr.");
-//
-//    template <class TA>
-//    class ReadOnlyInterface
-//    {
-//    public:
-//        typedef TA TypeAccess;
-//        typedef typename TypeAccess::ClassType ClassType;
-//        typedef typename DataType<typename TypeAccess::AccessType>::Type DataType;
-//
-//        static_assert(std::is_pointer<TypeAccess::AccessType>::value, "Inconsistent types. Should be ptr.");
-//
-//        ReadOnlyInterface(const TypeAccess& a) : m_access(a) {}
-//
-//        T getter(ClassType& c) const { return m_access.access(c); }
-//        const T getter(const ClassType& c) const { return m_access.access(c); }
-//
-//        bool setter(ClassType&, const DataType&) const { return false; }
-//        bool setter(ClassType&, DataType&&) const { return false; }
-//    protected:
-//        TypeAccess m_access;
-//    };
-//
-//    template <typename A>
-//    using Impl = UserPropertyImpl<A>;
-//};
-//
-//// Returns pointer (internal reference).
-//template <class C, typename TRAITS>
-//class GetSet1<C, TRAITS, typename std::enable_if<TRAITS::TypeTraits::kind == ReferenceKind::Pointer>::type>
-//{
-//public:
-//
-//    typedef TRAITS Traits;
-//    typedef C ClassType;
-//    typedef typename Traits::ExposedType ExposedType;
-//    typedef typename Traits::TypeTraits TypeTraits;
-//    typedef typename Traits::DataType DataType; // raw type or container
-//    static constexpr bool canRead = true;
-//    static constexpr bool canWrite = false;
-//
-//    typedef InterfaceTraitsInternalRef<ExposedType> Interface; // property interface specialisation
-//
-//    typedef typename Interface::template
-//        ReadOnlyInterface<typename Traits::template TypeAccess<ClassType, typename Traits::AccessType>>
-//            InterfaceType;
-//
-//    InterfaceType m_interface;
-//
-//    GetSet1(typename Traits::Type getter)
-//        : m_interface(typename Traits::template TypeAccess<ClassType, typename Traits::AccessType>(getter))
-//    {}
-//};
 
 /*
  * Property accessor composed of 1 getter and 1 setter
@@ -348,22 +291,22 @@ class GetSet2
 {
 public:
 
-    typedef FUNCTRAITS Traits;
+    typedef FUNCTRAITS PropTraits;
     typedef C ClassType;
-    typedef typename Traits::ExposedType ExposedType;
-    typedef typename Traits::TypeTraits TypeTraits;
-    typedef typename Traits::DataType DataType; // raw type
+    typedef typename PropTraits::ExposedType ExposedType;
+    typedef typename PropTraits::TypeTraits TypeTraits;
+    typedef typename PropTraits::DataType DataType; // raw type
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef InterfaceTraits<typename TypeTraits::DereferencedType> PropAccessTraits;
+    typedef AccessTraits<typename TypeTraits::DereferencedType> Interface;
 
     struct InterfaceType
     {
         template <typename F1, typename F2>
         InterfaceType(F1 get, F2 set) : getter(get), m_setter(set) {}
         
-        std::function<typename Traits::DispatchType> getter;
+        std::function<typename PropTraits::DispatchType> getter;
         std::function<void(ClassType&, DataType)> m_setter;
 
         // setter returns writable status, so wrap it
@@ -378,12 +321,6 @@ public:
 
 /*
  * Property factory which instantiates the proper type of property from 1 accessor.
- * The accessor can be a member object or a function.
- *  - PropertyTrait::Traits supplies:
- *      - Type : accessor type (member object/function pointer).
- *      - ExposedType : The type T referenced.
- *      - DataType : The dereferenced, raw type.
- *      - isWritable : Boolean; is ExposedType writable?
  */
 template <typename C, typename T, typename E = void>
 struct PropertyFactory1
@@ -394,7 +331,7 @@ struct PropertyFactory1
     {
         typedef GetSet1<C, FunctionTraits<T>> Accessor; // read-only?
         
-        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType; // interface
+        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType;
         
         return new PropertyImplType(name, Accessor(accessor));
     }
@@ -409,15 +346,15 @@ struct PropertyFactory1<C, T, typename std::enable_if<std::is_member_object_poin
     {
         typedef GetSet1<C, MemberTraits<T>> Accessor; // read-only?
 
-        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType; // interface
+        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType;
 
         return new PropertyImplType(name, Accessor(accessor));
     }
 };
 
 /*
- * Property factory which instantiates the proper type of property from 2 accessors.
- * Both getter and setter should be functions.
+ * Expose property with a getter and setter function.
+ * Type of property is the return type of the getter.
  */
 template <typename C, typename F1, typename F2, typename E = void>
 struct PropertyFactory2
@@ -426,7 +363,7 @@ struct PropertyFactory2
     {
         typedef GetSet2<C, FunctionTraits<F1>> Accessor; // read-write wrapper
         
-        typedef typename Accessor::PropAccessTraits::template Impl<Accessor> PropertyImplType;
+        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType;
 
         return new PropertyImplType(name, Accessor(accessor1, accessor2));
     }

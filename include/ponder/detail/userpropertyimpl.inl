@@ -62,7 +62,7 @@ template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
     // We copy the returned object based on the return type of the getter: (copy) T, const T&, (ref) T&.
-    return ToUserObject<!A::Traits::isWritable>::get(
+    return ToUserObject<!A::PropTraits::isWritable>::get(
                 m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
 }
 

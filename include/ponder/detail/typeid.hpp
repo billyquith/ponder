@@ -110,9 +110,9 @@ struct DynamicTypeDecl
 {
     static TypeId id(const T& object)
     {
-        typedef TypeTraits<const T&> Traits;
-        typename Traits::PointerType pointer = Traits::getPointer(object);
-        static_assert(Traits::kind != ReferenceKind::None, "");
+        typedef TypeTraits<const T&> PropTraits;
+        typename PropTraits::PointerType pointer = PropTraits::getPointer(object);
+        static_assert(PropTraits::kind != ReferenceKind::None, "");
         static_assert(std::is_pointer<decltype(pointer)>::value, "Not pointer");
         return pointer != nullptr ? pointer->ponderClassId() : staticTypeId<T>();
     }

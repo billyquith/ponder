@@ -345,7 +345,7 @@ struct MemberTraits<T(C::*)>
     typedef T(C::*Type);                                            // full type inc ref
     typedef T                                       ExposedType;    // the type exposed inc refs
     typedef TypeTraits<ExposedType>                 TypeTraits;
-    typedef typename TypeTraits::DereferencedType    AccessType;     // deferenced type
+    typedef typename TypeTraits::DereferencedType   AccessType;     // deferenced type
     typedef typename DataType<AccessType>::Type     DataType;       // raw type or container
     static constexpr bool isWritable = !std::is_const<AccessType>::value;
 
