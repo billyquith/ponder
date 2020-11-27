@@ -591,57 +591,52 @@ TEST_CASE("Type testing")
     {
         using ponder::detail::DataType;
 
-        static_assert(std::is_same<int, DataType<int>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, DataType<int*>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, DataType<int**>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, DataType<int***>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<int, DataType<int&>::Type>::value, "RawType<> fail");
+        STATIC_ASSERT((std::is_same<int, DataType<int>::Type>::value));
+        STATIC_ASSERT((std::is_same<int, DataType<int*>::Type>::value));
+        STATIC_ASSERT((std::is_same<int, DataType<int**>::Type>::value));
+        STATIC_ASSERT((std::is_same<int, DataType<int***>::Type>::value));
+        STATIC_ASSERT((std::is_same<int, DataType<int&>::Type>::value));
 
-        static_assert(std::is_same<char, DataType<char>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<float, DataType<float*>::Type>::value, "RawType<> fail");
+        STATIC_ASSERT((std::is_same<char, DataType<char>::Type>::value));
+        STATIC_ASSERT((std::is_same<float, DataType<float*>::Type>::value));
 
-        static_assert(std::is_same<std::string, DataType<std::string>::Type>::value,
-                      "RawType<> fail");
-        static_assert(std::is_same<std::string, DataType<std::string&>::Type>::value,
-                      "RawType<> fail");
-        static_assert(std::is_same<std::string, DataType<const std::string&>::Type>::value,
-                      "RawType<> fail");
-        static_assert(std::is_same<std::string, DataType<std::string*>::Type>::value,
-                      "RawType<> fail");
-        static_assert(std::is_same<std::string, DataType<const std::string*>::Type>::value,
-                      "RawType<> fail");
+        STATIC_ASSERT((std::is_same<std::string, DataType<std::string>::Type>::value));
+        STATIC_ASSERT((std::is_same<std::string, DataType<std::string&>::Type>::value));
+        STATIC_ASSERT((std::is_same<std::string, DataType<const std::string&>::Type>::value));
+        STATIC_ASSERT((std::is_same<std::string, DataType<std::string*>::Type>::value));
+        STATIC_ASSERT((std::is_same<std::string, DataType<const std::string*>::Type>::value));
 
-        static_assert(std::is_same<Callable, DataType<Callable>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<Callable, DataType<Callable*>::Type>::value, "RawType<> fail");
-        static_assert(std::is_same<Callable, DataType<Callable&>::Type>::value, "RawType<> fail");
+        STATIC_ASSERT((std::is_same<Callable, DataType<Callable>::Type>::value));
+        STATIC_ASSERT((std::is_same<Callable, DataType<Callable*>::Type>::value));
+        STATIC_ASSERT((std::is_same<Callable, DataType<Callable&>::Type>::value));
     }
 
     SECTION("which are user types")
     {
         using ponder::detail::IsUserType;
 
-        static_assert( ! IsUserType<int>::value, "IsUserType<> fail");
-        static_assert( ! IsUserType<char*>::value, "IsUserType<> fail");
-        static_assert( ! IsUserType<std::string>::value, "IsUserType<> fail");
-        static_assert( ! IsUserType<ponder::Value>::value, "IsUserType<> fail");
-        static_assert( ! IsUserType<Enum>::value, "IsUserType<> fail");
-        static_assert( ! IsUserType<EnumCls>::value, "IsUserType<> fail");
+        STATIC_ASSERT(( ! IsUserType<int>::value));
+        STATIC_ASSERT(( ! IsUserType<char*>::value));
+        STATIC_ASSERT(( ! IsUserType<std::string>::value));
+        STATIC_ASSERT(( ! IsUserType<ponder::Value>::value));
+        STATIC_ASSERT(( ! IsUserType<Enum>::value));
+        STATIC_ASSERT(( ! IsUserType<EnumCls>::value));
 
-        static_assert(IsUserType<Callable>::value, "IsUserType<> fail");
-        static_assert(IsUserType<NonCallable>::value, "IsUserType<> fail");
+        STATIC_ASSERT((IsUserType<Callable>::value));
+        STATIC_ASSERT((IsUserType<NonCallable>::value));
     }
 
     SECTION("which are user types")
     {
         using ponder::detail::IsUserObjRef;
 
-        static_assert( ! IsUserObjRef<int>::value, "IsUserObjRef<> fail");
-        static_assert( ! IsUserObjRef<Callable>::value, "IsUserObjRef<> fail");
-        static_assert( ! IsUserObjRef<NonCallable>::value, "IsUserObjRef<> fail");
+        STATIC_ASSERT(( ! IsUserObjRef<int>::value));
+        STATIC_ASSERT(( ! IsUserObjRef<Callable>::value));
+        STATIC_ASSERT(( ! IsUserObjRef<NonCallable>::value));
 
-        static_assert(IsUserObjRef<NonCallable*>::value, "IsUserObjRef<> fail");
-        static_assert(IsUserObjRef<NonCallable&>::value, "IsUserObjRef<> fail");
-        static_assert(IsUserObjRef<const NonCallable&>::value, "IsUserObjRef<> fail");
+        STATIC_ASSERT((IsUserObjRef<NonCallable*>::value));
+        STATIC_ASSERT((IsUserObjRef<NonCallable&>::value));
+        STATIC_ASSERT((IsUserObjRef<const NonCallable&>::value));
     }
 }
 
@@ -651,42 +646,32 @@ TEST_CASE("Types supporting array interface are supported")
 {
     SECTION("not arrays")
     {
-        static_assert( ! ponder_ext::ArrayMapper<int>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert( ! ponder_ext::ArrayMapper<char*>::isArray, "ponder_ext::ArrayMapper failed");
+        STATIC_ASSERT(( ! ponder_ext::ArrayMapper<int>::isArray));
+        STATIC_ASSERT(( ! ponder_ext::ArrayMapper<char*>::isArray));
     }
 
     SECTION("C arrays")
     {
-        static_assert(ponder_ext::ArrayMapper<int[10]>::isArray, "ponder_ext::ArrayMapper failed");
-        static_assert(std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value,
-                      "ponder_ext::ArrayMapper failed");
+        STATIC_ASSERT((ponder_ext::ArrayMapper<int[10]>::isArray));
+        STATIC_ASSERT((std::is_same<int, ponder_ext::ArrayMapper<int[10]>::ElementType>::value));
     }
 
     SECTION("std::array")
     {
-        static_assert(ponder_ext::ArrayMapper<std::array<int, 10>>::isArray,
-                      "ponder_ext::ArrayMapper failed");
-        static_assert(
-            std::is_same<int, ponder_ext::ArrayMapper<std::array<int, 10>>::ElementType>::value,
-            "ponder_ext::ArrayMapper failed");
+        STATIC_ASSERT((ponder_ext::ArrayMapper<std::array<int, 10>>::isArray));
+        STATIC_ASSERT((std::is_same<int, ponder_ext::ArrayMapper<std::array<int, 10>>::ElementType>::value));
     }
 
     SECTION("std::vector")
     {
-        static_assert(ponder_ext::ArrayMapper<std::vector<int>>::isArray,
-                      "ponder_ext::ArrayMapper failed");
-        static_assert(
-            std::is_same<int, ponder_ext::ArrayMapper<std::vector<int>>::ElementType>::value,
-            "ponder_ext::ArrayMapper failed");
+        STATIC_ASSERT((ponder_ext::ArrayMapper<std::vector<int>>::isArray));
+        static_assert(std::is_same<int, ponder_ext::ArrayMapper<std::vector<int>>::ElementType>::value);
     }
 
     SECTION("std::list")
     {
-        static_assert(ponder_ext::ArrayMapper<std::list<int>>::isArray,
-                      "ponder_ext::ArrayMapper failed");
-        static_assert(
-            std::is_same<int, ponder_ext::ArrayMapper<std::list<int>>::ElementType>::value,
-            "ponder_ext::ArrayMapper failed");
+        STATIC_ASSERT(ponder_ext::ArrayMapper<std::list<int>>::isArray);
+        STATIC_ASSERT((std::is_same<int, ponder_ext::ArrayMapper<std::list<int>>::ElementType>::value));
     }
 }
 

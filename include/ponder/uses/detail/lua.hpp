@@ -96,7 +96,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_enum<P>::value>::type>
 template <typename P>
 struct LuaValueReader<P,
     typename std::enable_if<std::is_same<std::string,
-                            typename detail::RawType<P>::Type>::value>::type>
+                            typename detail::DataType<P>::Type>::value>::type>
 {
     typedef std::string ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
@@ -119,7 +119,7 @@ template <typename P>
 struct LuaValueReader<P&, typename std::enable_if<detail::IsUserType<P>::value>::type>
 {
     typedef P& ParamType;
-    typedef typename detail::RawType<ParamType>::Type RawType;
+    typedef typename detail::DataType<ParamType>::Type DataType;
     
     static inline ParamType convert(lua_State* L, size_t index)
     {
@@ -129,7 +129,7 @@ struct LuaValueReader<P&, typename std::enable_if<detail::IsUserType<P>::value>:
         }
         
         UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, (int)index));        
-        return uobj->ref<RawType>();
+        return uobj->ref<DataType>();
     }
 };
 
@@ -137,7 +137,7 @@ template <typename P>
 struct LuaValueReader<P*, typename std::enable_if<ponder::detail::IsUserType<P>::value>::type>
 {
     typedef P* ParamType;
-    typedef typename ponder::detail::RawType<ParamType>::Type RawType;
+    typedef typename ponder::detail::DataType<ParamType>::Type DataType;
     
     static inline ParamType convert(lua_State* L, size_t index)
     {
@@ -147,7 +147,7 @@ struct LuaValueReader<P*, typename std::enable_if<ponder::detail::IsUserType<P>:
         }
         
         UserObject *uobj = reinterpret_cast<UserObject*>(lua_touserdata(L, (int)index));        
-        return &uobj->ref<RawType>();
+        return &uobj->ref<DataType>();
     }
 };
 
@@ -304,7 +304,7 @@ template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
         !ponder::detail::IsUserType<R>::value
-        && !std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
+        && !std::is_same<typename ponder::detail::DataType<R>::Type, UserObject>::value
     >::type>
 {
     static inline int value(lua_State *L, R&& o) {return LuaValueWriter<R>::push(L, o);}
@@ -314,7 +314,7 @@ template <typename R>
 struct CallReturnInternalRef<R,
     typename std::enable_if<
         ponder::detail::IsUserType<R>::value
-        || std::is_same<typename ponder::detail::RawType<R>::Type, UserObject>::value
+        || std::is_same<typename ponder::detail::DataType<R>::Type, UserObject>::value
     >::type>
 {
     static inline int value(lua_State *L, R&& o)
