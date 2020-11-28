@@ -74,9 +74,8 @@ struct AccessTraits
     template <class B>
     class ReadWriteBinder : public ReadOnlyBinder<B>
     {
-    public:
         typedef ReadOnlyBinder<B> Base;
-        
+    public:        
         ReadWriteBinder(const typename Base::Binding& a) : Base(a) {}
         
         bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
@@ -120,9 +119,8 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
     template <class B>
     class ReadWriteBinder : public ReadOnlyBinder<B>
     {
-    public:
         typedef ReadOnlyBinder<B> Base;
-        
+    public:        
         ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
         
         bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
@@ -166,9 +164,8 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
     template <class B>
     class ReadWriteBinder : public ReadOnlyBinder<B>
     {
-    public:
         typedef ReadOnlyBinder<B> Base;
-        
+    public:        
         ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
     };
     
@@ -213,9 +210,8 @@ struct AccessTraits<T,
     template <class B>
     class ReadWriteBinder : public ReadOnlyBinder<B>
     {
-    public:
         typedef ReadOnlyBinder<B> Base;
-        
+    public:        
         ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
         
         bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
@@ -276,16 +272,16 @@ public:
 
     typedef AccessTraits<typename TypeTraits::DereferencedType> Interface;
 
-    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, PropTraits::isWritable> AA;
+    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, false /* RO */> AccessAdapter;
 
     typedef typename Interface::template
-        ReadOnlyBinder<typename PropTraits::template Binding<ClassType, AA>>
+        ReadOnlyBinder<typename PropTraits::template Binding<ClassType, AccessAdapter>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, AA>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, AccessAdapter>(getter))
     {}
 };
 
@@ -305,16 +301,16 @@ public:
     
     typedef AccessTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
 
-    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, PropTraits::isWritable> AA;
+    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, true /* RW */> AccessAdapter;
 
     typedef typename Interface::template
-        ReadWriteBinder<typename PropTraits::template Binding<ClassType, AA>>
+        ReadWriteBinder<typename PropTraits::template Binding<ClassType, AccessAdapter>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, AA>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, AccessAdapter>(getter))
     {}
 };
 
