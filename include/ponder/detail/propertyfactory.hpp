@@ -197,8 +197,12 @@ struct AccessTraits<T,
 
         ReadOnlyBinder(const Binding& a) : m_bound(a) {}
         
-        T& getter(ClassType& c) const {return m_bound.access(c);}
-        const T& getter(const ClassType& c) const {return m_bound.access(c);}
+        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {
+            return m_bound.access(c);
+        }
+        const typename Binding::AccessAdapter::OutputType getter(const ClassType& c) const {
+            return m_bound.access(c);
+        }
         
         bool setter(ClassType&, const InputType&) const {return false;}
         bool setter(ClassType&, InputType&&) const {return false;}

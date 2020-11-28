@@ -122,7 +122,7 @@ public:
         m_name = name;
         m_funcType = FuncTraits::kind;
         m_returnType = mapType<typename FuncTraits::ExposedType>();
-        m_returnPolicy = ReturnPolicy<typename FuncTraits::ExposedType, P... > ::kind;
+        m_returnPolicy = ReturnPolicy<typename FuncTraits::ExposedType, P...> ::kind;
         m_paramInfo = FunctionApplyToParams<typename FuncTraits::Details::ParamTypes,
                                             FunctionMapParamsToValueKind<c_nParams>>::foreach();
         Function::m_usesData = &m_userData;
