@@ -79,10 +79,12 @@ struct AccessTraits
         
         ReadWriteInterface(const typename Base::Binding& a) : ReadOnlyInterface<B>(a) {}
         
-        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
-        {return this->m_bound.access(c) = v, true;}
-        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const
-        {return this->m_bound.access(c) = std::move(v), true;}
+        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const {
+            return this->m_bound.access(c) = v, true;
+        }
+        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const {
+            return this->m_bound.access(c) = std::move(v), true;
+        }
     };
 
     template <typename A>
@@ -123,10 +125,12 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
         
         ReadWriteInterface(const typename Base::Binding& a) : ReadOnlyInterface<B>(a) {}
         
-        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
-        {return this->m_bound.access(c) = v, true;}
-        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const
-        {return this->m_bound.access(c) = std::move(v), true;}
+        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const {
+            return this->m_bound.access(c) = v, true;
+        }
+        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const {
+            return this->m_bound.access(c) = std::move(v), true;
+        }
     };
 
     template <typename A>
@@ -210,10 +214,12 @@ struct AccessTraits<T,
         
         ReadWriteInterface(const typename Base::Binding& a) : ReadOnlyInterface<B>(a) {}
         
-        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const
-        {return this->m_bound.access(c) = v, true;}
-        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const
-        {return this->m_bound.access(c) = std::move(v), true;}
+        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const {
+            return this->m_bound.access(c) = v, true;
+        }
+        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const {
+            return this->m_bound.access(c) = std::move(v), true;
+        }
     };
 
     template <typename A>
@@ -250,7 +256,7 @@ public:
 
     InterfaceType m_interface;
 
-    GetSet1(typename PropTraits::Type getter)
+    GetSet1(typename PropTraits::BoundType getter)
         : m_interface(typename PropTraits::template Binding<ClassType,
                       typename PropTraits::AccessType>(getter))
     {}
@@ -278,7 +284,7 @@ public:
 
     InterfaceType m_interface;
 
-    GetSet1(typename PropTraits::Type getter)
+    GetSet1(typename PropTraits::BoundType getter)
         : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>(getter))
     {}
 };

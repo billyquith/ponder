@@ -156,8 +156,9 @@ struct ReturnType<T, false>
 /*
  * Uniform type declaration to all function types.
  *  - Used by property and function declaration, so not class specific.
- *  - DataType - scalar return type. E.g. int.
- *  - ExposedType - Stored type, e.g. int[].
+ *  - BoundType - the exposer, e.g. member function or pointer.
+ *  - DataType - scalar non-const/non-ref return type. E.g. int.
+ *  - ExposedType - real type exposed, const/ref, e.g. int[], const int.
  *  - getter/setter are both const functions but may reference non-const objects.
  *  - getter returns ExposedType and is set via DataType, which may be component, e.g. int[]
  */
@@ -177,7 +178,7 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::Function;    
     typedef typename function::FunctionDetails<typename std::remove_pointer<T>::type> Details;
-    typedef typename Details::FuncType          Type;
+    typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
@@ -193,11 +194,11 @@ struct FunctionTraits<T,
         typedef C ClassType;
         typedef A AccessType;
         
-        Binding(Type d) : data(d) {}
+        Binding(BoundType d) : data(d) {}
         
         AccessType access(ClassType& c) const {return (*data)(c);}
     private:
-        Type data;
+        BoundType data;
     };
 };
 
@@ -209,7 +210,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
 {
     static constexpr FunctionKind kind = FunctionKind::MemberFunction;
     typedef typename function::MethodDetails<T> Details;
-    typedef typename Details::FuncType          Type;
+    typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
@@ -224,11 +225,11 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
         typedef C ClassType;
         typedef A AccessType;
         
-        Binding(Type d) : data(d) {}
+        Binding(BoundType d) : data(d) {}
         
         AccessType access(ClassType& c) const {return (c.*data)();}
     private:
-        Type data;
+        BoundType data;
     };
 };
 
@@ -241,7 +242,7 @@ struct FunctionTraits<T, typename
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
     typedef function::CallableDetails<T>        Details;
-    typedef typename Details::FuncType          Type;
+    typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
@@ -257,11 +258,11 @@ struct FunctionTraits<T, typename
         typedef C ClassType;
         typedef A AccessType;
         
-        Binding(Type d) : data(d) {}
+        Binding(BoundType d) : data(d) {}
         
         AccessType access(ClassType& c) const {return data(c);}
     private:
-        Type data;
+        BoundType data;
     };
 };
 
@@ -275,7 +276,7 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::FunctionWrapper;
     typedef function::CallableDetails<T>        Details;
-    typedef typename Details::FuncType          Type;
+    typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
@@ -291,11 +292,11 @@ struct FunctionTraits<T,
         typedef C ClassType;
         typedef A AccessType;
         
-        Binding(Type d) : data(d) {}
+        Binding(BoundType d) : data(d) {}
         
         AccessType access(ClassType& c) const {return data(c);}
     private:
-        Type data;
+        BoundType data;
     };
 };
 
@@ -309,7 +310,7 @@ struct FunctionTraits<T,
 {
     static constexpr FunctionKind kind = FunctionKind::Lambda;    
     typedef function::CallableDetails<T>        Details;
-    typedef T                                   Type;
+    typedef T                                   BoundType;
     typedef typename Details::ReturnType        ExposedType;
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
@@ -325,11 +326,11 @@ struct FunctionTraits<T,
         typedef C ClassType;
         typedef A AccessType;
 
-        Binding(Type d) : data(d) {}
+        Binding(BoundType d) : data(d) {}
         
         AccessType access(ClassType& c) const {return data(c);}
     private:
-        Type data;
+        BoundType data;
     };
 };
 
@@ -342,7 +343,7 @@ struct MemberTraits;
 template <typename C, typename T>
 struct MemberTraits<T(C::*)>
 {
-    typedef T(C::*Type);                                            // full type inc ref
+    typedef T(C::*BoundType);                                       // full type inc ref
     typedef T                                       ExposedType;    // the type exposed inc refs
     typedef TypeTraits<ExposedType>                 TypeTraits;
     typedef typename TypeTraits::DereferencedType   AccessType;     // deferenced type
@@ -356,11 +357,11 @@ struct MemberTraits<T(C::*)>
         typedef CLASS ClassType;
         typedef A AccessType;
 
-        Binding(const Type& d) : data(d) {}
+        Binding(const BoundType& d) : data(d) {}
         
         AccessType& access(ClassType& c) const {return c.*data;}
     private:
-        Type data;
+        BoundType data;
     };
 };
 
