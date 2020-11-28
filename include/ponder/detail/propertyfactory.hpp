@@ -59,14 +59,14 @@ struct AccessTraits
     public:
         typedef B Binding;
         typedef typename Binding::ClassType ClassType;
-        typedef typename DataType<typename Binding::AccessType>::Type DataType;
+        typedef typename Binding::AccessAdapter::InputType InputType;
 
         ReadOnlyInterface(const Binding& a) : m_bound(a) {}
         
-        typename Binding::AccessType getter(ClassType& c) const {return m_bound.access(c);}
+        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {return m_bound.access(c);}
         
-        bool setter(ClassType&, const DataType&) const {return false;}
-        bool setter(ClassType&, DataType&&) const {return false;}
+        bool setter(ClassType&, const InputType&) const {return false;}
+        bool setter(ClassType&, InputType&&) const {return false;}
     protected:
         Binding m_bound;
     };
@@ -79,10 +79,10 @@ struct AccessTraits
         
         ReadWriteInterface(const typename Base::Binding& a) : ReadOnlyInterface<B>(a) {}
         
-        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const {
+        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
             return this->m_bound.access(c) = v, true;
         }
-        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const {
+        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
             return this->m_bound.access(c) = std::move(v), true;
         }
     };
@@ -105,14 +105,14 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
     public:
         typedef B Binding;
         typedef typename Binding::ClassType ClassType;
-        typedef typename DataType<typename Binding::AccessType>::Type DataType;
+        typedef typename Binding::AccessAdapter::InputType InputType;
         
         ReadOnlyInterface(const Binding& a) : m_bound(a) {}
         
-        T getter(ClassType& c) const {return m_bound.access(c);}
+        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {return m_bound.access(c);}
         
-        bool setter(ClassType&, const DataType&) const {return false;}
-        bool setter(ClassType&, DataType&&) const {return false;}
+        bool setter(ClassType&, InputType const&) const {return false;}
+        bool setter(ClassType&, InputType&&) const {return false;}
     protected:
         Binding m_bound;
     };
@@ -125,10 +125,10 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
         
         ReadWriteInterface(const typename Base::Binding& a) : ReadOnlyInterface<B>(a) {}
         
-        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const {
+        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
             return this->m_bound.access(c) = v, true;
         }
-        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const {
+        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
             return this->m_bound.access(c) = std::move(v), true;
         }
     };
@@ -153,7 +153,7 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
         typedef B Binding;
         typedef T ArrayType;
         typedef typename Binding::ClassType ClassType;
-        typedef typename ArrayTraits::ElementType DataType;
+        typedef typename Binding::AccessAdapter::InputType InputType;
 
         ReadOnlyInterface(const Binding& a) : m_bound(a) {}
         
@@ -193,15 +193,15 @@ struct AccessTraits<T,
     public:
         typedef B Binding;
         typedef typename Binding::ClassType ClassType;
-        typedef typename DataType<typename Binding::AccessType>::Type DataType;
-        
+        typedef typename Binding::AccessAdapter::InputType InputType;
+
         ReadOnlyInterface(const Binding& a) : m_bound(a) {}
         
         T& getter(ClassType& c) const {return m_bound.access(c);}
         const T& getter(const ClassType& c) const {return m_bound.access(c);}
         
-        bool setter(ClassType&, const DataType&) const {return false;}
-        bool setter(ClassType&, DataType&&) const {return false;}
+        bool setter(ClassType&, const InputType&) const {return false;}
+        bool setter(ClassType&, InputType&&) const {return false;}
     protected:
         Binding m_bound;
     };
@@ -214,10 +214,10 @@ struct AccessTraits<T,
         
         ReadWriteInterface(const typename Base::Binding& a) : ReadOnlyInterface<B>(a) {}
         
-        bool setter(typename Base::ClassType& c, const typename Base::DataType& v) const {
+        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
             return this->m_bound.access(c) = v, true;
         }
-        bool setter(typename Base::ClassType& c, typename Base::DataType&& v) const {
+        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
             return this->m_bound.access(c) = std::move(v), true;
         }
     };
@@ -230,7 +230,29 @@ struct AccessTraits<T,
 template <typename T>
 struct AccessTraits<T&> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
 template <typename T>
-struct AccessTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };    
+struct AccessTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
+
+template <typename T, bool isWritable = true>
+struct AccessAdapter
+{
+    typedef T InputType;
+    typedef T& OutputType; // Not a rvalue so we can reference
+};
+
+template <>
+struct AccessAdapter<void>
+{
+    typedef void InputType;
+    typedef void OutputType;
+};
+
+template <typename T>
+struct AccessAdapter<T, false>
+{
+    typedef T InputType;
+    typedef T OutputType; // T is an rvalue so return by value
+};
+
 
 // Read-only accessor wrapper. Not RW, not a pointer.
 template <class C, typename TRAITS, typename E = void>
@@ -250,15 +272,16 @@ public:
 
     typedef AccessTraits<typename TypeTraits::DereferencedType> Interface;
 
+    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, PropTraits::isWritable> AA;
+
     typedef typename Interface::template
-        ReadOnlyInterface<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>>
+        ReadOnlyInterface<typename PropTraits::template Binding<ClassType, AA>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType,
-                      typename PropTraits::AccessType>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, AA>(getter))
     {}
 };
 
@@ -278,14 +301,16 @@ public:
     
     typedef AccessTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
 
+    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, PropTraits::isWritable> AA;
+
     typedef typename Interface::template
-        ReadWriteInterface<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>>
+        ReadWriteInterface<typename PropTraits::template Binding<ClassType, AA>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, AA>(getter))
     {}
 };
 

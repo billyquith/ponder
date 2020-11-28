@@ -183,8 +183,7 @@ struct FunctionTraits<T,
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename DataType<AccessType>::Type DataType;
+    typedef typename TypeTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -192,11 +191,11 @@ struct FunctionTraits<T,
     {
     public:
         typedef C ClassType;
-        typedef A AccessType;
+        typedef A AccessAdapter;
         
         Binding(BoundType d) : data(d) {}
         
-        AccessType access(ClassType& c) const {return (*data)(c);}
+        typename AccessAdapter::OutputType access(ClassType& c) const {return (*data)(c);}
     private:
         BoundType data;
     };
@@ -214,8 +213,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     typedef typename Details::ReturnType        ExposedType;
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename DataType<AccessType>::Type DataType;
+    typedef typename TypeTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -223,11 +221,11 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     {
     public:
         typedef C ClassType;
-        typedef A AccessType;
-        
+        typedef A AccessAdapter;
+
         Binding(BoundType d) : data(d) {}
         
-        AccessType access(ClassType& c) const {return (c.*data)();}
+        typename AccessAdapter::OutputType access(ClassType& c) const {return (c.*data)();}
     private:
         BoundType data;
     };
@@ -247,8 +245,7 @@ struct FunctionTraits<T, typename
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename DataType<AccessType>::Type DataType;
+    typedef typename TypeTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
     
     template <typename C, typename A>
@@ -256,11 +253,11 @@ struct FunctionTraits<T, typename
     {
     public:
         typedef C ClassType;
-        typedef A AccessType;
-        
+        typedef A AccessAdapter;
+
         Binding(BoundType d) : data(d) {}
         
-        AccessType access(ClassType& c) const {return data(c);}
+        typename AccessAdapter::OutputType access(ClassType& c) const {return data(c);}
     private:
         BoundType data;
     };
@@ -281,8 +278,7 @@ struct FunctionTraits<T,
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename DataType<AccessType>::Type DataType;
+    typedef typename TypeTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -290,11 +286,11 @@ struct FunctionTraits<T,
     {
     public:
         typedef C ClassType;
-        typedef A AccessType;
-        
+        typedef A AccessAdapter;
+
         Binding(BoundType d) : data(d) {}
         
-        AccessType access(ClassType& c) const {return data(c);}
+        typename AccessAdapter::OutputType access(ClassType& c) const {return data(c);}
     private:
         BoundType data;
     };
@@ -315,8 +311,7 @@ struct FunctionTraits<T,
     typedef TypeTraits<ExposedType>             TypeTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
                                        && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename DataType<AccessType>::Type DataType;
+    typedef typename TypeTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -324,11 +319,11 @@ struct FunctionTraits<T,
     {
     public:
         typedef C ClassType;
-        typedef A AccessType;
+        typedef A AccessAdapter;
 
         Binding(BoundType d) : data(d) {}
         
-        AccessType access(ClassType& c) const {return data(c);}
+        typename AccessAdapter::OutputType access(ClassType& c) const {return data(c);}
     private:
         BoundType data;
     };
@@ -344,22 +339,21 @@ template <typename C, typename T>
 struct MemberTraits<T(C::*)>
 {
     typedef T(C::*BoundType);                                       // full type inc ref
-    typedef T                                       ExposedType;    // the type exposed inc refs
-    typedef TypeTraits<ExposedType>                 TypeTraits;
-    typedef typename TypeTraits::DereferencedType   AccessType;     // deferenced type
-    typedef typename DataType<AccessType>::Type     DataType;       // raw type or container
-    static constexpr bool isWritable = !std::is_const<AccessType>::value;
+    typedef T                                   ExposedType;    // the type exposed inc refs
+    typedef TypeTraits<ExposedType>             TypeTraits;
+    typedef typename TypeTraits::DataType       DataType;       // raw type or container
+    static constexpr bool isWritable = !std::is_const<typename TypeTraits::DereferencedType>::value;
 
     template <typename CLASS, typename A>
     class Binding
     {
     public:
         typedef CLASS ClassType;
-        typedef A AccessType;
+        typedef A AccessAdapter;
 
         Binding(const BoundType& d) : data(d) {}
         
-        AccessType& access(ClassType& c) const {return c.*data;}
+        typename AccessAdapter::OutputType access(ClassType& c) const { return c.*data; }
     private:
         BoundType data;
     };
