@@ -232,25 +232,28 @@ struct AccessTraits<T&> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)];
 template <typename T>
 struct AccessTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
 
-template <typename T, bool isWritable = true>
+
+// Read-only.
+template <typename PropTraits, typename R, typename E = void>
 struct AccessAdapter
 {
-    typedef T InputType;
-    typedef T& OutputType; // Not a rvalue so we can reference
+    typedef typename PropTraits::TypeTraits::DereferencedType InputType;
+    typedef typename PropTraits::TypeTraits::DereferencedType OutputType; // T is an rvalue so return by value
 };
 
-template <>
-struct AccessAdapter<void>
+template <typename PropTraits>
+struct AccessAdapter<PropTraits, void>
 {
     typedef void InputType;
     typedef void OutputType;
 };
 
-template <typename T>
-struct AccessAdapter<T, false>
+// Writeable.
+template <typename PropTraits, typename R>
+struct AccessAdapter<PropTraits, R, typename std::enable_if<PropTraits::isWritable>::type>
 {
-    typedef T InputType;
-    typedef T OutputType; // T is an rvalue so return by value
+    typedef typename PropTraits::TypeTraits::DereferencedType InputType;
+    typedef typename PropTraits::TypeTraits::DereferencedType& OutputType; // Not a rvalue so we can reference
 };
 
 
@@ -272,7 +275,7 @@ public:
 
     typedef AccessTraits<typename TypeTraits::DereferencedType> Interface;
 
-    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, false /* RO */> AccessAdapter;
+    typedef typename AccessAdapter<typename PropTraits, typename TypeTraits::Type> AccessAdapter;
 
     typedef typename Interface::template
         ReadOnlyBinder<typename PropTraits::template Binding<ClassType, AccessAdapter>>
@@ -301,7 +304,7 @@ public:
     
     typedef AccessTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
 
-    typedef typename AccessAdapter<typename TypeTraits::DereferencedType, true /* RW */> AccessAdapter;
+    typedef typename AccessAdapter<typename PropTraits, typename TypeTraits::Type> AccessAdapter;
 
     typedef typename Interface::template
         ReadWriteBinder<typename PropTraits::template Binding<ClassType, AccessAdapter>>

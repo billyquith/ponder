@@ -56,35 +56,47 @@ namespace detail {
  *   storage / modifiers (in other words, convert from T to PointerType)
  */
 
-// How we access an instance of type T.
 template <typename T, typename E = void>
-struct TypeDetails
-{
-    typedef int unhandled_type[-(int)sizeof(T)];
-};
-
-// Object instance.
-template <typename T>
-struct TypeDetails<T>
+struct TypeTraits
 {
     static constexpr ReferenceKind kind = ReferenceKind::Instance;
+    typedef T Type;
     typedef T& ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
+    static_assert(!std::is_void<T>::value, "Incorrect type details");
     typedef typename DataType<T>::Type DataType;
-    static constexpr bool isWritable = !std::is_void<DereferencedType>::value && !std::is_const<DereferencedType>::value;
+    static constexpr bool isWritable = !std::is_const<DereferencedType>::value;
     static constexpr bool isRef = false;
 
-    static inline ReferenceType get(void* pointer) {return *static_cast<T*>(pointer);}
-    static inline PointerType getPointer(T& value) {return &value;}
-    static inline PointerType getPointer(T* value) {return value;}
+    static inline ReferenceType get(void* pointer) { return *static_cast<T*>(pointer); }
+    static inline PointerType getPointer(T& value) { return &value; }
+    static inline PointerType getPointer(T* value) { return value; }
+};
+
+// void
+template <>
+struct TypeTraits<void>
+{
+    static constexpr ReferenceKind kind = ReferenceKind::None;
+    typedef void T;
+    typedef T* ReferenceType;
+    typedef T* PointerType;
+    typedef T DereferencedType;
+    typedef typename DataType<T>::Type DataType;
+    static constexpr bool isWritable = false;
+    static constexpr bool isRef = false;
+
+    static inline ReferenceType get(void* pointer) { return 0; }
+    static inline PointerType getPointer(T* value) { return value; }
 };
 
 // Raw pointers
 template <typename T>
-struct TypeDetails<T*>
+struct TypeTraits<T*>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Pointer;
+    typedef T* Type;
     typedef T* ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
@@ -99,9 +111,10 @@ struct TypeDetails<T*>
 
 // References
 template <typename T>
-struct TypeDetails<T&>
+struct TypeTraits<T&>
 {
     static constexpr ReferenceKind kind = ReferenceKind::Reference;
+    typedef T& Type;
     typedef T& ReferenceType;
     typedef T* PointerType;
     typedef T DereferencedType;
@@ -133,43 +146,24 @@ struct SmartPointerReferenceTraits
 
 // std::shared_ptr<>
 template <typename T>
-struct TypeDetails<std::shared_ptr<T>>
+struct TypeTraits<std::shared_ptr<T>>
     : public SmartPointerReferenceTraits<std::shared_ptr<T>,T> {};
-
-
-template <typename T>
-struct TypeTraits : public TypeDetails<T> {};
-
-// void
-template <>
-struct TypeTraits<void>
-{
-    static constexpr ReferenceKind kind = ReferenceKind::None;
-    typedef void T;
-    typedef T* ReferenceType;
-    typedef T* PointerType;
-    typedef T DereferencedType;
-    typedef typename DataType<T>::Type DataType;
-    static constexpr bool isWritable = false;
-    static constexpr bool isRef = false;
-
-    static inline ReferenceType get(void* pointer) {return 0;}
-    static inline PointerType getPointer(T* value) {return value;}
-};
 
     
 // Built-in arrays []
-//template <typename T, size_t N>
-//struct TypeTraits<T[N]> //, typename std::enable_if< std::is_array<T>::value >::type>
-//{
-//    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
-//    typedef typename DataType<T>::Type DataType;
-//    typedef T(&ReferenceType)[N];
-//    typedef T* PointerType;
-//    static constexpr size_t Size = N;
-//    static constexpr bool isWritable = !std::is_const<T>::value;
-//    static constexpr bool isRef = false;
-//};
+template <typename T, size_t N>
+struct TypeTraits<T[N], typename std::enable_if<std::is_array<T>::value>::type>
+{
+    static constexpr ReferenceKind kind = ReferenceKind::BuiltinArray;
+    typedef T Type[N];
+    typedef typename DataType<T>::Type DataType;
+    typedef T(&ReferenceType)[N];
+    typedef T* PointerType;
+    typedef T DereferencedType[N];
+    static constexpr size_t Size = N;
+    static constexpr bool isWritable = !std::is_const<T>::value;
+    static constexpr bool isRef = false;
+};
 
 
 //template <typename C, typename T, size_t S>
