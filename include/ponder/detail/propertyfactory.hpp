@@ -155,8 +155,10 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
 
         ReadOnlyBinder(const Binding& a) : m_bound(a) {}
         
-        ArrayType& array(ClassType& c) const {return m_bound.access(c);}
-        const ArrayType& array(const ClassType& c) const {return m_bound.access(c);}
+        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {return m_bound.access(c);}
+
+        bool setter(ClassType&, const InputType&) const { return false; }
+        bool setter(ClassType&, InputType&&) const { return false; }
     protected:
         Binding m_bound;
     };
@@ -167,6 +169,14 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
         typedef ReadOnlyBinder<B> Base;
     public:        
         ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
+
+        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
+            return this->m_bound.access(c) = v, true;
+        }
+        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
+            return this->m_bound.access(c) = std::move(v), true;
+        }
+
     };
     
     template <typename A>
