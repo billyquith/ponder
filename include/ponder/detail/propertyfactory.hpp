@@ -197,9 +197,6 @@ struct AccessTraits<T,
         typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {
             return m_bound.access(c);
         }
-        const typename Binding::AccessAdapter::OutputType getter(const ClassType& c) const {
-            return m_bound.access(c);
-        }
         
         bool setter(ClassType&, const InputType&) const {return false;}
         bool setter(ClassType&, InputType&&) const {return false;}
@@ -246,6 +243,13 @@ struct AccessAdapter<PropTraits, void>
 {
     typedef void InputType;
     typedef void OutputType;
+};
+
+template <typename PropTraits, typename R>
+struct AccessAdapter<PropTraits, R*>
+{
+    typedef R* InputType;
+    typedef ponder::Value OutputType;
 };
 
 // Writeable.
