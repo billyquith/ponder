@@ -91,6 +91,7 @@ namespace PropertyTest
 
         const MyType* getCT() const {return &mt;}
         MyType* getT() { return &mt; }
+        void setT(const MyType * t) { mt = *t; }
     };
 
 #define FUNCTION_ACCESSORS(T,N) \
@@ -134,8 +135,9 @@ namespace PropertyTest
             PROPERTY(float,f)
             PROPERTY(std::string,s)
             PROPERTY(MyEnum,e)
-            .property("getConstT", &MyClass::getCT)
+            .property("getCT", &MyClass::getCT)
             .property("getT", &MyClass::getT)
+            .property("myType", &MyClass::getCT, &MyClass::setT)
             ;
 
         // ***** std::function *****

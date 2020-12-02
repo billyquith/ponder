@@ -81,7 +81,28 @@ protected:
     Binding m_bound;
 };
 
-// Bind to internal reference.
+template <class C, typename PropTraits>
+class ValueBinder2 : public ValueBinder<C, PropTraits>
+{
+    typedef ValueBinder<C, PropTraits> Base;
+public:
+    template <typename S>
+    ValueBinder2(const Base::Binding& g, S s) : Base(g), m_set(s) {}
+
+    bool setter(ClassType& c, SetType v) const {
+        return m_set(c, v), true;
+    }
+
+    bool setter(ClassType& c, Value const& value) const {
+        return setter(c, value.to<SetType>());
+    }
+
+protected:
+    std::function<void(Base::ClassType&, Base::AccessType)> m_set;
+};
+
+
+// Bind to internal reference getter.
 template <class C, typename PropTraits>
 class InternalRefBinder
 {
@@ -111,6 +132,22 @@ protected:
     Binding m_bound;
 };
 
+// Internal reference getter & setter.
+template <class C, typename PropTraits>
+class InternalRefBinder2 : public InternalRefBinder<C, PropTraits>
+{
+    typedef InternalRefBinder<C, PropTraits> Base;
+public:
+    template <typename S>
+    InternalRefBinder2(const Base::Binding& g, S s) : Base(g), m_set(s) {}
+
+    bool setter(ClassType& c, AccessType v) const { return m_set(c, v), true; }
+    bool setter(ClassType& c, Value const& value) const { return setter(c, value.to<AccessType>()); }
+
+protected:
+    std::function<void(ClassType&, AccessType)> m_set;
+};
+
 /*
  *  Access traits for an exposed type T.
  *    - I.e. how we use an instance to access the bound property data using the correct interface.
@@ -125,6 +162,9 @@ struct AccessTraits
 
     template <class C>
     using ValueBinder = ValueBinder<C, PT>;
+
+    template <class C>
+    using ValueBinder2 = ValueBinder2<C, PT>;
 
     template <typename A>
     using Impl = SimplePropertyImpl<A>;
@@ -141,6 +181,9 @@ struct AccessTraits<PT,
 
     template <class C>
     using ValueBinder = ValueBinder<C, PT>;
+
+    template <class C>
+    using ValueBinder2 = ValueBinder2<C, PT>;
 
     template <typename A>
     using Impl = EnumPropertyImpl<A>;
@@ -199,6 +242,11 @@ struct AccessTraits<PT,
         std::is_pointer<typename PT::ExposedType>::value, InternalRefBinder<C, PT>, ValueBinder<C, PT>
     >::type;
 
+    template <class C>
+    using ValueBinder2 = typename std::conditional<
+        std::is_pointer<typename PT::ExposedType>::value, InternalRefBinder2<C, PT>, ValueBinder2<C, PT>
+    >::type;
+
     template <typename A>
     using Impl = UserPropertyImpl<A>;
 };
@@ -246,24 +294,13 @@ public:
     
     typedef AccessTraits<PropTraits> Access;
 
-    struct InterfaceType
-    {
-        template <typename F1, typename F2>
-        InterfaceType(F1 get, F2 set) : getter(get), m_setter(set) {}
-        
-        std::function<typename PropTraits::DispatchType> getter;
-        std::function<void(ClassType&, DataType)> m_setter;
+    typedef typename Access::template ValueBinder2<ClassType> InterfaceType;
 
-        Value getValue(ClassType& c) const { return UserObject::makeCopy(getter(c)); }
-
-        // setter returns writable status, so wrap it
-        bool setter(ClassType& c, DataType v) const {return m_setter(c,v), true;}
-        bool setter(ClassType& c, Value const& v) const { return m_setter(c, v.to<DataType>()), true; }
-    } m_interface;
+    InterfaceType m_interface;
 
     template <typename F1, typename F2>
     GetSet2(F1 getter, F2 setter)
-        : m_interface(getter, setter)
+        : m_interface(typename InterfaceType::Binding(getter), setter)
     {}
 };
 
