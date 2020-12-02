@@ -99,7 +99,7 @@ public:
         if constexpr (std::is_const<AccessType>::value)
             return m_bound.access(c);
         else
-            return m_bound.access(const_cast<std::remove_const<ClassType>::type&>(c));
+            return m_bound.access(const_cast<typename std::remove_const<ClassType>::type&>(c));
     }
 
     Value getValue(ClassType& c) const {return UserObject::makeRef(getter(c));}
