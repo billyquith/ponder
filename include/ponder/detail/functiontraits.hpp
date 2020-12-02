@@ -180,11 +180,11 @@ struct FunctionTraits<T,
     typedef typename function::FunctionDetails<typename std::remove_pointer<T>::type> Details;
     typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             TypeTraits;
+    typedef TypeTraits<ExposedType>             ExposedTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename TypeTraits::DataType       DataType;
+                                       && !std::is_const<typename ExposedTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename ExposedTraits::DereferencedType, isWritable>::Type AccessType;
+    typedef typename ExposedTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -212,10 +212,10 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
     typedef typename function::MethodDetails<T> Details;
     typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             TypeTraits;
+    typedef TypeTraits<ExposedType>             ExposedTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value && !Details::isConst;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename TypeTraits::DataType       DataType;
+    typedef typename function::ReturnType<typename ExposedTraits::DereferencedType, isWritable>::Type AccessType;
+    typedef typename ExposedTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -243,11 +243,11 @@ struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::val
     typedef function::CallableDetails<T>        Details;
     typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             TypeTraits;
+    typedef TypeTraits<ExposedType>             ExposedTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename TypeTraits::DataType       DataType;
+                                       && !std::is_const<typename ExposedTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename ExposedTraits::DereferencedType, isWritable>::Type AccessType;
+    typedef typename ExposedTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
     
     template <typename C, typename A>
@@ -277,11 +277,11 @@ struct FunctionTraits<T,
     typedef function::CallableDetails<T>        Details;
     typedef typename Details::FuncType          BoundType;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             TypeTraits;
+    typedef TypeTraits<ExposedType>             ExposedTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename TypeTraits::DataType       DataType;
+                                       && !std::is_const<typename ExposedTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename ExposedTraits::DereferencedType, isWritable>::Type AccessType;
+    typedef typename ExposedTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -311,11 +311,11 @@ struct FunctionTraits<T,
     typedef function::CallableDetails<T>        Details;
     typedef T                                   BoundType;
     typedef typename Details::ReturnType        ExposedType;
-    typedef TypeTraits<ExposedType>             TypeTraits;
+    typedef TypeTraits<ExposedType>             ExposedTraits;
     static constexpr bool isWritable = std::is_lvalue_reference<ExposedType>::value
-                                       && !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename function::ReturnType<typename TypeTraits::DereferencedType, isWritable>::Type AccessType;
-    typedef typename TypeTraits::DataType       DataType;
+                                       && !std::is_const<typename ExposedTraits::DereferencedType>::value;
+    typedef typename function::ReturnType<typename ExposedTraits::DereferencedType, isWritable>::Type AccessType;
+    typedef typename ExposedTraits::DataType       DataType;
     typedef typename Details::DispatchType      DispatchType;
 
     template <typename C, typename A>
@@ -344,10 +344,10 @@ struct MemberTraits<T(C::*)>
 {
     typedef T(C::*BoundType);                                   // full type inc ref
     typedef T                                   ExposedType;    // the type exposed inc refs
-    typedef TypeTraits<ExposedType>             TypeTraits;
-    typedef typename TypeTraits::DataType       DataType;       // raw type or container
-    static constexpr bool isWritable = !std::is_const<typename TypeTraits::DereferencedType>::value;
-    typedef typename TypeTraits::DereferencedType AccessType;
+    typedef TypeTraits<ExposedType>             ExposedTraits;
+    typedef typename ExposedTraits::DataType       DataType;       // raw type or container
+    static constexpr bool isWritable = !std::is_const<typename ExposedTraits::DereferencedType>::value;
+    typedef typename ExposedTraits::DereferencedType AccessType;
 
     template <typename C, typename A>
     class Binding

@@ -135,7 +135,7 @@ struct AccessTraits
  */
 template <typename PT>
 struct AccessTraits<PT,
-    typename std::enable_if<std::is_enum<typename PT::TypeTraits::DereferencedType>::value>::type>
+    typename std::enable_if<std::is_enum<typename PT::ExposedTraits::DereferencedType>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
 
@@ -151,17 +151,17 @@ struct AccessTraits<PT,
  */
 template <typename PT>
 struct AccessTraits<PT,
-    typename std::enable_if<ponder_ext::ArrayMapper<typename PT::TypeTraits::DereferencedType>::isArray>::type>
+    typename std::enable_if<ponder_ext::ArrayMapper<typename PT::ExposedTraits::DereferencedType>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
 
-    typedef ponder_ext::ArrayMapper<typename PT::TypeTraits::DereferencedType> ArrayTraits;
+    typedef ponder_ext::ArrayMapper<typename PT::ExposedTraits::DereferencedType> ArrayTraits;
 
     template <class C>
     class ValueBinder : public ArrayTraits
     {
     public:
-        typedef typename PT::TypeTraits::DereferencedType ArrayType;
+        typedef typename PT::ExposedTraits::DereferencedType ArrayType;
         typedef C ClassType;
         typedef typename PT::AccessType& AccessType;
 
@@ -189,8 +189,8 @@ struct AccessTraits<PT,
  */
 template <typename PT>
 struct AccessTraits<PT,
-    typename std::enable_if<hasStaticTypeDecl<typename PT::TypeTraits::DereferencedType>()
-                        && !std::is_enum<typename PT::TypeTraits::DereferencedType>::value>::type>
+    typename std::enable_if<hasStaticTypeDecl<typename PT::ExposedTraits::DereferencedType>()
+                        && !std::is_enum<typename PT::ExposedTraits::DereferencedType>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
 
@@ -212,7 +212,7 @@ public:
     typedef TRAITS PropTraits;
     typedef C ClassType;
     typedef typename PropTraits::ExposedType ExposedType;
-    typedef typename PropTraits::TypeTraits TypeTraits;
+    typedef typename PropTraits::ExposedTraits TypeTraits;
     typedef typename PropTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = PropTraits::isWritable;
@@ -239,7 +239,7 @@ public:
     typedef FUNCTRAITS PropTraits;
     typedef C ClassType;
     typedef typename PropTraits::ExposedType ExposedType;
-    typedef typename PropTraits::TypeTraits TypeTraits;
+    typedef typename PropTraits::ExposedTraits TypeTraits;
     typedef typename PropTraits::DataType DataType; // raw type
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
