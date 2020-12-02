@@ -68,7 +68,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_integral<P>::value>::ty
     typedef P ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        return luaL_checkinteger(L, (int)index);
+        return static_cast<ParamType>(luaL_checkinteger(L, (int)index));
     }
 };
 
@@ -78,7 +78,7 @@ struct LuaValueReader<P, typename std::enable_if<std::is_floating_point<P>::valu
     typedef P ParamType;
     static inline ParamType convert(lua_State* L, size_t index)
     {
-        return luaL_checknumber(L, (int)index);
+        return static_cast<ParamType>(luaL_checknumber(L, (int)index));
     }
 };
 
