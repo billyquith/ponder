@@ -309,6 +309,10 @@ struct ValueMapper<ponder::String>
         {PONDER_ERROR(ponder::BadType(ponder::ValueKind::Reference, ponder::ValueKind::String));}
 };
 
+// TODO - Add ponder::is_string() ?
+template <>
+struct ValueMapper<const ponder::String> : ValueMapper<ponder::String> {};
+
 template <>
 struct ValueMapper<ponder::detail::string_view>
 {
@@ -500,12 +504,6 @@ struct ValueMapper<ponder::NoType>
  *  - Modify type to avoid supporting every variation above, e.g. const.
  */
     
-/**
- * Specialization of ValueMapper for const T -- just forward to ValueMapper<T>
- */
-template <typename T>
-struct ValueMapper<const T> : public ValueMapper<T> {};
-
 /**
  * Show error for references. Not allowed.
  */

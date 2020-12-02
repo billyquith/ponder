@@ -47,7 +47,7 @@ Value EnumPropertyImpl<A>::getValue(const UserObject& object) const
 template <typename A>
 void EnumPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.m_interface.setter(object.get<typename A::ClassType>(), value.to<typename A::DataType>()))
+    if (!m_accessor.m_interface.setter(object.get<typename A::ClassType>(), value))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

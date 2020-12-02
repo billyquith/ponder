@@ -30,46 +30,23 @@
 namespace ponder {
 namespace detail {
     
-// Policy for returned user object
-template <bool copyObject>
-struct ToUserObject
-{
-    template <typename T>
-    static inline UserObject get(const T& value)
-    {
-        return UserObject::makeCopy(value);
-    }
-};
-
-template <>
-struct ToUserObject<false>
-{
-    template <typename T>
-    static inline UserObject get(T& value)
-    {
-        return UserObject::makeRef(value);
-    }
-};
-
 template <typename A>
 UserPropertyImpl<A>::UserPropertyImpl(IdRef name, A&& accessor)
     : UserProperty(name, classByType<typename A::DataType>())
     , m_accessor(accessor)
-{
-}
+{}
 
 template <typename A>
 Value UserPropertyImpl<A>::getValue(const UserObject& object) const
 {
     // We copy the returned object based on the return type of the getter: (copy) T, const T&, (ref) T&.
-    return ToUserObject<!A::PropTraits::isWritable>::get(
-                m_accessor.m_interface.getter(object.get<typename A::ClassType>()));
+    return m_accessor.m_interface.getValue(object.get<typename A::ClassType>());
 }
 
 template <typename A>
 void UserPropertyImpl<A>::setValue(const UserObject& object, const Value& value) const
 {
-    if (!m_accessor.m_interface.setter(object.ref<typename A::ClassType>(), value.to<typename A::DataType>()))
+    if (!m_accessor.m_interface.setter(object.ref<typename A::ClassType>(), value))
         PONDER_ERROR(ForbiddenWrite(name()));
 }
 

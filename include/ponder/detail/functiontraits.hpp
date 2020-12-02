@@ -237,8 +237,7 @@ struct FunctionTraits<T, typename std::enable_if<std::is_member_function_pointer
  * Specialization for functors (classes exporting a result_type type, T operator() ).
  */
 template <typename T>
-struct FunctionTraits<T, typename
-    std::enable_if<std::is_bind_expression<T>::value>::type>
+struct FunctionTraits<T, typename std::enable_if<std::is_bind_expression<T>::value>::type>
 {
     static constexpr FunctionKind kind = FunctionKind::BindExpression;
     typedef function::CallableDetails<T>        Details;

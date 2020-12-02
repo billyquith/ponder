@@ -49,11 +49,20 @@ public:
     typedef B Binding;
     typedef typename Binding::ClassType ClassType;
     typedef typename Binding::AccessType AccessType;
-    typedef typename std::remove_reference<const AccessType>::type SetType;
+    typedef typename std::remove_reference<AccessType>::type SetType;
 
-    ValueBinder(const Binding& a) : m_bound(a) {}
+    static_assert(!std::is_pointer<AccessType>::value, "Error: Pointers not handled here");
+
+    ValueBinder(const Binding& b) : m_bound(b) {}
 
     AccessType getter(ClassType& c) const { return m_bound.access(c); }
+
+    Value getValue(ClassType& c) const {
+        if constexpr (std::is_reference<AccessType>::value)
+            return UserObject::makeRef(getter(c));
+        else
+            return UserObject::makeCopy(getter(c));
+    }
 
     bool setter(ClassType& c, SetType v) const {
         if constexpr (std::is_reference<AccessType>::value)
@@ -61,31 +70,38 @@ public:
         else
             return false;
     }
-    //bool setter(ClassType& c, AccessType&& v) const {
-    //    return this->m_bound.access(c) = std::move(v), true;
-    //}
+
+    bool setter(ClassType& c, Value const& value) const {
+        return setter(c, value.to<SetType>());
+    }
+
 protected:
     Binding m_bound;
 };
 
-// Bind using a reference.
-//template <class B>
-//class RefBinder
-//{
-//public:        
-//    typedef B Binding;
-//    typedef typename Binding::ClassType ClassType;
-//    typedef typename Binding::AccessType AccessType;
+// Bind to internal reference.
+template <class B>
+class InternalRefBinder
+{
+public:        
+    typedef B Binding;
+    typedef typename Binding::ClassType ClassType;
+    typedef typename Binding::AccessType AccessType;
 
-//    RefBinder(const Binding& a) {}
-//    
-//    bool setter(ClassType& c, const AccessType& v) const {
-//        return this->m_bound.access(c) = v, true;
-//    }
-//    bool setter(ClassType& c, AccessType&& v) const {
-//        return this->m_bound.access(c) = std::move(v), true;
-//    }
-//};
+    static_assert(std::is_pointer<AccessType>::value, "Error: Only pointers handled here");
+
+    InternalRefBinder(const Binding& b) : m_bound(b) {}
+
+    AccessType getter(ClassType& c) const   {return m_bound.access(c);}
+
+    Value getValue(ClassType& c) const      {return UserObject::makeRef(getter(c));}
+
+    bool setter(ClassType&, AccessType) const {return false;}
+    bool setter(ClassType&, Value const&) const {return false;}
+
+protected:
+    Binding m_bound;
+};
 
 /*
  *  Access traits for an exposed type T.
@@ -94,7 +110,7 @@ protected:
  *    - ValueBinder & RefBinder : RO (const) or RW data.
  *    - Impl : which specialise property impl to use.
  */
-template <typename T, typename E = void>
+template <typename PT, typename E = void>
 struct AccessTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
@@ -109,8 +125,9 @@ struct AccessTraits
 /*
  * Enums.
  */
-template <typename T>
-struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
+template <typename PT>
+struct AccessTraits<PT,
+    typename std::enable_if<std::is_enum<typename PT::TypeTraits::DereferencedType>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
 
@@ -124,18 +141,20 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 /*
  * Array types.
  */
-template <typename T>
-struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArray>::type>
+template <typename PT>
+struct AccessTraits<PT,
+    typename std::enable_if<ponder_ext::ArrayMapper<typename PT::TypeTraits::DereferencedType>::isArray>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Container;
-    typedef ponder_ext::ArrayMapper<T> ArrayTraits;
+
+    typedef ponder_ext::ArrayMapper<typename PT::TypeTraits::DereferencedType> ArrayTraits;
 
     template <typename B>
     class ValueBinder : public ArrayTraits
     {
     public:
         typedef B Binding;
-        typedef T ArrayType;
+        typedef typename PT::TypeTraits::DereferencedType ArrayType;
         typedef typename Binding::ClassType ClassType;
         typedef typename Binding::AccessType AccessType;
 
@@ -146,9 +165,6 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
         bool setter(ClassType& c, const AccessType v) const {
             return this->m_bound.access(c) = v, true;
         }
-        //bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
-        //    return this->m_bound.access(c) = std::move(v), true;
-        //}
     protected:
         Binding m_bound;
     };
@@ -162,24 +178,21 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
  *  - I.e. Registered classes.
  *  - Enums also use registration so must differentiate.
  */
-template <typename T>
-struct AccessTraits<T,
-    typename std::enable_if<hasStaticTypeDecl<T>() && !std::is_enum<T>::value>::type>
+template <typename PT>
+struct AccessTraits<PT,
+    typename std::enable_if<hasStaticTypeDecl<typename PT::TypeTraits::DereferencedType>()
+                        && !std::is_enum<typename PT::TypeTraits::DereferencedType>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
 
     template <typename B>
-    using ValueBinder = ValueBinder<B>;
+    using ValueBinder = typename std::conditional<
+        std::is_pointer<typename PT::ExposedType>::value, InternalRefBinder<B>, ValueBinder<B>
+    >::type;
 
     template <typename A>
     using Impl = UserPropertyImpl<A>;
 };
-
-// Sanity checks.
-template <typename T>
-struct AccessTraits<T&> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
-template <typename T>
-struct AccessTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
 
 
 // Read-only accessor wrapper. Not RW, not a pointer.
@@ -193,19 +206,23 @@ public:
     typedef typename PropTraits::ExposedType ExposedType;
     typedef typename PropTraits::TypeTraits TypeTraits;
     typedef typename PropTraits::DataType DataType; // raw type or container
+    //typedef typename std::conditional<std::is_pointer<ExposedType>::value, C, const C>::type ClassType;
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    typedef AccessTraits<typename TypeTraits::DereferencedType> Access;
+    typedef AccessTraits<PropTraits> Access; // property interface specialisation
+
+    typedef typename std::conditional<std::is_pointer<ExposedType>::value,
+        ExposedType, typename PropTraits::AccessType>::type AccessType;
 
     typedef typename Access::template
-        ValueBinder<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>>
+        ValueBinder<typename PropTraits::template Binding<ClassType, AccessType>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, AccessType>(getter))
     {}
 };
 
@@ -223,7 +240,7 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
 
-    typedef AccessTraits<typename TypeTraits::DereferencedType> Access; // property interface specialisation
+    typedef AccessTraits<PropTraits> Access; // property interface specialisation
 
     typedef typename Access::template
         ValueBinder<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType&>>
@@ -252,7 +269,7 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef AccessTraits<typename TypeTraits::DereferencedType> Access;
+    typedef AccessTraits<PropTraits> Access; // property interface specialisation
 
     struct InterfaceType
     {
@@ -262,8 +279,11 @@ public:
         std::function<typename PropTraits::DispatchType> getter;
         std::function<void(ClassType&, DataType)> m_setter;
 
+        Value getValue(ClassType& c) const { return UserObject::makeCopy(getter(c)); }
+
         // setter returns writable status, so wrap it
         bool setter(ClassType& c, DataType v) const {return m_setter(c,v), true;}
+        bool setter(ClassType& c, Value const& v) const { return m_setter(c, v.to<DataType>()), true; }
     } m_interface;
 
     template <typename F1, typename F2>

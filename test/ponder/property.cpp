@@ -89,7 +89,8 @@ namespace PropertyTest
         MEMBER_ACCESSORS(MyEnum,e)
         MEMBER_ACCESSORS(MyType, mt)
 
-        MyType* getT() {return &mt;}
+        const MyType* getCT() const {return &mt;}
+        MyType* getT() { return &mt; }
     };
 
 #define FUNCTION_ACCESSORS(T,N) \
@@ -133,6 +134,7 @@ namespace PropertyTest
             PROPERTY(float,f)
             PROPERTY(std::string,s)
             PROPERTY(MyEnum,e)
+            .property("getConstT", &MyClass::getCT)
             //.property("getT", &MyClass::getT)
             ;
 
