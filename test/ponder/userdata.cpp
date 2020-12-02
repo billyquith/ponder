@@ -73,6 +73,7 @@ TEST_CASE("User data is stored in a store")
         
         ponder::userDataStore()->setValue(cls, "test1", ponder::Value(2345));
         const ponder::Value* uv = ponder::userDataStore()->getValue(cls, "test1");
+        UNUSED(uv);
     }
 }
 

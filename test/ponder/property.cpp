@@ -135,7 +135,7 @@ namespace PropertyTest
             PROPERTY(std::string,s)
             PROPERTY(MyEnum,e)
             .property("getConstT", &MyClass::getCT)
-            //.property("getT", &MyClass::getT)
+            .property("getT", &MyClass::getT)
             ;
 
         // ***** std::function *****

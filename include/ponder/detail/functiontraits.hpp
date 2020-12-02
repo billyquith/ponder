@@ -349,11 +349,11 @@ struct MemberTraits<T(C::*)>
     static constexpr bool isWritable = !std::is_const<typename TypeTraits::DereferencedType>::value;
     typedef typename TypeTraits::DereferencedType AccessType;
 
-    template <typename CLASS, typename A>
+    template <typename C, typename A>
     class Binding
     {
     public:
-        typedef CLASS ClassType;
+        typedef C ClassType;
         typedef A AccessType;
 
         Binding(const BoundType& d) : data(d) {}

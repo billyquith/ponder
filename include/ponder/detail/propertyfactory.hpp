@@ -42,14 +42,16 @@ namespace ponder {
 namespace detail {
 
 // Bind to value.
-template <class B>
+template <class C, typename PropTraits>
 class ValueBinder
 {
 public:
-    typedef B Binding;
-    typedef typename Binding::ClassType ClassType;
-    typedef typename Binding::AccessType AccessType;
+    typedef C ClassType;
+    typedef typename std::conditional<PropTraits::isWritable,
+                typename PropTraits::AccessType&, typename PropTraits::AccessType>::type AccessType;
     typedef typename std::remove_reference<AccessType>::type SetType;
+
+    using Binding = typename PropTraits::template Binding<ClassType, AccessType>;
 
     static_assert(!std::is_pointer<AccessType>::value, "Error: Pointers not handled here");
 
@@ -58,14 +60,14 @@ public:
     AccessType getter(ClassType& c) const { return m_bound.access(c); }
 
     Value getValue(ClassType& c) const {
-        if constexpr (std::is_reference<AccessType>::value)
+        if constexpr (PropTraits::isWritable)
             return UserObject::makeRef(getter(c));
         else
             return UserObject::makeCopy(getter(c));
     }
 
     bool setter(ClassType& c, SetType v) const {
-        if constexpr (std::is_reference<AccessType>::value)
+        if constexpr (PropTraits::isWritable)
             return this->m_bound.access(c) = v, true;
         else
             return false;
@@ -80,21 +82,27 @@ protected:
 };
 
 // Bind to internal reference.
-template <class B>
+template <class C, typename PropTraits>
 class InternalRefBinder
 {
 public:        
-    typedef B Binding;
-    typedef typename Binding::ClassType ClassType;
-    typedef typename Binding::AccessType AccessType;
+    typedef C ClassType;
+    typedef typename PropTraits::ExposedType AccessType;
+
+    using Binding = typename PropTraits::template Binding<ClassType, AccessType>;
 
     static_assert(std::is_pointer<AccessType>::value, "Error: Only pointers handled here");
 
     InternalRefBinder(const Binding& b) : m_bound(b) {}
 
-    AccessType getter(ClassType& c) const   {return m_bound.access(c);}
+    AccessType getter(ClassType& c) const {
+        if constexpr (std::is_const<AccessType>::value)
+            return m_bound.access(c);
+        else
+            return m_bound.access(const_cast<std::remove_const<ClassType>::type&>(c));
+    }
 
-    Value getValue(ClassType& c) const      {return UserObject::makeRef(getter(c));}
+    Value getValue(ClassType& c) const {return UserObject::makeRef(getter(c));}
 
     bool setter(ClassType&, AccessType) const {return false;}
     bool setter(ClassType&, Value const&) const {return false;}
@@ -115,8 +123,8 @@ struct AccessTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
 
-    template <typename B>
-    using ValueBinder = ValueBinder<B>;
+    template <class C>
+    using ValueBinder = ValueBinder<C, PT>;
 
     template <typename A>
     using Impl = SimplePropertyImpl<A>;
@@ -131,8 +139,8 @@ struct AccessTraits<PT,
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
 
-    template <typename B>
-    using ValueBinder = ValueBinder<B>;
+    template <class C>
+    using ValueBinder = ValueBinder<C, PT>;
 
     template <typename A>
     using Impl = EnumPropertyImpl<A>;
@@ -149,14 +157,15 @@ struct AccessTraits<PT,
 
     typedef ponder_ext::ArrayMapper<typename PT::TypeTraits::DereferencedType> ArrayTraits;
 
-    template <typename B>
+    template <class C>
     class ValueBinder : public ArrayTraits
     {
     public:
-        typedef B Binding;
         typedef typename PT::TypeTraits::DereferencedType ArrayType;
-        typedef typename Binding::ClassType ClassType;
-        typedef typename Binding::AccessType AccessType;
+        typedef C ClassType;
+        typedef typename PT::AccessType& AccessType;
+
+        using Binding = typename PT::template Binding<ClassType, AccessType>;
 
         ValueBinder(const Binding& a) : m_bound(a) {}
         
@@ -168,7 +177,7 @@ struct AccessTraits<PT,
     protected:
         Binding m_bound;
     };
-    
+
     template <typename A>
     using Impl = ArrayPropertyImpl<A>;
 };
@@ -185,9 +194,9 @@ struct AccessTraits<PT,
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
 
-    template <typename B>
+    template <class C>
     using ValueBinder = typename std::conditional<
-        std::is_pointer<typename PT::ExposedType>::value, InternalRefBinder<B>, ValueBinder<B>
+        std::is_pointer<typename PT::ExposedType>::value, InternalRefBinder<C, PT>, ValueBinder<C, PT>
     >::type;
 
     template <typename A>
@@ -202,27 +211,24 @@ class GetSet1
 public:
     typedef TRAITS PropTraits;
     static_assert(!PropTraits::isWritable, "!isWritable expected");
-    typedef const C ClassType;
+    typedef C ClassType;
     typedef typename PropTraits::ExposedType ExposedType;
     typedef typename PropTraits::TypeTraits TypeTraits;
     typedef typename PropTraits::DataType DataType; // raw type or container
-    //typedef typename std::conditional<std::is_pointer<ExposedType>::value, C, const C>::type ClassType;
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
     typedef AccessTraits<PropTraits> Access; // property interface specialisation
 
     typedef typename std::conditional<std::is_pointer<ExposedType>::value,
-        ExposedType, typename PropTraits::AccessType>::type AccessType;
+                                        ExposedType, typename PropTraits::AccessType>::type AccessType;
 
-    typedef typename Access::template
-        ValueBinder<typename PropTraits::template Binding<ClassType, AccessType>>
-            InterfaceType;
+    typedef typename Access::template ValueBinder<ClassType> InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, AccessType>(getter))
+        : m_interface(typename InterfaceType::Binding(getter))
     {}
 };
 
@@ -242,14 +248,12 @@ public:
 
     typedef AccessTraits<PropTraits> Access; // property interface specialisation
 
-    typedef typename Access::template
-        ValueBinder<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType&>>
-            InterfaceType;
+    typedef typename Access::template ValueBinder<ClassType> InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType&>(getter))
+        : m_interface(typename InterfaceType::Binding(getter))
     {}
 };
 
