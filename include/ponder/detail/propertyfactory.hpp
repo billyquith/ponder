@@ -171,7 +171,7 @@ struct AccessTraits<PT,
         
         AccessType getter(ClassType& c) const {return m_bound.access(c);}
 
-        bool setter(ClassType& c, const AccessType v) const {
+        bool setter(ClassType& c, AccessType v) const {
             return this->m_bound.access(c) = v, true;
         }
     protected:
