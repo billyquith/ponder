@@ -205,48 +205,19 @@ struct AccessTraits<PT,
 
 
 // Read-only accessor wrapper. Not RW, not a pointer.
-template <class C, typename TRAITS, typename E = void>
+template <class C, typename TRAITS>
 class GetSet1
 {
 public:
     typedef TRAITS PropTraits;
-    static_assert(!PropTraits::isWritable, "!isWritable expected");
     typedef C ClassType;
     typedef typename PropTraits::ExposedType ExposedType;
     typedef typename PropTraits::TypeTraits TypeTraits;
     typedef typename PropTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
-    static constexpr bool canWrite = false;
+    static constexpr bool canWrite = PropTraits::isWritable;
 
-    typedef AccessTraits<PropTraits> Access; // property interface specialisation
-
-    typedef typename std::conditional<std::is_pointer<ExposedType>::value,
-                                        ExposedType, typename PropTraits::AccessType>::type AccessType;
-
-    typedef typename Access::template ValueBinder<ClassType> InterfaceType;
-
-    InterfaceType m_interface;
-
-    GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename InterfaceType::Binding(getter))
-    {}
-};
-
-// Read-write accessor wrapper.
-template <class C, typename TRAITS>
-class GetSet1<C, TRAITS, typename std::enable_if<TRAITS::isWritable>::type>
-{
-public:
-    typedef TRAITS PropTraits;
-    static_assert(PropTraits::isWritable, "isWritable expected");
-    typedef C ClassType;
-    typedef typename PropTraits::ExposedType ExposedType;
-    typedef typename PropTraits::TypeTraits TypeTraits;
-    typedef typename PropTraits::DataType DataType; // raw type or container
-    static constexpr bool canRead = true;
-    static constexpr bool canWrite = true;
-
-    typedef AccessTraits<PropTraits> Access; // property interface specialisation
+    typedef AccessTraits<PropTraits> Access;
 
     typedef typename Access::template ValueBinder<ClassType> InterfaceType;
 
@@ -273,7 +244,7 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef AccessTraits<PropTraits> Access; // property interface specialisation
+    typedef AccessTraits<PropTraits> Access;
 
     struct InterfaceType
     {
