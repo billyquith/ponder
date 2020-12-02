@@ -40,51 +40,67 @@
 
 namespace ponder {
 namespace detail {
-    
+
+// Bind to value.
+template <class B>
+class ValueBinder
+{
+public:
+    typedef B Binding;
+    typedef typename Binding::ClassType ClassType;
+    typedef typename Binding::AccessType AccessType;
+    typedef typename std::remove_reference<const AccessType>::type SetType;
+
+    ValueBinder(const Binding& a) : m_bound(a) {}
+
+    AccessType getter(ClassType& c) const { return m_bound.access(c); }
+
+    bool setter(ClassType& c, SetType v) const {
+        if constexpr (std::is_reference<AccessType>::value)
+            return this->m_bound.access(c) = v, true;
+        else
+            return false;
+    }
+    //bool setter(ClassType& c, AccessType&& v) const {
+    //    return this->m_bound.access(c) = std::move(v), true;
+    //}
+protected:
+    Binding m_bound;
+};
+
+// Bind using a reference.
+//template <class B>
+//class RefBinder
+//{
+//public:        
+//    typedef B Binding;
+//    typedef typename Binding::ClassType ClassType;
+//    typedef typename Binding::AccessType AccessType;
+
+//    RefBinder(const Binding& a) {}
+//    
+//    bool setter(ClassType& c, const AccessType& v) const {
+//        return this->m_bound.access(c) = v, true;
+//    }
+//    bool setter(ClassType& c, AccessType&& v) const {
+//        return this->m_bound.access(c) = std::move(v), true;
+//    }
+//};
+
 /*
  *  Access traits for an exposed type T.
  *    - I.e. how we use an instance to access the bound property data using the correct interface.
  *  Traits:
- *    - ReadOnlyBinder & ReadWriteBinder : RO (const) or RW data.
+ *    - ValueBinder & RefBinder : RO (const) or RW data.
  *    - Impl : which specialise property impl to use.
  */
 template <typename T, typename E = void>
 struct AccessTraits
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Simple;
-    
-    template <class B>
-    class ReadOnlyBinder
-    {
-    public:
-        typedef B Binding;
-        typedef typename Binding::ClassType ClassType;
-        typedef typename Binding::AccessAdapter::InputType InputType;
 
-        ReadOnlyBinder(const Binding& a) : m_bound(a) {}
-        
-        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {return m_bound.access(c);}
-        
-        bool setter(ClassType&, const InputType&) const {return false;}
-        bool setter(ClassType&, InputType&&) const {return false;}
-    protected:
-        Binding m_bound;
-    };
-
-    template <class B>
-    class ReadWriteBinder : public ReadOnlyBinder<B>
-    {
-        typedef ReadOnlyBinder<B> Base;
-    public:        
-        ReadWriteBinder(const typename Base::Binding& a) : Base(a) {}
-        
-        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
-            return this->m_bound.access(c) = v, true;
-        }
-        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
-            return this->m_bound.access(c) = std::move(v), true;
-        }
-    };
+    template <typename B>
+    using ValueBinder = ValueBinder<B>;
 
     template <typename A>
     using Impl = SimplePropertyImpl<A>;
@@ -98,38 +114,8 @@ struct AccessTraits<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::Enum;
 
-    template <class B>
-    class ReadOnlyBinder
-    {
-    public:
-        typedef B Binding;
-        typedef typename Binding::ClassType ClassType;
-        typedef typename Binding::AccessAdapter::InputType InputType;
-        
-        ReadOnlyBinder(const Binding& a) : m_bound(a) {}
-        
-        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {return m_bound.access(c);}
-        
-        bool setter(ClassType&, InputType const&) const {return false;}
-        bool setter(ClassType&, InputType&&) const {return false;}
-    protected:
-        Binding m_bound;
-    };
-    
-    template <class B>
-    class ReadWriteBinder : public ReadOnlyBinder<B>
-    {
-        typedef ReadOnlyBinder<B> Base;
-    public:        
-        ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
-        
-        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
-            return this->m_bound.access(c) = v, true;
-        }
-        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
-            return this->m_bound.access(c) = std::move(v), true;
-        }
-    };
+    template <typename B>
+    using ValueBinder = ValueBinder<B>;
 
     template <typename A>
     using Impl = EnumPropertyImpl<A>;
@@ -145,38 +131,26 @@ struct AccessTraits<T, typename std::enable_if<ponder_ext::ArrayMapper<T>::isArr
     typedef ponder_ext::ArrayMapper<T> ArrayTraits;
 
     template <typename B>
-    class ReadOnlyBinder : public ArrayTraits
+    class ValueBinder : public ArrayTraits
     {
     public:
         typedef B Binding;
         typedef T ArrayType;
         typedef typename Binding::ClassType ClassType;
-        typedef typename Binding::AccessAdapter::InputType InputType;
+        typedef typename Binding::AccessType AccessType;
 
-        ReadOnlyBinder(const Binding& a) : m_bound(a) {}
+        ValueBinder(const Binding& a) : m_bound(a) {}
         
-        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {return m_bound.access(c);}
+        AccessType getter(ClassType& c) const {return m_bound.access(c);}
 
-        bool setter(ClassType&, const InputType&) const { return false; }
-        bool setter(ClassType&, InputType&&) const { return false; }
-    protected:
-        Binding m_bound;
-    };
-    
-    template <class B>
-    class ReadWriteBinder : public ReadOnlyBinder<B>
-    {
-        typedef ReadOnlyBinder<B> Base;
-    public:        
-        ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
-
-        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
+        bool setter(ClassType& c, const AccessType v) const {
             return this->m_bound.access(c) = v, true;
         }
-        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
-            return this->m_bound.access(c) = std::move(v), true;
-        }
-
+        //bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
+        //    return this->m_bound.access(c) = std::move(v), true;
+        //}
+    protected:
+        Binding m_bound;
     };
     
     template <typename A>
@@ -194,40 +168,8 @@ struct AccessTraits<T,
 {
     static constexpr PropertyAccessKind kind = PropertyAccessKind::User;
 
-    template <class B>
-    class ReadOnlyBinder
-    {
-    public:
-        typedef B Binding;
-        typedef typename Binding::ClassType ClassType;
-        typedef typename Binding::AccessAdapter::InputType InputType;
-
-        ReadOnlyBinder(const Binding& a) : m_bound(a) {}
-        
-        typename Binding::AccessAdapter::OutputType getter(ClassType& c) const {
-            return m_bound.access(c);
-        }
-        
-        bool setter(ClassType&, const InputType&) const {return false;}
-        bool setter(ClassType&, InputType&&) const {return false;}
-    protected:
-        Binding m_bound;
-    };
-    
-    template <class B>
-    class ReadWriteBinder : public ReadOnlyBinder<B>
-    {
-        typedef ReadOnlyBinder<B> Base;
-    public:        
-        ReadWriteBinder(const typename Base::Binding& a) : ReadOnlyBinder<B>(a) {}
-        
-        bool setter(typename Base::ClassType& c, const typename Base::InputType& v) const {
-            return this->m_bound.access(c) = v, true;
-        }
-        bool setter(typename Base::ClassType& c, typename Base::InputType&& v) const {
-            return this->m_bound.access(c) = std::move(v), true;
-        }
-    };
+    template <typename B>
+    using ValueBinder = ValueBinder<B>;
 
     template <typename A>
     using Impl = UserPropertyImpl<A>;
@@ -238,37 +180,6 @@ template <typename T>
 struct AccessTraits<T&> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
 template <typename T>
 struct AccessTraits<T*> { typedef int TypeShouldBeDereferenced[-(int)sizeof(T)]; };
-
-
-// Read-only.
-template <typename PropTraits, typename R, typename E = void>
-struct AccessAdapter
-{
-    typedef typename PropTraits::TypeTraits::DereferencedType InputType;
-    typedef typename PropTraits::TypeTraits::DereferencedType OutputType; // T is an rvalue so return by value
-};
-
-template <typename PropTraits>
-struct AccessAdapter<PropTraits, void>
-{
-    typedef void InputType;
-    typedef void OutputType;
-};
-
-template <typename PropTraits, typename R>
-struct AccessAdapter<PropTraits, R*>
-{
-    typedef R* InputType;
-    typedef ponder::Value OutputType;
-};
-
-// Writeable.
-template <typename PropTraits, typename R>
-struct AccessAdapter<PropTraits, R, typename std::enable_if<PropTraits::isWritable>::type>
-{
-    typedef typename PropTraits::TypeTraits::DereferencedType InputType;
-    typedef typename PropTraits::TypeTraits::DereferencedType& OutputType; // Not a rvalue so we can reference
-};
 
 
 // Read-only accessor wrapper. Not RW, not a pointer.
@@ -285,20 +196,16 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = false;
 
-    static_assert(TypeTraits::kind != ReferenceKind::Pointer, "Ponder: Cannot return pointer");
+    typedef AccessTraits<typename TypeTraits::DereferencedType> Access;
 
-    typedef AccessTraits<typename TypeTraits::DereferencedType> Interface;
-
-    typedef typename AccessAdapter<typename PropTraits, typename TypeTraits::Type> AccessAdapter;
-
-    typedef typename Interface::template
-        ReadOnlyBinder<typename PropTraits::template Binding<ClassType, AccessAdapter>>
+    typedef typename Access::template
+        ValueBinder<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, AccessAdapter>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType>(getter))
     {}
 };
 
@@ -315,19 +222,17 @@ public:
     typedef typename PropTraits::DataType DataType; // raw type or container
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
-    
-    typedef AccessTraits<typename TypeTraits::DereferencedType> Interface; // property interface specialisation
 
-    typedef typename AccessAdapter<typename PropTraits, typename TypeTraits::Type> AccessAdapter;
+    typedef AccessTraits<typename TypeTraits::DereferencedType> Access; // property interface specialisation
 
-    typedef typename Interface::template
-        ReadWriteBinder<typename PropTraits::template Binding<ClassType, AccessAdapter>>
+    typedef typename Access::template
+        ValueBinder<typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType&>>
             InterfaceType;
 
     InterfaceType m_interface;
 
     GetSet1(typename PropTraits::BoundType getter)
-        : m_interface(typename PropTraits::template Binding<ClassType, AccessAdapter>(getter))
+        : m_interface(typename PropTraits::template Binding<ClassType, typename PropTraits::AccessType&>(getter))
     {}
 };
 
@@ -347,7 +252,7 @@ public:
     static constexpr bool canRead = true;
     static constexpr bool canWrite = true;
     
-    typedef AccessTraits<typename TypeTraits::DereferencedType> Interface;
+    typedef AccessTraits<typename TypeTraits::DereferencedType> Access;
 
     struct InterfaceType
     {
@@ -379,9 +284,9 @@ struct PropertyFactory1
     {
         typedef GetSet1<C, FunctionTraits<T>> Accessor; // read-only?
         
-        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType;
+        typedef typename Accessor::Access::template Impl<Accessor> PropertyImpl;
         
-        return new PropertyImplType(name, Accessor(accessor));
+        return new PropertyImpl(name, Accessor(accessor));
     }
 };
 
@@ -394,9 +299,9 @@ struct PropertyFactory1<C, T, typename std::enable_if<std::is_member_object_poin
     {
         typedef GetSet1<C, MemberTraits<T>> Accessor; // read-only?
 
-        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType;
+        typedef typename Accessor::Access::template Impl<Accessor> PropertyImpl;
 
-        return new PropertyImplType(name, Accessor(accessor));
+        return new PropertyImpl(name, Accessor(accessor));
     }
 };
 
@@ -411,9 +316,9 @@ struct PropertyFactory2
     {
         typedef GetSet2<C, FunctionTraits<F1>> Accessor; // read-write wrapper
         
-        typedef typename Accessor::Interface::template Impl<Accessor> PropertyImplType;
+        typedef typename Accessor::Access::template Impl<Accessor> PropertyImpl;
 
-        return new PropertyImplType(name, Accessor(accessor1, accessor2));
+        return new PropertyImpl(name, Accessor(accessor1, accessor2));
     }
 };
 
