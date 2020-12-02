@@ -35,12 +35,12 @@ Features:
 
 ### Build
 
-Compilers supported. Requires C++14 support.
+Compilers supported. [Requires C++17][compsupp].
 
 - MSVC 2017+
 - Xcode 8+
-- GCC 4.9+
-- Clang 3.4+
+- GCC 7+
+- Clang 3.9+
 
 Ponder uses CMake to generate project files which are then used to build the project ([Build
 docs][build]). E.g. Use `make` to build Ponder (but you can use any build system CMake supports):
@@ -52,6 +52,12 @@ mkdir build && cd build
 cmake -G "Unix Makefiles" ..
 make
 ```
+
+### Package Managers
+
+Windows [vcpkg][vcpkg]:
+
+    vcpkg install ponder
 
 ### History
 
@@ -66,3 +72,5 @@ See [CHANGELOG.md](CHANGELOG.md) and [release notes][rel] for more details on Po
 [build]: https://billyquith.github.io/ponder/building_ponder.html
 [tege]: http://www.tegesoft.com
 [camp]: https://github.com/tegesoft/camp
+[vcpkg]: https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=msvc-160
+[compsupp]: https://en.cppreference.com/w/cpp/compiler_support
