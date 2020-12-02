@@ -15,6 +15,8 @@
 
 #define STATIC_ASSERT(T) static_assert((T), "static_assert failure: " #T)
 
+#define UNUSED(V) ((void)&(V))
+
 inline std::ostream& operator << (std::ostream& stream, const ponder::Value& value)
 {
     return stream << value.to<std::string>();

@@ -659,7 +659,7 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         IS_TRUE(FunctionCaller(fn_funcWrapper2).call(ponder::Args(&object, 10)) == Value(30));
         IS_TRUE(FunctionCaller(fn_funcWrapper3).call(ponder::Args(&object, 10)) == Value(60));
 
-        auto const& mc = ponder::classByType<MyClass>();
+        ponder::classByType<MyClass>(); // ensure instanced
         Value r = FunctionCaller(fn_nonClassFunc1).call();
         IS_TRUE(r.to<int>() == 77);
 
@@ -705,7 +705,7 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         IS_TRUE(callStatic(fn_funcWrapper2, ponder::Args(&object, 10)) == Value(30));
         IS_TRUE(callStatic(fn_funcWrapper3, ponder::Args(&object, 10)) == Value(60));
 
-        auto const& mc = ponder::classByType<MyClass>();
+        ponder::classByType<MyClass>(); // ensure instanced
         Value r = FunctionCaller(fn_nonClassFunc1).call();
         IS_TRUE(r.to<int>() == 77);
 
@@ -749,7 +749,7 @@ TEST_CASE_METHOD(FunctionTestFixture, "Registered functions can be called with t
         IS_TRUE(callStatic(fn_funcWrapper2, &object, 10) == Value(30));
         IS_TRUE(callStatic(fn_funcWrapper3, &object, 10) == Value(60));
 
-        auto const& mc = ponder::classByType<MyClass>();
+        ponder::classByType<MyClass>(); // ensure instanced
         Value r = FunctionCaller(fn_nonClassFunc1).call();
         IS_TRUE(r.to<int>() == 77);
 

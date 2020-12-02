@@ -773,12 +773,14 @@ TEST_CASE("Default values can be created")
     {
         ponder::detail::ValueProvider<int> pi;
         int i(pi());
+        UNUSED(i);
     }
 
     SECTION("string")
     {
         ponder::detail::ValueProvider<std::string> vp;
         std::string v(vp());
+        UNUSED(v);
     }
 
 //    SECTION("class")

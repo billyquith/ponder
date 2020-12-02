@@ -167,7 +167,7 @@ namespace UserObjectTest
 
         DefaultClass(int i_) : i(i_) { ++construct; }
         DefaultClass(const DefaultClass& o) { i = o.i; ++copy; }
-        DefaultClass& operator=(const DefaultClass& o) { i = o.i; }
+        DefaultClass& operator=(const DefaultClass& o) { i = o.i; return *this; }
         ~DefaultClass() { ++destruct; }
     };
 
@@ -185,9 +185,9 @@ namespace UserObjectTest
 
         MoveableClass(int i_) : i(i_) { ++construct; }
         MoveableClass(const MoveableClass& o) { i = o.i; ++copy; }
-        MoveableClass& operator=(const MoveableClass& o) { i = o.i; ++move; }
+        MoveableClass& operator=(const MoveableClass& o) { i = o.i; ++move; return *this; }
         MoveableClass(MoveableClass&& o) { i = o.i; ++move; }
-        MoveableClass& operator=(MoveableClass&& o) { i = o.i; ++assignMove; }
+        MoveableClass& operator=(MoveableClass&& o) { i = o.i; ++assignMove; return *this; }
         ~MoveableClass() { ++destruct; }
     };
 
@@ -567,7 +567,7 @@ TEST_CASE("User objects can be created")
 
 TEST_CASE("User objects wrap C++ objects")
 {
-    auto const& metacls = ponder::classByType<Data>();
+    //auto const& metacls = ponder::classByType<Data>();
 
 //    SECTION("constructors")
 //    {
