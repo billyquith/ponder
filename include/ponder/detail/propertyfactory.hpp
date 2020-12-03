@@ -87,18 +87,18 @@ class ValueBinder2 : public ValueBinder<C, PropTraits>
     typedef ValueBinder<C, PropTraits> Base;
 public:
     template <typename S>
-    ValueBinder2(const Base::Binding& g, S s) : Base(g), m_set(s) {}
+    ValueBinder2(const typename Base::Binding& g, S s) : Base(g), m_set(s) {}
 
-    bool setter(ClassType& c, SetType v) const {
+    bool setter(typename Base::ClassType& c, typename Base::SetType v) const {
         return m_set(c, v), true;
     }
 
-    bool setter(ClassType& c, Value const& value) const {
+    bool setter(typename Base::ClassType& c, Value const& value) const {
         return setter(c, value.to<SetType>());
     }
 
 protected:
-    std::function<void(Base::ClassType&, Base::AccessType)> m_set;
+    std::function<void(typename Base::ClassType&, typename Base::AccessType)> m_set;
 };
 
 
@@ -139,13 +139,17 @@ class InternalRefBinder2 : public InternalRefBinder<C, PropTraits>
     typedef InternalRefBinder<C, PropTraits> Base;
 public:
     template <typename S>
-    InternalRefBinder2(const Base::Binding& g, S s) : Base(g), m_set(s) {}
+    InternalRefBinder2(const typename Base::Binding& g, S s) : Base(g), m_set(s) {}
 
-    bool setter(ClassType& c, AccessType v) const { return m_set(c, v), true; }
-    bool setter(ClassType& c, Value const& value) const { return setter(c, value.to<AccessType>()); }
+    bool setter(typename Base::ClassType& c, typename Base::AccessType v) const {
+        return m_set(c, v), true;
+    }
+    bool setter(typename Base::ClassType& c, Value const& value) const{
+        return setter(c, value.to<typename Base::AccessType>());
+    }
 
 protected:
-    std::function<void(ClassType&, AccessType)> m_set;
+    std::function<void(typename Base::ClassType&, typename Base::AccessType)> m_set;
 };
 
 /*
