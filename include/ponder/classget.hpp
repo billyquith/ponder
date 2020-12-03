@@ -41,7 +41,7 @@
 #include <string>
 
 namespace ponder {
-    
+
 /**
  * \brief Get the total number of existing metaclasses
  *
@@ -57,9 +57,9 @@ size_t classCount();
  * \relates Class
  * \snippet inspect.cpp classIterator
  *
- * \return Class iterator: `pair<String, Class*>`
+ * \return ClassView
  */
-const detail::ClassManager& classIterator();
+detail::ClassManager::ClassView classes();
 
 /**
  * \brief Get a metaclass from its name

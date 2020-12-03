@@ -81,19 +81,8 @@ public:
     typedef pair_t value_type;
     typedef typename container_t::const_iterator const_iterator;
 
-    const_iterator begin() const    { return m_contents.begin(); }
-    const_iterator end() const      { return m_contents.end(); }
-
-    class Iterator {
-        const_iterator m_begin, m_end;
-    public:
-        Iterator(const_iterator b, const_iterator e) : m_begin(b), m_end(e) {}
-        const_iterator begin() const    { return m_begin; }
-        const_iterator end() const      { return m_end; }
-    };
-
-    // Allow iteration of dictionary without exposing the API.
-    Iterator getIterator() const { return Iterator(begin(), end()); }
+    const_iterator begin() const    { return m_contents.cbegin(); }
+    const_iterator end() const      { return m_contents.cend(); }
 
     const_iterator findKey(KEY_REF key) const
     {

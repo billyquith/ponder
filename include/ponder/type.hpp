@@ -220,6 +220,56 @@ struct Parameter
 //};
     
 } // namespace policy
+
+template <typename T, typename IT>
+class ViewIterator
+{
+private:
+    IT m_iter;
+    class Holder
+    {
+        const T m_value;
+    public:
+        Holder(IT value) : m_value(value) {}
+        T operator*() { return m_value; }
+    };
+public:
+    typedef T value_type;
+    typedef std::ptrdiff_t difference_type;
+    typedef std::input_iterator_tag iterator_category;
+
+    explicit ViewIterator(IT value) : m_iter(value) {}
+    value_type operator*() const { return *m_iter->second; }
+    bool operator==(const ViewIterator& other) const { return m_iter == other.m_iter; }
+    bool operator!=(const ViewIterator& other) const { return !(*this == other); }
+    Holder operator++(int)
+    {
+        Holder ret(m_iter);
+        ++m_iter;
+        return ret;
+    }
+    ViewIterator& operator++()
+    {
+        ++m_iter;
+        return *this;
+    }
+};
+
+template <typename T, typename IT>
+class View
+{
+public:
+    typedef ViewIterator<T, IT> Iterator;
+
+    View(IT b, IT e) : m_begin(b), m_end(e) {}
+
+    Iterator begin() { return Iterator(m_begin); }
+    Iterator end() { return Iterator(m_end); }
+
+private:
+    IT m_begin, m_end;
+};
+
 } // namespace ponder
 
 #endif // PONDER_TYPE_HPP

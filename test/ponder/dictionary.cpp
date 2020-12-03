@@ -105,7 +105,7 @@ TEST_CASE("Ponder has a dictionary")
     SECTION("can iterate over key,values")
     {
         int count = 0;
-        for (auto&& it : dict->getIterator())
+        for (const auto& it : *dict)
         {
             REQUIRE(dict->at(count)->name() == it.name());
             REQUIRE(dict->at(count)->value() == it.value());

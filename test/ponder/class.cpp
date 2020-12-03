@@ -300,9 +300,9 @@ TEST_CASE("Class metadata can be retrieved")
     SECTION("iteration")
     {
         size_t count = 0;
-        for (auto&& cls : ponder::classIterator())
+        for (const auto& cls : ponder::classes())
         {
-            (void) cls.second->name();
+            (void) cls.name();
             ++count;
         }
         REQUIRE(count == ponder::classCount());
@@ -362,7 +362,7 @@ TEST_CASE("Class members can be inspected")
     SECTION("can iterate over properties")
     {
         int index = 0;
-        for (auto&& prop : metaclass.propertyIterator())
+        for (const auto& prop : metaclass.properties())
         {
             switch (index++) {
                 case 0:
@@ -377,7 +377,7 @@ TEST_CASE("Class members can be inspected")
     SECTION("can iterate over functions")
     {
         int index = 0;
-        for (auto&& func : metaclass.functionIterator())
+        for (auto&& func : metaclass.functions())
         {
             switch (index++) {
                 case 0:

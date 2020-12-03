@@ -67,9 +67,9 @@ inline void Class::undeclare()
     detail::ClassManager::instance().removeClass(detail::getTypeId<T>());
 }
 
-inline Class::FunctionTable::Iterator Class::functionIterator() const
+inline Class::FunctionView Class::functions() const
 {
-    return m_functions.getIterator();
+    return FunctionView(m_functions.begin(), m_functions.end());
 }
 
 inline bool Class::tryFunction(const IdRef name, const Function *& funcRet) const
@@ -83,9 +83,9 @@ inline bool Class::tryFunction(const IdRef name, const Function *& funcRet) cons
     return false;
 }
 
-inline Class::PropertyTable::Iterator Class::propertyIterator() const
+inline Class::PropertyView Class::properties() const
 {
-    return m_properties.getIterator();
+    return PropertyView(m_properties.begin(), m_properties.end());
 }
 
 inline bool Class::tryProperty(const IdRef name, const Property *& propRet) const

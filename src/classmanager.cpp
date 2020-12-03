@@ -86,14 +86,9 @@ size_t ClassManager::count() const
     return m_classes.size();
 }
 
-ClassManager::ClassTable::const_iterator ClassManager::begin() const
+ClassManager::ClassView ClassManager::getClasses() const
 {
-    return m_classes.begin();
-}
-    
-ClassManager::ClassTable::const_iterator ClassManager::end() const
-{
-    return m_classes.end();
+    return ClassView(m_classes.begin(), m_classes.end());
 }
 
 const Class* ClassManager::getByIdSafe(TypeId const& id) const

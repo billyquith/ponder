@@ -70,11 +70,10 @@ static void test()
     std::cout << (help ? help->to<ponder::Id>() : "no help") << std::endl;
     
     // print functions and any help
-    for (auto const& it : cls.functionIterator())
+    for (auto const& fn : cls.functions())
     {
-        auto const& fn = it.second;
-        std::cout << "\t" << fn->name() << ": ";
-        help = ponder::userDataStore()->getValue(*fn, "help");
+        std::cout << "\t" << fn.name() << ": ";
+        help = ponder::userDataStore()->getValue(fn, "help");
         if (help)
             std::cout << (help ? help->to<ponder::Id>() : "no help") << std::endl;
     }    

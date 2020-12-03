@@ -464,12 +464,11 @@ TEST_CASE("User objects can be inspected and modified")
         ponder::UserObject userObject(&object);
 
         int index = 0;
-        for (auto&& prop : ponder::classByType<MyClass>().propertyIterator())
+        for (const auto& prop : ponder::classByType<MyClass>().properties())
         {
             switch (index) {
             case 0:
                 REQUIRE(prop.name() == ponder::String("p"));
-                REQUIRE(prop.value()->name() == ponder::String("p"));
                 break;
             default: ;
             }

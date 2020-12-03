@@ -57,6 +57,8 @@ class PONDER_API ClassManager : public ObserverNotifier
 
 public:
 
+    typedef View<const Class&, ClassTable::const_iterator> ClassView;
+
     /**
      * \brief Get the unique instance of the class
      *
@@ -97,24 +99,6 @@ public:
      */
     size_t count() const;
     
-    /**
-     * \brief Begin iterator for iterating over contained classes
-     *
-     * \return An iterator
-     *
-     * \see classIterator()
-     */
-    ClassTable::const_iterator begin() const;
-    
-    /**
-     * \brief End iterator for iterating over contained classes
-     *
-     * \return An iterator
-     *
-     * \see classIterator()
-     */
-    ClassTable::const_iterator end() const;
-
     /**
      * \brief Get a metaclass from a C++ type
      *
@@ -181,6 +165,8 @@ public:
      * The destructor destroys all the registered metaclasses and notifies the observers.
      */
     ~ClassManager();
+
+    ClassView getClasses() const;
 
 private:
 

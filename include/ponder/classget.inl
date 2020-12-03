@@ -34,9 +34,9 @@ inline size_t classCount()
     return detail::ClassManager::instance().count();
 }
 
-inline const detail::ClassManager& classIterator()
+inline detail::ClassManager::ClassView classes()
 {
-    return detail::ClassManager::instance();
+    return detail::ClassManager::instance().getClasses();
 }
 
 inline const Class& classByName(IdRef name)

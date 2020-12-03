@@ -114,7 +114,7 @@ class PONDER_API Class : public Type
     Destructor m_destructor;        // Destructor (function able to delete an abstract object)
     UserObjectCreator m_userObjectCreator; // Convert pointer of class instance to UserObject
 
-public:     // declaration
+public: // declaration
 
     /**
      * \brief Declare a new metaclass
@@ -147,7 +147,10 @@ public:     // declaration
     template <typename T>
     static void undeclare();
 
-public:     // reflection
+public: // reflection
+
+    typedef View<const Function&, FunctionTable::const_iterator> FunctionView;
+    typedef View<const Property&, PropertyTable::const_iterator> PropertyView;
 
     /**
      * \brief Return the name of the metaclass
@@ -241,11 +244,11 @@ public:     // reflection
      * \return An iterator that can be used to iterator over all functions
      *
      * \code
-     * for (auto&& func : classByType<MyClass>().functionIterator())
+     * for (auto&& func : classByType<MyClass>().functions())
      *     foo(func.name(), func.value());
      * \endcode
      */
-    FunctionTable::Iterator functionIterator() const;
+    FunctionView functions() const;
 
     /**
      * \brief Look up a function by name and return success
@@ -303,11 +306,11 @@ public:     // reflection
      * \return An iterator that can be used to iterator over all properties
      *
      * \code
-     * for (auto&& prop : ponder::classByType<MyClass>().propertyIterator())
+     * for (auto&& prop : ponder::classByType<MyClass>())
      *     foo(prop.name(), prop.value());
      * \endcode
      */
-    PropertyTable::Iterator propertyIterator() const;
+    PropertyView properties() const;
     
     /**
      * \brief Look up a property by name and return success
