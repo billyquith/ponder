@@ -3,10 +3,10 @@ var namespaceponder =
     [ "archive", null, [
       [ "ArchiveReader", "classponder_1_1archive_1_1_archive_reader.html", "classponder_1_1archive_1_1_archive_reader" ],
       [ "ArchiveWriter", "classponder_1_1archive_1_1_archive_writer.html", "classponder_1_1archive_1_1_archive_writer" ],
-      [ "RapidJsonArchive", "classponder_1_1archive_1_1_rapid_json_archive.html", "classponder_1_1archive_1_1_rapid_json_archive" ],
+      [ "RapidJsonArchiveReader", "classponder_1_1archive_1_1_rapid_json_archive_reader.html", "classponder_1_1archive_1_1_rapid_json_archive_reader" ],
+      [ "RapidJsonArchiveWriter", "classponder_1_1archive_1_1_rapid_json_archive_writer.html", "classponder_1_1archive_1_1_rapid_json_archive_writer" ],
       [ "RapidXmlArchive", "classponder_1_1archive_1_1_rapid_xml_archive.html", "classponder_1_1archive_1_1_rapid_xml_archive" ]
     ] ],
-    [ "lua", "namespaceponder_1_1lua.html", null ],
     [ "policy", "namespaceponder_1_1policy.html", "namespaceponder_1_1policy" ],
     [ "runtime", "namespaceponder_1_1runtime.html", "namespaceponder_1_1runtime" ],
     [ "uses", "namespaceponder_1_1uses.html", "namespaceponder_1_1uses" ],
@@ -50,5 +50,7 @@ var namespaceponder =
     [ "UserObject", "classponder_1_1_user_object.html", "classponder_1_1_user_object" ],
     [ "UserProperty", "classponder_1_1_user_property.html", "classponder_1_1_user_property" ],
     [ "Value", "classponder_1_1_value.html", "classponder_1_1_value" ],
-    [ "ValueVisitor", "classponder_1_1_value_visitor.html", "classponder_1_1_value_visitor" ]
+    [ "ValueVisitor", "classponder_1_1_value_visitor.html", "classponder_1_1_value_visitor" ],
+    [ "View", "classponder_1_1_view.html", "classponder_1_1_view" ],
+    [ "ViewIterator", "classponder_1_1_view_iterator.html", "classponder_1_1_view_iterator" ]
 ];

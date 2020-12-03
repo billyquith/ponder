@@ -67,6 +67,7 @@ var index =
       [ "3.1 Release Notes", "blog_ponder_3.html#ponder_3_1", [
         [ "Change internal class registration to by type instead of by name", "blog_ponder_3.html#obj_reg_by_typeid", null ],
         [ "Drop support for MSVC 2015.", "blog_ponder_3.html#drop_msvc2015", null ]
-      ] ]
+      ] ],
+      [ "3.2 Release Notes", "blog_ponder_3.html#ponder_3_2", null ]
     ] ]
 ];

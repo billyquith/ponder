@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['type',['Type',['../classponder_1_1_type.html',1,'ponder']]],
-  ['typeambiguity',['TypeAmbiguity',['../classponder_1_1_type_ambiguity.html',1,'ponder']]]
+  ['simpleproperty_279',['SimpleProperty',['../classponder_1_1_simple_property.html',1,'ponder']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['perfunctionuserdata',['PerFunctionUserData',['../structponder_1_1uses_1_1_uses.html#a15bd015678ff2ff4c8e87faab97f89f4',1,'ponder::uses::Uses']]]
+  ['result_5ftype_451',['result_type',['../classponder_1_1_value_visitor.html#a9e3747df5714af5feaee952552f4db30',1,'ponder::ValueVisitor']]]
 ];
