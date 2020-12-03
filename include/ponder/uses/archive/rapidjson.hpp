@@ -41,7 +41,7 @@ namespace ponder {
 namespace archive {
 
 /**
- * \brief An archive that uses JSON format as storage.
+ * \brief Write to an archive that uses JSON format as storage.
  *
  * The [RapidJSON](http://rapidjson.org/) library is used for JSON parsing and formatting.
  */
@@ -102,18 +102,24 @@ public:
     }
 };
 
+/**
+ * \brief Read from an archive that uses JSON format as storage.
+ *
+ * The [RapidJSON](http://rapidjson.org/) library is used for JSON parsing and formatting.
+ */
 class RapidJsonArchiveReader
 {
     rapidjson::Document& m_archive;
 
 public:
-
+    //! An abstract node within the JSON archive.
     struct Node
     {
         const rapidjson::Value& m_value;
         Node(const rapidjson::Value& value) : m_value(value) {}
     };
 
+    //! Facilitate iteration over JSON arrays.
     struct ArrayIterator
     {
         const rapidjson::Value& m_value;

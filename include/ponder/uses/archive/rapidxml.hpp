@@ -51,6 +51,7 @@ public:
     using ch_t = CH;
     using Node = rapidxml::xml_node<ch_t>*;
 
+    //! Facilitate iteration over XML elements/arrays.
     class ArrayIterator
     {
         Node m_node{};
