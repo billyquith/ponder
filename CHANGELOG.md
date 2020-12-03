@@ -12,6 +12,8 @@ Ponder Changelog
 - Add pass-by-reference parameters (#109).
 - Serialisation: JSON support added (#43).
 - UserObject automatically destructs (#50).
+- Big refactor to simplify property bindings & add return internal refs.
+- API improvements (#93).
 - Tests: Catch2 updated to 2.13.1
 
 ## 3.1
