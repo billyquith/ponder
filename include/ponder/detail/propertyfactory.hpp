@@ -94,7 +94,7 @@ public:
     }
 
     bool setter(typename Base::ClassType& c, Value const& value) const {
-        return setter(c, value.to<SetType>());
+        return setter(c, value.to<typename Base::SetType>());
     }
 
 protected:
