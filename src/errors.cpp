@@ -46,7 +46,7 @@ BadType::BadType(const String& message)
 
 ponder::String BadType::typeName(ValueKind type)
 {
-    return detail::valueTypeAsString(type);
+    return detail::valueKindAsString(type);
 }
 
 BadArgument::BadArgument(ValueKind provided,

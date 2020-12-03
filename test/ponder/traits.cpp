@@ -843,9 +843,9 @@ TEST_CASE("Check Ponder utilities work correctly")
 
     SECTION("type to string")
     {
-        REQUIRE(strcmp(ponder::detail::valueTypeAsString(ponder::ValueKind::None), "none")==0);
-        REQUIRE(strcmp(ponder::detail::valueTypeAsString(ponder::ValueKind::Real), "real")==0);
-        REQUIRE(strcmp(ponder::detail::valueTypeAsString(ponder::ValueKind::User), "user")==0);
+        REQUIRE(strcmp(ponder::detail::valueKindAsString(ponder::ValueKind::None), "none")==0);
+        REQUIRE(strcmp(ponder::detail::valueKindAsString(ponder::ValueKind::Real), "real")==0);
+        REQUIRE(strcmp(ponder::detail::valueKindAsString(ponder::ValueKind::User), "user")==0);
     }
 }
 

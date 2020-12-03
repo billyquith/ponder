@@ -192,7 +192,7 @@ static const char* c_typeNames[] =
     "user",     // ValueKind::User
 };
 
-const char* valueTypeAsString(ValueKind t)
+const char* valueKindAsString(ValueKind t)
 {
     const unsigned int i = static_cast<unsigned int>(t);
     return i <= static_cast<unsigned int>(ValueKind::User) ? c_typeNames[i] : "unknown";

@@ -450,7 +450,7 @@ struct ValueMapper<ponder::ValueKind>
 {
     static constexpr ponder::ValueKind kind = ponder::ValueKind::String;
     static ponder::String to(ponder::ValueKind source)
-        {return ponder::String(ponder::detail::valueTypeAsString(source));}
+        {return ponder::String(ponder::detail::valueKindAsString(source));}
 };
 
 /**
