@@ -27,6 +27,7 @@
  **
  ****************************************************************************/
 
+#include <stdexcept>
 #include <ponder/detail/util.hpp>
 
 #if defined(__GNUWIN32__) && __cplusplus >= 201103L
