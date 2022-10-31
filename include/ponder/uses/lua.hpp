@@ -421,7 +421,8 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     lua_pushglobaltable(L);                     // +1
     lua_pushliteral(L, PONDER__LUA_METATBLS);   // +1
     lua_rawget(L, -2);                          // 0 -+
-    if (lua_isnil(L, -1))
+    bool isnil = lua_isnil(L, -1);
+    if (isnil)
     {
         // first time
         lua_pop(L, 1);                              // -1 pop nil
@@ -459,7 +460,7 @@ void expose(lua_State *L, const Class& cls, const IdRef name)
     lua_setmetatable(L, -2);                    // -1
 
     lua_rawset(L, -3);                          // -2 _G[CLASSNAME] = class_obj
-    lua_pop(L, 2);                              // -2 global,meta
+    lua_pop(L, isnil ? 2 : 3);                              // -2 global,meta
 }
 
 void expose(lua_State *L, const Enum& enm, const IdRef name)
